@@ -9,6 +9,8 @@ class ElementConfig(BaseModel):
     drill_to: Optional[str] = None
     callback_event: Optional[str] = None
     callback_payload: Optional[Dict[str, Any]] = None
+    hover_callback_event: Optional[str] = None
+    hover_callback_payload: Optional[Dict[str, Any]] = None
     color: Optional[str] = None
     hover_color: Optional[str] = None
     border_width: Optional[float] = None

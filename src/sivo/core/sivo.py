@@ -38,6 +38,8 @@ class Sivo:
         drill_to: Optional[str] = None,
         callback_event: Optional[str] = None,
         callback_payload: Optional[dict] = None,
+        hover_callback_event: Optional[str] = None,
+        hover_callback_payload: Optional[dict] = None,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -56,6 +58,8 @@ class Sivo:
             drill_to=drill_to,
             callback_event=callback_event,
             callback_payload=callback_payload,
+            hover_callback_event=hover_callback_event,
+            hover_callback_payload=hover_callback_payload,
             color=color,
             hover_color=hover_color,
             border_width=border_width,
@@ -63,12 +67,12 @@ class Sivo:
             glow=glow
         )
 
-    def to_html(self, output_path: Optional[str] = None) -> str:
+    def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
         Generates the interactive HTML string (bundle) containing the ECharts map,
         Jinja2 template, and mapped behaviors. Optionally saves to a file.
         """
-        return self.infographic.to_echarts_html(output_path=output_path)
+        return self.infographic.to_echarts_html(output_path=output_path, custom_css=custom_css, custom_js=custom_js)
 
     def get_manifest(self) -> Dict:
         """Returns the interaction manifest JSON data."""

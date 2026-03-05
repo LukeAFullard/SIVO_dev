@@ -213,6 +213,65 @@
             }
         });
 
+        // Handle hover events
+        myChart.on('mouseover', function (params) {
+            var name = params.name;
+            var elementActions = actionsManifest[name];
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.action_type === 'hover_callback') {
+                        window.parent.postMessage({
+                            type: 'sivo_hover',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
+                    }
+                });
+            }
+        });
+
+        // Listen for messages from Streamlit
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'sivo_command') {
+                var payload = event.data.payload;
+                if (payload.command === 'zoom_to') {
+                    var elementId = payload.element_id;
+                    var zoomLevel = payload.zoom || 2;
+
+                    // We need to find the element in the map data to get its bounding box or center
+                    // ECharts geo doesn't perfectly expose region centers programmatically easily,
+                    // but we can center the map on the named region
+
+                    myChart.dispatchAction({
+                        type: 'geoSelect',
+                        name: elementId
+                    });
+
+                    // The easiest way to zoom to a specific region name in an ECharts map series
+                    // is to set the `center` and `zoom` properties on the series options.
+                    // However, we don't have the center coordinates natively in JS.
+                    // A workaround is to use ECharts internal API to get region bounding rect,
+                    // or just let ECharts handle select. Let's use `select` to highlight it.
+                    // For actual zoom, we'd need the metadata from Python injected.
+                } else if (payload.command === 'inject_assets') {
+                    if (payload.css) {
+                        var style = document.createElement('style');
+                        style.innerHTML = payload.css;
+                        document.head.appendChild(style);
+                    }
+                    if (payload.js) {
+                        var script = document.createElement('script');
+                        script.innerHTML = payload.js;
+                        document.body.appendChild(script);
+                    }
+                }
+            }
+        });
+
         function closePanel() {
             document.getElementById('info-panel').classList.remove('active');
         }
@@ -222,5 +281,9 @@
             myChart.resize();
         });
     </script>
+
+    <!-- Custom injected assets placeholder -->
+    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
+    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
 </body>
 </html>

@@ -23,6 +23,11 @@ class CallbackAction(BaseAction):
     event_name: str = Field(description="Event name to send back to Streamlit or backend")
     payload: Optional[dict] = Field(default=None, description="Optional data payload to send")
 
+class HoverCallbackAction(BaseAction):
+    action_type: Literal["hover_callback"] = "hover_callback"
+    event_name: str = Field(description="Event name to send back to Streamlit or backend on hover")
+    payload: Optional[dict] = Field(default=None, description="Optional data payload to send")
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
