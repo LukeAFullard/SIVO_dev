@@ -334,7 +334,7 @@ Streamlit
 
 ### Streamlit Component
 
-A custom component renders the SIVO bundle inside a Streamlit app.
+A custom component renders the SIVO bundle inside a Streamlit app. **Note: Any Streamlit component MUST be a V2 component (`st.components.v2.component`).** See [V2 Components Documentation](https://docs.streamlit.io/develop/api-reference/custom-components/st.components.v2.component) and [V2 Components with file-backed assets](https://discuss.streamlit.io/t/how-do-i-use-components-v2-with-file-backed-css-html-and-or-js/120290) for more information.
 
 Capabilities:
 
