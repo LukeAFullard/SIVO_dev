@@ -65,49 +65,52 @@
         var echartsData = [{"name": "buildingA", "value": 1, "tooltip": "Main Admin", "itemStyle": {"areaColor": "#ffcccc"}}, {"name": "buildingB", "value": 1, "tooltip": "Engineering Block", "itemStyle": {"areaColor": "#ccffcc"}}, {"name": "fountain", "value": 1, "tooltip": "Relaxation Zone", "itemStyle": {"areaColor": "#ccccff", "borderColor": "#0000ff", "borderWidth": 3}, "emphasis": {"itemStyle": {"areaColor": "#aaaaff", "shadowBlur": 15, "shadowColor": "#aaaaff", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "pathway", "value": 1}];
         var actionsManifest = {"buildingA": [{"action_type": "tooltip", "content": "<h3>Building A</h3><p>Main Administrative Building.</p><p>Capacity: 500</p>", "title": "Main Admin"}], "buildingB": [{"action_type": "tooltip", "content": "<h3>Building B</h3><p>Engineering & Sciences.</p><ul><li>Labs</li><li>Classrooms</li></ul>", "title": "Engineering Block"}], "fountain": [{"action_type": "tooltip", "content": "\n        <style>\n          h3 { color: darkblue; }\n          .fountain-desc { border: 1px solid blue; padding: 5px; }\n        </style>\n        <h3>Central Fountain</h3>\n        <p class=\"fountain-desc\">A nice place to relax. Note this CSS does not bleed out due to Shadow DOM!</p>\n        ", "title": "Relaxation Zone"}]};
 
-        option = {
-            tooltip: {
-                trigger: 'item',
-                formatter: function (params) {
-                    var dataIndex = echartsData.findIndex(item => item.name === params.name);
-                    if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
-                        return echartsData[dataIndex].tooltip;
+        function getBaseOption(mapName) {
+            return {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        var dataIndex = echartsData.findIndex(item => item.name === params.name);
+                        if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
+                            return echartsData[dataIndex].tooltip;
+                        }
+                        return params.name;
                     }
-                    return params.name;
-                }
-            },
-            series: [
-                {
-                    name: 'SIVO Series',
-                    type: 'map',
-                    map: 'sivo_map',
-                    roam: true, // Enable zoom and pan
-                    itemStyle: {
-                        borderColor: '#999',
-                        borderWidth: 1,
-                        areaColor: '#eee'
-                    },
-                    emphasis: {
+                },
+                series: [
+                    {
+                        name: 'SIVO Series',
+                        type: 'map',
+                        map: mapName,
+                        roam: true, // Enable zoom and pan
                         itemStyle: {
-                            areaColor: '#ffd700', // Highlight color
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            borderColor: '#999',
+                            borderWidth: 1,
+                            areaColor: '#eee'
                         },
-                        label: {
-                            show: false
-                        }
-                    },
-                    select: {
-                        itemStyle: {
-                            areaColor: '#ff8c00'
-                        }
-                    },
-                    data: echartsData
-                }
-            ]
-        };
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#ffd700', // Highlight color
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            label: {
+                                show: false
+                            }
+                        },
+                        select: {
+                            itemStyle: {
+                                areaColor: '#ff8c00'
+                            }
+                        },
+                        data: echartsData
+                    }
+                ]
+            };
+        }
 
+        option = getBaseOption('sivo_map');
         myChart.setOption(option);
 
         // Setup Shadow DOM for info-content
@@ -134,8 +137,21 @@
                         window.open(action.url, action.target);
                     } else if (action.action_type === 'drilldown') {
                         console.log('DrillDown to:', action.target_svg);
-                        // Optional: trigger drilldown logic here
-                        alert('Drilling down to ' + action.target_svg);
+                        fetch(action.target_svg)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.text();
+                            })
+                            .then(svgText => {
+                                echarts.registerMap(action.target_svg, { svg: svgText });
+                                myChart.setOption(getBaseOption(action.target_svg));
+                            })
+                            .catch(error => {
+                                console.error('Error fetching SVG:', error);
+                                alert('Could not load ' + action.target_svg);
+                            });
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
                     }
