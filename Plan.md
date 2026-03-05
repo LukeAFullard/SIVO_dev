@@ -432,26 +432,26 @@ Deliverables:
 
 * [x] SVG parser
 * [x] canonicalizer (Robust `<use>` reference resolution, proper wrapping, and cycle detection completed)
-* [ ] metadata extraction
-* [ ] bounding box calculation
+* [x] metadata extraction
+* [x] bounding box calculation (Robust parser implemented for SVG paths handling relative/absolute commands and exponential notation)
 
 ## Phase 2 — Interaction System
 
 Deliverables:
 
-* Action classes
-* manifest generator
-* tooltip system
-* hit detection
+* [x] Action classes
+* [x] manifest generator
+* [x] tooltip system (Shadow DOM encapsulated)
+* [x] hit detection
 
 ## Phase 3 — Frontend Runtime
 
 Deliverables:
 
-* JS runtime
-* resize handling
-* drill-down transitions
-* event system
+* [x] JS runtime
+* [x] resize handling
+* [x] drill-down transitions (SVG loading & chart rebuilding fixed)
+* [ ] event system (Full Streamlit callback sync)
 
 ## Phase 4 — Streamlit Integration
 
