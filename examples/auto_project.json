@@ -1,0 +1,37 @@
+{
+  "svg_file": "sample.svg",
+  "mappings": {
+    "scene": {
+      "tooltip": "scene tooltip",
+      "html": "<h3>scene</h3><p>Description goes here.</p>"
+    },
+    "background": {
+      "tooltip": "background tooltip",
+      "html": "<h3>background</h3><p>Description goes here.</p>"
+    },
+    "sun": {
+      "tooltip": "sun tooltip",
+      "html": "<h3>sun</h3><p>Description goes here.</p>"
+    },
+    "mountain1": {
+      "tooltip": "mountain1 tooltip",
+      "html": "<h3>mountain1</h3><p>Description goes here.</p>"
+    },
+    "mountain2": {
+      "tooltip": "mountain2 tooltip",
+      "html": "<h3>mountain2</h3><p>Description goes here.</p>"
+    },
+    "house": {
+      "tooltip": "house tooltip",
+      "html": "<h3>house</h3><p>Description goes here.</p>"
+    },
+    "roof": {
+      "tooltip": "roof tooltip",
+      "html": "<h3>roof</h3><p>Description goes here.</p>"
+    },
+    "river": {
+      "tooltip": "river tooltip",
+      "html": "<h3>river</h3><p>Description goes here.</p>"
+    }
+  }
+}

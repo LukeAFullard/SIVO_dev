@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
 from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride
+from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
@@ -26,6 +27,53 @@ class Infographic:
     def from_string(cls, svg_string: str) -> "Infographic":
         parser = SVGParser(svg_string, is_file=False)
         return cls(parser)
+
+    @classmethod
+    def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Infographic":
+        """
+        Creates an Infographic from a configuration file, dictionary, or ProjectConfig object.
+        """
+        if isinstance(config, str):
+            with open(config, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            # If config is a file path, base_dir is the directory of that file
+            base_dir = os.path.dirname(os.path.abspath(config))
+            cfg = ProjectConfig(**data)
+        elif isinstance(config, dict):
+            cfg = ProjectConfig(**config)
+        elif isinstance(config, ProjectConfig):
+            cfg = config
+        else:
+            raise ValueError("config must be a file path, dict, or ProjectConfig instance.")
+
+        # Resolve the SVG file path relative to the base directory
+        svg_path = os.path.join(base_dir, cfg.svg_file)
+        if not os.path.exists(svg_path):
+            raise FileNotFoundError(f"SVG file not found: {svg_path}")
+
+        infographic = cls.from_svg(svg_path)
+
+        for element_id, elem_config in cfg.mappings.items():
+            try:
+                infographic.map(
+                    element_id,
+                    tooltip=elem_config.tooltip,
+                    html=elem_config.html,
+                    url=elem_config.url,
+                    drill_to=elem_config.drill_to,
+                    callback_event=elem_config.callback_event,
+                    callback_payload=elem_config.callback_payload,
+                    color=elem_config.color,
+                    hover_color=elem_config.hover_color,
+                    border_width=elem_config.border_width,
+                    border_color=elem_config.border_color,
+                    glow=elem_config.glow
+                )
+            except ValueError as e:
+                # Log or handle missing elements gracefully, perhaps a warning
+                print(f"Warning mapping {element_id}: {e}")
+
+        return infographic
 
     def map(
         self,

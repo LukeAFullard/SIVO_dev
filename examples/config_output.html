@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIVO Interactive Graphic</title>
+    <!-- Include ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+        #chart-container {
+            flex: 1;
+            height: 100%;
+        }
+        #info-panel {
+            width: 300px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 1px solid #ddd;
+            overflow-y: auto;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            display: none;
+            transition: all 0.3s ease;
+        }
+        #info-panel.active {
+            display: block;
+        }
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            font-weight: bold;
+            color: #888;
+        }
+        .close-btn:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chart-container"></div>
+    <div id="info-panel">
+        <span class="close-btn" onclick="closePanel()">×</span>
+        <div id="info-content-host"></div>
+    </div>
+
+    <script>
+        var chartDom = document.getElementById('chart-container');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        // The SVG content injected from Python
+        var svgStr = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\">\n  <g id=\"scene\" name=\"scene\">\n    <rect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/>\n    <circle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/>\n    <polygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/>\n    <polygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/>\n    <rect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/>\n    <polygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/>\n    <path id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/>\n  </g>\n</svg>";
+
+        // Register the SVG map
+        echarts.registerMap('sivo_map', { svg: svgStr });
+
+        // Mappings for tooltips and HTML content
+        var echartsData = [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1, "tooltip": "The Sun", "itemStyle": {"areaColor": "gold"}, "emphasis": {"itemStyle": {"areaColor": "yellow", "shadowBlur": 15, "shadowColor": "yellow", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "mountain1", "value": 1, "tooltip": "Mountain 1", "itemStyle": {"areaColor": "#a0a0a0"}, "emphasis": {"itemStyle": {"areaColor": "#d0d0d0"}}}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1, "tooltip": "A cozy house", "itemStyle": {"areaColor": "brown", "borderColor": "red", "borderWidth": 3.0}, "emphasis": {"itemStyle": {"areaColor": "orange"}}}, {"name": "roof", "value": 1}, {"name": "river", "value": 1}];
+        var actionsManifest = {"sun": [{"action_type": "tooltip", "content": "<h3>Sun</h3><p>A bright yellow sun.</p>", "title": "The Sun"}], "mountain1": [{"action_type": "tooltip", "content": "<h3>Mountain 1</h3><p>The first mountain.</p>", "title": "Mountain 1"}], "house": [{"action_type": "tooltip", "content": "<style>h3 { color: brown; }</style><h3>House</h3><p>This is a small house.</p>", "title": "A cozy house"}]};
+
+        function getBaseOption(mapName) {
+            return {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        var dataIndex = echartsData.findIndex(item => item.name === params.name);
+                        if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
+                            return echartsData[dataIndex].tooltip;
+                        }
+                        return params.name;
+                    }
+                },
+                series: [
+                    {
+                        name: 'SIVO Series',
+                        type: 'map',
+                        map: mapName,
+                        roam: true, // Enable zoom and pan
+                        itemStyle: {
+                            borderColor: '#999',
+                            borderWidth: 1,
+                            areaColor: '#eee'
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#ffd700', // Highlight color
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            label: {
+                                show: false
+                            }
+                        },
+                        select: {
+                            itemStyle: {
+                                areaColor: '#ff8c00'
+                            }
+                        },
+                        data: echartsData
+                    }
+                ]
+            };
+        }
+
+        option = getBaseOption('sivo_map');
+        myChart.setOption(option);
+
+        // Setup Shadow DOM for info-content
+        var infoContentHost = document.getElementById('info-content-host');
+        var infoContentShadow = infoContentHost.attachShadow({mode: 'open'});
+        var infoContent = document.createElement('div');
+        infoContentShadow.appendChild(infoContent);
+
+        // Handle click events
+        myChart.on('click', function (params) {
+            var infoPanel = document.getElementById('info-panel');
+            var name = params.name;
+
+            var elementActions = actionsManifest[name];
+            var htmlContent = '';
+            var hasInteraction = false;
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.action_type === 'tooltip') {
+                        htmlContent += action.content;
+                        hasInteraction = true;
+                    } else if (action.action_type === 'url') {
+                        window.open(action.url, action.target);
+                    } else if (action.action_type === 'drilldown') {
+                        console.log('DrillDown to:', action.target_svg);
+                        fetch(action.target_svg)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.text();
+                            })
+                            .then(svgText => {
+                                // Register each new SVG map with a unique name (the filepath) to prevent ECharts from serving a cached map.
+                                echarts.registerMap(action.target_svg, { svg: svgText });
+                                // Always rebuild base chart options using a factory function to avoid mutating global reference states.
+                                myChart.setOption(getBaseOption(action.target_svg), true);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching SVG:', error);
+                                alert('Could not load ' + action.target_svg);
+                            });
+                    } else if (action.action_type === 'callback') {
+                        console.log('Triggering callback:', action.event_name, action.payload);
+                        // Post message to parent window (e.g. Streamlit iframe wrapper)
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
+                    }
+                });
+            }
+
+            // Also trigger a default generic click event if there's no specific callback mapped
+            if (!elementActions || !elementActions.find(a => a.action_type === 'callback')) {
+                window.parent.postMessage({
+                    type: 'sivo_click',
+                    payload: {
+                        element_id: name,
+                        event_name: 'click',
+                        data: {}
+                    }
+                }, '*');
+            }
+
+            if (hasInteraction && htmlContent) {
+                infoContent.innerHTML = htmlContent;
+                infoPanel.classList.add('active');
+            } else if (!hasInteraction && !elementActions) {
+                infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
+                infoPanel.classList.add('active');
+            } else {
+                closePanel();
+            }
+        });
+
+        function closePanel() {
+            document.getElementById('info-panel').classList.remove('active');
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    </script>
+</body>
+</html>
