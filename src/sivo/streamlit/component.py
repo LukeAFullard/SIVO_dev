@@ -2,21 +2,21 @@ import streamlit as st
 from typing import Optional, Any
 import html
 
-from sivo.core.infographic import Infographic
+from sivo.core.sivo import Sivo
 
-def sivo_component(infographic: Infographic, key: Optional[str] = None) -> Any:
+def sivo_component(sivo_app: Sivo, key: Optional[str] = None) -> Any:
     """
     Renders a SIVO Infographic inside a Streamlit application using a V2 custom component.
 
     Args:
-        infographic (Infographic): The SIVO Infographic instance to render.
+        sivo_app (Sivo): The SIVO orchestrator instance to render.
         key (str, optional): An optional key that uniquely identifies this component.
 
     Returns:
         Any: The value returned by the Streamlit component (e.g. click events).
     """
     # Generate the interactive HTML bundle
-    html_content = infographic.to_echarts_html()
+    html_content = sivo_app.to_html()
 
     # The V2 component requires us to pass the HTML (either as string or file path).
     # Since we dynamically generate the HTML bundle including ECharts and SVG mapping logic,
@@ -34,7 +34,7 @@ def sivo_component(infographic: Infographic, key: Optional[str] = None) -> Any:
     # The V2 component documentation says: "Raw HTML. This doesn't require any <html>, <head>, or <body> tags; just provide the inner HTML."
 
     # We will provide a simple container and execute a JavaScript block to inject the actual HTML or create an iframe.
-    # Because `to_echarts_html()` generates a full HTML document, placing it inside an iframe is the safest way
+    # Because `to_html()` generates a full HTML document, placing it inside an iframe is the safest way
     # to avoid CSS/JS conflicts with Streamlit.
 
     # Let's create an iframe in the component's HTML, and use JavaScript to populate it.

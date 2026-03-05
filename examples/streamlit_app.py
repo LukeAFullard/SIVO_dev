@@ -4,7 +4,7 @@ import streamlit as st
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from sivo.core.infographic import Infographic
+from sivo import Sivo
 from sivo.streamlit.component import sivo_component
 
 st.set_page_config(page_title="SIVO Streamlit V2 Component Example", layout="wide")
@@ -34,11 +34,11 @@ svg_content = """
 </svg>
 """
 
-# 1. Create Infographic from SVG string
-infographic = Infographic.from_string(svg_content)
+# 1. Create Sivo app from SVG string
+sivo_app = Sivo.from_string(svg_content)
 
 # 2. Map interactions
-infographic.map(
+sivo_app.map(
     "room1",
     tooltip="<b>Conference Room 1</b><br/>Status: 🟢 Available",
     color="#a8e6cf",
@@ -47,7 +47,7 @@ infographic.map(
     border_color="#2e8c61"
 )
 
-infographic.map(
+sivo_app.map(
     "room2",
     tooltip="<b>Conference Room 2</b><br/>Status: 🔴 In Use",
     callback_event="book_room",
@@ -58,7 +58,7 @@ infographic.map(
     border_color="#c94c4c"
 )
 
-infographic.map(
+sivo_app.map(
     "zone3",
     tooltip="<b>Break Area</b><br/>Status: 🟡 Needs Cleaning",
     callback_event="notify_cleaners",
@@ -73,7 +73,7 @@ st.subheader("Interactive Graphic")
 st.markdown("Hover over the rooms and zones to see tooltips and custom styles mapped from Python!")
 
 # Render using the custom V2 component
-result = sivo_component(infographic, key="sivo_example")
+result = sivo_component(sivo_app, key="sivo_example")
 
 st.markdown("---")
 st.subheader("Component Return Value")
