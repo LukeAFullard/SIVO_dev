@@ -2,7 +2,7 @@ import argparse
 import sys
 import os
 import json
-from ..core.infographic import Infographic
+from ..core.sivo import Sivo
 from ..core.config import ProjectConfig
 
 def cmd_init(args):
@@ -19,8 +19,8 @@ def cmd_init(args):
 
     try:
         # Load the SVG to extract elements
-        infographic = Infographic.from_svg(svg_path)
-        metadata = infographic.get_metadata()
+        sivo_app = Sivo.from_svg(svg_path)
+        metadata = sivo_app.get_metadata()
 
         mappings = {}
         for obj in metadata.get("objects", []):
@@ -54,7 +54,7 @@ def cmd_validate(args):
 
     try:
         # Load config and validate the mapping against the SVG
-        sivo_instance = Infographic.from_config(config_path)
+        sivo_app = Sivo.from_config(config_path)
         print(f"Success: Configuration '{config_path}' and its associated SVG are valid.")
     except Exception as e:
         print(f"Validation failed: {e}", file=sys.stderr)
@@ -71,8 +71,8 @@ def cmd_export(args):
     output_path = args.output or "output.html"
 
     try:
-        sivo_instance = Infographic.from_config(config_path)
-        sivo_instance.to_echarts_html(output_path)
+        sivo_app = Sivo.from_config(config_path)
+        sivo_app.to_html(output_path)
         print(f"Successfully exported interactive HTML to '{output_path}'.")
     except Exception as e:
         print(f"Export failed: {e}", file=sys.stderr)
