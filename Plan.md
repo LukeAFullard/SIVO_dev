@@ -583,3 +583,186 @@ Future versions may include:
 **SIVO (SVG Interactive Vector Objects)** provides a robust framework for transforming static SVG designs into interactive data-driven interfaces using Python. By combining SVG normalization, Python-defined interaction logic, and Streamlit integration, SIVO enables developers to build powerful visual interfaces without complex frontend engineering.
 
 The system prioritizes reliability, accessibility, and simplicity while remaining extensible for advanced visualization needs.
+
+# 26. Next Steps
+
+### Phase 1: Debugging & Security Audit
+
+**1. Critical Vulnerability: XML External Entity (XXE) Injection**
+*   **Location:** `src/sivo/svg/parser.py`, Lines 9-14
+*   **Assessment:** The application parses SVG (XML) files using `lxml.etree.parse()` without disabling network access or entity resolution. This exposes the application to XXE injection vulnerabilities, potentially allowing attackers to read local files, conduct Server-Side Request Forgery (SSRF) attacks, or cause Denial of Service (DoS) if malicious or untrusted SVGs are uploaded and processed.
+*   **Proposed Solution:**
+    ```python
+    def __init__(self, filepath_or_string: str, is_file: bool = True):
+        # Explicitly secure the parser against XXE
+        parser = etree.XMLParser(resolve_entities=False, no_network=True)
+
+        if is_file:
+            with open(filepath_or_string, 'rb') as f:
+                self.tree = etree.parse(f, parser=parser)
+            self.root = self.tree.getroot()
+        else:
+            self.root = etree.fromstring(filepath_or_string.encode('utf-8'), parser=parser)
+            self.tree = etree.ElementTree(self.root)
+    ```
+*   **Trade-off:** Disabling external entities improves security immensely but may break unusual legacy SVG files that legitimately rely on external entities. This does not change the API contract.
+
+**2. Security Risk: Cross-Site Scripting (XSS) via DOM Injection**
+*   **Location:** `src/sivo/runtime/templates/echarts.html`, Lines 117-124
+*   **Assessment:** The JS runtime injects user-defined HTML content (`action.content`) into the DOM via `infoContent.innerHTML = htmlContent;`. Even though it is encapsulated in a Shadow DOM, this is still vulnerable to XSS if the HTML configuration originates from untrusted sources (e.g., `<img src="x" onerror="alert(1)">`).
+*   **Proposed Solution:**
+    ```javascript
+    // Introduce a lightweight client-side sanitizer
+    function sanitizeHTML(str) {
+        var temp = document.createElement('div');
+        temp.innerHTML = str;
+        var scripts = temp.getElementsByTagName('script');
+        for (var i = scripts.length - 1; i >= 0; i--) {
+            scripts[i].parentNode.removeChild(scripts[i]);
+        }
+        // Iterate and remove inline event handlers (on*)
+        var allElements = temp.getElementsByTagName("*");
+        for (var i = 0, len = allElements.length; i < len; i++) {
+            var el = allElements[i];
+            for (var j = el.attributes.length - 1; j >= 0; j--) {
+                if (el.attributes[j].name.toLowerCase().startsWith('on')) {
+                    el.removeAttribute(el.attributes[j].name);
+                }
+            }
+        }
+        return temp.innerHTML;
+    }
+
+    if (hasInteraction && htmlContent) {
+        infoContent.innerHTML = sanitizeHTML(htmlContent);
+        infoPanel.classList.add('active');
+    }
+    ```
+*   **Trade-off:** Adds minor processing overhead on the frontend and strips out legitimately intended scripts, slightly reducing functionality if developers wanted executable code inside tooltips.
+
+**3. Logical Error: Misaligned Coordinate Parsing**
+*   **Location:** `src/sivo/svg/metadata.py`, Lines 62-63
+*   **Assessment:** When calculating the bounding box for `polygon` or `polyline`, the code assumes the `points` array will always contain an even number of coordinates after regex parsing. If an SVG contains a malformed points string (e.g., an odd number of numbers), `xs` and `ys` will misalign, leading to mathematically skewed bounding box calculations.
+*   **Proposed Solution:**
+    ```python
+        elif tag_name in ['polygon', 'polyline']:
+            points_str = elem.get('points', '')
+            coords = [float(p) for p in re.findall(r'[-+]?(?:\d*\.\d+|\d+)', points_str)]
+            if len(coords) < 2:
+                return None
+
+            # Ensure an even number of coordinates to prevent misalignment
+            if len(coords) % 2 != 0:
+                coords = coords[:-1]
+
+            xs = coords[0::2]
+            ys = coords[1::2]
+            return [min(xs), min(ys), max(xs), max(ys)]
+    ```
+*   **Trade-off:** Dropping a trailing orphaned coordinate changes strict parsing behavior in favor of fault tolerance. It ensures the application won't crash or generate corrupted spatial metadata.
+
+---
+
+### Phase 2: Refactoring & Optimization
+
+**1. Performance: O(n) Mapping Bottleneck**
+*   **Location:** `src/sivo/core/infographic.py`, Lines 77-83 (`map` method)
+*   **Assessment:** The `map` method performs a linear search `O(n)` over `self.elements` every time an element is mapped. When loading from a JSON configuration containing `m` mappings, this results in `O(n * m)` complexity, severely bottlenecking performance for complex SVGs with thousands of elements.
+*   **Proposed Solution:**
+    ```python
+    # Inside __init__, build an O(1) lookup map
+    def __init__(self, parser: SVGParser):
+        self.parser = parser
+        self.elements = self.parser.process_elements()
+        self.mappings: Dict[str, InteractionMapping] = {}
+        self._element_lookup: Dict[str, dict] = {}
+
+        for elem in self.elements:
+            self.mappings[elem['name']] = InteractionMapping(id=elem['id'])
+            self._element_lookup[elem['id']] = elem
+            self._element_lookup[elem['name']] = elem
+
+    # Inside the map method, replace the loop:
+    def map(self, element_id: str, ...):
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem:
+            raise ValueError(f"Element with id/name '{element_id}' not found in SVG.")
+
+        elem_name = target_elem['name']
+        mapping = self.mappings[elem_name]
+        # ... logic continues
+    ```
+*   **Trade-off:** Slightly increases memory usage due to the `_element_lookup` dictionary, but vastly improves computational speed from `O(n)` to `O(1)` per mapped element.
+
+**2. Readability & Maintenance: Monolithic Logic**
+*   **Location:** `src/sivo/svg/metadata.py`, Lines 68-185 (`calculate_path_bbox` method)
+*   **Assessment:** `calculate_path_bbox` is a massive, deeply nested function handling multiple SVG path commands within a single monolithic `while` loop. This violates the Single Responsibility Principle, making it difficult to maintain, read, or write targeted unit tests for specific SVG commands.
+*   **Proposed Solution:**
+    ```python
+    class PathBBoxCalculator:
+        def __init__(self):
+            self.min_x = self.min_y = float('inf')
+            self.max_x = self.max_y = float('-inf')
+            self.curr_x = self.curr_y = 0.0
+
+        def update_bounds(self, *coords):
+            for i in range(0, len(coords), 2):
+                x, y = coords[i], coords[i+1]
+                self.min_x, self.max_x = min(self.min_x, x), max(self.max_x, x)
+                self.min_y, self.max_y = min(self.min_y, y), max(self.max_y, y)
+
+        def handle_M(self, x, y, is_relative):
+            if is_relative:
+                x += self.curr_x
+                y += self.curr_y
+            self.curr_x, self.curr_y = x, y
+            self.update_bounds(x, y)
+
+        # ... other handlers (handle_L, handle_C, etc.) ...
+
+    def calculate_path_bbox(d_str: str) -> Optional[List[float]]:
+        # Tokenize and pass to PathBBoxCalculator instance
+        pass
+    ```
+*   **Trade-off:** Refactoring to a class or a dispatcher model introduces slight function call overhead, but drastically improves readability, maintainability, and testing isolation.
+
+**3. Optimization: Arbitrary Cycle Prevention**
+*   **Location:** `src/sivo/svg/normalizer.py`, Lines 69-79 (`resolve_use_tags` method)
+*   **Assessment:** The cycle detection logic for SVG `<use>` references relies on an arbitrary depth counter (`depth > 20`). This heuristic approach wastes CPU cycles on deep, legitimately nested trees while failing to explicitly catch true circular dependencies in an optimized manner.
+*   **Proposed Solution:**
+    ```python
+    # Pass a specific visited_ids set alongside the queue items
+    initial_uses = [(u, set()) for u in self.root.xpath('.//svg:use', namespaces=self.namespaces)]
+    queue = collections.deque(initial_uses)
+
+    while queue:
+        use_elem, visited = queue.popleft()
+        # ... fetch href ...
+        ref_id = href[1:]
+
+        if ref_id in visited:
+            parent.remove(use_elem) # Cycle detected
+            continue
+
+        new_visited = visited.copy()
+        new_visited.add(ref_id)
+
+        # ... clone logic ...
+
+        for new_use in new_uses:
+            queue.append((new_use, new_visited))
+    ```
+*   **Trade-off:** Memory overhead increases marginally because each queue item maintains its own set of visited IDs. However, it provides guaranteed mathematical loop prevention.
+
+---
+
+### Phase 3: Strategic Expansion
+
+**1. Programmatic Zoom & Pan API**
+*   **Utility:** Currently, the ECharts implementation allows manual user panning (`roam: true`). Exposing an API method (e.g., `sivo_app.zoom_to("element_id")`) that calculates the target's metadata `bbox` and triggers ECharts' `dispatchAction` to automatically focus and center on a specific SVG region would be highly valuable for guided storytelling or presentation flows.
+
+**2. Bi-directional Streamlit State Synchronization**
+*   **Utility:** SIVO can send click callbacks to Streamlit via the V2 component, but it currently lacks a way for Streamlit to update the SVG state *without* initiating a full backend re-render. Implementing a JS frontend listener that accepts state mutations from Streamlit (e.g., changing colors dynamically based on live data feeds) would make the infographics truly reactive and real-time.
+
+**3. HTML/DOM Overlay Positioning System**
+*   **Utility:** Allow developers to define custom HTML overlays (like React-style tooltips or floating charts) that are absolutely positioned *over* specific SVG coordinates, derived from the Python bounding box metadata. This enables rich annotations and complex UI components that live outside the strict ECharts `<canvas>` bounds, significantly enhancing the visual capabilities of the framework.
