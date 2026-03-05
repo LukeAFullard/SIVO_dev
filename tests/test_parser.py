@@ -4,7 +4,7 @@ import unittest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from sivo.parser import SVGParser
+from sivo.svg.parser import SVGParser
 
 class TestSVGParser(unittest.TestCase):
     def test_svg_parsing(self):

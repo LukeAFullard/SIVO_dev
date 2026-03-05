@@ -56,20 +56,19 @@
         var option;
 
         // The SVG content injected from Python
-        var svgStr = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\">\n  <g id=\"scene\" name=\"scene\">\n    <rect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/>\n    <circle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/>\n    <polygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/>\n    <polygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/>\n    <rect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/>\n    <polygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/>\n    <path id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/>\n  </g>\n</svg>";
+        var svgStr = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 500 500\">\n  <rect id=\"buildingA\" x=\"50\" y=\"50\" width=\"150\" height=\"150\" fill=\"#cccccc\" stroke=\"#333333\" stroke-width=\"2\" name=\"buildingA\"/>\n  <rect id=\"buildingB\" x=\"250\" y=\"50\" width=\"200\" height=\"100\" fill=\"#cccccc\" stroke=\"#333333\" stroke-width=\"2\" name=\"buildingB\"/>\n  <circle id=\"fountain\" cx=\"250\" cy=\"300\" r=\"40\" fill=\"#aaccff\" stroke=\"#333333\" stroke-width=\"2\" name=\"fountain\"/>\n  <path id=\"pathway\" d=\"M 125 200 L 125 300 L 210 300\" fill=\"none\" stroke=\"#666666\" stroke-width=\"10\" name=\"pathway\"/>\n</svg>";
 
         // Register the SVG map
         echarts.registerMap('sivo_map', { svg: svgStr });
 
         // Mappings for tooltips and HTML content
-        var echartsData = [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1, "tooltip": "The Sun", "itemStyle": {"areaColor": "#ffcc00"}}, {"name": "mountain1", "value": 1, "tooltip": "Left Mountain", "itemStyle": {"areaColor": "#8c8c8c"}}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1, "tooltip": "A small house", "itemStyle": {"areaColor": "#a52a2a"}}, {"name": "roof", "value": 1}, {"name": "river", "value": 1, "tooltip": "Blue River", "itemStyle": {"areaColor": "#0000ff"}}];
-        var htmlMappings = {"sun": "<h3>The Sun</h3><p>The star at the center of the Solar System.</p>", "mountain1": "<h3>Left Mountain</h3><p>A tall, majestic mountain.</p>", "house": "<h3>Cozy House</h3><p>This is where someone lives.</p>", "river": "<h3>River</h3><p>A flowing body of water.</p>"};
+        var echartsData = [{"name": "buildingA", "value": 1, "tooltip": "Main Admin", "itemStyle": {"areaColor": "#ffcccc"}}, {"name": "buildingB", "value": 1, "tooltip": "Engineering Block", "itemStyle": {"areaColor": "#ccffcc"}}, {"name": "fountain", "value": 1, "tooltip": "Relaxation Zone", "itemStyle": {"areaColor": "#ccccff"}}, {"name": "pathway", "value": 1}];
+        var actionsManifest = {"buildingA": [{"action_type": "tooltip", "content": "<h3>Building A</h3><p>Main Administrative Building.</p><p>Capacity: 500</p>", "title": "Main Admin"}], "buildingB": [{"action_type": "tooltip", "content": "<h3>Building B</h3><p>Engineering & Sciences.</p><ul><li>Labs</li><li>Classrooms</li></ul>", "title": "Engineering Block"}], "fountain": [{"action_type": "tooltip", "content": "<h3>Central Fountain</h3><p>A nice place to relax.</p>", "title": "Relaxation Zone"}]};
 
         option = {
             tooltip: {
                 trigger: 'item',
                 formatter: function (params) {
-                    // Check if a custom tooltip is defined in echartsData
                     var dataIndex = echartsData.findIndex(item => item.name === params.name);
                     if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
                         return echartsData[dataIndex].tooltip;
@@ -115,14 +114,37 @@
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
             var infoContent = document.getElementById('info-content');
-
             var name = params.name;
-            if (htmlMappings[name]) {
-                infoContent.innerHTML = htmlMappings[name];
+
+            var elementActions = actionsManifest[name];
+            var htmlContent = '';
+            var hasInteraction = false;
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.action_type === 'tooltip') {
+                        htmlContent += action.content;
+                        hasInteraction = true;
+                    } else if (action.action_type === 'url') {
+                        window.open(action.url, action.target);
+                    } else if (action.action_type === 'drilldown') {
+                        console.log('DrillDown to:', action.target_svg);
+                        // Optional: trigger drilldown logic here
+                        alert('Drilling down to ' + action.target_svg);
+                    } else if (action.action_type === 'callback') {
+                        console.log('Triggering callback:', action.event_name, action.payload);
+                    }
+                });
+            }
+
+            if (hasInteraction && htmlContent) {
+                infoContent.innerHTML = htmlContent;
                 infoPanel.classList.add('active');
-            } else {
+            } else if (!hasInteraction && !elementActions) {
                 infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
                 infoPanel.classList.add('active');
+            } else {
+                closePanel();
             }
         });
 
