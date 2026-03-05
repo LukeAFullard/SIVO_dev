@@ -4,43 +4,37 @@ import html
 
 from sivo.core.sivo import Sivo
 
-def sivo_component(sivo_app: Sivo, key: Optional[str] = None) -> Any:
+def sivo_component(
+    sivo_app: Sivo,
+    key: Optional[str] = None,
+    custom_css: Optional[str] = None,
+    custom_js: Optional[str] = None,
+    zoom_to: Optional[str] = None
+) -> Any:
     """
     Renders a SIVO Infographic inside a Streamlit application using a V2 custom component.
 
     Args:
         sivo_app (Sivo): The SIVO orchestrator instance to render.
         key (str, optional): An optional key that uniquely identifies this component.
+        custom_css (str, optional): Optional CSS string to inject into the component.
+        custom_js (str, optional): Optional JS string to inject into the component.
+        zoom_to (str, optional): An SVG element ID to zoom to programmatically.
 
     Returns:
-        Any: The value returned by the Streamlit component (e.g. click events).
+        Any: The value returned by the Streamlit component (e.g. click/hover events).
     """
     # Generate the interactive HTML bundle
-    html_content = sivo_app.to_html()
+    html_content = sivo_app.to_html(custom_css=custom_css, custom_js=custom_js)
 
-    # The V2 component requires us to pass the HTML (either as string or file path).
-    # Since we dynamically generate the HTML bundle including ECharts and SVG mapping logic,
-    # we can pass it via the `html` parameter. However, the `html` parameter for V2 components
-    # usually expects inner HTML. Since our bundle generates a full HTML document (or large snippet),
-    # an iframe-based approach or passing a container div via `html` and populating it via `js` is standard.
-    # We will use an iframe-like approach by injecting our HTML string into a component.
+    # Pass the data payload including commands like zoom
+    payload = {
+        "html_content": html_content,
+        "zoom_to": zoom_to
+    }
 
-    # Alternatively, the easiest way to render arbitrary HTML with scripts in Streamlit is `st.components.v1.html`,
-    # but the instructions strictly require `st.components.v2.component`.
-    # A V2 component accepts `html`, `css`, `js`.
-
-    # We can create a base wrapper HTML that will inject the payload.
-    # Or simply provide the generated HTML string directly.
-    # The V2 component documentation says: "Raw HTML. This doesn't require any <html>, <head>, or <body> tags; just provide the inner HTML."
-
-    # We will provide a simple container and execute a JavaScript block to inject the actual HTML or create an iframe.
-    # Because `to_html()` generates a full HTML document, placing it inside an iframe is the safest way
-    # to avoid CSS/JS conflicts with Streamlit.
-
-    # Let's create an iframe in the component's HTML, and use JavaScript to populate it.
-
-    # Mount the component, passing the full HTML string as data
-    return _sivo_v2_component(data=html_content, key=key)
+    # Mount the component, passing the full payload as data
+    return _sivo_v2_component(data=payload, key=key)
 
 # Define HTML and JS for the custom component
 _COMPONENT_HTML = """
@@ -52,18 +46,44 @@ export default function(component) {
     const { data, setTriggerValue, parentElement } = component;
     const iframe = parentElement.querySelector('#sivo-iframe');
 
-    // Populate the iframe with the generated HTML
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    doc.write(data);
-    doc.close();
+    // We only want to populate the iframe's HTML once or when it explicitly changes,
+    // to avoid full re-renders when only sending a command like zoom_to.
+
+    // Store the last rendered HTML to prevent flickering
+    if (!iframe.dataset.renderedHtml || iframe.dataset.renderedHtml !== data.html_content) {
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(data.html_content);
+        doc.close();
+        iframe.dataset.renderedHtml = data.html_content;
+    }
+
+    // Send programmatic commands (e.g., zoom_to) into the iframe
+    if (data.zoom_to) {
+        // We use setTimeout to ensure the iframe content has loaded before sending the message.
+        // In a real production app, you might wait for an 'iframe_ready' message first.
+        setTimeout(() => {
+            iframe.contentWindow.postMessage({
+                type: 'sivo_command',
+                payload: {
+                    command: 'zoom_to',
+                    element_id: data.zoom_to,
+                    zoom: 2
+                }
+            }, '*');
+        }, 500);
+    }
 
     // We can listen for messages from the iframe to support callbacks to Streamlit
-    window.addEventListener('message', function(event) {
-        if (event.data && event.data.type === 'sivo_click') {
-            setTriggerValue(event.data.payload);
-        }
-    });
+    // Ensure we don't attach multiple event listeners if the component re-renders
+    if (!window.sivoListenerAttached) {
+        window.addEventListener('message', function(event) {
+            if (event.data && (event.data.type === 'sivo_click' || event.data.type === 'sivo_hover')) {
+                setTriggerValue(event.data.payload);
+            }
+        });
+        window.sivoListenerAttached = true;
+    }
 }
 """
 

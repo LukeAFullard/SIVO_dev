@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction
 from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -66,6 +66,8 @@ class Infographic:
                     drill_to=elem_config.drill_to,
                     callback_event=elem_config.callback_event,
                     callback_payload=elem_config.callback_payload,
+                    hover_callback_event=elem_config.hover_callback_event,
+                    hover_callback_payload=elem_config.hover_callback_payload,
                     color=elem_config.color,
                     hover_color=elem_config.hover_color,
                     border_width=elem_config.border_width,
@@ -87,6 +89,8 @@ class Infographic:
         drill_to: Optional[str] = None,
         callback_event: Optional[str] = None,
         callback_payload: Optional[dict] = None,
+        hover_callback_event: Optional[str] = None,
+        hover_callback_payload: Optional[dict] = None,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -118,6 +122,9 @@ class Infographic:
         if callback_event:
             mapping.actions.append(CallbackAction(event_name=callback_event, payload=callback_payload))
 
+        if hover_callback_event:
+            mapping.actions.append(HoverCallbackAction(event_name=hover_callback_event, payload=hover_callback_payload))
+
         if color:
             mapping.theme.color = color
 
@@ -133,13 +140,13 @@ class Infographic:
         if glow is not None:
             mapping.theme.glow = glow
 
-    def to_echarts_html(self, output_path: Optional[str] = None) -> str:
+    def to_echarts_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
         Generates interactive HTML string.
         Optionally writes to output_path.
         """
         svg_string = self.parser.to_string()
-        return generate_echarts_html(svg_string, self.mappings, output_path)
+        return generate_echarts_html(svg_string, self.mappings, output_path, custom_css, custom_js)
 
     def get_manifest(self) -> Dict:
         """

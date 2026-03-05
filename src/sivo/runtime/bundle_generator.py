@@ -3,7 +3,7 @@ import json
 from typing import Dict, Optional
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-def generate_echarts_html(svg_string: str, mappings: Dict, output_path: Optional[str] = None) -> str:
+def generate_echarts_html(svg_string: str, mappings: Dict, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
     template_dir = os.path.join(os.path.dirname(__file__), 'templates')
     env = Environment(
         loader=FileSystemLoader(template_dir),
@@ -61,7 +61,9 @@ def generate_echarts_html(svg_string: str, mappings: Dict, output_path: Optional
     html_output = template.render(
         svg_string=json.dumps(svg_string),
         echarts_data=json.dumps(echarts_data),
-        actions_manifest=json.dumps(actions_manifest)
+        actions_manifest=json.dumps(actions_manifest),
+        custom_css=custom_css,
+        custom_js=custom_js
     )
 
     if output_path:
