@@ -50,6 +50,8 @@ infographic.map(
 infographic.map(
     "room2",
     tooltip="<b>Conference Room 2</b><br/>Status: 🔴 In Use",
+    callback_event="book_room",
+    callback_payload={"room_id": "room2", "action": "book"},
     color="#ffaaa5",
     hover_color="#ff7b72",
     border_width=3,
@@ -59,6 +61,8 @@ infographic.map(
 infographic.map(
     "zone3",
     tooltip="<b>Break Area</b><br/>Status: 🟡 Needs Cleaning",
+    callback_event="notify_cleaners",
+    callback_payload={"zone": "zone3", "priority": "high"},
     color="#ffd3b6",
     hover_color="#ffb385",
     border_width=3,

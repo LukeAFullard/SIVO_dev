@@ -451,7 +451,7 @@ Deliverables:
 * [x] JS runtime
 * [x] resize handling
 * [x] drill-down transitions (SVG loading & chart rebuilding fixed)
-* [ ] event system (Full Streamlit callback sync)
+* [x] event system (Full Streamlit callback sync)
 
 ## Phase 4 — Streamlit Integration
 

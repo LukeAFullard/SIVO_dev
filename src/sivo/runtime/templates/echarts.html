@@ -156,8 +156,29 @@
                             });
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
+                        // Post message to parent window (e.g. Streamlit iframe wrapper)
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
                     }
                 });
+            }
+
+            // Also trigger a default generic click event if there's no specific callback mapped
+            if (!elementActions || !elementActions.find(a => a.action_type === 'callback')) {
+                window.parent.postMessage({
+                    type: 'sivo_click',
+                    payload: {
+                        element_id: name,
+                        event_name: 'click',
+                        data: {}
+                    }
+                }, '*');
             }
 
             if (hasInteraction && htmlContent) {
