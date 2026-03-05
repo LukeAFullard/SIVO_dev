@@ -47,7 +47,7 @@
     <div id="chart-container"></div>
     <div id="info-panel">
         <span class="close-btn" onclick="closePanel()">×</span>
-        <div id="info-content"></div>
+        <div id="info-content-host"></div>
     </div>
 
     <script>
@@ -62,8 +62,8 @@
         echarts.registerMap('sivo_map', { svg: svgStr });
 
         // Mappings for tooltips and HTML content
-        var echartsData = [{"name": "buildingA", "value": 1, "tooltip": "Main Admin", "itemStyle": {"areaColor": "#ffcccc"}}, {"name": "buildingB", "value": 1, "tooltip": "Engineering Block", "itemStyle": {"areaColor": "#ccffcc"}}, {"name": "fountain", "value": 1, "tooltip": "Relaxation Zone", "itemStyle": {"areaColor": "#ccccff"}}, {"name": "pathway", "value": 1}];
-        var actionsManifest = {"buildingA": [{"action_type": "tooltip", "content": "<h3>Building A</h3><p>Main Administrative Building.</p><p>Capacity: 500</p>", "title": "Main Admin"}], "buildingB": [{"action_type": "tooltip", "content": "<h3>Building B</h3><p>Engineering & Sciences.</p><ul><li>Labs</li><li>Classrooms</li></ul>", "title": "Engineering Block"}], "fountain": [{"action_type": "tooltip", "content": "<h3>Central Fountain</h3><p>A nice place to relax.</p>", "title": "Relaxation Zone"}]};
+        var echartsData = [{"name": "buildingA", "value": 1, "tooltip": "Main Admin", "itemStyle": {"areaColor": "#ffcccc"}}, {"name": "buildingB", "value": 1, "tooltip": "Engineering Block", "itemStyle": {"areaColor": "#ccffcc"}}, {"name": "fountain", "value": 1, "tooltip": "Relaxation Zone", "itemStyle": {"areaColor": "#ccccff", "borderColor": "#0000ff", "borderWidth": 3}, "emphasis": {"itemStyle": {"areaColor": "#aaaaff", "shadowBlur": 15, "shadowColor": "#aaaaff", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "pathway", "value": 1}];
+        var actionsManifest = {"buildingA": [{"action_type": "tooltip", "content": "<h3>Building A</h3><p>Main Administrative Building.</p><p>Capacity: 500</p>", "title": "Main Admin"}], "buildingB": [{"action_type": "tooltip", "content": "<h3>Building B</h3><p>Engineering & Sciences.</p><ul><li>Labs</li><li>Classrooms</li></ul>", "title": "Engineering Block"}], "fountain": [{"action_type": "tooltip", "content": "\n        <style>\n          h3 { color: darkblue; }\n          .fountain-desc { border: 1px solid blue; padding: 5px; }\n        </style>\n        <h3>Central Fountain</h3>\n        <p class=\"fountain-desc\">A nice place to relax. Note this CSS does not bleed out due to Shadow DOM!</p>\n        ", "title": "Relaxation Zone"}]};
 
         option = {
             tooltip: {
@@ -110,10 +110,15 @@
 
         myChart.setOption(option);
 
+        // Setup Shadow DOM for info-content
+        var infoContentHost = document.getElementById('info-content-host');
+        var infoContentShadow = infoContentHost.attachShadow({mode: 'open'});
+        var infoContent = document.createElement('div');
+        infoContentShadow.appendChild(infoContent);
+
         // Handle click events
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
-            var infoContent = document.getElementById('info-content');
             var name = params.name;
 
             var elementActions = actionsManifest[name];
