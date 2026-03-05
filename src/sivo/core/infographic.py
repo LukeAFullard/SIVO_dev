@@ -87,3 +87,25 @@ class Infographic:
             if mapping.actions or mapping.theme.color or mapping.theme.hover_color:
                 manifest["objects"][name] = mapping.model_dump()
         return manifest
+
+    def get_metadata(self) -> Dict:
+        """
+        Returns the SVG metadata including bounding boxes and element types.
+        """
+        metadata = {"objects": []}
+        for elem in self.elements:
+            obj_data = {
+                "id": elem["id"],
+                "type": elem["tag"]
+            }
+            if "bbox" in elem:
+                obj_data["bbox"] = elem["bbox"]
+            metadata["objects"].append(obj_data)
+        return metadata
+
+    def export_metadata(self, output_path: str):
+        """
+        Exports the SVG metadata to a JSON file.
+        """
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(self.get_metadata(), f, indent=2)

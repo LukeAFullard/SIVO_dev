@@ -47,9 +47,15 @@ def run():
     # Note: 'pathway' has no custom mapping, defaults will apply
 
     output_path = os.path.join(os.path.dirname(__file__), "output.html")
-    print(f"Exporting to {output_path}...")
+    print(f"Exporting HTML to {output_path}...")
     sivo_instance.to_echarts_html(output_path)
+
+    metadata_path = os.path.join(os.path.dirname(__file__), "metadata.json")
+    print(f"Exporting Metadata to {metadata_path}...")
+    sivo_instance.export_metadata(metadata_path)
+
     print("Done! Open examples/output.html in your browser.")
+    print("Check examples/metadata.json for the extracted SVG metadata.")
 
 if __name__ == "__main__":
     run()

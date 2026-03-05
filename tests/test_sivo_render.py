@@ -39,5 +39,31 @@ class TestSivoRender(unittest.TestCase):
         self.assertIn("test2", html_output)
         self.assertIn("https://example.com", html_output)
 
+    def test_metadata_extraction(self):
+        svg_content = """
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <rect id="rect1" x="10" y="20" width="30" height="40"/>
+            <circle id="circle1" cx="100" cy="100" r="50"/>
+            <polygon id="poly1" points="0,0 10,0 10,10 0,10"/>
+        </svg>
+        """
+        infographic = Infographic.from_string(svg_content)
+        metadata = infographic.get_metadata()
+
+        self.assertIn("objects", metadata)
+        objects = {obj["id"]: obj for obj in metadata["objects"]}
+
+        self.assertIn("rect1", objects)
+        self.assertEqual(objects["rect1"]["type"], "rect")
+        self.assertEqual(objects["rect1"]["bbox"], [10.0, 20.0, 40.0, 60.0])
+
+        self.assertIn("circle1", objects)
+        self.assertEqual(objects["circle1"]["type"], "circle")
+        self.assertEqual(objects["circle1"]["bbox"], [50.0, 50.0, 150.0, 150.0])
+
+        self.assertIn("poly1", objects)
+        self.assertEqual(objects["poly1"]["type"], "polygon")
+        self.assertEqual(objects["poly1"]["bbox"], [0.0, 0.0, 10.0, 10.0])
+
 if __name__ == '__main__':
     unittest.main()
