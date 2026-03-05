@@ -1,5 +1,6 @@
 from lxml import etree
 from typing import List, Dict, Any
+from .normalizer import SVGNormalizer
 
 class SVGParser:
     def __init__(self, filepath_or_string: str, is_file: bool = True):
@@ -14,6 +15,10 @@ class SVGParser:
         self.namespaces = {'svg': 'http://www.w3.org/2000/svg'}
         if None in self.root.nsmap:
             self.namespaces['svg'] = self.root.nsmap[None]
+
+        # Normalize the SVG (e.g., inline <use> references) before processing
+        normalizer = SVGNormalizer(self.tree)
+        normalizer.normalize()
 
     def process_elements(self) -> List[Dict[str, str]]:
         """
