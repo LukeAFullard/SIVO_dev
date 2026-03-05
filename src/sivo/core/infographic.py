@@ -34,6 +34,8 @@ class Infographic:
         html: Optional[str] = None,
         url: Optional[str] = None,
         drill_to: Optional[str] = None,
+        callback_event: Optional[str] = None,
+        callback_payload: Optional[dict] = None,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -66,6 +68,9 @@ class Infographic:
 
         if drill_to:
             mapping.actions.append(DrillDownAction(target_svg=drill_to))
+
+        if callback_event:
+            mapping.actions.append(CallbackAction(event_name=callback_event, payload=callback_payload))
 
         if color:
             mapping.theme.color = color

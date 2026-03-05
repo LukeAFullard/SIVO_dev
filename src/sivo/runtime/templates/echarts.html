@@ -145,8 +145,10 @@
                                 return response.text();
                             })
                             .then(svgText => {
+                                // Register each new SVG map with a unique name (the filepath) to prevent ECharts from serving a cached map.
                                 echarts.registerMap(action.target_svg, { svg: svgText });
-                                myChart.setOption(getBaseOption(action.target_svg));
+                                // Always rebuild base chart options using a factory function to avoid mutating global reference states.
+                                myChart.setOption(getBaseOption(action.target_svg), true);
                             })
                             .catch(error => {
                                 console.error('Error fetching SVG:', error);
@@ -154,8 +156,29 @@
                             });
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
+                        // Post message to parent window (e.g. Streamlit iframe wrapper)
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
                     }
                 });
+            }
+
+            // Also trigger a default generic click event if there's no specific callback mapped
+            if (!elementActions || !elementActions.find(a => a.action_type === 'callback')) {
+                window.parent.postMessage({
+                    type: 'sivo_click',
+                    payload: {
+                        element_id: name,
+                        event_name: 'click',
+                        data: {}
+                    }
+                }, '*');
             }
 
             if (hasInteraction && htmlContent) {

@@ -58,10 +58,10 @@ export default function(component) {
     doc.write(data);
     doc.close();
 
-    // Optional: We can listen for messages from the iframe if we want to support callbacks to Streamlit
+    // We can listen for messages from the iframe to support callbacks to Streamlit
     window.addEventListener('message', function(event) {
         if (event.data && event.data.type === 'sivo_click') {
-            setTriggerValue('clicked', event.data.payload);
+            setTriggerValue(event.data.payload);
         }
     });
 }

@@ -5,7 +5,7 @@ from typing import List, Dict, Any, Tuple, Optional
 def parse_coord(coord_str: Optional[str]) -> float:
     if not coord_str:
         return 0.0
-    match = re.match(r'^[+-]?(?:\d+(?:\.\d*)?|\.\d+)', coord_str.strip())
+    match = re.match(r'^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?', coord_str.strip())
     if match:
         return float(match.group(0))
     return 0.0
