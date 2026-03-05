@@ -4,12 +4,15 @@ import html
 
 from sivo.core.sivo import Sivo
 
+from typing import Optional, Any, Dict
+
 def sivo_component(
     sivo_app: Sivo,
     key: Optional[str] = None,
     custom_css: Optional[str] = None,
     custom_js: Optional[str] = None,
-    zoom_to: Optional[str] = None
+    zoom_to: Optional[str] = None,
+    dynamic_colors: Optional[Dict[str, str]] = None
 ) -> Any:
     """
     Renders a SIVO Infographic inside a Streamlit application using a V2 custom component.
@@ -20,6 +23,7 @@ def sivo_component(
         custom_css (str, optional): Optional CSS string to inject into the component.
         custom_js (str, optional): Optional JS string to inject into the component.
         zoom_to (str, optional): An SVG element ID to zoom to programmatically.
+        dynamic_colors (dict, optional): A dictionary of element_id: color hex mapping to update colors without full re-render.
 
     Returns:
         Any: The value returned by the Streamlit component (e.g. click/hover events).
@@ -28,9 +32,13 @@ def sivo_component(
     html_content = sivo_app.to_html(custom_css=custom_css, custom_js=custom_js)
 
     # Pass the data payload including commands like zoom
+    zoom_center = sivo_app.get_element_center(zoom_to) if zoom_to else None
+
     payload = {
         "html_content": html_content,
-        "zoom_to": zoom_to
+        "zoom_to": zoom_to,
+        "zoom_center": zoom_center,
+        "dynamic_colors": dynamic_colors or {}
     }
 
     # Mount the component, passing the full payload as data
@@ -58,21 +66,31 @@ export default function(component) {
         iframe.dataset.renderedHtml = data.html_content;
     }
 
-    // Send programmatic commands (e.g., zoom_to) into the iframe
-    if (data.zoom_to) {
-        // We use setTimeout to ensure the iframe content has loaded before sending the message.
-        // In a real production app, you might wait for an 'iframe_ready' message first.
-        setTimeout(() => {
+    // Send programmatic commands (e.g., zoom_to, dynamic_colors) into the iframe
+    // We use setTimeout to ensure the iframe content has loaded before sending the message.
+    setTimeout(() => {
+        if (data.zoom_to) {
             iframe.contentWindow.postMessage({
                 type: 'sivo_command',
                 payload: {
                     command: 'zoom_to',
                     element_id: data.zoom_to,
+                    zoom_center: data.zoom_center,
                     zoom: 2
                 }
             }, '*');
-        }, 500);
-    }
+        }
+
+        if (data.dynamic_colors && Object.keys(data.dynamic_colors).length > 0) {
+            iframe.contentWindow.postMessage({
+                type: 'sivo_command',
+                payload: {
+                    command: 'update_colors',
+                    colors: data.dynamic_colors
+                }
+            }, '*');
+        }
+    }, 500);
 
     // We can listen for messages from the iframe to support callbacks to Streamlit
     // Ensure we don't attach multiple event listeners if the component re-renders

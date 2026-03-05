@@ -64,6 +64,7 @@
         // Mappings for tooltips and HTML content
         var echartsData = {{ echarts_data | safe }};
         var actionsManifest = {{ actions_manifest | safe }};
+        var overlaysData = {{ overlays | safe }};
 
         function getBaseOption(mapName) {
             return {
@@ -251,12 +252,14 @@
                         name: elementId
                     });
 
-                    // The easiest way to zoom to a specific region name in an ECharts map series
-                    // is to set the `center` and `zoom` properties on the series options.
-                    // However, we don't have the center coordinates natively in JS.
-                    // A workaround is to use ECharts internal API to get region bounding rect,
-                    // or just let ECharts handle select. Let's use `select` to highlight it.
-                    // For actual zoom, we'd need the metadata from Python injected.
+                    if (payload.zoom_center) {
+                        myChart.setOption({
+                            series: [{
+                                center: payload.zoom_center,
+                                zoom: zoomLevel
+                            }]
+                        });
+                    }
                 } else if (payload.command === 'inject_assets') {
                     if (payload.css) {
                         var style = document.createElement('style');
@@ -268,6 +271,29 @@
                         script.innerHTML = payload.js;
                         document.body.appendChild(script);
                     }
+                } else if (payload.command === 'update_colors') {
+                    var newColors = payload.colors;
+                    var seriesData = myChart.getOption().series[0].data;
+
+                    var updated = false;
+                    for (var i = 0; i < seriesData.length; i++) {
+                        var name = seriesData[i].name;
+                        if (newColors[name]) {
+                            if (!seriesData[i].itemStyle) {
+                                seriesData[i].itemStyle = {};
+                            }
+                            seriesData[i].itemStyle.areaColor = newColors[name];
+                            updated = true;
+                        }
+                    }
+
+                    if (updated) {
+                        myChart.setOption({
+                            series: [{
+                                data: seriesData
+                            }]
+                        });
+                    }
                 }
             }
         });
@@ -276,10 +302,61 @@
             document.getElementById('info-panel').classList.remove('active');
         }
 
+        // Setup Overlays
+        var overlaysContainer = document.createElement('div');
+        overlaysContainer.id = 'sivo-overlays-container';
+        overlaysContainer.style.position = 'absolute';
+        overlaysContainer.style.top = '0';
+        overlaysContainer.style.left = '0';
+        overlaysContainer.style.width = '100%';
+        overlaysContainer.style.height = '100%';
+        overlaysContainer.style.pointerEvents = 'none'; // Let clicks pass through to chart
+        document.getElementById('chart-container').appendChild(overlaysContainer);
+
+        var overlayElements = {};
+
+        function initOverlays() {
+            for (const [id, overlay] of Object.entries(overlaysData)) {
+                var el = document.createElement('div');
+                el.style.position = 'absolute';
+                el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
+                el.innerHTML = overlay.html;
+                overlaysContainer.appendChild(el);
+                overlayElements[id] = { dom: el, data: overlay };
+            }
+        }
+
+        function updateOverlaysPosition() {
+            for (const [id, overlayObj] of Object.entries(overlayElements)) {
+                var coord = overlayObj.data.coord; // [x, y] in SVG map coordinates
+                var offset = overlayObj.data.offset; // [x, y] pixel offset
+
+                // Convert SVG coordinate to DOM pixel coordinate
+                var pixel = myChart.convertToPixel({seriesIndex: 0}, coord);
+                if (pixel) {
+                    overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
+                    overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
+                    overlayObj.dom.style.display = 'block';
+                } else {
+                    overlayObj.dom.style.display = 'none';
+                }
+            }
+        }
+
+        initOverlays();
+
+        // Update overlays on map roam (zoom/pan)
+        myChart.on('georoam', updateOverlaysPosition);
+
         // Handle window resize
         window.addEventListener('resize', function() {
             myChart.resize();
+            updateOverlaysPosition();
         });
+
+        // Initial position update after chart renders
+        setTimeout(updateOverlaysPosition, 100);
+
     </script>
 
     <!-- Custom injected assets placeholder -->

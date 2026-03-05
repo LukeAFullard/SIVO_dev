@@ -67,6 +67,14 @@ class Sivo:
             glow=glow
         )
 
+    def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0):
+        """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
+        self.infographic.add_overlay(element_id, html, offset_x, offset_y)
+
+    def get_element_center(self, element_id: str) -> Optional[list[float]]:
+        """Gets the center coordinate [x, y] of a specific element, useful for programmatic zoom."""
+        return self.infographic.get_element_center(element_id)
+
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
         Generates the interactive HTML string (bundle) containing the ECharts map,
