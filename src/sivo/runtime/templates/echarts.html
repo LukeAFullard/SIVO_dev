@@ -65,49 +65,52 @@
         var echartsData = {{ echarts_data | safe }};
         var actionsManifest = {{ actions_manifest | safe }};
 
-        option = {
-            tooltip: {
-                trigger: 'item',
-                formatter: function (params) {
-                    var dataIndex = echartsData.findIndex(item => item.name === params.name);
-                    if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
-                        return echartsData[dataIndex].tooltip;
+        function getBaseOption(mapName) {
+            return {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        var dataIndex = echartsData.findIndex(item => item.name === params.name);
+                        if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
+                            return echartsData[dataIndex].tooltip;
+                        }
+                        return params.name;
                     }
-                    return params.name;
-                }
-            },
-            series: [
-                {
-                    name: 'SIVO Series',
-                    type: 'map',
-                    map: 'sivo_map',
-                    roam: true, // Enable zoom and pan
-                    itemStyle: {
-                        borderColor: '#999',
-                        borderWidth: 1,
-                        areaColor: '#eee'
-                    },
-                    emphasis: {
+                },
+                series: [
+                    {
+                        name: 'SIVO Series',
+                        type: 'map',
+                        map: mapName,
+                        roam: true, // Enable zoom and pan
                         itemStyle: {
-                            areaColor: '#ffd700', // Highlight color
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            borderColor: '#999',
+                            borderWidth: 1,
+                            areaColor: '#eee'
                         },
-                        label: {
-                            show: false
-                        }
-                    },
-                    select: {
-                        itemStyle: {
-                            areaColor: '#ff8c00'
-                        }
-                    },
-                    data: echartsData
-                }
-            ]
-        };
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#ffd700', // Highlight color
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            label: {
+                                show: false
+                            }
+                        },
+                        select: {
+                            itemStyle: {
+                                areaColor: '#ff8c00'
+                            }
+                        },
+                        data: echartsData
+                    }
+                ]
+            };
+        }
 
+        option = getBaseOption('sivo_map');
         myChart.setOption(option);
 
         // Setup Shadow DOM for info-content
@@ -134,8 +137,21 @@
                         window.open(action.url, action.target);
                     } else if (action.action_type === 'drilldown') {
                         console.log('DrillDown to:', action.target_svg);
-                        // Optional: trigger drilldown logic here
-                        alert('Drilling down to ' + action.target_svg);
+                        fetch(action.target_svg)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.text();
+                            })
+                            .then(svgText => {
+                                echarts.registerMap(action.target_svg, { svg: svgText });
+                                myChart.setOption(getBaseOption(action.target_svg));
+                            })
+                            .catch(error => {
+                                console.error('Error fetching SVG:', error);
+                                alert('Could not load ' + action.target_svg);
+                            });
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
                     }
