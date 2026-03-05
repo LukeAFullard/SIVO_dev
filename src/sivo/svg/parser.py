@@ -1,6 +1,7 @@
 from lxml import etree
 from typing import List, Dict, Any
 from .normalizer import SVGNormalizer
+from .metadata import get_bounding_box
 
 class SVGParser:
     def __init__(self, filepath_or_string: str, is_file: bool = True):
@@ -38,11 +39,17 @@ class SVGParser:
                         elem_name = elem_id
                         elem.set('name', elem_name)
 
-                    elements.append({
+                    bbox = get_bounding_box(elem)
+
+                    element_data = {
                         'id': elem_id,
                         'name': elem_name,
                         'tag': tag_name
-                    })
+                    }
+                    if bbox:
+                        element_data['bbox'] = bbox
+
+                    elements.append(element_data)
         return elements
 
     def get_viewbox(self) -> str:
