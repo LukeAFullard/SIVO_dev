@@ -430,10 +430,10 @@ docs/
 
 Deliverables:
 
-* SVG parser
-* canonicalizer
-* metadata extraction
-* bounding box calculation
+* [x] SVG parser
+* [x] canonicalizer (Robust `<use>` reference resolution, proper wrapping, and cycle detection completed)
+* [ ] metadata extraction
+* [ ] bounding box calculation
 
 ## Phase 2 — Interaction System
 
