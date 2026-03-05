@@ -135,20 +135,22 @@ These provide reliable XML parsing and manipulation.
 
 The mapping engine connects Python code to SVG elements.
 
-## Infographic Class
+## Sivo Orchestrator Class
 
-Primary user-facing API.
+Primary user-facing API, wrapping the internal `Infographic` logic to provide a seamless declarative interface.
 
 ```python
-from sivo import Infographic
+from sivo import Sivo
 
-inf = Infographic.from_svg("campus.svg")
+sivo_app = Sivo.from_svg("campus.svg")
 
-inf.map(
+sivo_app.map(
     "buildingA",
     tooltip="<h3>Building A</h3>",
     drill_to="buildingA.svg"
 )
+
+sivo_app.to_html("output.html")
 ```
 
 ### Responsibilities
@@ -349,13 +351,14 @@ Capabilities:
 
 ```python
 import streamlit as st
-from sivo import Infographic
+from sivo import Sivo
+from sivo.streamlit.component import sivo_component
 
-inf = Infographic.from_svg("factory.svg")
+sivo_app = Sivo.from_svg("factory.svg")
 
-inf.map("machineA", tooltip="Machine A")
+sivo_app.map("machineA", tooltip="Machine A")
 
-st.sivo(inf)
+result = sivo_component(sivo_app.infographic, key="sivo_example")
 ```
 
 ---
@@ -393,9 +396,10 @@ sivo/
   __init__.py
 
   core/
+    sivo.py
     infographic.py
     actions.py
-    manifest.py
+    config.py
 
   svg/
     normalizer.py
@@ -457,8 +461,8 @@ Deliverables:
 
 Deliverables:
 
-* Streamlit component
-* example apps
+* [x] Streamlit component (V2 API)
+* [x] example apps
 * dynamic updates
 
 ## Phase 5 — Configuration & CLI
@@ -467,6 +471,7 @@ Deliverables:
 
 * [x] Configuration Engine (JSON/dict parsing)
 * [x] CLI tool
+* [x] Sivo Declarative Orchestrator
 * pip packaging
 * documentation
 * example gallery

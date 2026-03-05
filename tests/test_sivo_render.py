@@ -5,7 +5,7 @@ import unittest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 from sivo.svg.parser import SVGParser
-from sivo.core.infographic import Infographic
+from sivo import Sivo
 
 class TestSivoRender(unittest.TestCase):
     def test_infographic_render(self):
@@ -15,11 +15,12 @@ class TestSivoRender(unittest.TestCase):
             <rect id="test2" width="10" height="10"/>
         </svg>
         """
-        infographic = Infographic.from_string(svg_content)
-        infographic.map("test1", tooltip="Test Path", color="#ff0000", glow=True, border_width=2.5)
-        infographic.map("test2", url="https://example.com", drill_to="other.svg")
+        # Migrate this test to use Sivo orchestrator API
+        sivo_app = Sivo.from_string(svg_content)
+        sivo_app.map("test1", tooltip="Test Path", color="#ff0000", glow=True, border_width=2.5)
+        sivo_app.map("test2", url="https://example.com", drill_to="other.svg")
 
-        manifest = infographic.get_manifest()
+        manifest = sivo_app.get_manifest()
 
         self.assertIn("test1", manifest["objects"])
         self.assertEqual(manifest["objects"]["test1"]["theme"]["glow"], True)
@@ -34,7 +35,7 @@ class TestSivoRender(unittest.TestCase):
         self.assertIn("url", action_types)
         self.assertIn("drilldown", action_types)
 
-        html_output = infographic.to_echarts_html()
+        html_output = sivo_app.to_html()
 
         # Check that Jinja rendered properly
         self.assertIn("SIVO Interactive Graphic", html_output)
@@ -51,8 +52,8 @@ class TestSivoRender(unittest.TestCase):
             <polygon id="poly1" points="0,0 10,0 10,10 0,10"/>
         </svg>
         """
-        infographic = Infographic.from_string(svg_content)
-        metadata = infographic.get_metadata()
+        sivo_app = Sivo.from_string(svg_content)
+        metadata = sivo_app.get_metadata()
 
         self.assertIn("objects", metadata)
         objects = {obj["id"]: obj for obj in metadata["objects"]}
