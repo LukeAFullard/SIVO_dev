@@ -35,7 +35,10 @@ class Infographic:
         url: Optional[str] = None,
         drill_to: Optional[str] = None,
         color: Optional[str] = None,
-        hover_color: Optional[str] = None
+        hover_color: Optional[str] = None,
+        border_width: Optional[float] = None,
+        border_color: Optional[str] = None,
+        glow: Optional[bool] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -70,6 +73,15 @@ class Infographic:
         if hover_color:
             mapping.theme.hover_color = hover_color
 
+        if border_width is not None:
+            mapping.theme.border_width = border_width
+
+        if border_color:
+            mapping.theme.border_color = border_color
+
+        if glow is not None:
+            mapping.theme.glow = glow
+
     def to_echarts_html(self, output_path: Optional[str] = None) -> str:
         """
         Generates interactive HTML string.
@@ -84,7 +96,9 @@ class Infographic:
         """
         manifest = {"objects": {}}
         for name, mapping in self.mappings.items():
-            if mapping.actions or mapping.theme.color or mapping.theme.hover_color:
+            if (mapping.actions or mapping.theme.color or mapping.theme.hover_color or
+                mapping.theme.border_color or mapping.theme.border_width is not None or
+                mapping.theme.glow is not None):
                 manifest["objects"][name] = mapping.model_dump()
         return manifest
 

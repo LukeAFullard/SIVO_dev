@@ -39,9 +39,20 @@ def run():
 
     sivo_instance.map(
         "fountain",
-        html="<h3>Central Fountain</h3><p>A nice place to relax.</p>",
+        html="""
+        <style>
+          h3 { color: darkblue; }
+          .fountain-desc { border: 1px solid blue; padding: 5px; }
+        </style>
+        <h3>Central Fountain</h3>
+        <p class="fountain-desc">A nice place to relax. Note this CSS does not bleed out due to Shadow DOM!</p>
+        """,
         tooltip="Relaxation Zone",
-        color="#ccccff" # Light blue
+        color="#ccccff", # Light blue
+        hover_color="#aaaaff",
+        border_width=3,
+        border_color="#0000ff",
+        glow=True
     )
 
     # Note: 'pathway' has no custom mapping, defaults will apply

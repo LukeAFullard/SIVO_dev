@@ -47,7 +47,7 @@
     <div id="chart-container"></div>
     <div id="info-panel">
         <span class="close-btn" onclick="closePanel()">×</span>
-        <div id="info-content"></div>
+        <div id="info-content-host"></div>
     </div>
 
     <script>
@@ -110,10 +110,15 @@
 
         myChart.setOption(option);
 
+        // Setup Shadow DOM for info-content
+        var infoContentHost = document.getElementById('info-content-host');
+        var infoContentShadow = infoContentHost.attachShadow({mode: 'open'});
+        var infoContent = document.createElement('div');
+        infoContentShadow.appendChild(infoContent);
+
         // Handle click events
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
-            var infoContent = document.getElementById('info-content');
             var name = params.name;
 
             var elementActions = actionsManifest[name];

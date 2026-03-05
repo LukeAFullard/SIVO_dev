@@ -26,6 +26,9 @@ class CallbackAction(BaseAction):
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
+    border_width: Optional[float] = None
+    border_color: Optional[str] = None
+    glow: Optional[bool] = None
 
 class InteractionMapping(BaseModel):
     id: str

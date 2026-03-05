@@ -35,11 +35,26 @@ def generate_echarts_html(svg_string: str, mappings: Dict, output_path: Optional
         item_style = {}
         if mapping.theme.color:
             item_style['areaColor'] = mapping.theme.color
+        if mapping.theme.border_color:
+            item_style['borderColor'] = mapping.theme.border_color
+        if mapping.theme.border_width is not None:
+            item_style['borderWidth'] = mapping.theme.border_width
+
         if item_style:
             data_item['itemStyle'] = item_style
 
+        emphasis_style = {}
         if mapping.theme.hover_color:
-            data_item['emphasis'] = {'itemStyle': {'areaColor': mapping.theme.hover_color}}
+            emphasis_style['areaColor'] = mapping.theme.hover_color
+
+        if mapping.theme.glow:
+            emphasis_style['shadowBlur'] = 15
+            emphasis_style['shadowColor'] = mapping.theme.hover_color if mapping.theme.hover_color else 'rgba(0, 0, 0, 0.5)'
+            emphasis_style['shadowOffsetX'] = 0
+            emphasis_style['shadowOffsetY'] = 0
+
+        if emphasis_style:
+            data_item['emphasis'] = {'itemStyle': emphasis_style}
 
         echarts_data.append(data_item)
 

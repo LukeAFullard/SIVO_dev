@@ -16,10 +16,14 @@ class TestSivoRender(unittest.TestCase):
         </svg>
         """
         infographic = Infographic.from_string(svg_content)
-        infographic.map("test1", tooltip="Test Path", color="#ff0000")
+        infographic.map("test1", tooltip="Test Path", color="#ff0000", glow=True, border_width=2.5)
         infographic.map("test2", url="https://example.com", drill_to="other.svg")
 
         manifest = infographic.get_manifest()
+
+        self.assertIn("test1", manifest["objects"])
+        self.assertEqual(manifest["objects"]["test1"]["theme"]["glow"], True)
+        self.assertEqual(manifest["objects"]["test1"]["theme"]["border_width"], 2.5)
 
         self.assertIn("test1", manifest["objects"])
         self.assertIn("test2", manifest["objects"])
