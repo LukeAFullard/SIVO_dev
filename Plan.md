@@ -466,7 +466,7 @@ Deliverables:
 Deliverables:
 
 * [x] Configuration Engine (JSON/dict parsing)
-* CLI tool
+* [x] CLI tool
 * pip packaging
 * documentation
 * example gallery
