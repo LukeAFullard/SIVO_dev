@@ -145,8 +145,10 @@
                                 return response.text();
                             })
                             .then(svgText => {
+                                // Register each new SVG map with a unique name (the filepath) to prevent ECharts from serving a cached map.
                                 echarts.registerMap(action.target_svg, { svg: svgText });
-                                myChart.setOption(getBaseOption(action.target_svg));
+                                // Always rebuild base chart options using a factory function to avoid mutating global reference states.
+                                myChart.setOption(getBaseOption(action.target_svg), true);
                             })
                             .catch(error => {
                                 console.error('Error fetching SVG:', error);
