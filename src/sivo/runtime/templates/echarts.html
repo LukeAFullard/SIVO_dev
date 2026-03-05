@@ -63,13 +63,12 @@
 
         // Mappings for tooltips and HTML content
         var echartsData = {{ echarts_data | safe }};
-        var htmlMappings = {{ html_mappings | safe }};
+        var actionsManifest = {{ actions_manifest | safe }};
 
         option = {
             tooltip: {
                 trigger: 'item',
                 formatter: function (params) {
-                    // Check if a custom tooltip is defined in echartsData
                     var dataIndex = echartsData.findIndex(item => item.name === params.name);
                     if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
                         return echartsData[dataIndex].tooltip;
@@ -115,14 +114,37 @@
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
             var infoContent = document.getElementById('info-content');
-
             var name = params.name;
-            if (htmlMappings[name]) {
-                infoContent.innerHTML = htmlMappings[name];
+
+            var elementActions = actionsManifest[name];
+            var htmlContent = '';
+            var hasInteraction = false;
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.action_type === 'tooltip') {
+                        htmlContent += action.content;
+                        hasInteraction = true;
+                    } else if (action.action_type === 'url') {
+                        window.open(action.url, action.target);
+                    } else if (action.action_type === 'drilldown') {
+                        console.log('DrillDown to:', action.target_svg);
+                        // Optional: trigger drilldown logic here
+                        alert('Drilling down to ' + action.target_svg);
+                    } else if (action.action_type === 'callback') {
+                        console.log('Triggering callback:', action.event_name, action.payload);
+                    }
+                });
+            }
+
+            if (hasInteraction && htmlContent) {
+                infoContent.innerHTML = htmlContent;
                 infoPanel.classList.add('active');
-            } else {
+            } else if (!hasInteraction && !elementActions) {
                 infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
                 infoPanel.classList.add('active');
+            } else {
+                closePanel();
             }
         });
 

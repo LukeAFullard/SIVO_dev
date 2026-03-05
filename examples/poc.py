@@ -4,7 +4,7 @@ import sys
 # Ensure SIVO is importable from src
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from sivo.sivo import Sivo
+from sivo.core.infographic import Infographic
 
 # Sample SVG mimicking a minimal campus or office layout
 sample_svg = """<?xml version="1.0" encoding="UTF-8"?>
@@ -19,7 +19,7 @@ sample_svg = """<?xml version="1.0" encoding="UTF-8"?>
 def run():
     print("Initializing SIVO with sample SVG...")
     # Initialize from a string (is_file=False)
-    sivo_instance = Sivo(sample_svg, is_file=False)
+    sivo_instance = Infographic.from_string(sample_svg)
 
     # Map elements to tooltips and HTML
     print("Mapping interactions...")
