@@ -43,27 +43,15 @@ class SVGNormalizer:
         """
 
         # Initial search for all <use> tags
-        initial_uses = self.root.xpath('.//svg:use', namespaces=self.namespaces)
+        initial_uses = [(u, set()) for u in self.root.xpath('.//svg:use', namespaces=self.namespaces)]
         queue = collections.deque(initial_uses)
 
         while queue:
-            use_elem = queue.popleft()
+            use_elem, visited = queue.popleft()
             parent = use_elem.getparent()
 
             if parent is None:
                 # If the <use> tag has no parent, we can't replace it
-                continue
-
-            # Simple cycle prevention: track depth of use wrappers
-            # To avoid segfaults from deep copying massive trees
-            depth = 0
-            curr = use_elem
-            while curr is not None:
-                if curr.tag == f"{{{self.namespaces['svg']}}}g" and curr.get('data-sivo-use-wrapper') == 'true':
-                    depth += 1
-                curr = curr.getparent()
-            if depth > 20:
-                parent.remove(use_elem)
                 continue
 
             href = use_elem.get('href')
@@ -89,6 +77,13 @@ class SVGNormalizer:
                 parent.remove(use_elem)
                 continue
 
+            if ref_id in visited:
+                parent.remove(use_elem)
+                continue
+
+            new_visited = visited.copy()
+            new_visited.add(ref_id)
+
             ref_elem = ref_elem[0]
 
             # Create a wrapper <g> element to hold the clone and apply attributes
@@ -112,7 +107,7 @@ class SVGNormalizer:
             if clone.tag == f"{{{self.namespaces['svg']}}}use":
                 new_uses.insert(0, clone)
             for new_use in new_uses:
-                queue.append(new_use)
+                queue.append((new_use, new_visited))
 
             # The wrapper should have the ID of the <use> tag if it exists
             use_id = use_elem.get('id')

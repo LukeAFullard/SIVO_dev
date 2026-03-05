@@ -181,8 +181,29 @@
                 }, '*');
             }
 
+            // Introduce a lightweight client-side sanitizer
+            function sanitizeHTML(str) {
+                var temp = document.createElement('div');
+                temp.innerHTML = str;
+                var scripts = temp.getElementsByTagName('script');
+                for (var i = scripts.length - 1; i >= 0; i--) {
+                    scripts[i].parentNode.removeChild(scripts[i]);
+                }
+                // Iterate and remove inline event handlers (on*)
+                var allElements = temp.getElementsByTagName("*");
+                for (var i = 0, len = allElements.length; i < len; i++) {
+                    var el = allElements[i];
+                    for (var j = el.attributes.length - 1; j >= 0; j--) {
+                        if (el.attributes[j].name.toLowerCase().startsWith('on')) {
+                            el.removeAttribute(el.attributes[j].name);
+                        }
+                    }
+                }
+                return temp.innerHTML;
+            }
+
             if (hasInteraction && htmlContent) {
-                infoContent.innerHTML = htmlContent;
+                infoContent.innerHTML = sanitizeHTML(htmlContent);
                 infoPanel.classList.add('active');
             } else if (!hasInteraction && !elementActions) {
                 infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';

@@ -5,12 +5,15 @@ from .metadata import get_bounding_box
 
 class SVGParser:
     def __init__(self, filepath_or_string: str, is_file: bool = True):
+        # Explicitly secure the parser against XXE
+        parser = etree.XMLParser(resolve_entities=False, no_network=True)
+
         if is_file:
             with open(filepath_or_string, 'rb') as f:
-                self.tree = etree.parse(f)
+                self.tree = etree.parse(f, parser=parser)
             self.root = self.tree.getroot()
         else:
-            self.root = etree.fromstring(filepath_or_string.encode('utf-8'))
+            self.root = etree.fromstring(filepath_or_string.encode('utf-8'), parser=parser)
             self.tree = etree.ElementTree(self.root)
 
         self.namespaces = {'svg': 'http://www.w3.org/2000/svg'}
