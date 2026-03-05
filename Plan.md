@@ -461,10 +461,11 @@ Deliverables:
 * example apps
 * dynamic updates
 
-## Phase 5 — CLI & Packaging
+## Phase 5 — Configuration & CLI
 
 Deliverables:
 
+* [x] Configuration Engine (JSON/dict parsing)
 * CLI tool
 * pip packaging
 * documentation

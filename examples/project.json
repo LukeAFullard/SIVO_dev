@@ -1,0 +1,26 @@
+{
+  "svg_file": "sample.svg",
+  "mappings": {
+    "sun": {
+      "tooltip": "The Sun",
+      "html": "<h3>Sun</h3><p>A bright yellow sun.</p>",
+      "color": "gold",
+      "hover_color": "yellow",
+      "glow": true
+    },
+    "mountain1": {
+      "tooltip": "Mountain 1",
+      "html": "<h3>Mountain 1</h3><p>The first mountain.</p>",
+      "color": "#a0a0a0",
+      "hover_color": "#d0d0d0"
+    },
+    "house": {
+      "tooltip": "A cozy house",
+      "html": "<style>h3 { color: brown; }</style><h3>House</h3><p>This is a small house.</p>",
+      "color": "brown",
+      "hover_color": "orange",
+      "border_width": 3,
+      "border_color": "red"
+    }
+  }
+}
