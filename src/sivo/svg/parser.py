@@ -30,7 +30,11 @@ class SVGParser:
         elements = []
 
         for elem in self.root.iter():
-            tag_name = etree.QName(elem).localname
+            try:
+                tag_name = etree.QName(elem).localname
+            except ValueError:
+                # E.g. when elem.tag is a Comment or PI (processing instruction)
+                continue
             if tag_name in ['path', 'rect', 'circle', 'g', 'polygon', 'polyline']:
                 elem_id = elem.get('id')
                 if elem_id:
