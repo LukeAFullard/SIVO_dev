@@ -46,6 +46,11 @@ def get_bounding_box(elem: etree._Element) -> Optional[List[float]]:
             coords = [float(p) for p in re.findall(r'[-+]?(?:\d*\.\d+|\d+)', points_str)]
             if len(coords) < 2:
                 return None
+
+            # Ensure an even number of coordinates to prevent misalignment
+            if len(coords) % 2 != 0:
+                coords = coords[:-1]
+
             xs = coords[0::2]
             ys = coords[1::2]
             return [min(xs), min(ys), max(xs), max(ys)]
@@ -58,6 +63,67 @@ def get_bounding_box(elem: etree._Element) -> Optional[List[float]]:
     except Exception:
         pass
     return None
+
+class PathBBoxCalculator:
+    def __init__(self):
+        self.min_x = float('inf')
+        self.min_y = float('inf')
+        self.max_x = float('-inf')
+        self.max_y = float('-inf')
+        self.current_x = 0.0
+        self.current_y = 0.0
+
+    def update_bounds(self, *coords):
+        for i in range(0, len(coords), 2):
+            x, y = coords[i], coords[i+1]
+            self.min_x = min(self.min_x, x)
+            self.max_x = max(self.max_x, x)
+            self.min_y = min(self.min_y, y)
+            self.max_y = max(self.max_y, y)
+
+    def handle_M_L_T(self, x, y, is_relative):
+        if is_relative:
+            x += self.current_x
+            y += self.current_y
+        self.current_x, self.current_y = x, y
+        self.update_bounds(x, y)
+
+    def handle_H(self, x, is_relative):
+        if is_relative:
+            x += self.current_x
+        self.current_x = x
+        self.update_bounds(x, self.current_y)
+
+    def handle_V(self, y, is_relative):
+        if is_relative:
+            y += self.current_y
+        self.current_y = y
+        self.update_bounds(self.current_x, y)
+
+    def handle_C(self, x1, y1, x2, y2, x, y, is_relative):
+        if is_relative:
+            x1 += self.current_x; y1 += self.current_y
+            x2 += self.current_x; y2 += self.current_y
+            x += self.current_x; y += self.current_y
+
+        self.update_bounds(self.current_x, self.current_y, x1, y1, x2, y2, x, y)
+        self.current_x, self.current_y = x, y
+
+    def handle_S_Q(self, xc, yc, x, y, is_relative):
+        if is_relative:
+            xc += self.current_x; yc += self.current_y
+            x += self.current_x; y += self.current_y
+
+        self.update_bounds(self.current_x, self.current_y, xc, yc, x, y)
+        self.current_x, self.current_y = x, y
+
+    def handle_A(self, rx, ry, x_rot, large_arc, sweep, x, y, is_relative):
+        if is_relative:
+            x += self.current_x; y += self.current_y
+
+        self.update_bounds(self.current_x, self.current_y, x, y)
+        self.current_x, self.current_y = x, y
+
 
 def calculate_path_bbox(d_str: str) -> Optional[List[float]]:
     """
@@ -72,18 +138,7 @@ def calculate_path_bbox(d_str: str) -> Optional[List[float]]:
     if not tokens:
         return None
 
-    min_x = float('inf')
-    min_y = float('inf')
-    max_x = float('-inf')
-    max_y = float('-inf')
-
-    current_x = 0.0
-    current_y = 0.0
-
-    # SVG path commands taking 2 parameters (x, y) per coordinate point
-    # V and H take 1 parameter, A takes 7
-    # Z takes 0
-
+    calc = PathBBoxCalculator()
     i = 0
     current_cmd = ''
 
@@ -100,132 +155,57 @@ def calculate_path_bbox(d_str: str) -> Optional[List[float]]:
             if not current_cmd:
                 current_cmd = 'M'
 
-        # Parse arguments based on command
         cmd_upper = current_cmd.upper()
+        is_relative = current_cmd.islower()
 
         if cmd_upper in ['M', 'L', 'T']:
-            # 2 args: x, y
             if i + 1 >= len(tokens): break
-            x = float(tokens[i])
-            y = float(tokens[i+1])
+            x, y = float(tokens[i]), float(tokens[i+1])
             i += 2
-
-            if current_cmd.islower():
-                x += current_x
-                y += current_y
-
-            current_x, current_y = x, y
-
-            min_x = min(min_x, current_x)
-            min_y = min(min_y, current_y)
-            max_x = max(max_x, current_x)
-            max_y = max(max_y, current_y)
-
-            # M commands act as L for subsequent coordinate pairs
+            calc.handle_M_L_T(x, y, is_relative)
             if cmd_upper == 'M':
-                current_cmd = 'l' if current_cmd == 'm' else 'L'
+                current_cmd = 'l' if is_relative else 'L'
 
         elif cmd_upper in ['H']:
-            # 1 arg: x
             if i >= len(tokens): break
             x = float(tokens[i])
             i += 1
-
-            if current_cmd.islower():
-                x += current_x
-
-            current_x = x
-            min_x = min(min_x, current_x)
-            max_x = max(max_x, current_x)
+            calc.handle_H(x, is_relative)
 
         elif cmd_upper in ['V']:
-            # 1 arg: y
             if i >= len(tokens): break
             y = float(tokens[i])
             i += 1
-
-            if current_cmd.islower():
-                y += current_y
-
-            current_y = y
-            min_y = min(min_y, current_y)
-            max_y = max(max_y, current_y)
+            calc.handle_V(y, is_relative)
 
         elif cmd_upper in ['C']:
-            # 6 args: x1, y1, x2, y2, x, y
             if i + 5 >= len(tokens): break
-            x1 = float(tokens[i])
-            y1 = float(tokens[i+1])
-            x2 = float(tokens[i+2])
-            y2 = float(tokens[i+3])
-            x = float(tokens[i+4])
-            y = float(tokens[i+5])
+            x1, y1 = float(tokens[i]), float(tokens[i+1])
+            x2, y2 = float(tokens[i+2]), float(tokens[i+3])
+            x, y = float(tokens[i+4]), float(tokens[i+5])
             i += 6
-
-            if current_cmd.islower():
-                x1 += current_x; y1 += current_y
-                x2 += current_x; y2 += current_y
-                x += current_x; y += current_y
-
-            # Expand bbox to include control points and endpoints
-            min_x = min(min_x, current_x, x1, x2, x)
-            min_y = min(min_y, current_y, y1, y2, y)
-            max_x = max(max_x, current_x, x1, x2, x)
-            max_y = max(max_y, current_y, y1, y2, y)
-
-            current_x, current_y = x, y
+            calc.handle_C(x1, y1, x2, y2, x, y, is_relative)
 
         elif cmd_upper in ['S', 'Q']:
-            # 4 args: x1/x2, y1/y2, x, y
             if i + 3 >= len(tokens): break
-            xc = float(tokens[i])
-            yc = float(tokens[i+1])
-            x = float(tokens[i+2])
-            y = float(tokens[i+3])
+            xc, yc = float(tokens[i]), float(tokens[i+1])
+            x, y = float(tokens[i+2]), float(tokens[i+3])
             i += 4
-
-            if current_cmd.islower():
-                xc += current_x; yc += current_y
-                x += current_x; y += current_y
-
-            min_x = min(min_x, current_x, xc, x)
-            min_y = min(min_y, current_y, yc, y)
-            max_x = max(max_x, current_x, xc, x)
-            max_y = max(max_y, current_y, yc, y)
-
-            current_x, current_y = x, y
+            calc.handle_S_Q(xc, yc, x, y, is_relative)
 
         elif cmd_upper in ['A']:
-            # 7 args: rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y
             if i + 6 >= len(tokens): break
-            rx = float(tokens[i])
-            ry = float(tokens[i+1])
+            rx, ry = float(tokens[i]), float(tokens[i+1])
             x_rot = float(tokens[i+2])
             large_arc = float(tokens[i+3])
             sweep = float(tokens[i+4])
-            x = float(tokens[i+5])
-            y = float(tokens[i+6])
+            x, y = float(tokens[i+5]), float(tokens[i+6])
             i += 7
-
-            if current_cmd.islower():
-                x += current_x; y += current_y
-
-            # Very rough approximation for arc bbox
-            # We just consider the endpoints and roughly the arc's extent
-            # Precise geometric bbox for arcs is complex. Using endpoints + rx/ry expansion is safer.
-            # But the arc doesn't necessarily reach current_x - rx, it depends on sweep and flags.
-            # As a conservative approximation, we just add the endpoints for now.
-            min_x = min(min_x, current_x, x)
-            min_y = min(min_y, current_y, y)
-            max_x = max(max_x, current_x, x)
-            max_y = max(max_y, current_y, y)
-
-            current_x, current_y = x, y
+            calc.handle_A(rx, ry, x_rot, large_arc, sweep, x, y, is_relative)
         else:
-            # Unknown command or malformed path, break to avoid infinite loop
             break
 
-    if min_x == float('inf'):
+    if calc.min_x == float('inf'):
         return None
 
-    return [min_x, min_y, max_x, max_y]
+    return [calc.min_x, calc.min_y, calc.max_x, calc.max_y]

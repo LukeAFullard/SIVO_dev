@@ -13,10 +13,13 @@ class Infographic:
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
+        self._element_lookup: Dict[str, dict] = {}
 
         # Initialize default mappings
         for elem in self.elements:
             self.mappings[elem['name']] = InteractionMapping(id=elem['id'])
+            self._element_lookup[elem['id']] = elem
+            self._element_lookup[elem['name']] = elem
 
     @classmethod
     def from_svg(cls, filepath: str) -> "Infographic":
@@ -93,12 +96,7 @@ class Infographic:
         """
         Maps an SVG element id (or name) to actions or visual themes.
         """
-        target_elem = None
-        for elem in self.elements:
-            if elem['id'] == element_id or elem['name'] == element_id:
-                target_elem = elem
-                break
-
+        target_elem = self._element_lookup.get(element_id)
         if not target_elem:
             raise ValueError(f"Element with id/name '{element_id}' not found in SVG.")
 
