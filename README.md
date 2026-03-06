@@ -139,9 +139,11 @@ SIVO parses and normalizes SVGs using `lxml`, manages configurations with `pydan
 
 We provide extensive examples ranging from basic setup to comprehensive Streamlit dashboards. Check the `examples/` directory for full scripts:
 
-*   **Phase 1: Basic Usage:** Hello World, URL Navigation, Declarative Configuration.
-*   **Phase 2: Advanced Standalone Features:** SVG Drill-Downs, Custom Asset Injection, HTML/DOM Overlays, Multi-View Standalone HTML.
-*   **Phase 3: Streamlit Integration:** Basic Callbacks, Hover Events, Dynamic Color Updates, Programmatic Zooming.
+*   **Phase 1: Basic Usage:** Hello World (`examples/01_hello_world`), URL Navigation (`examples/02_url_navigation`), Declarative Configuration (`examples/03_json_config`).
+*   **Phase 2: Advanced Standalone Features:** SVG Drill-Downs (`examples/04_drilldowns`), Custom Asset Injection (`examples/05_custom_assets`), HTML/DOM Overlays (`examples/06_html_overlays`), Multi-View Standalone HTML (`examples/07_multi_view_standalone`), Data-Driven Choropleths (`examples/08_choropleth`), Animations & Dynamic Markers (`examples/09_animations_markers`).
+*   **Phase 3: Streamlit Integration:** Basic Callbacks (`examples/10_streamlit_callbacks`), Hover Events (`examples/11_streamlit_hover`), Dynamic Color Updates (`examples/12_dynamic_colors`), Programmatic Zooming (`examples/13_streamlit_zoom`), Comprehensive Dashboard (`examples/14_comprehensive_dashboard`).
+
+These examples demonstrate the fully implemented Phase 1, 2, and 3 project goals.
 
 ## License
 MIT

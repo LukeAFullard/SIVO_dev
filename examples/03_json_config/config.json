@@ -1,0 +1,16 @@
+{
+  "svg_file": "sample.svg",
+  "mappings": {
+    "sun": {
+      "tooltip": "The Sun configured via JSON",
+      "color": "gold",
+      "hover_color": "yellow",
+      "glow": true
+    },
+    "mountain1": {
+      "tooltip": "Mountain configured via JSON",
+      "color": "#a0a0a0",
+      "hover_color": "#c0c0c0"
+    }
+  }
+}
