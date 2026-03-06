@@ -339,6 +339,14 @@
                                     alert('Could not load ' + action.target_svg);
                                 });
                         }
+                    } else if (action.action_type === 'video') {
+                        // Display built-in video modal
+                        var videoModal = document.getElementById('sivo-video-modal');
+                        var videoWrapper = document.getElementById('sivo-video-wrapper');
+                        if (videoModal && videoWrapper) {
+                            videoWrapper.innerHTML = `<iframe src="${action.video_url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                            videoModal.classList.add('active');
+                        }
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
                         // Post message to parent window (e.g. Streamlit iframe wrapper)
@@ -580,5 +588,82 @@
     <!-- Custom injected assets placeholder -->
     <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
     <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+
+    <!-- SIVO Built-in Video Modal -->
+    <style>
+        #sivo-video-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        #sivo-video-modal.active {
+            display: flex;
+        }
+        .sivo-video-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .sivo-video-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .sivo-video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        .sivo-video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div id="sivo-video-modal">
+        <div style="position: relative; width: 80%; max-width: 800px;">
+            <span class="sivo-video-close" id="sivo-video-close">&times;</span>
+            <div class="sivo-video-content">
+                <div class="sivo-video-container" id="sivo-video-wrapper"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var sivoVideoModal = document.getElementById('sivo-video-modal');
+        var sivoVideoCloseBtn = document.getElementById('sivo-video-close');
+        var sivoVideoWrapper = document.getElementById('sivo-video-wrapper');
+
+        function closeSivoVideoModal() {
+            if (sivoVideoModal) {
+                sivoVideoModal.classList.remove('active');
+                if (sivoVideoWrapper) sivoVideoWrapper.innerHTML = '';
+            }
+        }
+
+        if (sivoVideoCloseBtn) sivoVideoCloseBtn.addEventListener('click', closeSivoVideoModal);
+        if (sivoVideoModal) {
+            sivoVideoModal.addEventListener('click', function(e) {
+                if (e.target === sivoVideoModal) {
+                    closeSivoVideoModal();
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>

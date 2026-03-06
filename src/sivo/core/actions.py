@@ -28,6 +28,10 @@ class HoverCallbackAction(BaseAction):
     event_name: str = Field(description="Event name to send back to Streamlit or backend on hover")
     payload: Optional[dict] = Field(default=None, description="Optional data payload to send")
 
+class VideoAction(BaseAction):
+    action_type: Literal["video"] = "video"
+    video_url: str = Field(description="Embed URL for the video (e.g., YouTube embed URL)")
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -36,7 +40,7 @@ class ThemeOverride(BaseModel):
     glow: Optional[bool] = None
     animation: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str

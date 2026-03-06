@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction
 from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -92,6 +92,7 @@ class Infographic:
         callback_payload: Optional[dict] = None,
         hover_callback_event: Optional[str] = None,
         hover_callback_payload: Optional[dict] = None,
+        video: Optional[str] = None,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -126,6 +127,9 @@ class Infographic:
 
         if hover_callback_event:
             mapping.actions.append(HoverCallbackAction(event_name=hover_callback_event, payload=hover_callback_payload))
+
+        if video:
+            mapping.actions.append(VideoAction(video_url=video))
 
         if color:
             mapping.theme.color = color
