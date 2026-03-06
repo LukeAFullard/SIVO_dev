@@ -42,8 +42,8 @@ def get_bounding_box(elem: etree._Element) -> Optional[List[float]]:
             return [min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)]
         elif tag_name in ['polygon', 'polyline']:
             points_str = elem.get('points', '')
-            # Extract all numbers from points string
-            coords = [float(p) for p in re.findall(r'[-+]?(?:\d*\.\d+|\d+)', points_str)]
+            # Extract all numbers from points string, accounting for exponential notation
+            coords = [float(p) for p in re.findall(r'[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?', points_str)]
             if len(coords) < 2:
                 return None
 

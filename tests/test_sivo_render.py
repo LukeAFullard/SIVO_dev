@@ -76,6 +76,19 @@ class TestSivoRender(unittest.TestCase):
         self.assertIn("view2", project_html)
         self.assertIn("room", project_html)
 
+    def test_xss_escaping_in_bundle(self):
+        svg_content = '<svg xmlns="http://www.w3.org/2000/svg"><rect id="xss_rect"/></svg>'
+        sivo_app = Sivo.from_string(svg_content)
+        # Add a tooltip containing a malicious script tag
+        sivo_app.map("xss_rect", html="<script>alert('XSS')</script>")
+
+        html_output = sivo_app.to_html()
+
+        # Ensure that the <script> string inside the JSON view data was properly escaped to \u003c
+        # or that the raw <script> does not appear
+        self.assertNotIn('<script>alert(', html_output)
+        self.assertIn('u003cscript', html_output)
+
     def test_metadata_extraction(self):
         svg_content = """
         <svg xmlns="http://www.w3.org/2000/svg">

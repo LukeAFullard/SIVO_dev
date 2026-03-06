@@ -24,5 +24,24 @@ class TestSVGParser(unittest.TestCase):
         self.assertEqual(elements[1]['id'], "test2")
         self.assertEqual(elements[1]['name'], "test2")
 
+    def test_xxe_vulnerability_prevention(self):
+        # This XML attempts to include an external entity
+        malicious_svg = """
+        <!DOCTYPE svg [
+          <!ENTITY xxe SYSTEM "file:///etc/passwd">
+        ]>
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <text id="malicious">&xxe;</text>
+        </svg>
+        """
+        parser = SVGParser(malicious_svg, is_file=False)
+        elements = parser.process_elements()
+        # Ensure the parser doesn't crash, but it also shouldn't resolve the entity.
+        # It should just have a text tag without resolving &xxe; or throw an error based on lxml behaviour with resolve_entities=False
+        text_elems = parser.root.xpath('.//svg:text', namespaces=parser.namespaces)
+        self.assertEqual(len(text_elems), 1)
+        # Because entity resolution is disabled, it will be blank or literal '&xxe;' depending on lxml version.
+        self.assertNotIn("root:x", text_elems[0].text or "")
+
 if __name__ == '__main__':
     unittest.main()
