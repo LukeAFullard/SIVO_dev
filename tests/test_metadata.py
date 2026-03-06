@@ -34,6 +34,19 @@ class TestMetadata(unittest.TestCase):
         bbox = get_bounding_box(elem)
         self.assertEqual(bbox, [0.0, 0.0, 100.0, 100.0])
 
+    def test_polygon_bbox_misaligned(self):
+        # Polygon with an odd number of coordinates
+        elem = etree.Element("polygon", points="0,0 100,0 100,100 0")
+        bbox = get_bounding_box(elem)
+        # Should gracefully ignore the last '0' coordinate, matching bounding box [0, 0, 100, 100]
+        self.assertEqual(bbox, [0.0, 0.0, 100.0, 100.0])
+
+    def test_polygon_bbox_exponential(self):
+        # Polygon using scientific / exponential notation
+        elem = etree.Element("polygon", points="0,0 1e2,0 1E2,100.0 0,1e2")
+        bbox = get_bounding_box(elem)
+        self.assertEqual(bbox, [0.0, 0.0, 100.0, 100.0])
+
     def test_path_bbox_absolute(self):
         # M 10 10 L 90 10 L 90 90 Z
         d = "M 10 10 L 90 10 L 90 90 Z"

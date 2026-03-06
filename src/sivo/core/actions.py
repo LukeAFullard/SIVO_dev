@@ -1,4 +1,4 @@
-from typing import Optional, Literal
+from typing import Optional, Literal, Union, Annotated
 from pydantic import BaseModel, Field
 
 class BaseAction(BaseModel):
@@ -35,7 +35,9 @@ class ThemeOverride(BaseModel):
     border_color: Optional[str] = None
     glow: Optional[bool] = None
 
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction], Field(discriminator='action_type')]
+
 class InteractionMapping(BaseModel):
     id: str
-    actions: list[BaseAction] = Field(default_factory=list)
+    actions: list[ActionType] = Field(default_factory=list)
     theme: ThemeOverride = Field(default_factory=ThemeOverride)

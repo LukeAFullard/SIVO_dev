@@ -31,12 +31,13 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             elif isinstance(mapping, dict):
                 mapping_dict = mapping.copy()
             else:
-                # If mapping is an InteractionMapping but lacks model_dump (e.g. older Pydantic)
                 mapping_dict = dict(mapping)
 
-            # Process Actions
-            # Because mapping_dict might have 'actions' as a list of BaseAction or dicts,
-            # we need to cleanly dump them.
+            data_item = {
+                'name': name,
+                'value': 1,
+            }
+
             element_actions = []
             actions_list = mapping_dict.get('actions', [])
 
@@ -68,11 +69,6 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
                 element_actions.append(act_dict)
 
             mapping_dict['actions'] = element_actions
-
-            data_item = {
-                'name': name,
-                'value': 1,
-            }
 
             processed_element_actions = []
 
@@ -128,8 +124,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
         }
 
     html_output = template.render(
-        views_data=json.dumps(formatted_views),
-        initial_view=json.dumps(initial_view),
+        views_data=json.dumps(formatted_views).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
+        initial_view=json.dumps(initial_view).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
         custom_css=custom_css,
         custom_js=custom_js
     )

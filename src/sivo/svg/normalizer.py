@@ -1,5 +1,5 @@
 from lxml import etree
-import copy
+from copy import deepcopy
 import re
 import collections
 
@@ -91,7 +91,7 @@ class SVGNormalizer:
             wrapper.set('data-sivo-use-wrapper', 'true')
 
             # Clone the referenced element
-            clone = copy.deepcopy(ref_elem)
+            clone = deepcopy(ref_elem)
 
             # Remove id from the clone and its descendants to avoid duplicates in the document
             if 'id' in clone.attrib:

@@ -11,6 +11,8 @@ SIVO acts as the bridge between vector design tools and interactive web data vis
 *   **Rich Behaviors**: Attach custom tooltips (supporting HTML content via Shadow DOM), URL navigation, state/callback events, and visual styling changes to any SVG element.
 *   **SVG Drill-downs**: Load and seamlessly transition to secondary SVGs, creating hierarchical visual storytelling experiences (e.g. Campus Map -> Building -> Floor).
 *   **Responsive Scaling**: Interactive elements adapt flawlessly inside flexible layouts.
+*   **Secure by Design**: Implements mitigations against XXE injections during SVG parsing, and sanitizes/escapes JSON configurations to prevent Cross-Site Scripting (XSS).
+*   **Multi-View HTML Export**: Bundle multiple SVG views and their logic into a single standalone, offline-capable interactive HTML file.
 
 ## Installation
 
@@ -123,6 +125,14 @@ python -m sivo export project.json -o interactive_map.html
 
 ## Structure
 SIVO parses and normalizes SVGs using `lxml`, manages configurations with `pydantic`, and uses `Jinja2` with `Apache ECharts` on the frontend for rendering the SVG interactions.
+
+## Tutorials / Examples
+
+We provide extensive examples ranging from basic setup to comprehensive Streamlit dashboards. Check the `examples/` directory for full scripts:
+
+*   **Phase 1: Basic Usage:** Hello World, URL Navigation, Declarative Configuration.
+*   **Phase 2: Advanced Standalone Features:** SVG Drill-Downs, Custom Asset Injection, HTML/DOM Overlays, Multi-View Standalone HTML.
+*   **Phase 3: Streamlit Integration:** Basic Callbacks, Hover Events, Dynamic Color Updates, Programmatic Zooming.
 
 ## License
 MIT
