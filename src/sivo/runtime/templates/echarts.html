@@ -6,6 +6,8 @@
     <title>SIVO Interactive Graphic</title>
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <!-- Include DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -366,23 +368,11 @@
 
             // Introduce a lightweight client-side sanitizer
             function sanitizeHTML(str) {
-                var temp = document.createElement('div');
-                temp.innerHTML = str;
-                var scripts = temp.getElementsByTagName('script');
-                for (var i = scripts.length - 1; i >= 0; i--) {
-                    scripts[i].parentNode.removeChild(scripts[i]);
+                if (typeof DOMPurify !== 'undefined') {
+                    return DOMPurify.sanitize(str);
                 }
-                // Iterate and remove inline event handlers (on*)
-                var allElements = temp.getElementsByTagName("*");
-                for (var i = 0, len = allElements.length; i < len; i++) {
-                    var el = allElements[i];
-                    for (var j = el.attributes.length - 1; j >= 0; j--) {
-                        if (el.attributes[j].name.toLowerCase().startsWith('on')) {
-                            el.removeAttribute(el.attributes[j].name);
-                        }
-                    }
-                }
-                return temp.innerHTML;
+                // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
+                return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             }
 
             if (hasInteraction && htmlContent) {

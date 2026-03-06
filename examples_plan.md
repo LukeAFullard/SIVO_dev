@@ -2,7 +2,7 @@
 
 This document outlines a structured plan for creating example scripts and applications that demonstrate how to use SIVO (SVG Interactive Vector Objects). These examples will serve as practical tutorials for users, ranging from basic setup to advanced Streamlit integrations.
 
-> **Note:** Each example should be contained within its own dedicated subfolder inside the `examples/` directory (e.g., `examples/01_hello_world/`) to keep scripts, SVGs, and generated HTML files cleanly isolated.
+> **Status Update:** All examples listed in this document have been **fully implemented and tested**. They are located in their respective subdirectories within the `examples/` folder.
 
 ## Phase 1: Basic Usage (Standalone HTML Export)
 

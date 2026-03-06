@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <rect id="room101" x="20" y="20" width="100" height="100" fill="#ccffff" stroke="#333333" stroke-width="2"/>
+  <rect id="room102" x="150" y="20" width="100" height="100" fill="#ffffcc" stroke="#333333" stroke-width="2"/>
+  <circle id="desk1" cx="70" cy="70" r="20" fill="#999999" />
+  <circle id="desk2" cx="200" cy="70" r="20" fill="#999999" />
+  <text x="150" y="200" font-family="sans-serif" font-size="20" text-anchor="middle">Building A - Floor 1</text>
+</svg>
