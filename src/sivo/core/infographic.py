@@ -14,6 +14,7 @@ class Infographic:
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
         self._element_lookup: Dict[str, dict] = {}
+        self.overlays: Dict[str, dict] = {}
 
         # Initialize default mappings
         for elem in self.elements:
@@ -140,13 +141,56 @@ class Infographic:
         if glow is not None:
             mapping.theme.glow = glow
 
+    def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0):
+        """
+        Adds a custom HTML overlay positioned over a specific SVG element's center coordinate.
+        """
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem:
+            raise ValueError(f"Element with id/name '{element_id}' not found in SVG.")
+
+        if 'bbox' not in target_elem or not target_elem['bbox']:
+            raise ValueError(f"Cannot calculate overlay position: Element '{element_id}' has no bounding box.")
+
+        bbox = target_elem['bbox']
+        center_x = (bbox[0] + bbox[2]) / 2.0
+        center_y = (bbox[1] + bbox[3]) / 2.0
+
+        self.overlays[element_id] = {
+            "html": html,
+            "coord": [center_x, center_y],
+            "offset": [offset_x, offset_y]
+        }
+
+    def get_element_center(self, element_id: str) -> Optional[list[float]]:
+        target_elem = self._element_lookup.get(element_id)
+        if target_elem and 'bbox' in target_elem and target_elem['bbox']:
+            bbox = target_elem['bbox']
+            return [(bbox[0] + bbox[2]) / 2.0, (bbox[1] + bbox[3]) / 2.0]
+        return None
+
     def to_echarts_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
         Generates interactive HTML string.
         Optionally writes to output_path.
         """
-        svg_string = self.parser.to_string()
-        return generate_echarts_html(svg_string, self.mappings, output_path, custom_css, custom_js)
+        mappings_dict = {}
+        for k, v in self.mappings.items():
+            if hasattr(v, "model_dump"):
+                mappings_dict[k] = v.model_dump()
+            elif hasattr(v, "dict"):
+                mappings_dict[k] = v.dict()
+            else:
+                mappings_dict[k] = v
+
+        views_data = {
+            "default_view": {
+                "svg_string": self.parser.to_string(),
+                "mappings": mappings_dict,
+                "overlays": self.overlays
+            }
+        }
+        return generate_echarts_html(views_data, "default_view", output_path, custom_css, custom_js)
 
     def get_manifest(self) -> Dict:
         """

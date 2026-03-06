@@ -1,3 +1,6 @@
+True
+True
+False
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,8 +58,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "<svg xmlns=\"http://www.w3.org/2000/svg\">\n    <path id=\"test1\" d=\"M10 10\" name=\"test1\"/>\n    <rect id=\"test2\" width=\"10\" height=\"10\" name=\"test2\"/>\n</svg>", "echarts_data": [{"name": "test1", "value": 1, "itemStyle": {"areaColor": "#ff0000", "borderWidth": 2.5}, "emphasis": {"itemStyle": {"shadowBlur": 15, "shadowColor": "rgba(0, 0, 0, 0.5)", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "test2", "value": 1}], "actions_manifest": {"test1": [{"action_type": "tooltip"}], "test2": [{"action_type": "url"}, {"action_type": "drilldown"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -431,7 +434,7 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 </body>
 </html>

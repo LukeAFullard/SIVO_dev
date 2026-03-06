@@ -1,3 +1,4 @@
+{'objects': {'test1': {'id': 'test1', 'actions': [{'action_type': 'url'}], 'theme': {'color': None, 'hover_color': None, 'border_width': None, 'border_color': None, 'glow': None}}}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,8 +56,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "<svg><path id=\"test1\" name=\"test1\"/></svg>", "echarts_data": [{"name": "test1", "value": 1}], "actions_manifest": {"test1": [{"action_type": "url"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -431,7 +432,7 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 </body>
 </html>

@@ -758,11 +758,14 @@ The system prioritizes reliability, accessibility, and simplicity while remainin
 
 ### Phase 3: Strategic Expansion
 
-**1. Programmatic Zoom & Pan API (Completed)**
+**1. Programmatic Zoom & Pan API (Completed - Center Extraction via Python Metadata)**
 *   **Utility:** Currently, the ECharts implementation allows manual user panning (`roam: true`). Exposing an API method (e.g., `sivo_app.zoom_to("element_id")`) that calculates the target's metadata `bbox` and triggers ECharts' `dispatchAction` to automatically focus and center on a specific SVG region would be highly valuable for guided storytelling or presentation flows.
 
-**2. Bi-directional Streamlit State Synchronization (Completed - Hover Callbacks & Zoom)**
+**2. Bi-directional Streamlit State Synchronization (Completed - Dynamic Colors & Hover Callbacks)**
 *   **Utility:** SIVO can send click callbacks to Streamlit via the V2 component, but it currently lacks a way for Streamlit to update the SVG state *without* initiating a full backend re-render. Implementing a JS frontend listener that accepts state mutations from Streamlit (e.g., changing colors dynamically based on live data feeds) would make the infographics truly reactive and real-time.
 
-**3. HTML/DOM Overlay Positioning System / Asset Injection (Completed - Custom CSS/JS Injection)**
+**3. HTML/DOM Overlay Positioning System / Asset Injection (Completed - Absolute Positioning over SVG via BBox)**
 *   **Utility:** Allow developers to define custom HTML overlays (like React-style tooltips or floating charts) that are absolutely positioned *over* specific SVG coordinates, derived from the Python bounding box metadata. This enables rich annotations and complex UI components that live outside the strict ECharts `<canvas>` bounds, significantly enhancing the visual capabilities of the framework.
+
+**4. Multi-View Standalone HTML Generation (Completed)**
+*   **Utility:** Upgraded the `drill_to` architecture via a new `SivoProject` wrapper to allow developers to package multiple SVG views into a single, offline HTML file. Clicking elements mapped with `drill_to="view_id"` instantly transitions the ECharts canvas and overlay logic entirely on the client side without needing Streamlit or separate `.svg` network fetches.
