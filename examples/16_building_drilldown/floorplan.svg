@@ -1,0 +1,13 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <g id="floor1">
+    <rect id="floor_bg" width="600" height="400" fill="#ffd3b6" />
+    <rect id="roomA" x="50" y="50" width="200" height="300" fill="#ffaaa5" stroke="#333" stroke-width="2" />
+    <text x="150" y="200" font-family="Arial" font-size="20" fill="#333" text-anchor="middle">Room A</text>
+
+    <rect id="roomB" x="300" y="50" width="250" height="140" fill="#ffaaa5" stroke="#333" stroke-width="2" />
+    <text x="425" y="120" font-family="Arial" font-size="20" fill="#333" text-anchor="middle">Room B</text>
+
+    <rect id="hallway" x="300" y="210" width="250" height="140" fill="#f4f4f4" stroke="#333" stroke-width="2" />
+    <text x="425" y="280" font-family="Arial" font-size="20" fill="#333" text-anchor="middle">Hallway</text>
+  </g>
+</svg>

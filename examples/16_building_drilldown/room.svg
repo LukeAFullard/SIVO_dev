@@ -1,0 +1,12 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <g id="roomA_details">
+    <rect id="room_bg" width="600" height="400" fill="#e0e0e0" />
+    <rect id="desk1" x="100" y="100" width="150" height="80" fill="#a0522d" stroke="#333" stroke-width="2" />
+    <rect id="desk2" x="350" y="100" width="150" height="80" fill="#a0522d" stroke="#333" stroke-width="2" />
+    <circle id="chair1" cx="175" cy="220" r="30" fill="#4682b4" />
+    <circle id="chair2" cx="425" cy="220" r="30" fill="#4682b4" />
+
+    <text x="175" y="145" font-family="Arial" font-size="16" fill="white" text-anchor="middle">Desk 1</text>
+    <text x="425" y="145" font-family="Arial" font-size="16" fill="white" text-anchor="middle">Desk 2</text>
+  </g>
+</svg>
