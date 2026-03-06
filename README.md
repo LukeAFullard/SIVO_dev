@@ -16,6 +16,8 @@ SIVO acts as the bridge between vector design tools and interactive web data vis
 *   **Data-Driven Choropleths**: Automatically compute and apply color gradients to SVG elements based on a dictionary of numerical values.
 *   **Dynamic Markers**: Calculate element bounding boxes and programmatically drop text/icon markers exactly on the SVG map.
 *   **Built-in Zoom UI**: Responsive user interface zoom controls natively included in exported interactives.
+*   **Animation API**: Apply standard CSS keyframe animations (like `pulse` and `fade`) directly to SVG paths to highlight critical regions.
+*   **Auto-Generated Legends**: Automatically display interactive data-scale legends for generated choropleth maps.
 
 ## Installation
 

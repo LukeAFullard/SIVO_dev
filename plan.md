@@ -2,6 +2,8 @@
 
 ## Phase 1: Debugging & Security Audit
 
+*Note: All items below have been implemented and tested.*
+
 **1. Security Risk: Cross-Site Scripting (XSS) via Inline JSON Serialization**
 * **Location:** `src/sivo/runtime/bundle_generator.py`, Lines 131-132
 * **Assessment:** The application injects Python objects directly into an inline JavaScript variable using `json.dumps(formatted_views)` inside a Jinja template. If any tooltips, custom HTML content, or string parameters contain the `</script>` string, it will break out of the script context and execute arbitrary JavaScript, bypassing the shadow DOM sanitization completely. This is a classic XSS vulnerability when mixing JSON inside HTML `<script>` blocks.
@@ -32,6 +34,8 @@
 
 ## Phase 2: Refactoring & Optimization
 
+*Note: All items below have been implemented and tested.*
+
 **1. Modularity: Type Safety in Pydantic Action Models**
 * **Location:** `src/sivo/core/actions.py`
 * **Assessment:** The `InteractionMapping` class uses `actions: list[BaseAction]`. However, due to Pydantic's serialization mechanisms, using a base class without a discriminator can cause attributes of inherited classes to be stripped out during `.model_dump()`.
@@ -47,6 +51,8 @@
 * **Trade-off:** Requires explicit declaration of all possible subclass action types but massively improves Pydantic's schema validation, serialization, and typing support.
 
 ## Phase 3: Strategic Expansion
+
+*Note: All items below have been implemented and tested.*
 
 **1. Data-Driven Theming (Choropleth Generation)**
 * **Proposal:** Introduce an integration allowing developers to pass a Pandas DataFrame mapping element IDs to numerical values alongside a color scale (e.g., `matplotlib.colormaps` or simple linear interpolation).
