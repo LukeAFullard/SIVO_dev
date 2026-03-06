@@ -110,7 +110,7 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#CC0000", "shadowBlur": 15, "shadowColor": "#CC0000", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#f0f0f0", "shadowBlur": 15, "shadowColor": "#f0f0f0", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\n    \u003cdiv style=\"text-align: center; width: 100%;\"\u003e\n        \u003ch3 style=\"margin-top: 0; margin-bottom: 10px; color: #333;\"\u003eSIVO Introduction\u003c/h3\u003e\n        \u003ciframe width=\"100%\" height=\"200\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1\" \n        title=\"YouTube video player\" frameborder=\"0\" \n        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" \n        allowfullscreen\u003e\u003c/iframe\u003e\n        \u003cp style=\"margin-top: 10px; font-size: 14px; color: #666;\"\u003e\n            Watch this amazing video right inside your SVG dashboard!\n        \u003c/p\u003e\n    \u003c/div\u003e\n    ", "title": "Click to watch video"}], "play_icon": [{"action_type": "tooltip", "content": "\n    \u003cdiv style=\"text-align: center; width: 100%;\"\u003e\n        \u003ch3 style=\"margin-top: 0; margin-bottom: 10px; color: #333;\"\u003eSIVO Introduction\u003c/h3\u003e\n        \u003ciframe width=\"100%\" height=\"200\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1\" \n        title=\"YouTube video player\" frameborder=\"0\" \n        allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" \n        allowfullscreen\u003e\u003c/iframe\u003e\n        \u003cp style=\"margin-top: 10px; font-size: 14px; color: #666;\"\u003e\n            Watch this amazing video right inside your SVG dashboard!\n        \u003c/p\u003e\n    \u003c/div\u003e\n    ", "title": "Click to watch video"}]}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#CC0000", "shadowBlur": 15, "shadowColor": "#CC0000", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#f0f0f0", "shadowBlur": 15, "shadowColor": "#f0f0f0", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to watch video\u003c/h3\u003e", "title": "Click to watch video"}, {"action_type": "callback", "event_name": "open_youtube_modal", "payload": null}], "play_icon": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to watch video\u003c/h3\u003e", "title": "Click to watch video"}, {"action_type": "callback", "event_name": "open_youtube_modal", "payload": null}]}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
@@ -578,7 +578,95 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css"></style>
-    <script id="custom-js"></script>
+    <style id="custom-css">
+    #youtube-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+    }
+    #youtube-modal.active {
+        display: flex;
+    }
+    .modal-content {
+        position: relative;
+        width: 80%;
+        max-width: 800px;
+        background: #000;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        overflow: hidden;
+    }
+    .close-btn {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+    }
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+    <script id="custom-js">
+    // Create the modal container dynamically
+    var modalHTML = `
+    <div id="youtube-modal">
+        <div style="position: relative; width: 80%; max-width: 800px;">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <div class="modal-content">
+                <div class="video-container" id="video-wrapper">
+                    <!-- Iframe injected on click to avoid autoplaying immediately -->
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    var modal = document.getElementById('youtube-modal');
+    var closeBtn = document.getElementById('close-modal');
+    var videoWrapper = document.getElementById('video-wrapper');
+
+    // Listen for the custom SIVO callback event
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'sivo_click') {
+            var payload = event.data.payload;
+            if (payload.event_name === 'open_youtube_modal') {
+                // Inject iframe when opened
+                videoWrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                modal.classList.add('active');
+            }
+        }
+    });
+
+    // Close modal logic
+    function closeModal() {
+        modal.classList.remove('active');
+        videoWrapper.innerHTML = ''; // Stop video playback
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    </script>
 </body>
 </html>
