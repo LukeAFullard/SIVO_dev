@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIVO Interactive Graphic</title>
+    <!-- Include ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <!-- Include DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+        #chart-container {
+            flex: 1;
+            height: 100%;
+        }
+        #info-panel {
+            width: 300px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 1px solid #ddd;
+            overflow-y: auto;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            display: none;
+            transition: all 0.3s ease;
+        }
+        #info-panel.active {
+            display: block;
+        }
+        .close-btn {
+            float: right;
+            cursor: pointer;
+            font-weight: bold;
+            color: #888;
+        }
+        .close-btn:hover {
+            color: #333;
+        }
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1000;
+        }
+        .zoom-btn {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: #555;
+            user-select: none;
+        }
+        .zoom-btn:hover {
+            background: #f0f0f0;
+            color: #000;
+        }
+
+        /* Standard SIVO Animations */
+        @keyframes sivo-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .sivo-anim-pulse {
+            animation: sivo-pulse 2s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        @keyframes sivo-fade {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .sivo-anim-fade {
+            animation: sivo-fade 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chart-container"></div>
+    <div class="zoom-controls">
+        <div class="zoom-btn" onclick="zoomIn()">+</div>
+        <div class="zoom-btn" onclick="zoomOut()">-</div>
+        <div class="zoom-btn" onclick="resetZoom()">⌂</div>
+    </div>
+    <div id="info-panel">
+        <span class="close-btn" onclick="closePanel()">×</span>
+        <div id="info-content-host"></div>
+    </div>
+
+    <script>
+        var chartDom = document.getElementById('chart-container');
+        var myChart = echarts.init(chartDom);
+
+        // Multi-view data injected from Python
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/\u003e\n    \u003cpolygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/\u003e\n    \u003cpolygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/\u003e\n    \u003crect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/\u003e\n    \u003cpolygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/\u003e\n    \u003cpath id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1, "tooltip": "The Custom Sun"}, {"name": "mountain1", "value": 1}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1}, {"name": "roof", "value": 1}, {"name": "river", "value": 1}], "actions_manifest": {"sun": [{"action_type": "tooltip", "content": "\u003cdiv class='custom-tooltip'\u003e\u003ch3\u003eThe Custom Sun\u003c/h3\u003e\u003cp\u003eStyled with custom CSS!\u003c/p\u003e\u003c/div\u003e", "title": "The Custom Sun"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
+
+        // Active variables for the current view
+        var echartsData = [];
+        var actionsManifest = {};
+        var overlaysData = {};
+
+        // History for back navigation
+        var viewHistory = [];
+        var currentZoom = 1;
+        var currentCenter = null;
+
+        function getBaseOption(mapName) {
+            return {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        var dataIndex = echartsData.findIndex(item => item.name === params.name);
+                        if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
+                            return echartsData[dataIndex].tooltip;
+                        }
+                        return params.name;
+                    }
+                },
+                series: [
+                    {
+                        name: 'SIVO Series',
+                        type: 'map',
+                        map: mapName,
+                        roam: true, // Enable zoom and pan
+                        itemStyle: {
+                            borderColor: '#999',
+                            borderWidth: 1,
+                            areaColor: '#eee'
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#ffd700', // Highlight color
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            label: {
+                                show: false
+                            }
+                        },
+                        select: {
+                            itemStyle: {
+                                areaColor: '#ff8c00'
+                            }
+                        },
+                        data: echartsData
+                    }
+                ]
+            };
+        }
+
+        var animationInterval = null;
+
+        function applyAnimations() {
+            // Clear any existing interval to prevent memory leaks and erratic stacked animations during drill-downs
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+
+            // ECharts uses Canvas or SVG.
+            // If it's SVG renderer, we can apply classes.
+            // But since ECharts defaults to canvas, animating individual geo regions via CSS is hard.
+            // Instead, we will use a workaround: ECharts doesn't support CSS animations on canvas paths easily.
+            // If an animation is set, we will use setInterval to mutate the ECharts option instead for basic effects,
+            // or if it's rendered as SVG (which echarts map allows), we can query the dom.
+            // For now, if we want robust canvas animation, we just toggle emphasis state.
+
+            var option = myChart.getOption();
+            var seriesData = option.series[0].data;
+            var animatedItems = seriesData.filter(d => d.animation_class);
+
+            if (animatedItems.length === 0) return;
+
+            // Simple toggle for 'pulse' or 'fade' via ECharts itemStyle opacity
+            let toggle = false;
+            animationInterval = setInterval(() => {
+                toggle = !toggle;
+                var currentOption = myChart.getOption();
+                var currentData = currentOption.series[0].data;
+                var updated = false;
+
+                currentData.forEach((item, index) => {
+                    if (item.animation_class === 'fade') {
+                        if (!item.itemStyle) item.itemStyle = {};
+                        item.itemStyle.opacity = toggle ? 0.3 : 1.0;
+                        updated = true;
+                    } else if (item.animation_class === 'pulse') {
+                        // For pulse on canvas, we can fake it by highlighting
+                        if (toggle) {
+                            myChart.dispatchAction({ type: 'highlight', name: item.name });
+                        } else {
+                            myChart.dispatchAction({ type: 'downplay', name: item.name });
+                        }
+                    }
+                });
+
+                if (updated) {
+                    myChart.setOption({ series: [{ data: currentData }] });
+                }
+            }, 1000);
+        }
+
+        function renderView(viewId, isBackNavigation) {
+            if (!viewsData[viewId]) {
+                console.error("View not found:", viewId);
+                return;
+            }
+
+            if (!isBackNavigation && currentViewId && currentViewId !== viewId) {
+                viewHistory.push(currentViewId);
+            }
+
+            currentViewId = viewId;
+            var view = viewsData[viewId];
+
+            // Extract view-specific active data
+            echartsData = view.echarts_data;
+            actionsManifest = view.actions_manifest;
+            overlaysData = view.overlays;
+
+            // Register and set ECharts map
+            echarts.registerMap(viewId, { svg: view.svg_string });
+            myChart.setOption(getBaseOption(viewId), true);
+
+            // Reset zoom tracking
+            currentZoom = 1;
+            currentCenter = null;
+
+            // Re-initialize overlays for this view
+            initOverlays();
+            setTimeout(updateOverlaysPosition, 50);
+
+            // Close info panel on transition
+            closePanel();
+
+            // Start animations if any
+            applyAnimations();
+        }
+
+        function zoomIn() {
+            var option = myChart.getOption();
+            var series = option.series[0];
+            currentZoom = (series.zoom || 1) * 1.5;
+            myChart.setOption({
+                series: [{
+                    zoom: currentZoom
+                }]
+            });
+        }
+
+        function zoomOut() {
+            var option = myChart.getOption();
+            var series = option.series[0];
+            currentZoom = (series.zoom || 1) / 1.5;
+            myChart.setOption({
+                series: [{
+                    zoom: currentZoom
+                }]
+            });
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            myChart.setOption({
+                series: [{
+                    zoom: 1,
+                    center: null
+                }]
+            });
+        }
+
+        // Setup Shadow DOM for info-content
+        var infoContentHost = document.getElementById('info-content-host');
+        var infoContentShadow = infoContentHost.attachShadow({mode: 'open'});
+        var infoContent = document.createElement('div');
+        infoContentShadow.appendChild(infoContent);
+
+        // Handle click events
+        myChart.on('click', function (params) {
+            var infoPanel = document.getElementById('info-panel');
+            var name = params.name;
+
+            var elementActions = actionsManifest[name];
+            var htmlContent = '';
+            var hasInteraction = false;
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.action_type === 'tooltip') {
+                        htmlContent += action.content;
+                        hasInteraction = true;
+                    } else if (action.action_type === 'url') {
+                        window.open(action.url, action.target);
+                    } else if (action.action_type === 'drilldown') {
+                        // Check if it's an internal multi-view drill down
+                        if (viewsData[action.target_svg]) {
+                            console.log('Switching view to:', action.target_svg);
+                            renderView(action.target_svg, false);
+                        } else {
+                            // Fallback to legacy external fetch
+                            console.log('Fetching external drilldown:', action.target_svg);
+                            fetch(action.target_svg)
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.text();
+                                })
+                                .then(svgText => {
+                                    // Register each new SVG map with a unique name (the filepath) to prevent ECharts from serving a cached map.
+                                    echarts.registerMap(action.target_svg, { svg: svgText });
+                                    // Set simple generic option since it's external and lacks internal map data
+                                    var extOption = getBaseOption(action.target_svg);
+                                    extOption.series[0].data = [];
+                                    myChart.setOption(extOption, true);
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching SVG:', error);
+                                    alert('Could not load ' + action.target_svg);
+                                });
+                        }
+                    } else if (action.action_type === 'callback') {
+                        console.log('Triggering callback:', action.event_name, action.payload);
+                        // Post message to parent window (e.g. Streamlit iframe wrapper)
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
+                    }
+                });
+            }
+
+            // Also trigger a default generic click event if there's no specific callback mapped
+            if (!elementActions || !elementActions.find(a => a.action_type === 'callback')) {
+                window.parent.postMessage({
+                    type: 'sivo_click',
+                    payload: {
+                        element_id: name,
+                        event_name: 'click',
+                        data: {}
+                    }
+                }, '*');
+            }
+
+            // Introduce a lightweight client-side sanitizer
+            function sanitizeHTML(str) {
+                if (typeof DOMPurify !== 'undefined') {
+                    return DOMPurify.sanitize(str);
+                }
+                // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
+                return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
+
+            if (hasInteraction && htmlContent) {
+                infoContent.innerHTML = sanitizeHTML(htmlContent);
+                infoPanel.classList.add('active');
+            } else if (!hasInteraction && !elementActions) {
+                infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
+                infoPanel.classList.add('active');
+            } else {
+                closePanel();
+            }
+        });
+
+        // Handle hover events
+        myChart.on('mouseover', function (params) {
+            var name = params.name;
+            var elementActions = actionsManifest[name];
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.action_type === 'hover_callback') {
+                        window.parent.postMessage({
+                            type: 'sivo_hover',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
+                    }
+                });
+            }
+        });
+
+        // Listen for messages from Streamlit
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'sivo_command') {
+                var payload = event.data.payload;
+                if (payload.command === 'zoom_to') {
+                    var elementId = payload.element_id;
+                    var zoomLevel = payload.zoom || 2;
+
+                    // We need to find the element in the map data to get its bounding box or center
+                    // ECharts geo doesn't perfectly expose region centers programmatically easily,
+                    // but we can center the map on the named region
+
+                    myChart.dispatchAction({
+                        type: 'geoSelect',
+                        name: elementId
+                    });
+
+                    if (payload.zoom_center) {
+                        myChart.setOption({
+                            series: [{
+                                center: payload.zoom_center,
+                                zoom: zoomLevel
+                            }]
+                        });
+                    }
+                } else if (payload.command === 'inject_assets') {
+                    if (payload.css) {
+                        var style = document.createElement('style');
+                        style.innerHTML = payload.css;
+                        document.head.appendChild(style);
+                    }
+                    if (payload.js) {
+                        var script = document.createElement('script');
+                        script.innerHTML = payload.js;
+                        document.body.appendChild(script);
+                    }
+                } else if (payload.command === 'update_colors') {
+                    var newColors = payload.colors;
+                    var seriesData = myChart.getOption().series[0].data;
+
+                    var updated = false;
+                    for (var i = 0; i < seriesData.length; i++) {
+                        var name = seriesData[i].name;
+                        if (newColors[name]) {
+                            if (!seriesData[i].itemStyle) {
+                                seriesData[i].itemStyle = {};
+                            }
+                            seriesData[i].itemStyle.areaColor = newColors[name];
+                            updated = true;
+                        }
+                    }
+
+                    if (updated) {
+                        myChart.setOption({
+                            series: [{
+                                data: seriesData
+                            }]
+                        });
+                    }
+                }
+            }
+        });
+
+        function closePanel() {
+            document.getElementById('info-panel').classList.remove('active');
+        }
+
+        // Setup Overlays
+        var overlaysContainer = document.createElement('div');
+        overlaysContainer.id = 'sivo-overlays-container';
+        overlaysContainer.style.position = 'absolute';
+        overlaysContainer.style.top = '0';
+        overlaysContainer.style.left = '0';
+        overlaysContainer.style.width = '100%';
+        overlaysContainer.style.height = '100%';
+        overlaysContainer.style.pointerEvents = 'none'; // Let clicks pass through to chart
+        document.getElementById('chart-container').appendChild(overlaysContainer);
+
+        var overlayElements = {};
+
+        function initOverlays() {
+            overlaysContainer.innerHTML = '';
+            overlayElements = {};
+
+            if (overlaysData) {
+                for (const [id, overlay] of Object.entries(overlaysData)) {
+                    var el = document.createElement('div');
+                    el.style.position = 'absolute';
+                    el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
+                    el.innerHTML = overlay.html;
+                    overlaysContainer.appendChild(el);
+                    overlayElements[id] = { dom: el, data: overlay };
+                }
+            }
+        }
+
+        function updateOverlaysPosition() {
+            for (const [id, overlayObj] of Object.entries(overlayElements)) {
+                if (overlayObj.data.fixed) {
+                    // Fixed positioned overlays (like legends)
+                    overlayObj.dom.style.position = 'absolute';
+                    if (overlayObj.data.position === 'bottom-left') {
+                        overlayObj.dom.style.bottom = '20px';
+                        overlayObj.dom.style.left = '20px';
+                    }
+                    overlayObj.dom.style.display = 'block';
+                    continue;
+                }
+
+                var coord = overlayObj.data.coord; // [x, y] in SVG map coordinates
+                var offset = overlayObj.data.offset; // [x, y] pixel offset
+
+                // Convert SVG coordinate to DOM pixel coordinate
+                var pixel = myChart.convertToPixel({seriesIndex: 0}, coord);
+                if (pixel) {
+                    overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
+                    overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
+                    overlayObj.dom.style.display = 'block';
+                } else {
+                    overlayObj.dom.style.display = 'none';
+                }
+            }
+        }
+
+        // Initialize the first view
+        renderView(currentViewId, false);
+
+        // Update overlays on map roam (zoom/pan)
+        myChart.on('georoam', updateOverlaysPosition);
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            myChart.resize();
+            updateOverlaysPosition();
+        });
+
+        // Back Navigation Button functionality
+        var backBtn = document.createElement('div');
+        backBtn.innerHTML = '&#8592; Back';
+        backBtn.style.position = 'absolute';
+        backBtn.style.top = '10px';
+        backBtn.style.left = '10px';
+        backBtn.style.padding = '8px 12px';
+        backBtn.style.background = 'white';
+        backBtn.style.border = '1px solid #ccc';
+        backBtn.style.borderRadius = '4px';
+        backBtn.style.cursor = 'pointer';
+        backBtn.style.display = 'none';
+        backBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+        backBtn.style.zIndex = '1000';
+        document.body.appendChild(backBtn);
+
+        backBtn.addEventListener('click', function() {
+            if (viewHistory.length > 0) {
+                var prevView = viewHistory.pop();
+                renderView(prevView, true);
+            }
+        });
+
+        // Watch history to toggle back button visibility
+        setInterval(function() {
+            if (viewHistory.length > 0) {
+                backBtn.style.display = 'block';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        }, 100);
+
+    </script>
+
+    <!-- Custom injected assets placeholder -->
+    <style id="custom-css">
+        .custom-tooltip {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .custom-tooltip h3 {
+            margin-top: 0;
+            color: #f1c40f;
+        }
+    </style>
+    <script id="custom-js">
+        console.log('Hello from custom injected JS!');
+    </script>
+</body>
+</html>
