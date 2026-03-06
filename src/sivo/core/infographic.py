@@ -96,7 +96,8 @@ class Infographic:
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
         border_color: Optional[str] = None,
-        glow: Optional[bool] = None
+        glow: Optional[bool] = None,
+        animation: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -140,6 +141,64 @@ class Infographic:
 
         if glow is not None:
             mapping.theme.glow = glow
+
+        if animation:
+            mapping.theme.animation = animation
+
+    def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
+        """
+        Generates a choropleth map by interpolating colors based on a numeric data mapping.
+        Optionally displays a legend overlay.
+        """
+        if not data_map:
+            return
+
+        min_val = min(data_map.values())
+        max_val = max(data_map.values())
+        range_val = max_val - min_val if max_val > min_val else 1.0
+
+        def hex_to_rgb(h):
+            h = h.lstrip('#')
+            if len(h) == 3:
+                h = ''.join([c*2 for c in h])
+            return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
+        def rgb_to_hex(r, g, b):
+            return f"#{int(r):02x}{int(g):02x}{int(b):02x}"
+
+        min_rgb = hex_to_rgb(min_color)
+        max_rgb = hex_to_rgb(max_color)
+
+        for elem_id, value in data_map.items():
+            ratio = (value - min_val) / range_val
+            r = min_rgb[0] + (max_rgb[0] - min_rgb[0]) * ratio
+            g = min_rgb[1] + (max_rgb[1] - min_rgb[1]) * ratio
+            b = min_rgb[2] + (max_rgb[2] - min_rgb[2]) * ratio
+
+            color_hex = rgb_to_hex(r, g, b)
+
+            # Map the color to the element. We don't want to overwrite existing tooltips,
+            # so we try to catch missing elements and map only the color.
+            try:
+                self.map(elem_id, color=color_hex)
+            except ValueError:
+                pass # Element might not exist in SVG, skip it
+
+        if show_legend:
+            legend_html = f"""
+            <div style="background: rgba(255,255,255,0.9); padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: sans-serif; font-size: 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); user-select: none;">
+                <span>{min_val:.1f}</span>
+                <div style="width: 100px; height: 15px; background: linear-gradient(to right, {min_color}, {max_color}); border: 1px solid #999; border-radius: 3px;"></div>
+                <span>{max_val:.1f}</span>
+            </div>
+            """
+            # To add an absolute positioned legend that isn't tied to an SVG bounding box,
+            # we need to append it directly to the document. We can use a special "fixed" overlay.
+            self.overlays["sivo_choropleth_legend"] = {
+                "html": legend_html,
+                "fixed": True,
+                "position": "bottom-left"
+            }
 
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0):
         """

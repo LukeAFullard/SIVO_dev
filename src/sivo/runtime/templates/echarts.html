@@ -40,11 +40,64 @@
         .close-btn:hover {
             color: #333;
         }
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1000;
+        }
+        .zoom-btn {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: #555;
+            user-select: none;
+        }
+        .zoom-btn:hover {
+            background: #f0f0f0;
+            color: #000;
+        }
+
+        /* Standard SIVO Animations */
+        @keyframes sivo-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .sivo-anim-pulse {
+            animation: sivo-pulse 2s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        @keyframes sivo-fade {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .sivo-anim-fade {
+            animation: sivo-fade 2s infinite ease-in-out;
+        }
     </style>
 </head>
 <body>
 
     <div id="chart-container"></div>
+    <div class="zoom-controls">
+        <div class="zoom-btn" onclick="zoomIn()">+</div>
+        <div class="zoom-btn" onclick="zoomOut()">-</div>
+        <div class="zoom-btn" onclick="resetZoom()">⌂</div>
+    </div>
     <div id="info-panel">
         <span class="close-btn" onclick="closePanel()">×</span>
         <div id="info-content-host"></div>
@@ -65,6 +118,8 @@
 
         // History for back navigation
         var viewHistory = [];
+        var currentZoom = 1;
+        var currentCenter = null;
 
         function getBaseOption(mapName) {
             return {
@@ -111,6 +166,58 @@
             };
         }
 
+        var animationInterval = null;
+
+        function applyAnimations() {
+            // Clear any existing interval to prevent memory leaks and erratic stacked animations during drill-downs
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+
+            // ECharts uses Canvas or SVG.
+            // If it's SVG renderer, we can apply classes.
+            // But since ECharts defaults to canvas, animating individual geo regions via CSS is hard.
+            // Instead, we will use a workaround: ECharts doesn't support CSS animations on canvas paths easily.
+            // If an animation is set, we will use setInterval to mutate the ECharts option instead for basic effects,
+            // or if it's rendered as SVG (which echarts map allows), we can query the dom.
+            // For now, if we want robust canvas animation, we just toggle emphasis state.
+
+            var option = myChart.getOption();
+            var seriesData = option.series[0].data;
+            var animatedItems = seriesData.filter(d => d.animation_class);
+
+            if (animatedItems.length === 0) return;
+
+            // Simple toggle for 'pulse' or 'fade' via ECharts itemStyle opacity
+            let toggle = false;
+            animationInterval = setInterval(() => {
+                toggle = !toggle;
+                var currentOption = myChart.getOption();
+                var currentData = currentOption.series[0].data;
+                var updated = false;
+
+                currentData.forEach((item, index) => {
+                    if (item.animation_class === 'fade') {
+                        if (!item.itemStyle) item.itemStyle = {};
+                        item.itemStyle.opacity = toggle ? 0.3 : 1.0;
+                        updated = true;
+                    } else if (item.animation_class === 'pulse') {
+                        // For pulse on canvas, we can fake it by highlighting
+                        if (toggle) {
+                            myChart.dispatchAction({ type: 'highlight', name: item.name });
+                        } else {
+                            myChart.dispatchAction({ type: 'downplay', name: item.name });
+                        }
+                    }
+                });
+
+                if (updated) {
+                    myChart.setOption({ series: [{ data: currentData }] });
+                }
+            }, 1000);
+        }
+
         function renderView(viewId, isBackNavigation) {
             if (!viewsData[viewId]) {
                 console.error("View not found:", viewId);
@@ -133,12 +240,51 @@
             echarts.registerMap(viewId, { svg: view.svg_string });
             myChart.setOption(getBaseOption(viewId), true);
 
+            // Reset zoom tracking
+            currentZoom = 1;
+            currentCenter = null;
+
             // Re-initialize overlays for this view
             initOverlays();
             setTimeout(updateOverlaysPosition, 50);
 
             // Close info panel on transition
             closePanel();
+
+            // Start animations if any
+            applyAnimations();
+        }
+
+        function zoomIn() {
+            var option = myChart.getOption();
+            var series = option.series[0];
+            currentZoom = (series.zoom || 1) * 1.5;
+            myChart.setOption({
+                series: [{
+                    zoom: currentZoom
+                }]
+            });
+        }
+
+        function zoomOut() {
+            var option = myChart.getOption();
+            var series = option.series[0];
+            currentZoom = (series.zoom || 1) / 1.5;
+            myChart.setOption({
+                series: [{
+                    zoom: currentZoom
+                }]
+            });
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            myChart.setOption({
+                series: [{
+                    zoom: 1,
+                    center: null
+                }]
+            });
         }
 
         // Setup Shadow DOM for info-content
@@ -369,6 +515,17 @@
 
         function updateOverlaysPosition() {
             for (const [id, overlayObj] of Object.entries(overlayElements)) {
+                if (overlayObj.data.fixed) {
+                    // Fixed positioned overlays (like legends)
+                    overlayObj.dom.style.position = 'absolute';
+                    if (overlayObj.data.position === 'bottom-left') {
+                        overlayObj.dom.style.bottom = '20px';
+                        overlayObj.dom.style.left = '20px';
+                    }
+                    overlayObj.dom.style.display = 'block';
+                    continue;
+                }
+
                 var coord = overlayObj.data.coord; // [x, y] in SVG map coordinates
                 var offset = overlayObj.data.offset; // [x, y] pixel offset
 

@@ -13,6 +13,9 @@ SIVO acts as the bridge between vector design tools and interactive web data vis
 *   **Responsive Scaling**: Interactive elements adapt flawlessly inside flexible layouts.
 *   **Secure by Design**: Implements mitigations against XXE injections during SVG parsing, and sanitizes/escapes JSON configurations to prevent Cross-Site Scripting (XSS).
 *   **Multi-View HTML Export**: Bundle multiple SVG views and their logic into a single standalone, offline-capable interactive HTML file.
+*   **Data-Driven Choropleths**: Automatically compute and apply color gradients to SVG elements based on a dictionary of numerical values.
+*   **Dynamic Markers**: Calculate element bounding boxes and programmatically drop text/icon markers exactly on the SVG map.
+*   **Built-in Zoom UI**: Responsive user interface zoom controls natively included in exported interactives.
 
 ## Installation
 
@@ -49,7 +52,11 @@ sivo_app.map(
     drill_to="buildingA_floor1.svg"
 )
 
-# 3. Export to an interactive HTML bundle
+# 3. Automatically drop a marker and create a heatmap
+sivo_app.add_marker("buildingA", icon="📍", label="Admin")
+sivo_app.apply_choropleth({"buildingA": 100, "floor1": 50}, min_color="#ffffff", max_color="#ff0000")
+
+# 4. Export to an interactive HTML bundle
 sivo_app.to_html("interactive_map.html")
 ```
 

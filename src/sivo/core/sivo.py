@@ -44,7 +44,8 @@ class Sivo:
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
         border_color: Optional[str] = None,
-        glow: Optional[bool] = None
+        glow: Optional[bool] = None,
+        animation: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -64,11 +65,30 @@ class Sivo:
             hover_color=hover_color,
             border_width=border_width,
             border_color=border_color,
-            glow=glow
+            glow=glow,
+            animation=animation
         )
+
+    def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
+        """
+        Generates a choropleth map by interpolating colors based on a numeric data mapping.
+        """
+        self.infographic.apply_choropleth(data_map, min_color, max_color, show_legend)
 
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
+        self.infographic.add_overlay(element_id, html, offset_x, offset_y)
+
+    def add_marker(self, element_id: str, icon: str = "📍", label: str = "", offset_x: int = 0, offset_y: int = 0):
+        """
+        Convenience method to drop an icon and label at the center of a specified element.
+        """
+        html = f"""
+        <div style="display: flex; flex-direction: column; align-items: center; transform: translate(-50%, -100%);">
+            <span style="font-size: 24px; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5));">{icon}</span>
+            <span style="background: white; border: 1px solid #ccc; padding: 2px 4px; border-radius: 4px; font-size: 12px; font-family: sans-serif; white-space: nowrap; margin-top: -4px;">{label}</span>
+        </div>
+        """
         self.infographic.add_overlay(element_id, html, offset_x, offset_y)
 
     def get_element_center(self, element_id: str) -> Optional[list[float]]:
