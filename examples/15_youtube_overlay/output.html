@@ -110,7 +110,7 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#CC0000", "shadowBlur": 15, "shadowColor": "#CC0000", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#f0f0f0", "shadowBlur": 15, "shadowColor": "#f0f0f0", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to watch video\u003c/h3\u003e", "title": "Click to watch video"}, {"action_type": "callback", "event_name": "open_youtube_modal", "payload": null}], "play_icon": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to watch video\u003c/h3\u003e", "title": "Click to watch video"}, {"action_type": "callback", "event_name": "open_youtube_modal", "payload": null}]}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#CC0000", "shadowBlur": 15, "shadowColor": "#CC0000", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1, "tooltip": "Click to watch video", "emphasis": {"itemStyle": {"areaColor": "#f0f0f0", "shadowBlur": 15, "shadowColor": "#f0f0f0", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to watch video\u003c/h3\u003e", "title": "Click to watch video"}, {"action_type": "video", "video_url": "https://www.youtube-nocookie.com/embed/jNQXAC9IVRw?autoplay=1"}], "play_icon": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to watch video\u003c/h3\u003e", "title": "Click to watch video"}, {"action_type": "video", "video_url": "https://www.youtube-nocookie.com/embed/jNQXAC9IVRw?autoplay=1"}]}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
@@ -338,6 +338,14 @@
                                     console.error('Error fetching SVG:', error);
                                     alert('Could not load ' + action.target_svg);
                                 });
+                        }
+                    } else if (action.action_type === 'video') {
+                        // Display built-in video modal
+                        var videoModal = document.getElementById('sivo-video-modal');
+                        var videoWrapper = document.getElementById('sivo-video-wrapper');
+                        if (videoModal && videoWrapper) {
+                            videoWrapper.innerHTML = `<iframe src="${action.video_url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                            videoModal.classList.add('active');
                         }
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
@@ -578,95 +586,84 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">
-    #youtube-modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-        z-index: 9999;
-        justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(5px);
-    }
-    #youtube-modal.active {
-        display: flex;
-    }
-    .modal-content {
-        position: relative;
-        width: 80%;
-        max-width: 800px;
-        background: #000;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        overflow: hidden;
-    }
-    .close-btn {
-        position: absolute;
-        top: -40px;
-        right: 0;
-        color: white;
-        font-size: 30px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .video-container {
-        position: relative;
-        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-        height: 0;
-    }
-    .video-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
+
+    <!-- SIVO Built-in Video Modal -->
+    <style>
+        #sivo-video-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        #sivo-video-modal.active {
+            display: flex;
+        }
+        .sivo-video-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .sivo-video-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .sivo-video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        .sivo-video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
-    <script id="custom-js">
-    // Create the modal container dynamically
-    var modalHTML = `
-    <div id="youtube-modal">
+    <div id="sivo-video-modal">
         <div style="position: relative; width: 80%; max-width: 800px;">
-            <span class="close-btn" id="close-modal">&times;</span>
-            <div class="modal-content">
-                <div class="video-container" id="video-wrapper">
-                    <!-- Iframe injected on click to avoid autoplaying immediately -->
-                </div>
+            <span class="sivo-video-close" id="sivo-video-close">&times;</span>
+            <div class="sivo-video-content">
+                <div class="sivo-video-container" id="sivo-video-wrapper"></div>
             </div>
         </div>
     </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    <script>
+        var sivoVideoModal = document.getElementById('sivo-video-modal');
+        var sivoVideoCloseBtn = document.getElementById('sivo-video-close');
+        var sivoVideoWrapper = document.getElementById('sivo-video-wrapper');
 
-    var modal = document.getElementById('youtube-modal');
-    var closeBtn = document.getElementById('close-modal');
-    var videoWrapper = document.getElementById('video-wrapper');
-
-    // Listen for the custom SIVO callback event
-    window.addEventListener('message', function(event) {
-        if (event.data && event.data.type === 'sivo_click') {
-            var payload = event.data.payload;
-            if (payload.event_name === 'open_youtube_modal') {
-                // Inject iframe when opened
-                videoWrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-                modal.classList.add('active');
+        function closeSivoVideoModal() {
+            if (sivoVideoModal) {
+                sivoVideoModal.classList.remove('active');
+                if (sivoVideoWrapper) sivoVideoWrapper.innerHTML = '';
             }
         }
-    });
 
-    // Close modal logic
-    function closeModal() {
-        modal.classList.remove('active');
-        videoWrapper.innerHTML = ''; // Stop video playback
-    }
-
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closeModal();
+        if (sivoVideoCloseBtn) sivoVideoCloseBtn.addEventListener('click', closeSivoVideoModal);
+        if (sivoVideoModal) {
+            sivoVideoModal.addEventListener('click', function(e) {
+                if (e.target === sivoVideoModal) {
+                    closeSivoVideoModal();
+                }
+            });
         }
-    });
     </script>
+
 </body>
 </html>
