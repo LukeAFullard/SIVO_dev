@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction
 from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -93,6 +93,12 @@ class Infographic:
         hover_callback_event: Optional[str] = None,
         hover_callback_payload: Optional[dict] = None,
         video: Optional[str] = None,
+        gallery: Optional[list[str]] = None,
+        audio: Optional[str] = None,
+        markdown: Optional[str] = None,
+        fetch_url: Optional[str] = None,
+        form_fields: Optional[list[dict]] = None,
+        form_submit_event: Optional[str] = None,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -130,6 +136,21 @@ class Infographic:
 
         if video:
             mapping.actions.append(VideoAction(video_url=video))
+
+        if gallery:
+            mapping.actions.append(GalleryAction(images=gallery))
+
+        if audio:
+            mapping.actions.append(AudioAction(audio_url=audio))
+
+        if markdown:
+            mapping.actions.append(MarkdownAction(markdown_text=markdown))
+
+        if fetch_url:
+            mapping.actions.append(FetchAction(fetch_url=fetch_url))
+
+        if form_fields and form_submit_event:
+            mapping.actions.append(FormAction(form_fields=form_fields, submit_event=form_submit_event))
 
         if color:
             mapping.theme.color = color
