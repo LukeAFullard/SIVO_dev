@@ -34,6 +34,7 @@ class ThemeOverride(BaseModel):
     border_width: Optional[float] = None
     border_color: Optional[str] = None
     glow: Optional[bool] = None
+    animation: Optional[str] = None
 
 ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction], Field(discriminator='action_type')]
 

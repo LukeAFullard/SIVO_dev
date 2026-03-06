@@ -98,6 +98,9 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             if theme.get('border_width') is not None:
                 item_style['borderWidth'] = theme['border_width']
 
+            if theme.get('animation'):
+                data_item['animation_class'] = theme.get('animation')
+
             if item_style:
                 data_item['itemStyle'] = item_style
 

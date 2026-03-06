@@ -115,5 +115,47 @@ class TestSivoRender(unittest.TestCase):
         self.assertEqual(objects["poly1"]["type"], "polygon")
         self.assertEqual(objects["poly1"]["bbox"], [0.0, 0.0, 10.0, 10.0])
 
+    def test_apply_choropleth(self):
+        svg_content = """
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <rect id="rect1" x="10" y="20" width="30" height="40"/>
+            <circle id="circle1" cx="100" cy="100" r="50"/>
+            <polygon id="poly1" points="0,0 10,0 10,10 0,10"/>
+        </svg>
+        """
+        sivo_app = Sivo.from_string(svg_content)
+        data = {
+            "rect1": 0.0,
+            "circle1": 50.0,
+            "poly1": 100.0
+        }
+
+        # apply choropleth from #000000 to #ff0000
+        sivo_app.apply_choropleth(data, min_color="#000000", max_color="#ff0000")
+
+        manifest = sivo_app.get_manifest()
+
+        # rect1 should be min_color
+        self.assertEqual(manifest["objects"]["rect1"]["theme"]["color"], "#000000")
+        # circle1 should be exactly halfway (#7f0000 roughly)
+        self.assertEqual(manifest["objects"]["circle1"]["theme"]["color"], "#7f0000")
+        # poly1 should be max_color
+        self.assertEqual(manifest["objects"]["poly1"]["theme"]["color"], "#ff0000")
+
+    def test_add_marker(self):
+        svg_content = """
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <rect id="rect1" x="0" y="0" width="100" height="100"/>
+        </svg>
+        """
+        sivo_app = Sivo.from_string(svg_content)
+        sivo_app.add_marker("rect1", icon="★", label="Star Room")
+
+        overlays = sivo_app.infographic.overlays
+        self.assertIn("rect1", overlays)
+        self.assertIn("★", overlays["rect1"]["html"])
+        self.assertIn("Star Room", overlays["rect1"]["html"])
+        self.assertEqual(overlays["rect1"]["coord"], [50.0, 50.0])
+
 if __name__ == '__main__':
     unittest.main()

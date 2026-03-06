@@ -33,7 +33,7 @@
 ## Phase 2: Refactoring & Optimization
 
 **1. Modularity: Type Safety in Pydantic Action Models**
-* **Location:** `src/sivo/core/actions.py`, Lines 45-50
+* **Location:** `src/sivo/core/actions.py`
 * **Assessment:** The `InteractionMapping` class uses `actions: list[BaseAction]`. However, due to Pydantic's serialization mechanisms, using a base class without a discriminator can cause attributes of inherited classes to be stripped out during `.model_dump()`.
 * **Proposed Solution:**
   Change the type to a Discriminated Union:
@@ -52,10 +52,18 @@
 * **Proposal:** Introduce an integration allowing developers to pass a Pandas DataFrame mapping element IDs to numerical values alongside a color scale (e.g., `matplotlib.colormaps` or simple linear interpolation).
 * **Utility:** Automates the creation of heatmaps or geographic density maps without forcing the user to manually compute `map(id, color=...)` in a loop.
 
-**2. WebSocket / Live Server Capabilities**
-* **Proposal:** Add an optional built-in FastAPI application wrapper inside SIVO that serves the HTML bundle and maintains a WebSocket connection.
-* **Utility:** Currently, live updates require Streamlit. Offering a standalone websocket server allows users to deploy high-frequency updating dashboards (like sensor status) entirely independently, pushing JSON diffs to the JS runtime.
+**2. Auto-Generated Interactive Legends**
+* **Proposal:** Generate a color scale legend automatically when `apply_choropleth` is called, displaying the `min_color` and `max_color` alongside their corresponding minimum and maximum values.
+* **Utility:** Saves developers from manually writing HTML overlays to explain heatmap scales on their infographics.
 
-**3. Animation API Integration**
-* **Proposal:** Extend the SIVO Python API to allow mapping specific CSS animations (e.g. `pulse`, `fade`, `slide`) to SVG paths, generating inline CSS keyframes dynamically.
-* **Utility:** Adding visual indicators like a flashing red element for a "critical state" makes infographics significantly more intuitive and engaging for operational monitoring use cases.
+**3. Animation API**
+* **Proposal:** Introduce an `animation` parameter to SIVO's mapping API, appending standard CSS keyframes (e.g. `pulse`, `fade`) to mapped elements.
+* **Utility:** Provides an easy way to highlight critical statuses or active elements on an interactive map.
+
+**4. Built-in Zoom UI Controls**
+* **Proposal:** Update the `echarts.html` template to include visible `[ + ]`, `[ - ]`, and `[ Reset ]` buttons overlaying the canvas, providing explicit controls for zooming and panning the map via ECharts API.
+* **Utility:** Explicit zoom controls greatly improve the user experience for users who lack scroll wheels or on devices with touchpads.
+
+**5. Dynamic Annotations & Markers**
+* **Proposal:** Add an `add_marker` convenience API in Sivo that drops an HTML overlay pin/marker exactly at the computed bounding box center of an SVG element.
+* **Utility:** Allows developers to programmatically drop markers ("📍 You are here", etc.) on SVGs dynamically without editing the SVG payload manually.
