@@ -16,7 +16,7 @@ class URLAction(BaseAction):
 
 class DrillDownAction(BaseAction):
     action_type: Literal["drilldown"] = "drilldown"
-    target_svg: str = Field(description="Path to the secondary SVG file")
+    target_svg: str = Field(description="Registered view_id from SivoProject OR path to an external secondary SVG file")
 
 class CallbackAction(BaseAction):
     action_type: Literal["callback"] = "callback"

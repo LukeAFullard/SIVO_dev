@@ -766,3 +766,6 @@ The system prioritizes reliability, accessibility, and simplicity while remainin
 
 **3. HTML/DOM Overlay Positioning System / Asset Injection (Completed - Absolute Positioning over SVG via BBox)**
 *   **Utility:** Allow developers to define custom HTML overlays (like React-style tooltips or floating charts) that are absolutely positioned *over* specific SVG coordinates, derived from the Python bounding box metadata. This enables rich annotations and complex UI components that live outside the strict ECharts `<canvas>` bounds, significantly enhancing the visual capabilities of the framework.
+
+**4. Multi-View Standalone HTML Generation (Completed)**
+*   **Utility:** Upgraded the `drill_to` architecture via a new `SivoProject` wrapper to allow developers to package multiple SVG views into a single, offline HTML file. Clicking elements mapped with `drill_to="view_id"` instantly transitions the ECharts canvas and overlay logic entirely on the client side without needing Streamlit or separate `.svg` network fetches.

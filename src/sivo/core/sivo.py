@@ -75,12 +75,42 @@ class Sivo:
         """Gets the center coordinate [x, y] of a specific element, useful for programmatic zoom."""
         return self.infographic.get_element_center(element_id)
 
+    def _get_view_data(self) -> Dict:
+        """Internal method to extract view data for bundle generation."""
+        mappings_dict = {}
+        for k, v in self.infographic.mappings.items():
+            if hasattr(v, "model_dump"):
+                mappings_dict[k] = v.model_dump()
+            elif hasattr(v, "dict"):
+                mappings_dict[k] = v.dict()
+            else:
+                mappings_dict[k] = v
+
+        return {
+            "svg_string": self.infographic.parser.to_string(),
+            "mappings": mappings_dict,
+            "overlays": self.infographic.overlays
+        }
+
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
         Generates the interactive HTML string (bundle) containing the ECharts map,
         Jinja2 template, and mapped behaviors. Optionally saves to a file.
         """
-        return self.infographic.to_echarts_html(output_path=output_path, custom_css=custom_css, custom_js=custom_js)
+        from ..runtime.bundle_generator import generate_echarts_html
+
+        # Wrap the single view in a dictionary to reuse the multi-view bundle generator
+        views_data = {
+            "default_view": self._get_view_data()
+        }
+
+        return generate_echarts_html(
+            views_data=views_data,
+            initial_view="default_view",
+            output_path=output_path,
+            custom_css=custom_css,
+            custom_js=custom_js
+        )
 
     def get_manifest(self) -> Dict:
         """Returns the interaction manifest JSON data."""

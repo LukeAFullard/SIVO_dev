@@ -174,8 +174,23 @@ class Infographic:
         Generates interactive HTML string.
         Optionally writes to output_path.
         """
-        svg_string = self.parser.to_string()
-        return generate_echarts_html(svg_string, self.mappings, self.overlays, output_path, custom_css, custom_js)
+        mappings_dict = {}
+        for k, v in self.mappings.items():
+            if hasattr(v, "model_dump"):
+                mappings_dict[k] = v.model_dump()
+            elif hasattr(v, "dict"):
+                mappings_dict[k] = v.dict()
+            else:
+                mappings_dict[k] = v
+
+        views_data = {
+            "default_view": {
+                "svg_string": self.parser.to_string(),
+                "mappings": mappings_dict,
+                "overlays": self.overlays
+            }
+        }
+        return generate_echarts_html(views_data, "default_view", output_path, custom_css, custom_js)
 
     def get_manifest(self) -> Dict:
         """

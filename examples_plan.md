@@ -44,6 +44,11 @@ This document outlines a structured plan for creating example scripts and applic
 *   **Description:** Automatically calculate the center coordinate of SVG paths and attach absolutely positioned HTML overlays (like floating badges or micro-charts) directly over the map elements.
 *   **Key Concepts:** `add_overlay()`, bounding box metadata processing.
 
+### Example 2.4: Multi-View Standalone HTML
+*   **Location:** `examples/07_multi_view_standalone/`
+*   **Description:** Use the `SivoProject` class to bundle a Building, Floor, and Room SVG into a single, offline-capable interactive HTML file. Clicking a building navigates directly to the floorplan without needing external network fetches or a Python backend.
+*   **Key Concepts:** `SivoProject`, `add_view()`, `map(drill_to="view_id")`.
+
 ---
 
 ## Phase 3: Streamlit Integration
@@ -51,27 +56,27 @@ This document outlines a structured plan for creating example scripts and applic
 **Objective:** Demonstrate bidirectional communication between interactive SVGs and a live Python backend using Streamlit.
 
 ### Example 3.1: Basic Callbacks (Click Events)
-*   **Location:** `examples/07_streamlit_callbacks/`
+*   **Location:** `examples/08_streamlit_callbacks/`
 *   **Description:** A simple dashboard where clicking an SVG element updates a Streamlit text metric or chart.
 *   **Key Concepts:** `sivo_component()`, `map()` with `callback_event` and `callback_payload`, reading the return value in Streamlit.
 
 ### Example 3.2: Hover Events & Real-time State
-*   **Location:** `examples/08_streamlit_hover/`
+*   **Location:** `examples/09_streamlit_hover/`
 *   **Description:** A dashboard that reacts instantly as the user hovers over different SVG regions, updating side panels without requiring a click.
 *   **Key Concepts:** `map()` with `hover_callback_event`, performance considerations with frequent state updates.
 
 ### Example 3.3: Dynamic Color Updates (Zero Re-render)
-*   **Location:** `examples/09_dynamic_colors/`
+*   **Location:** `examples/10_dynamic_colors/`
 *   **Description:** Streamlit app that rapidly updates the colors of multiple SVG elements based on a simulated live data feed (e.g., server load heatmaps), using `dynamic_colors` to avoid full component re-renders.
 *   **Key Concepts:** `sivo_component(dynamic_colors={"element_id": "#ff0000"})`, `postMessage` state sync.
 
 ### Example 3.4: Programmatic Zooming & Panning
-*   **Location:** `examples/10_streamlit_zoom/`
+*   **Location:** `examples/11_streamlit_zoom/`
 *   **Description:** A Streamlit app with a dropdown menu or buttons. Selecting an item in the Streamlit UI programmatically centers and zooms the SVG map to that specific element.
 *   **Key Concepts:** `sivo_component(zoom_to="element_id")`.
 
 ### Example 3.5: Comprehensive Dashboard
-*   **Location:** `examples/11_comprehensive_dashboard/`
+*   **Location:** `examples/12_comprehensive_dashboard/`
 *   **Description:** A culmination of all features: A "Smart Factory" or "Campus Management" dashboard featuring tooltips, HTML overlays for sensor badges, dynamic color updates for live alerts, hover callbacks to update side panels, drill-downs into specific building zones, and programmatic zooming based on external events.
 
 ---
