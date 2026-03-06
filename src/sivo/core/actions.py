@@ -32,6 +32,28 @@ class VideoAction(BaseAction):
     action_type: Literal["video"] = "video"
     video_url: str = Field(description="Embed URL for the video (e.g., YouTube embed URL)")
 
+
+class GalleryAction(BaseAction):
+    action_type: Literal["gallery"] = "gallery"
+    images: list[str] = Field(description="List of image URLs to display in a lightbox gallery")
+
+class AudioAction(BaseAction):
+    action_type: Literal["audio"] = "audio"
+    audio_url: str = Field(description="URL of the audio file to play")
+
+class MarkdownAction(BaseAction):
+    action_type: Literal["markdown"] = "markdown"
+    markdown_text: str = Field(description="Markdown content to render in the info panel")
+
+class FetchAction(BaseAction):
+    action_type: Literal["fetch"] = "fetch"
+    fetch_url: str = Field(description="URL to fetch data from and display in the info panel")
+
+class FormAction(BaseAction):
+    action_type: Literal["form"] = "form"
+    form_fields: list[dict] = Field(description="List of fields (e.g., {'name': 'ticket', 'type': 'text'})")
+    submit_event: str = Field(description="Event name to trigger on form submission")
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -40,7 +62,7 @@ class ThemeOverride(BaseModel):
     glow: Optional[bool] = None
     animation: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str

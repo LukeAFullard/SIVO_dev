@@ -1,0 +1,7 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+  <g id="scene">
+    <rect id="background" width="400" height="400" fill="#f0f0f0" />
+    <circle id="play_button" cx="200" cy="200" r="80" fill="#FF0000" />
+    <polygon id="play_icon" points="170,150 250,200 170,250" fill="white" />
+  </g>
+</svg>

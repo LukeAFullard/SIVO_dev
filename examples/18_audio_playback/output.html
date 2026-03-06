@@ -112,8 +112,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click to hear a sound", "emphasis": {"itemStyle": {"areaColor": "#32a852", "shadowBlur": 15, "shadowColor": "#32a852", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to hear a sound\u003c/h3\u003e", "title": "Click to hear a sound"}, {"action_type": "audio", "audio_url": "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -445,7 +445,7 @@
             // Introduce a lightweight client-side sanitizer
             function sanitizeHTML(str) {
                 if (typeof DOMPurify !== 'undefined') {
-                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
+                    return DOMPurify.sanitize(str);
                 }
                 // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
                 return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -654,8 +654,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>
