@@ -23,26 +23,119 @@
             height: 100%;
         }
         #info-panel {
-            width: 300px;
-            padding: 20px;
             background: #f9f9f9;
-            border-left: 1px solid #ddd;
-            overflow-y: auto;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
             display: none;
+            flex-direction: column;
             transition: all 0.3s ease;
+            position: relative;
         }
         #info-panel.active {
+            display: flex;
+        }
+
+        .info-panel-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 15px;
+            background: #fff;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .info-panel-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        /* Layout modifiers for info-panel */
+        #info-panel.pos-right {
+            width: 300px;
+            height: 100%;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-left {
+            width: 300px;
+            height: 100%;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-bottom {
+            width: 100%;
+            height: 300px;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        #info-panel.pos-top {
+            width: 100%;
+            height: 300px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        /* Responsive Layout Overrides */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column !important;
+            }
+            #info-panel.active {
+                width: 100% !important;
+                height: 50vh !important;
+                border: none !important;
+                border-top: 1px solid #ddd !important;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
+            }
+            .sivo-resizer {
+                display: none !important;
+            }
+        }
+
+        .sivo-resizer {
+            display: none;
+            background-color: #eee;
+            z-index: 10;
+        }
+        .sivo-resizer:hover {
+            background-color: #ccc;
+        }
+
+        /* Resizer orientations */
+        .sivo-resizer.resizer-horizontal {
+            width: 5px;
+            cursor: col-resize;
+            height: 100%;
+        }
+        .sivo-resizer.resizer-vertical {
+            height: 5px;
+            cursor: row-resize;
+            width: 100%;
+        }
+        .sivo-resizer.active {
             display: block;
         }
+
         .close-btn {
-            float: right;
             cursor: pointer;
             font-weight: bold;
-            color: #888;
+            color: #555;
+            background: #eee;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: background 0.2s;
         }
         .close-btn:hover {
-            color: #333;
+            background: #ddd;
+            color: #000;
         }
         .zoom-controls {
             position: absolute;
@@ -97,14 +190,19 @@
 <body>
 
     <div id="chart-container"></div>
+    <div id="sivo-resizer" class="sivo-resizer"></div>
     <div class="zoom-controls">
         <div class="zoom-btn" onclick="zoomIn()">+</div>
         <div class="zoom-btn" onclick="zoomOut()">-</div>
         <div class="zoom-btn" onclick="resetZoom()">⌂</div>
     </div>
     <div id="info-panel">
-        <span class="close-btn" onclick="closePanel()">×</span>
-        <div id="info-content-host"></div>
+        <div class="info-panel-header">
+            <button class="close-btn" onclick="closePanel()" title="Close panel">×</button>
+        </div>
+        <div class="info-panel-content">
+            <div id="info-content-host"></div>
+        </div>
     </div>
 
     <script>
@@ -112,7 +210,7 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click for Markdown Details", "emphasis": {"itemStyle": {"areaColor": "#8b32a8", "shadowBlur": 15, "shadowColor": "#8b32a8", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick for Markdown Details\u003c/h3\u003e", "title": "Click for Markdown Details"}, {"action_type": "markdown", "markdown_text": "# SIVO Markdown Support\n    \nThis is a **bold** statement. You can write easily formatted info panels:\n- Bullet points\n- `Inline code`\n- [Links](https://github.com)\n\n```python\nprint(\"Hello SIVO!\")\n```"}]}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click for Markdown Details", "emphasis": {"itemStyle": {"areaColor": "#8b32a8", "shadowBlur": 15, "shadowColor": "#8b32a8", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick for Markdown Details\u003c/h3\u003e", "title": "Click for Markdown Details", "panel_position": "bottom"}, {"action_type": "markdown", "markdown_text": "# SIVO Markdown Support\n\nThis is a **bold** statement. You can write easily formatted info panels:\n- Bullet points\n- `Inline code`\n- [Links](https://github.com)\n\n```python\nprint(\"Hello SIVO!\")\n```", "panel_position": "bottom"}]}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
@@ -129,6 +227,7 @@
             return {
                 tooltip: {
                     trigger: 'item',
+                    triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
                     formatter: function (params) {
                         var dataIndex = echartsData.findIndex(item => item.name === params.name);
                         if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
@@ -305,9 +404,13 @@
             var elementActions = actionsManifest[name];
             var htmlContent = '';
             var hasInteraction = false;
+            var panelPosition = 'right'; // Default
 
             if (elementActions) {
                 elementActions.forEach(function(action) {
+                    if (action.panel_position) {
+                        panelPosition = action.panel_position;
+                    }
                     if (action.action_type === 'tooltip') {
                         htmlContent += action.content;
                         hasInteraction = true;
@@ -445,18 +548,60 @@
             // Introduce a lightweight client-side sanitizer
             function sanitizeHTML(str) {
                 if (typeof DOMPurify !== 'undefined') {
-                    return DOMPurify.sanitize(str);
+                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
                 }
                 // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
                 return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             }
 
+            function applyPanelPosition(position) {
+                infoPanel.className = 'active'; // reset classes but keep active
+                var resizer = document.getElementById('sivo-resizer');
+                resizer.className = 'sivo-resizer active';
+
+                // On mobile we force bottom layout in CSS, so logic mostly just applies classes.
+                if (position === 'left') {
+                    document.body.style.flexDirection = 'row-reverse';
+                    infoPanel.classList.add('pos-left');
+                    resizer.classList.add('resizer-horizontal');
+                } else if (position === 'bottom') {
+                    document.body.style.flexDirection = 'column';
+                    infoPanel.classList.add('pos-bottom');
+                    resizer.classList.add('resizer-vertical');
+                } else if (position === 'top') {
+                    document.body.style.flexDirection = 'column-reverse';
+                    infoPanel.classList.add('pos-top');
+                    resizer.classList.add('resizer-vertical');
+                } else {
+                    // default right
+                    document.body.style.flexDirection = 'row';
+                    infoPanel.classList.add('pos-right');
+                    resizer.classList.add('resizer-horizontal');
+                }
+
+                // Clear any manual sizing inline styles from dragging
+                infoPanel.style.width = '';
+                infoPanel.style.height = '';
+
+                // Smoothly resize ECharts during CSS transition
+                let start = null;
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    var progress = timestamp - start;
+                    myChart.resize();
+                    if (progress < 350) { // slightly longer than CSS transition 0.3s
+                        window.requestAnimationFrame(step);
+                    }
+                }
+                window.requestAnimationFrame(step);
+            }
+
             if (hasInteraction && htmlContent) {
                 infoContent.innerHTML = sanitizeHTML(htmlContent);
-                infoPanel.classList.add('active');
+                applyPanelPosition(panelPosition);
             } else if (!hasInteraction && !elementActions) {
                 infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
-                infoPanel.classList.add('active');
+                applyPanelPosition(panelPosition);
             } else {
                 closePanel();
             }
@@ -547,8 +692,97 @@
         });
 
         function closePanel() {
-            document.getElementById('info-panel').classList.remove('active');
+            var infoPanel = document.getElementById('info-panel');
+            infoPanel.className = '';
+            infoPanel.classList.add('pos-right'); // reset to default
+            infoPanel.style.width = '';
+            infoPanel.style.height = '';
+            var resizer = document.getElementById('sivo-resizer');
+            if (resizer) resizer.className = 'sivo-resizer';
+            document.body.style.flexDirection = 'row';
+
+            // Smoothly resize ECharts during CSS transition
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                var progress = timestamp - start;
+                myChart.resize();
+                if (progress < 350) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+            window.requestAnimationFrame(step);
         }
+
+        // --- Resizer Logic ---
+        (function() {
+            const resizer = document.getElementById('sivo-resizer');
+            const panel = document.getElementById('info-panel');
+            let isResizing = false;
+            let currentLayout = 'row'; // depends on flex-direction
+            let lastDownX = 0;
+            let lastDownY = 0;
+            let startWidth = 0;
+            let startHeight = 0;
+
+            resizer.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                currentLayout = document.body.style.flexDirection;
+                lastDownX = e.clientX;
+                lastDownY = e.clientY;
+                startWidth = panel.getBoundingClientRect().width;
+                startHeight = panel.getBoundingClientRect().height;
+
+                // Add a transparent overlay to capture pointer events over iframes/charts
+                let overlay = document.createElement('div');
+                overlay.id = 'sivo-drag-overlay';
+                overlay.style.position = 'fixed';
+                overlay.style.top = 0;
+                overlay.style.left = 0;
+                overlay.style.right = 0;
+                overlay.style.bottom = 0;
+                overlay.style.zIndex = 9999;
+                overlay.style.cursor = currentLayout.includes('row') ? 'col-resize' : 'row-resize';
+                document.body.appendChild(overlay);
+
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+
+                if (currentLayout === 'row') {
+                    // Right panel
+                    let newWidth = startWidth - (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'row-reverse') {
+                    // Left panel
+                    let newWidth = startWidth + (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'column') {
+                    // Bottom panel
+                    let newHeight = startHeight - (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                } else if (currentLayout === 'column-reverse') {
+                    // Top panel
+                    let newHeight = startHeight + (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                }
+
+                // Throttle resize event for performance if needed, but modern ECharts usually handles it
+                myChart.resize();
+            });
+
+            window.addEventListener('mouseup', function(e) {
+                if (isResizing) {
+                    isResizing = false;
+                    let overlay = document.getElementById('sivo-drag-overlay');
+                    if (overlay) document.body.removeChild(overlay);
+                    myChart.resize();
+                }
+            });
+        })();
+        // --- End Resizer Logic ---
 
         // Setup Overlays
         var overlaysContainer = document.createElement('div');
@@ -621,19 +855,34 @@
 
         // Back Navigation Button functionality
         var backBtn = document.createElement('div');
-        backBtn.innerHTML = '&#8592; Back';
+        backBtn.innerHTML = `
+            <svg style="width:16px; height:16px; margin-right:6px; vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span style="vertical-align:middle;">Back</span>
+        `;
         backBtn.style.position = 'absolute';
-        backBtn.style.top = '10px';
-        backBtn.style.left = '10px';
-        backBtn.style.padding = '8px 12px';
+        backBtn.style.top = '20px';
+        backBtn.style.left = '20px';
+        backBtn.style.padding = '10px 16px';
         backBtn.style.background = 'white';
-        backBtn.style.border = '1px solid #ccc';
-        backBtn.style.borderRadius = '4px';
+        backBtn.style.border = '1px solid #eaeaea';
+        backBtn.style.borderRadius = '20px'; // Pill shape
         backBtn.style.cursor = 'pointer';
         backBtn.style.display = 'none';
-        backBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+        backBtn.style.alignItems = 'center';
+        backBtn.style.fontFamily = 'sans-serif';
+        backBtn.style.fontSize = '14px';
+        backBtn.style.fontWeight = '500';
+        backBtn.style.color = '#333';
+        backBtn.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
         backBtn.style.zIndex = '1000';
-        document.body.appendChild(backBtn);
+        backBtn.style.transition = 'background 0.2s, transform 0.1s';
+
+        backBtn.addEventListener('mouseenter', () => backBtn.style.background = '#f9f9f9');
+        backBtn.addEventListener('mouseleave', () => backBtn.style.background = 'white');
+        backBtn.addEventListener('mousedown', () => backBtn.style.transform = 'scale(0.95)');
+        backBtn.addEventListener('mouseup', () => backBtn.style.transform = 'scale(1)');
+
+        document.getElementById('chart-container').appendChild(backBtn); // Append to chart container so flex layout doesn't break it
 
         backBtn.addEventListener('click', function() {
             if (viewHistory.length > 0) {
@@ -645,7 +894,7 @@
         // Watch history to toggle back button visibility
         setInterval(function() {
             if (viewHistory.length > 0) {
-                backBtn.style.display = 'block';
+                backBtn.style.display = 'flex';
             } else {
                 backBtn.style.display = 'none';
             }

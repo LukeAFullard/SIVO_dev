@@ -8,6 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <!-- Include marked.js for Markdown Action -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -21,26 +23,119 @@
             height: 100%;
         }
         #info-panel {
-            width: 300px;
-            padding: 20px;
             background: #f9f9f9;
-            border-left: 1px solid #ddd;
-            overflow-y: auto;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
             display: none;
+            flex-direction: column;
             transition: all 0.3s ease;
+            position: relative;
         }
         #info-panel.active {
+            display: flex;
+        }
+
+        .info-panel-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 15px;
+            background: #fff;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .info-panel-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        /* Layout modifiers for info-panel */
+        #info-panel.pos-right {
+            width: 300px;
+            height: 100%;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-left {
+            width: 300px;
+            height: 100%;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-bottom {
+            width: 100%;
+            height: 300px;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        #info-panel.pos-top {
+            width: 100%;
+            height: 300px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        /* Responsive Layout Overrides */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column !important;
+            }
+            #info-panel.active {
+                width: 100% !important;
+                height: 50vh !important;
+                border: none !important;
+                border-top: 1px solid #ddd !important;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
+            }
+            .sivo-resizer {
+                display: none !important;
+            }
+        }
+
+        .sivo-resizer {
+            display: none;
+            background-color: #eee;
+            z-index: 10;
+        }
+        .sivo-resizer:hover {
+            background-color: #ccc;
+        }
+
+        /* Resizer orientations */
+        .sivo-resizer.resizer-horizontal {
+            width: 5px;
+            cursor: col-resize;
+            height: 100%;
+        }
+        .sivo-resizer.resizer-vertical {
+            height: 5px;
+            cursor: row-resize;
+            width: 100%;
+        }
+        .sivo-resizer.active {
             display: block;
         }
+
         .close-btn {
-            float: right;
             cursor: pointer;
             font-weight: bold;
-            color: #888;
+            color: #555;
+            background: #eee;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: background 0.2s;
         }
         .close-btn:hover {
-            color: #333;
+            background: #ddd;
+            color: #000;
         }
         .zoom-controls {
             position: absolute;
@@ -95,14 +190,19 @@
 <body>
 
     <div id="chart-container"></div>
+    <div id="sivo-resizer" class="sivo-resizer"></div>
     <div class="zoom-controls">
         <div class="zoom-btn" onclick="zoomIn()">+</div>
         <div class="zoom-btn" onclick="zoomOut()">-</div>
         <div class="zoom-btn" onclick="resetZoom()">⌂</div>
     </div>
     <div id="info-panel">
-        <span class="close-btn" onclick="closePanel()">×</span>
-        <div id="info-content-host"></div>
+        <div class="info-panel-header">
+            <button class="close-btn" onclick="closePanel()" title="Close panel">×</button>
+        </div>
+        <div class="info-panel-content">
+            <div id="info-content-host"></div>
+        </div>
     </div>
 
     <script>
@@ -110,7 +210,7 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/\u003e\n    \u003cpolygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/\u003e\n    \u003cpolygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/\u003e\n    \u003crect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/\u003e\n    \u003cpolygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/\u003e\n    \u003cpath id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1, "tooltip": "Click to search about the Sun", "emphasis": {"itemStyle": {"areaColor": "yellow", "shadowBlur": 15, "shadowColor": "yellow", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "mountain1", "value": 1, "tooltip": "Click to search about Mountains", "emphasis": {"itemStyle": {"areaColor": "#c0c0c0"}}}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1}, {"name": "roof", "value": 1}, {"name": "river", "value": 1}], "actions_manifest": {"sun": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to search about the Sun\u003c/h3\u003e", "title": "Click to search about the Sun"}, {"action_type": "url", "url": "https://en.wikipedia.org/wiki/Sun", "target": "_blank"}], "mountain1": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to search about Mountains\u003c/h3\u003e", "title": "Click to search about Mountains"}, {"action_type": "url", "url": "https://en.wikipedia.org/wiki/Mountain", "target": "_blank"}]}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/\u003e\n    \u003cpolygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/\u003e\n    \u003cpolygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/\u003e\n    \u003crect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/\u003e\n    \u003cpolygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/\u003e\n    \u003cpath id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1, "tooltip": "Click to search about the Sun", "emphasis": {"itemStyle": {"areaColor": "yellow", "shadowBlur": 15, "shadowColor": "yellow", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "mountain1", "value": 1, "tooltip": "Click to search about Mountains", "emphasis": {"itemStyle": {"areaColor": "#c0c0c0"}}}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1}, {"name": "roof", "value": 1}, {"name": "river", "value": 1}], "actions_manifest": {"sun": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to search about the Sun\u003c/h3\u003e", "title": "Click to search about the Sun", "panel_position": "right"}, {"action_type": "url", "url": "https://en.wikipedia.org/wiki/Sun", "target": "_blank"}], "mountain1": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to search about Mountains\u003c/h3\u003e", "title": "Click to search about Mountains", "panel_position": "right"}, {"action_type": "url", "url": "https://en.wikipedia.org/wiki/Mountain", "target": "_blank"}]}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
@@ -127,6 +227,7 @@
             return {
                 tooltip: {
                     trigger: 'item',
+                    triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
                     formatter: function (params) {
                         var dataIndex = echartsData.findIndex(item => item.name === params.name);
                         if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
@@ -303,9 +404,13 @@
             var elementActions = actionsManifest[name];
             var htmlContent = '';
             var hasInteraction = false;
+            var panelPosition = 'right'; // Default
 
             if (elementActions) {
                 elementActions.forEach(function(action) {
+                    if (action.panel_position) {
+                        panelPosition = action.panel_position;
+                    }
                     if (action.action_type === 'tooltip') {
                         htmlContent += action.content;
                         hasInteraction = true;
@@ -339,6 +444,80 @@
                                     alert('Could not load ' + action.target_svg);
                                 });
                         }
+                    } else if (action.action_type === 'video') {
+                        // Display built-in video modal
+                        var videoModal = document.getElementById('sivo-video-modal');
+                        var videoWrapper = document.getElementById('sivo-video-wrapper');
+                        if (videoModal && videoWrapper) {
+                            videoWrapper.innerHTML = `<iframe src="${action.video_url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                            videoModal.classList.add('active');
+                        }
+
+                    } else if (action.action_type === 'markdown') {
+                        // Parse markdown to HTML
+                        htmlContent += marked.parse(action.markdown_text);
+                        hasInteraction = true;
+                    } else if (action.action_type === 'audio') {
+                        // Play audio
+                        var audio = new Audio(action.audio_url);
+                        audio.play();
+                    } else if (action.action_type === 'fetch') {
+                        // Fetch data and display in info panel
+                        htmlContent += `<div id="sivo-fetch-container-${name}"><em>Loading data...</em></div>`;
+                        hasInteraction = true;
+                        fetch(action.fetch_url)
+                            .then(response => response.text())
+                            .then(data => {
+                                // Basic attempt to pretty-print JSON if it is JSON
+                                try {
+                                    var jsonData = JSON.parse(data);
+                                    data = '<pre>' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                } catch (e) {
+                                    // Not JSON, keep as text
+                                }
+                                var container = document.getElementById(`sivo-fetch-container-${name}`);
+                                if (container) container.innerHTML = data;
+                            })
+                            .catch(err => {
+                                var container = document.getElementById(`sivo-fetch-container-${name}`);
+                                if (container) container.innerHTML = `<span style="color:red">Failed to fetch data</span>`;
+                            });
+                    } else if (action.action_type === 'gallery') {
+                        // Built-in gallery modal
+                        var galleryModal = document.getElementById('sivo-gallery-modal');
+                        var galleryWrapper = document.getElementById('sivo-gallery-wrapper');
+                        if (galleryModal && galleryWrapper && action.images.length > 0) {
+                            var imgHtml = `<img src="${action.images[0]}" style="max-width:100%; max-height:80vh; border-radius:4px;" />`;
+
+                            // If multiple images, add simple navigation
+                            if (action.images.length > 1) {
+                                imgHtml += `<div style="text-align:center; margin-top:10px; color:white;">`;
+                                action.images.forEach((img, idx) => {
+                                    imgHtml += `<span style="display:inline-block; width:10px; height:10px; background:${idx===0?'white':'#555'}; border-radius:50%; margin:0 5px; cursor:pointer;" onclick="sivoUpdateGallery('${img}', this)"></span>`;
+                                });
+                                imgHtml += `</div>`;
+                            }
+
+                            galleryWrapper.innerHTML = imgHtml;
+                            galleryModal.classList.add('active');
+                        }
+                    } else if (action.action_type === 'form') {
+                        var formHtml = `<form id="sivo-form-${name}" onsubmit="event.preventDefault(); sivoSubmitForm('${name}', '${action.submit_event}', this)">`;
+                        action.form_fields.forEach(field => {
+                            formHtml += `<div style="margin-bottom:10px;">`;
+                            formHtml += `<label style="display:block; margin-bottom:5px; font-weight:bold;">${field.label || field.name}</label>`;
+                            if (field.type === 'textarea') {
+                                formHtml += `<textarea name="${field.name}" style="width:100%; padding:5px; border:1px solid #ccc; border-radius:4px;" required></textarea>`;
+                            } else {
+                                formHtml += `<input type="${field.type || 'text'}" name="${field.name}" style="width:100%; padding:5px; border:1px solid #ccc; border-radius:4px;" required />`;
+                            }
+                            formHtml += `</div>`;
+                        });
+                        formHtml += `<button type="submit" style="background:#007bff; color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; width:100%;">Submit</button>`;
+                        formHtml += `</form>`;
+
+                        htmlContent += formHtml;
+                        hasInteraction = true;
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
                         // Post message to parent window (e.g. Streamlit iframe wrapper)
@@ -369,18 +548,60 @@
             // Introduce a lightweight client-side sanitizer
             function sanitizeHTML(str) {
                 if (typeof DOMPurify !== 'undefined') {
-                    return DOMPurify.sanitize(str);
+                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
                 }
                 // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
                 return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             }
 
+            function applyPanelPosition(position) {
+                infoPanel.className = 'active'; // reset classes but keep active
+                var resizer = document.getElementById('sivo-resizer');
+                resizer.className = 'sivo-resizer active';
+
+                // On mobile we force bottom layout in CSS, so logic mostly just applies classes.
+                if (position === 'left') {
+                    document.body.style.flexDirection = 'row-reverse';
+                    infoPanel.classList.add('pos-left');
+                    resizer.classList.add('resizer-horizontal');
+                } else if (position === 'bottom') {
+                    document.body.style.flexDirection = 'column';
+                    infoPanel.classList.add('pos-bottom');
+                    resizer.classList.add('resizer-vertical');
+                } else if (position === 'top') {
+                    document.body.style.flexDirection = 'column-reverse';
+                    infoPanel.classList.add('pos-top');
+                    resizer.classList.add('resizer-vertical');
+                } else {
+                    // default right
+                    document.body.style.flexDirection = 'row';
+                    infoPanel.classList.add('pos-right');
+                    resizer.classList.add('resizer-horizontal');
+                }
+
+                // Clear any manual sizing inline styles from dragging
+                infoPanel.style.width = '';
+                infoPanel.style.height = '';
+
+                // Smoothly resize ECharts during CSS transition
+                let start = null;
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    var progress = timestamp - start;
+                    myChart.resize();
+                    if (progress < 350) { // slightly longer than CSS transition 0.3s
+                        window.requestAnimationFrame(step);
+                    }
+                }
+                window.requestAnimationFrame(step);
+            }
+
             if (hasInteraction && htmlContent) {
                 infoContent.innerHTML = sanitizeHTML(htmlContent);
-                infoPanel.classList.add('active');
+                applyPanelPosition(panelPosition);
             } else if (!hasInteraction && !elementActions) {
                 infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
-                infoPanel.classList.add('active');
+                applyPanelPosition(panelPosition);
             } else {
                 closePanel();
             }
@@ -471,8 +692,97 @@
         });
 
         function closePanel() {
-            document.getElementById('info-panel').classList.remove('active');
+            var infoPanel = document.getElementById('info-panel');
+            infoPanel.className = '';
+            infoPanel.classList.add('pos-right'); // reset to default
+            infoPanel.style.width = '';
+            infoPanel.style.height = '';
+            var resizer = document.getElementById('sivo-resizer');
+            if (resizer) resizer.className = 'sivo-resizer';
+            document.body.style.flexDirection = 'row';
+
+            // Smoothly resize ECharts during CSS transition
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                var progress = timestamp - start;
+                myChart.resize();
+                if (progress < 350) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+            window.requestAnimationFrame(step);
         }
+
+        // --- Resizer Logic ---
+        (function() {
+            const resizer = document.getElementById('sivo-resizer');
+            const panel = document.getElementById('info-panel');
+            let isResizing = false;
+            let currentLayout = 'row'; // depends on flex-direction
+            let lastDownX = 0;
+            let lastDownY = 0;
+            let startWidth = 0;
+            let startHeight = 0;
+
+            resizer.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                currentLayout = document.body.style.flexDirection;
+                lastDownX = e.clientX;
+                lastDownY = e.clientY;
+                startWidth = panel.getBoundingClientRect().width;
+                startHeight = panel.getBoundingClientRect().height;
+
+                // Add a transparent overlay to capture pointer events over iframes/charts
+                let overlay = document.createElement('div');
+                overlay.id = 'sivo-drag-overlay';
+                overlay.style.position = 'fixed';
+                overlay.style.top = 0;
+                overlay.style.left = 0;
+                overlay.style.right = 0;
+                overlay.style.bottom = 0;
+                overlay.style.zIndex = 9999;
+                overlay.style.cursor = currentLayout.includes('row') ? 'col-resize' : 'row-resize';
+                document.body.appendChild(overlay);
+
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+
+                if (currentLayout === 'row') {
+                    // Right panel
+                    let newWidth = startWidth - (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'row-reverse') {
+                    // Left panel
+                    let newWidth = startWidth + (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'column') {
+                    // Bottom panel
+                    let newHeight = startHeight - (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                } else if (currentLayout === 'column-reverse') {
+                    // Top panel
+                    let newHeight = startHeight + (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                }
+
+                // Throttle resize event for performance if needed, but modern ECharts usually handles it
+                myChart.resize();
+            });
+
+            window.addEventListener('mouseup', function(e) {
+                if (isResizing) {
+                    isResizing = false;
+                    let overlay = document.getElementById('sivo-drag-overlay');
+                    if (overlay) document.body.removeChild(overlay);
+                    myChart.resize();
+                }
+            });
+        })();
+        // --- End Resizer Logic ---
 
         // Setup Overlays
         var overlaysContainer = document.createElement('div');
@@ -545,19 +855,34 @@
 
         // Back Navigation Button functionality
         var backBtn = document.createElement('div');
-        backBtn.innerHTML = '&#8592; Back';
+        backBtn.innerHTML = `
+            <svg style="width:16px; height:16px; margin-right:6px; vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span style="vertical-align:middle;">Back</span>
+        `;
         backBtn.style.position = 'absolute';
-        backBtn.style.top = '10px';
-        backBtn.style.left = '10px';
-        backBtn.style.padding = '8px 12px';
+        backBtn.style.top = '20px';
+        backBtn.style.left = '20px';
+        backBtn.style.padding = '10px 16px';
         backBtn.style.background = 'white';
-        backBtn.style.border = '1px solid #ccc';
-        backBtn.style.borderRadius = '4px';
+        backBtn.style.border = '1px solid #eaeaea';
+        backBtn.style.borderRadius = '20px'; // Pill shape
         backBtn.style.cursor = 'pointer';
         backBtn.style.display = 'none';
-        backBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+        backBtn.style.alignItems = 'center';
+        backBtn.style.fontFamily = 'sans-serif';
+        backBtn.style.fontSize = '14px';
+        backBtn.style.fontWeight = '500';
+        backBtn.style.color = '#333';
+        backBtn.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
         backBtn.style.zIndex = '1000';
-        document.body.appendChild(backBtn);
+        backBtn.style.transition = 'background 0.2s, transform 0.1s';
+
+        backBtn.addEventListener('mouseenter', () => backBtn.style.background = '#f9f9f9');
+        backBtn.addEventListener('mouseleave', () => backBtn.style.background = 'white');
+        backBtn.addEventListener('mousedown', () => backBtn.style.transform = 'scale(0.95)');
+        backBtn.addEventListener('mouseup', () => backBtn.style.transform = 'scale(1)');
+
+        document.getElementById('chart-container').appendChild(backBtn); // Append to chart container so flex layout doesn't break it
 
         backBtn.addEventListener('click', function() {
             if (viewHistory.length > 0) {
@@ -569,7 +894,7 @@
         // Watch history to toggle back button visibility
         setInterval(function() {
             if (viewHistory.length > 0) {
-                backBtn.style.display = 'block';
+                backBtn.style.display = 'flex';
             } else {
                 backBtn.style.display = 'none';
             }
@@ -580,5 +905,158 @@
     <!-- Custom injected assets placeholder -->
     <style id="custom-css"></style>
     <script id="custom-js"></script>
+
+    <!-- SIVO Built-in Gallery Modal -->
+    <style>
+        #sivo-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        #sivo-gallery-modal.active {
+            display: flex;
+        }
+        .sivo-gallery-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+    <div id="sivo-gallery-modal">
+        <span class="sivo-gallery-close" id="sivo-gallery-close">&times;</span>
+        <div id="sivo-gallery-wrapper" style="text-align:center;"></div>
+    </div>
+    <script>
+        var sivoGalleryModal = document.getElementById('sivo-gallery-modal');
+        var sivoGalleryCloseBtn = document.getElementById('sivo-gallery-close');
+
+        function closeSivoGalleryModal() {
+            if (sivoGalleryModal) sivoGalleryModal.classList.remove('active');
+        }
+
+        if (sivoGalleryCloseBtn) sivoGalleryCloseBtn.addEventListener('click', closeSivoGalleryModal);
+
+        // Helper to update gallery image
+        function sivoUpdateGallery(src, dotEl) {
+            var wrapper = document.getElementById('sivo-gallery-wrapper');
+            if(wrapper) {
+                var img = wrapper.querySelector('img');
+                if(img) img.src = src;
+
+                // update dots
+                var dots = wrapper.querySelectorAll('span');
+                dots.forEach(d => d.style.background = '#555');
+                dotEl.style.background = 'white';
+            }
+        }
+
+        // Helper to submit forms
+        function sivoSubmitForm(elementId, eventName, formEl) {
+            var formData = new FormData(formEl);
+            var payload = {};
+            formData.forEach(function(value, key){
+                payload[key] = value;
+            });
+
+            console.log('Form submitted:', payload);
+            window.parent.postMessage({
+                type: 'sivo_click',
+                payload: {
+                    element_id: elementId,
+                    event_name: eventName,
+                    data: payload
+                }
+            }, '*');
+
+            // Show success message
+            formEl.innerHTML = '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
+        }
+    </script>
+
+    <!-- SIVO Built-in Video Modal -->
+    <style>
+        #sivo-video-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        #sivo-video-modal.active {
+            display: flex;
+        }
+        .sivo-video-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .sivo-video-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .sivo-video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        .sivo-video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div id="sivo-video-modal">
+        <div style="position: relative; width: 80%; max-width: 800px;">
+            <span class="sivo-video-close" id="sivo-video-close">&times;</span>
+            <div class="sivo-video-content">
+                <div class="sivo-video-container" id="sivo-video-wrapper"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var sivoVideoModal = document.getElementById('sivo-video-modal');
+        var sivoVideoCloseBtn = document.getElementById('sivo-video-close');
+        var sivoVideoWrapper = document.getElementById('sivo-video-wrapper');
+
+        function closeSivoVideoModal() {
+            if (sivoVideoModal) {
+                sivoVideoModal.classList.remove('active');
+                if (sivoVideoWrapper) sivoVideoWrapper.innerHTML = '';
+            }
+        }
+
+        if (sivoVideoCloseBtn) sivoVideoCloseBtn.addEventListener('click', closeSivoVideoModal);
+        if (sivoVideoModal) {
+            sivoVideoModal.addEventListener('click', function(e) {
+                if (e.target === sivoVideoModal) {
+                    closeSivoVideoModal();
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>

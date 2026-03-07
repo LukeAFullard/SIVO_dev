@@ -9,18 +9,21 @@ class Sivo:
     This class serves as the primary declarative Python API for the framework,
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
-    def __init__(self, infographic: Infographic):
+    def __init__(self, infographic: Infographic, default_panel_position: str = "right"):
         self.infographic = infographic
+        self.infographic.default_panel_position = default_panel_position
 
     @classmethod
-    def from_svg(cls, filepath: str) -> "Sivo":
+    def from_svg(cls, filepath: str, default_panel_position: str = "right") -> "Sivo":
         """Initializes a Sivo instance from an SVG file path."""
-        return cls(Infographic.from_svg(filepath))
+        info = Infographic.from_svg(filepath)
+        return cls(info, default_panel_position=default_panel_position)
 
     @classmethod
-    def from_string(cls, svg_string: str) -> "Sivo":
+    def from_string(cls, svg_string: str, default_panel_position: str = "right") -> "Sivo":
         """Initializes a Sivo instance directly from an SVG string."""
-        return cls(Infographic.from_string(svg_string))
+        info = Infographic.from_string(svg_string)
+        return cls(info, default_panel_position=default_panel_position)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":

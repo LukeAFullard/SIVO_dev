@@ -11,6 +11,7 @@ def main():
         element_id="play_button",
         tooltip="Click to fetch cat fact",
         fetch_url="https://catfact.ninja/fact",
+        panel_position="top",
         hover_color="#e68a00",
         glow=True
     )
