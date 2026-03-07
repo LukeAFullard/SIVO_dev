@@ -65,6 +65,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
                 if hasattr(action, 'video_url') and "video_url" not in act_dict: act_dict["video_url"] = action.video_url
                 if hasattr(action, 'target_svg') and "target_svg" not in act_dict: act_dict["target_svg"] = action.target_svg
                 if hasattr(action, 'target') and "target" not in act_dict: act_dict["target"] = action.target
+                if hasattr(action, 'repl_url') and "repl_url" not in act_dict: act_dict["repl_url"] = action.repl_url
                 if hasattr(action, 'content') and "content" not in act_dict: act_dict["content"] = action.content
                 if hasattr(action, 'event_name') and "event_name" not in act_dict: act_dict["event_name"] = action.event_name
                 if hasattr(action, 'payload') and "payload" not in act_dict: act_dict["payload"] = action.payload

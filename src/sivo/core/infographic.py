@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction
 from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -123,6 +123,7 @@ class Infographic:
         ecommerce: Optional[dict] = None,
         rich_media: Optional[dict] = None,
         bi: Optional[dict] = None,
+        replit: Optional[str] = None,
         panel_position: Optional[str] = None,
         open_by_default: bool = False,
         color: Optional[str] = None,
@@ -208,6 +209,9 @@ class Infographic:
 
         if bi and 'provider' in bi and 'dashboard_url' in bi:
             mapping.actions.append(BIAction(provider=bi['provider'], dashboard_url=bi['dashboard_url'], panel_position=panel_position or self.default_panel_position))
+
+        if replit:
+            mapping.actions.append(ReplitAction(repl_url=replit, panel_position=panel_position or self.default_panel_position))
 
         if color:
             mapping.theme.color = color

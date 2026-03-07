@@ -60,7 +60,7 @@ class FormAction(BaseAction):
 
 class SocialAction(BaseAction):
     action_type: Literal["social"] = "social"
-    provider: Literal["instagram", "tiktok", "linkedin", "wikipedia", "website"] = Field(description="The platform provider or generic type")
+    provider: Literal["instagram", "tiktok", "linkedin", "wikipedia", "website", "twitch", "pinterest", "apple_music", "reddit"] = Field(description="The platform provider or generic type")
     url: str = Field(description="The URL to the post or page")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
@@ -88,7 +88,7 @@ class DataSourceAction(BaseAction):
 
 class ExternalFormAction(BaseAction):
     action_type: Literal["external_form"] = "external_form"
-    provider: Literal["typeform", "jotform", "hubspot"] = Field(description="The external form provider")
+    provider: Literal["typeform", "jotform", "hubspot", "google_forms", "surveymonkey", "qualtrics", "calendly"] = Field(description="The external form provider")
     form_url: str = Field(description="The URL of the external form to embed")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
@@ -111,6 +111,12 @@ class BIAction(BaseAction):
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
 
+
+class ReplitAction(BaseAction):
+    action_type: Literal["replit"] = "replit"
+    repl_url: str = Field(description="The URL of the Repl to embed")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -119,7 +125,7 @@ class ThemeOverride(BaseModel):
     glow: Optional[bool] = None
     animation: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str
