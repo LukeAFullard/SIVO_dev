@@ -66,6 +66,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
                 if hasattr(action, 'content') and "content" not in act_dict: act_dict["content"] = action.content
                 if hasattr(action, 'event_name') and "event_name" not in act_dict: act_dict["event_name"] = action.event_name
                 if hasattr(action, 'payload') and "payload" not in act_dict: act_dict["payload"] = action.payload
+                if hasattr(action, 'panel_position') and "panel_position" not in act_dict: act_dict["panel_position"] = action.panel_position
 
                 element_actions.append(act_dict)
 
