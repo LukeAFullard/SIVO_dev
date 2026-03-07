@@ -64,6 +64,11 @@ class SocialAction(BaseAction):
     url: str = Field(description="The URL to the post or page")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
+class PdfAction(BaseAction):
+    action_type: Literal["pdf"] = "pdf"
+    pdf_url: str = Field(description="URL to the PDF file")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -72,7 +77,7 @@ class ThemeOverride(BaseModel):
     glow: Optional[bool] = None
     animation: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, PdfAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str

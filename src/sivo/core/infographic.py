@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, PdfAction
 from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -72,6 +72,7 @@ class Infographic:
                     hover_callback_event=elem_config.hover_callback_event,
                     hover_callback_payload=elem_config.hover_callback_payload,
                     social=elem_config.social,
+                    pdf=getattr(elem_config, 'pdf', None),
                     panel_position=elem_config.panel_position,
                     open_by_default=elem_config.open_by_default,
                     color=elem_config.color,
@@ -105,6 +106,7 @@ class Infographic:
         form_fields: Optional[list[dict]] = None,
         form_submit_event: Optional[str] = None,
         social: Optional[dict] = None,
+        pdf: Optional[str] = None,
         panel_position: Optional[str] = None,
         open_by_default: bool = False,
         color: Optional[str] = None,
@@ -166,6 +168,9 @@ class Infographic:
 
         if social and 'provider' in social and 'url' in social:
             mapping.actions.append(SocialAction(provider=social['provider'], url=social['url'], panel_position=panel_position or self.default_panel_position))
+
+        if pdf:
+            mapping.actions.append(PdfAction(pdf_url=pdf, panel_position=panel_position or self.default_panel_position))
 
         if color:
             mapping.theme.color = color
