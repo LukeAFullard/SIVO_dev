@@ -71,4 +71,5 @@ ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, Callback
 class InteractionMapping(BaseModel):
     id: str
     actions: list[ActionType] = Field(default_factory=list)
+    open_by_default: bool = False
     theme: ThemeOverride = Field(default_factory=ThemeOverride)

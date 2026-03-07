@@ -12,6 +12,7 @@ class ElementConfig(BaseModel):
     hover_callback_event: Optional[str] = None
     hover_callback_payload: Optional[Dict[str, Any]] = None
     panel_position: Optional[str] = None
+    open_by_default: bool = False
     color: Optional[str] = None
     hover_color: Optional[str] = None
     border_width: Optional[float] = None

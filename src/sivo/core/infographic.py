@@ -72,6 +72,7 @@ class Infographic:
                     hover_callback_event=elem_config.hover_callback_event,
                     hover_callback_payload=elem_config.hover_callback_payload,
                     panel_position=elem_config.panel_position,
+                    open_by_default=elem_config.open_by_default,
                     color=elem_config.color,
                     hover_color=elem_config.hover_color,
                     border_width=elem_config.border_width,
@@ -103,6 +104,7 @@ class Infographic:
         form_fields: Optional[list[dict]] = None,
         form_submit_event: Optional[str] = None,
         panel_position: Optional[str] = None,
+        open_by_default: bool = False,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -119,6 +121,9 @@ class Infographic:
 
         elem_name = target_elem['name']
         mapping = self.mappings[elem_name]
+
+        if open_by_default:
+            mapping.open_by_default = True
 
         if html or tooltip:
             mapping.actions.append(TooltipAction(
