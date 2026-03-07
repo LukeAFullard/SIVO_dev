@@ -94,6 +94,50 @@
             }
         }
 
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+            #info-panel {
+                background: #1e1e1e;
+            }
+            .info-panel-header {
+                background: #252525;
+                border-bottom: 1px solid #333;
+            }
+            .close-btn {
+                background: #333;
+                color: #ddd;
+            }
+            .close-btn:hover {
+                background: #444;
+                color: #fff;
+            }
+            #info-panel.pos-right, #info-panel.pos-left {
+                border-color: #333;
+            }
+            #info-panel.pos-bottom, #info-panel.pos-top {
+                border-color: #333;
+            }
+            .sivo-resizer {
+                background-color: #333;
+            }
+            .sivo-resizer:hover {
+                background-color: #555;
+            }
+            .zoom-btn {
+                background: #252525;
+                border-color: #444;
+                color: #ccc;
+            }
+            .zoom-btn:hover {
+                background: #333;
+                color: #fff;
+            }
+        }
+
         .sivo-resizer {
             display: none;
             background-color: #eee;
@@ -225,6 +269,12 @@
 
         function getBaseOption(mapName) {
             return {
+                aria: {
+                    enabled: true,
+                    decal: {
+                        show: false
+                    }
+                },
                 tooltip: {
                     trigger: 'item',
                     triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
@@ -356,6 +406,20 @@
 
             // Start animations if any
             applyAnimations();
+
+            // Handle elements marked to open by default
+            echartsData.forEach(function(item) {
+                if (item.open_by_default) {
+                    setTimeout(() => {
+                        myChart.dispatchAction({
+                            type: 'showTip',
+                            name: item.name
+                        });
+                        // trigger click to open panel or specific action automatically
+                        myChart.trigger('click', { componentType: 'series', name: item.name });
+                    }, 500); // Wait a half second for the map to finish rendering
+                }
+            });
         }
 
         function zoomIn() {

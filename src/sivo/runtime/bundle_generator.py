@@ -37,6 +37,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
                 'name': name,
                 'value': 1,
             }
+            if mapping_dict.get('open_by_default'):
+                data_item['open_by_default'] = True
 
             element_actions = []
             actions_list = mapping_dict.get('actions', [])
