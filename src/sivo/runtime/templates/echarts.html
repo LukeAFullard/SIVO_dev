@@ -721,6 +721,109 @@
                         if (validSocial) {
                             socialIframes.push(iframe);
                         }
+                    } else if (action.action_type === 'analytics') {
+                        if (action.provider === 'google_analytics' && typeof gtag === 'function') {
+                            gtag('event', action.event_name, action.payload || {});
+                        } else if (action.provider === 'posthog' && typeof posthog !== 'undefined') {
+                            posthog.capture(action.event_name, action.payload || {});
+                        } else if (action.provider === 'plausible' && typeof plausible === 'function') {
+                            plausible(action.event_name, {props: action.payload || {}});
+                        }
+                    } else if (action.action_type === 'datasource') {
+                        // Fetch data from external source and display in info panel
+                        htmlContent += `<div id="sivo-datasource-container-${name}"><em>Loading data from ${action.provider}...</em></div>`;
+                        hasInteraction = true;
+
+                        // We use a generic fetch approach here. In a real world scenario, some APIs require authentication.
+                        // For APIs that allow public unauthenticated GET requests (e.g. some published Google Sheets, Notion public pages via proxy, or Airtable public views)
+                        fetch(action.api_endpoint)
+                            .then(response => response.text())
+                            .then(data => {
+                                try {
+                                    var jsonData = JSON.parse(data);
+                                    data = '<pre>' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                } catch (e) {
+                                    // Not JSON, keep as text
+                                }
+                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                if (container) container.innerHTML = data;
+                            })
+                            .catch(err => {
+                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                if (container) container.innerHTML = `<span style="color:red">Failed to fetch data from ${action.provider}</span>`;
+                            });
+                    } else if (action.action_type === 'external_form') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = action.form_url;
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'ecommerce') {
+                        hasInteraction = true;
+
+                        if (action.provider === 'stripe') {
+                            // Stripe payment links can be embedded or opened in a new tab.
+                            // Usually better to open in a new tab or use a button to redirect for security.
+                            htmlContent += `
+                            <div style="text-align: center; margin-top: 20px;">
+                                <h3>Purchase ${name}</h3>
+                                <a href="${action.checkout_url}" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #635bff; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 10px;">
+                                    Buy with Stripe
+                                </a>
+                            </div>`;
+                        } else if (action.provider === 'shopify') {
+                            // Basic fallback for Shopify Buy Button integration (usually requires external JS snippet)
+                            // Here we just provide a link, but this could be extended to inject the Shopify Buy Button JS.
+                            htmlContent += `
+                            <div style="text-align: center; margin-top: 20px;">
+                                <h3>Purchase ${name}</h3>
+                                <a href="${action.checkout_url}" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #96bf48; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 10px;">
+                                    Buy on Shopify
+                                </a>
+                            </div>`;
+                        }
+                    } else if (action.action_type === 'rich_media') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; picture-in-picture');
+
+                        if (action.provider === 'vimeo') {
+                            iframe.style.height = '400px';
+                            // Extract video ID from common vimeo URLs if necessary
+                            var vimeoIdMatch = action.media_url.match(/(?:vimeo\.com\/|video\/)(\d+)/);
+                            if (vimeoIdMatch) {
+                                iframe.src = `https://player.vimeo.com/video/${vimeoIdMatch[1]}`;
+                            } else {
+                                iframe.src = action.media_url;
+                            }
+                        } else if (action.provider === 'wistia') {
+                            iframe.style.height = '400px';
+                            iframe.src = action.media_url;
+                        } else if (action.provider === 'spotify') {
+                            iframe.style.height = '152px';
+                            iframe.src = action.media_url;
+                        } else if (action.provider === 'soundcloud') {
+                            iframe.style.height = '166px';
+                            iframe.src = action.media_url;
+                        }
+
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'bi') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = action.dashboard_url;
+
+                        socialIframes.push(iframe);
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
                         // Post message to parent window (e.g. Streamlit iframe wrapper)
