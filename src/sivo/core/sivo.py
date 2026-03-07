@@ -115,11 +115,11 @@ class Sivo:
         """
         self.infographic.apply_choropleth(data_map, min_color, max_color, show_legend)
 
-    def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0):
+    def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
-        self.infographic.add_overlay(element_id, html, offset_x, offset_y)
+        self.infographic.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
 
-    def add_marker(self, element_id: str, icon: str = "📍", label: str = "", offset_x: int = 0, offset_y: int = 0):
+    def add_marker(self, element_id: str, icon: str = "📍", label: str = "", offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """
         Convenience method to drop an icon and label at the center of a specified element.
         """
@@ -129,7 +129,7 @@ class Sivo:
             <span style="background: white; border: 1px solid #ccc; padding: 2px 4px; border-radius: 4px; font-size: 12px; font-family: sans-serif; white-space: nowrap; margin-top: -4px;">{label}</span>
         </div>
         """
-        self.infographic.add_overlay(element_id, html, offset_x, offset_y)
+        self.infographic.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
 
     def get_element_center(self, element_id: str) -> Optional[list[float]]:
         """Gets the center coordinate [x, y] of a specific element, useful for programmatic zoom."""

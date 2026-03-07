@@ -261,6 +261,7 @@
         var echartsData = [];
         var actionsManifest = {};
         var overlaysData = {};
+        var lockZoomOut = false;
 
         // History for back navigation
         var viewHistory = [];
@@ -388,10 +389,15 @@
             echartsData = view.echarts_data;
             actionsManifest = view.actions_manifest;
             overlaysData = view.overlays;
+            lockZoomOut = view.lock_zoom_out || false;
 
             // Register and set ECharts map
+            var baseOpt = getBaseOption(viewId);
+            if (lockZoomOut) {
+                baseOpt.series[0].scaleLimit = { min: 1.0 };
+            }
             echarts.registerMap(viewId, { svg: view.svg_string });
-            myChart.setOption(getBaseOption(viewId), true);
+            myChart.setOption(baseOpt, true);
 
             // Reset zoom tracking
             currentZoom = 1;
@@ -436,7 +442,13 @@
         function zoomOut() {
             var option = myChart.getOption();
             var series = option.series[0];
-            currentZoom = (series.zoom || 1) / 1.5;
+            var newZoom = (series.zoom || 1) / 1.5;
+
+            if (lockZoomOut && newZoom < 1.0) {
+                newZoom = 1.0;
+            }
+
+            currentZoom = newZoom;
             myChart.setOption({
                 series: [{
                     zoom: currentZoom
@@ -459,6 +471,15 @@
         var infoContentShadow = infoContentHost.attachShadow({mode: 'open'});
         var infoContent = document.createElement('div');
         infoContentShadow.appendChild(infoContent);
+
+        // Introduce a lightweight client-side sanitizer
+        function sanitizeHTML(str) {
+            if (typeof DOMPurify !== 'undefined') {
+                return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
+            }
+            // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
+            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
 
         // Handle click events
         myChart.on('click', function (params) {
@@ -541,7 +562,7 @@
                                     // Not JSON, keep as text
                                 }
                                 var container = document.getElementById(`sivo-fetch-container-${name}`);
-                                if (container) container.innerHTML = data;
+                                if (container) container.innerHTML = sanitizeHTML(data);
                             })
                             .catch(err => {
                                 var container = document.getElementById(`sivo-fetch-container-${name}`);
@@ -746,7 +767,7 @@
                                     // Not JSON, keep as text
                                 }
                                 var container = document.getElementById(`sivo-datasource-container-${name}`);
-                                if (container) container.innerHTML = data;
+                                if (container) container.innerHTML = sanitizeHTML(data);
                             })
                             .catch(err => {
                                 var container = document.getElementById(`sivo-datasource-container-${name}`);
@@ -851,14 +872,6 @@
                 }, '*');
             }
 
-            // Introduce a lightweight client-side sanitizer
-            function sanitizeHTML(str) {
-                if (typeof DOMPurify !== 'undefined') {
-                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
-                }
-                // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
-                return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            }
 
             function applyPanelPosition(position) {
                 infoPanel.className = 'active'; // reset classes but keep active
@@ -1124,6 +1137,8 @@
         }
 
         function updateOverlaysPosition() {
+            var zoomLevel = currentZoom;
+
             for (const [id, overlayObj] of Object.entries(overlayElements)) {
                 if (overlayObj.data.fixed) {
                     // Fixed positioned overlays (like legends)
@@ -1144,6 +1159,15 @@
                 if (pixel) {
                     overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
                     overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
+
+                    if (overlayObj.data.scale_with_zoom) {
+                        // Use a transform to scale the overlay, but preserve the origin at the point it's anchored to
+                        overlayObj.dom.style.transformOrigin = 'top left';
+                        overlayObj.dom.style.transform = 'scale(' + zoomLevel + ')';
+                    } else {
+                        overlayObj.dom.style.transform = '';
+                    }
+
                     overlayObj.dom.style.display = 'block';
                 } else {
                     overlayObj.dom.style.display = 'none';
@@ -1154,8 +1178,15 @@
         // Initialize the first view
         renderView(currentViewId, false);
 
-        // Update overlays on map roam (zoom/pan)
-        myChart.on('georoam', updateOverlaysPosition);
+        // Track zoom natively from georoam events since getOption() might not update on scroll
+        myChart.on('georoam', function(params) {
+            if (params.zoom) {
+                // params.zoom is a delta multiplier, not absolute zoom
+                currentZoom *= params.zoom;
+            }
+            // If dragging, params.zoom is undefined, but we still need to update position
+            updateOverlaysPosition();
+        });
 
         // Handle window resize
         window.addEventListener('resize', function() {

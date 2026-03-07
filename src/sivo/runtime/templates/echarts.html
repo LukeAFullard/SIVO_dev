@@ -1137,6 +1137,8 @@
         }
 
         function updateOverlaysPosition() {
+            var zoomLevel = currentZoom;
+
             for (const [id, overlayObj] of Object.entries(overlayElements)) {
                 if (overlayObj.data.fixed) {
                     // Fixed positioned overlays (like legends)
@@ -1157,6 +1159,15 @@
                 if (pixel) {
                     overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
                     overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
+
+                    if (overlayObj.data.scale_with_zoom) {
+                        // Use a transform to scale the overlay, but preserve the origin at the point it's anchored to
+                        overlayObj.dom.style.transformOrigin = 'top left';
+                        overlayObj.dom.style.transform = 'scale(' + zoomLevel + ')';
+                    } else {
+                        overlayObj.dom.style.transform = '';
+                    }
+
                     overlayObj.dom.style.display = 'block';
                 } else {
                     overlayObj.dom.style.display = 'none';
@@ -1167,8 +1178,15 @@
         // Initialize the first view
         renderView(currentViewId, false);
 
-        // Update overlays on map roam (zoom/pan)
-        myChart.on('georoam', updateOverlaysPosition);
+        // Track zoom natively from georoam events since getOption() might not update on scroll
+        myChart.on('georoam', function(params) {
+            if (params.zoom) {
+                // params.zoom is a delta multiplier, not absolute zoom
+                currentZoom *= params.zoom;
+            }
+            // If dragging, params.zoom is undefined, but we still need to update position
+            updateOverlaysPosition();
+        });
 
         // Handle window resize
         window.addEventListener('resize', function() {
