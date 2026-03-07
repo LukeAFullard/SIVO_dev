@@ -587,33 +587,74 @@
                         hasInteraction = true;
                         var height = '600px'; // default
 
-                        // We construct the iframe DOM element directly to bypass DOMPurify stripping <script> from srcdoc
+                        // We construct the iframe DOM element directly
+                        // Using official iframe embed URLs provided by platforms to avoid cross-origin and sandbox execution errors
                         var iframe = document.createElement('iframe');
                         iframe.style.width = '100%';
                         iframe.style.height = height;
                         iframe.style.border = 'none';
                         iframe.style.overflow = 'hidden';
                         iframe.setAttribute('scrolling', 'yes');
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share');
+
+                        var validSocial = true;
 
                         if (action.provider === 'twitter' || action.provider === 'x') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="twitter-tweet"><a href="${action.url}"></a></blockquote>\x3Cscript async src="https://platform.twitter.com/widgets.js">\x3C/script></body></html>`;
-                            socialIframes.push(iframe);
+                            // Render a standard blockquote embed for Twitter, bypassing DOMPurify via DOM appending
+                            validSocial = false; // We won't use the standard iframe path for this one
+
+                            var tweetContainer = document.createElement('div');
+                            tweetContainer.className = 'twitter-embed-container';
+
+                            var blockquote = document.createElement('blockquote');
+                            blockquote.className = 'twitter-tweet';
+                            blockquote.setAttribute('data-theme', 'light');
+                            var a = document.createElement('a');
+                            a.href = action.url;
+                            blockquote.appendChild(a);
+
+                            var script = document.createElement('script');
+                            script.async = true;
+                            script.src = 'https://platform.twitter.com/widgets.js';
+                            script.charset = 'utf-8';
+
+                            tweetContainer.appendChild(blockquote);
+                            tweetContainer.appendChild(script);
+
+                            // Because it's a DOM node, we'll store it in socialIframes so it gets appended safely later
+                            socialIframes.push(tweetContainer);
                         } else if (action.provider === 'instagram') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="instagram-media" data-instgrm-permalink="${action.url}?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>\x3Cscript async src="//www.instagram.com/embed.js">\x3C/script></body></html>`;
-                            socialIframes.push(iframe);
+                            // Instagram native iframe embed
+                            var igUrl = action.url.split('?')[0]; // remove queries
+                            if (!igUrl.endsWith('/')) igUrl += '/';
+                            iframe.src = igUrl + 'embed/';
                         } else if (action.provider === 'tiktok') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="tiktok-embed" cite="${action.url}" data-video-id=""><section></section></blockquote>\x3Cscript async src="https://www.tiktok.com/embed.js">\x3C/script></body></html>`;
-                            socialIframes.push(iframe);
+                            // TikTok native iframe embed (extract video ID)
+                            var videoIdMatch = action.url.match(/video\/(\d+)/);
+                            if (videoIdMatch) {
+                                iframe.src = `https://www.tiktok.com/embed/v2/${videoIdMatch[1]}`;
+                            } else {
+                                iframe.src = action.url;
+                            }
                         } else if (action.provider === 'facebook') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><div id="fb-root"></div>\x3Cscript async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0">\x3C/script><div class="fb-post" data-href="${action.url}" data-width="auto"></div></body></html>`;
-                            socialIframes.push(iframe);
+                            // Facebook native iframe embed
+                            var fbType = action.url.includes('/video') ? 'video.php' : 'post.php';
+                            iframe.src = `https://www.facebook.com/plugins/${fbType}?href=${encodeURIComponent(action.url)}&show_text=true&width=500`;
                         } else if (action.provider === 'linkedin') {
+                            // LinkedIn requires the specific /embed/ URN structure
                             if (action.url.includes('/embed/')) {
                                 iframe.src = action.url;
-                                socialIframes.push(iframe);
                             } else {
-                                htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px;">View on LinkedIn</a>`;
+                                validSocial = false;
+                                htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px; margin-top:10px;">View on LinkedIn</a>`;
                             }
+                        } else {
+                            validSocial = false;
+                        }
+
+                        if (validSocial) {
+                            socialIframes.push(iframe);
                         }
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
@@ -645,11 +686,7 @@
             // Introduce a lightweight client-side sanitizer
             function sanitizeHTML(str) {
                 if (typeof DOMPurify !== 'undefined') {
-                    // Allow iframes (for social embeds and videos) and specific styles/attributes
-                    return DOMPurify.sanitize(str, {
-                        ADD_TAGS: ['form', 'input', 'textarea', 'button', 'iframe'],
-                        ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'srcdoc', 'frameborder', 'allow', 'allowfullscreen', 'scrolling', 'title', 'width', 'height', 'style', 'class']
-                    });
+                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
                 }
                 // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
                 return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
