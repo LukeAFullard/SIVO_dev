@@ -9,13 +9,14 @@ SIVO acts as the bridge between vector design tools and interactive web data vis
 *   **Streamlit Integration**: A native V2 Custom Component is provided for seamless embedding and bidirectional data flow in Streamlit applications.
 *   **Complex SVG Handling**: Automatically normalizes complex SVGs, including correctly handling nested `<g>` tags and `<use>` symbol references.
 *   **Rich Behaviors**: Attach custom tooltips (supporting HTML content via Shadow DOM), URL navigation, state/callback events, and visual styling changes to any SVG element.
+*   **External Integrations**: Easily embed and configure Analytics (Google Analytics, PostHog, Plausible), Data Sources (Google Sheets, Airtable, Notion APIs), E-commerce (Stripe, Shopify), Forms (Typeform, Jotform, HubSpot), Rich Media (Vimeo, Wistia, Spotify, SoundCloud), and Business Intelligence dashboards (Metabase, Tableau, PowerBI) directly into the info panel.
 *   **SVG Drill-downs**: Load and seamlessly transition to secondary SVGs, creating hierarchical visual storytelling experiences (e.g. Campus Map -> Building -> Floor).
 *   **Responsive Scaling**: Interactive elements adapt flawlessly inside flexible layouts.
 *   **Secure by Design**: Implements mitigations against XXE injections during SVG parsing, and sanitizes/escapes JSON configurations to prevent Cross-Site Scripting (XSS).
 *   **Multi-View HTML Export**: Bundle multiple SVG views and their logic into a single standalone, offline-capable interactive HTML file.
 *   **Data-Driven Choropleths**: Automatically compute and apply color gradients to SVG elements based on a dictionary of numerical values.
 *   **Dynamic Markers**: Calculate element bounding boxes and programmatically drop text/icon markers exactly on the SVG map.
-*   **Built-in Zoom UI**: Responsive user interface zoom controls natively included in exported interactives.
+*   **Built-in Zoom UI**: Responsive user interface zoom controls natively included in exported interactives, with optional `lock_zoom_out` support to prevent zooming beyond the original scale.
 *   **Animation API**: Apply standard CSS keyframe animations (like `pulse` and `fade`) directly to SVG paths to highlight critical regions.
 *   **Auto-Generated Legends**: Automatically display interactive data-scale legends for generated choropleth maps.
 
@@ -47,6 +48,14 @@ sivo_app.map(
     color="#ffcccc",
     hover_color="#ff9999",
     glow=True
+)
+
+# Example of an external integration (Data Source & Analytics)
+sivo_app.map(
+    element_id="buildingC",
+    tooltip="Live Occupancy",
+    datasource={"provider": "google_sheets", "api_endpoint": "https://api.example.com/buildingC/occupancy"},
+    analytics={"provider": "google_analytics", "event_name": "viewed_buildingC"}
 )
 
 sivo_app.map(
@@ -140,10 +149,11 @@ SIVO parses and normalizes SVGs using `lxml`, manages configurations with `pydan
 We provide extensive examples ranging from basic setup to comprehensive Streamlit dashboards. Check the `examples/` directory for full scripts:
 
 *   **Phase 1: Basic Usage:** Hello World (`examples/01_hello_world`), URL Navigation (`examples/02_url_navigation`), Declarative Configuration (`examples/03_json_config`).
-*   **Phase 2: Advanced Standalone Features:** SVG Drill-Downs (`examples/04_drilldowns`), Custom Asset Injection (`examples/05_custom_assets`), HTML/DOM Overlays (`examples/06_html_overlays`), Multi-View Standalone HTML (`examples/07_multi_view_standalone`), Data-Driven Choropleths (`examples/08_choropleth`), Animations & Dynamic Markers (`examples/09_animations_markers`).
+*   **Phase 2: Advanced Standalone Features:** SVG Drill-Downs (`examples/04_drilldowns`), Custom Asset Injection (`examples/05_custom_assets`), HTML/DOM Overlays (`examples/06_html_overlays`), Multi-View Standalone HTML (`examples/07_multi_view_standalone`), Data-Driven Choropleths (`examples/08_choropleth`), Animations & Dynamic Markers (`examples/09_animations_markers`), Document Embeds (`examples/10_document_and_map_embed`).
 *   **Phase 3: Streamlit Integration:** Basic Callbacks (`examples/10_streamlit_callbacks`), Hover Events (`examples/11_streamlit_hover`), Dynamic Color Updates (`examples/12_dynamic_colors`), Programmatic Zooming (`examples/13_streamlit_zoom`), Comprehensive Dashboard (`examples/14_comprehensive_dashboard`).
+*   **Phase 4: External Integrations:** Analytics & Live Data (`examples/22_analytics_and_data`), Forms & E-commerce (`examples/23_forms_and_ecommerce`), Rich Media & Business Intelligence (`examples/24_rich_media_and_bi`).
 
-These examples demonstrate the fully implemented Phase 1, 2, and 3 project goals.
+These examples demonstrate the fully implemented Phase 1, 2, 3, and 4 project goals.
 
 ## License
 MIT
