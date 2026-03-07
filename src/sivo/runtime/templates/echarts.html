@@ -596,16 +596,16 @@
                         iframe.setAttribute('scrolling', 'yes');
 
                         if (action.provider === 'twitter' || action.provider === 'x') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="twitter-tweet"><a href="${action.url}"></a></blockquote><script async src="https://platform.twitter.com/widgets.js"><\\/script></body></html>`;
+                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="twitter-tweet"><a href="${action.url}"></a></blockquote>\x3Cscript async src="https://platform.twitter.com/widgets.js">\x3C/script></body></html>`;
                             socialIframes.push(iframe);
                         } else if (action.provider === 'instagram') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="instagram-media" data-instgrm-permalink="${action.url}?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote><script async src="//www.instagram.com/embed.js"><\\/script></body></html>`;
+                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="instagram-media" data-instgrm-permalink="${action.url}?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>\x3Cscript async src="//www.instagram.com/embed.js">\x3C/script></body></html>`;
                             socialIframes.push(iframe);
                         } else if (action.provider === 'tiktok') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="tiktok-embed" cite="${action.url}" data-video-id=""><section></section></blockquote><script async src="https://www.tiktok.com/embed.js"><\\/script></body></html>`;
+                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="tiktok-embed" cite="${action.url}" data-video-id=""><section></section></blockquote>\x3Cscript async src="https://www.tiktok.com/embed.js">\x3C/script></body></html>`;
                             socialIframes.push(iframe);
                         } else if (action.provider === 'facebook') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0"><\\/script><div class="fb-post" data-href="${action.url}" data-width="auto"></div></body></html>`;
+                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><div id="fb-root"></div>\x3Cscript async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0">\x3C/script><div class="fb-post" data-href="${action.url}" data-width="auto"></div></body></html>`;
                             socialIframes.push(iframe);
                         } else if (action.provider === 'linkedin') {
                             if (action.url.includes('/embed/')) {
