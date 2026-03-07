@@ -282,7 +282,7 @@ class Infographic:
                 "position": "bottom-left"
             }
 
-    def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0):
+    def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """
         Adds a custom HTML overlay positioned over a specific SVG element's center coordinate.
         """
@@ -300,7 +300,8 @@ class Infographic:
         self.overlays[element_id] = {
             "html": html,
             "coord": [center_x, center_y],
-            "offset": [offset_x, offset_y]
+            "offset": [offset_x, offset_y],
+            "scale_with_zoom": scale_with_zoom
         }
 
     def get_element_center(self, element_id: str) -> Optional[list[float]]:
