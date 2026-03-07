@@ -58,6 +58,12 @@ class FormAction(BaseAction):
     submit_event: str = Field(description="Event name to trigger on form submission")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
+class SocialAction(BaseAction):
+    action_type: Literal["social"] = "social"
+    provider: Literal["twitter", "x", "instagram", "tiktok", "facebook", "linkedin"] = Field(description="The social media platform provider")
+    url: str = Field(description="The URL to the social media post")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -66,7 +72,7 @@ class ThemeOverride(BaseModel):
     glow: Optional[bool] = None
     animation: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str

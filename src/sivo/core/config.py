@@ -11,6 +11,7 @@ class ElementConfig(BaseModel):
     callback_payload: Optional[Dict[str, Any]] = None
     hover_callback_event: Optional[str] = None
     hover_callback_payload: Optional[Dict[str, Any]] = None
+    social: Optional[Dict[str, str]] = None
     panel_position: Optional[str] = None
     open_by_default: bool = False
     color: Optional[str] = None
