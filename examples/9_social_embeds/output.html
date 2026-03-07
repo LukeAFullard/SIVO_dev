@@ -254,7 +254,7 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 200\"\u003e\n  \u003crect id=\"btn_twitter\" x=\"10\" y=\"10\" width=\"100\" height=\"50\" fill=\"#1DA1F2\" name=\"btn_twitter\"/\u003e\n  \u003crect id=\"btn_insta\" x=\"120\" y=\"10\" width=\"100\" height=\"50\" fill=\"#C13584\" name=\"btn_insta\"/\u003e\n  \u003crect id=\"btn_tiktok\" x=\"230\" y=\"10\" width=\"100\" height=\"50\" fill=\"#000000\" name=\"btn_tiktok\"/\u003e\n  \u003crect id=\"btn_fb\" x=\"10\" y=\"70\" width=\"100\" height=\"50\" fill=\"#4267B2\" name=\"btn_fb\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "btn_twitter", "value": 1}, {"name": "btn_insta", "value": 1}, {"name": "btn_tiktok", "value": 1}, {"name": "btn_fb", "value": 1}], "actions_manifest": {"btn_twitter": [{"action_type": "social", "provider": "twitter", "url": "https://x.com/OpenAI/status/1758231365825700200", "panel_position": "right"}], "btn_insta": [{"action_type": "social", "provider": "instagram", "url": "https://www.instagram.com/p/C3fL7t8LkQc/", "panel_position": "right"}], "btn_tiktok": [{"action_type": "social", "provider": "tiktok", "url": "https://www.tiktok.com/@tiktok/video/7328904576136056106", "panel_position": "right"}], "btn_fb": [{"action_type": "social", "provider": "facebook", "url": "https://www.facebook.com/zuck/posts/pfbid0259eAijz6kK2v2R9fUuYv3wT9qL5qH7N7tCq6R8jY1Y1Y1Y1Y1Y1Y1Y1Y1Y1Y1Y1l", "panel_position": "right"}]}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 500 200\"\u003e\n  \u003c!-- Twitter Logo --\u003e\n  \u003cg id=\"btn_twitter\" transform=\"translate(10, 10)\" name=\"btn_twitter\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#1DA1F2\"/\u003e\n    \u003cpath d=\"M56 31c-1.4 1-3.1 1.6-4.8 1.9 1.8-1 3.1-2.6 3.8-4.6-1.5.9-3.2 1.5-5 1.9-1.5-1.5-3.6-2.5-5.9-2.5-4.5 0-8.2 3.7-8.2 8.2 0 .6.1 1.3.2 1.9-6.8-.3-12.8-3.6-16.8-8.5-.7 1.2-1.1 2.6-1.1 4.1 0 2.8 1.4 5.4 3.6 6.9-1.3 0-2.6-.4-3.7-1v.1c0 4 2.8 7.3 6.6 8.1-.7.2-1.4.3-2.1.3-.5 0-1 0-1.5-.1 1 3.3 4.1 5.6 7.7 5.7-2.8 2.2-6.3 3.5-10.2 3.5-.7 0-1.3 0-1.9-.1 3.6 2.3 8 3.7 12.6 3.7 15.2 0 23.5-12.6 23.5-23.5v-1.1c1.7-1.2 3.1-2.6 4.2-4.3-1.5.7-3.1 1.1-4.8 1.3 1.8-1.2 3-2.9 3.6-5z\" fill=\"white\"/\u003e\n  \u003c/g\u003e\n\n  \u003c!-- Instagram Logo --\u003e\n  \u003cg id=\"btn_insta\" transform=\"translate(110, 10)\" name=\"btn_insta\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#C13584\"/\u003e\n    \u003cpath d=\"M40 25c-8.3 0-15 6.7-15 15s6.7 15 15 15 15-6.7 15-15-6.7-15-15-15zm0 24.5c-5.2 0-9.5-4.3-9.5-9.5S34.8 30.5 40 30.5 49.5 34.8 49.5 40 45.2 49.5 40 49.5zm9.8-19.3c-2 0-3.6-1.6-3.6-3.6s1.6-3.6 3.6-3.6 3.6 1.6 3.6 3.6-1.6 3.6-3.6 3.6zM60 40c0-6.1-.1-12.1-.4-18.1-.3-6.5-5.2-11.4-11.7-11.7C41.9 9.9 35.9 9.8 29.8 9.8s-12.1.1-18.1.4c-6.5.3-11.4 5.2-11.7 11.7C-.1 27.9-.2 33.9-.2 40s.1 12.1.4 18.1c.3 6.5 5.2 11.4 11.7 11.7 6.1.3 12.1.4 18.1.4s12.1-.1 18.1-.4c6.5-.3 11.4-5.2 11.7-11.7.3-6 .4-12 .4-18.1zM54 53.6c-1.3 3.3-3.8 5.8-7.1 7.1-4.9 1.9-16.5 1.5-26.9 1.5-10.4 0-22 .4-26.9-1.5-3.3-1.3-5.8-3.8-7.1-7.1-1.9-4.9-1.5-16.5-1.5-26.9 0-10.4-.4-22 1.5-26.9 1.3-3.3 3.8-5.8 7.1-7.1C18-.2 29.6.2 40 .2c10.4 0 22-.4 26.9 1.5 3.3 1.3 5.8 3.8 7.1 7.1 1.9 4.9 1.5 16.5 1.5 26.9 0 10.4.4 22-1.5 26.9z\" fill=\"white\" transform=\"scale(0.8) translate(10, 10)\"/\u003e\n  \u003c/g\u003e\n\n  \u003c!-- TikTok Logo --\u003e\n  \u003cg id=\"btn_tiktok\" transform=\"translate(210, 10)\" name=\"btn_tiktok\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#000000\"/\u003e\n    \u003cpath d=\"M47.7 21v14.1c4.5 0 8.5 2.1 11.3 5.4V26.4c-2.8-1-5.9-1.5-9.1-1.5v-3.9zm-13.6 0v27.2c0 3.7-3 6.8-6.8 6.8s-6.8-3-6.8-6.8 3-6.8 6.8-6.8c1.3 0 2.5.4 3.5 1.1v-6.9c-1.1-.6-2.3-1-3.5-1-7.5 0-13.6 6.1-13.6 13.6s6.1 13.6 13.6 13.6 13.6-6.1 13.6-13.6V21H34.1z\" fill=\"white\" transform=\"scale(1.2) translate(12, 10)\"/\u003e\n  \u003c/g\u003e\n  \n  \u003c!-- Facebook Logo --\u003e\n  \u003cg id=\"btn_fb\" transform=\"translate(310, 10)\" name=\"btn_fb\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#4267B2\"/\u003e\n    \u003cpath d=\"M50 20h-7c-5.5 0-10 4.5-10 10v6h-7v8h7v26h10V44h8l1-8h-9v-4c0-2.2 1.8-4 4-4h5v-8z\" fill=\"white\" transform=\"scale(1.2) translate(3, 3)\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "btn_twitter", "value": 1, "tooltip": "Twitter Embed", "itemStyle": {"areaColor": "#1da1f2"}, "emphasis": {"itemStyle": {"areaColor": "#0d8bd9"}}}, {"name": "btn_insta", "value": 1, "tooltip": "Instagram Embed", "itemStyle": {"areaColor": "#c13584"}, "emphasis": {"itemStyle": {"areaColor": "#a0296e"}}}, {"name": "btn_tiktok", "value": 1, "tooltip": "TikTok Embed", "itemStyle": {"areaColor": "#333333"}, "emphasis": {"itemStyle": {"areaColor": "#111111"}}}, {"name": "btn_fb", "value": 1, "tooltip": "Facebook Embed", "itemStyle": {"areaColor": "#4267b2"}, "emphasis": {"itemStyle": {"areaColor": "#365899"}}}], "actions_manifest": {"btn_twitter": [{"action_type": "tooltip", "content": "\u003ch3\u003eTwitter Embed\u003c/h3\u003e", "title": "Twitter Embed", "panel_position": "right"}, {"action_type": "social", "provider": "twitter", "url": "https://twitter.com/OpenAI/status/1758231365825700200", "panel_position": "right"}], "btn_insta": [{"action_type": "tooltip", "content": "\u003ch3\u003eInstagram Embed\u003c/h3\u003e", "title": "Instagram Embed", "panel_position": "right"}, {"action_type": "social", "provider": "instagram", "url": "https://www.instagram.com/p/C0f9W5aIxtA/", "panel_position": "right"}], "btn_tiktok": [{"action_type": "tooltip", "content": "\u003ch3\u003eTikTok Embed\u003c/h3\u003e", "title": "TikTok Embed", "panel_position": "right"}, {"action_type": "social", "provider": "tiktok", "url": "https://www.tiktok.com/@tiktok/video/7106594312293371179", "panel_position": "right"}], "btn_fb": [{"action_type": "tooltip", "content": "\u003ch3\u003eFacebook Embed\u003c/h3\u003e", "title": "Facebook Embed", "panel_position": "right"}, {"action_type": "social", "provider": "facebook", "url": "https://www.facebook.com/20531316728/posts/10154009990506729/", "panel_position": "right"}]}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
@@ -587,33 +587,74 @@
                         hasInteraction = true;
                         var height = '600px'; // default
 
-                        // We construct the iframe DOM element directly to bypass DOMPurify stripping <script> from srcdoc
+                        // We construct the iframe DOM element directly
+                        // Using official iframe embed URLs provided by platforms to avoid cross-origin and sandbox execution errors
                         var iframe = document.createElement('iframe');
                         iframe.style.width = '100%';
                         iframe.style.height = height;
                         iframe.style.border = 'none';
                         iframe.style.overflow = 'hidden';
                         iframe.setAttribute('scrolling', 'yes');
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share');
+
+                        var validSocial = true;
 
                         if (action.provider === 'twitter' || action.provider === 'x') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="twitter-tweet"><a href="${action.url}"></a></blockquote>\x3Cscript async src="https://platform.twitter.com/widgets.js">\x3C/script></body></html>`;
-                            socialIframes.push(iframe);
+                            // Render a standard blockquote embed for Twitter, bypassing DOMPurify via DOM appending
+                            validSocial = false; // We won't use the standard iframe path for this one
+
+                            var tweetContainer = document.createElement('div');
+                            tweetContainer.className = 'twitter-embed-container';
+
+                            var blockquote = document.createElement('blockquote');
+                            blockquote.className = 'twitter-tweet';
+                            blockquote.setAttribute('data-theme', 'light');
+                            var a = document.createElement('a');
+                            a.href = action.url;
+                            blockquote.appendChild(a);
+
+                            var script = document.createElement('script');
+                            script.async = true;
+                            script.src = 'https://platform.twitter.com/widgets.js';
+                            script.charset = 'utf-8';
+
+                            tweetContainer.appendChild(blockquote);
+                            tweetContainer.appendChild(script);
+
+                            // Because it's a DOM node, we'll store it in socialIframes so it gets appended safely later
+                            socialIframes.push(tweetContainer);
                         } else if (action.provider === 'instagram') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="instagram-media" data-instgrm-permalink="${action.url}?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>\x3Cscript async src="//www.instagram.com/embed.js">\x3C/script></body></html>`;
-                            socialIframes.push(iframe);
+                            // Instagram native iframe embed
+                            var igUrl = action.url.split('?')[0]; // remove queries
+                            if (!igUrl.endsWith('/')) igUrl += '/';
+                            iframe.src = igUrl + 'embed/';
                         } else if (action.provider === 'tiktok') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><blockquote class="tiktok-embed" cite="${action.url}" data-video-id=""><section></section></blockquote>\x3Cscript async src="https://www.tiktok.com/embed.js">\x3C/script></body></html>`;
-                            socialIframes.push(iframe);
+                            // TikTok native iframe embed (extract video ID)
+                            var videoIdMatch = action.url.match(/video\/(\d+)/);
+                            if (videoIdMatch) {
+                                iframe.src = `https://www.tiktok.com/embed/v2/${videoIdMatch[1]}`;
+                            } else {
+                                iframe.src = action.url;
+                            }
                         } else if (action.provider === 'facebook') {
-                            iframe.srcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;}</style></head><body><div id="fb-root"></div>\x3Cscript async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0">\x3C/script><div class="fb-post" data-href="${action.url}" data-width="auto"></div></body></html>`;
-                            socialIframes.push(iframe);
+                            // Facebook native iframe embed
+                            var fbType = action.url.includes('/video') ? 'video.php' : 'post.php';
+                            iframe.src = `https://www.facebook.com/plugins/${fbType}?href=${encodeURIComponent(action.url)}&show_text=true&width=500`;
                         } else if (action.provider === 'linkedin') {
+                            // LinkedIn requires the specific /embed/ URN structure
                             if (action.url.includes('/embed/')) {
                                 iframe.src = action.url;
-                                socialIframes.push(iframe);
                             } else {
-                                htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px;">View on LinkedIn</a>`;
+                                validSocial = false;
+                                htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px; margin-top:10px;">View on LinkedIn</a>`;
                             }
+                        } else {
+                            validSocial = false;
+                        }
+
+                        if (validSocial) {
+                            socialIframes.push(iframe);
                         }
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
@@ -645,11 +686,7 @@
             // Introduce a lightweight client-side sanitizer
             function sanitizeHTML(str) {
                 if (typeof DOMPurify !== 'undefined') {
-                    // Allow iframes (for social embeds and videos) and specific styles/attributes
-                    return DOMPurify.sanitize(str, {
-                        ADD_TAGS: ['form', 'input', 'textarea', 'button', 'iframe'],
-                        ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'srcdoc', 'frameborder', 'allow', 'allowfullscreen', 'scrolling', 'title', 'width', 'height', 'style', 'class']
-                    });
+                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
                 }
                 // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
                 return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
