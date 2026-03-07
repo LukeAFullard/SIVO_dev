@@ -668,6 +668,25 @@
                                 validSocial = false;
                                 htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px; margin-top:10px;">View on LinkedIn</a>`;
                             }
+                        } else if (action.provider === 'twitch') {
+                            var parts = action.url.split('twitch.tv/');
+                            if (parts.length > 1) {
+                                var channel = parts[1].split('?')[0];
+                                iframe.src = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname || 'localhost'}`;
+                            } else {
+                                iframe.src = action.url;
+                            }
+                        } else if (action.provider === 'pinterest') {
+                            iframe.src = action.url;
+                        } else if (action.provider === 'apple_music') {
+                            var amUrl = action.url;
+                            if (!amUrl.includes('embed.music.apple.com')) {
+                                amUrl = amUrl.replace('music.apple.com', 'embed.music.apple.com');
+                            }
+                            iframe.src = amUrl;
+                            iframe.style.height = '450px';
+                        } else if (action.provider === 'reddit') {
+                            iframe.src = action.url.replace('/comments/', '/embed/');
                         } else if (action.provider === 'website') {
                             // Generic Website embed
                             iframe.src = action.url;
@@ -843,6 +862,16 @@
                         iframe.style.border = 'none';
                         iframe.setAttribute('allowfullscreen', 'true');
                         iframe.src = action.dashboard_url;
+
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'replit') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = action.repl_url;
 
                         socialIframes.push(iframe);
                     } else if (action.action_type === 'callback') {
