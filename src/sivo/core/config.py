@@ -21,6 +21,10 @@ class ElementConfig(BaseModel):
 class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
+    default_panel_position: str = Field(
+        default="right",
+        description="Global default position for the info panel ('right', 'left', 'top', 'bottom')."
+    )
     mappings: Dict[str, ElementConfig] = Field(
         default_factory=dict,
         description="Dictionary mapping element IDs to their configuration."

@@ -9,12 +9,13 @@ from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right"):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
         self._element_lookup: Dict[str, dict] = {}
         self.overlays: Dict[str, dict] = {}
+        self.default_panel_position = default_panel_position
 
         # Initialize default mappings
         for elem in self.elements:
@@ -56,6 +57,7 @@ class Infographic:
             raise FileNotFoundError(f"SVG file not found: {svg_path}")
 
         infographic = cls.from_svg(svg_path)
+        infographic.default_panel_position = getattr(cfg, "default_panel_position", "right")
 
         for element_id, elem_config in cfg.mappings.items():
             try:
@@ -122,7 +124,7 @@ class Infographic:
             mapping.actions.append(TooltipAction(
                 title=tooltip,
                 content=html if html else f"<h3>{tooltip}</h3>" if tooltip else "",
-                panel_position=panel_position or "right"
+                panel_position=panel_position or self.default_panel_position
             ))
 
         if url:
@@ -147,13 +149,13 @@ class Infographic:
             mapping.actions.append(AudioAction(audio_url=audio))
 
         if markdown:
-            mapping.actions.append(MarkdownAction(markdown_text=markdown, panel_position=panel_position or "right"))
+            mapping.actions.append(MarkdownAction(markdown_text=markdown, panel_position=panel_position or self.default_panel_position))
 
         if fetch_url:
-            mapping.actions.append(FetchAction(fetch_url=fetch_url, panel_position=panel_position or "right"))
+            mapping.actions.append(FetchAction(fetch_url=fetch_url, panel_position=panel_position or self.default_panel_position))
 
         if form_fields and form_submit_event:
-            mapping.actions.append(FormAction(form_fields=form_fields, submit_event=form_submit_event, panel_position=panel_position or "right"))
+            mapping.actions.append(FormAction(form_fields=form_fields, submit_event=form_submit_event, panel_position=panel_position or self.default_panel_position))
 
         if color:
             mapping.theme.color = color

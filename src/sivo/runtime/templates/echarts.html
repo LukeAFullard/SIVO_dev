@@ -59,6 +59,48 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             box-sizing: border-box;
         }
+
+        /* Responsive Layout Overrides */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column !important;
+            }
+            #info-panel.active {
+                width: 100% !important;
+                height: 50vh !important;
+                border: none !important;
+                border-top: 1px solid #ddd !important;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
+            }
+            .sivo-resizer {
+                display: none !important;
+            }
+        }
+
+        .sivo-resizer {
+            display: none;
+            background-color: #eee;
+            z-index: 10;
+        }
+        .sivo-resizer:hover {
+            background-color: #ccc;
+        }
+
+        /* Resizer orientations */
+        .sivo-resizer.resizer-horizontal {
+            width: 5px;
+            cursor: col-resize;
+            height: 100%;
+        }
+        .sivo-resizer.resizer-vertical {
+            height: 5px;
+            cursor: row-resize;
+            width: 100%;
+        }
+        .sivo-resizer.active {
+            display: block;
+        }
+
         .close-btn {
             float: right;
             cursor: pointer;
@@ -121,6 +163,7 @@
 <body>
 
     <div id="chart-container"></div>
+    <div id="sivo-resizer" class="sivo-resizer"></div>
     <div class="zoom-controls">
         <div class="zoom-btn" onclick="zoomIn()">+</div>
         <div class="zoom-btn" onclick="zoomOut()">-</div>
@@ -481,20 +524,32 @@
 
             function applyPanelPosition(position) {
                 infoPanel.className = 'active'; // reset classes but keep active
+                var resizer = document.getElementById('sivo-resizer');
+                resizer.className = 'sivo-resizer active';
+
+                // On mobile we force bottom layout in CSS, so logic mostly just applies classes.
                 if (position === 'left') {
                     document.body.style.flexDirection = 'row-reverse';
                     infoPanel.classList.add('pos-left');
+                    resizer.classList.add('resizer-horizontal');
                 } else if (position === 'bottom') {
                     document.body.style.flexDirection = 'column';
                     infoPanel.classList.add('pos-bottom');
+                    resizer.classList.add('resizer-vertical');
                 } else if (position === 'top') {
                     document.body.style.flexDirection = 'column-reverse';
                     infoPanel.classList.add('pos-top');
+                    resizer.classList.add('resizer-vertical');
                 } else {
                     // default right
                     document.body.style.flexDirection = 'row';
                     infoPanel.classList.add('pos-right');
+                    resizer.classList.add('resizer-horizontal');
                 }
+
+                // Clear any manual sizing inline styles from dragging
+                infoPanel.style.width = '';
+                infoPanel.style.height = '';
 
                 // Force echarts to resize since layout changed
                 setTimeout(() => myChart.resize(), 50);
@@ -599,9 +654,83 @@
             var infoPanel = document.getElementById('info-panel');
             infoPanel.className = '';
             infoPanel.classList.add('pos-right'); // reset to default
+            infoPanel.style.width = '';
+            infoPanel.style.height = '';
+            var resizer = document.getElementById('sivo-resizer');
+            if (resizer) resizer.className = 'sivo-resizer';
             document.body.style.flexDirection = 'row';
             setTimeout(() => myChart.resize(), 50);
         }
+
+        // --- Resizer Logic ---
+        (function() {
+            const resizer = document.getElementById('sivo-resizer');
+            const panel = document.getElementById('info-panel');
+            let isResizing = false;
+            let currentLayout = 'row'; // depends on flex-direction
+            let lastDownX = 0;
+            let lastDownY = 0;
+            let startWidth = 0;
+            let startHeight = 0;
+
+            resizer.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                currentLayout = document.body.style.flexDirection;
+                lastDownX = e.clientX;
+                lastDownY = e.clientY;
+                startWidth = panel.getBoundingClientRect().width;
+                startHeight = panel.getBoundingClientRect().height;
+
+                // Add a transparent overlay to capture pointer events over iframes/charts
+                let overlay = document.createElement('div');
+                overlay.id = 'sivo-drag-overlay';
+                overlay.style.position = 'fixed';
+                overlay.style.top = 0;
+                overlay.style.left = 0;
+                overlay.style.right = 0;
+                overlay.style.bottom = 0;
+                overlay.style.zIndex = 9999;
+                overlay.style.cursor = currentLayout.includes('row') ? 'col-resize' : 'row-resize';
+                document.body.appendChild(overlay);
+
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+
+                if (currentLayout === 'row') {
+                    // Right panel
+                    let newWidth = startWidth - (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'row-reverse') {
+                    // Left panel
+                    let newWidth = startWidth + (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'column') {
+                    // Bottom panel
+                    let newHeight = startHeight - (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                } else if (currentLayout === 'column-reverse') {
+                    // Top panel
+                    let newHeight = startHeight + (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                }
+
+                // Throttle resize event for performance if needed, but modern ECharts usually handles it
+                myChart.resize();
+            });
+
+            window.addEventListener('mouseup', function(e) {
+                if (isResizing) {
+                    isResizing = false;
+                    let overlay = document.getElementById('sivo-drag-overlay');
+                    if (overlay) document.body.removeChild(overlay);
+                    myChart.resize();
+                }
+            });
+        })();
+        // --- End Resizer Logic ---
 
         // Setup Overlays
         var overlaysContainer = document.createElement('div');
