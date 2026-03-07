@@ -9,13 +9,14 @@ from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right"):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
         self._element_lookup: Dict[str, dict] = {}
         self.overlays: Dict[str, dict] = {}
         self.default_panel_position = default_panel_position
+        self.lock_zoom_out = lock_zoom_out
 
         # Initialize default mappings
         for elem in self.elements:
@@ -58,6 +59,7 @@ class Infographic:
 
         infographic = cls.from_svg(svg_path)
         infographic.default_panel_position = getattr(cfg, "default_panel_position", "right")
+        infographic.lock_zoom_out = getattr(cfg, "lock_zoom_out", False)
 
         for element_id, elem_config in cfg.mappings.items():
             try:
@@ -326,7 +328,8 @@ class Infographic:
             "default_view": {
                 "svg_string": self.parser.to_string(),
                 "mappings": mappings_dict,
-                "overlays": self.overlays
+                "overlays": self.overlays,
+                "lock_zoom_out": self.lock_zoom_out
             }
         }
         return generate_echarts_html(views_data, "default_view", output_path, custom_css, custom_js)

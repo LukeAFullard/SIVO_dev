@@ -261,6 +261,7 @@
         var echartsData = [];
         var actionsManifest = {};
         var overlaysData = {};
+        var lockZoomOut = false;
 
         // History for back navigation
         var viewHistory = [];
@@ -388,10 +389,15 @@
             echartsData = view.echarts_data;
             actionsManifest = view.actions_manifest;
             overlaysData = view.overlays;
+            lockZoomOut = view.lock_zoom_out || false;
 
             // Register and set ECharts map
+            var baseOpt = getBaseOption(viewId);
+            if (lockZoomOut) {
+                baseOpt.series[0].scaleLimit = { min: 1.0 };
+            }
             echarts.registerMap(viewId, { svg: view.svg_string });
-            myChart.setOption(getBaseOption(viewId), true);
+            myChart.setOption(baseOpt, true);
 
             // Reset zoom tracking
             currentZoom = 1;
@@ -436,7 +442,13 @@
         function zoomOut() {
             var option = myChart.getOption();
             var series = option.series[0];
-            currentZoom = (series.zoom || 1) / 1.5;
+            var newZoom = (series.zoom || 1) / 1.5;
+
+            if (lockZoomOut && newZoom < 1.0) {
+                newZoom = 1.0;
+            }
+
+            currentZoom = newZoom;
             myChart.setOption({
                 series: [{
                     zoom: currentZoom
