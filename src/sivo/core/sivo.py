@@ -9,21 +9,22 @@ class Sivo:
     This class serves as the primary declarative Python API for the framework,
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
-    def __init__(self, infographic: Infographic, default_panel_position: str = "right"):
+    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False):
         self.infographic = infographic
         self.infographic.default_panel_position = default_panel_position
+        self.infographic.lock_zoom_out = lock_zoom_out
 
     @classmethod
-    def from_svg(cls, filepath: str, default_panel_position: str = "right") -> "Sivo":
+    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False) -> "Sivo":
         """Initializes a Sivo instance from an SVG file path."""
         info = Infographic.from_svg(filepath)
-        return cls(info, default_panel_position=default_panel_position)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out)
 
     @classmethod
-    def from_string(cls, svg_string: str, default_panel_position: str = "right") -> "Sivo":
+    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False) -> "Sivo":
         """Initializes a Sivo instance directly from an SVG string."""
         info = Infographic.from_string(svg_string)
-        return cls(info, default_panel_position=default_panel_position)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":
@@ -148,7 +149,8 @@ class Sivo:
         return {
             "svg_string": self.infographic.parser.to_string(),
             "mappings": mappings_dict,
-            "overlays": self.infographic.overlays
+            "overlays": self.infographic.overlays,
+            "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False)
         }
 
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:

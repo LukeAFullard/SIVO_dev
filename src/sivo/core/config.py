@@ -35,6 +35,10 @@ class ProjectConfig(BaseModel):
         default="right",
         description="Global default position for the info panel ('right', 'left', 'top', 'bottom')."
     )
+    lock_zoom_out: bool = Field(
+        default=False,
+        description="If True, prevents the user from zooming out further than the initial zoom level (1.0)."
+    )
     mappings: Dict[str, ElementConfig] = Field(
         default_factory=dict,
         description="Dictionary mapping element IDs to their configuration."
