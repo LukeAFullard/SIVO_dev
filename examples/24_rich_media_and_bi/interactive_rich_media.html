@@ -254,8 +254,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n    \u003crect id=\"dashboard_btn\" x=\"50\" y=\"50\" width=\"100\" height=\"100\" fill=\"purple\" stroke=\"magenta\" stroke-width=\"2\" name=\"dashboard_btn\"/\u003e\n    \u003ccircle id=\"music_btn\" cx=\"250\" cy=\"100\" r=\"50\" fill=\"pink\" stroke=\"red\" stroke-width=\"2\" name=\"music_btn\"/\u003e\n    \u003cpolygon id=\"video_btn\" points=\"150,200 250,200 200,300\" fill=\"cyan\" stroke=\"blue\" stroke-width=\"2\" name=\"video_btn\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "dashboard_btn", "value": 1, "tooltip": "View Live Sales Data"}, {"name": "music_btn", "value": 1, "tooltip": "Listen to the Theme Song"}, {"name": "video_btn", "value": 1, "tooltip": "Watch Intro Video"}], "actions_manifest": {"dashboard_btn": [{"action_type": "tooltip", "content": "\u003ch3\u003eView Live Sales Data\u003c/h3\u003e", "title": "View Live Sales Data", "panel_position": "right"}, {"action_type": "bi", "provider": "metabase", "dashboard_url": "https://metabase.example.com/public/dashboard/xyz123", "panel_position": "right"}], "music_btn": [{"action_type": "tooltip", "content": "\u003ch3\u003eListen to the Theme Song\u003c/h3\u003e", "title": "Listen to the Theme Song", "panel_position": "right"}, {"action_type": "rich_media", "provider": "spotify", "media_url": "https://open.spotify.com/embed/track/3n3Ppam7vgaVa1iaRUc9Lp", "panel_position": "right"}], "video_btn": [{"action_type": "tooltip", "content": "\u003ch3\u003eWatch Intro Video\u003c/h3\u003e", "title": "Watch Intro Video", "panel_position": "right"}, {"action_type": "rich_media", "provider": "vimeo", "media_url": "https://vimeo.com/76979871", "panel_position": "right"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -460,15 +460,6 @@
         var infoContent = document.createElement('div');
         infoContentShadow.appendChild(infoContent);
 
-        // Introduce a lightweight client-side sanitizer
-        function sanitizeHTML(str) {
-            if (typeof DOMPurify !== 'undefined') {
-                return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
-            }
-            // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
-            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
         // Handle click events
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
@@ -550,7 +541,7 @@
                                     // Not JSON, keep as text
                                 }
                                 var container = document.getElementById(`sivo-fetch-container-${name}`);
-                                if (container) container.innerHTML = sanitizeHTML(data);
+                                if (container) container.innerHTML = data;
                             })
                             .catch(err => {
                                 var container = document.getElementById(`sivo-fetch-container-${name}`);
@@ -755,7 +746,7 @@
                                     // Not JSON, keep as text
                                 }
                                 var container = document.getElementById(`sivo-datasource-container-${name}`);
-                                if (container) container.innerHTML = sanitizeHTML(data);
+                                if (container) container.innerHTML = data;
                             })
                             .catch(err => {
                                 var container = document.getElementById(`sivo-datasource-container-${name}`);
@@ -860,6 +851,14 @@
                 }, '*');
             }
 
+            // Introduce a lightweight client-side sanitizer
+            function sanitizeHTML(str) {
+                if (typeof DOMPurify !== 'undefined') {
+                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
+                }
+                // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
+                return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
 
             function applyPanelPosition(position) {
                 infoPanel.className = 'active'; // reset classes but keep active
@@ -1214,8 +1213,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

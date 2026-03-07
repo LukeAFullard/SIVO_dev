@@ -254,8 +254,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n    \u003crect id=\"product1\" x=\"50\" y=\"50\" width=\"100\" height=\"100\" fill=\"salmon\" stroke=\"red\" stroke-width=\"2\" name=\"product1\"/\u003e\n    \u003ccircle id=\"survey1\" cx=\"250\" cy=\"100\" r=\"50\" fill=\"yellow\" stroke=\"orange\" stroke-width=\"2\" name=\"survey1\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "product1", "value": 1, "tooltip": "Buy Now"}, {"name": "survey1", "value": 1, "tooltip": "Take our Survey"}], "actions_manifest": {"product1": [{"action_type": "tooltip", "content": "\u003ch3\u003eSpecial Product\u003c/h3\u003e\u003cp\u003ePrice: $99.99\u003c/p\u003e", "title": "Buy Now", "panel_position": "right"}, {"action_type": "ecommerce", "provider": "stripe", "checkout_url": "https://buy.stripe.com/test_abcdefg", "panel_position": "right"}], "survey1": [{"action_type": "tooltip", "content": "\u003ch3\u003eTake our Survey\u003c/h3\u003e", "title": "Take our Survey", "panel_position": "right"}, {"action_type": "external_form", "provider": "typeform", "form_url": "https://form.typeform.com/to/demo_form", "panel_position": "right"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -460,15 +460,6 @@
         var infoContent = document.createElement('div');
         infoContentShadow.appendChild(infoContent);
 
-        // Introduce a lightweight client-side sanitizer
-        function sanitizeHTML(str) {
-            if (typeof DOMPurify !== 'undefined') {
-                return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
-            }
-            // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
-            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
         // Handle click events
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
@@ -550,7 +541,7 @@
                                     // Not JSON, keep as text
                                 }
                                 var container = document.getElementById(`sivo-fetch-container-${name}`);
-                                if (container) container.innerHTML = sanitizeHTML(data);
+                                if (container) container.innerHTML = data;
                             })
                             .catch(err => {
                                 var container = document.getElementById(`sivo-fetch-container-${name}`);
@@ -755,7 +746,7 @@
                                     // Not JSON, keep as text
                                 }
                                 var container = document.getElementById(`sivo-datasource-container-${name}`);
-                                if (container) container.innerHTML = sanitizeHTML(data);
+                                if (container) container.innerHTML = data;
                             })
                             .catch(err => {
                                 var container = document.getElementById(`sivo-datasource-container-${name}`);
@@ -860,6 +851,14 @@
                 }, '*');
             }
 
+            // Introduce a lightweight client-side sanitizer
+            function sanitizeHTML(str) {
+                if (typeof DOMPurify !== 'undefined') {
+                    return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
+                }
+                // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
+                return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            }
 
             function applyPanelPosition(position) {
                 infoPanel.className = 'active'; // reset classes but keep active
@@ -1214,8 +1213,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

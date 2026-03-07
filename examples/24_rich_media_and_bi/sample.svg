@@ -1,0 +1,5 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+    <rect id="dashboard_btn" x="50" y="50" width="100" height="100" fill="purple" stroke="magenta" stroke-width="2"/>
+    <circle id="music_btn" cx="250" cy="100" r="50" fill="pink" stroke="red" stroke-width="2"/>
+    <polygon id="video_btn" points="150,200 250,200 200,300" fill="cyan" stroke="blue" stroke-width="2"/>
+</svg>
