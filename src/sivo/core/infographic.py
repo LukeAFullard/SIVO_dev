@@ -69,6 +69,7 @@ class Infographic:
                     callback_payload=elem_config.callback_payload,
                     hover_callback_event=elem_config.hover_callback_event,
                     hover_callback_payload=elem_config.hover_callback_payload,
+                    panel_position=elem_config.panel_position,
                     color=elem_config.color,
                     hover_color=elem_config.hover_color,
                     border_width=elem_config.border_width,
@@ -99,6 +100,7 @@ class Infographic:
         fetch_url: Optional[str] = None,
         form_fields: Optional[list[dict]] = None,
         form_submit_event: Optional[str] = None,
+        panel_position: Optional[str] = None,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -119,7 +121,8 @@ class Infographic:
         if html or tooltip:
             mapping.actions.append(TooltipAction(
                 title=tooltip,
-                content=html if html else f"<h3>{tooltip}</h3>" if tooltip else ""
+                content=html if html else f"<h3>{tooltip}</h3>" if tooltip else "",
+                panel_position=panel_position or "right"
             ))
 
         if url:
@@ -144,13 +147,13 @@ class Infographic:
             mapping.actions.append(AudioAction(audio_url=audio))
 
         if markdown:
-            mapping.actions.append(MarkdownAction(markdown_text=markdown))
+            mapping.actions.append(MarkdownAction(markdown_text=markdown, panel_position=panel_position or "right"))
 
         if fetch_url:
-            mapping.actions.append(FetchAction(fetch_url=fetch_url))
+            mapping.actions.append(FetchAction(fetch_url=fetch_url, panel_position=panel_position or "right"))
 
         if form_fields and form_submit_event:
-            mapping.actions.append(FormAction(form_fields=form_fields, submit_event=form_submit_event))
+            mapping.actions.append(FormAction(form_fields=form_fields, submit_event=form_submit_event, panel_position=panel_position or "right"))
 
         if color:
             mapping.theme.color = color

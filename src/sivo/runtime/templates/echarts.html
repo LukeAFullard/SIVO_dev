@@ -23,17 +23,41 @@
             height: 100%;
         }
         #info-panel {
-            width: 300px;
             padding: 20px;
             background: #f9f9f9;
-            border-left: 1px solid #ddd;
             overflow-y: auto;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
             display: none;
             transition: all 0.3s ease;
         }
         #info-panel.active {
             display: block;
+        }
+        /* Layout modifiers for info-panel */
+        #info-panel.pos-right {
+            width: 300px;
+            height: 100%;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-left {
+            width: 300px;
+            height: 100%;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-bottom {
+            width: 100%;
+            height: 300px;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        #info-panel.pos-top {
+            width: 100%;
+            height: 300px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
         .close-btn {
             float: right;
@@ -305,9 +329,13 @@
             var elementActions = actionsManifest[name];
             var htmlContent = '';
             var hasInteraction = false;
+            var panelPosition = 'right'; // Default
 
             if (elementActions) {
                 elementActions.forEach(function(action) {
+                    if (action.panel_position) {
+                        panelPosition = action.panel_position;
+                    }
                     if (action.action_type === 'tooltip') {
                         htmlContent += action.content;
                         hasInteraction = true;
@@ -451,12 +479,33 @@
                 return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             }
 
+            function applyPanelPosition(position) {
+                infoPanel.className = 'active'; // reset classes but keep active
+                if (position === 'left') {
+                    document.body.style.flexDirection = 'row-reverse';
+                    infoPanel.classList.add('pos-left');
+                } else if (position === 'bottom') {
+                    document.body.style.flexDirection = 'column';
+                    infoPanel.classList.add('pos-bottom');
+                } else if (position === 'top') {
+                    document.body.style.flexDirection = 'column-reverse';
+                    infoPanel.classList.add('pos-top');
+                } else {
+                    // default right
+                    document.body.style.flexDirection = 'row';
+                    infoPanel.classList.add('pos-right');
+                }
+
+                // Force echarts to resize since layout changed
+                setTimeout(() => myChart.resize(), 50);
+            }
+
             if (hasInteraction && htmlContent) {
                 infoContent.innerHTML = sanitizeHTML(htmlContent);
-                infoPanel.classList.add('active');
+                applyPanelPosition(panelPosition);
             } else if (!hasInteraction && !elementActions) {
                 infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
-                infoPanel.classList.add('active');
+                applyPanelPosition(panelPosition);
             } else {
                 closePanel();
             }
@@ -547,7 +596,11 @@
         });
 
         function closePanel() {
-            document.getElementById('info-panel').classList.remove('active');
+            var infoPanel = document.getElementById('info-panel');
+            infoPanel.className = '';
+            infoPanel.classList.add('pos-right'); // reset to default
+            document.body.style.flexDirection = 'row';
+            setTimeout(() => myChart.resize(), 50);
         }
 
         // Setup Overlays

@@ -8,6 +8,7 @@ class TooltipAction(BaseAction):
     action_type: Literal["tooltip"] = "tooltip"
     content: str = Field(description="HTML content for the tooltip")
     title: Optional[str] = Field(default=None, description="Optional title for the tooltip")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
 class URLAction(BaseAction):
     action_type: Literal["url"] = "url"
@@ -44,15 +45,18 @@ class AudioAction(BaseAction):
 class MarkdownAction(BaseAction):
     action_type: Literal["markdown"] = "markdown"
     markdown_text: str = Field(description="Markdown content to render in the info panel")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
 class FetchAction(BaseAction):
     action_type: Literal["fetch"] = "fetch"
     fetch_url: str = Field(description="URL to fetch data from and display in the info panel")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
 class FormAction(BaseAction):
     action_type: Literal["form"] = "form"
     form_fields: list[dict] = Field(description="List of fields (e.g., {'name': 'ticket', 'type': 'text'})")
     submit_event: str = Field(description="Event name to trigger on form submission")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
