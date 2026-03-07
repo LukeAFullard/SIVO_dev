@@ -600,31 +600,7 @@
 
                         var validSocial = true;
 
-                        if (action.provider === 'twitter' || action.provider === 'x') {
-                            // Render a standard blockquote embed for Twitter, bypassing DOMPurify via DOM appending
-                            validSocial = false; // We won't use the standard iframe path for this one
-
-                            var tweetContainer = document.createElement('div');
-                            tweetContainer.className = 'twitter-embed-container';
-
-                            var blockquote = document.createElement('blockquote');
-                            blockquote.className = 'twitter-tweet';
-                            blockquote.setAttribute('data-theme', 'light');
-                            var a = document.createElement('a');
-                            a.href = action.url;
-                            blockquote.appendChild(a);
-
-                            var script = document.createElement('script');
-                            script.async = true;
-                            script.src = 'https://platform.twitter.com/widgets.js';
-                            script.charset = 'utf-8';
-
-                            tweetContainer.appendChild(blockquote);
-                            tweetContainer.appendChild(script);
-
-                            // Because it's a DOM node, we'll store it in socialIframes so it gets appended safely later
-                            socialIframes.push(tweetContainer);
-                        } else if (action.provider === 'instagram') {
+                        if (action.provider === 'instagram') {
                             // Instagram native iframe embed
                             var igUrl = action.url.split('?')[0]; // remove queries
                             if (!igUrl.endsWith('/')) igUrl += '/';
@@ -637,10 +613,6 @@
                             } else {
                                 iframe.src = action.url;
                             }
-                        } else if (action.provider === 'facebook') {
-                            // Facebook native iframe embed
-                            var fbType = action.url.includes('/video') ? 'video.php' : 'post.php';
-                            iframe.src = `https://www.facebook.com/plugins/${fbType}?href=${encodeURIComponent(action.url)}&show_text=true&width=500`;
                         } else if (action.provider === 'linkedin') {
                             // LinkedIn requires the specific /embed/ URN structure
                             if (action.url.includes('/embed/')) {
@@ -648,6 +620,73 @@
                             } else {
                                 validSocial = false;
                                 htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px; margin-top:10px;">View on LinkedIn</a>`;
+                            }
+                        } else if (action.provider === 'website') {
+                            // Generic Website embed
+                            iframe.src = action.url;
+                        } else if (action.provider === 'wikipedia') {
+                            // Wikipedia via REST API (since Wikipedia enforces X-Frame-Options: deny)
+                            validSocial = false;
+
+                            var wikiContainer = document.createElement('div');
+                            wikiContainer.style.border = "1px solid #e2e8f0";
+                            wikiContainer.style.borderRadius = "8px";
+                            wikiContainer.style.padding = "20px";
+                            wikiContainer.style.fontFamily = "system-ui, -apple-system, sans-serif";
+                            wikiContainer.style.margin = "10px 0";
+                            wikiContainer.style.backgroundColor = "#fff";
+                            wikiContainer.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+
+                            wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="text-align:center; padding: 20px;"><div class="sivo-loader"></div><p style="color:#64748b; font-size:14px;">Loading Wikipedia summary...</p></div>`);
+                            socialIframes.push(wikiContainer);
+
+                            // Extract title from URL (e.g., https://en.wikipedia.org/wiki/Python_(programming_language) -> Python_(programming_language))
+                            var parts = action.url.split('/wiki/');
+                            if (parts.length > 1) {
+                                var title = parts[1].split('?')[0].split('#')[0];
+                                var lang = parts[0].split('//')[1].split('.')[0]; // e.g., 'en'
+                                var apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${title}`;
+
+                                // Safely encode the action URL for use in links
+                                var safeUrl = encodeURI(action.url);
+
+                                fetch(apiUrl)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        var imgHtml = '';
+                                        if (data.thumbnail && data.thumbnail.source) {
+                                            // Ensure the thumbnail source is a valid HTTPS url to prevent XSS
+                                            var safeImgUrl = encodeURI(data.thumbnail.source);
+                                            if (safeImgUrl.startsWith('https://')) {
+                                                imgHtml = `<img src="${safeImgUrl}" style="float: right; margin: 0 0 15px 15px; max-width: 120px; border-radius: 4px; border: 1px solid #e2e8f0;">`;
+                                            }
+                                        }
+
+                                        var safeTitle = data.title ? data.title.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+                                        var safeDesc = data.description ? data.description.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+                                        var safeExtract = data.extract ? data.extract.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+
+                                        wikiContainer.innerHTML = DOMPurify.sanitize(`
+                                            <div style="display: flex; align-items: center; margin-bottom: 15px; gap: 10px;">
+                                                <svg viewBox="0 0 512 512" style="width: 24px; height: 24px; fill: #000;"><path d="M495 194.2c2.5-12.2-6.6-23.7-18.9-23.7h-92.4l-75.9 203.4h-3.4L230 170.5h-92.4c-12.3 0-21.4 11.5-18.9 23.7 20.3 98.4 51.5 252 56 274.5 2.1 10.6 11.4 18.5 22.3 18.5h63c10.8 0 20-7.8 22.1-18.4l51.5-247.9h3.3l52.1 247.9c2.1 10.6 11.3 18.4 22.1 18.4h63.2c10.9 0 20.2-7.9 22.3-18.5 4.5-22.5 35.7-176.1 56-274.5zM17 194.2C19.5 182 10.4 170.5-1.9 170.5H-39v44h15l-44 213h-15v44h90v-44H-8l44-213h15c12.3 0 21.4-11.5 18.9-23.7z"/></svg>
+                                                <h3 style="margin: 0; font-size: 1.25rem; color: #0f172a; flex-grow: 1;"><a href="${safeUrl}" target="_blank" style="color: inherit; text-decoration: none;">${safeTitle}</a></h3>
+                                            </div>
+                                            <div style="clear: both; font-size: 14px; line-height: 1.6; color: #334155;">
+                                                ${imgHtml}
+                                                <p style="margin-top:0;"><strong>${safeDesc}</strong></p>
+                                                <p>${safeExtract}</p>
+                                            </div>
+                                            <div style="margin-top: 15px; text-align: right;">
+                                                <a href="${safeUrl}" target="_blank" style="color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 500;">Read more on Wikipedia →</a>
+                                            </div>
+                                        `);
+                                    })
+                                    .catch(err => {
+                                        wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="color: #ef4444; padding: 15px;">Failed to load Wikipedia summary. <a href="${safeUrl}" target="_blank">View page directly</a>.</div>`);
+                                    });
+                            } else {
+                                var safeUrl = encodeURI(action.url);
+                                wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="color: #ef4444; padding: 15px;">Invalid Wikipedia URL. <a href="${safeUrl}" target="_blank">View page directly</a>.</div>`);
                             }
                         } else {
                             validSocial = false;

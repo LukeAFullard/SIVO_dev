@@ -254,7 +254,7 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 500 200\"\u003e\n  \u003c!-- Twitter Logo --\u003e\n  \u003cg id=\"btn_twitter\" transform=\"translate(10, 10)\" name=\"btn_twitter\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#1DA1F2\"/\u003e\n    \u003cpath d=\"M56 31c-1.4 1-3.1 1.6-4.8 1.9 1.8-1 3.1-2.6 3.8-4.6-1.5.9-3.2 1.5-5 1.9-1.5-1.5-3.6-2.5-5.9-2.5-4.5 0-8.2 3.7-8.2 8.2 0 .6.1 1.3.2 1.9-6.8-.3-12.8-3.6-16.8-8.5-.7 1.2-1.1 2.6-1.1 4.1 0 2.8 1.4 5.4 3.6 6.9-1.3 0-2.6-.4-3.7-1v.1c0 4 2.8 7.3 6.6 8.1-.7.2-1.4.3-2.1.3-.5 0-1 0-1.5-.1 1 3.3 4.1 5.6 7.7 5.7-2.8 2.2-6.3 3.5-10.2 3.5-.7 0-1.3 0-1.9-.1 3.6 2.3 8 3.7 12.6 3.7 15.2 0 23.5-12.6 23.5-23.5v-1.1c1.7-1.2 3.1-2.6 4.2-4.3-1.5.7-3.1 1.1-4.8 1.3 1.8-1.2 3-2.9 3.6-5z\" fill=\"white\"/\u003e\n  \u003c/g\u003e\n\n  \u003c!-- Instagram Logo --\u003e\n  \u003cg id=\"btn_insta\" transform=\"translate(110, 10)\" name=\"btn_insta\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#C13584\"/\u003e\n    \u003cpath d=\"M40 25c-8.3 0-15 6.7-15 15s6.7 15 15 15 15-6.7 15-15-6.7-15-15-15zm0 24.5c-5.2 0-9.5-4.3-9.5-9.5S34.8 30.5 40 30.5 49.5 34.8 49.5 40 45.2 49.5 40 49.5zm9.8-19.3c-2 0-3.6-1.6-3.6-3.6s1.6-3.6 3.6-3.6 3.6 1.6 3.6 3.6-1.6 3.6-3.6 3.6zM60 40c0-6.1-.1-12.1-.4-18.1-.3-6.5-5.2-11.4-11.7-11.7C41.9 9.9 35.9 9.8 29.8 9.8s-12.1.1-18.1.4c-6.5.3-11.4 5.2-11.7 11.7C-.1 27.9-.2 33.9-.2 40s.1 12.1.4 18.1c.3 6.5 5.2 11.4 11.7 11.7 6.1.3 12.1.4 18.1.4s12.1-.1 18.1-.4c6.5-.3 11.4-5.2 11.7-11.7.3-6 .4-12 .4-18.1zM54 53.6c-1.3 3.3-3.8 5.8-7.1 7.1-4.9 1.9-16.5 1.5-26.9 1.5-10.4 0-22 .4-26.9-1.5-3.3-1.3-5.8-3.8-7.1-7.1-1.9-4.9-1.5-16.5-1.5-26.9 0-10.4-.4-22 1.5-26.9 1.3-3.3 3.8-5.8 7.1-7.1C18-.2 29.6.2 40 .2c10.4 0 22-.4 26.9 1.5 3.3 1.3 5.8 3.8 7.1 7.1 1.9 4.9 1.5 16.5 1.5 26.9 0 10.4.4 22-1.5 26.9z\" fill=\"white\" transform=\"scale(0.8) translate(10, 10)\"/\u003e\n  \u003c/g\u003e\n\n  \u003c!-- TikTok Logo --\u003e\n  \u003cg id=\"btn_tiktok\" transform=\"translate(210, 10)\" name=\"btn_tiktok\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#000000\"/\u003e\n    \u003cpath d=\"M47.7 21v14.1c4.5 0 8.5 2.1 11.3 5.4V26.4c-2.8-1-5.9-1.5-9.1-1.5v-3.9zm-13.6 0v27.2c0 3.7-3 6.8-6.8 6.8s-6.8-3-6.8-6.8 3-6.8 6.8-6.8c1.3 0 2.5.4 3.5 1.1v-6.9c-1.1-.6-2.3-1-3.5-1-7.5 0-13.6 6.1-13.6 13.6s6.1 13.6 13.6 13.6 13.6-6.1 13.6-13.6V21H34.1z\" fill=\"white\" transform=\"scale(1.2) translate(12, 10)\"/\u003e\n  \u003c/g\u003e\n  \n  \u003c!-- Facebook Logo --\u003e\n  \u003cg id=\"btn_fb\" transform=\"translate(310, 10)\" name=\"btn_fb\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#4267B2\"/\u003e\n    \u003cpath d=\"M50 20h-7c-5.5 0-10 4.5-10 10v6h-7v8h7v26h10V44h8l1-8h-9v-4c0-2.2 1.8-4 4-4h5v-8z\" fill=\"white\" transform=\"scale(1.2) translate(3, 3)\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "btn_twitter", "value": 1, "tooltip": "Twitter Embed", "itemStyle": {"areaColor": "#1da1f2"}, "emphasis": {"itemStyle": {"areaColor": "#0d8bd9"}}}, {"name": "btn_insta", "value": 1, "tooltip": "Instagram Embed", "itemStyle": {"areaColor": "#c13584"}, "emphasis": {"itemStyle": {"areaColor": "#a0296e"}}}, {"name": "btn_tiktok", "value": 1, "tooltip": "TikTok Embed", "itemStyle": {"areaColor": "#333333"}, "emphasis": {"itemStyle": {"areaColor": "#111111"}}}, {"name": "btn_fb", "value": 1, "tooltip": "Facebook Embed", "itemStyle": {"areaColor": "#4267b2"}, "emphasis": {"itemStyle": {"areaColor": "#365899"}}}], "actions_manifest": {"btn_twitter": [{"action_type": "tooltip", "content": "\u003ch3\u003eTwitter Embed\u003c/h3\u003e", "title": "Twitter Embed", "panel_position": "right"}, {"action_type": "social", "provider": "twitter", "url": "https://twitter.com/OpenAI/status/1758231365825700200", "panel_position": "right"}], "btn_insta": [{"action_type": "tooltip", "content": "\u003ch3\u003eInstagram Embed\u003c/h3\u003e", "title": "Instagram Embed", "panel_position": "right"}, {"action_type": "social", "provider": "instagram", "url": "https://www.instagram.com/p/C0f9W5aIxtA/", "panel_position": "right"}], "btn_tiktok": [{"action_type": "tooltip", "content": "\u003ch3\u003eTikTok Embed\u003c/h3\u003e", "title": "TikTok Embed", "panel_position": "right"}, {"action_type": "social", "provider": "tiktok", "url": "https://www.tiktok.com/@tiktok/video/7106594312293371179", "panel_position": "right"}], "btn_fb": [{"action_type": "tooltip", "content": "\u003ch3\u003eFacebook Embed\u003c/h3\u003e", "title": "Facebook Embed", "panel_position": "right"}, {"action_type": "social", "provider": "facebook", "url": "https://www.facebook.com/20531316728/posts/10154009990506729/", "panel_position": "right"}]}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 500 200\"\u003e\n  \u003c!-- Wikipedia Icon --\u003e\n  \u003cg id=\"btn_wiki\" transform=\"translate(10, 10)\" name=\"btn_wiki\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#f8f9fa\" stroke=\"#a2a9b1\" stroke-width=\"2\"/\u003e\n    \u003ctext x=\"40\" y=\"55\" font-family=\"serif\" font-size=\"45\" text-anchor=\"middle\" fill=\"#202122\"\u003eW\u003c/text\u003e\n  \u003c/g\u003e\n\n  \u003c!-- Instagram Logo --\u003e\n  \u003cg id=\"btn_insta\" transform=\"translate(110, 10)\" name=\"btn_insta\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#C13584\"/\u003e\n    \u003cpath d=\"M40 25c-8.3 0-15 6.7-15 15s6.7 15 15 15 15-6.7 15-15-6.7-15-15-15zm0 24.5c-5.2 0-9.5-4.3-9.5-9.5S34.8 30.5 40 30.5 49.5 34.8 49.5 40 45.2 49.5 40 49.5zm9.8-19.3c-2 0-3.6-1.6-3.6-3.6s1.6-3.6 3.6-3.6 3.6 1.6 3.6 3.6-1.6 3.6-3.6 3.6zM60 40c0-6.1-.1-12.1-.4-18.1-.3-6.5-5.2-11.4-11.7-11.7C41.9 9.9 35.9 9.8 29.8 9.8s-12.1.1-18.1.4c-6.5.3-11.4 5.2-11.7 11.7C-.1 27.9-.2 33.9-.2 40s.1 12.1.4 18.1c.3 6.5 5.2 11.4 11.7 11.7 6.1.3 12.1.4 18.1.4s12.1-.1 18.1-.4c6.5-.3 11.4-5.2 11.7-11.7.3-6 .4-12 .4-18.1zM54 53.6c-1.3 3.3-3.8 5.8-7.1 7.1-4.9 1.9-16.5 1.5-26.9 1.5-10.4 0-22 .4-26.9-1.5-3.3-1.3-5.8-3.8-7.1-7.1-1.9-4.9-1.5-16.5-1.5-26.9 0-10.4-.4-22 1.5-26.9 1.3-3.3 3.8-5.8 7.1-7.1C18-.2 29.6.2 40 .2c10.4 0 22-.4 26.9 1.5 3.3 1.3 5.8 3.8 7.1 7.1 1.9 4.9 1.5 16.5 1.5 26.9 0 10.4.4 22-1.5 26.9z\" fill=\"white\" transform=\"scale(0.8) translate(10, 10)\"/\u003e\n  \u003c/g\u003e\n\n  \u003c!-- TikTok Logo --\u003e\n  \u003cg id=\"btn_tiktok\" transform=\"translate(210, 10)\" name=\"btn_tiktok\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#000000\"/\u003e\n    \u003cpath d=\"M47.7 21v14.1c4.5 0 8.5 2.1 11.3 5.4V26.4c-2.8-1-5.9-1.5-9.1-1.5v-3.9zm-13.6 0v27.2c0 3.7-3 6.8-6.8 6.8s-6.8-3-6.8-6.8 3-6.8 6.8-6.8c1.3 0 2.5.4 3.5 1.1v-6.9c-1.1-.6-2.3-1-3.5-1-7.5 0-13.6 6.1-13.6 13.6s6.1 13.6 13.6 13.6 13.6-6.1 13.6-13.6V21H34.1z\" fill=\"white\" transform=\"scale(1.2) translate(12, 10)\"/\u003e\n  \u003c/g\u003e\n  \n  \u003c!-- Website Iframe Logo --\u003e\n  \u003cg id=\"btn_web\" transform=\"translate(310, 10)\" name=\"btn_web\"\u003e\n    \u003crect width=\"80\" height=\"80\" rx=\"15\" fill=\"#4ade80\"/\u003e\n    \u003ccircle cx=\"40\" cy=\"40\" r=\"25\" fill=\"none\" stroke=\"white\" stroke-width=\"4\"/\u003e\n    \u003cpath d=\"M15 40h50M40 15c-15 0-20 25-20 25s5 25 20 25 20-25 20-25-5-25-20-25z\" fill=\"none\" stroke=\"white\" stroke-width=\"4\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "btn_wiki", "value": 1, "tooltip": "Wikipedia API Fetch", "itemStyle": {"areaColor": "#f8f9fa"}, "emphasis": {"itemStyle": {"areaColor": "#eaecf0"}}}, {"name": "btn_insta", "value": 1, "tooltip": "Instagram Embed", "itemStyle": {"areaColor": "#c13584"}, "emphasis": {"itemStyle": {"areaColor": "#a0296e"}}}, {"name": "btn_tiktok", "value": 1, "tooltip": "TikTok Embed", "itemStyle": {"areaColor": "#333333"}, "emphasis": {"itemStyle": {"areaColor": "#111111"}}}, {"name": "btn_web", "value": 1, "tooltip": "Generic Website Embed", "itemStyle": {"areaColor": "#4ade80"}, "emphasis": {"itemStyle": {"areaColor": "#22c55e"}}}], "actions_manifest": {"btn_wiki": [{"action_type": "tooltip", "content": "\u003ch3\u003eWikipedia API Fetch\u003c/h3\u003e", "title": "Wikipedia API Fetch", "panel_position": "right"}, {"action_type": "social", "provider": "wikipedia", "url": "https://en.wikipedia.org/wiki/Python_(programming_language)", "panel_position": "right"}], "btn_insta": [{"action_type": "tooltip", "content": "\u003ch3\u003eInstagram Embed\u003c/h3\u003e", "title": "Instagram Embed", "panel_position": "right"}, {"action_type": "social", "provider": "instagram", "url": "https://www.instagram.com/p/C0f9W5aIxtA/", "panel_position": "right"}], "btn_tiktok": [{"action_type": "tooltip", "content": "\u003ch3\u003eTikTok Embed\u003c/h3\u003e", "title": "TikTok Embed", "panel_position": "right"}, {"action_type": "social", "provider": "tiktok", "url": "https://www.tiktok.com/@tiktok/video/7106594312293371179", "panel_position": "right"}], "btn_web": [{"action_type": "tooltip", "content": "\u003ch3\u003eGeneric Website Embed\u003c/h3\u003e", "title": "Generic Website Embed", "panel_position": "right"}, {"action_type": "social", "provider": "website", "url": "https://example.com", "panel_position": "right"}]}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
@@ -600,31 +600,7 @@
 
                         var validSocial = true;
 
-                        if (action.provider === 'twitter' || action.provider === 'x') {
-                            // Render a standard blockquote embed for Twitter, bypassing DOMPurify via DOM appending
-                            validSocial = false; // We won't use the standard iframe path for this one
-
-                            var tweetContainer = document.createElement('div');
-                            tweetContainer.className = 'twitter-embed-container';
-
-                            var blockquote = document.createElement('blockquote');
-                            blockquote.className = 'twitter-tweet';
-                            blockquote.setAttribute('data-theme', 'light');
-                            var a = document.createElement('a');
-                            a.href = action.url;
-                            blockquote.appendChild(a);
-
-                            var script = document.createElement('script');
-                            script.async = true;
-                            script.src = 'https://platform.twitter.com/widgets.js';
-                            script.charset = 'utf-8';
-
-                            tweetContainer.appendChild(blockquote);
-                            tweetContainer.appendChild(script);
-
-                            // Because it's a DOM node, we'll store it in socialIframes so it gets appended safely later
-                            socialIframes.push(tweetContainer);
-                        } else if (action.provider === 'instagram') {
+                        if (action.provider === 'instagram') {
                             // Instagram native iframe embed
                             var igUrl = action.url.split('?')[0]; // remove queries
                             if (!igUrl.endsWith('/')) igUrl += '/';
@@ -637,10 +613,6 @@
                             } else {
                                 iframe.src = action.url;
                             }
-                        } else if (action.provider === 'facebook') {
-                            // Facebook native iframe embed
-                            var fbType = action.url.includes('/video') ? 'video.php' : 'post.php';
-                            iframe.src = `https://www.facebook.com/plugins/${fbType}?href=${encodeURIComponent(action.url)}&show_text=true&width=500`;
                         } else if (action.provider === 'linkedin') {
                             // LinkedIn requires the specific /embed/ URN structure
                             if (action.url.includes('/embed/')) {
@@ -648,6 +620,61 @@
                             } else {
                                 validSocial = false;
                                 htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px; margin-top:10px;">View on LinkedIn</a>`;
+                            }
+                        } else if (action.provider === 'website') {
+                            // Generic Website embed
+                            iframe.src = action.url;
+                        } else if (action.provider === 'wikipedia') {
+                            // Wikipedia via REST API (since Wikipedia enforces X-Frame-Options: deny)
+                            validSocial = false;
+
+                            var wikiContainer = document.createElement('div');
+                            wikiContainer.style.border = "1px solid #e2e8f0";
+                            wikiContainer.style.borderRadius = "8px";
+                            wikiContainer.style.padding = "20px";
+                            wikiContainer.style.fontFamily = "system-ui, -apple-system, sans-serif";
+                            wikiContainer.style.margin = "10px 0";
+                            wikiContainer.style.backgroundColor = "#fff";
+                            wikiContainer.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+
+                            wikiContainer.innerHTML = `<div style="text-align:center; padding: 20px;"><div class="sivo-loader"></div><p style="color:#64748b; font-size:14px;">Loading Wikipedia summary...</p></div>`;
+                            socialIframes.push(wikiContainer);
+
+                            // Extract title from URL (e.g., https://en.wikipedia.org/wiki/Python_(programming_language) -> Python_(programming_language))
+                            var parts = action.url.split('/wiki/');
+                            if (parts.length > 1) {
+                                var title = parts[1].split('?')[0].split('#')[0];
+                                var lang = parts[0].split('//')[1].split('.')[0]; // e.g., 'en'
+                                var apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${title}`;
+
+                                fetch(apiUrl)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        var imgHtml = '';
+                                        if (data.thumbnail && data.thumbnail.source) {
+                                            imgHtml = `<img src="${data.thumbnail.source}" style="float: right; margin: 0 0 15px 15px; max-width: 120px; border-radius: 4px; border: 1px solid #e2e8f0;">`;
+                                        }
+
+                                        wikiContainer.innerHTML = `
+                                            <div style="display: flex; align-items: center; margin-bottom: 15px; gap: 10px;">
+                                                <svg viewBox="0 0 512 512" style="width: 24px; height: 24px; fill: #000;"><path d="M495 194.2c2.5-12.2-6.6-23.7-18.9-23.7h-92.4l-75.9 203.4h-3.4L230 170.5h-92.4c-12.3 0-21.4 11.5-18.9 23.7 20.3 98.4 51.5 252 56 274.5 2.1 10.6 11.4 18.5 22.3 18.5h63c10.8 0 20-7.8 22.1-18.4l51.5-247.9h3.3l52.1 247.9c2.1 10.6 11.3 18.4 22.1 18.4h63.2c10.9 0 20.2-7.9 22.3-18.5 4.5-22.5 35.7-176.1 56-274.5zM17 194.2C19.5 182 10.4 170.5-1.9 170.5H-39v44h15l-44 213h-15v44h90v-44H-8l44-213h15c12.3 0 21.4-11.5 18.9-23.7z"/></svg>
+                                                <h3 style="margin: 0; font-size: 1.25rem; color: #0f172a; flex-grow: 1;"><a href="${action.url}" target="_blank" style="color: inherit; text-decoration: none;">${data.title}</a></h3>
+                                            </div>
+                                            <div style="clear: both; font-size: 14px; line-height: 1.6; color: #334155;">
+                                                ${imgHtml}
+                                                <p style="margin-top:0;"><strong>${data.description || ''}</strong></p>
+                                                <p>${data.extract}</p>
+                                            </div>
+                                            <div style="margin-top: 15px; text-align: right;">
+                                                <a href="${action.url}" target="_blank" style="color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 500;">Read more on Wikipedia →</a>
+                                            </div>
+                                        `;
+                                    })
+                                    .catch(err => {
+                                        wikiContainer.innerHTML = `<div style="color: #ef4444; padding: 15px;">Failed to load Wikipedia summary. <a href="${action.url}" target="_blank">View page directly</a>.</div>`;
+                                    });
+                            } else {
+                                wikiContainer.innerHTML = `<div style="color: #ef4444; padding: 15px;">Invalid Wikipedia URL. <a href="${action.url}" target="_blank">View page directly</a>.</div>`;
                             }
                         } else {
                             validSocial = false;

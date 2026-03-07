@@ -60,8 +60,8 @@ class FormAction(BaseAction):
 
 class SocialAction(BaseAction):
     action_type: Literal["social"] = "social"
-    provider: Literal["twitter", "x", "instagram", "tiktok", "facebook", "linkedin"] = Field(description="The social media platform provider")
-    url: str = Field(description="The URL to the social media post")
+    provider: Literal["instagram", "tiktok", "linkedin", "wikipedia", "website"] = Field(description="The platform provider or generic type")
+    url: str = Field(description="The URL to the post or page")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
 class ThemeOverride(BaseModel):
