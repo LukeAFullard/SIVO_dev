@@ -583,19 +583,31 @@
 
                         htmlContent += formHtml;
                         hasInteraction = true;
-                    } else if (action.action_type === 'pdf') {
+                    } else if (action.action_type === 'document') {
                         hasInteraction = true;
 
-                        var safePdfUrl = encodeURIComponent(action.pdf_url);
+                        var safeDocUrl = encodeURIComponent(action.document_url);
                         var iframe = document.createElement('iframe');
                         iframe.style.width = '100%';
                         iframe.style.height = '600px';
                         iframe.style.border = 'none';
                         iframe.setAttribute('allowfullscreen', 'true');
                         // Use Google Docs viewer to force in-browser rendering instead of download
-                        iframe.src = 'https://docs.google.com/gview?embedded=true&url=' + safePdfUrl;
+                        iframe.src = 'https://docs.google.com/gview?embedded=true&url=' + safeDocUrl;
 
                         // We push to socialIframes which acts as a generic post-DOMPurify node injector array
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'map') {
+                        hasInteraction = true;
+
+                        var safeLocation = encodeURIComponent(action.map_location);
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = 'https://maps.google.com/maps?q=' + safeLocation + '&output=embed';
+
                         socialIframes.push(iframe);
                     } else if (action.action_type === 'social') {
                         hasInteraction = true;

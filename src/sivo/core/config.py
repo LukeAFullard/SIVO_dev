@@ -12,7 +12,8 @@ class ElementConfig(BaseModel):
     hover_callback_event: Optional[str] = None
     hover_callback_payload: Optional[Dict[str, Any]] = None
     social: Optional[Dict[str, str]] = None
-    pdf: Optional[str] = None
+    document: Optional[str] = None
+    map_location: Optional[str] = None
     panel_position: Optional[str] = None
     open_by_default: bool = False
     color: Optional[str] = None
