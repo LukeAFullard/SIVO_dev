@@ -16,6 +16,7 @@ def main():
             {"name": "issue", "label": "Describe the Issue", "type": "textarea"}
         ],
         form_submit_event="issue_reported",
+        panel_position="left",
         hover_color="#cc0000",
         glow=True
     )
