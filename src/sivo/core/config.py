@@ -14,6 +14,12 @@ class ElementConfig(BaseModel):
     social: Optional[Dict[str, str]] = None
     document: Optional[str] = None
     map_location: Optional[str] = None
+    analytics: Optional[Dict[str, Any]] = None
+    datasource: Optional[Dict[str, str]] = None
+    external_form: Optional[Dict[str, str]] = None
+    ecommerce: Optional[Dict[str, str]] = None
+    rich_media: Optional[Dict[str, str]] = None
+    bi: Optional[Dict[str, str]] = None
     panel_position: Optional[str] = None
     open_by_default: bool = False
     color: Optional[str] = None

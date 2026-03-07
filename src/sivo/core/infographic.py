@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction
 from .config import ProjectConfig, ElementConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -74,6 +74,12 @@ class Infographic:
                     social=elem_config.social,
                     document=getattr(elem_config, 'document', None),
                     map_location=getattr(elem_config, 'map_location', None),
+                    analytics=getattr(elem_config, 'analytics', None),
+                    datasource=getattr(elem_config, 'datasource', None),
+                    external_form=getattr(elem_config, 'external_form', None),
+                    ecommerce=getattr(elem_config, 'ecommerce', None),
+                    rich_media=getattr(elem_config, 'rich_media', None),
+                    bi=getattr(elem_config, 'bi', None),
                     panel_position=elem_config.panel_position,
                     open_by_default=elem_config.open_by_default,
                     color=elem_config.color,
@@ -109,6 +115,12 @@ class Infographic:
         social: Optional[dict] = None,
         document: Optional[str] = None,
         map_location: Optional[str] = None,
+        analytics: Optional[dict] = None,
+        datasource: Optional[dict] = None,
+        external_form: Optional[dict] = None,
+        ecommerce: Optional[dict] = None,
+        rich_media: Optional[dict] = None,
+        bi: Optional[dict] = None,
         panel_position: Optional[str] = None,
         open_by_default: bool = False,
         color: Optional[str] = None,
@@ -176,6 +188,24 @@ class Infographic:
 
         if map_location:
             mapping.actions.append(MapAction(map_location=map_location, panel_position=panel_position or self.default_panel_position))
+
+        if analytics and 'provider' in analytics and 'event_name' in analytics:
+            mapping.actions.append(AnalyticsAction(provider=analytics['provider'], event_name=analytics['event_name'], payload=analytics.get('payload')))
+
+        if datasource and 'provider' in datasource and 'api_endpoint' in datasource:
+            mapping.actions.append(DataSourceAction(provider=datasource['provider'], api_endpoint=datasource['api_endpoint'], panel_position=panel_position or self.default_panel_position))
+
+        if external_form and 'provider' in external_form and 'form_url' in external_form:
+            mapping.actions.append(ExternalFormAction(provider=external_form['provider'], form_url=external_form['form_url'], panel_position=panel_position or self.default_panel_position))
+
+        if ecommerce and 'provider' in ecommerce and 'checkout_url' in ecommerce:
+            mapping.actions.append(EcommerceAction(provider=ecommerce['provider'], checkout_url=ecommerce['checkout_url'], panel_position=panel_position or self.default_panel_position))
+
+        if rich_media and 'provider' in rich_media and 'media_url' in rich_media:
+            mapping.actions.append(RichMediaAction(provider=rich_media['provider'], media_url=rich_media['media_url'], panel_position=panel_position or self.default_panel_position))
+
+        if bi and 'provider' in bi and 'dashboard_url' in bi:
+            mapping.actions.append(BIAction(provider=bi['provider'], dashboard_url=bi['dashboard_url'], panel_position=panel_position or self.default_panel_position))
 
         if color:
             mapping.theme.color = color

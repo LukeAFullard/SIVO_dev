@@ -74,6 +74,43 @@ class MapAction(BaseAction):
     map_location: str = Field(description="Location query for Google Maps")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
+class AnalyticsAction(BaseAction):
+    action_type: Literal["analytics"] = "analytics"
+    provider: Literal["google_analytics", "posthog", "plausible"] = Field(description="The analytics provider")
+    event_name: str = Field(description="The event name to track")
+    payload: Optional[dict] = Field(default=None, description="Optional payload/properties for the event")
+
+class DataSourceAction(BaseAction):
+    action_type: Literal["datasource"] = "datasource"
+    provider: Literal["google_sheets", "airtable", "notion"] = Field(description="The data source provider")
+    api_endpoint: str = Field(description="The API endpoint or URL to fetch data from")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+class ExternalFormAction(BaseAction):
+    action_type: Literal["external_form"] = "external_form"
+    provider: Literal["typeform", "jotform", "hubspot"] = Field(description="The external form provider")
+    form_url: str = Field(description="The URL of the external form to embed")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+class EcommerceAction(BaseAction):
+    action_type: Literal["ecommerce"] = "ecommerce"
+    provider: Literal["stripe", "shopify"] = Field(description="The e-commerce provider")
+    checkout_url: str = Field(description="The URL for the checkout or buy button")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+class RichMediaAction(BaseAction):
+    action_type: Literal["rich_media"] = "rich_media"
+    provider: Literal["vimeo", "wistia", "spotify", "soundcloud"] = Field(description="The rich media provider")
+    media_url: str = Field(description="The URL of the media to embed")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+class BIAction(BaseAction):
+    action_type: Literal["bi"] = "bi"
+    provider: Literal["metabase", "tableau", "powerbi"] = Field(description="The Business Intelligence provider")
+    dashboard_url: str = Field(description="The URL of the dashboard to embed")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -82,7 +119,7 @@ class ThemeOverride(BaseModel):
     glow: Optional[bool] = None
     animation: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str
