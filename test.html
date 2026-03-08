@@ -268,13 +268,14 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\n  \u003crect id=\"test_rect\" x=\"10\" y=\"10\" width=\"80\" height=\"80\" fill=\"blue\" name=\"test_rect\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "test_rect", "value": 1, "tooltip": "This is a test rectangle"}], "actions_manifest": {"test_rect": [{"action_type": "a11y", "role": "button", "tabindex": "0", "aria_label": "This is a test rectangle"}, {"action_type": "tooltip", "content": "\u003cp\u003eTest HTML\u003c/p\u003e", "title": "This is a test rectangle", "panel_position": "right"}]}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\"\u003e\n  \u003crect id=\"rectA\" x=\"20\" y=\"20\" width=\"40\" height=\"40\" fill=\"red\" name=\"rectA\"/\u003e\n  \u003crect id=\"rectB\" x=\"140\" y=\"140\" width=\"40\" height=\"40\" fill=\"blue\" name=\"rectB\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "rectA", "value": 1}, {"name": "rectB", "value": 1}], "actions_manifest": {}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
         var actionsManifest = {};
         var overlaysData = {};
+        var connectionsData = [];
         var lockZoomOut = false;
         var dataBinding = null;
 
@@ -339,10 +340,95 @@
                                 areaColor: '#ff8c00'
                             }
                         },
-                        data: echartsData
+                        data: echartsData,
+                        zlevel: 1
                     }
                 ]
             };
+
+            if (connectionsData && connectionsData.length > 0) {
+                // If using pure 'map' coordinate system instead of 'geo', ECharts doesn't readily support 'lines'.
+                // 'lines' strictly requires 'geo' or 'cartesian2d'.
+                // To get lines to work correctly with an SVG map, the standard ECharts practice is to configure the map purely within a `geo` component, and bind scatter/lines to that geo coordinate system.
+                // However, since SIVO heavily relies on the 'map' series type to handle interactions and thematic styling (choropleth, emphasis, tooltip bindings),
+                // we must construct a hidden `geo` component that perfectly mirrors the map's aspect ratio and zoom scale.
+
+                if (!option.geo) {
+                    option.geo = {
+                        map: mapName,
+                        roam: true,
+                        layoutCenter: ['50%', '50%'],
+                        layoutSize: '100%',
+                        itemStyle: {
+                            color: 'transparent',
+                            borderColor: 'transparent'
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: 'transparent',
+                                borderColor: 'transparent'
+                            },
+                            label: { show: false }
+                        },
+                        zlevel: 0
+                    };
+
+                    // Crucial: Bind the primary series to the new geo component to sync transformations
+                    option.series[0].geoIndex = 0;
+                }
+
+                var linesData = connectionsData.map(function(conn) {
+                    return {
+                        coords: [
+                            [conn.coords[0][0], conn.coords[0][1]],
+                            [conn.coords[1][0], conn.coords[1][1]]
+                        ],
+                        lineStyle: {
+                            color: conn.color,
+                            width: conn.width,
+                            type: conn.type,
+                            opacity: conn.opacity
+                        },
+                        name: conn.label
+                    };
+                });
+
+                option.series.push({
+                    type: 'lines',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    polyline: false,
+                    effect: {
+                        show: true,
+                        period: connectionsData[0].animation_speed || 3,
+                        trailLength: 0.7,
+                        color: '#fff',
+                        symbolSize: 3
+                    },
+                    lineStyle: {
+                        color: function(params) { return params.data.lineStyle.color; },
+                        width: 0,
+                        curveness: 0.2
+                    },
+                    data: linesData
+                });
+
+                // Add the static solid line underneath the effect
+                option.series.push({
+                    type: 'lines',
+                    coordinateSystem: 'geo',
+                    zlevel: 1,
+                    polyline: false,
+                    lineStyle: {
+                        color: function(params) { return params.data.lineStyle.color; },
+                        width: function(params) { return params.data.lineStyle.width; },
+                        opacity: function(params) { return params.data.lineStyle.opacity; },
+                        type: function(params) { return params.data.lineStyle.type; },
+                        curveness: 0.2
+                    },
+                    data: linesData
+                });
+            }
 
             if (dataBinding) {
                 option.visualMap = {
@@ -428,7 +514,7 @@
                 }
                 tableHtml += `</tbody></table>`;
                 var dataSummary = document.createElement('div');
-                dataSummary.innerHTML = tableHtml;
+                dataSummary.innerHTML = sanitizeHTML(tableHtml);
                 a11yContainer.appendChild(dataSummary);
             }
 
@@ -532,6 +618,7 @@
             echartsData = view.echarts_data;
             actionsManifest = view.actions_manifest;
             overlaysData = view.overlays;
+            connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
             dataBinding = view.data_binding || null;
 

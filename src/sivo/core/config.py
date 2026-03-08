@@ -41,6 +41,16 @@ class DataBindingConfig(BaseModel):
     min_val: float
     max_val: float
 
+class ConnectionConfig(BaseModel):
+    source_id: str
+    target_id: str
+    label: str = ""
+    color: str = "#ff3333"
+    width: float = 2.0
+    animation_speed: float = 3.0
+    type: str = "solid"
+    opacity: float = 0.6
+
 class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
@@ -59,6 +69,10 @@ class ProjectConfig(BaseModel):
     mappings: Dict[str, ElementConfig] = Field(
         default_factory=dict,
         description="Dictionary mapping element IDs to their configuration."
+    )
+    connections: List[ConnectionConfig] = Field(
+        default_factory=list,
+        description="List of connections to draw between elements."
     )
     data_binding: Optional[DataBindingConfig] = Field(
         default=None,
