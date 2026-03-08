@@ -23,6 +23,8 @@ class ElementConfig(BaseModel):
     echarts_option: Optional[Dict[str, Any]] = None
     panel_position: Optional[str] = None
     open_by_default: bool = False
+    zoom_on_click: bool = False
+    zoom_level: float = 2.0
     color: Optional[str] = None
     hover_color: Optional[str] = None
     border_width: Optional[float] = None

@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -88,6 +88,8 @@ class Infographic:
                     echarts_option=getattr(elem_config, 'echarts_option', None),
                     panel_position=elem_config.panel_position,
                     open_by_default=elem_config.open_by_default,
+                    zoom_on_click=elem_config.zoom_on_click,
+                    zoom_level=elem_config.zoom_level,
                     color=elem_config.color,
                     hover_color=elem_config.hover_color,
                     border_width=elem_config.border_width,
@@ -131,6 +133,8 @@ class Infographic:
         echarts_option: Optional[dict] = None,
         panel_position: Optional[str] = None,
         open_by_default: bool = False,
+        zoom_on_click: bool = False,
+        zoom_level: float = 2.0,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
         border_width: Optional[float] = None,
@@ -150,6 +154,11 @@ class Infographic:
 
         if open_by_default:
             mapping.open_by_default = True
+
+        if zoom_on_click:
+            center = self.get_element_center(element_id)
+            if center:
+                mapping.actions.append(ZoomAction(center=center, zoom_level=zoom_level))
 
         if html or tooltip:
             mapping.actions.append(TooltipAction(
