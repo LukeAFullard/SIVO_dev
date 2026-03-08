@@ -128,6 +128,12 @@ class ZoomAction(BaseAction):
     center: list[float] = Field(description="The [x, y] center coordinate of the element to zoom to")
     zoom_level: float = Field(default=2.0, description="The ECharts zoom magnification level")
 
+class A11yAction(BaseAction):
+    action_type: Literal["a11y"] = "a11y"
+    role: str = Field(default="button", description="The ARIA role for the interactive element")
+    tabindex: str = Field(default="0", description="The tabindex for keyboard navigation")
+    aria_label: str = Field(description="The screen reader accessible label for the element")
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -136,7 +142,7 @@ class ThemeOverride(BaseModel):
     glow: Optional[bool] = None
     animation: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str
