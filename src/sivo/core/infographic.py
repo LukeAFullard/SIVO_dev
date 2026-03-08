@@ -321,6 +321,15 @@ class Infographic:
             play_interval=play_interval
         )
 
+    def bind_live(self, url: str, topic: str, auth_token: Optional[str] = None):
+        """Binds a WebSocket connection for live UI updates via the frontend runtime."""
+        from .config import LiveBindingConfig
+        self.live_binding = LiveBindingConfig(
+            url=url,
+            topic=topic,
+            auth_token=auth_token
+        )
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.

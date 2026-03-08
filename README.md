@@ -100,6 +100,21 @@ if result:
 
 ## Advanced Usage
 
+### End-to-End (E2E) Browser Testing (Non-Default)
+For enterprise use-cases, it is highly recommended to enable E2E testing to ensure custom interactive SVGs scale correctly across browsers without regressions.
+
+To enable scaffolding for Playwright, set the `enable_e2e_testing` flag in `ProjectConfig` to `True`. Then run tests using:
+```bash
+playwright install --with-deps chromium
+pytest tests/e2e
+```
+
+### JavaScript Bundling (Non-Default)
+By default, SIVO relies on CDN links (e.g., ECharts) to render the map quickly. If you want to bundle JS locally for offline environments or better minify assets, set `build_js=True` in your `ProjectConfig` or call `sivo_app.build_javascript()`. SIVO will invoke a JS bundler pipeline before generating the HTML output.
+
+### Real-time Telemetry (LiveBindingConfig)
+SIVO supports native WebSocket/PubSub integration to push real-time state changes directly to the browser (bypassing Streamlit). Use `sivo_app.bind_live("wss://your-broker", "sensor_data")` to connect the interactive canvas to a live data feed.
+
 ### Declarative Configuration (JSON)
 For complex deployments or low-code environments, SIVO can be entirely configured via a JSON file.
 

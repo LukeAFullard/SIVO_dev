@@ -136,6 +136,53 @@ class Sivo:
         """
         self.infographic.bind_timeline(data, key, colors, min_val, max_val, auto_play, play_interval)
 
+    def bind_live(self, url: str, topic: str, auth_token: Optional[str] = None):
+        """
+        Binds a WebSocket/PubSub connection to dynamically mutate the ECharts canvas based on live
+        telemetry data, completely bypassing Streamlit re-renders.
+        """
+        self.infographic.bind_live(url, topic, auth_token)
+
+    def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
+        """
+        Non-default option: Triggers a JavaScript bundler (e.g., esbuild) to minify and
+        bundle frontend assets instead of relying on CDN links.
+        Requires Node.js and 'npm install' to have been run.
+        """
+        import subprocess
+        import os
+        print(f"SIVO Build System: Bundling JS assets from {entry_point} -> {output_dir}")
+        if not os.path.exists("package.json"):
+            print("Warning: package.json not found. Generating default package.json for esbuild...")
+            import json
+            pkg_data = {
+                "name": "sivo",
+                "scripts": {
+                    "build": f"esbuild {entry_point} --bundle --minify --outfile={output_dir}/sivo.min.js"
+                },
+                "dependencies": {
+                    "echarts": "^5.5.0",
+                    "dompurify": "^3.0.6",
+                    "marked": "^12.0.0"
+                },
+                "devDependencies": {
+                    "esbuild": "^0.20.0"
+                }
+            }
+            with open("package.json", "w") as f:
+                json.dump(pkg_data, f, indent=2)
+        try:
+            print("Running 'npm install'...")
+            subprocess.run(["npm", "install"], check=True)
+            print("Running 'npm run build'...")
+            subprocess.run(["npm", "run", "build"], check=True)
+            self.infographic.build_js = True
+            print(f"Successfully bundled JS to {output_dir}/sivo.min.js")
+        except FileNotFoundError:
+            print("Error: npm or node not found in PATH. Please install Node.js to use JS bundling.")
+        except subprocess.CalledProcessError as e:
+            print(f"Build failed: {e}")
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.
@@ -190,6 +237,8 @@ class Sivo:
             view_data["data_binding"] = self.infographic.data_binding.model_dump()
         if self.infographic.timeline_binding:
             view_data["timeline_binding"] = self.infographic.timeline_binding.model_dump()
+        if hasattr(self.infographic, "live_binding") and self.infographic.live_binding:
+            view_data["live_binding"] = self.infographic.live_binding.model_dump()
         return view_data
 
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
