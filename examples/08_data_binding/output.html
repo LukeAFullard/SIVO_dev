@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIVO Interactive Graphic</title>
+    <!-- Include ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <!-- Include DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <!-- Include marked.js for Markdown Action -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+        #chart-container {
+            flex: 1;
+            height: 100%;
+        }
+        #info-panel {
+            background: #f9f9f9;
+            display: none;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        #info-panel.active {
+            display: flex;
+        }
+
+        .info-panel-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 15px;
+            background: #fff;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .info-panel-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        /* Layout modifiers for info-panel */
+        #info-panel.pos-right {
+            width: 300px;
+            height: 100%;
+            border-left: 1px solid #ddd;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-left {
+            width: 300px;
+            height: 100%;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        #info-panel.pos-bottom {
+            width: 100%;
+            height: 300px;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        #info-panel.pos-top {
+            width: 100%;
+            height: 300px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        /* Responsive Layout Overrides */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column !important;
+            }
+            #info-panel.active {
+                width: 100% !important;
+                height: 50vh !important;
+                border: none !important;
+                border-top: 1px solid #ddd !important;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
+            }
+            .sivo-resizer {
+                display: none !important;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+            #info-panel {
+                background: #1e1e1e;
+            }
+            .info-panel-header {
+                background: #252525;
+                border-bottom: 1px solid #333;
+            }
+            .close-btn {
+                background: #333;
+                color: #ddd;
+            }
+            .close-btn:hover {
+                background: #444;
+                color: #fff;
+            }
+            #info-panel.pos-right, #info-panel.pos-left {
+                border-color: #333;
+            }
+            #info-panel.pos-bottom, #info-panel.pos-top {
+                border-color: #333;
+            }
+            .sivo-resizer {
+                background-color: #333;
+            }
+            .sivo-resizer:hover {
+                background-color: #555;
+            }
+            .zoom-btn {
+                background: #252525;
+                border-color: #444;
+                color: #ccc;
+            }
+            .zoom-btn:hover {
+                background: #333;
+                color: #fff;
+            }
+        }
+
+        .sivo-resizer {
+            display: none;
+            background-color: #eee;
+            z-index: 10;
+        }
+        .sivo-resizer:hover {
+            background-color: #ccc;
+        }
+
+        /* Resizer orientations */
+        .sivo-resizer.resizer-horizontal {
+            width: 5px;
+            cursor: col-resize;
+            height: 100%;
+        }
+        .sivo-resizer.resizer-vertical {
+            height: 5px;
+            cursor: row-resize;
+            width: 100%;
+        }
+        .sivo-resizer.active {
+            display: block;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+            background: #eee;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+        .close-btn:hover {
+            background: #ddd;
+            color: #000;
+        }
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1000;
+        }
+        .zoom-btn {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: #555;
+            user-select: none;
+        }
+        .zoom-btn:hover {
+            background: #f0f0f0;
+            color: #000;
+        }
+
+        /* Standard SIVO Animations */
+        @keyframes sivo-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .sivo-anim-pulse {
+            animation: sivo-pulse 2s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        @keyframes sivo-fade {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .sivo-anim-fade {
+            animation: sivo-fade 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chart-container"></div>
+    <div id="sivo-resizer" class="sivo-resizer"></div>
+    <div class="zoom-controls">
+        <div class="zoom-btn" onclick="zoomIn()">+</div>
+        <div class="zoom-btn" onclick="zoomOut()">-</div>
+        <div class="zoom-btn" onclick="resetZoom()">⌂</div>
+    </div>
+    <div id="info-panel">
+        <div class="info-panel-header">
+            <button class="close-btn" onclick="closePanel()" title="Close panel">×</button>
+        </div>
+        <div class="info-panel-content">
+            <div id="info-content-host"></div>
+        </div>
+    </div>
+
+    <script>
+        var chartDom = document.getElementById('chart-container');
+        var myChart = echarts.init(chartDom);
+
+        // Multi-view data injected from Python
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\"\u003e\n    \u003crect id=\"TX\" x=\"10\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"TX\"/\u003e\n    \u003crect id=\"CA\" x=\"110\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"CA\"/\u003e\n    \u003crect id=\"NY\" x=\"10\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"NY\"/\u003e\n    \u003crect id=\"WY\" x=\"110\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"WY\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "TX", "value": 1, "tooltip": "State: TX"}, {"name": "CA", "value": 1, "tooltip": "State: CA"}, {"name": "NY", "value": 1, "tooltip": "State: NY"}, {"name": "WY", "value": 1, "tooltip": "State: WY"}], "actions_manifest": {"TX": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "CA": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "NY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "WY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}]}, "overlays": {}, "data_binding": {"data": {"TX": {"sales": 15000.0}, "CA": {"sales": 22000.0}, "NY": {"sales": 8000.0}, "WY": {"sales": 500.0}}, "key": "sales", "colors": ["#e0f3db", "#43a2ca"], "min_val": 0.0, "max_val": 25000.0}}};
+        var currentViewId = "default_view";
+
+        // Active variables for the current view
+        var echartsData = [];
+        var actionsManifest = {};
+        var overlaysData = {};
+        var lockZoomOut = false;
+        var dataBinding = null;
+
+        // History for back navigation
+        var viewHistory = [];
+        var currentZoom = 1;
+        var currentCenter = null;
+
+        function getBaseOption(mapName) {
+            var option = {
+                aria: {
+                    enabled: true,
+                    decal: {
+                        show: false
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
+                    formatter: function (params) {
+                        var dataIndex = echartsData.findIndex(item => item.name === params.name);
+                        var tooltipContent = params.name;
+
+                        if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
+                            tooltipContent = echartsData[dataIndex].tooltip;
+                        }
+
+                        if (dataBinding && dataBinding.data && dataBinding.data[params.name]) {
+                            var val = dataBinding.data[params.name][dataBinding.key];
+                            if (val !== undefined) {
+                                tooltipContent += '<br/>' + dataBinding.key + ': <b>' + val + '</b>';
+                            }
+                        }
+
+                        return tooltipContent;
+                    }
+                },
+                series: [
+                    {
+                        name: 'SIVO Series',
+                        type: 'map',
+                        map: mapName,
+                        roam: true, // Enable zoom and pan
+                        itemStyle: {
+                            borderColor: '#999',
+                            borderWidth: 1,
+                            areaColor: '#eee'
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#ffd700', // Highlight color
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            label: {
+                                show: false
+                            }
+                        },
+                        select: {
+                            itemStyle: {
+                                areaColor: '#ff8c00'
+                            }
+                        },
+                        data: echartsData
+                    }
+                ]
+            };
+
+            if (dataBinding) {
+                option.visualMap = {
+                    min: dataBinding.min_val,
+                    max: dataBinding.max_val,
+                    left: 'left',
+                    bottom: 'bottom',
+                    text: [dataBinding.max_val.toString(), dataBinding.min_val.toString()],           // 文本，默认为数值文本
+                    calculable: true,
+                    inRange: {
+                        color: dataBinding.colors
+                    }
+                };
+            }
+
+            return option;
+        }
+
+        var animationInterval = null;
+
+        function applyAnimations() {
+            // Clear any existing interval to prevent memory leaks and erratic stacked animations during drill-downs
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+
+            // ECharts uses Canvas or SVG.
+            // If it's SVG renderer, we can apply classes.
+            // But since ECharts defaults to canvas, animating individual geo regions via CSS is hard.
+            // Instead, we will use a workaround: ECharts doesn't support CSS animations on canvas paths easily.
+            // If an animation is set, we will use setInterval to mutate the ECharts option instead for basic effects,
+            // or if it's rendered as SVG (which echarts map allows), we can query the dom.
+            // For now, if we want robust canvas animation, we just toggle emphasis state.
+
+            var option = myChart.getOption();
+            var seriesData = option.series[0].data;
+            var animatedItems = seriesData.filter(d => d.animation_class);
+
+            if (animatedItems.length === 0) return;
+
+            // Simple toggle for 'pulse' or 'fade' via ECharts itemStyle opacity
+            let toggle = false;
+            animationInterval = setInterval(() => {
+                toggle = !toggle;
+                var currentOption = myChart.getOption();
+                var currentData = currentOption.series[0].data;
+                var updated = false;
+
+                currentData.forEach((item, index) => {
+                    if (item.animation_class === 'fade') {
+                        if (!item.itemStyle) item.itemStyle = {};
+                        item.itemStyle.opacity = toggle ? 0.3 : 1.0;
+                        updated = true;
+                    } else if (item.animation_class === 'pulse') {
+                        // For pulse on canvas, we can fake it by highlighting
+                        if (toggle) {
+                            myChart.dispatchAction({ type: 'highlight', name: item.name });
+                        } else {
+                            myChart.dispatchAction({ type: 'downplay', name: item.name });
+                        }
+                    }
+                });
+
+                if (updated) {
+                    myChart.setOption({ series: [{ data: currentData }] });
+                }
+            }, 1000);
+        }
+
+        function renderView(viewId, isBackNavigation) {
+            if (!viewsData[viewId]) {
+                console.error("View not found:", viewId);
+                return;
+            }
+
+            if (!isBackNavigation && currentViewId && currentViewId !== viewId) {
+                viewHistory.push(currentViewId);
+            }
+
+            currentViewId = viewId;
+            var view = viewsData[viewId];
+
+            // Extract view-specific active data
+            echartsData = view.echarts_data;
+            actionsManifest = view.actions_manifest;
+            overlaysData = view.overlays;
+            lockZoomOut = view.lock_zoom_out || false;
+            dataBinding = view.data_binding || null;
+
+            if (dataBinding && dataBinding.data) {
+                // Populate Echarts data with values for visualMap
+                for (var i = 0; i < echartsData.length; i++) {
+                    var itemName = echartsData[i].name;
+                    if (dataBinding.data[itemName] && dataBinding.data[itemName][dataBinding.key] !== undefined) {
+                        echartsData[i].value = dataBinding.data[itemName][dataBinding.key];
+                    }
+                }
+            }
+
+            // Register and set ECharts map
+            var baseOpt = getBaseOption(viewId);
+            if (lockZoomOut) {
+                baseOpt.series[0].scaleLimit = { min: 1.0 };
+            }
+            echarts.registerMap(viewId, { svg: view.svg_string });
+            myChart.setOption(baseOpt, true);
+
+            // Reset zoom tracking
+            currentZoom = 1;
+            currentCenter = null;
+
+            // Re-initialize overlays for this view
+            initOverlays();
+            setTimeout(updateOverlaysPosition, 50);
+
+            // Close info panel on transition
+            closePanel();
+
+            // Start animations if any
+            applyAnimations();
+
+            // Handle elements marked to open by default
+            echartsData.forEach(function(item) {
+                if (item.open_by_default) {
+                    setTimeout(() => {
+                        myChart.dispatchAction({
+                            type: 'showTip',
+                            name: item.name
+                        });
+                        // trigger click to open panel or specific action automatically
+                        myChart.trigger('click', { componentType: 'series', name: item.name });
+                    }, 500); // Wait a half second for the map to finish rendering
+                }
+            });
+        }
+
+        function zoomIn() {
+            var option = myChart.getOption();
+            var series = option.series[0];
+            currentZoom = (series.zoom || 1) * 1.5;
+            myChart.setOption({
+                series: [{
+                    zoom: currentZoom
+                }]
+            });
+        }
+
+        function zoomOut() {
+            var option = myChart.getOption();
+            var series = option.series[0];
+            var newZoom = (series.zoom || 1) / 1.5;
+
+            if (lockZoomOut && newZoom < 1.0) {
+                newZoom = 1.0;
+            }
+
+            currentZoom = newZoom;
+            myChart.setOption({
+                series: [{
+                    zoom: currentZoom
+                }]
+            });
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            myChart.setOption({
+                series: [{
+                    zoom: 1,
+                    center: null
+                }]
+            });
+        }
+
+        // Setup Shadow DOM for info-content
+        var infoContentHost = document.getElementById('info-content-host');
+        var infoContentShadow = infoContentHost.attachShadow({mode: 'open'});
+        var infoContent = document.createElement('div');
+        infoContentShadow.appendChild(infoContent);
+
+        // Introduce a lightweight client-side sanitizer
+        function sanitizeHTML(str) {
+            if (typeof DOMPurify !== 'undefined') {
+                return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
+            }
+            // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
+            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Handle click events
+        myChart.on('click', function (params) {
+            var infoPanel = document.getElementById('info-panel');
+            var name = params.name;
+
+            var elementActions = actionsManifest[name];
+            var htmlContent = '';
+            var hasInteraction = false;
+            var panelPosition = 'right'; // Default
+            var socialIframes = []; // Store secure iframes to append after DOMPurify
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.panel_position) {
+                        panelPosition = action.panel_position;
+                    }
+                    if (action.action_type === 'tooltip') {
+                        htmlContent += action.content;
+                        hasInteraction = true;
+                    } else if (action.action_type === 'url') {
+                        window.open(action.url, action.target);
+                    } else if (action.action_type === 'drilldown') {
+                        // Check if it's an internal multi-view drill down
+                        if (viewsData[action.target_svg]) {
+                            console.log('Switching view to:', action.target_svg);
+                            renderView(action.target_svg, false);
+                        } else {
+                            // Fallback to legacy external fetch
+                            console.log('Fetching external drilldown:', action.target_svg);
+                            fetch(action.target_svg)
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.text();
+                                })
+                                .then(svgText => {
+                                    // Register each new SVG map with a unique name (the filepath) to prevent ECharts from serving a cached map.
+                                    echarts.registerMap(action.target_svg, { svg: svgText });
+                                    // Set simple generic option since it's external and lacks internal map data
+                                    var extOption = getBaseOption(action.target_svg);
+                                    extOption.series[0].data = [];
+                                    myChart.setOption(extOption, true);
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching SVG:', error);
+                                    alert('Could not load ' + action.target_svg);
+                                });
+                        }
+                    } else if (action.action_type === 'video') {
+                        // Display built-in video modal
+                        var videoModal = document.getElementById('sivo-video-modal');
+                        var videoWrapper = document.getElementById('sivo-video-wrapper');
+                        if (videoModal && videoWrapper) {
+                            videoWrapper.innerHTML = `<iframe src="${action.video_url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                            videoModal.classList.add('active');
+                        }
+
+                    } else if (action.action_type === 'markdown') {
+                        // Parse markdown to HTML
+                        htmlContent += marked.parse(action.markdown_text);
+                        hasInteraction = true;
+                    } else if (action.action_type === 'audio') {
+                        // Play audio
+                        var audio = new Audio(action.audio_url);
+                        audio.play();
+                    } else if (action.action_type === 'fetch') {
+                        // Fetch data and display in info panel
+                        htmlContent += `<div id="sivo-fetch-container-${name}"><em>Loading data...</em></div>`;
+                        hasInteraction = true;
+                        fetch(action.fetch_url)
+                            .then(response => response.text())
+                            .then(data => {
+                                // Basic attempt to pretty-print JSON if it is JSON
+                                try {
+                                    var jsonData = JSON.parse(data);
+                                    data = '<pre>' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                } catch (e) {
+                                    // Not JSON, keep as text
+                                }
+                                var container = document.getElementById(`sivo-fetch-container-${name}`);
+                                if (container) container.innerHTML = sanitizeHTML(data);
+                            })
+                            .catch(err => {
+                                var container = document.getElementById(`sivo-fetch-container-${name}`);
+                                if (container) container.innerHTML = `<span style="color:red">Failed to fetch data</span>`;
+                            });
+                    } else if (action.action_type === 'gallery') {
+                        // Built-in gallery modal
+                        var galleryModal = document.getElementById('sivo-gallery-modal');
+                        var galleryWrapper = document.getElementById('sivo-gallery-wrapper');
+                        if (galleryModal && galleryWrapper && action.images.length > 0) {
+                            var imgHtml = `<img src="${action.images[0]}" style="max-width:100%; max-height:80vh; border-radius:4px;" />`;
+
+                            // If multiple images, add simple navigation
+                            if (action.images.length > 1) {
+                                imgHtml += `<div style="text-align:center; margin-top:10px; color:white;">`;
+                                action.images.forEach((img, idx) => {
+                                    imgHtml += `<span style="display:inline-block; width:10px; height:10px; background:${idx===0?'white':'#555'}; border-radius:50%; margin:0 5px; cursor:pointer;" onclick="sivoUpdateGallery('${img}', this)"></span>`;
+                                });
+                                imgHtml += `</div>`;
+                            }
+
+                            galleryWrapper.innerHTML = imgHtml;
+                            galleryModal.classList.add('active');
+                        }
+                    } else if (action.action_type === 'form') {
+                        var formHtml = `<form id="sivo-form-${name}" onsubmit="event.preventDefault(); sivoSubmitForm('${name}', '${action.submit_event}', this)">`;
+                        action.form_fields.forEach(field => {
+                            formHtml += `<div style="margin-bottom:10px;">`;
+                            formHtml += `<label style="display:block; margin-bottom:5px; font-weight:bold;">${field.label || field.name}</label>`;
+                            if (field.type === 'textarea') {
+                                formHtml += `<textarea name="${field.name}" style="width:100%; padding:5px; border:1px solid #ccc; border-radius:4px;" required></textarea>`;
+                            } else {
+                                formHtml += `<input type="${field.type || 'text'}" name="${field.name}" style="width:100%; padding:5px; border:1px solid #ccc; border-radius:4px;" required />`;
+                            }
+                            formHtml += `</div>`;
+                        });
+                        formHtml += `<button type="submit" style="background:#007bff; color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; width:100%;">Submit</button>`;
+                        formHtml += `</form>`;
+
+                        htmlContent += formHtml;
+                        hasInteraction = true;
+                    } else if (action.action_type === 'document') {
+                        hasInteraction = true;
+
+                        var safeDocUrl = encodeURIComponent(action.document_url);
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        // Use Google Docs viewer to force in-browser rendering instead of download
+                        iframe.src = 'https://docs.google.com/gview?embedded=true&url=' + safeDocUrl;
+
+                        // We push to socialIframes which acts as a generic post-DOMPurify node injector array
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'map') {
+                        hasInteraction = true;
+
+                        var safeLocation = encodeURIComponent(action.map_location);
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = 'https://maps.google.com/maps?q=' + safeLocation + '&output=embed';
+
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'social') {
+                        hasInteraction = true;
+                        var height = '600px'; // default
+
+                        // We construct the iframe DOM element directly
+                        // Using official iframe embed URLs provided by platforms to avoid cross-origin and sandbox execution errors
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = height;
+                        iframe.style.border = 'none';
+                        iframe.style.overflow = 'hidden';
+                        iframe.setAttribute('scrolling', 'yes');
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share');
+
+                        var validSocial = true;
+
+                        if (action.provider === 'instagram') {
+                            // Instagram native iframe embed
+                            var igUrl = action.url.split('?')[0]; // remove queries
+                            if (!igUrl.endsWith('/')) igUrl += '/';
+                            iframe.src = igUrl + 'embed/';
+                        } else if (action.provider === 'tiktok') {
+                            // TikTok native iframe embed (extract video ID)
+                            var videoIdMatch = action.url.match(/video\/(\d+)/);
+                            if (videoIdMatch) {
+                                iframe.src = `https://www.tiktok.com/embed/v2/${videoIdMatch[1]}`;
+                            } else {
+                                iframe.src = action.url;
+                            }
+                        } else if (action.provider === 'linkedin') {
+                            // LinkedIn requires the specific /embed/ URN structure
+                            if (action.url.includes('/embed/')) {
+                                iframe.src = action.url;
+                            } else {
+                                validSocial = false;
+                                htmlContent += `<a href="${action.url}" target="_blank" style="display:block; padding:15px; background:#0077b5; color:white; text-align:center; text-decoration:none; border-radius:4px; margin-top:10px;">View on LinkedIn</a>`;
+                            }
+                        } else if (action.provider === 'twitch') {
+                            var parts = action.url.split('twitch.tv/');
+                            if (parts.length > 1) {
+                                var channel = parts[1].split('?')[0];
+                                iframe.src = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname || 'localhost'}`;
+                            } else {
+                                iframe.src = action.url;
+                            }
+                        } else if (action.provider === 'pinterest') {
+                            iframe.src = action.url;
+                        } else if (action.provider === 'apple_music') {
+                            var amUrl = action.url;
+                            if (!amUrl.includes('embed.music.apple.com')) {
+                                amUrl = amUrl.replace('music.apple.com', 'embed.music.apple.com');
+                            }
+                            iframe.src = amUrl;
+                            iframe.style.height = '450px';
+                        } else if (action.provider === 'reddit') {
+                            iframe.src = action.url.replace('/comments/', '/embed/');
+                        } else if (action.provider === 'website') {
+                            // Generic Website embed
+                            iframe.src = action.url;
+                        } else if (action.provider === 'wikipedia') {
+                            // Wikipedia via REST API (since Wikipedia enforces X-Frame-Options: deny)
+                            validSocial = false;
+
+                            var wikiContainer = document.createElement('div');
+                            wikiContainer.style.border = "1px solid #e2e8f0";
+                            wikiContainer.style.borderRadius = "8px";
+                            wikiContainer.style.padding = "20px";
+                            wikiContainer.style.fontFamily = "system-ui, -apple-system, sans-serif";
+                            wikiContainer.style.margin = "10px 0";
+                            wikiContainer.style.backgroundColor = "#fff";
+                            wikiContainer.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+
+                            wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="text-align:center; padding: 20px;"><div class="sivo-loader"></div><p style="color:#64748b; font-size:14px;">Loading Wikipedia summary...</p></div>`);
+                            socialIframes.push(wikiContainer);
+
+                            // Extract title from URL (e.g., https://en.wikipedia.org/wiki/Python_(programming_language) -> Python_(programming_language))
+                            var parts = action.url.split('/wiki/');
+                            if (parts.length > 1) {
+                                var title = parts[1].split('?')[0].split('#')[0];
+                                var lang = parts[0].split('//')[1].split('.')[0]; // e.g., 'en'
+                                var apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${title}`;
+
+                                // Safely encode the action URL for use in links
+                                var safeUrl = encodeURI(action.url);
+
+                                fetch(apiUrl)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        var imgHtml = '';
+                                        if (data.thumbnail && data.thumbnail.source) {
+                                            // Ensure the thumbnail source is a valid HTTPS url to prevent XSS
+                                            var safeImgUrl = encodeURI(data.thumbnail.source);
+                                            if (safeImgUrl.startsWith('https://')) {
+                                                imgHtml = `<img src="${safeImgUrl}" style="float: right; margin: 0 0 15px 15px; max-width: 120px; border-radius: 4px; border: 1px solid #e2e8f0;">`;
+                                            }
+                                        }
+
+                                        var safeTitle = data.title ? data.title.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+                                        var safeDesc = data.description ? data.description.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+                                        var safeExtract = data.extract ? data.extract.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+
+                                        wikiContainer.innerHTML = DOMPurify.sanitize(`
+                                            <div style="display: flex; align-items: center; margin-bottom: 15px; gap: 10px;">
+                                                <svg viewBox="0 0 512 512" style="width: 24px; height: 24px; fill: #000;"><path d="M495 194.2c2.5-12.2-6.6-23.7-18.9-23.7h-92.4l-75.9 203.4h-3.4L230 170.5h-92.4c-12.3 0-21.4 11.5-18.9 23.7 20.3 98.4 51.5 252 56 274.5 2.1 10.6 11.4 18.5 22.3 18.5h63c10.8 0 20-7.8 22.1-18.4l51.5-247.9h3.3l52.1 247.9c2.1 10.6 11.3 18.4 22.1 18.4h63.2c10.9 0 20.2-7.9 22.3-18.5 4.5-22.5 35.7-176.1 56-274.5zM17 194.2C19.5 182 10.4 170.5-1.9 170.5H-39v44h15l-44 213h-15v44h90v-44H-8l44-213h15c12.3 0 21.4-11.5 18.9-23.7z"/></svg>
+                                                <h3 style="margin: 0; font-size: 1.25rem; color: #0f172a; flex-grow: 1;"><a href="${safeUrl}" target="_blank" style="color: inherit; text-decoration: none;">${safeTitle}</a></h3>
+                                            </div>
+                                            <div style="clear: both; font-size: 14px; line-height: 1.6; color: #334155;">
+                                                ${imgHtml}
+                                                <p style="margin-top:0;"><strong>${safeDesc}</strong></p>
+                                                <p>${safeExtract}</p>
+                                            </div>
+                                            <div style="margin-top: 15px; text-align: right;">
+                                                <a href="${safeUrl}" target="_blank" style="color: #2563eb; text-decoration: none; font-size: 13px; font-weight: 500;">Read more on Wikipedia →</a>
+                                            </div>
+                                        `);
+                                    })
+                                    .catch(err => {
+                                        wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="color: #ef4444; padding: 15px;">Failed to load Wikipedia summary. <a href="${safeUrl}" target="_blank">View page directly</a>.</div>`);
+                                    });
+                            } else {
+                                var safeUrl = encodeURI(action.url);
+                                wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="color: #ef4444; padding: 15px;">Invalid Wikipedia URL. <a href="${safeUrl}" target="_blank">View page directly</a>.</div>`);
+                            }
+                        } else {
+                            validSocial = false;
+                        }
+
+                        if (validSocial) {
+                            socialIframes.push(iframe);
+                        }
+                    } else if (action.action_type === 'analytics') {
+                        if (action.provider === 'google_analytics' && typeof gtag === 'function') {
+                            gtag('event', action.event_name, action.payload || {});
+                        } else if (action.provider === 'posthog' && typeof posthog !== 'undefined') {
+                            posthog.capture(action.event_name, action.payload || {});
+                        } else if (action.provider === 'plausible' && typeof plausible === 'function') {
+                            plausible(action.event_name, {props: action.payload || {}});
+                        }
+                    } else if (action.action_type === 'datasource') {
+                        // Fetch data from external source and display in info panel
+                        htmlContent += `<div id="sivo-datasource-container-${name}"><em>Loading data from ${action.provider}...</em></div>`;
+                        hasInteraction = true;
+
+                        // We use a generic fetch approach here. In a real world scenario, some APIs require authentication.
+                        // For APIs that allow public unauthenticated GET requests (e.g. some published Google Sheets, Notion public pages via proxy, or Airtable public views)
+                        fetch(action.api_endpoint)
+                            .then(response => response.text())
+                            .then(data => {
+                                try {
+                                    var jsonData = JSON.parse(data);
+                                    data = '<pre>' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                } catch (e) {
+                                    // Not JSON, keep as text
+                                }
+                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                if (container) container.innerHTML = sanitizeHTML(data);
+                            })
+                            .catch(err => {
+                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                if (container) container.innerHTML = `<span style="color:red">Failed to fetch data from ${action.provider}</span>`;
+                            });
+                    } else if (action.action_type === 'external_form') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = action.form_url;
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'ecommerce') {
+                        hasInteraction = true;
+
+                        if (action.provider === 'stripe') {
+                            // Stripe payment links can be embedded or opened in a new tab.
+                            // Usually better to open in a new tab or use a button to redirect for security.
+                            htmlContent += `
+                            <div style="text-align: center; margin-top: 20px;">
+                                <h3>Purchase ${name}</h3>
+                                <a href="${action.checkout_url}" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #635bff; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 10px;">
+                                    Buy with Stripe
+                                </a>
+                            </div>`;
+                        } else if (action.provider === 'shopify') {
+                            // Basic fallback for Shopify Buy Button integration (usually requires external JS snippet)
+                            // Here we just provide a link, but this could be extended to inject the Shopify Buy Button JS.
+                            htmlContent += `
+                            <div style="text-align: center; margin-top: 20px;">
+                                <h3>Purchase ${name}</h3>
+                                <a href="${action.checkout_url}" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #96bf48; color: white; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 10px;">
+                                    Buy on Shopify
+                                </a>
+                            </div>`;
+                        }
+                    } else if (action.action_type === 'rich_media') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; picture-in-picture');
+
+                        if (action.provider === 'vimeo') {
+                            iframe.style.height = '400px';
+                            // Extract video ID from common vimeo URLs if necessary
+                            var vimeoIdMatch = action.media_url.match(/(?:vimeo\.com\/|video\/)(\d+)/);
+                            if (vimeoIdMatch) {
+                                iframe.src = `https://player.vimeo.com/video/${vimeoIdMatch[1]}`;
+                            } else {
+                                iframe.src = action.media_url;
+                            }
+                        } else if (action.provider === 'wistia') {
+                            iframe.style.height = '400px';
+                            iframe.src = action.media_url;
+                        } else if (action.provider === 'spotify') {
+                            iframe.style.height = '152px';
+                            iframe.src = action.media_url;
+                        } else if (action.provider === 'soundcloud') {
+                            iframe.style.height = '166px';
+                            iframe.src = action.media_url;
+                        }
+
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'bi') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = action.dashboard_url;
+
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'replit') {
+                        hasInteraction = true;
+                        var iframe = document.createElement('iframe');
+                        iframe.style.width = '100%';
+                        iframe.style.height = '600px';
+                        iframe.style.border = 'none';
+                        iframe.setAttribute('allowfullscreen', 'true');
+                        iframe.src = action.repl_url;
+
+                        socialIframes.push(iframe);
+                    } else if (action.action_type === 'callback') {
+                        console.log('Triggering callback:', action.event_name, action.payload);
+                        // Post message to parent window (e.g. Streamlit iframe wrapper)
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
+                    }
+                });
+            }
+
+            // Also trigger a default generic click event if there's no specific callback mapped
+            if (!elementActions || !elementActions.find(a => a.action_type === 'callback')) {
+                window.parent.postMessage({
+                    type: 'sivo_click',
+                    payload: {
+                        element_id: name,
+                        event_name: 'click',
+                        data: {}
+                    }
+                }, '*');
+            }
+
+
+            function applyPanelPosition(position) {
+                infoPanel.className = 'active'; // reset classes but keep active
+                var resizer = document.getElementById('sivo-resizer');
+                resizer.className = 'sivo-resizer active';
+
+                // On mobile we force bottom layout in CSS, so logic mostly just applies classes.
+                if (position === 'left') {
+                    document.body.style.flexDirection = 'row-reverse';
+                    infoPanel.classList.add('pos-left');
+                    resizer.classList.add('resizer-horizontal');
+                } else if (position === 'bottom') {
+                    document.body.style.flexDirection = 'column';
+                    infoPanel.classList.add('pos-bottom');
+                    resizer.classList.add('resizer-vertical');
+                } else if (position === 'top') {
+                    document.body.style.flexDirection = 'column-reverse';
+                    infoPanel.classList.add('pos-top');
+                    resizer.classList.add('resizer-vertical');
+                } else {
+                    // default right
+                    document.body.style.flexDirection = 'row';
+                    infoPanel.classList.add('pos-right');
+                    resizer.classList.add('resizer-horizontal');
+                }
+
+                // Clear any manual sizing inline styles from dragging
+                infoPanel.style.width = '';
+                infoPanel.style.height = '';
+
+                // Smoothly resize ECharts during CSS transition
+                let start = null;
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    var progress = timestamp - start;
+                    myChart.resize();
+                    if (progress < 350) { // slightly longer than CSS transition 0.3s
+                        window.requestAnimationFrame(step);
+                    }
+                }
+                window.requestAnimationFrame(step);
+            }
+
+            if (hasInteraction && (htmlContent || socialIframes.length > 0)) {
+                infoContent.innerHTML = sanitizeHTML(htmlContent);
+                // Append secure iframes created by the framework, bypassing DOMPurify
+                socialIframes.forEach(function(iframe) {
+                    infoContent.appendChild(iframe);
+                });
+                applyPanelPosition(panelPosition);
+            } else if (!hasInteraction && !elementActions) {
+                infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
+                applyPanelPosition(panelPosition);
+            } else {
+                closePanel();
+            }
+        });
+
+        // Handle hover events
+        myChart.on('mouseover', function (params) {
+            var name = params.name;
+            var elementActions = actionsManifest[name];
+
+            if (elementActions) {
+                elementActions.forEach(function(action) {
+                    if (action.action_type === 'hover_callback') {
+                        window.parent.postMessage({
+                            type: 'sivo_hover',
+                            payload: {
+                                element_id: name,
+                                event_name: action.event_name,
+                                data: action.payload || {}
+                            }
+                        }, '*');
+                    }
+                });
+            }
+        });
+
+        // Listen for messages from Streamlit
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'sivo_command') {
+                var payload = event.data.payload;
+                if (payload.command === 'zoom_to') {
+                    var elementId = payload.element_id;
+                    var zoomLevel = payload.zoom || 2;
+
+                    // We need to find the element in the map data to get its bounding box or center
+                    // ECharts geo doesn't perfectly expose region centers programmatically easily,
+                    // but we can center the map on the named region
+
+                    myChart.dispatchAction({
+                        type: 'geoSelect',
+                        name: elementId
+                    });
+
+                    if (payload.zoom_center) {
+                        myChart.setOption({
+                            series: [{
+                                center: payload.zoom_center,
+                                zoom: zoomLevel
+                            }]
+                        });
+                    }
+                } else if (payload.command === 'inject_assets') {
+                    if (payload.css) {
+                        var style = document.createElement('style');
+                        style.innerHTML = payload.css;
+                        document.head.appendChild(style);
+                    }
+                    if (payload.js) {
+                        var script = document.createElement('script');
+                        script.innerHTML = payload.js;
+                        document.body.appendChild(script);
+                    }
+                } else if (payload.command === 'update_colors') {
+                    var newColors = payload.colors;
+                    var seriesData = myChart.getOption().series[0].data;
+
+                    var updated = false;
+                    for (var i = 0; i < seriesData.length; i++) {
+                        var name = seriesData[i].name;
+                        if (newColors[name]) {
+                            if (!seriesData[i].itemStyle) {
+                                seriesData[i].itemStyle = {};
+                            }
+                            seriesData[i].itemStyle.areaColor = newColors[name];
+                            updated = true;
+                        }
+                    }
+
+                    if (updated) {
+                        myChart.setOption({
+                            series: [{
+                                data: seriesData
+                            }]
+                        });
+                    }
+                }
+            }
+        });
+
+        function closePanel() {
+            var infoPanel = document.getElementById('info-panel');
+            infoPanel.className = '';
+            infoPanel.classList.add('pos-right'); // reset to default
+            infoPanel.style.width = '';
+            infoPanel.style.height = '';
+            var resizer = document.getElementById('sivo-resizer');
+            if (resizer) resizer.className = 'sivo-resizer';
+            document.body.style.flexDirection = 'row';
+
+            // Smoothly resize ECharts during CSS transition
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                var progress = timestamp - start;
+                myChart.resize();
+                if (progress < 350) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+
+        // --- Resizer Logic ---
+        (function() {
+            const resizer = document.getElementById('sivo-resizer');
+            const panel = document.getElementById('info-panel');
+            let isResizing = false;
+            let currentLayout = 'row'; // depends on flex-direction
+            let lastDownX = 0;
+            let lastDownY = 0;
+            let startWidth = 0;
+            let startHeight = 0;
+
+            resizer.addEventListener('mousedown', function(e) {
+                isResizing = true;
+                currentLayout = document.body.style.flexDirection;
+                lastDownX = e.clientX;
+                lastDownY = e.clientY;
+                startWidth = panel.getBoundingClientRect().width;
+                startHeight = panel.getBoundingClientRect().height;
+
+                // Add a transparent overlay to capture pointer events over iframes/charts
+                let overlay = document.createElement('div');
+                overlay.id = 'sivo-drag-overlay';
+                overlay.style.position = 'fixed';
+                overlay.style.top = 0;
+                overlay.style.left = 0;
+                overlay.style.right = 0;
+                overlay.style.bottom = 0;
+                overlay.style.zIndex = 9999;
+                overlay.style.cursor = currentLayout.includes('row') ? 'col-resize' : 'row-resize';
+                document.body.appendChild(overlay);
+
+                e.preventDefault();
+            });
+
+            window.addEventListener('mousemove', function(e) {
+                if (!isResizing) return;
+
+                if (currentLayout === 'row') {
+                    // Right panel
+                    let newWidth = startWidth - (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'row-reverse') {
+                    // Left panel
+                    let newWidth = startWidth + (e.clientX - lastDownX);
+                    panel.style.width = newWidth + 'px';
+                } else if (currentLayout === 'column') {
+                    // Bottom panel
+                    let newHeight = startHeight - (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                } else if (currentLayout === 'column-reverse') {
+                    // Top panel
+                    let newHeight = startHeight + (e.clientY - lastDownY);
+                    panel.style.height = newHeight + 'px';
+                }
+
+                // Throttle resize event for performance if needed, but modern ECharts usually handles it
+                myChart.resize();
+            });
+
+            window.addEventListener('mouseup', function(e) {
+                if (isResizing) {
+                    isResizing = false;
+                    let overlay = document.getElementById('sivo-drag-overlay');
+                    if (overlay) document.body.removeChild(overlay);
+                    myChart.resize();
+                }
+            });
+        })();
+        // --- End Resizer Logic ---
+
+        // Setup Overlays
+        var overlaysContainer = document.createElement('div');
+        overlaysContainer.id = 'sivo-overlays-container';
+        overlaysContainer.style.position = 'absolute';
+        overlaysContainer.style.top = '0';
+        overlaysContainer.style.left = '0';
+        overlaysContainer.style.width = '100%';
+        overlaysContainer.style.height = '100%';
+        overlaysContainer.style.pointerEvents = 'none'; // Let clicks pass through to chart
+        document.getElementById('chart-container').appendChild(overlaysContainer);
+
+        var overlayElements = {};
+
+        function initOverlays() {
+            overlaysContainer.innerHTML = '';
+            overlayElements = {};
+
+            if (overlaysData) {
+                for (const [id, overlay] of Object.entries(overlaysData)) {
+                    var el = document.createElement('div');
+                    el.style.position = 'absolute';
+                    el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
+                    el.innerHTML = overlay.html;
+                    overlaysContainer.appendChild(el);
+                    overlayElements[id] = { dom: el, data: overlay };
+                }
+            }
+        }
+
+        function updateOverlaysPosition() {
+            var zoomLevel = currentZoom;
+
+            for (const [id, overlayObj] of Object.entries(overlayElements)) {
+                if (overlayObj.data.fixed) {
+                    // Fixed positioned overlays (like legends)
+                    overlayObj.dom.style.position = 'absolute';
+                    if (overlayObj.data.position === 'bottom-left') {
+                        overlayObj.dom.style.bottom = '20px';
+                        overlayObj.dom.style.left = '20px';
+                    }
+                    overlayObj.dom.style.display = 'block';
+                    continue;
+                }
+
+                var coord = overlayObj.data.coord; // [x, y] in SVG map coordinates
+                var offset = overlayObj.data.offset; // [x, y] pixel offset
+
+                // Convert SVG coordinate to DOM pixel coordinate
+                var pixel = myChart.convertToPixel({seriesIndex: 0}, coord);
+                if (pixel) {
+                    overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
+                    overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
+
+                    if (overlayObj.data.scale_with_zoom) {
+                        // Use a transform to scale the overlay, but preserve the origin at the point it's anchored to
+                        overlayObj.dom.style.transformOrigin = 'top left';
+                        overlayObj.dom.style.transform = 'scale(' + zoomLevel + ')';
+                    } else {
+                        overlayObj.dom.style.transform = '';
+                    }
+
+                    overlayObj.dom.style.display = 'block';
+                } else {
+                    overlayObj.dom.style.display = 'none';
+                }
+            }
+        }
+
+        // Initialize the first view
+        renderView(currentViewId, false);
+
+        // Track zoom natively from georoam events since getOption() might not update on scroll
+        myChart.on('georoam', function(params) {
+            if (params.zoom) {
+                // params.zoom is a delta multiplier, not absolute zoom
+                currentZoom *= params.zoom;
+            }
+            // If dragging, params.zoom is undefined, but we still need to update position
+            updateOverlaysPosition();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            myChart.resize();
+            updateOverlaysPosition();
+        });
+
+        // Back Navigation Button functionality
+        var backBtn = document.createElement('div');
+        backBtn.innerHTML = `
+            <svg style="width:16px; height:16px; margin-right:6px; vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span style="vertical-align:middle;">Back</span>
+        `;
+        backBtn.style.position = 'absolute';
+        backBtn.style.top = '20px';
+        backBtn.style.left = '20px';
+        backBtn.style.padding = '10px 16px';
+        backBtn.style.background = 'white';
+        backBtn.style.border = '1px solid #eaeaea';
+        backBtn.style.borderRadius = '20px'; // Pill shape
+        backBtn.style.cursor = 'pointer';
+        backBtn.style.display = 'none';
+        backBtn.style.alignItems = 'center';
+        backBtn.style.fontFamily = 'sans-serif';
+        backBtn.style.fontSize = '14px';
+        backBtn.style.fontWeight = '500';
+        backBtn.style.color = '#333';
+        backBtn.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+        backBtn.style.zIndex = '1000';
+        backBtn.style.transition = 'background 0.2s, transform 0.1s';
+
+        backBtn.addEventListener('mouseenter', () => backBtn.style.background = '#f9f9f9');
+        backBtn.addEventListener('mouseleave', () => backBtn.style.background = 'white');
+        backBtn.addEventListener('mousedown', () => backBtn.style.transform = 'scale(0.95)');
+        backBtn.addEventListener('mouseup', () => backBtn.style.transform = 'scale(1)');
+
+        document.getElementById('chart-container').appendChild(backBtn); // Append to chart container so flex layout doesn't break it
+
+        backBtn.addEventListener('click', function() {
+            if (viewHistory.length > 0) {
+                var prevView = viewHistory.pop();
+                renderView(prevView, true);
+            }
+        });
+
+        // Watch history to toggle back button visibility
+        setInterval(function() {
+            if (viewHistory.length > 0) {
+                backBtn.style.display = 'flex';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        }, 100);
+
+    </script>
+
+    <!-- Custom injected assets placeholder -->
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
+
+    <!-- SIVO Built-in Gallery Modal -->
+    <style>
+        #sivo-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        #sivo-gallery-modal.active {
+            display: flex;
+        }
+        .sivo-gallery-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+    <div id="sivo-gallery-modal">
+        <span class="sivo-gallery-close" id="sivo-gallery-close">&times;</span>
+        <div id="sivo-gallery-wrapper" style="text-align:center;"></div>
+    </div>
+    <script>
+        var sivoGalleryModal = document.getElementById('sivo-gallery-modal');
+        var sivoGalleryCloseBtn = document.getElementById('sivo-gallery-close');
+
+        function closeSivoGalleryModal() {
+            if (sivoGalleryModal) sivoGalleryModal.classList.remove('active');
+        }
+
+        if (sivoGalleryCloseBtn) sivoGalleryCloseBtn.addEventListener('click', closeSivoGalleryModal);
+
+        // Helper to update gallery image
+        function sivoUpdateGallery(src, dotEl) {
+            var wrapper = document.getElementById('sivo-gallery-wrapper');
+            if(wrapper) {
+                var img = wrapper.querySelector('img');
+                if(img) img.src = src;
+
+                // update dots
+                var dots = wrapper.querySelectorAll('span');
+                dots.forEach(d => d.style.background = '#555');
+                dotEl.style.background = 'white';
+            }
+        }
+
+        // Helper to submit forms
+        function sivoSubmitForm(elementId, eventName, formEl) {
+            var formData = new FormData(formEl);
+            var payload = {};
+            formData.forEach(function(value, key){
+                payload[key] = value;
+            });
+
+            console.log('Form submitted:', payload);
+            window.parent.postMessage({
+                type: 'sivo_click',
+                payload: {
+                    element_id: elementId,
+                    event_name: eventName,
+                    data: payload
+                }
+            }, '*');
+
+            // Show success message
+            formEl.innerHTML = '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
+        }
+    </script>
+
+    <!-- SIVO Built-in Video Modal -->
+    <style>
+        #sivo-video-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        #sivo-video-modal.active {
+            display: flex;
+        }
+        .sivo-video-content {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .sivo-video-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .sivo-video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        .sivo-video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div id="sivo-video-modal">
+        <div style="position: relative; width: 80%; max-width: 800px;">
+            <span class="sivo-video-close" id="sivo-video-close">&times;</span>
+            <div class="sivo-video-content">
+                <div class="sivo-video-container" id="sivo-video-wrapper"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var sivoVideoModal = document.getElementById('sivo-video-modal');
+        var sivoVideoCloseBtn = document.getElementById('sivo-video-close');
+        var sivoVideoWrapper = document.getElementById('sivo-video-wrapper');
+
+        function closeSivoVideoModal() {
+            if (sivoVideoModal) {
+                sivoVideoModal.classList.remove('active');
+                if (sivoVideoWrapper) sivoVideoWrapper.innerHTML = '';
+            }
+        }
+
+        if (sivoVideoCloseBtn) sivoVideoCloseBtn.addEventListener('click', closeSivoVideoModal);
+        if (sivoVideoModal) {
+            sivoVideoModal.addEventListener('click', function(e) {
+                if (e.target === sivoVideoModal) {
+                    closeSivoVideoModal();
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

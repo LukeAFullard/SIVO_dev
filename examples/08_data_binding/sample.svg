@@ -1,0 +1,6 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+    <rect id="TX" x="10" y="10" width="80" height="80" fill="#ccc" />
+    <rect id="CA" x="110" y="10" width="80" height="80" fill="#ccc" />
+    <rect id="NY" x="10" y="110" width="80" height="80" fill="#ccc" />
+    <rect id="WY" x="110" y="110" width="80" height="80" fill="#ccc" />
+</svg>
