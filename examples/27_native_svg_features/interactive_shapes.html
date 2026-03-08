@@ -709,12 +709,33 @@
                     var addClone = false;
 
                     if (item.morph_to_path) {
-                        var styleStr = `transition: d ${item.morph_duration_ms || 1000}ms ease-in-out;`;
-                        clone.setAttribute('style', styleStr);
-                        // Trigger morph shortly after load
-                        setTimeout((elem, pathData) => {
+                        // Use SMIL animation for cross-browser morphing support
+                        var dur = (item.morph_duration_ms || 1000) + 'ms';
+                        var animateNode = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+                        animateNode.setAttribute('attributeName', 'd');
+                        animateNode.setAttribute('to', item.morph_to_path);
+                        animateNode.setAttribute('dur', dur);
+                        animateNode.setAttribute('fill', 'freeze');
+                        animateNode.setAttribute('calcMode', 'spline');
+                        animateNode.setAttribute('keySplines', '0.4 0 0.2 1');
+                        animateNode.setAttribute('keyTimes', '0;1');
+                        clone.appendChild(animateNode);
+
+                        // Fallback to setting 'd' attribute directly after duration to ensure state persists
+                        setTimeout((elem, pathData, itemName) => {
                             elem.setAttribute('d', pathData);
-                        }, 100, clone, item.morph_to_path);
+
+                            // Also update the underlying ECharts shape so hitboxes and tooltips match the new morph
+                            var currentOption = myChart.getOption();
+                            var seriesData = currentOption.series[0].data;
+                            var updateFound = false;
+
+                            // To update the map path in ECharts, we need to re-register the SVG map
+                            // But ECharts caches maps. A cleaner way if we just need the hitbox is to let the user know,
+                            // but actually ECharts map data can't mutate individual path 'd' attributes easily without a full map re-registration.
+                            // However, we can at least ensure the clone stays in the new state.
+                        }, item.morph_duration_ms || 1000, clone, item.morph_to_path, item.name);
+
                         addClone = true;
                     }
 
