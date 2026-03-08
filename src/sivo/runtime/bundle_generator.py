@@ -140,11 +140,23 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
 
         formatted_views[view_id] = view_dict
 
+    # Check for locally bundled JS
+    build_js = False
+    bundled_js_content = ""
+    # Assuming any view with build_js flag active should trigger it globally
+    # In Sivo core, build_js flag is on the Infographic. We can infer it if a 'dist/sivo.min.js' exists locally.
+    if os.path.exists("dist/sivo.min.js"):
+        build_js = True
+        with open("dist/sivo.min.js", "r", encoding="utf-8") as f:
+            bundled_js_content = f.read()
+
     html_output = template.render(
         views_data=json.dumps(formatted_views).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
         initial_view=json.dumps(initial_view).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
         custom_css=custom_css,
-        custom_js=custom_js
+        custom_js=custom_js,
+        build_js=build_js,
+        bundled_js_content=bundled_js_content
     )
 
     if output_path:

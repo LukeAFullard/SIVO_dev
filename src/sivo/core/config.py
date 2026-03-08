@@ -60,6 +60,14 @@ class ConnectionConfig(BaseModel):
     type: str = "solid"
     opacity: float = 0.6
 
+class LiveBindingConfig(BaseModel):
+    """Configuration for native WebSocket/PubSub real-time data updates without Streamlit re-renders."""
+    url: str
+    topic: str
+    auth_token: Optional[str] = None
+    reconnect_attempts: int = 5
+    fallback_polling_interval: int = 0
+
 class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
@@ -90,4 +98,16 @@ class ProjectConfig(BaseModel):
     timeline_binding: Optional[TimelineBindingConfig] = Field(
         default=None,
         description="Optional timeline binding for animating choropleth maps over time."
+    )
+    live_binding: Optional[LiveBindingConfig] = Field(
+        default=None,
+        description="Optional WebSocket connection for live telemetry."
+    )
+    build_js: bool = Field(
+        default=False,
+        description="If True, runs an optional JavaScript bundler (e.g., Vite/Webpack) to minify frontend assets."
+    )
+    enable_e2e_testing: bool = Field(
+        default=False,
+        description="If True, provisions scaffolding for End-to-End (E2E) Browser Testing via Playwright."
     )
