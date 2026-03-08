@@ -33,6 +33,9 @@ class ElementConfig(BaseModel):
     border_width: Optional[float] = None
     border_color: Optional[str] = None
     glow: Optional[bool] = None
+    morph_to_path: Optional[str] = None
+    morph_duration_ms: Optional[int] = None
+    filter: Optional[str] = None
 
 class DataBindingConfig(BaseModel):
     data: Dict[str, Dict[str, float]]
@@ -71,6 +74,10 @@ class LiveBindingConfig(BaseModel):
 class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
+    render_mode: str = Field(
+        default="echarts",
+        description="The rendering engine to use. 'echarts' for standard mapping, 'svg' for native advanced manipulations."
+    )
     default_panel_position: str = Field(
         default="right",
         description="Global default position for the info panel ('right', 'left', 'top', 'bottom')."

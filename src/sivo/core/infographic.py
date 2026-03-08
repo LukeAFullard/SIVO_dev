@@ -9,16 +9,18 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "echarts"):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
         self._element_lookup: Dict[str, dict] = {}
         self.overlays: Dict[str, dict] = {}
         self.connections: list[dict] = []
+        self.path_labels: list[dict] = []
         self.default_panel_position = default_panel_position
         self.lock_zoom_out = lock_zoom_out
         self.enable_a11y = enable_a11y
+        self.render_mode = render_mode
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
 
@@ -66,6 +68,7 @@ class Infographic:
         infographic.lock_zoom_out = getattr(cfg, "lock_zoom_out", False)
 
         infographic.enable_a11y = getattr(cfg, "enable_a11y", False)
+        infographic.render_mode = getattr(cfg, "render_mode", "echarts")
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
 
@@ -115,7 +118,10 @@ class Infographic:
                     hover_color=elem_config.hover_color,
                     border_width=elem_config.border_width,
                     border_color=elem_config.border_color,
-                    glow=elem_config.glow
+                    glow=elem_config.glow,
+                    morph_to_path=elem_config.morph_to_path,
+                    morph_duration_ms=elem_config.morph_duration_ms,
+                    filter=elem_config.filter
                 )
             except ValueError as e:
                 # Log or handle missing elements gracefully, perhaps a warning
@@ -164,7 +170,10 @@ class Infographic:
         border_width: Optional[float] = None,
         border_color: Optional[str] = None,
         glow: Optional[bool] = None,
-        animation: Optional[str] = None
+        animation: Optional[str] = None,
+        morph_to_path: Optional[str] = None,
+        morph_duration_ms: Optional[int] = None,
+        filter: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -294,6 +303,15 @@ class Infographic:
         if animation:
             mapping.theme.animation = animation
 
+        if morph_to_path:
+            mapping.theme.morph_to_path = morph_to_path
+
+        if morph_duration_ms is not None:
+            mapping.theme.morph_duration_ms = morph_duration_ms
+
+        if filter:
+            mapping.theme.filter = filter
+
     def bind_data(self, data: Dict[str, Dict[str, float]], key: str, colors: list, min_val: float, max_val: float):
         """
         Binds quantitative data to SVG IDs dynamically and applies a color scale.
@@ -415,6 +433,25 @@ class Infographic:
             "opacity": opacity
         })
 
+    def add_path_label(self, element_id: str, text: str, font_size: int = 12, color: str = "#000000"):
+        """
+        Adds text rendered along an SVG path.
+        This feature requires the 'svg' render_mode.
+        """
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem:
+            raise ValueError(f"Element with id/name '{element_id}' not found in SVG.")
+
+        if target_elem['tag'] != 'path':
+             raise ValueError(f"Element '{element_id}' is not a path. add_path_label requires a <path> element.")
+
+        self.path_labels.append({
+            "path_id": element_id,
+            "text": text,
+            "font_size": font_size,
+            "color": color
+        })
+
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """
         Adds a custom HTML overlay positioned over a specific SVG element's center coordinate.
@@ -463,7 +500,9 @@ class Infographic:
             "mappings": mappings_dict,
             "overlays": self.overlays,
             "connections": self.connections,
-            "lock_zoom_out": self.lock_zoom_out
+            "path_labels": self.path_labels,
+            "lock_zoom_out": self.lock_zoom_out,
+            "render_mode": self.render_mode
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()

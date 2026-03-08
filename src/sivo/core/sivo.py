@@ -9,23 +9,24 @@ class Sivo:
     This class serves as the primary declarative Python API for the framework,
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
-    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False):
+    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "echarts"):
         self.infographic = infographic
         self.infographic.default_panel_position = default_panel_position
         self.infographic.lock_zoom_out = lock_zoom_out
         self.infographic.enable_a11y = enable_a11y
+        self.infographic.render_mode = render_mode
 
     @classmethod
-    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False) -> "Sivo":
+    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "echarts") -> "Sivo":
         """Initializes a Sivo instance from an SVG file path."""
         info = Infographic.from_svg(filepath)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode)
 
     @classmethod
-    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False) -> "Sivo":
+    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "echarts") -> "Sivo":
         """Initializes a Sivo instance directly from an SVG string."""
         info = Infographic.from_string(svg_string)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":
@@ -75,7 +76,10 @@ class Sivo:
         border_width: Optional[float] = None,
         border_color: Optional[str] = None,
         glow: Optional[bool] = None,
-        animation: Optional[str] = None
+        animation: Optional[str] = None,
+        morph_to_path: Optional[str] = None,
+        morph_duration_ms: Optional[int] = None,
+        filter: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -121,7 +125,10 @@ class Sivo:
             border_width=border_width,
             border_color=border_color,
             glow=glow,
-            animation=animation
+            animation=animation,
+            morph_to_path=morph_to_path,
+            morph_duration_ms=morph_duration_ms,
+            filter=filter
         )
 
     def bind_data(self, data: Dict[str, Dict[str, float]], key: str, colors: list, min_val: float, max_val: float):
@@ -195,6 +202,13 @@ class Sivo:
         """
         self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity)
 
+    def add_path_label(self, element_id: str, text: str, font_size: int = 12, color: str = "#000000"):
+        """
+        Adds text rendered along an SVG path.
+        This feature requires the 'svg' render_mode.
+        """
+        self.infographic.add_path_label(element_id, text, font_size, color)
+
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
         self.infographic.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
@@ -231,7 +245,9 @@ class Sivo:
             "mappings": mappings_dict,
             "overlays": self.infographic.overlays,
             "connections": self.infographic.connections,
-            "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False)
+            "path_labels": self.infographic.path_labels,
+            "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False),
+            "render_mode": getattr(self.infographic, "render_mode", "echarts")
         }
         if self.infographic.data_binding:
             view_data["data_binding"] = self.infographic.data_binding.model_dump()

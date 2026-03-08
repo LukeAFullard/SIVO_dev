@@ -111,6 +111,19 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             if theme.get('animation'):
                 data_item['animation_class'] = theme.get('animation')
 
+            if theme.get('morph_to_path'):
+                data_item['morph_to_path'] = theme.get('morph_to_path')
+
+            if theme.get('morph_duration_ms') is not None:
+                data_item['morph_duration_ms'] = theme.get('morph_duration_ms')
+
+            if theme.get('filter'):
+                data_item['filter'] = theme.get('filter')
+
+            if theme.get('morph_to_path') or theme.get('filter'):
+                # When relying on native SVG overlay (morph or filter), we hide the underlying ECharts shape
+                item_style['opacity'] = 0
+
             if item_style:
                 data_item['itemStyle'] = item_style
 
@@ -133,7 +146,11 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "svg_string": view_obj["svg_string"],
             "echarts_data": echarts_data,
             "actions_manifest": actions_manifest,
-            "overlays": view_obj["overlays"]
+            "overlays": view_obj.get("overlays", {}),
+            "connections": view_obj.get("connections", []),
+            "path_labels": view_obj.get("path_labels", []),
+            "lock_zoom_out": view_obj.get("lock_zoom_out", False),
+            "render_mode": view_obj.get("render_mode", "echarts")
         }
         if "data_binding" in view_obj:
             view_dict["data_binding"] = view_obj["data_binding"]

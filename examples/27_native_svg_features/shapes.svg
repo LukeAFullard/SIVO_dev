@@ -1,0 +1,7 @@
+<svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- A square that will morph into a circle -->
+  <path id="morphing_shape" d="M 10 10 h 80 v 80 h -80 Z" fill="#3498db" />
+
+  <!-- A curved path for text to follow -->
+  <path id="text_curve" d="M 110 50 Q 150 10 190 50" fill="transparent" stroke="#bdc3c7" stroke-width="2" />
+</svg>

@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -293,8 +288,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 100\"\u003e\n  \u003c!-- A square that will morph into a circle --\u003e\n  \u003cpath id=\"morphing_shape\" d=\"M 10 10 h 80 v 80 h -80 Z\" fill=\"#3498db\" name=\"morphing_shape\"/\u003e\n  \n  \u003c!-- A curved path for text to follow --\u003e\n  \u003cpath id=\"text_curve\" d=\"M 110 50 Q 150 10 190 50\" fill=\"transparent\" stroke=\"#bdc3c7\" stroke-width=\"2\" name=\"text_curve\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "morphing_shape", "value": 1, "tooltip": "This shape morphs on load!", "morph_to_path": "M 50 10 A 40 40 0 1 0 50 90 A 40 40 0 1 0 50 10", "morph_duration_ms": 2000, "filter": "5", "itemStyle": {"opacity": 0}}, {"name": "text_curve", "value": 1}], "actions_manifest": {"morphing_shape": [{"action_type": "tooltip", "content": "\u003ch3\u003eThis shape morphs on load!\u003c/h3\u003e", "title": "This shape morphs on load!", "panel_position": "right"}]}, "overlays": {}, "connections": [], "path_labels": [{"path_id": "text_curve", "text": "Hello, text on a path!", "font_size": 12, "color": "#e74c3c"}], "lock_zoom_out": false, "render_mode": "svg"}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -1859,8 +1854,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

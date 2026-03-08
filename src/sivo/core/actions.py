@@ -141,6 +141,9 @@ class ThemeOverride(BaseModel):
     border_color: Optional[str] = None
     glow: Optional[bool] = None
     animation: Optional[str] = None
+    morph_to_path: Optional[str] = None
+    morph_duration_ms: Optional[int] = None
+    filter: Optional[str] = None
 
 ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
