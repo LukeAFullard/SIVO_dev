@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -85,6 +85,7 @@ class Infographic:
                     ecommerce=getattr(elem_config, 'ecommerce', None),
                     rich_media=getattr(elem_config, 'rich_media', None),
                     bi=getattr(elem_config, 'bi', None),
+                    echarts_option=getattr(elem_config, 'echarts_option', None),
                     panel_position=elem_config.panel_position,
                     open_by_default=elem_config.open_by_default,
                     color=elem_config.color,
@@ -127,6 +128,7 @@ class Infographic:
         rich_media: Optional[dict] = None,
         bi: Optional[dict] = None,
         replit: Optional[str] = None,
+        echarts_option: Optional[dict] = None,
         panel_position: Optional[str] = None,
         open_by_default: bool = False,
         color: Optional[str] = None,
@@ -215,6 +217,9 @@ class Infographic:
 
         if replit:
             mapping.actions.append(ReplitAction(repl_url=replit, panel_position=panel_position or self.default_panel_position))
+
+        if echarts_option:
+            mapping.actions.append(EchartsAction(option=echarts_option, panel_position=panel_position or self.default_panel_position))
 
         if color:
             mapping.theme.color = color

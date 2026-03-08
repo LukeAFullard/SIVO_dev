@@ -254,8 +254,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\"\u003e\n    \u003crect id=\"TX\" x=\"10\" y=\"10\" width=\"180\" height=\"180\" fill=\"#add8e6\" stroke=\"#000\" stroke-width=\"2\" name=\"TX\"/\u003e\n    \u003ctext x=\"100\" y=\"100\" font-size=\"20\" text-anchor=\"middle\" alignment-baseline=\"middle\"\u003eClick Me\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "TX", "value": 1, "tooltip": "View Regional Data"}], "actions_manifest": {"TX": [{"action_type": "tooltip", "content": "\u003ch3\u003eDetailed Overview\u003c/h3\u003e\u003cp\u003eClicking this element triggered a nested ECharts visualization.\u003c/p\u003e", "title": "View Regional Data", "panel_position": "right"}, {"action_type": "echarts", "option": {"title": {"text": "Texas Regional Sales"}, "tooltip": {}, "xAxis": {"data": ["Austin", "Dallas", "Houston", "San Antonio"]}, "yAxis": {}, "series": [{"name": "Sales", "type": "bar", "data": [5000, 20000, 36000, 10000], "itemStyle": {"color": "#43a2ca"}}]}, "height": "400px", "panel_position": "right"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -1343,8 +1343,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

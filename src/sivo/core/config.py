@@ -20,6 +20,7 @@ class ElementConfig(BaseModel):
     ecommerce: Optional[Dict[str, str]] = None
     rich_media: Optional[Dict[str, str]] = None
     bi: Optional[Dict[str, str]] = None
+    echarts_option: Optional[Dict[str, Any]] = None
     panel_position: Optional[str] = None
     open_by_default: bool = False
     color: Optional[str] = None
