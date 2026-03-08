@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, List
 from pydantic import BaseModel, Field
 
 class ElementConfig(BaseModel):
@@ -28,6 +28,13 @@ class ElementConfig(BaseModel):
     border_color: Optional[str] = None
     glow: Optional[bool] = None
 
+class DataBindingConfig(BaseModel):
+    data: Dict[str, Dict[str, float]]
+    key: str
+    colors: List[str]
+    min_val: float
+    max_val: float
+
 class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
@@ -42,4 +49,8 @@ class ProjectConfig(BaseModel):
     mappings: Dict[str, ElementConfig] = Field(
         default_factory=dict,
         description="Dictionary mapping element IDs to their configuration."
+    )
+    data_binding: Optional[DataBindingConfig] = Field(
+        default=None,
+        description="Optional data binding for generating choropleth maps dynamically."
     )
