@@ -136,6 +136,12 @@ class Sivo:
         """
         self.infographic.apply_choropleth(data_map, min_color, max_color, show_legend)
 
+    def add_connection(self, source_id: str, target_id: str, label: str = "", color: str = "#ff3333", width: float = 2.0, animation_speed: float = 3.0, type: str = "solid", opacity: float = 0.6):
+        """
+        Draws a visual connection line between the centers of two SVG elements.
+        """
+        self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity)
+
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
         self.infographic.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
@@ -171,6 +177,7 @@ class Sivo:
             "svg_string": self.infographic.parser.to_string(),
             "mappings": mappings_dict,
             "overlays": self.infographic.overlays,
+            "connections": self.infographic.connections,
             "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False)
         }
         if self.infographic.data_binding:

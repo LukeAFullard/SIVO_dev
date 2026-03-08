@@ -15,6 +15,7 @@ class Infographic:
         self.mappings: Dict[str, InteractionMapping] = {}
         self._element_lookup: Dict[str, dict] = {}
         self.overlays: Dict[str, dict] = {}
+        self.connections: list[dict] = []
         self.default_panel_position = default_panel_position
         self.lock_zoom_out = lock_zoom_out
         self.enable_a11y = enable_a11y
@@ -65,6 +66,19 @@ class Infographic:
 
         infographic.enable_a11y = getattr(cfg, "enable_a11y", False)
         infographic.data_binding = getattr(cfg, "data_binding", None)
+
+        if getattr(cfg, "connections", None):
+            for conn in cfg.connections:
+                infographic.add_connection(
+                    source_id=conn.source_id,
+                    target_id=conn.target_id,
+                    label=conn.label,
+                    color=conn.color,
+                    width=conn.width,
+                    animation_speed=conn.animation_speed,
+                    type=conn.type,
+                    opacity=conn.opacity
+                )
 
         for element_id, elem_config in cfg.mappings.items():
             try:
@@ -345,6 +359,36 @@ class Infographic:
                 "position": "bottom-left"
             }
 
+    def add_connection(self, source_id: str, target_id: str, label: str = "", color: str = "#ff3333", width: float = 2.0, animation_speed: float = 3.0, type: str = 'solid', opacity: float = 0.6):
+        """
+        Adds a visual connection (line) between the centers of two SVG elements.
+        """
+        source_elem = self._element_lookup.get(source_id)
+        target_elem = self._element_lookup.get(target_id)
+
+        if not source_elem:
+            raise ValueError(f"Source element '{source_id}' not found in SVG.")
+        if not target_elem:
+            raise ValueError(f"Target element '{target_id}' not found in SVG.")
+
+        source_center = self.get_element_center(source_id)
+        target_center = self.get_element_center(target_id)
+
+        if not source_center or not target_center:
+            raise ValueError("Could not calculate bounding box centers for one or both elements.")
+
+        self.connections.append({
+            "source_id": source_id,
+            "target_id": target_id,
+            "coords": [source_center, target_center],
+            "label": label,
+            "color": color,
+            "width": width,
+            "animation_speed": animation_speed,
+            "type": type,
+            "opacity": opacity
+        })
+
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """
         Adds a custom HTML overlay positioned over a specific SVG element's center coordinate.
@@ -392,6 +436,7 @@ class Infographic:
             "svg_string": self.parser.to_string(),
             "mappings": mappings_dict,
             "overlays": self.overlays,
+            "connections": self.connections,
             "lock_zoom_out": self.lock_zoom_out
         }
         if self.data_binding:
