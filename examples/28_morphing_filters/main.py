@@ -11,6 +11,7 @@ svg_string = """
         </filter>
     </defs>
     <!-- We must have the same number of path commands for smooth morphing if we were using CSS, but native SMIL/anime can handle mismatch depending on library, ECharts handles basic morphing nicely if render_mode is used -->
+    <!-- For CSS native d-path morphing to work smoothly in Chromium, the paths should ideally have the same number/type of commands. We use a 4-point polygon to a 4-point polygon (triangle with a redundant point). -->
     <path id="myMorphPath" d="M50,50 L150,50 L150,150 L50,150 Z" fill="#3498db" />
     <circle id="myFilterCircle" cx="250" cy="100" r="50" fill="#e74c3c" />
 </svg>

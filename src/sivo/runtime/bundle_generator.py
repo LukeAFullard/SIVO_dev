@@ -143,6 +143,11 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             if theme.get('animation'):
                 data_item['animation_class'] = theme.get('animation')
 
+            # Prevent double-drawing if native SVG features are used
+            if view_obj.get("render_mode", "canvas") == "svg":
+                if theme.get('morph_to_path') or theme.get('filter') or theme.get('clip_path') or theme.get('mask') or theme.get('transform') or mapping_dict.get('draggable'):
+                    item_style['opacity'] = 0
+
             if item_style:
                 data_item['itemStyle'] = item_style
 

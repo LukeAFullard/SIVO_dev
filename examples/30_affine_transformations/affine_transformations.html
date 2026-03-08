@@ -252,6 +252,7 @@
 
     <div id="a11y-container" class="sr-only"></div>
     <div id="chart-container"></div>
+    <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none;"></div>
     <div id="sivo-resizer" class="sivo-resizer"></div>
     <div class="zoom-controls">
         <div class="zoom-btn" onclick="zoomIn()">+</div>
@@ -269,11 +270,14 @@
 
     <script>
         var chartDom = document.getElementById('chart-container');
-        var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n    \u003crect id=\"rectRotate\" x=\"50\" y=\"50\" width=\"100\" height=\"100\" fill=\"#3498db\" name=\"rectRotate\"/\u003e\n    \u003ccircle id=\"circleScale\" cx=\"250\" cy=\"100\" r=\"50\" fill=\"#e74c3c\" name=\"circleScale\"/\u003e\n    \u003cpolygon id=\"polyTranslate\" points=\"50,250 150,250 100,350\" fill=\"#2ecc71\" name=\"polyTranslate\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "rectRotate", "value": 1, "tooltip": "Rotated 45 degrees"}, {"name": "circleScale", "value": 1, "tooltip": "Scaled by 1.5"}, {"name": "polyTranslate", "value": 1, "tooltip": "Translated by (50, 0)"}], "actions_manifest": {"rectRotate": [{"action_type": "tooltip", "content": "\u003ch3\u003eRotated 45 degrees\u003c/h3\u003e", "title": "Rotated 45 degrees", "panel_position": "right"}], "circleScale": [{"action_type": "tooltip", "content": "\u003ch3\u003eScaled by 1.5\u003c/h3\u003e", "title": "Scaled by 1.5", "panel_position": "right"}], "polyTranslate": [{"action_type": "tooltip", "content": "\u003ch3\u003eTranslated by (50, 0)\u003c/h3\u003e", "title": "Translated by (50, 0)", "panel_position": "right"}]}, "overlays": {}, "render_mode": "svg"}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n    \u003c!-- Drawing ghost elements to clearly show the \"before\" state underneath the transformed ones --\u003e\n    \u003crect x=\"50\" y=\"50\" width=\"100\" height=\"100\" fill=\"none\" stroke=\"#ccc\" stroke-dasharray=\"5,5\"/\u003e\n    \u003crect id=\"rectRotate\" x=\"50\" y=\"50\" width=\"100\" height=\"100\" fill=\"#3498db\" name=\"rectRotate\"/\u003e\n    \n    \u003ccircle cx=\"250\" cy=\"100\" r=\"50\" fill=\"none\" stroke=\"#ccc\" stroke-dasharray=\"5,5\"/\u003e\n    \u003ccircle id=\"circleScale\" cx=\"250\" cy=\"100\" r=\"50\" fill=\"#e74c3c\" name=\"circleScale\"/\u003e\n    \n    \u003cpolygon points=\"50,250 150,250 100,350\" fill=\"none\" stroke=\"#ccc\" stroke-dasharray=\"5,5\"/\u003e\n    \u003cpolygon id=\"polyTranslate\" points=\"50,250 150,250 100,350\" fill=\"#2ecc71\" name=\"polyTranslate\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "rectRotate", "value": 1, "tooltip": "Rotated 45 degrees", "itemStyle": {"opacity": 0}}, {"name": "circleScale", "value": 1, "tooltip": "Scaled by 1.25", "itemStyle": {"opacity": 0}}, {"name": "polyTranslate", "value": 1, "tooltip": "Translated by (100, 50)", "itemStyle": {"opacity": 0}}], "actions_manifest": {"rectRotate": [{"action_type": "tooltip", "content": "\u003ch3\u003eRotated 45 degrees\u003c/h3\u003e", "title": "Rotated 45 degrees", "panel_position": "right"}], "circleScale": [{"action_type": "tooltip", "content": "\u003ch3\u003eScaled by 1.25\u003c/h3\u003e", "title": "Scaled by 1.25", "panel_position": "right"}], "polyTranslate": [{"action_type": "tooltip", "content": "\u003ch3\u003eTranslated by (100, 50)\u003c/h3\u003e", "title": "Translated by (100, 50)", "panel_position": "right"}]}, "overlays": {}, "render_mode": "svg", "mappings": {"rectRotate": {"id": "rectRotate", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eRotated 45 degrees\u003c/h3\u003e", "title": "Rotated 45 degrees", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": "rotate(45 100 100)"}}, "circleScale": {"id": "circleScale", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eScaled by 1.25\u003c/h3\u003e", "title": "Scaled by 1.25", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": "scale(1.25) translate(-50 -20)"}}, "polyTranslate": {"id": "polyTranslate", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eTranslated by (100, 50)\u003c/h3\u003e", "title": "Translated by (100, 50)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": "translate(100 50)"}}}}};
         var currentViewId = "default_view";
+
+        // Initialize ECharts with the appropriate renderer
+        var renderMode = viewsData[currentViewId].render_mode || 'canvas';
+        var myChart = echarts.init(chartDom, null, { renderer: renderMode });
 
         // Active variables for the current view
         var echartsData = [];
@@ -507,6 +511,101 @@
             }, 1000);
         }
 
+        function applyNativeSvgManipulations() {
+            var viewData = viewsData[currentViewId];
+            var overlayContainer = document.getElementById('sivo-native-overlay-svg-container');
+
+            // Set up overlay container
+            overlayContainer.innerHTML = viewData.svg_string;
+            overlayContainer.style.display = 'block';
+
+            var svgEl = overlayContainer.querySelector('svg');
+            if (!svgEl) return;
+
+            // Ensure SVG fills the container and allows us to control the global transform
+            svgEl.style.width = '100%';
+            svgEl.style.height = '100%';
+            // Keep pointer-events none so ECharts underneath still gets hover/click events
+            svgEl.style.pointerEvents = 'none';
+
+            // We need a root <g> tag to apply ECharts' global roam transforms (pan/zoom)
+            // Wrap all children in a new <g id="sivo-global-transform-group">
+            var wrapperGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            wrapperGroup.setAttribute('id', 'sivo-global-transform-group');
+
+            // Move all existing children into the wrapper
+            while (svgEl.firstChild) {
+                wrapperGroup.appendChild(svgEl.firstChild);
+            }
+            svgEl.appendChild(wrapperGroup);
+
+            // Now apply the specific features (morph, filter, transform, mask) to individual nodes
+            var mappings = viewData.mappings;
+            for (var name in mappings) {
+                var mapping = mappings[name];
+                if (!mapping.theme) continue;
+
+                var theme = mapping.theme;
+                // Find node by id or name
+                var node = wrapperGroup.querySelector(`[id="${name}"], [name="${name}"]`);
+                if (!node) continue;
+
+                // 1. Morphing
+                if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
+                    var duration = theme.morph_duration_ms || 1000;
+                    node.style.transition = `d ${duration}ms ease-in-out`;
+                    // Delay slightly to trigger the transition from initial state
+                    (function(n, p) {
+                        setTimeout(function() {
+                            n.setAttribute('d', p);
+                        }, 50);
+                    })(node, theme.morph_to_path);
+                }
+
+                // 2. Transformations
+                if (theme.transform) {
+                    var currentTransform = node.getAttribute('transform') || '';
+                    node.setAttribute('transform', currentTransform + ' ' + theme.transform);
+                }
+
+                // 3. Filters
+                if (theme.filter) {
+                    node.style.filter = theme.filter;
+                    node.setAttribute('filter', theme.filter);
+                }
+
+                // 4. Clipping
+                if (theme.clip_path) {
+                    node.setAttribute('clip-path', theme.clip_path);
+                }
+
+                // 5. Masking
+                if (theme.mask) {
+                    node.setAttribute('mask', theme.mask);
+                }
+            }
+
+            // Sync the initial transform state from ECharts
+            syncOverlayTransform();
+        }
+
+        function syncOverlayTransform() {
+            if (renderMode !== 'svg') return;
+
+            var overlayGroup = document.getElementById('sivo-global-transform-group');
+            if (!overlayGroup) return;
+
+            // In ECharts map series, the global transform matrix is applied to the root <g> inside its generated SVG.
+            // We can extract it by querying ECharts' own DOM node.
+            var echartsRootGroup = document.querySelector('#chart-container svg > g');
+            if (echartsRootGroup) {
+                var transform = echartsRootGroup.getAttribute('transform');
+                if (transform) {
+                    overlayGroup.setAttribute('transform', transform);
+                }
+            }
+        }
+
         function generateA11yNodes() {
             var a11yContainer = document.getElementById('a11y-container');
             a11yContainer.innerHTML = ''; // Clear previous
@@ -635,6 +734,10 @@
 
             currentViewId = viewId;
             var view = viewsData[viewId];
+
+            // Note: ECharts doesn't support changing renderer after init natively.
+            // We assume multi-view projects will use the same renderer, or default to the first view's.
+            renderMode = view.render_mode || 'canvas';
 
             // Extract view-specific active data
             echartsData = view.echarts_data;
@@ -777,6 +880,11 @@
             // Generate Accessibility (A11y) DOM Nodes
             generateA11yNodes();
 
+            // Apply SVG Render Mode Native Manipulations
+            if (renderMode === 'svg') {
+                applyNativeSvgManipulations();
+            }
+
             // Handle elements marked to open by default
             echartsData.forEach(function(item) {
                 if (item.open_by_default) {
@@ -848,6 +956,77 @@
             // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
             return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
+
+        // Implement Draggable Logic (for map elements marked as draggable)
+        // Since map regions in ECharts aren't natively draggable, we add a generic mouse tracking system.
+        var draggedElement = null;
+        var dragStartX = 0;
+        var dragStartY = 0;
+        var currentElementX = 0;
+        var currentElementY = 0;
+
+        myChart.on('mousedown', function (params) {
+            var name = params.name;
+            var viewData = viewsData[currentViewId];
+            if (viewData && viewData.mappings && viewData.mappings[name] && viewData.mappings[name].draggable) {
+                // Determine the actual DOM element if in SVG mode, otherwise this won't work well in Canvas
+                if (renderMode === 'svg') {
+                    // Prevent chart roaming while dragging
+                    var opt = myChart.getOption();
+                    if (opt.series[0]) opt.series[0].roam = false;
+                    myChart.setOption(opt);
+
+                    var svgNode = document.querySelector('#chart-container svg [name="' + name + '"]');
+                    if (svgNode) {
+                        draggedElement = svgNode;
+                        dragStartX = params.event.offsetX;
+                        dragStartY = params.event.offsetY;
+
+                        // Parse existing transform translation
+                        var currentTransform = svgNode.getAttribute('transform') || '';
+                        var translateMatch = currentTransform.match(/translate\(([^,]+)[ ,]([^)]+)\)/);
+                        if (translateMatch) {
+                            currentElementX = parseFloat(translateMatch[1]);
+                            currentElementY = parseFloat(translateMatch[2]);
+                        } else {
+                            currentElementX = 0;
+                            currentElementY = 0;
+                        }
+                    }
+                } else {
+                    console.warn("Draggable elements are only supported when render_mode='svg'.");
+                }
+            }
+        });
+
+        // We attach mousemove and mouseup to the generic zr (ZRender) instance to catch them anywhere over the chart
+        myChart.getZr().on('mousemove', function (params) {
+            if (draggedElement) {
+                var dx = params.offsetX - dragStartX;
+                var dy = params.offsetY - dragStartY;
+                var newX = currentElementX + dx;
+                var newY = currentElementY + dy;
+
+                var currentTransform = draggedElement.getAttribute('transform') || '';
+                // Remove old translate
+                currentTransform = currentTransform.replace(/translate\([^)]+\)/g, '').trim();
+                // Apply new translate
+                var newTransform = 'translate(' + newX + ' ' + newY + ') ' + currentTransform;
+                draggedElement.setAttribute('transform', newTransform.trim());
+            }
+        });
+
+        myChart.getZr().on('mouseup', function (params) {
+            if (draggedElement) {
+                // Re-enable chart roaming
+                var opt = myChart.getOption();
+                if (opt.series[0]) opt.series[0].roam = true;
+                myChart.setOption(opt);
+
+                draggedElement = null;
+            }
+        });
+
 
         // Handle click events
         myChart.on('click', function (params) {
@@ -1622,6 +1801,8 @@
                 // params.zoom is a delta multiplier, not absolute zoom
                 currentZoom *= params.zoom;
             }
+
+            syncOverlayTransform();
 
             // Sync zoom from map to geo component if lines exist to keep them aligned during drag
             if (connectionsData.length > 0) {
