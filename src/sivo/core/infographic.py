@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
 from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction
-from .config import ProjectConfig, ElementConfig
+from .config import ProjectConfig, ElementConfig, DataBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
@@ -17,6 +17,7 @@ class Infographic:
         self.overlays: Dict[str, dict] = {}
         self.default_panel_position = default_panel_position
         self.lock_zoom_out = lock_zoom_out
+        self.data_binding: Optional[DataBindingConfig] = None
 
         # Initialize default mappings
         for elem in self.elements:
@@ -60,6 +61,8 @@ class Infographic:
         infographic = cls.from_svg(svg_path)
         infographic.default_panel_position = getattr(cfg, "default_panel_position", "right")
         infographic.lock_zoom_out = getattr(cfg, "lock_zoom_out", False)
+
+        infographic.data_binding = getattr(cfg, "data_binding", None)
 
         for element_id, elem_config in cfg.mappings.items():
             try:
@@ -231,6 +234,18 @@ class Infographic:
         if animation:
             mapping.theme.animation = animation
 
+    def bind_data(self, data: Dict[str, Dict[str, float]], key: str, colors: list, min_val: float, max_val: float):
+        """
+        Binds quantitative data to SVG IDs dynamically and applies a color scale.
+        """
+        self.data_binding = DataBindingConfig(
+            data=data,
+            key=key,
+            colors=colors,
+            min_val=min_val,
+            max_val=max_val
+        )
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.
@@ -329,13 +344,17 @@ class Infographic:
             else:
                 mappings_dict[k] = v
 
+        view_data = {
+            "svg_string": self.parser.to_string(),
+            "mappings": mappings_dict,
+            "overlays": self.overlays,
+            "lock_zoom_out": self.lock_zoom_out
+        }
+        if self.data_binding:
+            view_data["data_binding"] = self.data_binding.model_dump()
+
         views_data = {
-            "default_view": {
-                "svg_string": self.parser.to_string(),
-                "mappings": mappings_dict,
-                "overlays": self.overlays,
-                "lock_zoom_out": self.lock_zoom_out
-            }
+            "default_view": view_data
         }
         return generate_echarts_html(views_data, "default_view", output_path, custom_css, custom_js)
 

@@ -111,6 +111,12 @@ class Sivo:
             animation=animation
         )
 
+    def bind_data(self, data: Dict[str, Dict[str, float]], key: str, colors: list, min_val: float, max_val: float):
+        """
+        Binds quantitative data to SVG IDs dynamically and applies a color scale.
+        """
+        self.infographic.bind_data(data, key, colors, min_val, max_val)
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.
@@ -148,12 +154,15 @@ class Sivo:
             else:
                 mappings_dict[k] = v
 
-        return {
+        view_data = {
             "svg_string": self.infographic.parser.to_string(),
             "mappings": mappings_dict,
             "overlays": self.infographic.overlays,
             "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False)
         }
+        if self.infographic.data_binding:
+            view_data["data_binding"] = self.infographic.data_binding.model_dump()
+        return view_data
 
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """

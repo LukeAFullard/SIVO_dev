@@ -125,12 +125,16 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
 
             echarts_data.append(data_item)
 
-        formatted_views[view_id] = {
+        view_dict = {
             "svg_string": view_obj["svg_string"],
             "echarts_data": echarts_data,
             "actions_manifest": actions_manifest,
             "overlays": view_obj["overlays"]
         }
+        if "data_binding" in view_obj:
+            view_dict["data_binding"] = view_obj["data_binding"]
+
+        formatted_views[view_id] = view_dict
 
     html_output = template.render(
         views_data=json.dumps(formatted_views).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
