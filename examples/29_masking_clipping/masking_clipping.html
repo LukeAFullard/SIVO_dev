@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -274,14 +269,11 @@
 
     <script>
         var chartDom = document.getElementById('chart-container');
+        var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
-
-        // Initialize ECharts with the appropriate renderer
-        var renderMode = viewsData[currentViewId].render_mode || 'canvas';
-        var myChart = echarts.init(chartDom, null, { renderer: renderMode });
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n    \u003cdefs\u003e\n        \u003cclipPath id=\"myClip\"\u003e\n            \u003ccircle cx=\"200\" cy=\"200\" r=\"100\"/\u003e\n        \u003c/clipPath\u003e\n        \u003cmask id=\"myMask\"\u003e\n            \u003crect x=\"0\" y=\"0\" width=\"400\" height=\"400\" fill=\"white\"/\u003e\n            \u003ccircle cx=\"200\" cy=\"200\" r=\"100\" fill=\"black\"/\u003e\n        \u003c/mask\u003e\n    \u003c/defs\u003e\n    \n    \u003crect id=\"rectToClip\" x=\"0\" y=\"0\" width=\"400\" height=\"200\" fill=\"#3498db\" name=\"rectToClip\"/\u003e\n    \u003crect id=\"rectToMask\" x=\"0\" y=\"200\" width=\"400\" height=\"200\" fill=\"#e74c3c\" name=\"rectToMask\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "rectToClip", "value": 1, "tooltip": "This rectangle is clipped by a circle"}, {"name": "rectToMask", "value": 1, "tooltip": "This rectangle is masked by a circle"}], "actions_manifest": {"rectToClip": [{"action_type": "tooltip", "content": "\u003ch3\u003eThis rectangle is clipped by a circle\u003c/h3\u003e", "title": "This rectangle is clipped by a circle", "panel_position": "right"}], "rectToMask": [{"action_type": "tooltip", "content": "\u003ch3\u003eThis rectangle is masked by a circle\u003c/h3\u003e", "title": "This rectangle is masked by a circle", "panel_position": "right"}]}, "overlays": {}, "render_mode": "svg"}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -515,57 +507,6 @@
             }, 1000);
         }
 
-        function applyNativeSvgManipulations() {
-            // Give ECharts a moment to flush the DOM
-            setTimeout(function() {
-                var svgNodes = document.querySelectorAll('#chart-container svg g[name], #chart-container svg path[name], #chart-container svg rect[name], #chart-container svg circle[name], #chart-container svg polygon[name]');
-
-                svgNodes.forEach(function(node) {
-                    var name = node.getAttribute('name');
-                    var mapping = viewsData[currentViewId].mappings[name];
-
-                    if (mapping && mapping.theme) {
-                        var theme = mapping.theme;
-
-                        // Morphing (only valid for <path> elements with morph_to_path)
-                        if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
-                            // Setup CSS transition for 'd' attribute if supported natively, otherwise fallback to standard attribute transition.
-                            var duration = theme.morph_duration_ms || 1000;
-                            node.style.transition = `d ${duration}ms ease-in-out`;
-
-                            // Trigger the morph slightly after initialization to ensure it animates from its initial state
-                            setTimeout(function() {
-                                node.setAttribute('d', theme.morph_to_path);
-                            }, 50);
-                        }
-
-                        // Transformations (rotate, scale, translate)
-                        if (theme.transform) {
-                            var currentTransform = node.getAttribute('transform') || '';
-                            // Append or replace? We append to retain ECharts' view transformations if any, but since these are SVG children, ECharts usually puts the global transform on a parent <g>.
-                            node.setAttribute('transform', currentTransform + ' ' + theme.transform);
-                        }
-
-                        // SVG Filters
-                        if (theme.filter) {
-                            node.style.filter = theme.filter;
-                            node.setAttribute('filter', theme.filter);
-                        }
-
-                        // Clipping
-                        if (theme.clip_path) {
-                            node.setAttribute('clip-path', theme.clip_path);
-                        }
-
-                        // Masking
-                        if (theme.mask) {
-                            node.setAttribute('mask', theme.mask);
-                        }
-                    }
-                });
-            }, 100);
-        }
-
         function generateA11yNodes() {
             var a11yContainer = document.getElementById('a11y-container');
             a11yContainer.innerHTML = ''; // Clear previous
@@ -694,10 +635,6 @@
 
             currentViewId = viewId;
             var view = viewsData[viewId];
-
-            // Note: ECharts doesn't support changing renderer after init natively.
-            // We assume multi-view projects will use the same renderer, or default to the first view's.
-            renderMode = view.render_mode || 'canvas';
 
             // Extract view-specific active data
             echartsData = view.echarts_data;
@@ -840,11 +777,6 @@
             // Generate Accessibility (A11y) DOM Nodes
             generateA11yNodes();
 
-            // Apply SVG Render Mode Native Manipulations
-            if (renderMode === 'svg') {
-                applyNativeSvgManipulations();
-            }
-
             // Handle elements marked to open by default
             echartsData.forEach(function(item) {
                 if (item.open_by_default) {
@@ -916,77 +848,6 @@
             // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
             return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
-
-        // Implement Draggable Logic (for map elements marked as draggable)
-        // Since map regions in ECharts aren't natively draggable, we add a generic mouse tracking system.
-        var draggedElement = null;
-        var dragStartX = 0;
-        var dragStartY = 0;
-        var currentElementX = 0;
-        var currentElementY = 0;
-
-        myChart.on('mousedown', function (params) {
-            var name = params.name;
-            var viewData = viewsData[currentViewId];
-            if (viewData && viewData.mappings && viewData.mappings[name] && viewData.mappings[name].draggable) {
-                // Determine the actual DOM element if in SVG mode, otherwise this won't work well in Canvas
-                if (renderMode === 'svg') {
-                    // Prevent chart roaming while dragging
-                    var opt = myChart.getOption();
-                    if (opt.series[0]) opt.series[0].roam = false;
-                    myChart.setOption(opt);
-
-                    var svgNode = document.querySelector('#chart-container svg [name="' + name + '"]');
-                    if (svgNode) {
-                        draggedElement = svgNode;
-                        dragStartX = params.event.offsetX;
-                        dragStartY = params.event.offsetY;
-
-                        // Parse existing transform translation
-                        var currentTransform = svgNode.getAttribute('transform') || '';
-                        var translateMatch = currentTransform.match(/translate\(([^,]+)[ ,]([^)]+)\)/);
-                        if (translateMatch) {
-                            currentElementX = parseFloat(translateMatch[1]);
-                            currentElementY = parseFloat(translateMatch[2]);
-                        } else {
-                            currentElementX = 0;
-                            currentElementY = 0;
-                        }
-                    }
-                } else {
-                    console.warn("Draggable elements are only supported when render_mode='svg'.");
-                }
-            }
-        });
-
-        // We attach mousemove and mouseup to the generic zr (ZRender) instance to catch them anywhere over the chart
-        myChart.getZr().on('mousemove', function (params) {
-            if (draggedElement) {
-                var dx = params.offsetX - dragStartX;
-                var dy = params.offsetY - dragStartY;
-                var newX = currentElementX + dx;
-                var newY = currentElementY + dy;
-
-                var currentTransform = draggedElement.getAttribute('transform') || '';
-                // Remove old translate
-                currentTransform = currentTransform.replace(/translate\([^)]+\)/g, '').trim();
-                // Apply new translate
-                var newTransform = 'translate(' + newX + ' ' + newY + ') ' + currentTransform;
-                draggedElement.setAttribute('transform', newTransform.trim());
-            }
-        });
-
-        myChart.getZr().on('mouseup', function (params) {
-            if (draggedElement) {
-                // Re-enable chart roaming
-                var opt = myChart.getOption();
-                if (opt.series[0]) opt.series[0].roam = true;
-                myChart.setOption(opt);
-
-                draggedElement = null;
-            }
-        });
-
 
         // Handle click events
         myChart.on('click', function (params) {
@@ -1835,8 +1696,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

@@ -40,6 +40,9 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             if mapping_dict.get('open_by_default'):
                 data_item['open_by_default'] = True
 
+            if mapping_dict.get('draggable'):
+                data_item['draggable'] = True
+
             element_actions = []
             actions_list = mapping_dict.get('actions', [])
 
@@ -103,6 +106,35 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             item_style = {}
             if theme.get('color'):
                 item_style['areaColor'] = theme['color']
+
+            # Advanced Paint: Gradients
+            if theme.get('fill_gradient'):
+                grad = theme['fill_gradient']
+                # Construct an ECharts linear gradient or radial gradient
+                # e.g., new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: 'red'}, {offset: 1, color: 'blue'}])
+                # We can't pass the JS function directly via JSON easily, so we use the dict format ECharts supports natively
+                # format: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{offset: 0, color: 'red'}, {offset: 1, color: 'blue'}] }
+                item_style['areaColor'] = {
+                    'type': grad.get('type', 'linear'),
+                    'x': grad.get('x', 0),
+                    'y': grad.get('y', 0),
+                    'x2': grad.get('x2', 0),
+                    'y2': grad.get('y2', 1),
+                    'colorStops': grad.get('stops', []),
+                    'global': grad.get('global', False)
+                }
+                # For radial: type: 'radial', x: 0.5, y: 0.5, r: 0.5
+
+            # Advanced Paint: Patterns
+            if theme.get('fill_pattern'):
+                pat = theme['fill_pattern']
+                # We need to construct an ECharts image pattern object
+                # format: { image: HTMLImageElement/Canvas/URL, repeat: 'repeat' }
+                item_style['areaColor'] = {
+                    'image': pat.get('image', ''),
+                    'repeat': pat.get('repeat', 'repeat')
+                }
+
             if theme.get('border_color'):
                 item_style['borderColor'] = theme['border_color']
             if theme.get('border_width') is not None:
@@ -129,11 +161,25 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
 
             echarts_data.append(data_item)
 
+        # We need to pass the raw mappings back so the frontend can access them, e.g. for native svg themes
+        safe_mappings = {}
+        for m_name, mapping in mappings.items():
+            if hasattr(mapping, "model_dump"):
+                safe_mappings[m_name] = mapping.model_dump()
+            elif hasattr(mapping, "dict"):
+                safe_mappings[m_name] = mapping.dict()
+            elif isinstance(mapping, dict):
+                safe_mappings[m_name] = mapping.copy()
+            else:
+                safe_mappings[m_name] = dict(mapping)
+
         view_dict = {
             "svg_string": view_obj["svg_string"],
             "echarts_data": echarts_data,
             "actions_manifest": actions_manifest,
-            "overlays": view_obj["overlays"]
+            "overlays": view_obj["overlays"],
+            "render_mode": view_obj.get("render_mode", "canvas"),
+            "mappings": safe_mappings
         }
         if "data_binding" in view_obj:
             view_dict["data_binding"] = view_obj["data_binding"]

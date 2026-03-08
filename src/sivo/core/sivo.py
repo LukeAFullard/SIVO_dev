@@ -9,23 +9,24 @@ class Sivo:
     This class serves as the primary declarative Python API for the framework,
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
-    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False):
+    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas"):
         self.infographic = infographic
         self.infographic.default_panel_position = default_panel_position
         self.infographic.lock_zoom_out = lock_zoom_out
         self.infographic.enable_a11y = enable_a11y
+        self.infographic.render_mode = render_mode
 
     @classmethod
-    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False) -> "Sivo":
+    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas") -> "Sivo":
         """Initializes a Sivo instance from an SVG file path."""
         info = Infographic.from_svg(filepath)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode)
 
     @classmethod
-    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False) -> "Sivo":
+    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas") -> "Sivo":
         """Initializes a Sivo instance directly from an SVG string."""
         info = Infographic.from_string(svg_string)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":
@@ -70,12 +71,21 @@ class Sivo:
         open_by_default: bool = False,
         zoom_on_click: bool = False,
         zoom_level: float = 2.0,
+        draggable: bool = False,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
+        fill_gradient: Optional[dict] = None,
+        fill_pattern: Optional[dict] = None,
         border_width: Optional[float] = None,
         border_color: Optional[str] = None,
         glow: Optional[bool] = None,
-        animation: Optional[str] = None
+        animation: Optional[str] = None,
+        morph_to_path: Optional[str] = None,
+        morph_duration_ms: Optional[int] = 1000,
+        filter: Optional[str] = None,
+        clip_path: Optional[str] = None,
+        mask: Optional[str] = None,
+        transform: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -116,13 +126,32 @@ class Sivo:
             open_by_default=open_by_default,
             zoom_on_click=zoom_on_click,
             zoom_level=zoom_level,
+            draggable=draggable,
             color=color,
             hover_color=hover_color,
+            fill_gradient=fill_gradient,
+            fill_pattern=fill_pattern,
             border_width=border_width,
             border_color=border_color,
             glow=glow,
-            animation=animation
+            animation=animation,
+            morph_to_path=morph_to_path,
+            morph_duration_ms=morph_duration_ms,
+            filter=filter,
+            clip_path=clip_path,
+            mask=mask,
+            transform=transform
         )
+
+    def add_shape(self, tag: str, attributes: Dict[str, str]):
+        """
+        Programmatically adds a simple vector shape to the SVG directly from Python.
+
+        Args:
+            tag (str): The SVG tag name (e.g., "rect", "circle", "path").
+            attributes (Dict[str, str]): Dictionary of SVG attributes (e.g., {'id': 'myRect', 'x': '10', 'y': '10', 'width': '50', 'height': '50', 'fill': 'red'}).
+        """
+        self.infographic.add_shape(tag, attributes)
 
     def bind_data(self, data: Dict[str, Dict[str, float]], key: str, colors: list, min_val: float, max_val: float):
         """
@@ -231,7 +260,8 @@ class Sivo:
             "mappings": mappings_dict,
             "overlays": self.infographic.overlays,
             "connections": self.infographic.connections,
-            "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False)
+            "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False),
+            "render_mode": getattr(self.infographic, "render_mode", "canvas")
         }
         if self.infographic.data_binding:
             view_data["data_binding"] = self.infographic.data_binding.model_dump()

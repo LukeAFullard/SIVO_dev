@@ -62,5 +62,32 @@ class SVGParser:
     def get_viewbox(self) -> str:
         return self.root.get('viewBox', '')
 
+    def add_shape(self, tag: str, attributes: Dict[str, str]):
+        """
+        Programmatically adds a new SVG shape to the root element.
+        """
+        # Get the namespace
+        ns = "http://www.w3.org/2000/svg"
+        if None in self.root.nsmap:
+            ns = self.root.nsmap[None]
+
+        # Create element with fully qualified tag
+        qname = f"{{{ns}}}{tag}"
+        elem = etree.SubElement(self.root, qname)
+
+        # Handle special text content key
+        text_content = attributes.pop('text_content', None)
+        if text_content is not None:
+            elem.text = text_content
+
+        # Set attributes
+        for key, value in attributes.items():
+            elem.set(key, str(value))
+
+        # ECharts requires a 'name' attribute matching 'id'
+        elem_id = attributes.get('id')
+        if elem_id and 'name' not in attributes:
+            elem.set('name', elem_id)
+
     def to_string(self) -> str:
         return etree.tostring(self.tree, encoding='unicode')

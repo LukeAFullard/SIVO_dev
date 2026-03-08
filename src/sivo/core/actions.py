@@ -137,10 +137,18 @@ class A11yAction(BaseAction):
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
+    fill_gradient: Optional[dict] = None
+    fill_pattern: Optional[dict] = None
     border_width: Optional[float] = None
     border_color: Optional[str] = None
     glow: Optional[bool] = None
     animation: Optional[str] = None
+    morph_to_path: Optional[str] = None
+    morph_duration_ms: Optional[int] = 1000
+    filter: Optional[str] = None
+    clip_path: Optional[str] = None
+    mask: Optional[str] = None
+    transform: Optional[str] = None
 
 ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
@@ -148,4 +156,5 @@ class InteractionMapping(BaseModel):
     id: str
     actions: list[ActionType] = Field(default_factory=list)
     open_by_default: bool = False
+    draggable: bool = False
     theme: ThemeOverride = Field(default_factory=ThemeOverride)
