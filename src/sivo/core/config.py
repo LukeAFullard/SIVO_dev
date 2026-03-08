@@ -3,6 +3,9 @@ from pydantic import BaseModel, Field
 
 class ElementConfig(BaseModel):
     """Configuration for a single SVG element's interactions and theme."""
+    aria_label: Optional[str] = None
+    role: Optional[str] = None
+    tabindex: Optional[str] = None
     tooltip: Optional[str] = None
     html: Optional[str] = None
     url: Optional[str] = None
@@ -48,6 +51,10 @@ class ProjectConfig(BaseModel):
     lock_zoom_out: bool = Field(
         default=False,
         description="If True, prevents the user from zooming out further than the initial zoom level (1.0)."
+    )
+    enable_a11y: bool = Field(
+        default=False,
+        description="If True, automatically generates accessibility actions (A11yAction) for interactive elements."
     )
     mappings: Dict[str, ElementConfig] = Field(
         default_factory=dict,

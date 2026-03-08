@@ -268,8 +268,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\n  \u003crect id=\"test_rect\" x=\"10\" y=\"10\" width=\"80\" height=\"80\" fill=\"blue\" name=\"test_rect\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "test_rect", "value": 1, "tooltip": "This is a test rectangle"}], "actions_manifest": {"test_rect": [{"action_type": "a11y", "role": "button", "tabindex": "0", "aria_label": "This is a test rectangle"}, {"action_type": "tooltip", "content": "\u003cp\u003eTest HTML\u003c/p\u003e", "title": "This is a test rectangle", "panel_position": "right"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -428,7 +428,7 @@
                 }
                 tableHtml += `</tbody></table>`;
                 var dataSummary = document.createElement('div');
-                dataSummary.innerHTML = sanitizeHTML(tableHtml);
+                dataSummary.innerHTML = tableHtml;
                 a11yContainer.appendChild(dataSummary);
             }
 
@@ -1471,8 +1471,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

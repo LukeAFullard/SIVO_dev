@@ -4,12 +4,12 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -17,6 +17,7 @@ class Infographic:
         self.overlays: Dict[str, dict] = {}
         self.default_panel_position = default_panel_position
         self.lock_zoom_out = lock_zoom_out
+        self.enable_a11y = enable_a11y
         self.data_binding: Optional[DataBindingConfig] = None
 
         # Initialize default mappings
@@ -62,12 +63,16 @@ class Infographic:
         infographic.default_panel_position = getattr(cfg, "default_panel_position", "right")
         infographic.lock_zoom_out = getattr(cfg, "lock_zoom_out", False)
 
+        infographic.enable_a11y = getattr(cfg, "enable_a11y", False)
         infographic.data_binding = getattr(cfg, "data_binding", None)
 
         for element_id, elem_config in cfg.mappings.items():
             try:
                 infographic.map(
                     element_id,
+                    aria_label=elem_config.aria_label,
+                    role=elem_config.role,
+                    tabindex=elem_config.tabindex,
                     tooltip=elem_config.tooltip,
                     html=elem_config.html,
                     url=elem_config.url,
@@ -105,6 +110,9 @@ class Infographic:
     def map(
         self,
         element_id: str,
+        aria_label: Optional[str] = None,
+        role: Optional[str] = None,
+        tabindex: Optional[str] = None,
         tooltip: Optional[str] = None,
         html: Optional[str] = None,
         url: Optional[str] = None,
@@ -151,6 +159,28 @@ class Infographic:
 
         elem_name = target_elem['name']
         mapping = self.mappings[elem_name]
+
+        # Handle Accessibility (A11y) Actions
+        if aria_label or role or tabindex or self.enable_a11y:
+            a11y_action = next((a for a in mapping.actions if a.action_type == "a11y"), None)
+            if not a11y_action:
+                # Generate default aria_label from tooltip or element_id if enable_a11y is True but aria_label wasn't provided
+                default_label = tooltip if tooltip else element_id
+
+                # Check if it was provided, else fallback to generated
+                final_label = aria_label if aria_label is not None else default_label
+                final_role = role if role is not None else "button"
+                final_tabindex = tabindex if tabindex is not None else "0"
+
+                mapping.actions.append(A11yAction(aria_label=final_label, role=final_role, tabindex=final_tabindex))
+            else:
+                if aria_label is not None:
+                    a11y_action.aria_label = aria_label
+                if role is not None:
+                    a11y_action.role = role
+                if tabindex is not None:
+                    a11y_action.tabindex = tabindex
+
 
         if open_by_default:
             mapping.open_by_default = True
