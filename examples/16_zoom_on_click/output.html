@@ -254,8 +254,8 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"400\"\u003e\n    \u003crect id=\"TX\" x=\"100\" y=\"100\" width=\"80\" height=\"80\" fill=\"#ccc\" stroke=\"#000\" stroke-width=\"2\" name=\"TX\"/\u003e\n    \u003ctext x=\"140\" y=\"140\" font-size=\"20\" text-anchor=\"middle\" alignment-baseline=\"middle\"\u003eTX\u003c/text\u003e\n    \n    \u003crect id=\"CA\" x=\"400\" y=\"200\" width=\"80\" height=\"80\" fill=\"#ccc\" stroke=\"#000\" stroke-width=\"2\" name=\"CA\"/\u003e\n    \u003ctext x=\"440\" y=\"240\" font-size=\"20\" text-anchor=\"middle\" alignment-baseline=\"middle\"\u003eCA\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "TX", "value": 1, "tooltip": "Texas Region"}, {"name": "CA", "value": 1, "tooltip": "California Region"}], "actions_manifest": {"TX": [{"action_type": "zoom", "center": [140.0, 140.0], "zoom_level": 3.5}, {"action_type": "tooltip", "content": "\u003ch3\u003eTexas Region\u003c/h3\u003e\u003cp\u003eZoomed in automatically to Texas.\u003c/p\u003e", "title": "Texas Region", "panel_position": "right"}], "CA": [{"action_type": "zoom", "center": [440.0, 240.0], "zoom_level": 3.5}, {"action_type": "tooltip", "content": "\u003ch3\u003eCalifornia Region\u003c/h3\u003e\u003cp\u003eZoomed in automatically to California.\u003c/p\u003e", "title": "California Region", "panel_position": "right"}]}, "overlays": {}}};
+        var currentViewId = "default_view";
 
         // Active variables for the current view
         var echartsData = [];
@@ -1352,8 +1352,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

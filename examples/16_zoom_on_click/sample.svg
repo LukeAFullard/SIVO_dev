@@ -1,0 +1,7 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+    <rect id="TX" x="100" y="100" width="80" height="80" fill="#ccc" stroke="#000" stroke-width="2"/>
+    <text x="140" y="140" font-size="20" text-anchor="middle" alignment-baseline="middle">TX</text>
+
+    <rect id="CA" x="400" y="200" width="80" height="80" fill="#ccc" stroke="#000" stroke-width="2"/>
+    <text x="440" y="240" font-size="20" text-anchor="middle" alignment-baseline="middle">CA</text>
+</svg>
