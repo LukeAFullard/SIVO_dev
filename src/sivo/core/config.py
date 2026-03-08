@@ -41,6 +41,15 @@ class DataBindingConfig(BaseModel):
     min_val: float
     max_val: float
 
+class TimelineBindingConfig(BaseModel):
+    data: Dict[str, Dict[str, Dict[str, float]]]
+    key: str
+    colors: List[str]
+    min_val: float
+    max_val: float
+    auto_play: bool = True
+    play_interval: int = 1000
+
 class ConnectionConfig(BaseModel):
     source_id: str
     target_id: str
@@ -77,4 +86,8 @@ class ProjectConfig(BaseModel):
     data_binding: Optional[DataBindingConfig] = Field(
         default=None,
         description="Optional data binding for generating choropleth maps dynamically."
+    )
+    timeline_binding: Optional[TimelineBindingConfig] = Field(
+        default=None,
+        description="Optional timeline binding for animating choropleth maps over time."
     )

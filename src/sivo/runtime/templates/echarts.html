@@ -278,6 +278,7 @@
         var connectionsData = [];
         var lockZoomOut = false;
         var dataBinding = null;
+        var timelineBinding = null;
 
         // History for back navigation
         var viewHistory = [];
@@ -430,16 +431,18 @@
                 });
             }
 
-            if (dataBinding) {
+            var activeDataBinding = dataBinding || timelineBinding;
+
+            if (activeDataBinding) {
                 option.visualMap = {
-                    min: dataBinding.min_val,
-                    max: dataBinding.max_val,
+                    min: activeDataBinding.min_val,
+                    max: activeDataBinding.max_val,
                     left: 'left',
                     bottom: 'bottom',
-                    text: [dataBinding.max_val.toString(), dataBinding.min_val.toString()],           // 文本，默认为数值文本
+                    text: [activeDataBinding.max_val.toString(), activeDataBinding.min_val.toString()],
                     calculable: true,
                     inRange: {
-                        color: dataBinding.colors
+                        color: activeDataBinding.colors
                     }
                 };
             }
@@ -510,6 +513,20 @@
                     var name = echartsData[i].name;
                     if (dataBinding.data[name] && dataBinding.data[name][dataBinding.key] !== undefined) {
                         tableHtml += `<tr><td>${name}</td><td>${dataBinding.data[name][dataBinding.key]}</td></tr>`;
+                    }
+                }
+                tableHtml += `</tbody></table>`;
+                var dataSummary = document.createElement('div');
+                dataSummary.innerHTML = sanitizeHTML(tableHtml);
+                a11yContainer.appendChild(dataSummary);
+            } else if (timelineBinding && timelineBinding.data) {
+                // For timelines, just output the first time step for simplicity, or indicate it's an animated map
+                var firstTimeKey = Object.keys(timelineBinding.data)[0];
+                var tableHtml = `<table summary="Data values for map regions over time"><caption>${timelineBinding.key} Values (starting ${firstTimeKey})</caption><thead><tr><th scope="col">Region</th><th scope="col">Value</th></tr></thead><tbody>`;
+                for (var i = 0; i < echartsData.length; i++) {
+                    var name = echartsData[i].name;
+                    if (timelineBinding.data[firstTimeKey][name] && timelineBinding.data[firstTimeKey][name][timelineBinding.key] !== undefined) {
+                        tableHtml += `<tr><td>${name}</td><td>${timelineBinding.data[firstTimeKey][name][timelineBinding.key]}</td></tr>`;
                     }
                 }
                 tableHtml += `</tbody></table>`;
@@ -621,6 +638,7 @@
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
             dataBinding = view.data_binding || null;
+            timelineBinding = view.timeline_binding || null;
 
             if (dataBinding && dataBinding.data) {
                 // Populate Echarts data with values for visualMap
@@ -638,7 +656,48 @@
                 baseOpt.series[0].scaleLimit = { min: 1.0 };
             }
             echarts.registerMap(viewId, { svg: view.svg_string });
-            myChart.setOption(baseOpt, true);
+
+            if (timelineBinding && timelineBinding.data) {
+                var timelineKeys = Object.keys(timelineBinding.data);
+
+                var fullOption = {
+                    baseOption: {
+                        ...baseOpt,
+                        timeline: {
+                            axisType: 'category',
+                            autoPlay: timelineBinding.auto_play,
+                            playInterval: timelineBinding.play_interval,
+                            data: timelineKeys,
+                            bottom: 20
+                        }
+                    },
+                    options: []
+                };
+
+                for (var t = 0; t < timelineKeys.length; t++) {
+                    var timeKey = timelineKeys[t];
+                    var stepDataMap = timelineBinding.data[timeKey];
+                    var stepSeriesData = JSON.parse(JSON.stringify(echartsData)); // Deep clone
+
+                    for (var i = 0; i < stepSeriesData.length; i++) {
+                        var itemName = stepSeriesData[i].name;
+                        if (stepDataMap[itemName] && stepDataMap[itemName][timelineBinding.key] !== undefined) {
+                            stepSeriesData[i].value = stepDataMap[itemName][timelineBinding.key];
+                        }
+                    }
+
+                    fullOption.options.push({
+                        title: { text: timeKey },
+                        series: [{
+                            data: stepSeriesData
+                        }]
+                    });
+                }
+
+                myChart.setOption(fullOption, true);
+            } else {
+                myChart.setOption(baseOpt, true);
+            }
 
             // Reset zoom tracking
             currentZoom = 1;
@@ -1502,6 +1561,20 @@
                 // params.zoom is a delta multiplier, not absolute zoom
                 currentZoom *= params.zoom;
             }
+
+            // Sync zoom from map to geo component if lines exist to keep them aligned during drag
+            if (connectionsData.length > 0) {
+                var option = myChart.getOption();
+                if (option.series && option.series[0] && option.geo) {
+                    myChart.setOption({
+                        geo: [{
+                            zoom: option.series[0].zoom,
+                            center: option.series[0].center
+                        }]
+                    });
+                }
+            }
+
             // If dragging, params.zoom is undefined, but we still need to update position
             updateOverlaysPosition();
         });

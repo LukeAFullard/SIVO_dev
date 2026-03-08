@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
 from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction
-from .config import ProjectConfig, ElementConfig, DataBindingConfig
+from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
@@ -20,6 +20,7 @@ class Infographic:
         self.lock_zoom_out = lock_zoom_out
         self.enable_a11y = enable_a11y
         self.data_binding: Optional[DataBindingConfig] = None
+        self.timeline_binding: Optional[TimelineBindingConfig] = None
 
         # Initialize default mappings
         for elem in self.elements:
@@ -66,6 +67,7 @@ class Infographic:
 
         infographic.enable_a11y = getattr(cfg, "enable_a11y", False)
         infographic.data_binding = getattr(cfg, "data_binding", None)
+        infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
 
         if getattr(cfg, "connections", None):
             for conn in cfg.connections:
@@ -304,6 +306,21 @@ class Infographic:
             max_val=max_val
         )
 
+    def bind_timeline(self, data: Dict[str, Dict[str, Dict[str, float]]], key: str, colors: list, min_val: float, max_val: float, auto_play: bool = True, play_interval: int = 1000):
+        """
+        Binds quantitative time-series data to SVG IDs dynamically and applies a color scale over an animated timeline.
+        data format: { "2020": { "RegionA": { "value": 10 }, "RegionB": { "value": 20 } }, "2021": ... }
+        """
+        self.timeline_binding = TimelineBindingConfig(
+            data=data,
+            key=key,
+            colors=colors,
+            min_val=min_val,
+            max_val=max_val,
+            auto_play=auto_play,
+            play_interval=play_interval
+        )
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.
@@ -441,6 +458,8 @@ class Infographic:
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()
+        if self.timeline_binding:
+            view_data["timeline_binding"] = self.timeline_binding.model_dump()
 
         views_data = {
             "default_view": view_data
