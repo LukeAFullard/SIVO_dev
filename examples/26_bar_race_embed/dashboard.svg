@@ -1,0 +1,14 @@
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+        <rect width="400" height="300" fill="#f0f4f8" />
+
+        <g id="race_trigger_button" transform="translate(100, 100)" cursor="pointer">
+            <rect width="200" height="60" rx="10" fill="#3b82f6" />
+            <text x="100" y="35" font-family="sans-serif" font-size="18" fill="white" text-anchor="middle" font-weight="bold">
+                Show Sales Bar Race
+            </text>
+            <text x="100" y="50" font-family="sans-serif" font-size="12" fill="#e2e8f0" text-anchor="middle">
+                (Click to open side panel)
+            </text>
+        </g>
+    </svg>

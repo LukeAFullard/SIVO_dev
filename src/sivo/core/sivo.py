@@ -130,6 +130,12 @@ class Sivo:
         """
         self.infographic.bind_data(data, key, colors, min_val, max_val)
 
+    def bind_timeline(self, data: Dict[str, Dict[str, Dict[str, float]]], key: str, colors: list, min_val: float, max_val: float, auto_play: bool = True, play_interval: int = 1000):
+        """
+        Binds quantitative time-series data to SVG IDs dynamically and animates a color scale over time.
+        """
+        self.infographic.bind_timeline(data, key, colors, min_val, max_val, auto_play, play_interval)
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.
@@ -182,6 +188,8 @@ class Sivo:
         }
         if self.infographic.data_binding:
             view_data["data_binding"] = self.infographic.data_binding.model_dump()
+        if self.infographic.timeline_binding:
+            view_data["timeline_binding"] = self.infographic.timeline_binding.model_dump()
         return view_data
 
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:

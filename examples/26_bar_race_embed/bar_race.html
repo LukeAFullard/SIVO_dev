@@ -268,7 +268,7 @@
         var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 200 200\"\u003e\n  \u003crect id=\"rectA\" x=\"20\" y=\"20\" width=\"40\" height=\"40\" fill=\"red\" name=\"rectA\"/\u003e\n  \u003crect id=\"rectB\" x=\"140\" y=\"140\" width=\"40\" height=\"40\" fill=\"blue\" name=\"rectB\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "rectA", "value": 1}, {"name": "rectB", "value": 1}], "actions_manifest": {}, "overlays": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"\u003e\n        \u003crect width=\"400\" height=\"300\" fill=\"#f0f4f8\"/\u003e\n        \n        \u003cg id=\"race_trigger_button\" transform=\"translate(100, 100)\" cursor=\"pointer\" name=\"race_trigger_button\"\u003e\n            \u003crect width=\"200\" height=\"60\" rx=\"10\" fill=\"#3b82f6\"/\u003e\n            \u003ctext x=\"100\" y=\"35\" font-family=\"sans-serif\" font-size=\"18\" fill=\"white\" text-anchor=\"middle\" font-weight=\"bold\"\u003e\n                Show Sales Bar Race\n            \u003c/text\u003e\n            \u003ctext x=\"100\" y=\"50\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#e2e8f0\" text-anchor=\"middle\"\u003e\n                (Click to open side panel)\n            \u003c/text\u003e\n        \u003c/g\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "race_trigger_button", "value": 1, "tooltip": "Open Race Chart", "emphasis": {"itemStyle": {"areaColor": "#2563eb", "shadowBlur": 15, "shadowColor": "#2563eb", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"race_trigger_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eOpen Race Chart\u003c/h3\u003e", "title": "Open Race Chart", "panel_position": "right"}, {"action_type": "echarts", "option": {"baseOption": {"timeline": {"axisType": "category", "autoPlay": true, "playInterval": 1500, "data": ["2019", "2020", "2021", "2022", "2023"], "label": {"formatter": "{value}"}}, "title": {"subtext": "Animated Bar Race built with ECharts"}, "tooltip": {"trigger": "axis"}, "xAxis": {"type": "value", "name": "Sales ($)"}, "yAxis": {"type": "category", "inverse": true, "animationDuration": 300, "animationDurationUpdate": 300, "max": 3}, "series": [{"realtimeSort": true, "name": "Sales", "type": "bar", "itemStyle": {"color": "#10b981"}, "label": {"show": true, "position": "right", "valueAnimation": true}}], "animationDuration": 0, "animationDurationUpdate": 1500, "animationEasing": "linear", "animationEasingUpdate": "linear"}, "options": [{"title": {"text": "Global Sales - 2019"}, "series": [{"data": [25, 66, 77, 79], "realtimeSort": true}], "yAxis": {"data": ["Brand A", "Brand D", "Brand C", "Brand B"]}}, {"title": {"text": "Global Sales - 2020"}, "series": [{"data": [56, 95, 108, 115], "realtimeSort": true}], "yAxis": {"data": ["Brand A", "Brand D", "Brand B", "Brand C"]}}, {"title": {"text": "Global Sales - 2021"}, "series": [{"data": [81, 105, 132, 135], "realtimeSort": true}], "yAxis": {"data": ["Brand A", "Brand D", "Brand B", "Brand C"]}}, {"title": {"text": "Global Sales - 2022"}, "series": [{"data": [108, 111, 146, 163], "realtimeSort": true}], "yAxis": {"data": ["Brand A", "Brand D", "Brand B", "Brand C"]}}, {"title": {"text": "Global Sales - 2023"}, "series": [{"data": [125, 142, 177, 193], "realtimeSort": true}], "yAxis": {"data": ["Brand D", "Brand A", "Brand B", "Brand C"]}}]}, "height": "400px", "panel_position": "right"}]}, "overlays": {}}};
         var currentViewId = "default_view";
 
         // Active variables for the current view
@@ -278,6 +278,7 @@
         var connectionsData = [];
         var lockZoomOut = false;
         var dataBinding = null;
+        var timelineBinding = null;
 
         // History for back navigation
         var viewHistory = [];
@@ -430,16 +431,18 @@
                 });
             }
 
-            if (dataBinding) {
+            var activeDataBinding = dataBinding || timelineBinding;
+
+            if (activeDataBinding) {
                 option.visualMap = {
-                    min: dataBinding.min_val,
-                    max: dataBinding.max_val,
+                    min: activeDataBinding.min_val,
+                    max: activeDataBinding.max_val,
                     left: 'left',
                     bottom: 'bottom',
-                    text: [dataBinding.max_val.toString(), dataBinding.min_val.toString()],           // 文本，默认为数值文本
+                    text: [activeDataBinding.max_val.toString(), activeDataBinding.min_val.toString()],
                     calculable: true,
                     inRange: {
-                        color: dataBinding.colors
+                        color: activeDataBinding.colors
                     }
                 };
             }
@@ -510,6 +513,20 @@
                     var name = echartsData[i].name;
                     if (dataBinding.data[name] && dataBinding.data[name][dataBinding.key] !== undefined) {
                         tableHtml += `<tr><td>${name}</td><td>${dataBinding.data[name][dataBinding.key]}</td></tr>`;
+                    }
+                }
+                tableHtml += `</tbody></table>`;
+                var dataSummary = document.createElement('div');
+                dataSummary.innerHTML = sanitizeHTML(tableHtml);
+                a11yContainer.appendChild(dataSummary);
+            } else if (timelineBinding && timelineBinding.data) {
+                // For timelines, just output the first time step for simplicity, or indicate it's an animated map
+                var firstTimeKey = Object.keys(timelineBinding.data)[0];
+                var tableHtml = `<table summary="Data values for map regions over time"><caption>${timelineBinding.key} Values (starting ${firstTimeKey})</caption><thead><tr><th scope="col">Region</th><th scope="col">Value</th></tr></thead><tbody>`;
+                for (var i = 0; i < echartsData.length; i++) {
+                    var name = echartsData[i].name;
+                    if (timelineBinding.data[firstTimeKey][name] && timelineBinding.data[firstTimeKey][name][timelineBinding.key] !== undefined) {
+                        tableHtml += `<tr><td>${name}</td><td>${timelineBinding.data[firstTimeKey][name][timelineBinding.key]}</td></tr>`;
                     }
                 }
                 tableHtml += `</tbody></table>`;
@@ -621,6 +638,7 @@
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
             dataBinding = view.data_binding || null;
+            timelineBinding = view.timeline_binding || null;
 
             if (dataBinding && dataBinding.data) {
                 // Populate Echarts data with values for visualMap
@@ -638,7 +656,48 @@
                 baseOpt.series[0].scaleLimit = { min: 1.0 };
             }
             echarts.registerMap(viewId, { svg: view.svg_string });
-            myChart.setOption(baseOpt, true);
+
+            if (timelineBinding && timelineBinding.data) {
+                var timelineKeys = Object.keys(timelineBinding.data);
+
+                var fullOption = {
+                    baseOption: {
+                        ...baseOpt,
+                        timeline: {
+                            axisType: 'category',
+                            autoPlay: timelineBinding.auto_play,
+                            playInterval: timelineBinding.play_interval,
+                            data: timelineKeys,
+                            bottom: 20
+                        }
+                    },
+                    options: []
+                };
+
+                for (var t = 0; t < timelineKeys.length; t++) {
+                    var timeKey = timelineKeys[t];
+                    var stepDataMap = timelineBinding.data[timeKey];
+                    var stepSeriesData = JSON.parse(JSON.stringify(echartsData)); // Deep clone
+
+                    for (var i = 0; i < stepSeriesData.length; i++) {
+                        var itemName = stepSeriesData[i].name;
+                        if (stepDataMap[itemName] && stepDataMap[itemName][timelineBinding.key] !== undefined) {
+                            stepSeriesData[i].value = stepDataMap[itemName][timelineBinding.key];
+                        }
+                    }
+
+                    fullOption.options.push({
+                        title: { text: timeKey },
+                        series: [{
+                            data: stepSeriesData
+                        }]
+                    });
+                }
+
+                myChart.setOption(fullOption, true);
+            } else {
+                myChart.setOption(baseOpt, true);
+            }
 
             // Reset zoom tracking
             currentZoom = 1;
@@ -679,7 +738,8 @@
             myChart.setOption({
                 series: [{
                     zoom: currentZoom
-                }]
+                }],
+                geo: option.geo ? [{ zoom: currentZoom }] : undefined
             });
         }
 
@@ -696,17 +756,20 @@
             myChart.setOption({
                 series: [{
                     zoom: currentZoom
-                }]
+                }],
+                geo: option.geo ? [{ zoom: currentZoom }] : undefined
             });
         }
 
         function resetZoom() {
             currentZoom = 1;
+            var option = myChart.getOption();
             myChart.setOption({
                 series: [{
                     zoom: 1,
                     center: null
-                }]
+                }],
+                geo: option.geo ? [{ zoom: 1, center: null }] : undefined
             });
         }
 
@@ -1498,6 +1561,20 @@
                 // params.zoom is a delta multiplier, not absolute zoom
                 currentZoom *= params.zoom;
             }
+
+            // Sync zoom from map to geo component if lines exist to keep them aligned during drag
+            if (connectionsData.length > 0) {
+                var option = myChart.getOption();
+                if (option.series && option.series[0] && option.geo) {
+                    myChart.setOption({
+                        geo: [{
+                            zoom: option.series[0].zoom,
+                            center: option.series[0].center
+                        }]
+                    });
+                }
+            }
+
             // If dragging, params.zoom is undefined, but we still need to update position
             updateOverlaysPosition();
         });
