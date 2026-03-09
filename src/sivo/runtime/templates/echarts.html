@@ -636,23 +636,36 @@
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
                     var delay = theme.morph_delay_ms || 0;
+                    var easing = theme.morph_easing || 'ease-in-out';
+                    var iterations = theme.morph_iterations !== undefined ? theme.morph_iterations : 1;
+
                     var originalD = node.getAttribute('d');
                     var targetD = theme.morph_to_path;
 
                     // The Web Animations API (WAAPI) provides the smoothest, hardware-accelerated
                     // path morphing in modern browsers. It requires wrapping the d string in 'path()'.
                     try {
-                        node.animate([
+                        var anim = node.animate([
                             { d: 'path("' + originalD + '")' },
                             { d: 'path("' + targetD + '")' }
                         ], {
                             duration: duration,
                             delay: delay,
                             fill: 'forwards',
-                            easing: 'ease-in-out'
+                            easing: easing,
+                            iterations: iterations,
+                            direction: iterations > 1 ? 'alternate' : 'normal'
                         });
-                        // Ensure the actual attribute is updated at the end for persistence
-                        setTimeout(() => node.setAttribute('d', targetD), duration + delay);
+
+                        // Ensure the actual attribute is updated at the end for persistence,
+                        // calculating total time including delays and iterations
+                        if (iterations !== Infinity) {
+                            setTimeout(() => {
+                                // If alternate and even iterations, it ends at original state
+                                var finalD = (iterations > 1 && iterations % 2 === 0) ? originalD : targetD;
+                                node.setAttribute('d', finalD);
+                            }, delay + (duration * iterations));
+                        }
                     } catch (err) {
                         // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
                         setTimeout(() => node.setAttribute('d', targetD), delay);

@@ -124,6 +124,8 @@ class Infographic:
                     morph_to_path=elem_config.morph_to_path,
                     morph_duration_ms=elem_config.morph_duration_ms,
                     morph_delay_ms=elem_config.morph_delay_ms,
+                    morph_easing=elem_config.morph_easing,
+                    morph_iterations=elem_config.morph_iterations,
                     filter=elem_config.filter,
                     clip_path=elem_config.clip_path,
                     mask=elem_config.mask,
@@ -183,6 +185,8 @@ class Infographic:
         morph_to_path: Optional[str] = None,
         morph_duration_ms: Optional[int] = 1000,
         morph_delay_ms: Optional[int] = 0,
+        morph_easing: Optional[str] = "ease-in-out",
+        morph_iterations: Optional[float] = 1.0,
         filter: Optional[str] = None,
         clip_path: Optional[str] = None,
         mask: Optional[str] = None,
@@ -333,6 +337,12 @@ class Infographic:
 
         if morph_delay_ms is not None:
             mapping.theme.morph_delay_ms = morph_delay_ms
+
+        if morph_easing:
+            mapping.theme.morph_easing = morph_easing
+
+        if morph_iterations is not None:
+            mapping.theme.morph_iterations = morph_iterations
 
         if filter:
             mapping.theme.filter = filter
