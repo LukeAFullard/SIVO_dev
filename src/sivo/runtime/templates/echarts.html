@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
     {% if build_js %}
@@ -222,40 +222,49 @@
         @media (max-width: 768px) {
             body, #sivo-app-container {
                 flex-direction: column !important;
+                padding-bottom: env(safe-area-inset-bottom);
             }
             #scrollytelling-container {
                 width: 100% !important;
                 height: 40vh !important;
-                order: 2; /* Put text below map on mobile */
+                order: 2 !important; /* Put text below map on mobile */
+                border-top: 1px solid #ddd;
             }
             #chart-wrapper {
-                height: 60vh !important;
-                order: 1;
+                height: auto !important; /* Let flex take over to fill remaining space */
+                flex: 1 !important;
+                order: 1 !important;     /* Map stays at the top */
+                min-height: 40vh;
             }
             .scrolly-step {
                 padding: 10vh 20px !important;
             }
             #tour-container {
-                width: 90% !important;
-                left: 5% !important;
+                width: 80% !important;
+                left: 10% !important;
                 transform: none !important;
-                bottom: 10px !important;
+                bottom: 20px !important;
                 padding: 10px 15px !important;
+                font-size: 14px;
             }
             #minimap-container {
-                width: 100px !important;
-                height: 100px !important;
-                bottom: 10px !important;
+                width: 80px !important;
+                height: 80px !important;
+                top: 10px !important;  /* Move minimap to top on mobile so it doesn't overlap zoom controls */
                 left: 10px !important;
+                bottom: auto !important;
             }
             #layer-legend {
-                max-width: 150px !important;
+                max-width: 120px !important;
                 font-size: 12px !important;
                 padding: 5px !important;
+                top: 10px !important;
+                right: 10px !important;
             }
             .zoom-controls {
                 right: 10px !important;
-                bottom: 10px !important;
+                bottom: 20px !important;
+                z-index: 1001 !important;
             }
             .zoom-btn {
                 width: 25px !important;
@@ -264,13 +273,27 @@
             }
             #info-panel.active {
                 width: 100% !important;
-                height: 50vh !important;
+                height: 45vh !important; /* Give fixed part of the screen to info panel */
+                flex: none !important;
+                order: 3 !important;     /* Ensure it is BELOW the chart */
                 border: none !important;
                 border-top: 1px solid #ddd !important;
                 box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
             }
             .sivo-resizer {
                 display: none !important;
+            }
+            .sivo-gallery-close, .sivo-video-close {
+                top: 15px !important;
+                right: 20px !important;
+                font-size: 30px !important;
+            }
+            .info-panel-header {
+                padding: 8px 10px !important;
+            }
+            .close-btn {
+                width: 30px !important;
+                height: 30px !important;
             }
         }
 
@@ -2542,12 +2565,20 @@
         }
         .sivo-gallery-close {
             position: absolute;
-            top: 20px;
-            right: 30px;
+            top: 10px;
+            right: 15px;
             color: white;
-            font-size: 40px;
+            font-size: 30px;
             font-weight: bold;
             cursor: pointer;
+            z-index: 10000;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
     <div id="sivo-gallery-modal">
@@ -2627,8 +2658,9 @@
         }
         .sivo-video-close {
             position: absolute;
-            top: -40px;
+            top: -30px;
             right: 0;
+            z-index: 10000;
             color: white;
             font-size: 30px;
             font-weight: bold;
