@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -435,8 +430,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"section1\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section1\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eData Center\u003c/text\u003e\n  \n  \u003ccircle id=\"section2\" cx=\"700\" cy=\"200\" r=\"100\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section2\"/\u003e\n  \u003ctext x=\"700\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eLogistics\u003c/text\u003e\n  \n  \u003cpath id=\"section3\" d=\"M 300 400 L 700 400 L 500 550 Z\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section3\"/\u003e\n  \u003ctext x=\"500\" y=\"470\" font-size=\"24\" text-anchor=\"middle\"\u003eHQ\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "section1", "value": 1, "tooltip": "Data Center (Active)"}, {"name": "section2", "value": 1, "tooltip": "Logistics Hub (Active)"}, {"name": "section3", "value": 1, "tooltip": "Headquarters (Active)"}], "actions_manifest": {"section1": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "section2": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "section3": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"section1": {"id": "section1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section2": {"id": "section2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section3": {"id": "section3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -2483,8 +2478,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

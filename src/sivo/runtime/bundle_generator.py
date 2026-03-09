@@ -184,10 +184,18 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "actions_manifest": actions_manifest,
             "overlays": view_obj["overlays"],
             "render_mode": view_obj.get("render_mode", "canvas"),
+            "enable_minimap": view_obj.get("enable_minimap", False),
+            "enable_export": view_obj.get("enable_export", False),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:
             view_dict["data_binding"] = view_obj["data_binding"]
+        if "scrollytelling" in view_obj:
+            view_dict["scrollytelling"] = view_obj["scrollytelling"]
+        if "tour" in view_obj:
+            view_dict["tour"] = view_obj["tour"]
+        if "layer_toggles" in view_obj:
+            view_dict["layer_toggles"] = view_obj["layer_toggles"]
 
         formatted_views[view_id] = view_dict
 

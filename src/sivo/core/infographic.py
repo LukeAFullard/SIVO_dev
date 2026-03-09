@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas"):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -20,8 +20,13 @@ class Infographic:
         self.lock_zoom_out = lock_zoom_out
         self.enable_a11y = enable_a11y
         self.render_mode = render_mode
+        self.enable_minimap = enable_minimap
+        self.enable_export = enable_export
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
+        self.scrollytelling: Optional[list] = None
+        self.tour: Optional[list] = None
+        self.layer_toggles: Optional[list] = None
 
         # Initialize default mappings
         for elem in self.elements:
@@ -68,8 +73,13 @@ class Infographic:
 
         infographic.enable_a11y = getattr(cfg, "enable_a11y", False)
         infographic.render_mode = getattr(cfg, "render_mode", "canvas")
+        infographic.enable_minimap = getattr(cfg, "enable_minimap", False)
+        infographic.enable_export = getattr(cfg, "enable_export", False)
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
+        infographic.scrollytelling = getattr(cfg, "scrollytelling", None)
+        infographic.tour = getattr(cfg, "tour", None)
+        infographic.layer_toggles = getattr(cfg, "layer_toggles", None)
 
         if getattr(cfg, "connections", None):
             for conn in cfg.connections:
@@ -190,7 +200,10 @@ class Infographic:
         filter: Optional[str] = None,
         clip_path: Optional[str] = None,
         mask: Optional[str] = None,
-        transform: Optional[str] = None
+        transform: Optional[str] = None,
+        odometer_value: Optional[float] = None,
+        odometer_duration_ms: Optional[int] = 2000,
+        odometer_format: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -356,6 +369,11 @@ class Infographic:
         if transform:
             mapping.theme.transform = transform
 
+        if odometer_value is not None:
+            mapping.theme.odometer_value = odometer_value
+            mapping.theme.odometer_duration_ms = odometer_duration_ms
+            mapping.theme.odometer_format = odometer_format
+
     def add_shape(self, tag: str, attributes: Dict[str, str]):
         """
         Programmatically adds a simple vector shape to the SVG and registers it
@@ -418,6 +436,24 @@ class Infographic:
             topic=topic,
             auth_token=auth_token
         )
+
+    def bind_scrollytelling(self, steps: list[Dict]):
+        from .config import ScrollytellingStepConfig
+        self.scrollytelling = []
+        for step in steps:
+            self.scrollytelling.append(ScrollytellingStepConfig(**step))
+
+    def bind_tour(self, steps: list[Dict]):
+        from .config import TourStepConfig
+        self.tour = []
+        for step in steps:
+            self.tour.append(TourStepConfig(**step))
+
+    def add_layer_toggle(self, label: str, element_ids: list[str], default_visible: bool = True):
+        from .config import LayerToggleConfig
+        if not self.layer_toggles:
+            self.layer_toggles = []
+        self.layer_toggles.append(LayerToggleConfig(label=label, element_ids=element_ids, default_visible=default_visible))
 
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
@@ -552,12 +588,21 @@ class Infographic:
             "mappings": mappings_dict,
             "overlays": self.overlays,
             "connections": self.connections,
-            "lock_zoom_out": self.lock_zoom_out
+            "lock_zoom_out": self.lock_zoom_out,
+            "render_mode": self.render_mode,
+            "enable_minimap": self.enable_minimap,
+            "enable_export": self.enable_export
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()
         if self.timeline_binding:
             view_data["timeline_binding"] = self.timeline_binding.model_dump()
+        if self.scrollytelling:
+            view_data["scrollytelling"] = [s.model_dump() for s in self.scrollytelling]
+        if self.tour:
+            view_data["tour"] = [s.model_dump() for s in self.tour]
+        if self.layer_toggles:
+            view_data["layer_toggles"] = [s.model_dump() for s in self.layer_toggles]
 
         views_data = {
             "default_view": view_data
