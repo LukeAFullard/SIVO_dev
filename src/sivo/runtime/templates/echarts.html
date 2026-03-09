@@ -2972,9 +2972,20 @@
 
             // Build search index globally so the event listener doesn't trap old closure scope on re-render
             window.sivoSearchIndex = [];
+
+            // Helper to strip HTML tags for search display
+            function stripHtml(html) {
+                var tmp = document.createElement("DIV");
+                tmp.innerHTML = html;
+                return tmp.textContent || tmp.innerText || "";
+            }
+
             echartsData.forEach(function(item) {
-                var title = item.tooltip || item.name;
-                var subtitle = item.name !== title ? item.name : '';
+                var rawTitle = item.tooltip || item.name;
+                // Strip HTML from title so we don't accidentally render images/blockquotes in the tiny search dropdown
+                var title = stripHtml(rawTitle);
+
+                var subtitle = item.name !== rawTitle ? item.name : '';
                 window.sivoSearchIndex.push({
                     id: item.name,
                     title: title,

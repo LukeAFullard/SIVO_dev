@@ -40,7 +40,21 @@ class Sivo:
         """
         Creates a Sivo instance from a configuration file, dictionary, or ProjectConfig object.
         """
-        return cls(Infographic.from_config(config, base_dir=base_dir))
+        info = Infographic.from_config(config, base_dir=base_dir)
+        return cls(
+            info,
+            default_panel_position=info.default_panel_position,
+            lock_zoom_out=info.lock_zoom_out,
+            enable_a11y=info.enable_a11y,
+            render_mode=info.render_mode,
+            enable_minimap=info.enable_minimap,
+            enable_export=info.enable_export,
+            fade_unselected=info.fade_unselected,
+            theme=info.theme,
+            enable_search=info.enable_search,
+            watermark=info.watermark,
+            enable_brush_selection=info.enable_brush_selection
+        )
 
     def map(
         self,
