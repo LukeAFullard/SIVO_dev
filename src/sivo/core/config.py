@@ -24,6 +24,7 @@ class ElementConfig(BaseModel):
     rich_media: Optional[Dict[str, str]] = None
     bi: Optional[Dict[str, str]] = None
     echarts_option: Optional[Dict[str, Any]] = None
+    context_menu: Optional[List[Dict[str, Any]]] = None
     panel_position: Optional[str] = None
     open_by_default: bool = False
     zoom_on_click: bool = False
@@ -186,4 +187,8 @@ class ProjectConfig(BaseModel):
     watermark: Optional[str] = Field(
         default=None,
         description="Optional HTML string to render a fixed watermark overlay (e.g., enterprise logo) in the bottom right corner."
+    )
+    enable_brush_selection: bool = Field(
+        default=False,
+        description="If True, enables a lasso/box selection tool to select multiple SVG elements at once."
     )

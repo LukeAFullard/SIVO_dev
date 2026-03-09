@@ -235,6 +235,34 @@
             color: #64748b;
         }
 
+        #sivo-context-menu {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 160px;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 8px 0;
+        }
+
+        .sivo-context-menu-item {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #334155;
+            cursor: pointer;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .sivo-context-menu-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
 
         #sivo-watermark-container {
             position: absolute;
@@ -588,6 +616,17 @@
         body.sivo-theme-dark .sivo-search-result-subtitle {
             color: #94a3b8 !important;
         }
+        body.sivo-theme-dark #sivo-context-menu {
+            background: rgba(30, 41, 59, 0.98) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-context-menu-item {
+            color: #e2e8f0 !important;
+        }
+        body.sivo-theme-dark .sivo-context-menu-item:hover {
+            background: #475569 !important;
+            color: #f8fafc !important;
+        }
 
 
         .sivo-resizer {
@@ -744,6 +783,7 @@
         <div id="chart-wrapper">
             <div id="a11y-container" class="sr-only"></div>
             <div id="sivo-watermark-container"></div>
+            <div id="sivo-context-menu"></div>
             <div id="sivo-global-loading" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999; background:rgba(255,255,255,0.9); padding:20px 40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); font-weight:bold; color:#333; display:flex; align-items:center; gap:10px;">
                 <div class="sivo-spinner"></div> Loading...
             </div>
@@ -852,6 +892,7 @@
         var dataBinding = null;
         var timelineBinding = null;
         var liveSocket = null;
+        var enableBrushSelection = false;
 
         // History for back navigation
         var viewHistory = [];
@@ -1043,6 +1084,27 @@
                     calculable: true,
                     inRange: {
                         color: activeDataBinding.colors
+                    }
+                };
+            }
+
+            if (enableBrushSelection) {
+                option.toolbox = {
+                    show: true,
+                    feature: {
+                        brush: {
+                            type: ['polygon', 'rect', 'keep', 'clear']
+                        }
+                    },
+                    right: 20,
+                    top: 20
+                };
+                option.brush = {
+                    geoIndex: 'all',
+                    seriesIndex: 'all',
+                    brushLink: 'all',
+                    outOfBrush: {
+                        colorAlpha: 0.2
                     }
                 };
             }
@@ -1490,6 +1552,7 @@
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
             fadeUnselected = view.fade_unselected || false;
+            enableBrushSelection = view.enable_brush_selection || false;
             dataBinding = view.data_binding || null;
             timelineBinding = view.timeline_binding || null;
             var liveBinding = view.live_binding || null;
@@ -2907,12 +2970,12 @@
 
             searchContainer.style.display = 'block';
 
-            // Build search index
-            var searchIndex = [];
+            // Build search index globally so the event listener doesn't trap old closure scope on re-render
+            window.sivoSearchIndex = [];
             echartsData.forEach(function(item) {
                 var title = item.tooltip || item.name;
                 var subtitle = item.name !== title ? item.name : '';
-                searchIndex.push({
+                window.sivoSearchIndex.push({
                     id: item.name,
                     title: title,
                     subtitle: subtitle,
@@ -2920,14 +2983,14 @@
                 });
             });
 
-            function renderResults(query) {
+            window.sivoRenderSearchResults = function(query) {
                 if (!query) {
                     searchResults.style.display = 'none';
                     return;
                 }
 
                 var q = query.toLowerCase();
-                var results = searchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
+                var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
 
                 if (results.length === 0) {
                     searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
@@ -2943,7 +3006,7 @@
 
                     el.addEventListener('mousedown', function(e) {
                         e.preventDefault(); // Prevent input blur
-                        selectSearchResult(item.id);
+                        window.sivoSelectSearchResult(item.id);
                     });
 
                     searchResults.appendChild(el);
@@ -2951,7 +3014,7 @@
                 searchResults.style.display = 'block';
             }
 
-            function selectSearchResult(elementId) {
+            window.sivoSelectSearchResult = function(elementId) {
                 searchInput.value = '';
                 searchResults.style.display = 'none';
                 searchInput.blur();
@@ -2972,22 +3035,19 @@
                 }
             }
 
-            // Prevent duplicate event listener bindings when renderView is called multiple times
-            if (!searchInput.dataset.listenersBound) {
-                searchInput.addEventListener('input', function(e) {
-                    renderResults(e.target.value);
-                });
+            // Using oninput/onfocus/onblur directly to safely overwrite any old closure references
+            // without stacking up event listeners on re-render.
+            searchInput.oninput = function(e) {
+                window.sivoRenderSearchResults(e.target.value);
+            };
 
-                searchInput.addEventListener('focus', function(e) {
-                    if (e.target.value) renderResults(e.target.value);
-                });
+            searchInput.onfocus = function(e) {
+                if (e.target.value) window.sivoRenderSearchResults(e.target.value);
+            };
 
-                searchInput.addEventListener('blur', function(e) {
-                    setTimeout(() => searchResults.style.display = 'none', 100);
-                });
-
-                searchInput.dataset.listenersBound = 'true';
-            }
+            searchInput.onblur = function(e) {
+                setTimeout(() => searchResults.style.display = 'none', 100);
+            };
         }
 
         function initWatermark(view) {
@@ -3010,6 +3070,87 @@
 
         // Initialize the first view
         renderView(currentViewId, false);
+
+        // Listen for brush selection events
+        myChart.on('brushSelected', function (params) {
+            if (!enableBrushSelection) return;
+
+            var selectedIds = [];
+            var mainSeries = params.batch[0]; // Assuming map series is first
+            if (mainSeries && mainSeries.selected && mainSeries.selected.length > 0) {
+                var selectedIndices = mainSeries.selected[0].dataIndex;
+                selectedIndices.forEach(function(index) {
+                    var item = echartsData[index];
+                    if (item && item.name) {
+                        selectedIds.push(item.name);
+                    }
+                });
+            }
+
+            // Post message to Streamlit or parent
+            window.parent.postMessage({
+                type: 'sivo_bulk_selection',
+                payload: {
+                    selected_ids: selectedIds
+                }
+            }, '*');
+        });
+
+        // Setup Native Context Menu
+        var contextMenuDOM = document.getElementById('sivo-context-menu');
+
+        myChart.on('contextmenu', function (params) {
+            var name = params.name;
+            var dataIndex = echartsData.findIndex(item => item.name === name);
+            if (dataIndex !== -1 && echartsData[dataIndex].context_menu && echartsData[dataIndex].context_menu.length > 0) {
+                // Prevent default browser menu
+                params.event.event.preventDefault();
+
+                var menuData = echartsData[dataIndex].context_menu;
+                contextMenuDOM.innerHTML = '';
+
+                menuData.forEach(function(menuItem) {
+                    var el = document.createElement('div');
+                    el.className = 'sivo-context-menu-item';
+                    el.innerText = menuItem.label;
+                    el.onclick = function() {
+                        contextMenuDOM.style.display = 'none';
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: menuItem.event || 'context_action',
+                                data: menuItem.payload || {}
+                            }
+                        }, '*');
+                    };
+                    contextMenuDOM.appendChild(el);
+                });
+
+                // Position menu
+                var e = params.event.event;
+                var mouseX = e.offsetX || e.clientX;
+                var mouseY = e.offsetY || e.clientY;
+
+                // Adjust position so it doesn't flow off-screen
+                contextMenuDOM.style.display = 'flex'; // needed to get real width/height
+                var rect = contextMenuDOM.getBoundingClientRect();
+                if (mouseX + rect.width > window.innerWidth) {
+                    mouseX -= rect.width;
+                }
+                if (mouseY + rect.height > window.innerHeight) {
+                    mouseY -= rect.height;
+                }
+
+                contextMenuDOM.style.left = mouseX + 'px';
+                contextMenuDOM.style.top = mouseY + 'px';
+            }
+        });
+
+        // Hide context menu on normal click anywhere
+        myChart.getZr().on('click', function(e) {
+            contextMenuDOM.style.display = 'none';
+        });
 
         // Track zoom natively from georoam events since getOption() might not update on scroll
         myChart.on('georoam', function(params) {
