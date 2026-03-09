@@ -2,14 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
+
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
     <style>
         body {
             margin: 0;
@@ -18,10 +22,142 @@
             display: flex;
             height: 100vh;
         }
-        #chart-container {
+        #sivo-app-container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            top: 0; left: 0;
+            overflow: hidden;
+        }
+        #chart-wrapper {
+            position: relative;
             flex: 1;
             height: 100%;
+            width: 100%;
         }
+        #chart-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #scrollytelling-container {
+            display: none;
+            width: 400px;
+            height: 100vh;
+            overflow-y: scroll;
+            background: #fff;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 20;
+            scroll-behavior: smooth;
+        }
+        .scrolly-step {
+            padding: 50vh 20px;
+            margin: 0;
+            border-bottom: 1px solid #eee;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        .scrolly-step.active {
+            opacity: 1;
+        }
+        #tour-container {
+            display: none;
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+        }
+        #tour-content {
+            margin-bottom: 15px;
+        }
+        .tour-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .tour-btn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .tour-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .tour-btn:hover:not(:disabled) {
+            background: #0056b3;
+        }
+        #minimap-container {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        #minimap-svg {
+            width: 100%;
+            height: 100%;
+        }
+        #minimap-viewport {
+            position: absolute;
+            border: 2px solid #007bff;
+            background: rgba(0, 123, 255, 0.2);
+            box-sizing: border-box;
+            transition: all 0.1s ease;
+        }
+
+        #layer-legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .layer-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .layer-toggle input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
         #info-panel {
             background: #f9f9f9;
             display: none;
@@ -79,18 +215,80 @@
 
         /* Responsive Layout Overrides */
         @media (max-width: 768px) {
-            body {
+            body, #sivo-app-container {
                 flex-direction: column !important;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            #scrollytelling-container {
+                width: 100% !important;
+                height: 40vh !important;
+                order: 2 !important; /* Put text below map on mobile */
+                border-top: 1px solid #ddd;
+            }
+            #chart-wrapper {
+                height: auto !important; /* Let flex take over to fill remaining space */
+                flex: 1 !important;
+                order: 1 !important;     /* Map stays at the top */
+                min-height: 40vh;
+            }
+            .scrolly-step {
+                padding: 10vh 20px !important;
+            }
+            #tour-container {
+                width: 80% !important;
+                left: 10% !important;
+                transform: none !important;
+                bottom: 20px !important;
+                padding: 10px 15px !important;
+                font-size: 14px;
+            }
+            #minimap-container {
+                width: 80px !important;
+                height: 80px !important;
+                top: 10px !important;  /* Move minimap to top on mobile so it doesn't overlap zoom controls */
+                left: 10px !important;
+                bottom: auto !important;
+            }
+            #layer-legend {
+                max-width: 120px !important;
+                font-size: 12px !important;
+                padding: 5px !important;
+                top: 10px !important;
+                right: 10px !important;
+            }
+            .zoom-controls {
+                right: 10px !important;
+                bottom: 20px !important;
+                z-index: 1001 !important;
+            }
+            .zoom-btn {
+                width: 25px !important;
+                height: 25px !important;
+                font-size: 14px !important;
             }
             #info-panel.active {
                 width: 100% !important;
-                height: 50vh !important;
+                height: 45vh !important; /* Give fixed part of the screen to info panel */
+                flex: none !important;
+                order: 3 !important;     /* Ensure it is BELOW the chart */
                 border: none !important;
                 border-top: 1px solid #ddd !important;
                 box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
             }
             .sivo-resizer {
                 display: none !important;
+            }
+            .sivo-gallery-close, .sivo-video-close {
+                top: 15px !important;
+                right: 20px !important;
+                font-size: 30px !important;
+            }
+            .info-panel-header {
+                padding: 8px 10px !important;
+            }
+            .close-btn {
+                width: 30px !important;
+                height: 30px !important;
             }
         }
 
@@ -210,6 +408,19 @@
             color: #000;
         }
 
+        /* Accessibility (A11y) Screen Reader Only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
         /* Standard SIVO Animations */
         @keyframes sivo-pulse {
             0% { transform: scale(1); opacity: 1; }
@@ -233,36 +444,70 @@
 </head>
 <body>
 
-    <div id="chart-container"></div>
-    <div id="sivo-resizer" class="sivo-resizer"></div>
-    <div class="zoom-controls">
-        <div class="zoom-btn" onclick="zoomIn()">+</div>
-        <div class="zoom-btn" onclick="zoomOut()">-</div>
-        <div class="zoom-btn" onclick="resetZoom()">⌂</div>
-    </div>
-    <div id="info-panel">
-        <div class="info-panel-header">
-            <button class="close-btn" onclick="closePanel()" title="Close panel">×</button>
+    <div id="sivo-app-container">
+        <div id="scrollytelling-container"></div>
+        <div id="chart-wrapper">
+            <div id="a11y-container" class="sr-only"></div>
+            <div id="chart-container"></div>
+            <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
+            <div class="zoom-controls">
+                <div class="zoom-btn" onclick="zoomIn()">+</div>
+                <div class="zoom-btn" onclick="zoomOut()">-</div>
+                <div class="zoom-btn" onclick="resetZoom()">⌂</div>
+                <div class="zoom-btn" onclick="exportSnapshot()" id="export-btn" style="display: none;" title="Export Snapshot">📷</div>
+            </div>
+
+            <div id="tour-container">
+                <div id="tour-content"></div>
+                <div class="tour-controls">
+                    <button class="tour-btn" id="tour-prev" onclick="tourPrev()">Prev</button>
+                    <span id="tour-progress" style="line-height: 32px; font-size: 14px; color: #666;"></span>
+                    <button class="tour-btn" id="tour-next" onclick="tourNext()">Next</button>
+                </div>
+                <button class="close-btn" onclick="closeTour()" style="position: absolute; top: -10px; right: -10px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">×</button>
+            </div>
+
+            <div id="minimap-container">
+                <div id="minimap-svg"></div>
+                <div id="minimap-viewport"></div>
+            </div>
+
+            <div id="layer-legend">
+                <strong style="display:block; margin-bottom:8px;">Layers</strong>
+                <div id="layer-legend-content"></div>
+            </div>
         </div>
-        <div class="info-panel-content">
-            <div id="info-content-host"></div>
+        <div id="sivo-resizer" class="sivo-resizer"></div>
+        <div id="info-panel">
+            <div class="info-panel-header">
+                <button class="close-btn" onclick="closePanel()" title="Close panel">×</button>
+            </div>
+            <div class="info-panel-content">
+                <div id="info-content-host"></div>
+            </div>
         </div>
     </div>
 
     <script>
         var chartDom = document.getElementById('chart-container');
-        var myChart = echarts.init(chartDom);
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\"\u003e\n    \u003crect id=\"TX\" x=\"10\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"TX\"/\u003e\n    \u003crect id=\"CA\" x=\"110\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"CA\"/\u003e\n    \u003crect id=\"NY\" x=\"10\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"NY\"/\u003e\n    \u003crect id=\"WY\" x=\"110\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"WY\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "TX", "value": 1, "tooltip": "State: TX"}, {"name": "CA", "value": 1, "tooltip": "State: CA"}, {"name": "NY", "value": 1, "tooltip": "State: NY"}, {"name": "WY", "value": 1, "tooltip": "State: WY"}], "actions_manifest": {"TX": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "CA": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "NY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "WY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}]}, "overlays": {}, "data_binding": {"data": {"TX": {"sales": 15000.0}, "CA": {"sales": 22000.0}, "NY": {"sales": 8000.0}, "WY": {"sales": 500.0}}, "key": "sales", "colors": ["#e0f3db", "#43a2ca"], "min_val": 0.0, "max_val": 25000.0}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\"\u003e\n    \u003crect id=\"TX\" x=\"10\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"TX\"/\u003e\n    \u003crect id=\"CA\" x=\"110\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"CA\"/\u003e\n    \u003crect id=\"NY\" x=\"10\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"NY\"/\u003e\n    \u003crect id=\"WY\" x=\"110\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"WY\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "TX", "value": 1, "tooltip": "State: TX"}, {"name": "CA", "value": 1, "tooltip": "State: CA"}, {"name": "NY", "value": 1, "tooltip": "State: NY"}, {"name": "WY", "value": 1, "tooltip": "State: WY"}], "actions_manifest": {"TX": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "CA": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "NY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "WY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"TX": {"id": "TX", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "CA": {"id": "CA", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "NY": {"id": "NY", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "WY": {"id": "WY", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "data_binding": {"data": {"TX": {"sales": 15000.0}, "CA": {"sales": 22000.0}, "NY": {"sales": 8000.0}, "WY": {"sales": 500.0}}, "key": "sales", "colors": ["#e0f3db", "#43a2ca"], "min_val": 0.0, "max_val": 25000.0}}};
         var currentViewId = "default_view";
+
+        // Initialize ECharts with the appropriate renderer
+        var renderMode = viewsData[currentViewId].render_mode || 'canvas';
+        var myChart = echarts.init(chartDom, null, { renderer: renderMode });
 
         // Active variables for the current view
         var echartsData = [];
         var actionsManifest = {};
         var overlaysData = {};
+        var connectionsData = [];
         var lockZoomOut = false;
         var dataBinding = null;
+        var timelineBinding = null;
+        var liveSocket = null;
 
         // History for back navigation
         var viewHistory = [];
@@ -280,6 +525,25 @@
                 tooltip: {
                     trigger: 'item',
                     triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
+                    position: function (point, params, dom, rect, size) {
+                        var x = point[0];
+                        var y = point[1];
+                        var viewWidth = size.viewSize[0];
+                        var viewHeight = size.viewSize[1];
+                        var boxWidth = size.contentSize[0];
+                        var boxHeight = size.contentSize[1];
+
+                        var posX = x + 10;
+                        var posY = y + 10;
+
+                        if (posX + boxWidth > viewWidth) {
+                            posX = x - boxWidth - 10;
+                        }
+                        if (posY + boxHeight > viewHeight) {
+                            posY = y - boxHeight - 10;
+                        }
+                        return [posX, posY];
+                    },
                     formatter: function (params) {
                         var dataIndex = echartsData.findIndex(item => item.name === params.name);
                         var tooltipContent = params.name;
@@ -325,21 +589,108 @@
                                 areaColor: '#ff8c00'
                             }
                         },
-                        data: echartsData
+                        data: echartsData,
+                        zlevel: 1
                     }
                 ]
             };
 
-            if (dataBinding) {
+            if (connectionsData && connectionsData.length > 0) {
+                // If using pure 'map' coordinate system instead of 'geo', ECharts doesn't readily support 'lines'.
+                // 'lines' strictly requires 'geo' or 'cartesian2d'.
+                // To get lines to work correctly with an SVG map, the standard ECharts practice is to configure the map purely within a `geo` component, and bind scatter/lines to that geo coordinate system.
+                // However, since SIVO heavily relies on the 'map' series type to handle interactions and thematic styling (choropleth, emphasis, tooltip bindings),
+                // we must construct a hidden `geo` component that perfectly mirrors the map's aspect ratio and zoom scale.
+
+                if (!option.geo) {
+                    option.geo = {
+                        map: mapName,
+                        roam: true,
+                        layoutCenter: ['50%', '50%'],
+                        layoutSize: '100%',
+                        itemStyle: {
+                            color: 'transparent',
+                            borderColor: 'transparent'
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: 'transparent',
+                                borderColor: 'transparent'
+                            },
+                            label: { show: false }
+                        },
+                        zlevel: 0
+                    };
+
+                    // Crucial: Bind the primary series to the new geo component to sync transformations
+                    option.series[0].geoIndex = 0;
+                }
+
+                var linesData = connectionsData.map(function(conn) {
+                    return {
+                        coords: [
+                            [conn.coords[0][0], conn.coords[0][1]],
+                            [conn.coords[1][0], conn.coords[1][1]]
+                        ],
+                        lineStyle: {
+                            color: conn.color,
+                            width: conn.width,
+                            type: conn.type,
+                            opacity: conn.opacity
+                        },
+                        name: conn.label
+                    };
+                });
+
+                option.series.push({
+                    type: 'lines',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    polyline: false,
+                    effect: {
+                        show: true,
+                        period: connectionsData[0].animation_speed || 3,
+                        trailLength: 0.7,
+                        color: '#fff',
+                        symbolSize: 3
+                    },
+                    lineStyle: {
+                        color: function(params) { return params.data.lineStyle.color; },
+                        width: 0,
+                        curveness: 0.2
+                    },
+                    data: linesData
+                });
+
+                // Add the static solid line underneath the effect
+                option.series.push({
+                    type: 'lines',
+                    coordinateSystem: 'geo',
+                    zlevel: 1,
+                    polyline: false,
+                    lineStyle: {
+                        color: function(params) { return params.data.lineStyle.color; },
+                        width: function(params) { return params.data.lineStyle.width; },
+                        opacity: function(params) { return params.data.lineStyle.opacity; },
+                        type: function(params) { return params.data.lineStyle.type; },
+                        curveness: 0.2
+                    },
+                    data: linesData
+                });
+            }
+
+            var activeDataBinding = dataBinding || timelineBinding;
+
+            if (activeDataBinding) {
                 option.visualMap = {
-                    min: dataBinding.min_val,
-                    max: dataBinding.max_val,
+                    min: activeDataBinding.min_val,
+                    max: activeDataBinding.max_val,
                     left: 'left',
                     bottom: 'bottom',
-                    text: [dataBinding.max_val.toString(), dataBinding.min_val.toString()],           // 文本，默认为数值文本
+                    text: [activeDataBinding.max_val.toString(), activeDataBinding.min_val.toString()],
                     calculable: true,
                     inRange: {
-                        color: dataBinding.colors
+                        color: activeDataBinding.colors
                     }
                 };
             }
@@ -399,6 +750,370 @@
             }, 1000);
         }
 
+        function applyNativeSvgManipulations() {
+            var viewData = viewsData[currentViewId];
+            var overlayContainer = document.getElementById('sivo-native-overlay-svg-container');
+
+            // Set up overlay container
+            overlayContainer.innerHTML = viewData.svg_string;
+            overlayContainer.style.display = 'block';
+
+            var svgEl = overlayContainer.querySelector('svg');
+            if (!svgEl) return;
+
+            // Ensure SVG fills the container and allows us to control the global transform
+            svgEl.style.width = '100%';
+            svgEl.style.height = '100%';
+            // Keep pointer-events none so ECharts underneath still gets hover/click events
+            svgEl.style.pointerEvents = 'none';
+
+            // We need a root <g> tag to apply ECharts' global roam transforms (pan/zoom)
+            // Wrap all children in a new <g id="sivo-global-transform-group">
+            var wrapperGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            wrapperGroup.setAttribute('id', 'sivo-global-transform-group');
+
+            // Move all existing children into the wrapper
+            while (svgEl.firstChild) {
+                wrapperGroup.appendChild(svgEl.firstChild);
+            }
+            svgEl.appendChild(wrapperGroup);
+
+            // Now apply the specific features (morph, filter, transform, mask) to individual nodes
+            var mappings = viewData.mappings;
+            for (var name in mappings) {
+                var mapping = mappings[name];
+                // Check if element has any actions mapped to it (so we need it interactive) or a theme
+                var hasTheme = mapping.theme !== undefined;
+                var hasActions = mapping.actions && mapping.actions.length > 0;
+                var isDraggable = mapping.draggable;
+                var hasHoverColor = hasTheme && mapping.theme.hover_color;
+
+                var node = wrapperGroup.querySelector(`[id="${name}"], [name="${name}"]`);
+                if (!node) continue;
+
+                // Make interactive elements pointer-events: auto so they can catch events
+                // because the parent svg is pointer-events: none.
+                if (isDraggable || hasActions || hasHoverColor || mapping.tooltip) {
+                    node.style.pointerEvents = 'auto';
+                    node.style.cursor = 'pointer';
+
+                    // Manually bind ECharts-like interactivity to these top-level DOM nodes
+                    (function(node, name, mapping) {
+                        // Tooltip & Hover Callback
+                        node.addEventListener('mouseenter', function(e) {
+                            // Highlight (ECharts doesn't let us trigger its native highlight easily if opacity is 0,
+                            // so we manually apply hover_color if it exists)
+                            if (mapping.theme && mapping.theme.hover_color) {
+                                node.setAttribute('data-original-fill', node.getAttribute('fill') || '');
+                                node.setAttribute('fill', mapping.theme.hover_color);
+                            }
+
+                            // Show Tooltip via ECharts dispatch
+                            myChart.dispatchAction({
+                                type: 'showTip',
+                                seriesIndex: 0,
+                                name: name
+                            });
+
+                            // Hover Callback action
+                            if (mapping.actions) {
+                                mapping.actions.forEach(function(action) {
+                                    if (action.action_type === 'hover_callback') {
+                                        window.parent.postMessage({
+                                            type: 'sivo_hover',
+                                            payload: { element_id: name, event: action.event_name, data: action.payload || {} }
+                                        }, '*');
+                                    }
+                                });
+                            }
+                        });
+
+                        node.addEventListener('mouseleave', function(e) {
+                            if (mapping.theme && mapping.theme.hover_color) {
+                                var orig = node.getAttribute('data-original-fill');
+                                if (orig !== null) node.setAttribute('fill', orig);
+                            }
+                            myChart.dispatchAction({
+                                type: 'hideTip'
+                            });
+                        });
+
+                        // Click actions
+                        node.addEventListener('click', function(e) {
+                            // If we were dragging, prevent click
+                            if (window.isDraggingElement) {
+                                window.isDraggingElement = false;
+                                return;
+                            }
+                            // Manually trigger the ECharts 'click' logic we defined lower down
+                            // ECharts `trigger` API is internal, but we can simulate the params object
+                            // and call the same logic. For simplicity, we can dispatch a custom DOM event or
+                            // extract our click handler into a reusable function.
+                            // However, we can also just manually trigger it through the zr instance
+                            myChart.trigger('click', { componentType: 'series', name: name });
+                        });
+
+                        // Dragging logic is handled below globally, but we tag it
+                        if (mapping.draggable) {
+                            node.setAttribute('data-draggable', 'true');
+                            node.style.cursor = 'grab';
+                        }
+                    })(node, name, mapping);
+                }
+
+                if (!hasTheme) continue;
+                var theme = mapping.theme;
+
+                // 1. Morphing
+                if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
+                    var duration = theme.morph_duration_ms || 1000;
+                    var delay = theme.morph_delay_ms || 0;
+                    var easing = theme.morph_easing || 'ease-in-out';
+                    var iterations = theme.morph_iterations !== undefined ? theme.morph_iterations : 1;
+
+                    var originalD = node.getAttribute('d');
+                    var targetD = theme.morph_to_path;
+
+                    // The Web Animations API (WAAPI) provides the smoothest, hardware-accelerated
+                    // path morphing in modern browsers. It requires wrapping the d string in 'path()'.
+                    try {
+                        var anim = node.animate([
+                            { d: 'path("' + originalD + '")' },
+                            { d: 'path("' + targetD + '")' }
+                        ], {
+                            duration: duration,
+                            delay: delay,
+                            fill: 'forwards',
+                            easing: easing,
+                            iterations: iterations,
+                            direction: iterations > 1 ? 'alternate' : 'normal'
+                        });
+
+                        // Ensure the actual attribute is updated at the end for persistence,
+                        // calculating total time including delays and iterations
+                        if (iterations !== Infinity) {
+                            setTimeout(() => {
+                                // If alternate and even iterations, it ends at original state
+                                var finalD = (iterations > 1 && iterations % 2 === 0) ? originalD : targetD;
+                                node.setAttribute('d', finalD);
+                            }, delay + (duration * iterations));
+                        }
+                    } catch (err) {
+                        // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
+                        setTimeout(() => node.setAttribute('d', targetD), delay);
+                    }
+                }
+
+                // 2. Transformations
+                if (theme.transform) {
+                    var currentTransform = node.getAttribute('transform') || '';
+                    node.setAttribute('transform', currentTransform + ' ' + theme.transform);
+                }
+
+                // 3. Filters
+                if (theme.filter) {
+                    node.style.filter = theme.filter;
+                    node.setAttribute('filter', theme.filter);
+                }
+
+                // 4. Clipping
+                if (theme.clip_path) {
+                    node.setAttribute('clip-path', theme.clip_path);
+                }
+
+                // 5. Masking
+                if (theme.mask) {
+                    node.setAttribute('mask', theme.mask);
+                }
+
+                // 6. Odometer Text Animation
+                if (theme.odometer_value !== undefined && theme.odometer_value !== null && node.tagName.toLowerCase() === 'text') {
+                    // Start an odometer animation
+                    var startVal = parseFloat(node.textContent) || 0;
+                    var endVal = theme.odometer_value;
+                    var odoDuration = theme.odometer_duration_ms || 2000;
+                    var formatStr = theme.odometer_format;
+
+                    var startTime = null;
+                    function stepOdometer(timestamp) {
+                        if (!startTime) startTime = timestamp;
+                        var progress = timestamp - startTime;
+                        var factor = Math.min(progress / odoDuration, 1);
+                        var easeOutQuart = 1 - Math.pow(1 - factor, 4);
+
+                        var currentVal = startVal + (endVal - startVal) * easeOutQuart;
+
+                        if (formatStr === 'int') {
+                            node.textContent = Math.round(currentVal);
+                        } else if (formatStr === 'float') {
+                            node.textContent = currentVal.toFixed(2);
+                        } else if (formatStr === 'currency') {
+                            node.textContent = '$' + currentVal.toFixed(2);
+                        } else {
+                            // Default to integer if no format provided or arbitrary
+                            node.textContent = Math.round(currentVal);
+                        }
+
+                        if (progress < odoDuration) {
+                            window.requestAnimationFrame(stepOdometer);
+                        } else {
+                            // ensure exact end value is set
+                            if (formatStr === 'int') {
+                                node.textContent = Math.round(endVal);
+                            } else if (formatStr === 'float') {
+                                node.textContent = endVal.toFixed(2);
+                            } else if (formatStr === 'currency') {
+                                node.textContent = '$' + endVal.toFixed(2);
+                            } else {
+                                node.textContent = Math.round(endVal);
+                            }
+                        }
+                    }
+                    window.requestAnimationFrame(stepOdometer);
+                }
+            }
+
+            // Sync the initial transform state from ECharts
+            syncOverlayTransform();
+        }
+
+        function syncOverlayTransform() {
+            if (renderMode !== 'svg') return;
+
+            var overlayGroup = document.getElementById('sivo-global-transform-group');
+            if (!overlayGroup) return;
+
+            // In ECharts map series, the global transform matrix is usually applied to the `<g>` that directly wraps the paths.
+            // ECharts often renders a structure like <svg><g><g><path>...
+            // ECharts often applies the matrix directly to the `path` elements themselves or a `<g>`.
+            // In the SVG renderer, ECharts applies a transform attribute to each mapped shape,
+            // or we can use the ECharts internal API to get the current projection matrix to ensure perfection.
+            // Even better, we can query ANY of the generated path elements and extract its transform!
+            var echartsPath = document.querySelector('#chart-container svg path[transform]');
+            if (echartsPath) {
+                var transform = echartsPath.getAttribute('transform');
+                if (transform) {
+                    overlayGroup.setAttribute('transform', transform);
+                }
+            }
+        }
+
+        function generateA11yNodes() {
+            var a11yContainer = document.getElementById('a11y-container');
+            a11yContainer.innerHTML = ''; // Clear previous
+
+            // If a data binding (choropleth) exists, create a readable table summary
+            if (dataBinding && dataBinding.data) {
+                var tableHtml = `<table summary="Data values for map regions"><caption>${dataBinding.key} Values</caption><thead><tr><th scope="col">Region</th><th scope="col">Value</th></tr></thead><tbody>`;
+                for (var i = 0; i < echartsData.length; i++) {
+                    var name = echartsData[i].name;
+                    if (dataBinding.data[name] && dataBinding.data[name][dataBinding.key] !== undefined) {
+                        tableHtml += `<tr><td>${name}</td><td>${dataBinding.data[name][dataBinding.key]}</td></tr>`;
+                    }
+                }
+                tableHtml += `</tbody></table>`;
+                var dataSummary = document.createElement('div');
+                dataSummary.innerHTML = sanitizeHTML(tableHtml);
+                a11yContainer.appendChild(dataSummary);
+            } else if (timelineBinding && timelineBinding.data) {
+                // For timelines, just output the first time step for simplicity, or indicate it's an animated map
+                var firstTimeKey = Object.keys(timelineBinding.data)[0];
+                var tableHtml = `<table summary="Data values for map regions over time"><caption>${timelineBinding.key} Values (starting ${firstTimeKey})</caption><thead><tr><th scope="col">Region</th><th scope="col">Value</th></tr></thead><tbody>`;
+                for (var i = 0; i < echartsData.length; i++) {
+                    var name = echartsData[i].name;
+                    if (timelineBinding.data[firstTimeKey][name] && timelineBinding.data[firstTimeKey][name][timelineBinding.key] !== undefined) {
+                        tableHtml += `<tr><td>${name}</td><td>${timelineBinding.data[firstTimeKey][name][timelineBinding.key]}</td></tr>`;
+                    }
+                }
+                tableHtml += `</tbody></table>`;
+                var dataSummary = document.createElement('div');
+                dataSummary.innerHTML = sanitizeHTML(tableHtml);
+                a11yContainer.appendChild(dataSummary);
+            }
+
+            var nav = document.createElement('nav');
+            nav.setAttribute('aria-label', 'Interactive map regions');
+            var ul = document.createElement('ul');
+            nav.appendChild(ul);
+
+            Object.keys(actionsManifest).forEach(function(elementId) {
+                var actions = actionsManifest[elementId];
+                var a11yAction = actions.find(a => a.action_type === 'a11y');
+
+                if (a11yAction) {
+                    var role = a11yAction.role || 'button';
+                    var ariaLabel = a11yAction.aria_label || elementId;
+                    var tabIndex = a11yAction.tabindex || '0';
+
+                    var li = document.createElement('li');
+
+                    // We need a focusable element that is visually hidden but part of tab order.
+                    // Using an absolutely positioned element that is 1x1 or moved offscreen.
+                    var a11yItem = document.createElement('div');
+                    a11yItem.setAttribute('role', role);
+                    a11yItem.setAttribute('aria-label', ariaLabel);
+                    a11yItem.setAttribute('tabindex', tabIndex);
+                    // Use inline styles to ensure it remains hidden but focusable
+                    a11yItem.style.position = 'absolute';
+                    a11yItem.style.width = '1px';
+                    a11yItem.style.height = '1px';
+                    a11yItem.style.padding = '0';
+                    a11yItem.style.margin = '-1px';
+                    a11yItem.style.overflow = 'hidden';
+                    a11yItem.style.clip = 'rect(0, 0, 0, 0)';
+                    a11yItem.style.whiteSpace = 'nowrap';
+                    a11yItem.style.borderWidth = '0';
+
+                    // Use class for locator
+                    a11yItem.className = 'a11y-focus-target';
+
+                    // Focus logic (visually highlight the ECharts region)
+                    a11yItem.addEventListener('focus', function() {
+                        myChart.dispatchAction({
+                            type: 'highlight',
+                            name: elementId
+                        });
+                        myChart.dispatchAction({
+                            type: 'showTip',
+                            name: elementId
+                        });
+                    });
+
+                    // Blur logic (remove visual highlight)
+                    a11yItem.addEventListener('blur', function() {
+                        myChart.dispatchAction({
+                            type: 'downplay',
+                            name: elementId
+                        });
+                        myChart.dispatchAction({
+                            type: 'hideTip',
+                            name: elementId
+                        });
+                    });
+
+                    // Keyboard activation
+                    a11yItem.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            // Dispatch click logic mimicking the ECharts normal flow
+                            var params = { componentType: 'series', name: elementId };
+                            myChart.trigger('click', params);
+
+                            // Try simulating actual click to info panel processor
+                            if (window.parent && window.parent.postMessage) {
+                                // Usually myChart.trigger should handle it because of `myChart.on('click')`
+                                // Let's just manually call the logic by dispatching custom event if needed, but trigger('click') works.
+                            }
+                        }
+                    });
+
+                    li.appendChild(a11yItem);
+                    ul.appendChild(li);
+                }
+            });
+            a11yContainer.appendChild(nav);
+        }
+
         function renderView(viewId, isBackNavigation) {
             if (!viewsData[viewId]) {
                 console.error("View not found:", viewId);
@@ -412,12 +1127,74 @@
             currentViewId = viewId;
             var view = viewsData[viewId];
 
+            // Note: ECharts doesn't support changing renderer after init natively.
+            // We assume multi-view projects will use the same renderer, or default to the first view's.
+            renderMode = view.render_mode || 'canvas';
+
             // Extract view-specific active data
             echartsData = view.echarts_data;
             actionsManifest = view.actions_manifest;
             overlaysData = view.overlays;
+            connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
             dataBinding = view.data_binding || null;
+            timelineBinding = view.timeline_binding || null;
+            var liveBinding = view.live_binding || null;
+
+            // Handle Live Binding (WebSocket Telemetry) if present
+            if (liveSocket) {
+                liveSocket.close();
+                liveSocket = null;
+            }
+            if (liveBinding) {
+                liveSocket = new WebSocket(liveBinding.url);
+
+                liveSocket.onopen = function(e) {
+                    console.log("[SIVO] Live binding WebSocket connected to", liveBinding.url);
+                    if (liveBinding.auth_token) {
+                        liveSocket.send(JSON.stringify({ type: 'auth', token: liveBinding.auth_token }));
+                    }
+                    if (liveBinding.topic) {
+                        liveSocket.send(JSON.stringify({ type: 'subscribe', topic: liveBinding.topic }));
+                    }
+                };
+
+                liveSocket.onmessage = function(event) {
+                    try {
+                        var msg = JSON.parse(event.data);
+                        // Expected format: { element_id: "id1", color: "#ff0000", tooltip: "New data" }
+                        if (msg && msg.element_id) {
+                            console.log("[SIVO] Live update received:", msg);
+                            // Merge into existing mapped logic dynamically
+                            if (!actionsManifest[msg.element_id]) {
+                                actionsManifest[msg.element_id] = { actions: [], theme: {} };
+                            }
+                            if (msg.color) {
+                                actionsManifest[msg.element_id].theme.color = msg.color;
+                            }
+                            if (msg.tooltip) {
+                                var tAction = actionsManifest[msg.element_id].actions.find(a => a.action_type === 'tooltip');
+                                if (!tAction) {
+                                    tAction = { action_type: 'tooltip', title: msg.tooltip, content: `<h3>${msg.tooltip}</h3>` };
+                                    actionsManifest[msg.element_id].actions.push(tAction);
+                                } else {
+                                    tAction.title = msg.tooltip;
+                                    tAction.content = `<h3>${msg.tooltip}</h3>`;
+                                }
+                            }
+                            // Re-apply base option dynamically without breaking current zoom state
+                            var updatedOption = createBaseOption(viewId, view.svg_string, actionsManifest);
+                            myChart.setOption(updatedOption, false);
+                        }
+                    } catch(err) {
+                        console.error("[SIVO] Error parsing live message:", err);
+                    }
+                };
+
+                liveSocket.onclose = function(event) {
+                    console.warn("[SIVO] Live binding WebSocket closed.", event);
+                };
+            }
 
             if (dataBinding && dataBinding.data) {
                 // Populate Echarts data with values for visualMap
@@ -435,7 +1212,48 @@
                 baseOpt.series[0].scaleLimit = { min: 1.0 };
             }
             echarts.registerMap(viewId, { svg: view.svg_string });
-            myChart.setOption(baseOpt, true);
+
+            if (timelineBinding && timelineBinding.data) {
+                var timelineKeys = Object.keys(timelineBinding.data);
+
+                var fullOption = {
+                    baseOption: {
+                        ...baseOpt,
+                        timeline: {
+                            axisType: 'category',
+                            autoPlay: timelineBinding.auto_play,
+                            playInterval: timelineBinding.play_interval,
+                            data: timelineKeys,
+                            bottom: 20
+                        }
+                    },
+                    options: []
+                };
+
+                for (var t = 0; t < timelineKeys.length; t++) {
+                    var timeKey = timelineKeys[t];
+                    var stepDataMap = timelineBinding.data[timeKey];
+                    var stepSeriesData = JSON.parse(JSON.stringify(echartsData)); // Deep clone
+
+                    for (var i = 0; i < stepSeriesData.length; i++) {
+                        var itemName = stepSeriesData[i].name;
+                        if (stepDataMap[itemName] && stepDataMap[itemName][timelineBinding.key] !== undefined) {
+                            stepSeriesData[i].value = stepDataMap[itemName][timelineBinding.key];
+                        }
+                    }
+
+                    fullOption.options.push({
+                        title: { text: timeKey },
+                        series: [{
+                            data: stepSeriesData
+                        }]
+                    });
+                }
+
+                myChart.setOption(fullOption, true);
+            } else {
+                myChart.setOption(baseOpt, true);
+            }
 
             // Reset zoom tracking
             currentZoom = 1;
@@ -450,6 +1268,34 @@
 
             // Start animations if any
             applyAnimations();
+
+            // Generate Accessibility (A11y) DOM Nodes
+            generateA11yNodes();
+
+            // Initialize Scrollytelling if present
+            initScrollytelling(view.scrollytelling);
+
+            // Initialize Tour if present
+            initTour(view.tour);
+
+            // Initialize Minimap if present
+            initMinimap(view);
+
+            // Show export button if enabled
+            if (view.enable_export) {
+                document.getElementById('export-btn').style.display = 'flex';
+            } else {
+                document.getElementById('export-btn').style.display = 'none';
+            }
+
+            // Initialize Layer Legend
+            initLayerLegend(view.layer_toggles);
+
+            // Apply SVG Render Mode Native Manipulations
+            if (renderMode === 'svg') {
+                // ECharts renders asynchronously; wait slightly to guarantee DOM paths exist to copy transforms from
+                setTimeout(applyNativeSvgManipulations, 100);
+            }
 
             // Handle elements marked to open by default
             echartsData.forEach(function(item) {
@@ -473,7 +1319,8 @@
             myChart.setOption({
                 series: [{
                     zoom: currentZoom
-                }]
+                }],
+                geo: option.geo ? [{ zoom: currentZoom }] : undefined
             });
         }
 
@@ -490,17 +1337,20 @@
             myChart.setOption({
                 series: [{
                     zoom: currentZoom
-                }]
+                }],
+                geo: option.geo ? [{ zoom: currentZoom }] : undefined
             });
         }
 
         function resetZoom() {
             currentZoom = 1;
+            var option = myChart.getOption();
             myChart.setOption({
                 series: [{
                     zoom: 1,
                     center: null
-                }]
+                }],
+                geo: option.geo ? [{ zoom: 1, center: null }] : undefined
             });
         }
 
@@ -519,6 +1369,83 @@
             return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
+        // Implement Draggable Logic (for map elements marked as draggable)
+        // Since map regions in ECharts aren't natively draggable, we add a generic mouse tracking system.
+        var draggedElement = null;
+        var dragStartX = 0;
+        var dragStartY = 0;
+        var currentElementX = 0;
+        var currentElementY = 0;
+
+        window.isDraggingElement = false;
+
+        // Catch mousedown at the root DOM level before ECharts initiates pan (georoam)
+        document.getElementById('sivo-native-overlay-svg-container').addEventListener('mousedown', function (e) {
+            if (renderMode !== 'svg') return;
+
+            // Check if the clicked target has data-draggable true
+            var target = e.target;
+            if (target && target.closest) {
+                target = target.closest('[data-draggable="true"]');
+            }
+            if (target && target.getAttribute('data-draggable') === 'true') {
+                e.stopPropagation(); // Stop ECharts from getting the mousedown and starting a pan
+
+                draggedElement = target;
+                dragStartX = e.clientX;
+                dragStartY = e.clientY;
+                window.isDraggingElement = true; // prevent click immediately after drag
+
+                // Parse existing transform translation
+                var currentTransform = target.getAttribute('transform') || '';
+                var translateMatch = currentTransform.match(/translate\(([-\d.]+)[ ,]([-\d.]+)\)/);
+                if (translateMatch) {
+                    currentElementX = parseFloat(translateMatch[1]);
+                    currentElementY = parseFloat(translateMatch[2]);
+                } else {
+                    currentElementX = 0;
+                    currentElementY = 0;
+                }
+            }
+        }, true);
+
+        // Listen for mousemove on the window to support dragging
+        window.addEventListener('mousemove', function (e) {
+            if (draggedElement) {
+                var dx = e.clientX - dragStartX;
+                var dy = e.clientY - dragStartY;
+
+                // Account for global ECharts zoom level so it drags 1:1 with mouse
+                var zoomLevel = currentZoom || 1;
+                dx = dx / zoomLevel;
+                dy = dy / zoomLevel;
+
+                var newX = currentElementX + dx;
+                var newY = currentElementY + dy;
+
+                var currentTransform = draggedElement.getAttribute('transform') || '';
+                // Remove old translate to overwrite it
+                currentTransform = currentTransform.replace(/translate\([^)]+\)/g, '').trim();
+
+                // Construct new transform
+                var newTransform = 'translate(' + newX + ' ' + newY + ') ' + currentTransform;
+                draggedElement.setAttribute('transform', newTransform.trim());
+
+                // Prevent anything else from handling this move
+                e.stopPropagation();
+            }
+        }, true);
+
+        // Use global window events to ensure mouseup is always caught even if it leaves the canvas
+        window.addEventListener('mouseup', function(e) {
+            if (draggedElement) {
+                draggedElement = null;
+                // delay clearing isDraggingElement so click handlers don't fire immediately
+                setTimeout(() => window.isDraggingElement = false, 100);
+            }
+        });
+
+
         // Handle click events
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
@@ -529,6 +1456,7 @@
             var hasInteraction = false;
             var panelPosition = 'right'; // Default
             var socialIframes = []; // Store secure iframes to append after DOMPurify
+            var sivoChartsToInit = [];
 
             if (elementActions) {
                 elementActions.forEach(function(action) {
@@ -912,6 +1840,31 @@
                         iframe.src = action.repl_url;
 
                         socialIframes.push(iframe);
+                    } else if (action.action_type === 'echarts') {
+                        hasInteraction = true;
+
+                        var chartId = 'sivo-nested-chart-' + name + '-' + Math.random().toString(36).substr(2, 9);
+                        var chartContainer = document.createElement('div');
+                        chartContainer.id = chartId;
+                        chartContainer.style.width = '100%';
+                        chartContainer.style.height = action.height || '400px';
+                        chartContainer.style.marginTop = '15px';
+
+                        socialIframes.push(chartContainer);
+
+                        sivoChartsToInit.push({
+                            id: chartId,
+                            option: action.option
+                        });
+                    } else if (action.action_type === 'zoom') {
+                        var zoomOption = {
+                            series: [{
+                                center: action.center,
+                                zoom: action.zoom_level
+                            }]
+                        };
+                        myChart.setOption(zoomOption);
+                        currentZoom = action.zoom_level;
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
                         // Post message to parent window (e.g. Streamlit iframe wrapper)
@@ -940,7 +1893,7 @@
             }
 
 
-            function applyPanelPosition(position) {
+            function applyPanelPosition(position, initCharts) {
                 infoPanel.className = 'active'; // reset classes but keep active
                 var resizer = document.getElementById('sivo-resizer');
                 resizer.className = 'sivo-resizer active';
@@ -975,6 +1928,21 @@
                     if (!start) start = timestamp;
                     var progress = timestamp - start;
                     myChart.resize();
+
+                    if (initCharts && progress > 50 && sivoChartsToInit.length > 0) {
+                        // Initialize nested charts once the panel starts rendering
+                        sivoChartsToInit.forEach(function(chartData) {
+                            var container = infoContentShadow.getElementById(chartData.id);
+                            if (container && !container.getAttribute('data-echarts-initialized')) {
+                                container.setAttribute('data-echarts-initialized', 'true');
+                                var nestedChart = echarts.init(container);
+                                nestedChart.setOption(chartData.option);
+                            }
+                        });
+                        // clear so we only init once
+                        sivoChartsToInit = [];
+                    }
+
                     if (progress < 350) { // slightly longer than CSS transition 0.3s
                         window.requestAnimationFrame(step);
                     }
@@ -988,10 +1956,10 @@
                 socialIframes.forEach(function(iframe) {
                     infoContent.appendChild(iframe);
                 });
-                applyPanelPosition(panelPosition);
+                applyPanelPosition(panelPosition, true);
             } else if (!hasInteraction && !elementActions) {
                 infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
-                applyPanelPosition(panelPosition);
+                applyPanelPosition(panelPosition, false);
             } else {
                 closePanel();
             }
@@ -1242,6 +2210,250 @@
             }
         }
 
+        function initScrollytelling(steps) {
+            var container = document.getElementById('scrollytelling-container');
+            if (!steps || steps.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+            container.innerHTML = '';
+
+            steps.forEach(function(step, index) {
+                var stepEl = document.createElement('div');
+                stepEl.className = 'scrolly-step';
+                stepEl.innerHTML = step.content;
+                stepEl.setAttribute('data-index', index);
+                if (index === steps.length - 1) {
+                    stepEl.style.paddingBottom = '80vh';
+                }
+                container.appendChild(stepEl);
+            });
+
+            var observerOptions = { root: container, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        var index = parseInt(entry.target.getAttribute('data-index'), 10);
+                        var step = steps[index];
+
+                        document.querySelectorAll('.scrolly-step').forEach(el => el.classList.remove('active'));
+                        entry.target.classList.add('active');
+
+                        if (step.zoom_to) {
+                            myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
+                            var viewMeta = overlaysData[step.zoom_to];
+                            if (viewMeta && viewMeta.coord) {
+                                myChart.setOption({ series: [{ center: viewMeta.coord, zoom: step.zoom_level || 2.0 }] });
+                            } else {
+                                myChart.setOption({ series: [{ zoom: step.zoom_level || 2.0 }] });
+                            }
+                        }
+
+                        if (step.colors) {
+                            var currentOption = myChart.getOption();
+                            var seriesData = currentOption.series[0].data;
+                            var updated = false;
+                            for (var i = 0; i < seriesData.length; i++) {
+                                var name = seriesData[i].name;
+                                if (step.colors[name]) {
+                                    if (!seriesData[i].itemStyle) seriesData[i].itemStyle = {};
+                                    seriesData[i].itemStyle.areaColor = step.colors[name];
+                                    updated = true;
+                                }
+                            }
+                            if (updated) myChart.setOption({ series: [{ data: seriesData }] });
+                        }
+
+                        myChart.dispatchAction({ type: 'hideTip' });
+                        if (step.show_tooltips) {
+                            step.show_tooltips.forEach(function(tooltipId) {
+                                myChart.dispatchAction({ type: 'showTip', name: tooltipId });
+                            });
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scrolly-step').forEach(stepEl => observer.observe(stepEl));
+            if (steps.length > 0) container.scrollTop = 0;
+        }
+
+        var tourSteps = [];
+        var currentTourStep = 0;
+
+        function initTour(steps) {
+            var container = document.getElementById('tour-container');
+            if (!steps || steps.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            tourSteps = steps;
+            currentTourStep = 0;
+            container.style.display = 'block';
+            renderTourStep();
+        }
+
+        function renderTourStep() {
+            if (currentTourStep < 0 || currentTourStep >= tourSteps.length) return;
+            var step = tourSteps[currentTourStep];
+            document.getElementById('tour-content').innerHTML = sanitizeHTML(step.content);
+            document.getElementById('tour-progress').innerText = (currentTourStep + 1) + ' / ' + tourSteps.length;
+            document.getElementById('tour-prev').disabled = currentTourStep === 0;
+            document.getElementById('tour-next').innerText = currentTourStep === tourSteps.length - 1 ? 'Finish' : 'Next';
+
+            if (step.zoom_to) {
+                myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
+                var viewMeta = overlaysData[step.zoom_to];
+                if (viewMeta && viewMeta.coord) {
+                    myChart.setOption({ series: [{ center: viewMeta.coord, zoom: step.zoom_level || 2.0 }] });
+                } else {
+                    myChart.setOption({ series: [{ zoom: step.zoom_level || 2.0 }] });
+                }
+            }
+
+            myChart.dispatchAction({ type: 'hideTip' });
+            if (step.show_tooltips) {
+                step.show_tooltips.forEach(tooltipId => myChart.dispatchAction({ type: 'showTip', name: tooltipId }));
+            }
+        }
+
+        function tourNext() {
+            if (currentTourStep < tourSteps.length - 1) {
+                currentTourStep++;
+                renderTourStep();
+            } else {
+                closeTour();
+            }
+        }
+
+        function tourPrev() {
+            if (currentTourStep > 0) {
+                currentTourStep--;
+                renderTourStep();
+            }
+        }
+
+        function closeTour() {
+            document.getElementById('tour-container').style.display = 'none';
+        }
+
+        var isMinimapEnabled = false;
+
+        function initMinimap(view) {
+            var container = document.getElementById('minimap-container');
+            if (view.enable_minimap) {
+                isMinimapEnabled = true;
+                container.style.display = 'block';
+                document.getElementById('minimap-svg').innerHTML = view.svg_string;
+                updateMinimapViewport();
+            } else {
+                isMinimapEnabled = false;
+                container.style.display = 'none';
+            }
+        }
+
+        function updateMinimapViewport() {
+            if (!isMinimapEnabled) return;
+            var option = myChart.getOption();
+            if (!option || !option.series || option.series.length === 0) return;
+            var zoom = option.series[0].zoom || 1;
+            var viewport = document.getElementById('minimap-viewport');
+            var vpWidth = 150 / zoom;
+            var vpHeight = 150 / zoom;
+            var left = (150 - vpWidth) / 2;
+            var top = (150 - vpHeight) / 2;
+            viewport.style.width = vpWidth + 'px';
+            viewport.style.height = vpHeight + 'px';
+            viewport.style.left = left + 'px';
+            viewport.style.top = top + 'px';
+        }
+
+        function exportSnapshot() {
+            if (renderMode === 'svg') {
+                var container = document.getElementById('sivo-native-overlay-svg-container');
+                if (!container) return;
+                var svgClone = container.querySelector('svg').cloneNode(true);
+                var source = new XMLSerializer().serializeToString(svgClone);
+                if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+                    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+                }
+                if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+                    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+                }
+                source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+                var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+                var downloadLink = document.createElement("a");
+                downloadLink.href = url;
+                downloadLink.download = "sivo-snapshot.svg";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                var imgData = myChart.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#fff' });
+                var downloadLink = document.createElement("a");
+                downloadLink.href = imgData;
+                downloadLink.download = "sivo-snapshot.png";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }
+        }
+
+        function initLayerLegend(toggles) {
+            var legendContainer = document.getElementById('layer-legend');
+            var legendContent = document.getElementById('layer-legend-content');
+            if (!toggles || toggles.length === 0) {
+                legendContainer.style.display = 'none';
+                return;
+            }
+            legendContainer.style.display = 'block';
+            legendContent.innerHTML = '';
+            toggles.forEach(function(toggle) {
+                var label = document.createElement('label');
+                label.className = 'layer-toggle';
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = toggle.default_visible;
+                checkbox.dataset.elementIds = JSON.stringify(toggle.element_ids);
+                checkbox.addEventListener('change', function(e) {
+                    var isVisible = e.target.checked;
+                    var ids = JSON.parse(e.target.dataset.elementIds);
+                    if (renderMode === 'svg') {
+                        var overlayGroup = document.getElementById('sivo-global-transform-group');
+                        if (overlayGroup) {
+                            ids.forEach(function(id) {
+                                var node = overlayGroup.querySelector(`[id="${id}"], [name="${id}"]`);
+                                if (node) node.style.display = isVisible ? '' : 'none';
+                            });
+                        }
+                    }
+                    var currentOption = myChart.getOption();
+                    if (currentOption && currentOption.series && currentOption.series[0].data) {
+                        var seriesData = currentOption.series[0].data;
+                        var updated = false;
+                        for (var i = 0; i < seriesData.length; i++) {
+                            if (ids.includes(seriesData[i].name)) {
+                                if (!seriesData[i].itemStyle) seriesData[i].itemStyle = {};
+                                seriesData[i].itemStyle.opacity = isVisible ? 1 : 0;
+                                updated = true;
+                            }
+                        }
+                        if (updated) myChart.setOption({ series: [{ data: seriesData }] });
+                    }
+                });
+                var span = document.createElement('span');
+                span.innerText = toggle.label;
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                legendContent.appendChild(label);
+                if (!toggle.default_visible) {
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+
         // Initialize the first view
         renderView(currentViewId, false);
 
@@ -1251,8 +2463,25 @@
                 // params.zoom is a delta multiplier, not absolute zoom
                 currentZoom *= params.zoom;
             }
+
+            syncOverlayTransform();
+
+            // Sync zoom from map to geo component if lines exist to keep them aligned during drag
+            if (connectionsData.length > 0) {
+                var option = myChart.getOption();
+                if (option.series && option.series[0] && option.geo) {
+                    myChart.setOption({
+                        geo: [{
+                            zoom: option.series[0].zoom,
+                            center: option.series[0].center
+                        }]
+                    });
+                }
+            }
+
             // If dragging, params.zoom is undefined, but we still need to update position
             updateOverlaysPosition();
+            updateMinimapViewport();
         });
 
         // Handle window resize
@@ -1331,12 +2560,20 @@
         }
         .sivo-gallery-close {
             position: absolute;
-            top: 20px;
-            right: 30px;
+            top: 10px;
+            right: 15px;
             color: white;
-            font-size: 40px;
+            font-size: 30px;
             font-weight: bold;
             cursor: pointer;
+            z-index: 10000;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
     <div id="sivo-gallery-modal">
@@ -1416,8 +2653,9 @@
         }
         .sivo-video-close {
             position: absolute;
-            top: -40px;
+            top: -30px;
             right: 0;
+            z-index: 10000;
             color: white;
             font-size: 30px;
             font-weight: bold;
