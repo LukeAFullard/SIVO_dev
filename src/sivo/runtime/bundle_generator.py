@@ -186,6 +186,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "render_mode": view_obj.get("render_mode", "canvas"),
             "enable_minimap": view_obj.get("enable_minimap", False),
             "enable_export": view_obj.get("enable_export", False),
+            "fade_unselected": view_obj.get("fade_unselected", False),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:

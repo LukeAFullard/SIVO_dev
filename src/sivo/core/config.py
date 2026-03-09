@@ -171,3 +171,7 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, provisions scaffolding for End-to-End (E2E) Browser Testing via Playwright."
     )
+    fade_unselected: bool = Field(
+        default=False,
+        description="If True, clicking on an interactive element will automatically fade out all other elements on the canvas to emphasize the selection."
+    )

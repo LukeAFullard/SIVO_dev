@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -511,8 +506,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"\u003e\n    \u003crect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/\u003e\n    \u003cg id=\"shapes\" name=\"shapes\"\u003e\n        \u003crect id=\"rect1\" x=\"50\" y=\"50\" width=\"80\" height=\"80\" fill=\"#3498db\" name=\"rect1\"/\u003e\n        \u003ccircle id=\"circ1\" cx=\"200\" cy=\"90\" r=\"40\" fill=\"#e74c3c\" name=\"circ1\"/\u003e\n        \u003cpolygon id=\"poly1\" points=\"300,50 340,130 260,130\" fill=\"#2ecc71\" name=\"poly1\"/\u003e\n        \n        \u003crect id=\"rect2\" x=\"50\" y=\"170\" width=\"80\" height=\"80\" fill=\"#9b59b6\" name=\"rect2\"/\u003e\n        \u003ccircle id=\"circ2\" cx=\"200\" cy=\"210\" r=\"40\" fill=\"#f1c40f\" name=\"circ2\"/\u003e\n        \u003cpolygon id=\"poly2\" points=\"300,170 340,250 260,250\" fill=\"#e67e22\" name=\"poly2\"/\u003e\n    \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "shapes", "value": 1}, {"name": "rect1", "value": 1, "tooltip": "Blue Rectangle", "emphasis": {"itemStyle": {"areaColor": "#2980b9"}}}, {"name": "circ1", "value": 1, "tooltip": "Red Circle", "emphasis": {"itemStyle": {"areaColor": "#c0392b"}}}, {"name": "poly1", "value": 1}, {"name": "rect2", "value": 1}, {"name": "circ2", "value": 1}, {"name": "poly2", "value": 1, "tooltip": "Orange Triangle", "emphasis": {"itemStyle": {"areaColor": "#d35400"}}}], "actions_manifest": {"rect1": [{"action_type": "tooltip", "content": "\u003ch3\u003eBlue Rectangle\u003c/h3\u003e\u003cp\u003eNotice how all other shapes fade out when you click me.\u003c/p\u003e", "title": "Blue Rectangle", "panel_position": "right"}], "circ1": [{"action_type": "tooltip", "content": "\u003ch3\u003eRed Circle\u003c/h3\u003e\u003cp\u003eClick the background canvas to deselect and close this panel.\u003c/p\u003e", "title": "Red Circle", "panel_position": "right"}], "poly2": [{"action_type": "tooltip", "content": "\u003ch3\u003eOrange Triangle\u003c/h3\u003e\u003cp\u003eFading works across all mapped objects automatically.\u003c/p\u003e", "title": "Orange Triangle", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": true, "mappings": {"shapes": {"id": "shapes", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "rect1": {"id": "rect1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eBlue Rectangle\u003c/h3\u003e\u003cp\u003eNotice how all other shapes fade out when you click me.\u003c/p\u003e", "title": "Blue Rectangle", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#2980b9", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "circ1": {"id": "circ1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eRed Circle\u003c/h3\u003e\u003cp\u003eClick the background canvas to deselect and close this panel.\u003c/p\u003e", "title": "Red Circle", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#c0392b", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "poly1": {"id": "poly1", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "rect2": {"id": "rect2", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "circ2": {"id": "circ2", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "poly2": {"id": "poly2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eOrange Triangle\u003c/h3\u003e\u003cp\u003eFading works across all mapped objects automatically.\u003c/p\u003e", "title": "Orange Triangle", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#d35400", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -2631,8 +2626,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>
