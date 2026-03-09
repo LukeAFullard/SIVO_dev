@@ -179,3 +179,11 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, clicking on an interactive element will automatically fade out all other elements on the canvas to emphasize the selection."
     )
+    enable_search: bool = Field(
+        default=False,
+        description="If True, renders a search bar overlay that allows users to quickly locate SVG elements by ID or tooltip content."
+    )
+    watermark: Optional[str] = Field(
+        default=None,
+        description="Optional HTML string to render a fixed watermark overlay (e.g., enterprise logo) in the bottom right corner."
+    )
