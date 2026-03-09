@@ -251,8 +251,10 @@
 <body>
 
     <div id="a11y-container" class="sr-only"></div>
-    <div id="chart-container"></div>
-    <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none;"></div>
+    <div style="position: relative; flex: 1; height: 100%; width: 100%;">
+        <div id="chart-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+        <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
+    </div>
     <div id="sivo-resizer" class="sivo-resizer"></div>
     <div class="zoom-controls">
         <div class="zoom-btn" onclick="zoomIn()">+</div>
@@ -629,17 +631,25 @@
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
                     var originalD = node.getAttribute('d');
+                    var targetD = theme.morph_to_path;
 
-                    // Instead of CSS transitions which are flaky across browsers for the 'd' attribute,
-                    // we dynamically inject an <animate> tag natively supported by SVG.
-                    var animateNode = document.createElementNS("http://www.w3.org/2000/svg", "animate");
-                    animateNode.setAttribute("attributeName", "d");
-                    animateNode.setAttribute("from", originalD);
-                    animateNode.setAttribute("to", theme.morph_to_path);
-                    animateNode.setAttribute("dur", duration + "ms");
-                    animateNode.setAttribute("fill", "freeze"); // keep the final state
-
-                    node.appendChild(animateNode);
+                    // The Web Animations API (WAAPI) provides the smoothest, hardware-accelerated
+                    // path morphing in modern browsers. It requires wrapping the d string in 'path()'.
+                    try {
+                        node.animate([
+                            { d: 'path("' + originalD + '")' },
+                            { d: 'path("' + targetD + '")' }
+                        ], {
+                            duration: duration,
+                            fill: 'forwards',
+                            easing: 'ease-in-out'
+                        });
+                        // Ensure the actual attribute is updated at the end for persistence
+                        setTimeout(() => node.setAttribute('d', targetD), duration);
+                    } catch (err) {
+                        // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
+                        node.setAttribute('d', targetD);
+                    }
                 }
 
                 // 2. Transformations

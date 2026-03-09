@@ -631,21 +631,24 @@
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
                     var originalD = node.getAttribute('d');
+                    var targetD = theme.morph_to_path;
 
-                    // Instead of CSS transitions which are flaky across browsers for the 'd' attribute,
-                    // we dynamically inject an <animate> tag natively supported by SVG.
-                    var animateNode = document.createElementNS("http://www.w3.org/2000/svg", "animate");
-                    animateNode.setAttribute("attributeName", "d");
-                    animateNode.setAttribute("from", originalD);
-                    animateNode.setAttribute("to", theme.morph_to_path);
-                    animateNode.setAttribute("dur", duration + "ms");
-                    animateNode.setAttribute("fill", "freeze"); // keep the final state
-
-                    node.appendChild(animateNode);
-
-                    // Force the animation to start immediately since it was dynamically inserted
-                    if (animateNode.beginElement) {
-                        animateNode.beginElement();
+                    // The Web Animations API (WAAPI) provides the smoothest, hardware-accelerated
+                    // path morphing in modern browsers. It requires wrapping the d string in 'path()'.
+                    try {
+                        node.animate([
+                            { d: 'path("' + originalD + '")' },
+                            { d: 'path("' + targetD + '")' }
+                        ], {
+                            duration: duration,
+                            fill: 'forwards',
+                            easing: 'ease-in-out'
+                        });
+                        // Ensure the actual attribute is updated at the end for persistence
+                        setTimeout(() => node.setAttribute('d', targetD), duration);
+                    } catch (err) {
+                        // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
+                        node.setAttribute('d', targetD);
                     }
                 }
 

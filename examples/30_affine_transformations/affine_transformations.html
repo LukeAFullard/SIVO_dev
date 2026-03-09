@@ -251,8 +251,10 @@
 <body>
 
     <div id="a11y-container" class="sr-only"></div>
-    <div id="chart-container"></div>
-    <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none;"></div>
+    <div style="position: relative; flex: 1; height: 100%; width: 100%;">
+        <div id="chart-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+        <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
+    </div>
     <div id="sivo-resizer" class="sivo-resizer"></div>
     <div class="zoom-controls">
         <div class="zoom-btn" onclick="zoomIn()">+</div>
@@ -543,23 +545,111 @@
             var mappings = viewData.mappings;
             for (var name in mappings) {
                 var mapping = mappings[name];
-                if (!mapping.theme) continue;
+                // Check if element has any actions mapped to it (so we need it interactive) or a theme
+                var hasTheme = mapping.theme !== undefined;
+                var hasActions = mapping.actions && mapping.actions.length > 0;
+                var isDraggable = mapping.draggable;
+                var hasHoverColor = hasTheme && mapping.theme.hover_color;
 
-                var theme = mapping.theme;
-                // Find node by id or name
                 var node = wrapperGroup.querySelector(`[id="${name}"], [name="${name}"]`);
                 if (!node) continue;
+
+                // Make interactive elements pointer-events: auto so they can catch events
+                // because the parent svg is pointer-events: none.
+                if (isDraggable || hasActions || hasHoverColor || mapping.tooltip) {
+                    node.style.pointerEvents = 'auto';
+                    node.style.cursor = 'pointer';
+
+                    // Manually bind ECharts-like interactivity to these top-level DOM nodes
+                    (function(node, name, mapping) {
+                        // Tooltip & Hover Callback
+                        node.addEventListener('mouseenter', function(e) {
+                            // Highlight (ECharts doesn't let us trigger its native highlight easily if opacity is 0,
+                            // so we manually apply hover_color if it exists)
+                            if (mapping.theme && mapping.theme.hover_color) {
+                                node.setAttribute('data-original-fill', node.getAttribute('fill') || '');
+                                node.setAttribute('fill', mapping.theme.hover_color);
+                            }
+
+                            // Show Tooltip via ECharts dispatch
+                            myChart.dispatchAction({
+                                type: 'showTip',
+                                seriesIndex: 0,
+                                name: name
+                            });
+
+                            // Hover Callback action
+                            if (mapping.actions) {
+                                mapping.actions.forEach(function(action) {
+                                    if (action.action_type === 'hover_callback') {
+                                        window.parent.postMessage({
+                                            type: 'sivo_hover',
+                                            payload: { element_id: name, event: action.event_name, data: action.payload || {} }
+                                        }, '*');
+                                    }
+                                });
+                            }
+                        });
+
+                        node.addEventListener('mouseleave', function(e) {
+                            if (mapping.theme && mapping.theme.hover_color) {
+                                var orig = node.getAttribute('data-original-fill');
+                                if (orig !== null) node.setAttribute('fill', orig);
+                            }
+                            myChart.dispatchAction({
+                                type: 'hideTip'
+                            });
+                        });
+
+                        // Click actions
+                        node.addEventListener('click', function(e) {
+                            // If we were dragging, prevent click
+                            if (window.isDraggingElement) {
+                                window.isDraggingElement = false;
+                                return;
+                            }
+                            // Manually trigger the ECharts 'click' logic we defined lower down
+                            // ECharts `trigger` API is internal, but we can simulate the params object
+                            // and call the same logic. For simplicity, we can dispatch a custom DOM event or
+                            // extract our click handler into a reusable function.
+                            // However, we can also just manually trigger it through the zr instance
+                            myChart.trigger('click', { componentType: 'series', name: name });
+                        });
+
+                        // Dragging logic is handled below globally, but we tag it
+                        if (mapping.draggable) {
+                            node.setAttribute('data-draggable', 'true');
+                            node.style.cursor = 'grab';
+                        }
+                    })(node, name, mapping);
+                }
+
+                if (!hasTheme) continue;
+                var theme = mapping.theme;
 
                 // 1. Morphing
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
-                    node.style.transition = `d ${duration}ms ease-in-out`;
-                    // Delay slightly to trigger the transition from initial state
-                    (function(n, p) {
-                        setTimeout(function() {
-                            n.setAttribute('d', p);
-                        }, 50);
-                    })(node, theme.morph_to_path);
+                    var originalD = node.getAttribute('d');
+                    var targetD = theme.morph_to_path;
+
+                    // The Web Animations API (WAAPI) provides the smoothest, hardware-accelerated
+                    // path morphing in modern browsers. It requires wrapping the d string in 'path()'.
+                    try {
+                        node.animate([
+                            { d: 'path("' + originalD + '")' },
+                            { d: 'path("' + targetD + '")' }
+                        ], {
+                            duration: duration,
+                            fill: 'forwards',
+                            easing: 'ease-in-out'
+                        });
+                        // Ensure the actual attribute is updated at the end for persistence
+                        setTimeout(() => node.setAttribute('d', targetD), duration);
+                    } catch (err) {
+                        // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
+                        node.setAttribute('d', targetD);
+                    }
                 }
 
                 // 2. Transformations
@@ -595,11 +685,15 @@
             var overlayGroup = document.getElementById('sivo-global-transform-group');
             if (!overlayGroup) return;
 
-            // In ECharts map series, the global transform matrix is applied to the root <g> inside its generated SVG.
-            // We can extract it by querying ECharts' own DOM node.
-            var echartsRootGroup = document.querySelector('#chart-container svg > g');
-            if (echartsRootGroup) {
-                var transform = echartsRootGroup.getAttribute('transform');
+            // In ECharts map series, the global transform matrix is usually applied to the `<g>` that directly wraps the paths.
+            // ECharts often renders a structure like <svg><g><g><path>...
+            // ECharts often applies the matrix directly to the `path` elements themselves or a `<g>`.
+            // In the SVG renderer, ECharts applies a transform attribute to each mapped shape,
+            // or we can use the ECharts internal API to get the current projection matrix to ensure perfection.
+            // Even better, we can query ANY of the generated path elements and extract its transform!
+            var echartsPath = document.querySelector('#chart-container svg path[transform]');
+            if (echartsPath) {
+                var transform = echartsPath.getAttribute('transform');
                 if (transform) {
                     overlayGroup.setAttribute('transform', transform);
                 }
@@ -882,7 +976,8 @@
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
-                applyNativeSvgManipulations();
+                // ECharts renders asynchronously; wait slightly to guarantee DOM paths exist to copy transforms from
+                setTimeout(applyNativeSvgManipulations, 100);
             }
 
             // Handle elements marked to open by default
@@ -965,65 +1060,71 @@
         var currentElementX = 0;
         var currentElementY = 0;
 
-        myChart.on('mousedown', function (params) {
-            var name = params.name;
-            var viewData = viewsData[currentViewId];
-            if (viewData && viewData.mappings && viewData.mappings[name] && viewData.mappings[name].draggable) {
-                // Determine the actual DOM element if in SVG mode, otherwise this won't work well in Canvas
-                if (renderMode === 'svg') {
-                    // Prevent chart roaming while dragging
-                    var opt = myChart.getOption();
-                    if (opt.series[0]) opt.series[0].roam = false;
-                    myChart.setOption(opt);
+        window.isDraggingElement = false;
 
-                    var svgNode = document.querySelector('#chart-container svg [name="' + name + '"]');
-                    if (svgNode) {
-                        draggedElement = svgNode;
-                        dragStartX = params.event.offsetX;
-                        dragStartY = params.event.offsetY;
+        // Catch mousedown at the root DOM level before ECharts initiates pan (georoam)
+        document.getElementById('sivo-native-overlay-svg-container').addEventListener('mousedown', function (e) {
+            if (renderMode !== 'svg') return;
 
-                        // Parse existing transform translation
-                        var currentTransform = svgNode.getAttribute('transform') || '';
-                        var translateMatch = currentTransform.match(/translate\(([^,]+)[ ,]([^)]+)\)/);
-                        if (translateMatch) {
-                            currentElementX = parseFloat(translateMatch[1]);
-                            currentElementY = parseFloat(translateMatch[2]);
-                        } else {
-                            currentElementX = 0;
-                            currentElementY = 0;
-                        }
-                    }
+            // Check if the clicked target has data-draggable true
+            var target = e.target;
+            if (target && target.closest) {
+                target = target.closest('[data-draggable="true"]');
+            }
+            if (target && target.getAttribute('data-draggable') === 'true') {
+                e.stopPropagation(); // Stop ECharts from getting the mousedown and starting a pan
+
+                draggedElement = target;
+                dragStartX = e.clientX;
+                dragStartY = e.clientY;
+                window.isDraggingElement = true; // prevent click immediately after drag
+
+                // Parse existing transform translation
+                var currentTransform = target.getAttribute('transform') || '';
+                var translateMatch = currentTransform.match(/translate\(([-\d.]+)[ ,]([-\d.]+)\)/);
+                if (translateMatch) {
+                    currentElementX = parseFloat(translateMatch[1]);
+                    currentElementY = parseFloat(translateMatch[2]);
                 } else {
-                    console.warn("Draggable elements are only supported when render_mode='svg'.");
+                    currentElementX = 0;
+                    currentElementY = 0;
                 }
             }
-        });
+        }, true);
 
-        // We attach mousemove and mouseup to the generic zr (ZRender) instance to catch them anywhere over the chart
-        myChart.getZr().on('mousemove', function (params) {
+        // Listen for mousemove on the window to support dragging
+        window.addEventListener('mousemove', function (e) {
             if (draggedElement) {
-                var dx = params.offsetX - dragStartX;
-                var dy = params.offsetY - dragStartY;
+                var dx = e.clientX - dragStartX;
+                var dy = e.clientY - dragStartY;
+
+                // Account for global ECharts zoom level so it drags 1:1 with mouse
+                var zoomLevel = currentZoom || 1;
+                dx = dx / zoomLevel;
+                dy = dy / zoomLevel;
+
                 var newX = currentElementX + dx;
                 var newY = currentElementY + dy;
 
                 var currentTransform = draggedElement.getAttribute('transform') || '';
-                // Remove old translate
+                // Remove old translate to overwrite it
                 currentTransform = currentTransform.replace(/translate\([^)]+\)/g, '').trim();
-                // Apply new translate
+
+                // Construct new transform
                 var newTransform = 'translate(' + newX + ' ' + newY + ') ' + currentTransform;
                 draggedElement.setAttribute('transform', newTransform.trim());
+
+                // Prevent anything else from handling this move
+                e.stopPropagation();
             }
-        });
+        }, true);
 
-        myChart.getZr().on('mouseup', function (params) {
+        // Use global window events to ensure mouseup is always caught even if it leaves the canvas
+        window.addEventListener('mouseup', function(e) {
             if (draggedElement) {
-                // Re-enable chart roaming
-                var opt = myChart.getOption();
-                if (opt.series[0]) opt.series[0].roam = true;
-                myChart.setOption(opt);
-
                 draggedElement = null;
+                // delay clearing isDraggingElement so click handlers don't fire immediately
+                setTimeout(() => window.isDraggingElement = false, 100);
             }
         });
 
