@@ -635,6 +635,7 @@
                 // 1. Morphing
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
+                    var delay = theme.morph_delay_ms || 0;
                     var originalD = node.getAttribute('d');
                     var targetD = theme.morph_to_path;
 
@@ -646,14 +647,15 @@
                             { d: 'path("' + targetD + '")' }
                         ], {
                             duration: duration,
+                            delay: delay,
                             fill: 'forwards',
                             easing: 'ease-in-out'
                         });
                         // Ensure the actual attribute is updated at the end for persistence
-                        setTimeout(() => node.setAttribute('d', targetD), duration);
+                        setTimeout(() => node.setAttribute('d', targetD), duration + delay);
                     } catch (err) {
                         // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
-                        node.setAttribute('d', targetD);
+                        setTimeout(() => node.setAttribute('d', targetD), delay);
                     }
                 }
 

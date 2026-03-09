@@ -38,6 +38,7 @@ class ElementConfig(BaseModel):
     glow: Optional[bool] = None
     morph_to_path: Optional[str] = None
     morph_duration_ms: Optional[int] = 1000
+    morph_delay_ms: Optional[int] = 0
     filter: Optional[str] = None
     clip_path: Optional[str] = None
     mask: Optional[str] = None

@@ -27,7 +27,8 @@ sivo_app.map(
     element_id="myMorphPath",
     tooltip="This path will morph to a triangle",
     morph_to_path="M100,20 L180,180 L100,180 L20,180 Z",
-    morph_duration_ms=2000
+    morph_duration_ms=2000,
+    morph_delay_ms=500
 )
 
 # Map an SVG filter
