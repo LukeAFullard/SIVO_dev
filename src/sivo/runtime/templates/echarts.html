@@ -3006,7 +3006,7 @@
 
                     el.addEventListener('mousedown', function(e) {
                         e.preventDefault(); // Prevent input blur
-                        selectSearchResult(item.id);
+                        window.sivoSelectSearchResult(item.id);
                     });
 
                     searchResults.appendChild(el);
