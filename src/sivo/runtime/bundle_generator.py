@@ -43,6 +43,9 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             if mapping_dict.get('draggable'):
                 data_item['draggable'] = True
 
+            if mapping_dict.get('context_menu'):
+                data_item['context_menu'] = mapping_dict['context_menu']
+
             element_actions = []
             actions_list = mapping_dict.get('actions', [])
 
@@ -194,6 +197,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "theme": view_obj.get("theme", "light"),
             "enable_search": view_obj.get("enable_search", False),
             "watermark": view_obj.get("watermark", None),
+            "enable_brush_selection": view_obj.get("enable_brush_selection", False),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:
