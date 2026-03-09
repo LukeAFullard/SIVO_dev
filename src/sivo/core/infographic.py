@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas"):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -19,6 +19,7 @@ class Infographic:
         self.default_panel_position = default_panel_position
         self.lock_zoom_out = lock_zoom_out
         self.enable_a11y = enable_a11y
+        self.render_mode = render_mode
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
 
@@ -66,6 +67,7 @@ class Infographic:
         infographic.lock_zoom_out = getattr(cfg, "lock_zoom_out", False)
 
         infographic.enable_a11y = getattr(cfg, "enable_a11y", False)
+        infographic.render_mode = getattr(cfg, "render_mode", "canvas")
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
 
@@ -111,11 +113,21 @@ class Infographic:
                     open_by_default=elem_config.open_by_default,
                     zoom_on_click=elem_config.zoom_on_click,
                     zoom_level=elem_config.zoom_level,
+                    draggable=elem_config.draggable,
                     color=elem_config.color,
                     hover_color=elem_config.hover_color,
+                    fill_gradient=elem_config.fill_gradient,
+                    fill_pattern=elem_config.fill_pattern,
                     border_width=elem_config.border_width,
                     border_color=elem_config.border_color,
-                    glow=elem_config.glow
+                    glow=elem_config.glow,
+                    morph_to_path=elem_config.morph_to_path,
+                    morph_duration_ms=elem_config.morph_duration_ms,
+                    morph_delay_ms=elem_config.morph_delay_ms,
+                    filter=elem_config.filter,
+                    clip_path=elem_config.clip_path,
+                    mask=elem_config.mask,
+                    transform=elem_config.transform
                 )
             except ValueError as e:
                 # Log or handle missing elements gracefully, perhaps a warning
@@ -159,12 +171,22 @@ class Infographic:
         open_by_default: bool = False,
         zoom_on_click: bool = False,
         zoom_level: float = 2.0,
+        draggable: bool = False,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
+        fill_gradient: Optional[dict] = None,
+        fill_pattern: Optional[dict] = None,
         border_width: Optional[float] = None,
         border_color: Optional[str] = None,
         glow: Optional[bool] = None,
-        animation: Optional[str] = None
+        animation: Optional[str] = None,
+        morph_to_path: Optional[str] = None,
+        morph_duration_ms: Optional[int] = 1000,
+        morph_delay_ms: Optional[int] = 0,
+        filter: Optional[str] = None,
+        clip_path: Optional[str] = None,
+        mask: Optional[str] = None,
+        transform: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -200,6 +222,9 @@ class Infographic:
 
         if open_by_default:
             mapping.open_by_default = True
+
+        if draggable:
+            mapping.draggable = True
 
         if zoom_on_click:
             center = self.get_element_center(element_id)
@@ -282,6 +307,12 @@ class Infographic:
         if hover_color:
             mapping.theme.hover_color = hover_color
 
+        if fill_gradient:
+            mapping.theme.fill_gradient = fill_gradient
+
+        if fill_pattern:
+            mapping.theme.fill_pattern = fill_pattern
+
         if border_width is not None:
             mapping.theme.border_width = border_width
 
@@ -293,6 +324,54 @@ class Infographic:
 
         if animation:
             mapping.theme.animation = animation
+
+        if morph_to_path:
+            mapping.theme.morph_to_path = morph_to_path
+
+        if morph_duration_ms is not None:
+            mapping.theme.morph_duration_ms = morph_duration_ms
+
+        if morph_delay_ms is not None:
+            mapping.theme.morph_delay_ms = morph_delay_ms
+
+        if filter:
+            mapping.theme.filter = filter
+
+        if clip_path:
+            mapping.theme.clip_path = clip_path
+
+        if mask:
+            mapping.theme.mask = mask
+
+        if transform:
+            mapping.theme.transform = transform
+
+    def add_shape(self, tag: str, attributes: Dict[str, str]):
+        """
+        Programmatically adds a simple vector shape to the SVG and registers it
+        in the internal elements lookup so it can be mapped to actions.
+        """
+        self.parser.add_shape(tag, attributes)
+
+        # After adding, re-process elements to find the new one and register it
+        # We only need to add the newest element to our mappings/lookup
+        elem_id = attributes.get('id')
+        if elem_id:
+            # We construct the element data exactly like process_elements does
+            elem_name = attributes.get('name', elem_id)
+            element_data = {
+                'id': elem_id,
+                'name': elem_name,
+                'tag': tag
+            }
+            # Add to elements list
+            self.elements.append(element_data)
+
+            # Register in internal lookup and default mapping
+            if elem_name not in self.mappings:
+                self.mappings[elem_name] = InteractionMapping(id=elem_id)
+            self._element_lookup[elem_id] = element_data
+            self._element_lookup[elem_name] = element_data
 
     def bind_data(self, data: Dict[str, Dict[str, float]], key: str, colors: list, min_val: float, max_val: float):
         """

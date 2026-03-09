@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -279,8 +274,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"200\"\u003e\n    \u003crect id=\"gradientRect\" x=\"10\" y=\"50\" width=\"180\" height=\"100\" fill=\"#ccc\" name=\"gradientRect\"/\u003e\n    \u003ccircle id=\"patternCircle\" cx=\"300\" cy=\"100\" r=\"80\" fill=\"#ccc\" name=\"patternCircle\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "gradientRect", "value": 1, "tooltip": "This rectangle uses a linear gradient", "itemStyle": {"areaColor": {"type": "linear", "x": 0, "y": 0, "x2": 1, "y2": 1, "colorStops": [{"offset": 0, "color": "#3498db"}, {"offset": 1, "color": "#2ecc71"}], "global": false}}}, {"name": "patternCircle", "value": 1, "tooltip": "This circle uses an image pattern", "itemStyle": {"areaColor": {"image": "https://www.transparenttextures.com/patterns/cubes.png", "repeat": "repeat"}}}], "actions_manifest": {"gradientRect": [{"action_type": "tooltip", "content": "\u003ch3\u003eThis rectangle uses a linear gradient\u003c/h3\u003e", "title": "This rectangle uses a linear gradient", "panel_position": "right"}], "patternCircle": [{"action_type": "tooltip", "content": "\u003ch3\u003eThis circle uses an image pattern\u003c/h3\u003e", "title": "This circle uses an image pattern", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "mappings": {"gradientRect": {"id": "gradientRect", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eThis rectangle uses a linear gradient\u003c/h3\u003e", "title": "This rectangle uses a linear gradient", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": {"type": "linear", "x": 0, "y": 0, "x2": 1, "y2": 1, "stops": [{"offset": 0, "color": "#3498db"}, {"offset": 1, "color": "#2ecc71"}]}, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": null}}, "patternCircle": {"id": "patternCircle", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eThis circle uses an image pattern\u003c/h3\u003e", "title": "This circle uses an image pattern", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": {"image": "https://www.transparenttextures.com/patterns/cubes.png", "repeat": "repeat"}, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": null}}}}};
+        var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -635,7 +630,6 @@
                 // 1. Morphing
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
-                    var delay = theme.morph_delay_ms || 0;
                     var originalD = node.getAttribute('d');
                     var targetD = theme.morph_to_path;
 
@@ -647,15 +641,14 @@
                             { d: 'path("' + targetD + '")' }
                         ], {
                             duration: duration,
-                            delay: delay,
                             fill: 'forwards',
                             easing: 'ease-in-out'
                         });
                         // Ensure the actual attribute is updated at the end for persistence
-                        setTimeout(() => node.setAttribute('d', targetD), duration + delay);
+                        setTimeout(() => node.setAttribute('d', targetD), duration);
                     } catch (err) {
                         // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
-                        setTimeout(() => node.setAttribute('d', targetD), delay);
+                        node.setAttribute('d', targetD);
                     }
                 }
 
@@ -1985,8 +1978,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

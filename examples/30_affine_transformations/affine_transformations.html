@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -279,8 +274,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n    \u003c!-- Drawing ghost elements to clearly show the \"before\" state underneath the transformed ones --\u003e\n    \u003crect x=\"50\" y=\"50\" width=\"100\" height=\"100\" fill=\"none\" stroke=\"#ccc\" stroke-dasharray=\"5,5\"/\u003e\n    \u003crect id=\"rectRotate\" x=\"50\" y=\"50\" width=\"100\" height=\"100\" fill=\"#3498db\" name=\"rectRotate\"/\u003e\n    \n    \u003ccircle cx=\"250\" cy=\"100\" r=\"50\" fill=\"none\" stroke=\"#ccc\" stroke-dasharray=\"5,5\"/\u003e\n    \u003ccircle id=\"circleScale\" cx=\"250\" cy=\"100\" r=\"50\" fill=\"#e74c3c\" name=\"circleScale\"/\u003e\n    \n    \u003cpolygon points=\"50,250 150,250 100,350\" fill=\"none\" stroke=\"#ccc\" stroke-dasharray=\"5,5\"/\u003e\n    \u003cpolygon id=\"polyTranslate\" points=\"50,250 150,250 100,350\" fill=\"#2ecc71\" name=\"polyTranslate\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "rectRotate", "value": 1, "tooltip": "Rotated 45 degrees", "itemStyle": {"opacity": 0}}, {"name": "circleScale", "value": 1, "tooltip": "Scaled by 1.25", "itemStyle": {"opacity": 0}}, {"name": "polyTranslate", "value": 1, "tooltip": "Translated by (100, 50)", "itemStyle": {"opacity": 0}}], "actions_manifest": {"rectRotate": [{"action_type": "tooltip", "content": "\u003ch3\u003eRotated 45 degrees\u003c/h3\u003e", "title": "Rotated 45 degrees", "panel_position": "right"}], "circleScale": [{"action_type": "tooltip", "content": "\u003ch3\u003eScaled by 1.25\u003c/h3\u003e", "title": "Scaled by 1.25", "panel_position": "right"}], "polyTranslate": [{"action_type": "tooltip", "content": "\u003ch3\u003eTranslated by (100, 50)\u003c/h3\u003e", "title": "Translated by (100, 50)", "panel_position": "right"}]}, "overlays": {}, "render_mode": "svg", "mappings": {"rectRotate": {"id": "rectRotate", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eRotated 45 degrees\u003c/h3\u003e", "title": "Rotated 45 degrees", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": "rotate(45 100 100)"}}, "circleScale": {"id": "circleScale", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eScaled by 1.25\u003c/h3\u003e", "title": "Scaled by 1.25", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": "scale(1.25) translate(-50 -20)"}}, "polyTranslate": {"id": "polyTranslate", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eTranslated by (100, 50)\u003c/h3\u003e", "title": "Translated by (100, 50)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "filter": null, "clip_path": null, "mask": null, "transform": "translate(100 50)"}}}}};
+        var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -635,7 +630,6 @@
                 // 1. Morphing
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
-                    var delay = theme.morph_delay_ms || 0;
                     var originalD = node.getAttribute('d');
                     var targetD = theme.morph_to_path;
 
@@ -647,15 +641,14 @@
                             { d: 'path("' + targetD + '")' }
                         ], {
                             duration: duration,
-                            delay: delay,
                             fill: 'forwards',
                             easing: 'ease-in-out'
                         });
                         // Ensure the actual attribute is updated at the end for persistence
-                        setTimeout(() => node.setAttribute('d', targetD), duration + delay);
+                        setTimeout(() => node.setAttribute('d', targetD), duration);
                     } catch (err) {
                         // Fallback if WAAPI path() morphing fails (e.g. invalid string mismatch)
-                        setTimeout(() => node.setAttribute('d', targetD), delay);
+                        node.setAttribute('d', targetD);
                     }
                 }
 
@@ -1985,8 +1978,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

@@ -28,11 +28,21 @@ class ElementConfig(BaseModel):
     open_by_default: bool = False
     zoom_on_click: bool = False
     zoom_level: float = 2.0
+    draggable: bool = False
     color: Optional[str] = None
     hover_color: Optional[str] = None
+    fill_gradient: Optional[Dict[str, Any]] = None
+    fill_pattern: Optional[Dict[str, Any]] = None
     border_width: Optional[float] = None
     border_color: Optional[str] = None
     glow: Optional[bool] = None
+    morph_to_path: Optional[str] = None
+    morph_duration_ms: Optional[int] = 1000
+    morph_delay_ms: Optional[int] = 0
+    filter: Optional[str] = None
+    clip_path: Optional[str] = None
+    mask: Optional[str] = None
+    transform: Optional[str] = None
 
 class DataBindingConfig(BaseModel):
     data: Dict[str, Dict[str, float]]
@@ -82,6 +92,10 @@ class ProjectConfig(BaseModel):
     enable_a11y: bool = Field(
         default=False,
         description="If True, automatically generates accessibility actions (A11yAction) for interactive elements."
+    )
+    render_mode: str = Field(
+        default="canvas",
+        description="Rendering mode: 'canvas' (default ECharts) or 'svg' (enables native SVG features like morphing and filters)."
     )
     mappings: Dict[str, ElementConfig] = Field(
         default_factory=dict,
