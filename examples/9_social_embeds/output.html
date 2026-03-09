@@ -2241,6 +2241,9 @@
                         document.querySelectorAll('.scrolly-step').forEach(el => el.classList.remove('active'));
                         entry.target.classList.add('active');
 
+                        // Close info panel to ensure map is visible during narrative changes
+                        closePanel();
+
                         if (step.zoom_to) {
                             myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
                             var viewMeta = overlaysData[step.zoom_to];
@@ -2297,6 +2300,10 @@
 
         function renderTourStep() {
             if (currentTourStep < 0 || currentTourStep >= tourSteps.length) return;
+
+            // Close info panel to ensure map is visible during tour progression
+            closePanel();
+
             var step = tourSteps[currentTourStep];
             document.getElementById('tour-content').innerHTML = sanitizeHTML(step.content);
             document.getElementById('tour-progress').innerText = (currentTourStep + 1) + ' / ' + tourSteps.length;
