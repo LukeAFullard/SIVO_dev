@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light"):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -24,6 +24,8 @@ class Infographic:
         self.enable_export = enable_export
         self.fade_unselected = fade_unselected
         self.theme = theme
+        self.enable_search = enable_search
+        self.watermark = watermark
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
         self.scrollytelling: Optional[list] = None
@@ -79,6 +81,8 @@ class Infographic:
         infographic.enable_export = getattr(cfg, "enable_export", False)
         infographic.fade_unselected = getattr(cfg, "fade_unselected", False)
         infographic.theme = getattr(cfg, "theme", "light")
+        infographic.enable_search = getattr(cfg, "enable_search", False)
+        infographic.watermark = getattr(cfg, "watermark", None)
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
         infographic.scrollytelling = getattr(cfg, "scrollytelling", None)
@@ -597,7 +601,9 @@ class Infographic:
             "enable_minimap": self.enable_minimap,
             "enable_export": self.enable_export,
             "fade_unselected": self.fade_unselected,
-            "theme": self.theme
+            "theme": self.theme,
+            "enable_search": self.enable_search,
+            "watermark": self.watermark
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()

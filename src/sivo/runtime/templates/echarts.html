@@ -145,6 +145,112 @@
             transition: all 0.1s ease;
         }
 
+        #sivo-search-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            max-width: 90%;
+            z-index: 1000;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        #sivo-search-container:focus-within {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #38bdf8;
+        }
+
+        #sivo-search-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 12px 20px 12px 40px;
+            font-size: 15px;
+            color: #334155;
+            outline: none;
+            border-radius: 24px;
+            box-sizing: border-box;
+        }
+
+        .sivo-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        #sivo-search-results {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+
+        .sivo-search-result-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sivo-search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .sivo-search-result-item:hover, .sivo-search-result-item.active {
+            background: #f8fafc;
+        }
+
+        .sivo-search-result-title {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .sivo-search-result-subtitle {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+
+        #sivo-watermark-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+            opacity: 0.8;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #sivo-watermark-container:hover {
+            opacity: 1.0;
+        }
+
         #layer-legend {
             position: absolute;
             top: 20px;
@@ -212,6 +318,7 @@
             font-size: 15px;
             color: #334155;
             line-height: 1.6;
+            z-index: 1000;
         }
         #info-panel.active {
             display: flex;
@@ -221,31 +328,49 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding: 12px 16px;
+            padding: 16px;
             background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #f1f5f9;
             position: sticky;
             top: 0;
             z-index: 10;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
         .info-panel-content {
-            padding: 24px;
+            padding: 32px 24px;
             overflow-y: auto;
             flex: 1;
         }
+
+        /* Improved typography inside info panel content */
+        .info-panel-content h1, .info-panel-content h2, .info-panel-content h3 {
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .info-panel-content h3 {
+            font-size: 1.25rem;
+        }
+
+        .info-panel-content p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
         /* Layout modifiers for info-panel */
         #info-panel.pos-right {
-            width: 320px;
+            width: 360px;
             height: 100%;
             border-left: 1px solid #e2e8f0;
-            box-shadow: -4px 0 15px -3px rgba(0, 0, 0, 0.05);
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.05);
         }
         #info-panel.pos-left {
-            width: 320px;
+            width: 360px;
             height: 100%;
             border-right: 1px solid #e2e8f0;
-            box-shadow: 4px 0 15px -3px rgba(0, 0, 0, 0.05);
+            box-shadow: 10px 0 25px -5px rgba(0, 0, 0, 0.05);
         }
         #info-panel.pos-bottom {
             width: 100%;
@@ -393,14 +518,20 @@
             color: #f8fafc !important;
         }
         body.sivo-theme-dark #info-panel {
-            background: rgba(15, 23, 42, 0.95) !important;
+            background: rgba(15, 23, 42, 0.98) !important;
             backdrop-filter: blur(10px) !important;
-            color: #f8fafc !important;
-            border-color: rgba(255,255,255,0.1) !important;
+            color: #e2e8f0 !important;
+            border-color: #334155 !important;
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.5) !important;
         }
         body.sivo-theme-dark .info-panel-header {
             background: transparent !important;
-            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+            border-bottom: 1px solid #334155 !important;
+        }
+        body.sivo-theme-dark .info-panel-content h1,
+        body.sivo-theme-dark .info-panel-content h2,
+        body.sivo-theme-dark .info-panel-content h3 {
+            color: #f8fafc !important;
         }
         body.sivo-theme-dark .close-btn {
             background: rgba(255,255,255,0.1) !important;
@@ -431,6 +562,33 @@
         body.sivo-theme-dark .sivo-switch {
             background-color: #475569 !important;
         }
+        body.sivo-theme-dark #sivo-search-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-search-input {
+            color: #f8fafc !important;
+        }
+        body.sivo-theme-dark #sivo-search-input::placeholder {
+            color: #64748b !important;
+        }
+        body.sivo-theme-dark #sivo-search-results {
+            background: rgba(30, 41, 59, 0.98) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-item {
+            border-bottom-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-item:hover, body.sivo-theme-dark .sivo-search-result-item.active {
+            background: #475569 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-title {
+            color: #f1f5f9 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-subtitle {
+            color: #94a3b8 !important;
+        }
+
 
         .sivo-resizer {
             display: none;
@@ -585,6 +743,14 @@
         <div id="scrollytelling-container"></div>
         <div id="chart-wrapper">
             <div id="a11y-container" class="sr-only"></div>
+            <div id="sivo-watermark-container"></div>
+
+            <div id="sivo-search-container">
+                <svg class="sivo-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="sivo-search-input" placeholder="Search map..." autocomplete="off">
+                <div id="sivo-search-results"></div>
+            </div>
+
             <div id="chart-container"></div>
             <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
             <div class="zoom-controls">
@@ -1472,6 +1638,12 @@
 
             // Initialize Layer Legend
             initLayerLegend(view.layer_toggles);
+
+            // Initialize Search UI
+            initSearch(view);
+
+            // Initialize Watermark
+            initWatermark(view);
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
@@ -2710,6 +2882,119 @@
                     checkbox.dispatchEvent(new Event('change'));
                 }
             });
+        }
+
+        function initSearch(view) {
+            var searchContainer = document.getElementById('sivo-search-container');
+            var searchInput = document.getElementById('sivo-search-input');
+            var searchResults = document.getElementById('sivo-search-results');
+
+            if (!view.enable_search) {
+                searchContainer.style.display = 'none';
+                return;
+            }
+
+            searchContainer.style.display = 'block';
+
+            // Build search index
+            var searchIndex = [];
+            echartsData.forEach(function(item) {
+                var title = item.tooltip || item.name;
+                var subtitle = item.name !== title ? item.name : '';
+                searchIndex.push({
+                    id: item.name,
+                    title: title,
+                    subtitle: subtitle,
+                    searchStr: (title + ' ' + subtitle).toLowerCase()
+                });
+            });
+
+            function renderResults(query) {
+                if (!query) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                var q = query.toLowerCase();
+                var results = searchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
+
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                    searchResults.style.display = 'block';
+                    return;
+                }
+
+                searchResults.innerHTML = '';
+                results.forEach(function(item) {
+                    var el = document.createElement('div');
+                    el.className = 'sivo-search-result-item';
+                    el.innerHTML = `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
+
+                    el.addEventListener('mousedown', function(e) {
+                        e.preventDefault(); // Prevent input blur
+                        selectSearchResult(item.id);
+                    });
+
+                    searchResults.appendChild(el);
+                });
+                searchResults.style.display = 'block';
+            }
+
+            function selectSearchResult(elementId) {
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+                searchInput.blur();
+
+                // Focus element
+                myChart.dispatchAction({ type: 'geoSelect', name: elementId });
+
+                // Check if it has a specific overlay bound center
+                var viewMeta = overlaysData[elementId];
+                if (viewMeta && viewMeta.coord) {
+                    myChart.setOption({ series: [{ center: viewMeta.coord, zoom: 3.0 }] });
+                } else {
+                    // Trigger click to center map if ECharts handles it, or trigger panel logic
+                    myChart.trigger('click', { componentType: 'series', name: elementId });
+
+                    // Show tooltip
+                    myChart.dispatchAction({ type: 'showTip', name: elementId });
+                }
+            }
+
+            // Prevent duplicate event listener bindings when renderView is called multiple times
+            if (!searchInput.dataset.listenersBound) {
+                searchInput.addEventListener('input', function(e) {
+                    renderResults(e.target.value);
+                });
+
+                searchInput.addEventListener('focus', function(e) {
+                    if (e.target.value) renderResults(e.target.value);
+                });
+
+                searchInput.addEventListener('blur', function(e) {
+                    setTimeout(() => searchResults.style.display = 'none', 100);
+                });
+
+                searchInput.dataset.listenersBound = 'true';
+            }
+        }
+
+        function initWatermark(view) {
+            var watermarkContainer = document.getElementById('sivo-watermark-container');
+            if (view.watermark) {
+                watermarkContainer.innerHTML = sanitizeHTML(view.watermark);
+                watermarkContainer.style.display = 'block';
+
+                // Adjust position if zoom controls are present and default right
+                var zoomControls = document.querySelector('.zoom-controls');
+                if (zoomControls && zoomControls.style.display !== 'none') {
+                    watermarkContainer.style.bottom = '180px'; // move above zoom controls
+                } else {
+                    watermarkContainer.style.bottom = '20px';
+                }
+            } else {
+                watermarkContainer.style.display = 'none';
+            }
         }
 
         // Initialize the first view
