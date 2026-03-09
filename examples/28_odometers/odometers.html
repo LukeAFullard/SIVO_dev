@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -435,8 +430,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\" style=\"background:#0f172a;\"\u003e\n  \u003crect id=\"kpi_box1\" x=\"100\" y=\"200\" width=\"300\" height=\"200\" fill=\"#1e293b\" rx=\"10\" name=\"kpi_box1\"/\u003e\n  \u003ctext x=\"250\" y=\"260\" font-size=\"24\" fill=\"#94a3b8\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eTotal Revenue\u003c/text\u003e\n  \u003ctext id=\"revenue_val\" x=\"250\" y=\"340\" font-size=\"64\" fill=\"#38bdf8\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"revenue_val\"\u003e0\u003c/text\u003e\n  \n  \u003crect id=\"kpi_box2\" x=\"600\" y=\"200\" width=\"300\" height=\"200\" fill=\"#1e293b\" rx=\"10\" name=\"kpi_box2\"/\u003e\n  \u003ctext x=\"750\" y=\"260\" font-size=\"24\" fill=\"#94a3b8\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eActive Users\u003c/text\u003e\n  \u003ctext id=\"users_val\" x=\"750\" y=\"340\" font-size=\"64\" fill=\"#10b981\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"users_val\"\u003e0\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "kpi_box1", "value": 1}, {"name": "revenue_val", "value": 1}, {"name": "kpi_box2", "value": 1}, {"name": "users_val", "value": 1}], "actions_manifest": {}, "overlays": {}, "render_mode": "svg", "enable_minimap": false, "enable_export": false, "mappings": {"kpi_box1": {"id": "kpi_box1", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "revenue_val": {"id": "revenue_val", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": 124500.5, "odometer_duration_ms": 3000, "odometer_format": "currency"}}, "kpi_box2": {"id": "kpi_box2", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "users_val": {"id": "users_val", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": 8432, "odometer_duration_ms": 2500, "odometer_format": "int"}}}}};
+        var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -2483,8 +2478,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

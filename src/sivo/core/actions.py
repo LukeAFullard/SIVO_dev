@@ -152,6 +152,9 @@ class ThemeOverride(BaseModel):
     clip_path: Optional[str] = None
     mask: Optional[str] = None
     transform: Optional[str] = None
+    odometer_value: Optional[float] = None
+    odometer_duration_ms: Optional[int] = 2000
+    odometer_format: Optional[str] = None
 
 ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 

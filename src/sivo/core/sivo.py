@@ -9,24 +9,26 @@ class Sivo:
     This class serves as the primary declarative Python API for the framework,
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
-    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas"):
+    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False):
         self.infographic = infographic
         self.infographic.default_panel_position = default_panel_position
         self.infographic.lock_zoom_out = lock_zoom_out
         self.infographic.enable_a11y = enable_a11y
         self.infographic.render_mode = render_mode
+        self.infographic.enable_minimap = enable_minimap
+        self.infographic.enable_export = enable_export
 
     @classmethod
-    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas") -> "Sivo":
+    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False) -> "Sivo":
         """Initializes a Sivo instance from an SVG file path."""
         info = Infographic.from_svg(filepath)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export)
 
     @classmethod
-    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas") -> "Sivo":
+    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False) -> "Sivo":
         """Initializes a Sivo instance directly from an SVG string."""
         info = Infographic.from_string(svg_string)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":
@@ -88,7 +90,10 @@ class Sivo:
         filter: Optional[str] = None,
         clip_path: Optional[str] = None,
         mask: Optional[str] = None,
-        transform: Optional[str] = None
+        transform: Optional[str] = None,
+        odometer_value: Optional[float] = None,
+        odometer_duration_ms: Optional[int] = 2000,
+        odometer_format: Optional[str] = None
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -146,7 +151,10 @@ class Sivo:
             filter=filter,
             clip_path=clip_path,
             mask=mask,
-            transform=transform
+            transform=transform,
+            odometer_value=odometer_value,
+            odometer_duration_ms=odometer_duration_ms,
+            odometer_format=odometer_format
         )
 
     def add_shape(self, tag: str, attributes: Dict[str, str]):
@@ -177,6 +185,25 @@ class Sivo:
         telemetry data, completely bypassing Streamlit re-renders.
         """
         self.infographic.bind_live(url, topic, auth_token)
+
+    def bind_scrollytelling(self, steps: list[Dict]):
+        """
+        Binds a scrollytelling configuration. The infographic will stay sticky while scrolling
+        through the text content, and trigger zooms or style changes.
+        """
+        self.infographic.bind_scrollytelling(steps)
+
+    def bind_tour(self, steps: list[Dict]):
+        """
+        Binds a guided tour configuration. A next/prev UI will walk the user through the steps.
+        """
+        self.infographic.bind_tour(steps)
+
+    def add_layer_toggle(self, label: str, element_ids: list[str], default_visible: bool = True):
+        """
+        Adds a layer toggle legend item for the specified element IDs.
+        """
+        self.infographic.add_layer_toggle(label, element_ids, default_visible)
 
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
         """
@@ -267,7 +294,9 @@ class Sivo:
             "overlays": self.infographic.overlays,
             "connections": self.infographic.connections,
             "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False),
-            "render_mode": getattr(self.infographic, "render_mode", "canvas")
+            "render_mode": getattr(self.infographic, "render_mode", "canvas"),
+            "enable_minimap": getattr(self.infographic, "enable_minimap", False),
+            "enable_export": getattr(self.infographic, "enable_export", False)
         }
         if self.infographic.data_binding:
             view_data["data_binding"] = self.infographic.data_binding.model_dump()
@@ -275,6 +304,12 @@ class Sivo:
             view_data["timeline_binding"] = self.infographic.timeline_binding.model_dump()
         if hasattr(self.infographic, "live_binding") and self.infographic.live_binding:
             view_data["live_binding"] = self.infographic.live_binding.model_dump()
+        if hasattr(self.infographic, "scrollytelling") and self.infographic.scrollytelling:
+            view_data["scrollytelling"] = [s.model_dump() for s in self.infographic.scrollytelling]
+        if hasattr(self.infographic, "tour") and self.infographic.tour:
+            view_data["tour"] = [s.model_dump() for s in self.infographic.tour]
+        if hasattr(self.infographic, "layer_toggles") and self.infographic.layer_toggles:
+            view_data["layer_toggles"] = [s.model_dump() for s in self.infographic.layer_toggles]
         return view_data
 
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:

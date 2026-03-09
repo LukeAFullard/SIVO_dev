@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -435,8 +430,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"gallery\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"gallery\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eArt Gallery\u003c/text\u003e\n  \n  \u003crect id=\"cafe\" x=\"700\" y=\"100\" width=\"200\" height=\"200\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"cafe\"/\u003e\n  \u003ctext x=\"800\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eCafe\u003c/text\u003e\n  \n  \u003crect id=\"giftshop\" x=\"400\" y=\"400\" width=\"200\" height=\"150\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"giftshop\"/\u003e\n  \u003ctext x=\"500\" y=\"480\" font-size=\"24\" text-anchor=\"middle\"\u003eGift Shop\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "gallery", "value": 1, "tooltip": "Main Art Gallery"}, {"name": "cafe", "value": 1, "tooltip": "Museum Cafe"}, {"name": "giftshop", "value": 1, "tooltip": "Gift Shop"}], "actions_manifest": {"gallery": [{"action_type": "tooltip", "content": "\u003cp\u003eFeaturing modern artists.\u003c/p\u003e", "title": "Main Art Gallery", "panel_position": "right"}], "cafe": [{"action_type": "tooltip", "content": "\u003cp\u003eCoffee and pastries.\u003c/p\u003e", "title": "Museum Cafe", "panel_position": "right"}], "giftshop": [{"action_type": "tooltip", "content": "\u003cp\u003eSouvenirs and books.\u003c/p\u003e", "title": "Gift Shop", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"gallery": {"id": "gallery", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eFeaturing modern artists.\u003c/p\u003e", "title": "Main Art Gallery", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "cafe": {"id": "cafe", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eCoffee and pastries.\u003c/p\u003e", "title": "Museum Cafe", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "giftshop": {"id": "giftshop", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eSouvenirs and books.\u003c/p\u003e", "title": "Gift Shop", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -2483,8 +2478,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

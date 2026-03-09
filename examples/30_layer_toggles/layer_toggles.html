@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -435,8 +430,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003c!-- Base Map Layer --\u003e\n  \u003cg id=\"layer_basemap\" name=\"layer_basemap\"\u003e\n      \u003crect x=\"50\" y=\"50\" width=\"900\" height=\"500\" fill=\"#f8fafc\" stroke=\"#cbd5e1\" stroke-width=\"4\" rx=\"10\"/\u003e\n      \u003cpath d=\"M 200 50 L 200 550\" stroke=\"#cbd5e1\" stroke-width=\"2\" stroke-dasharray=\"10,10\"/\u003e\n      \u003cpath d=\"M 800 50 L 800 550\" stroke=\"#cbd5e1\" stroke-width=\"2\" stroke-dasharray=\"10,10\"/\u003e\n  \u003c/g\u003e\n  \n  \u003c!-- Electrical Wiring Layer --\u003e\n  \u003cg id=\"layer_wiring\" name=\"layer_wiring\"\u003e\n      \u003cpath id=\"wire1\" d=\"M 100 300 L 900 300\" stroke=\"#ef4444\" stroke-width=\"5\" fill=\"none\" name=\"wire1\"/\u003e\n      \u003cpath id=\"wire2\" d=\"M 500 100 L 500 500\" stroke=\"#ef4444\" stroke-width=\"5\" fill=\"none\" name=\"wire2\"/\u003e\n      \u003ccircle cx=\"500\" cy=\"300\" r=\"15\" fill=\"#b91c1c\"/\u003e\n  \u003c/g\u003e\n\n  \u003c!-- HVAC Layer --\u003e\n  \u003cg id=\"layer_hvac\" name=\"layer_hvac\"\u003e\n      \u003crect x=\"150\" y=\"150\" width=\"100\" height=\"300\" fill=\"#bae6fd\" opacity=\"0.7\"/\u003e\n      \u003crect x=\"750\" y=\"150\" width=\"100\" height=\"300\" fill=\"#bae6fd\" opacity=\"0.7\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "layer_basemap", "value": 1}, {"name": "layer_wiring", "value": 1}, {"name": "wire1", "value": 1, "tooltip": "Main Power Line"}, {"name": "wire2", "value": 1}, {"name": "layer_hvac", "value": 1}], "actions_manifest": {"wire1": [{"action_type": "tooltip", "content": "\u003ch3\u003eMain Power Line\u003c/h3\u003e", "title": "Main Power Line", "panel_position": "right"}]}, "overlays": {}, "render_mode": "svg", "enable_minimap": false, "enable_export": false, "mappings": {"layer_basemap": {"id": "layer_basemap", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "layer_wiring": {"id": "layer_wiring", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "wire1": {"id": "wire1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eMain Power Line\u003c/h3\u003e", "title": "Main Power Line", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "wire2": {"id": "wire2", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "layer_hvac": {"id": "layer_hvac", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -2483,8 +2478,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

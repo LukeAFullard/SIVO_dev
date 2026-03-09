@@ -45,6 +45,9 @@ class ElementConfig(BaseModel):
     clip_path: Optional[str] = None
     mask: Optional[str] = None
     transform: Optional[str] = None
+    odometer_value: Optional[float] = None
+    odometer_duration_ms: Optional[int] = 2000
+    odometer_format: Optional[str] = None
 
 class DataBindingConfig(BaseModel):
     data: Dict[str, Dict[str, float]]
@@ -79,6 +82,27 @@ class LiveBindingConfig(BaseModel):
     auth_token: Optional[str] = None
     reconnect_attempts: int = 5
     fallback_polling_interval: int = 0
+
+class ScrollytellingStepConfig(BaseModel):
+    """Configuration for a single scrollytelling step."""
+    content: str = Field(description="HTML content for the step text")
+    zoom_to: Optional[str] = Field(default=None, description="Element ID to zoom to")
+    zoom_level: float = Field(default=2.0, description="Zoom level")
+    colors: Optional[Dict[str, str]] = Field(default=None, description="Mapping of Element IDs to colors")
+    show_tooltips: Optional[List[str]] = Field(default=None, description="List of Element IDs to show tooltips for")
+
+class TourStepConfig(BaseModel):
+    """Configuration for a single guided tour step."""
+    content: str = Field(description="HTML content for the tour step tooltip/modal")
+    zoom_to: Optional[str] = Field(default=None, description="Element ID to zoom to")
+    zoom_level: float = Field(default=2.0, description="Zoom level")
+    show_tooltips: Optional[List[str]] = Field(default=None, description="List of Element IDs to show tooltips for")
+
+class LayerToggleConfig(BaseModel):
+    """Configuration for an interactive layer toggle legend."""
+    label: str = Field(description="Display label for the legend item")
+    element_ids: List[str] = Field(description="List of SVG Element IDs to toggle visibility for")
+    default_visible: bool = Field(default=True, description="Initial visibility state")
 
 class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
@@ -118,6 +142,26 @@ class ProjectConfig(BaseModel):
     live_binding: Optional[LiveBindingConfig] = Field(
         default=None,
         description="Optional WebSocket connection for live telemetry."
+    )
+    scrollytelling: Optional[List[ScrollytellingStepConfig]] = Field(
+        default=None,
+        description="Optional list of scrollytelling steps."
+    )
+    tour: Optional[List[TourStepConfig]] = Field(
+        default=None,
+        description="Optional list of tour steps."
+    )
+    layer_toggles: Optional[List[LayerToggleConfig]] = Field(
+        default=None,
+        description="Optional list of layer visibility toggles."
+    )
+    enable_minimap: bool = Field(
+        default=False,
+        description="If True, renders a small minimap in the corner to show global viewport context."
+    )
+    enable_export: bool = Field(
+        default=False,
+        description="If True, renders an export button that allows snapshotting the canvas."
     )
     build_js: bool = Field(
         default=False,
