@@ -123,6 +123,10 @@ class ProjectConfig(BaseModel):
         default="canvas",
         description="Rendering mode: 'canvas' (default ECharts) or 'svg' (enables native SVG features like morphing and filters)."
     )
+    theme: str = Field(
+        default="light",
+        description="The visual theme for the infographic UI. Options: 'light', 'dark'."
+    )
     mappings: Dict[str, ElementConfig] = Field(
         default_factory=dict,
         description="Dictionary mapping element IDs to their configuration."

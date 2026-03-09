@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light"):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -23,6 +23,7 @@ class Infographic:
         self.enable_minimap = enable_minimap
         self.enable_export = enable_export
         self.fade_unselected = fade_unselected
+        self.theme = theme
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
         self.scrollytelling: Optional[list] = None
@@ -77,6 +78,7 @@ class Infographic:
         infographic.enable_minimap = getattr(cfg, "enable_minimap", False)
         infographic.enable_export = getattr(cfg, "enable_export", False)
         infographic.fade_unselected = getattr(cfg, "fade_unselected", False)
+        infographic.theme = getattr(cfg, "theme", "light")
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
         infographic.scrollytelling = getattr(cfg, "scrollytelling", None)
@@ -594,7 +596,8 @@ class Infographic:
             "render_mode": self.render_mode,
             "enable_minimap": self.enable_minimap,
             "enable_export": self.enable_export,
-            "fade_unselected": self.fade_unselected
+            "fade_unselected": self.fade_unselected,
+            "theme": self.theme
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()
