@@ -1,39 +1,41 @@
+import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+
 from sivo import Sivo
 
-svg_content = """
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-    <rect width="100%" height="100%" fill="transparent" />
-    <g id="servers">
-        <rect id="server-alpha" x="200" y="200" width="150" height="200" rx="10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
-        <rect id="server-beta" x="450" y="200" width="150" height="200" rx="10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
-    </g>
-</svg>
-"""
-
 def main():
-    print("Building Professional Polish Example...")
+    svg_path = os.path.join(os.path.dirname(__file__), '../sample.svg')
 
-    # 1. Initialize Sivo with theme="dark" and fade_unselected=True
-    sivo_app = Sivo.from_string(svg_content, theme="dark", fade_unselected=True)
-
-    # Map a standard item to show empty state
-    sivo_app.map(
-        element_id="server-alpha",
-        tooltip="Server Alpha"
+    sivo_app = Sivo.from_svg(
+        svg_path,
+        title="Global Demographic Insights",
+        subtitle="An interactive exploration of 2024 population density.",
+        attribution="Data Source: World Bank | Powered by SIVO",
+        enable_fullscreen=True,
+        enable_share=True,
+        enable_data_download=True,
+        enable_export=True,
+        enable_search=True
     )
 
-    # Map an item fetching data to show the sleek loading spinner
     sivo_app.map(
-        element_id="server-beta",
-        tooltip="Server Beta",
-        fetch_url="https://jsonplaceholder.typicode.com/todos/1"
+        element_id="mountain1",
+        tooltip="Mountain 1",
+        color="#a0a0a0",
+        hover_color="#c0c0c0"
     )
 
-    output_path = os.path.join(os.path.dirname(__file__), "output.html")
-    sivo_app.to_html(output_path)
+    sivo_app.map(
+        element_id="sun",
+        tooltip="The Sun",
+        color="gold",
+        hover_color="yellow"
+    )
 
-    print(f"Map successfully generated at: {output_path}")
+    output_file = os.path.join(os.path.dirname(__file__), 'output.html')
+    sivo_app.to_html(output_file)
+    print(f"Generated {output_file}")
 
 if __name__ == "__main__":
     main()
