@@ -256,8 +256,10 @@
 <body>
 
     <div id="a11y-container" class="sr-only"></div>
-    <div id="chart-container"></div>
-    <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none;"></div>
+    <div style="position: relative; flex: 1; height: 100%; width: 100%;">
+        <div id="chart-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+        <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
+    </div>
     <div id="sivo-resizer" class="sivo-resizer"></div>
     <div class="zoom-controls">
         <div class="zoom-btn" onclick="zoomIn()">+</div>
@@ -633,13 +635,23 @@
                 // 1. Morphing
                 if (theme.morph_to_path && node.tagName.toLowerCase() === 'path') {
                     var duration = theme.morph_duration_ms || 1000;
-                    node.style.transition = `d ${duration}ms ease-in-out`;
-                    // Delay slightly to trigger the transition from initial state
-                    (function(n, p) {
-                        setTimeout(function() {
-                            n.setAttribute('d', p);
-                        }, 50);
-                    })(node, theme.morph_to_path);
+                    var originalD = node.getAttribute('d');
+
+                    // Instead of CSS transitions which are flaky across browsers for the 'd' attribute,
+                    // we dynamically inject an <animate> tag natively supported by SVG.
+                    var animateNode = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+                    animateNode.setAttribute("attributeName", "d");
+                    animateNode.setAttribute("from", originalD);
+                    animateNode.setAttribute("to", theme.morph_to_path);
+                    animateNode.setAttribute("dur", duration + "ms");
+                    animateNode.setAttribute("fill", "freeze"); // keep the final state
+
+                    node.appendChild(animateNode);
+
+                    // Force the animation to start immediately since it was dynamically inserted
+                    if (animateNode.beginElement) {
+                        animateNode.beginElement();
+                    }
                 }
 
                 // 2. Transformations
@@ -675,11 +687,15 @@
             var overlayGroup = document.getElementById('sivo-global-transform-group');
             if (!overlayGroup) return;
 
-            // In ECharts map series, the global transform matrix is applied to the root <g> inside its generated SVG.
-            // We can extract it by querying ECharts' own DOM node.
-            var echartsRootGroup = document.querySelector('#chart-container svg > g');
-            if (echartsRootGroup) {
-                var transform = echartsRootGroup.getAttribute('transform');
+            // In ECharts map series, the global transform matrix is usually applied to the `<g>` that directly wraps the paths.
+            // ECharts often renders a structure like <svg><g><g><path>...
+            // ECharts often applies the matrix directly to the `path` elements themselves or a `<g>`.
+            // In the SVG renderer, ECharts applies a transform attribute to each mapped shape,
+            // or we can use the ECharts internal API to get the current projection matrix to ensure perfection.
+            // Even better, we can query ANY of the generated path elements and extract its transform!
+            var echartsPath = document.querySelector('#chart-container svg path[transform]');
+            if (echartsPath) {
+                var transform = echartsPath.getAttribute('transform');
                 if (transform) {
                     overlayGroup.setAttribute('transform', transform);
                 }
@@ -962,7 +978,8 @@
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
-                applyNativeSvgManipulations();
+                // ECharts renders asynchronously; wait slightly to guarantee DOM paths exist to copy transforms from
+                setTimeout(applyNativeSvgManipulations, 100);
             }
 
             // Handle elements marked to open by default
@@ -1053,6 +1070,9 @@
 
             // Check if the clicked target has data-draggable true
             var target = e.target;
+            if (target && target.closest) {
+                target = target.closest('[data-draggable="true"]');
+            }
             if (target && target.getAttribute('data-draggable') === 'true') {
                 e.stopPropagation(); // Stop ECharts from getting the mousedown and starting a pan
 
@@ -1095,8 +1115,11 @@
                 // Construct new transform
                 var newTransform = 'translate(' + newX + ' ' + newY + ') ' + currentTransform;
                 draggedElement.setAttribute('transform', newTransform.trim());
+
+                // Prevent anything else from handling this move
+                e.stopPropagation();
             }
-        });
+        }, true);
 
         // Use global window events to ensure mouseup is always caught even if it leaves the canvas
         window.addEventListener('mouseup', function(e) {
