@@ -49,6 +49,55 @@
             width: 100%;
             height: 100%;
         }
+
+        #sivo-title-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            max-width: 400px;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-title {
+            margin: 0 0 4px 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        #sivo-subtitle {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        #sivo-attribution {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            display: none;
+            pointer-events: none;
+        }
+
         #scrollytelling-container {
             display: none;
             width: 400px;
@@ -587,6 +636,21 @@
             color: #f8fafc !important;
             border-color: #334155 !important;
         }
+        body.sivo-theme-dark #sivo-title-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-title {
+            color: #f1f5f9 !important;
+        }
+        body.sivo-theme-dark #sivo-subtitle {
+            color: #94a3b8 !important;
+        }
+        body.sivo-theme-dark #sivo-attribution {
+            background: rgba(30, 41, 59, 0.8) !important;
+            border-color: #334155 !important;
+            color: #94a3b8 !important;
+        }
         body.sivo-theme-dark .sivo-switch {
             background-color: #475569 !important;
         }
@@ -794,9 +858,25 @@
                 <div id="sivo-search-results"></div>
             </div>
 
+            <div id="sivo-title-container">
+                <h1 id="sivo-title"></h1>
+                <p id="sivo-subtitle"></p>
+            </div>
+
+            <div id="sivo-attribution"></div>
+
             <div id="chart-container"></div>
             <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
             <div class="zoom-controls">
+                <div class="zoom-btn" onclick="toggleFullscreen()" id="fullscreen-btn" style="display: none;" title="Toggle Fullscreen">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="shareInfographic()" id="share-btn" style="display: none;" title="Share">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="downloadDataCSV()" id="download-data-btn" style="display: none;" title="Download Data (CSV)">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                </div>
                 <div class="zoom-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
                     <svg id="theme-icon-light" style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
                     <svg id="theme-icon-dark" style="width:16px; height:16px; display:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -1712,6 +1792,12 @@
 
             // Initialize Watermark
             initWatermark(view);
+
+            // Initialize Title, Subtitle, Attribution
+            initTitles(view);
+
+            // Initialize Controls (Fullscreen, Share, Download)
+            initControls(view);
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
@@ -3077,6 +3163,106 @@
             } else {
                 watermarkContainer.style.display = 'none';
             }
+        }
+
+        function initTitles(view) {
+            var titleContainer = document.getElementById('sivo-title-container');
+            var titleEl = document.getElementById('sivo-title');
+            var subtitleEl = document.getElementById('sivo-subtitle');
+            var attributionEl = document.getElementById('sivo-attribution');
+
+            if (view.title || view.subtitle) {
+                titleContainer.style.display = 'block';
+                titleEl.style.display = view.title ? 'block' : 'none';
+                subtitleEl.style.display = view.subtitle ? 'block' : 'none';
+                if (view.title) titleEl.innerText = view.title;
+                if (view.subtitle) subtitleEl.innerText = view.subtitle;
+            } else {
+                titleContainer.style.display = 'none';
+            }
+
+            if (view.attribution) {
+                attributionEl.style.display = 'block';
+                attributionEl.innerText = view.attribution;
+            } else {
+                attributionEl.style.display = 'none';
+            }
+        }
+
+        function initControls(view) {
+            document.getElementById('fullscreen-btn').style.display = view.enable_fullscreen ? 'flex' : 'none';
+            // Only show share if Web Share API is supported, or just show it anyway if requested
+            document.getElementById('share-btn').style.display = view.enable_share && navigator.share ? 'flex' : 'none';
+            // Only show data download if there is data
+            document.getElementById('download-data-btn').style.display = view.enable_data_download && (dataBinding || timelineBinding) ? 'flex' : 'none';
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function shareInfographic() {
+            var view = viewsData[currentViewId];
+            if (navigator.share) {
+                navigator.share({
+                    title: view.title || 'Interactive Infographic',
+                    text: view.subtitle || 'Check out this interactive graphic',
+                    url: window.location.href,
+                }).catch((error) => console.log('Error sharing', error));
+            }
+        }
+
+        function downloadDataCSV() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+
+            if (dataBinding && dataBinding.data) {
+                csvContent += "Region," + dataBinding.key + "\n";
+                for (var name in dataBinding.data) {
+                    var val = dataBinding.data[name][dataBinding.key];
+                    if (val !== undefined) {
+                        csvContent += `"${name}",${val}\n`;
+                    }
+                }
+            } else if (timelineBinding && timelineBinding.data) {
+                var firstTimeKey = Object.keys(timelineBinding.data)[0];
+                var keys = ["Region"];
+                var timelineKeys = Object.keys(timelineBinding.data);
+                keys = keys.concat(timelineKeys);
+                csvContent += keys.join(",") + "\n";
+
+                // Collect all regions
+                var regions = new Set();
+                timelineKeys.forEach(tKey => {
+                    Object.keys(timelineBinding.data[tKey]).forEach(r => regions.add(r));
+                });
+
+                regions.forEach(r => {
+                    var row = [`"${r}"`];
+                    timelineKeys.forEach(tKey => {
+                        var val = timelineBinding.data[tKey][r] ? timelineBinding.data[tKey][r][timelineBinding.key] : "";
+                        row.push(val !== undefined ? val : "");
+                    });
+                    csvContent += row.join(",") + "\n";
+                });
+            } else {
+                alert("No data to download.");
+                return;
+            }
+
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            var view = viewsData[currentViewId];
+            link.setAttribute("download", (view.title ? view.title.replace(/\s+/g, '_').toLowerCase() : "sivo_data") + ".csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Initialize the first view

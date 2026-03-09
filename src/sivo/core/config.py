@@ -192,3 +192,27 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, enables a lasso/box selection tool to select multiple SVG elements at once."
     )
+    title: Optional[str] = Field(
+        default=None,
+        description="Main title to display at the top of the infographic."
+    )
+    subtitle: Optional[str] = Field(
+        default=None,
+        description="Subtitle to display below the main title."
+    )
+    attribution: Optional[str] = Field(
+        default=None,
+        description="Attribution text (e.g. 'Data: WHO | Created by SIVO') to display at the bottom."
+    )
+    enable_fullscreen: bool = Field(
+        default=False,
+        description="If True, adds a fullscreen toggle button to the zoom controls."
+    )
+    enable_share: bool = Field(
+        default=False,
+        description="If True, adds a share button that uses the Web Share API if available."
+    )
+    enable_data_download: bool = Field(
+        default=False,
+        description="If True, adds a download button to export the bound data as a CSV."
+    )

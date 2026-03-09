@@ -44,6 +44,55 @@
             width: 100%;
             height: 100%;
         }
+
+        #sivo-title-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            max-width: 400px;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-title {
+            margin: 0 0 4px 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        #sivo-subtitle {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        #sivo-attribution {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            display: none;
+            pointer-events: none;
+        }
+
         #scrollytelling-container {
             display: none;
             width: 400px;
@@ -140,6 +189,140 @@
             transition: all 0.1s ease;
         }
 
+        #sivo-search-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            max-width: 90%;
+            z-index: 1000;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        #sivo-search-container:focus-within {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #38bdf8;
+        }
+
+        #sivo-search-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 12px 20px 12px 40px;
+            font-size: 15px;
+            color: #334155;
+            outline: none;
+            border-radius: 24px;
+            box-sizing: border-box;
+        }
+
+        .sivo-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        #sivo-search-results {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+
+        .sivo-search-result-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sivo-search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .sivo-search-result-item:hover, .sivo-search-result-item.active {
+            background: #f8fafc;
+        }
+
+        .sivo-search-result-title {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .sivo-search-result-subtitle {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        #sivo-context-menu {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 160px;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 8px 0;
+        }
+
+        .sivo-context-menu-item {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #334155;
+            cursor: pointer;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .sivo-context-menu-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+
+        #sivo-watermark-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+            opacity: 0.8;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #sivo-watermark-container:hover {
+            opacity: 1.0;
+        }
+
         #layer-legend {
             position: absolute;
             top: 20px;
@@ -207,6 +390,7 @@
             font-size: 15px;
             color: #334155;
             line-height: 1.6;
+            z-index: 1000;
         }
         #info-panel.active {
             display: flex;
@@ -216,31 +400,49 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding: 12px 16px;
+            padding: 16px;
             background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #f1f5f9;
             position: sticky;
             top: 0;
             z-index: 10;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
         .info-panel-content {
-            padding: 24px;
+            padding: 32px 24px;
             overflow-y: auto;
             flex: 1;
         }
+
+        /* Improved typography inside info panel content */
+        .info-panel-content h1, .info-panel-content h2, .info-panel-content h3 {
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .info-panel-content h3 {
+            font-size: 1.25rem;
+        }
+
+        .info-panel-content p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
         /* Layout modifiers for info-panel */
         #info-panel.pos-right {
-            width: 320px;
+            width: 360px;
             height: 100%;
             border-left: 1px solid #e2e8f0;
-            box-shadow: -4px 0 15px -3px rgba(0, 0, 0, 0.05);
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.05);
         }
         #info-panel.pos-left {
-            width: 320px;
+            width: 360px;
             height: 100%;
             border-right: 1px solid #e2e8f0;
-            box-shadow: 4px 0 15px -3px rgba(0, 0, 0, 0.05);
+            box-shadow: 10px 0 25px -5px rgba(0, 0, 0, 0.05);
         }
         #info-panel.pos-bottom {
             width: 100%;
@@ -388,14 +590,20 @@
             color: #f8fafc !important;
         }
         body.sivo-theme-dark #info-panel {
-            background: rgba(15, 23, 42, 0.95) !important;
+            background: rgba(15, 23, 42, 0.98) !important;
             backdrop-filter: blur(10px) !important;
-            color: #f8fafc !important;
-            border-color: rgba(255,255,255,0.1) !important;
+            color: #e2e8f0 !important;
+            border-color: #334155 !important;
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.5) !important;
         }
         body.sivo-theme-dark .info-panel-header {
             background: transparent !important;
-            border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+            border-bottom: 1px solid #334155 !important;
+        }
+        body.sivo-theme-dark .info-panel-content h1,
+        body.sivo-theme-dark .info-panel-content h2,
+        body.sivo-theme-dark .info-panel-content h3 {
+            color: #f8fafc !important;
         }
         body.sivo-theme-dark .close-btn {
             background: rgba(255,255,255,0.1) !important;
@@ -423,9 +631,62 @@
             color: #f8fafc !important;
             border-color: #334155 !important;
         }
+        body.sivo-theme-dark #sivo-title-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-title {
+            color: #f1f5f9 !important;
+        }
+        body.sivo-theme-dark #sivo-subtitle {
+            color: #94a3b8 !important;
+        }
+        body.sivo-theme-dark #sivo-attribution {
+            background: rgba(30, 41, 59, 0.8) !important;
+            border-color: #334155 !important;
+            color: #94a3b8 !important;
+        }
         body.sivo-theme-dark .sivo-switch {
             background-color: #475569 !important;
         }
+        body.sivo-theme-dark #sivo-search-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-search-input {
+            color: #f8fafc !important;
+        }
+        body.sivo-theme-dark #sivo-search-input::placeholder {
+            color: #64748b !important;
+        }
+        body.sivo-theme-dark #sivo-search-results {
+            background: rgba(30, 41, 59, 0.98) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-item {
+            border-bottom-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-item:hover, body.sivo-theme-dark .sivo-search-result-item.active {
+            background: #475569 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-title {
+            color: #f1f5f9 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-subtitle {
+            color: #94a3b8 !important;
+        }
+        body.sivo-theme-dark #sivo-context-menu {
+            background: rgba(30, 41, 59, 0.98) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-context-menu-item {
+            color: #e2e8f0 !important;
+        }
+        body.sivo-theme-dark .sivo-context-menu-item:hover {
+            background: #475569 !important;
+            color: #f8fafc !important;
+        }
+
 
         .sivo-resizer {
             display: none;
@@ -580,13 +841,47 @@
         <div id="scrollytelling-container"></div>
         <div id="chart-wrapper">
             <div id="a11y-container" class="sr-only"></div>
+            <div id="sivo-watermark-container"></div>
+            <div id="sivo-context-menu"></div>
+            <div id="sivo-global-loading" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999; background:rgba(255,255,255,0.9); padding:20px 40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); font-weight:bold; color:#333; display:flex; align-items:center; gap:10px;">
+                <div class="sivo-spinner"></div> Loading...
+            </div>
+
+            <div id="sivo-search-container">
+                <svg class="sivo-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="sivo-search-input" placeholder="Search map..." autocomplete="off">
+                <div id="sivo-search-results"></div>
+            </div>
+
+            <div id="sivo-title-container">
+                <h1 id="sivo-title"></h1>
+                <p id="sivo-subtitle"></p>
+            </div>
+
+            <div id="sivo-attribution"></div>
+
             <div id="chart-container"></div>
             <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
             <div class="zoom-controls">
+                <div class="zoom-btn" onclick="toggleFullscreen()" id="fullscreen-btn" style="display: none;" title="Toggle Fullscreen">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="shareInfographic()" id="share-btn" style="display: none;" title="Share">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="downloadDataCSV()" id="download-data-btn" style="display: none;" title="Download Data (CSV)">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                    <svg id="theme-icon-light" style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg id="theme-icon-dark" style="width:16px; height:16px; display:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
                 <div class="zoom-btn" onclick="zoomIn()">+</div>
                 <div class="zoom-btn" onclick="zoomOut()">-</div>
                 <div class="zoom-btn" onclick="resetZoom()">⌂</div>
-                <div class="zoom-btn" onclick="exportSnapshot()" id="export-btn" style="display: none;" title="Export Snapshot">📷</div>
+                <div class="zoom-btn" onclick="exportSnapshot()" id="export-btn" style="display: none;" title="Export Snapshot">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
             </div>
 
             <div id="tour-container">
@@ -625,12 +920,38 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n    \u003crect width=\"100%\" height=\"100%\" fill=\"transparent\"/\u003e\n    \u003cg id=\"servers\" name=\"servers\"\u003e\n        \u003crect id=\"server-alpha\" x=\"200\" y=\"200\" width=\"150\" height=\"200\" rx=\"10\" fill=\"#e2e8f0\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"server-alpha\"/\u003e\n        \u003crect id=\"server-beta\" x=\"450\" y=\"200\" width=\"150\" height=\"200\" rx=\"10\" fill=\"#e2e8f0\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"server-beta\"/\u003e\n    \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "servers", "value": 1}, {"name": "server-alpha", "value": 1, "tooltip": "Server Alpha"}, {"name": "server-beta", "value": 1, "tooltip": "Server Beta"}], "actions_manifest": {"server-alpha": [{"action_type": "tooltip", "content": "\u003ch3\u003eServer Alpha\u003c/h3\u003e", "title": "Server Alpha", "panel_position": "right"}], "server-beta": [{"action_type": "tooltip", "content": "\u003ch3\u003eServer Beta\u003c/h3\u003e", "title": "Server Beta", "panel_position": "right"}, {"action_type": "fetch", "fetch_url": "https://jsonplaceholder.typicode.com/todos/1", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": true, "theme": "dark", "mappings": {"servers": {"id": "servers", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "server-alpha": {"id": "server-alpha", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eServer Alpha\u003c/h3\u003e", "title": "Server Alpha", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "server-beta": {"id": "server-beta", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eServer Beta\u003c/h3\u003e", "title": "Server Beta", "panel_position": "right"}, {"action_type": "fetch", "fetch_url": "https://jsonplaceholder.typicode.com/todos/1", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/\u003e\n    \u003cpolygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/\u003e\n    \u003cpolygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/\u003e\n    \u003crect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/\u003e\n    \u003cpolygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/\u003e\n    \u003cpath id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1}, {"name": "mountain1", "value": 1}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1}, {"name": "roof", "value": 1}, {"name": "river", "value": 1}], "actions_manifest": {}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": true, "fade_unselected": false, "theme": "light", "enable_search": true, "watermark": null, "enable_brush_selection": false, "title": "Global Demographic Insights", "subtitle": "An interactive exploration of 2024 population density.", "attribution": "Data Source: World Bank | Powered by SIVO", "enable_fullscreen": true, "enable_share": true, "enable_data_download": true, "mappings": {"scene": {"id": "scene", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "background": {"id": "background", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "sun": {"id": "sun", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain1": {"id": "mountain1", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain2": {"id": "mountain2", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "house": {"id": "house", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "roof": {"id": "roof", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "river": {"id": "river", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "data_binding": {"data": {"region_a": {"Population": 50000.0}, "region_b": {"Population": 120000.0}, "region_c": {"Population": 35000.0}}, "key": "Population", "colors": ["#e0f2fe", "#0284c7"], "min_val": 0.0, "max_val": 150000.0}}};
         var currentViewId = "default_view";
 
         // Apply Global Theme
         var currentTheme = viewsData[currentViewId].theme || 'light';
         document.body.className = 'sivo-theme-' + currentTheme;
+
+        function updateThemeIcons() {
+            var isDark = document.body.classList.contains('sivo-theme-dark') ||
+                         (!document.body.classList.contains('sivo-theme-light') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.getElementById('theme-icon-light').style.display = isDark ? 'none' : 'block';
+            document.getElementById('theme-icon-dark').style.display = isDark ? 'block' : 'none';
+        }
+        updateThemeIcons();
+
+        function toggleTheme() {
+            if (document.body.classList.contains('sivo-theme-dark')) {
+                document.body.classList.remove('sivo-theme-dark');
+                document.body.classList.add('sivo-theme-light');
+            } else if (document.body.classList.contains('sivo-theme-light')) {
+                document.body.classList.remove('sivo-theme-light');
+                document.body.classList.add('sivo-theme-dark');
+            } else {
+                // If relying on OS preference initially, explicitly set the opposite
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('sivo-theme-light');
+                } else {
+                    document.body.classList.add('sivo-theme-dark');
+                }
+            }
+            updateThemeIcons();
+        }
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -646,6 +967,7 @@
         var dataBinding = null;
         var timelineBinding = null;
         var liveSocket = null;
+        var enableBrushSelection = false;
 
         // History for back navigation
         var viewHistory = [];
@@ -718,21 +1040,20 @@
                         },
                         emphasis: {
                             itemStyle: {
-                                areaColor: '#e2e8f0', // Slight darken on hover if no custom color
-                                shadowBlur: 12,
+                                // Strip out default areaColor override so custom colors stay intact on hover
+                                // Keep a very subtle shadow just to indicate it is interactive on hover
+                                shadowBlur: 8,
                                 shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.15)'
+                                shadowColor: 'rgba(0, 0, 0, 0.2)'
                             },
                             label: {
                                 show: false
                             }
                         },
+                        selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
                             itemStyle: {
-                                // Do not override color on select natively to let fade logic handle focus
-                                // Or we could add a subtle stroke to indicate selection
-                                shadowBlur: 15,
-                                shadowColor: 'rgba(0, 0, 0, 0.2)'
+                                // Empty to ensure absolutely no visual change on click natively
                             }
                         },
                         data: echartsData,
@@ -838,6 +1159,27 @@
                     calculable: true,
                     inRange: {
                         color: activeDataBinding.colors
+                    }
+                };
+            }
+
+            if (enableBrushSelection) {
+                option.toolbox = {
+                    show: true,
+                    feature: {
+                        brush: {
+                            type: ['polygon', 'rect', 'keep', 'clear']
+                        }
+                    },
+                    right: 20,
+                    top: 20
+                };
+                option.brush = {
+                    geoIndex: 'all',
+                    seriesIndex: 'all',
+                    brushLink: 'all',
+                    outOfBrush: {
+                        colorAlpha: 0.2
                     }
                 };
             }
@@ -1285,6 +1627,7 @@
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
             fadeUnselected = view.fade_unselected || false;
+            enableBrushSelection = view.enable_brush_selection || false;
             dataBinding = view.data_binding || null;
             timelineBinding = view.timeline_binding || null;
             var liveBinding = view.live_binding || null;
@@ -1438,6 +1781,18 @@
 
             // Initialize Layer Legend
             initLayerLegend(view.layer_toggles);
+
+            // Initialize Search UI
+            initSearch(view);
+
+            // Initialize Watermark
+            initWatermark(view);
+
+            // Initialize Title, Subtitle, Attribution
+            initTitles(view);
+
+            // Initialize Controls (Fullscreen, Share, Download)
+            initControls(view);
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
@@ -1685,6 +2040,9 @@
                         } else {
                             // Fallback to legacy external fetch
                             console.log('Fetching external drilldown:', action.target_svg);
+                            var loadingIndicator = document.getElementById('sivo-global-loading');
+                            if (loadingIndicator) loadingIndicator.style.display = 'flex';
+
                             fetch(action.target_svg)
                                 .then(response => {
                                     if (!response.ok) {
@@ -1703,6 +2061,9 @@
                                 .catch(error => {
                                     console.error('Error fetching SVG:', error);
                                     alert('Could not load ' + action.target_svg);
+                                })
+                                .finally(() => {
+                                    if (loadingIndicator) loadingIndicator.style.display = 'none';
                                 });
                         }
                     } else if (action.action_type === 'video') {
@@ -2678,8 +3039,310 @@
             });
         }
 
+        function initSearch(view) {
+            var searchContainer = document.getElementById('sivo-search-container');
+            var searchInput = document.getElementById('sivo-search-input');
+            var searchResults = document.getElementById('sivo-search-results');
+
+            if (!view.enable_search) {
+                searchContainer.style.display = 'none';
+                return;
+            }
+
+            searchContainer.style.display = 'block';
+
+            // Build search index globally so the event listener doesn't trap old closure scope on re-render
+            window.sivoSearchIndex = [];
+
+            // Helper to strip HTML tags for search display
+            function stripHtml(html) {
+                var tmp = document.createElement("DIV");
+                tmp.innerHTML = html;
+                return tmp.textContent || tmp.innerText || "";
+            }
+
+            echartsData.forEach(function(item) {
+                var rawTitle = item.tooltip || item.name;
+                // Strip HTML from title so we don't accidentally render images/blockquotes in the tiny search dropdown
+                var title = stripHtml(rawTitle);
+
+                var subtitle = item.name !== rawTitle ? item.name : '';
+                window.sivoSearchIndex.push({
+                    id: item.name,
+                    title: title,
+                    subtitle: subtitle,
+                    searchStr: (title + ' ' + subtitle).toLowerCase()
+                });
+            });
+
+            window.sivoRenderSearchResults = function(query) {
+                if (!query) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                var q = query.toLowerCase();
+                var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
+
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                    searchResults.style.display = 'block';
+                    return;
+                }
+
+                searchResults.innerHTML = '';
+                results.forEach(function(item) {
+                    var el = document.createElement('div');
+                    el.className = 'sivo-search-result-item';
+                    el.innerHTML = `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
+
+                    el.addEventListener('mousedown', function(e) {
+                        e.preventDefault(); // Prevent input blur
+                        window.sivoSelectSearchResult(item.id);
+                    });
+
+                    searchResults.appendChild(el);
+                });
+                searchResults.style.display = 'block';
+            }
+
+            window.sivoSelectSearchResult = function(elementId) {
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+                searchInput.blur();
+
+                // Focus element
+                myChart.dispatchAction({ type: 'geoSelect', name: elementId });
+
+                // Check if it has a specific overlay bound center
+                var viewMeta = overlaysData[elementId];
+                if (viewMeta && viewMeta.coord) {
+                    myChart.setOption({ series: [{ center: viewMeta.coord, zoom: 3.0 }] });
+                } else {
+                    // Trigger click to center map if ECharts handles it, or trigger panel logic
+                    myChart.trigger('click', { componentType: 'series', name: elementId });
+
+                    // Show tooltip
+                    myChart.dispatchAction({ type: 'showTip', name: elementId });
+                }
+            }
+
+            // Using oninput/onfocus/onblur directly to safely overwrite any old closure references
+            // without stacking up event listeners on re-render.
+            searchInput.oninput = function(e) {
+                window.sivoRenderSearchResults(e.target.value);
+            };
+
+            searchInput.onfocus = function(e) {
+                if (e.target.value) window.sivoRenderSearchResults(e.target.value);
+            };
+
+            searchInput.onblur = function(e) {
+                setTimeout(() => searchResults.style.display = 'none', 100);
+            };
+        }
+
+        function initWatermark(view) {
+            var watermarkContainer = document.getElementById('sivo-watermark-container');
+            if (view.watermark) {
+                watermarkContainer.innerHTML = sanitizeHTML(view.watermark);
+                watermarkContainer.style.display = 'block';
+
+                // Adjust position if zoom controls are present and default right
+                var zoomControls = document.querySelector('.zoom-controls');
+                if (zoomControls && zoomControls.style.display !== 'none') {
+                    watermarkContainer.style.bottom = '180px'; // move above zoom controls
+                } else {
+                    watermarkContainer.style.bottom = '20px';
+                }
+            } else {
+                watermarkContainer.style.display = 'none';
+            }
+        }
+
+        function initTitles(view) {
+            var titleContainer = document.getElementById('sivo-title-container');
+            var titleEl = document.getElementById('sivo-title');
+            var subtitleEl = document.getElementById('sivo-subtitle');
+            var attributionEl = document.getElementById('sivo-attribution');
+
+            if (view.title || view.subtitle) {
+                titleContainer.style.display = 'block';
+                titleEl.style.display = view.title ? 'block' : 'none';
+                subtitleEl.style.display = view.subtitle ? 'block' : 'none';
+                if (view.title) titleEl.innerText = view.title;
+                if (view.subtitle) subtitleEl.innerText = view.subtitle;
+            } else {
+                titleContainer.style.display = 'none';
+            }
+
+            if (view.attribution) {
+                attributionEl.style.display = 'block';
+                attributionEl.innerText = view.attribution;
+            } else {
+                attributionEl.style.display = 'none';
+            }
+        }
+
+        function initControls(view) {
+            document.getElementById('fullscreen-btn').style.display = view.enable_fullscreen ? 'flex' : 'none';
+            // Only show share if Web Share API is supported, or just show it anyway if requested
+            document.getElementById('share-btn').style.display = view.enable_share && navigator.share ? 'flex' : 'none';
+            // Only show data download if there is data
+            document.getElementById('download-data-btn').style.display = view.enable_data_download && (dataBinding || timelineBinding) ? 'flex' : 'none';
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function shareInfographic() {
+            var view = viewsData[currentViewId];
+            if (navigator.share) {
+                navigator.share({
+                    title: view.title || 'Interactive Infographic',
+                    text: view.subtitle || 'Check out this interactive graphic',
+                    url: window.location.href,
+                }).catch((error) => console.log('Error sharing', error));
+            }
+        }
+
+        function downloadDataCSV() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+
+            if (dataBinding && dataBinding.data) {
+                csvContent += "Region," + dataBinding.key + "\n";
+                for (var name in dataBinding.data) {
+                    var val = dataBinding.data[name][dataBinding.key];
+                    if (val !== undefined) {
+                        csvContent += `"${name}",${val}\n`;
+                    }
+                }
+            } else if (timelineBinding && timelineBinding.data) {
+                var firstTimeKey = Object.keys(timelineBinding.data)[0];
+                var keys = ["Region"];
+                var timelineKeys = Object.keys(timelineBinding.data);
+                keys = keys.concat(timelineKeys);
+                csvContent += keys.join(",") + "\n";
+
+                // Collect all regions
+                var regions = new Set();
+                timelineKeys.forEach(tKey => {
+                    Object.keys(timelineBinding.data[tKey]).forEach(r => regions.add(r));
+                });
+
+                regions.forEach(r => {
+                    var row = [`"${r}"`];
+                    timelineKeys.forEach(tKey => {
+                        var val = timelineBinding.data[tKey][r] ? timelineBinding.data[tKey][r][timelineBinding.key] : "";
+                        row.push(val !== undefined ? val : "");
+                    });
+                    csvContent += row.join(",") + "\n";
+                });
+            } else {
+                alert("No data to download.");
+                return;
+            }
+
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            var view = viewsData[currentViewId];
+            link.setAttribute("download", (view.title ? view.title.replace(/\s+/g, '_').toLowerCase() : "sivo_data") + ".csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         // Initialize the first view
         renderView(currentViewId, false);
+
+        // Listen for brush selection events
+        myChart.on('brushSelected', function (params) {
+            if (!enableBrushSelection) return;
+
+            var selectedIds = [];
+            var mainSeries = params.batch[0]; // Assuming map series is first
+            if (mainSeries && mainSeries.selected && mainSeries.selected.length > 0) {
+                var selectedIndices = mainSeries.selected[0].dataIndex;
+                selectedIndices.forEach(function(index) {
+                    var item = echartsData[index];
+                    if (item && item.name) {
+                        selectedIds.push(item.name);
+                    }
+                });
+            }
+
+            // Post message to Streamlit or parent
+            window.parent.postMessage({
+                type: 'sivo_bulk_selection',
+                payload: {
+                    selected_ids: selectedIds
+                }
+            }, '*');
+        });
+
+        // Setup Native Context Menu
+        var contextMenuDOM = document.getElementById('sivo-context-menu');
+
+        myChart.on('contextmenu', function (params) {
+            var name = params.name;
+            var dataIndex = echartsData.findIndex(item => item.name === name);
+            if (dataIndex !== -1 && echartsData[dataIndex].context_menu && echartsData[dataIndex].context_menu.length > 0) {
+                // Prevent default browser menu
+                params.event.event.preventDefault();
+
+                var menuData = echartsData[dataIndex].context_menu;
+                contextMenuDOM.innerHTML = '';
+
+                menuData.forEach(function(menuItem) {
+                    var el = document.createElement('div');
+                    el.className = 'sivo-context-menu-item';
+                    el.innerText = menuItem.label;
+                    el.onclick = function() {
+                        contextMenuDOM.style.display = 'none';
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: menuItem.event || 'context_action',
+                                data: menuItem.payload || {}
+                            }
+                        }, '*');
+                    };
+                    contextMenuDOM.appendChild(el);
+                });
+
+                // Position menu
+                var e = params.event.event;
+                var mouseX = e.offsetX || e.clientX;
+                var mouseY = e.offsetY || e.clientY;
+
+                // Adjust position so it doesn't flow off-screen
+                contextMenuDOM.style.display = 'flex'; // needed to get real width/height
+                var rect = contextMenuDOM.getBoundingClientRect();
+                if (mouseX + rect.width > window.innerWidth) {
+                    mouseX -= rect.width;
+                }
+                if (mouseY + rect.height > window.innerHeight) {
+                    mouseY -= rect.height;
+                }
+
+                contextMenuDOM.style.left = mouseX + 'px';
+                contextMenuDOM.style.top = mouseY + 'px';
+            }
+        });
+
+        // Hide context menu on normal click anywhere
+        myChart.getZr().on('click', function(e) {
+            contextMenuDOM.style.display = 'none';
+        });
 
         // Track zoom natively from georoam events since getOption() might not update on scroll
         myChart.on('georoam', function(params) {

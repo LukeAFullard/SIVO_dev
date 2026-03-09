@@ -198,6 +198,12 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "enable_search": view_obj.get("enable_search", False),
             "watermark": view_obj.get("watermark", None),
             "enable_brush_selection": view_obj.get("enable_brush_selection", False),
+            "title": view_obj.get("title", None),
+            "subtitle": view_obj.get("subtitle", None),
+            "attribution": view_obj.get("attribution", None),
+            "enable_fullscreen": view_obj.get("enable_fullscreen", False),
+            "enable_share": view_obj.get("enable_share", False),
+            "enable_data_download": view_obj.get("enable_data_download", False),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:

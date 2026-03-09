@@ -1,39 +1,44 @@
+import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+
 from sivo import Sivo
 
-svg_content = """
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-    <rect width="100%" height="100%" fill="transparent" />
-    <g id="servers">
-        <rect id="server-alpha" x="200" y="200" width="150" height="200" rx="10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
-        <rect id="server-beta" x="450" y="200" width="150" height="200" rx="10" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
-    </g>
-</svg>
-"""
-
 def main():
-    print("Building Professional Polish Example...")
+    # Load sample SVG from the root examples folder (or create one on the fly)
+    svg_path = os.path.join(os.path.dirname(__file__), '../sample.svg')
 
-    # 1. Initialize Sivo with theme="dark" and fade_unselected=True
-    sivo_app = Sivo.from_string(svg_content, theme="dark", fade_unselected=True)
-
-    # Map a standard item to show empty state
-    sivo_app.map(
-        element_id="server-alpha",
-        tooltip="Server Alpha"
+    # We will initialize the sivo instance directly to enable the new parameters
+    sivo_app = Sivo.from_svg(
+        svg_path,
+        title="Global Demographic Insights",
+        subtitle="An interactive exploration of 2024 population density.",
+        attribution="Data Source: World Bank | Powered by SIVO",
+        enable_fullscreen=True,
+        enable_share=True,
+        enable_data_download=True,
+        enable_export=True,
+        enable_search=True
     )
 
-    # Map an item fetching data to show the sleek loading spinner
-    sivo_app.map(
-        element_id="server-beta",
-        tooltip="Server Beta",
-        fetch_url="https://jsonplaceholder.typicode.com/todos/1"
+    # Some mock data binding
+    data = {
+        "region_a": {"Population": 50000},
+        "region_b": {"Population": 120000},
+        "region_c": {"Population": 35000}
+    }
+
+    sivo_app.bind_data(
+        data=data,
+        key="Population",
+        colors=["#e0f2fe", "#0284c7"],
+        min_val=0,
+        max_val=150000
     )
 
-    output_path = os.path.join(os.path.dirname(__file__), "output.html")
-    sivo_app.to_html(output_path)
-
-    print(f"Map successfully generated at: {output_path}")
+    output_file = os.path.join(os.path.dirname(__file__), 'output.html')
+    sivo_app.to_html(output_file)
+    print(f"Generated {output_file}")
 
 if __name__ == "__main__":
     main()
