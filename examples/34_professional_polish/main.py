@@ -5,10 +5,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 from sivo import Sivo
 
 def main():
-    # Load sample SVG from the root examples folder (or create one on the fly)
     svg_path = os.path.join(os.path.dirname(__file__), '../sample.svg')
 
-    # We will initialize the sivo instance directly to enable the new parameters
     sivo_app = Sivo.from_svg(
         svg_path,
         title="Global Demographic Insights",
@@ -21,19 +19,18 @@ def main():
         enable_search=True
     )
 
-    # Some mock data binding
-    data = {
-        "region_a": {"Population": 50000},
-        "region_b": {"Population": 120000},
-        "region_c": {"Population": 35000}
-    }
+    sivo_app.map(
+        element_id="mountain1",
+        tooltip="Mountain 1",
+        color="#a0a0a0",
+        hover_color="#c0c0c0"
+    )
 
-    sivo_app.bind_data(
-        data=data,
-        key="Population",
-        colors=["#e0f2fe", "#0284c7"],
-        min_val=0,
-        max_val=150000
+    sivo_app.map(
+        element_id="sun",
+        tooltip="The Sun",
+        color="gold",
+        hover_color="yellow"
     )
 
     output_file = os.path.join(os.path.dirname(__file__), 'output.html')

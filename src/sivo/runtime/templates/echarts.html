@@ -1954,8 +1954,9 @@
         });
 
 
-        function applyFadeUnselected(selectedName) {
-            if (!fadeUnselected) return;
+        function applyFadeUnselected(selectedName, force = false) {
+            if (!fadeUnselected && !force) return;
+            if (force) window.sivoForcedFade = true;
 
             var currentOption = myChart.getOption();
             var seriesData = currentOption.series[0].data;
@@ -1987,7 +1988,8 @@
         }
 
         function clearFadeUnselected() {
-            if (!fadeUnselected) return;
+            if (!fadeUnselected && !window.sivoForcedFade) return;
+            window.sivoForcedFade = false;
 
             var currentOption = myChart.getOption();
             var seriesData = currentOption.series[0].data;
@@ -3118,6 +3120,9 @@
 
                 // Focus element
                 myChart.dispatchAction({ type: 'geoSelect', name: elementId });
+
+                // Force highlight by fading everything else
+                applyFadeUnselected(elementId, true);
 
                 // Check if it has a specific overlay bound center
                 var viewMeta = overlaysData[elementId];

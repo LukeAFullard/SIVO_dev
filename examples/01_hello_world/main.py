@@ -9,7 +9,7 @@ def main():
     if not os.path.exists(svg_path):
         svg_path = os.path.join(os.path.dirname(__file__), "sample.svg")
 
-    sivo_app = Sivo.from_svg(svg_path)
+    sivo_app = Sivo.from_svg(svg_path, enable_search=True)
 
     # 2. Map interactions
     sivo_app.map(
