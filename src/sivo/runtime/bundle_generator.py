@@ -154,6 +154,10 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             emphasis_style = {}
             if theme.get('hover_color'):
                 emphasis_style['areaColor'] = theme['hover_color']
+            else:
+                # If no specific hover color is set, ensure areaColor stays transparent or inherits correctly
+                # so we don't accidentally override it in emphasis if we don't want to.
+                pass
 
             if theme.get('glow'):
                 emphasis_style['shadowBlur'] = 15

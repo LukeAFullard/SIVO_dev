@@ -583,6 +583,10 @@
             <div id="chart-container"></div>
             <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
             <div class="zoom-controls">
+                <div class="zoom-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                    <svg id="theme-icon-light" style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg id="theme-icon-dark" style="width:16px; height:16px; display:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
                 <div class="zoom-btn" onclick="zoomIn()">+</div>
                 <div class="zoom-btn" onclick="zoomOut()">-</div>
                 <div class="zoom-btn" onclick="resetZoom()">⌂</div>
@@ -631,6 +635,32 @@
         // Apply Global Theme
         var currentTheme = viewsData[currentViewId].theme || 'light';
         document.body.className = 'sivo-theme-' + currentTheme;
+
+        function updateThemeIcons() {
+            var isDark = document.body.classList.contains('sivo-theme-dark') ||
+                         (!document.body.classList.contains('sivo-theme-light') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.getElementById('theme-icon-light').style.display = isDark ? 'none' : 'block';
+            document.getElementById('theme-icon-dark').style.display = isDark ? 'block' : 'none';
+        }
+        updateThemeIcons();
+
+        function toggleTheme() {
+            if (document.body.classList.contains('sivo-theme-dark')) {
+                document.body.classList.remove('sivo-theme-dark');
+                document.body.classList.add('sivo-theme-light');
+            } else if (document.body.classList.contains('sivo-theme-light')) {
+                document.body.classList.remove('sivo-theme-light');
+                document.body.classList.add('sivo-theme-dark');
+            } else {
+                // If relying on OS preference initially, explicitly set the opposite
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('sivo-theme-light');
+                } else {
+                    document.body.classList.add('sivo-theme-dark');
+                }
+            }
+            updateThemeIcons();
+        }
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -718,21 +748,20 @@
                         },
                         emphasis: {
                             itemStyle: {
-                                areaColor: '#e2e8f0', // Slight darken on hover if no custom color
-                                shadowBlur: 12,
+                                // Strip out default areaColor override so custom colors stay intact on hover
+                                // Keep a very subtle shadow just to indicate it is interactive on hover
+                                shadowBlur: 8,
                                 shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.15)'
+                                shadowColor: 'rgba(0, 0, 0, 0.2)'
                             },
                             label: {
                                 show: false
                             }
                         },
+                        selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
                             itemStyle: {
-                                // Do not override color on select natively to let fade logic handle focus
-                                // Or we could add a subtle stroke to indicate selection
-                                shadowBlur: 15,
-                                shadowColor: 'rgba(0, 0, 0, 0.2)'
+                                // Empty to ensure absolutely no visual change on click natively
                             }
                         },
                         data: echartsData,
