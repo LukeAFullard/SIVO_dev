@@ -91,6 +91,37 @@ This document outlines a structured plan for creating example scripts and applic
 
 ---
 
+## Phase 4: Advanced Infographic Narratives
+
+**Objective:** Demonstrate narrative storytelling features and specific infographic visual controls natively available in standalone HTML exports.
+
+### Example 4.1: Scrollytelling
+*   **Location:** `examples/26_scrollytelling/`
+*   **Description:** An interactive presentation where the SVG stays sticky on the left while a text column scrolls on the right, automatically triggering map zooms and color changes as paragraphs cross the viewport.
+*   **Key Concepts:** `bind_scrollytelling()`, `ScrollytellingStepConfig`.
+
+### Example 4.2: Guided Tours
+*   **Location:** `examples/27_guided_tour/`
+*   **Description:** An automatic step-by-step UI "Next/Prev" dialog overlay that walks a user through specific areas of a map without needing them to scroll or explore manually.
+*   **Key Concepts:** `bind_tour()`, `TourStepConfig`.
+
+### Example 4.3: Dynamic Text Odometers
+*   **Location:** `examples/28_odometers/`
+*   **Description:** Utilizes native SVG mode and requestAnimationFrame to smoothly count up large KPI numbers directly within the SVG canvas.
+*   **Key Concepts:** `odometer_value`, `odometer_duration_ms`, `render_mode="svg"`.
+
+### Example 4.4: Minimaps and High-Res Exports
+*   **Location:** `examples/29_minimap_export/`
+*   **Description:** Shows a global viewport tracking minimap in the corner that syncs with ECharts georoam state, and adds a camera button to download the state as PNG/SVG.
+*   **Key Concepts:** `enable_minimap=True`, `enable_export=True`.
+
+### Example 4.5: Interactive Layer Toggles
+*   **Location:** `examples/30_layer_toggles/`
+*   **Description:** Generates an absolute positioned checklist legend overlay that manipulates the visibility and opacity of distinct layer groups.
+*   **Key Concepts:** `add_layer_toggle()`.
+
+---
+
 ## Process for Creating Examples
 
 1.  **Create Directory:** Create a new subfolder for the example (e.g., `examples/01_hello_world/`). Place any required `.svg` files inside this directory to ensure path isolation.

@@ -167,8 +167,9 @@ We provide extensive examples ranging from basic setup to comprehensive Streamli
 *   **Phase 2: Advanced Standalone Features:** SVG Drill-Downs (`examples/04_drilldowns`), Custom Asset Injection (`examples/05_custom_assets`), HTML/DOM Overlays (`examples/06_html_overlays`), Multi-View Standalone HTML (`examples/07_multi_view_standalone`), Static Choropleths (`examples/08_choropleth`), Dynamic Data Binding & Legend (`examples/08_data_binding`), Animations & Dynamic Markers (`examples/09_animations_markers`), Document Embeds (`examples/10_document_and_map_embed`).
 *   **Phase 3: Streamlit Integration:** Basic Callbacks (`examples/10_streamlit_callbacks`), Hover Events (`examples/11_streamlit_hover`), Dynamic Color Updates (`examples/12_dynamic_colors`), Programmatic Zooming (`examples/13_streamlit_zoom`), Comprehensive Dashboard (`examples/14_comprehensive_dashboard`).
 *   **Phase 4: External Integrations:** Analytics & Live Data (`examples/22_analytics_and_data`), Forms & E-commerce (`examples/23_forms_and_ecommerce`), Rich Media & Business Intelligence (`examples/24_rich_media_and_bi`), New Integrations (`examples/25_new_integrations`), Nested ECharts Action (`examples/15_echarts_action`), Zoom on Click (`examples/16_zoom_on_click`).
+*   **Phase 5: Infographic Narratives:** Scrollytelling (`examples/26_scrollytelling`), Guided Tours (`examples/27_guided_tour`), Dynamic Odometers (`examples/28_odometers`), Minimap & Export (`examples/29_minimap_export`), Layer Toggles (`examples/30_layer_toggles`).
 
-These examples demonstrate the fully implemented Phase 1, 2, 3, and 4 project goals.
+These examples demonstrate the fully implemented Phase 1, 2, 3, 4, and 5 project goals.
 
 ## License
 MIT

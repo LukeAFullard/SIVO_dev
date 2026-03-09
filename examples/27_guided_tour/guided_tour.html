@@ -215,8 +215,47 @@
 
         /* Responsive Layout Overrides */
         @media (max-width: 768px) {
-            body {
+            body, #sivo-app-container {
                 flex-direction: column !important;
+            }
+            #scrollytelling-container {
+                width: 100% !important;
+                height: 40vh !important;
+                order: 2; /* Put text below map on mobile */
+            }
+            #chart-wrapper {
+                height: 60vh !important;
+                order: 1;
+            }
+            .scrolly-step {
+                padding: 10vh 20px !important;
+            }
+            #tour-container {
+                width: 90% !important;
+                left: 5% !important;
+                transform: none !important;
+                bottom: 10px !important;
+                padding: 10px 15px !important;
+            }
+            #minimap-container {
+                width: 100px !important;
+                height: 100px !important;
+                bottom: 10px !important;
+                left: 10px !important;
+            }
+            #layer-legend {
+                max-width: 150px !important;
+                font-size: 12px !important;
+                padding: 5px !important;
+            }
+            .zoom-controls {
+                right: 10px !important;
+                bottom: 10px !important;
+            }
+            .zoom-btn {
+                width: 25px !important;
+                height: 25px !important;
+                font-size: 14px !important;
             }
             #info-panel.active {
                 width: 100% !important;
@@ -430,7 +469,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"gallery\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"gallery\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eArt Gallery\u003c/text\u003e\n  \n  \u003crect id=\"cafe\" x=\"700\" y=\"100\" width=\"200\" height=\"200\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"cafe\"/\u003e\n  \u003ctext x=\"800\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eCafe\u003c/text\u003e\n  \n  \u003crect id=\"giftshop\" x=\"400\" y=\"400\" width=\"200\" height=\"150\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"giftshop\"/\u003e\n  \u003ctext x=\"500\" y=\"480\" font-size=\"24\" text-anchor=\"middle\"\u003eGift Shop\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "gallery", "value": 1, "tooltip": "Main Art Gallery"}, {"name": "cafe", "value": 1, "tooltip": "Museum Cafe"}, {"name": "giftshop", "value": 1, "tooltip": "Gift Shop"}], "actions_manifest": {"gallery": [{"action_type": "tooltip", "content": "\u003cp\u003eFeaturing modern artists.\u003c/p\u003e", "title": "Main Art Gallery", "panel_position": "right"}], "cafe": [{"action_type": "tooltip", "content": "\u003cp\u003eCoffee and pastries.\u003c/p\u003e", "title": "Museum Cafe", "panel_position": "right"}], "giftshop": [{"action_type": "tooltip", "content": "\u003cp\u003eSouvenirs and books.\u003c/p\u003e", "title": "Gift Shop", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"gallery": {"id": "gallery", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eFeaturing modern artists.\u003c/p\u003e", "title": "Main Art Gallery", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "cafe": {"id": "cafe", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eCoffee and pastries.\u003c/p\u003e", "title": "Museum Cafe", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "giftshop": {"id": "giftshop", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eSouvenirs and books.\u003c/p\u003e", "title": "Gift Shop", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"gallery\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"gallery\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eArt Gallery\u003c/text\u003e\n  \n  \u003crect id=\"cafe\" x=\"700\" y=\"100\" width=\"200\" height=\"200\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"cafe\"/\u003e\n  \u003ctext x=\"800\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eCafe\u003c/text\u003e\n  \n  \u003crect id=\"giftshop\" x=\"400\" y=\"400\" width=\"200\" height=\"150\" fill=\"#e5e7eb\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"giftshop\"/\u003e\n  \u003ctext x=\"500\" y=\"480\" font-size=\"24\" text-anchor=\"middle\"\u003eGift Shop\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "gallery", "value": 1, "tooltip": "Main Art Gallery"}, {"name": "cafe", "value": 1, "tooltip": "Museum Cafe"}, {"name": "giftshop", "value": 1, "tooltip": "Gift Shop"}], "actions_manifest": {"gallery": [{"action_type": "tooltip", "content": "\u003cp\u003eFeaturing modern artists.\u003c/p\u003e", "title": "Main Art Gallery", "panel_position": "right"}], "cafe": [{"action_type": "tooltip", "content": "\u003cp\u003eCoffee and pastries.\u003c/p\u003e", "title": "Museum Cafe", "panel_position": "right"}], "giftshop": [{"action_type": "tooltip", "content": "\u003cp\u003eSouvenirs and books.\u003c/p\u003e", "title": "Gift Shop", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"gallery": {"id": "gallery", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eFeaturing modern artists.\u003c/p\u003e", "title": "Main Art Gallery", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "cafe": {"id": "cafe", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eCoffee and pastries.\u003c/p\u003e", "title": "Museum Cafe", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "giftshop": {"id": "giftshop", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eSouvenirs and books.\u003c/p\u003e", "title": "Gift Shop", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "tour": [{"content": "\u003ch3\u003eWelcome to the Museum Tour\u003c/h3\u003e\u003cp\u003eWe'll guide you through the main exhibits. Click \u003cb\u003eNext\u003c/b\u003e to begin.\u003c/p\u003e", "zoom_to": null, "zoom_level": 2.0, "show_tooltips": null}, {"content": "\u003ch3\u003e1. Art Gallery\u003c/h3\u003e\u003cp\u003eFirst stop: the main exhibition hall.\u003c/p\u003e", "zoom_to": "gallery", "zoom_level": 2.5, "show_tooltips": ["gallery"]}, {"content": "\u003ch3\u003e2. Museum Cafe\u003c/h3\u003e\u003cp\u003eTake a break and grab a coffee.\u003c/p\u003e", "zoom_to": "cafe", "zoom_level": 2.5, "show_tooltips": ["cafe"]}, {"content": "\u003ch3\u003e3. Gift Shop\u003c/h3\u003e\u003cp\u003eDon't forget to exit through the gift shop!\u003c/p\u003e", "zoom_to": "giftshop", "zoom_level": 2.5, "show_tooltips": ["giftshop"]}, {"content": "\u003ch3\u003eEnd of Tour\u003c/h3\u003e\u003cp\u003eEnjoy the rest of your visit!\u003c/p\u003e", "zoom_to": null, "zoom_level": 2.0, "show_tooltips": null}]}};
         var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer

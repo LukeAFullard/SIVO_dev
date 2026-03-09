@@ -215,8 +215,47 @@
 
         /* Responsive Layout Overrides */
         @media (max-width: 768px) {
-            body {
+            body, #sivo-app-container {
                 flex-direction: column !important;
+            }
+            #scrollytelling-container {
+                width: 100% !important;
+                height: 40vh !important;
+                order: 2; /* Put text below map on mobile */
+            }
+            #chart-wrapper {
+                height: 60vh !important;
+                order: 1;
+            }
+            .scrolly-step {
+                padding: 10vh 20px !important;
+            }
+            #tour-container {
+                width: 90% !important;
+                left: 5% !important;
+                transform: none !important;
+                bottom: 10px !important;
+                padding: 10px 15px !important;
+            }
+            #minimap-container {
+                width: 100px !important;
+                height: 100px !important;
+                bottom: 10px !important;
+                left: 10px !important;
+            }
+            #layer-legend {
+                max-width: 150px !important;
+                font-size: 12px !important;
+                padding: 5px !important;
+            }
+            .zoom-controls {
+                right: 10px !important;
+                bottom: 10px !important;
+            }
+            .zoom-btn {
+                width: 25px !important;
+                height: 25px !important;
+                font-size: 14px !important;
             }
             #info-panel.active {
                 width: 100% !important;
@@ -430,7 +469,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"section1\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section1\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eData Center\u003c/text\u003e\n  \n  \u003ccircle id=\"section2\" cx=\"700\" cy=\"200\" r=\"100\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section2\"/\u003e\n  \u003ctext x=\"700\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eLogistics\u003c/text\u003e\n  \n  \u003cpath id=\"section3\" d=\"M 300 400 L 700 400 L 500 550 Z\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section3\"/\u003e\n  \u003ctext x=\"500\" y=\"470\" font-size=\"24\" text-anchor=\"middle\"\u003eHQ\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "section1", "value": 1, "tooltip": "Data Center (Active)"}, {"name": "section2", "value": 1, "tooltip": "Logistics Hub (Active)"}, {"name": "section3", "value": 1, "tooltip": "Headquarters (Active)"}], "actions_manifest": {"section1": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "section2": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "section3": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"section1": {"id": "section1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section2": {"id": "section2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section3": {"id": "section3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"section1\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section1\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eData Center\u003c/text\u003e\n  \n  \u003ccircle id=\"section2\" cx=\"700\" cy=\"200\" r=\"100\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section2\"/\u003e\n  \u003ctext x=\"700\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eLogistics\u003c/text\u003e\n  \n  \u003cpath id=\"section3\" d=\"M 300 400 L 700 400 L 500 550 Z\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section3\"/\u003e\n  \u003ctext x=\"500\" y=\"470\" font-size=\"24\" text-anchor=\"middle\"\u003eHQ\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "section1", "value": 1, "tooltip": "Data Center (Active)"}, {"name": "section2", "value": 1, "tooltip": "Logistics Hub (Active)"}, {"name": "section3", "value": 1, "tooltip": "Headquarters (Active)"}], "actions_manifest": {"section1": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "section2": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "section3": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"section1": {"id": "section1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section2": {"id": "section2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section3": {"id": "section3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "scrollytelling": [{"content": "\u003ch1\u003e1. The Global Network\u003c/h1\u003e\u003cp\u003eOur operations span across three main hubs. Scroll down to take a closer look.\u003c/p\u003e", "zoom_to": null, "zoom_level": 2.0, "colors": {"section1": "#f0f0f0", "section2": "#f0f0f0", "section3": "#f0f0f0"}, "show_tooltips": null}, {"content": "\u003ch2\u003e2. The Data Center\u003c/h2\u003e\u003cp\u003eThis is where all our processing happens. It handles over 10TB of data per second.\u003c/p\u003e", "zoom_to": "section1", "zoom_level": 2.5, "colors": {"section1": "#3b82f6", "section2": "#f0f0f0", "section3": "#f0f0f0"}, "show_tooltips": ["section1"]}, {"content": "\u003ch2\u003e3. The Logistics Hub\u003c/h2\u003e\u003cp\u003ePhysical goods are routed through this circular zone, ensuring 24-hour delivery.\u003c/p\u003e", "zoom_to": "section2", "zoom_level": 2.5, "colors": {"section1": "#f0f0f0", "section2": "#10b981", "section3": "#f0f0f0"}, "show_tooltips": ["section2"]}, {"content": "\u003ch2\u003e4. Headquarters\u003c/h2\u003e\u003cp\u003eThe central triangle coordinates both data and physical routing.\u003c/p\u003e", "zoom_to": "section3", "zoom_level": 2.0, "colors": {"section1": "#f0f0f0", "section2": "#f0f0f0", "section3": "#8b5cf6"}, "show_tooltips": ["section3"]}, {"content": "\u003ch1\u003eConclusion\u003c/h1\u003e\u003cp\u003eThanks for exploring our network infrastructure.\u003c/p\u003e", "zoom_to": null, "zoom_level": 2.0, "colors": {"section1": "#3b82f6", "section2": "#10b981", "section3": "#8b5cf6"}, "show_tooltips": null}]}};
         var currentViewId = "default_view";
 
         // Initialize ECharts with the appropriate renderer

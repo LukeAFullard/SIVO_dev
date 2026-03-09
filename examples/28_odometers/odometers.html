@@ -215,8 +215,47 @@
 
         /* Responsive Layout Overrides */
         @media (max-width: 768px) {
-            body {
+            body, #sivo-app-container {
                 flex-direction: column !important;
+            }
+            #scrollytelling-container {
+                width: 100% !important;
+                height: 40vh !important;
+                order: 2; /* Put text below map on mobile */
+            }
+            #chart-wrapper {
+                height: 60vh !important;
+                order: 1;
+            }
+            .scrolly-step {
+                padding: 10vh 20px !important;
+            }
+            #tour-container {
+                width: 90% !important;
+                left: 5% !important;
+                transform: none !important;
+                bottom: 10px !important;
+                padding: 10px 15px !important;
+            }
+            #minimap-container {
+                width: 100px !important;
+                height: 100px !important;
+                bottom: 10px !important;
+                left: 10px !important;
+            }
+            #layer-legend {
+                max-width: 150px !important;
+                font-size: 12px !important;
+                padding: 5px !important;
+            }
+            .zoom-controls {
+                right: 10px !important;
+                bottom: 10px !important;
+            }
+            .zoom-btn {
+                width: 25px !important;
+                height: 25px !important;
+                font-size: 14px !important;
             }
             #info-panel.active {
                 width: 100% !important;
