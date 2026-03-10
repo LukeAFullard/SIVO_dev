@@ -12,6 +12,11 @@ svg_content1 = """
 
   <path id="region_b" d="M 500 100 L 900 100 L 900 400 L 500 400 Z" fill="#e2e8f0" stroke="#94a3b8" />
   <text x="700" y="250" font-size="18" text-anchor="middle">Click for Confetti!</text>
+
+  <!-- Add paths so the parser computes their centers correctly -->
+  <path id="node_1" d="M 240 190 L 260 190 L 260 210 L 240 210 Z" fill="transparent" />
+  <path id="node_2" d="M 290 290 L 310 290 L 310 310 L 290 310 Z" fill="transparent" />
+  <path id="node_3" d="M 690 290 L 710 290 L 710 310 L 690 310 Z" fill="transparent" />
 </svg>
 """
 
@@ -39,11 +44,6 @@ live_data = {
     "node_2": 50,
     "node_3": 75
 }
-
-# We add invisible nodes to attach pulse markers to
-sivo_app.add_shape("circle", {"id": "node_1", "cx": "250", "cy": "200", "r": "10", "fill": "transparent"})
-sivo_app.add_shape("circle", {"id": "node_2", "cx": "300", "cy": "300", "r": "10", "fill": "transparent"})
-sivo_app.add_shape("circle", {"id": "node_3", "cx": "700", "cy": "300", "r": "10", "fill": "transparent"})
 
 sivo_app.apply_proportional_symbols(live_data, min_size=15, max_size=30, color="#ef4444", is_pulse=True)
 
