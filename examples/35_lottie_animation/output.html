@@ -923,7 +923,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n    \u003crect width=\"100%\" height=\"100%\" fill=\"#f8fafc\"/\u003e\n    \u003ctext x=\"400\" y=\"50\" font-family=\"sans-serif\" font-size=\"24\" text-anchor=\"middle\" fill=\"#334155\"\u003eInteractive Datacenter Map\u003c/text\u003e\n\n    \u003cg id=\"servers\" name=\"servers\"\u003e\n        \u003crect id=\"server-alpha\" x=\"200\" y=\"200\" width=\"150\" height=\"200\" rx=\"10\" fill=\"#e2e8f0\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"server-alpha\"/\u003e\n        \u003ctext x=\"275\" y=\"300\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\" fill=\"#475569\"\u003eServer Alpha\u003c/text\u003e\n\n        \u003crect id=\"server-beta\" x=\"450\" y=\"200\" width=\"150\" height=\"200\" rx=\"10\" fill=\"#e2e8f0\" stroke=\"#94a3b8\" stroke-width=\"2\" name=\"server-beta\"/\u003e\n        \u003ctext x=\"525\" y=\"300\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\" fill=\"#475569\"\u003eServer Beta\u003c/text\u003e\n    \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "servers", "value": 1}, {"name": "server-alpha", "value": 1, "tooltip": "Server Alpha Details", "itemStyle": {"areaColor": "#bae6fd"}, "emphasis": {"itemStyle": {"areaColor": "#7dd3fc", "shadowBlur": 15, "shadowColor": "#7dd3fc", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "server-beta", "value": 1, "tooltip": "Server Beta Details", "itemStyle": {"areaColor": "#fecaca"}, "emphasis": {"itemStyle": {"areaColor": "#fca5a5", "shadowBlur": 15, "shadowColor": "#fca5a5", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"server-alpha": [{"action_type": "tooltip", "content": "\n        \u003ch3\u003eServer Alpha\u003c/h3\u003e\n        \u003cspan class=\"status-badge\"\u003e\u25cf Online\u003c/span\u003e\n        \u003cp\u003eThis server handles primary database routing and load balancing. Uptime is currently 99.99%.\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eLoad:\u003c/b\u003e 45%\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eTemp:\u003c/b\u003e 42\u00b0C\u003c/p\u003e\n        ", "title": "Server Alpha Details", "panel_position": "right"}], "server-beta": [{"action_type": "tooltip", "content": "\n        \u003ch3\u003eServer Beta\u003c/h3\u003e\n        \u003cspan class=\"status-badge\" style=\"background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.4);\"\u003e\u25cf Warning\u003c/span\u003e\n        \u003cp\u003eThis server is currently experiencing higher than normal latency. Investigation is ongoing.\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eLoad:\u003c/b\u003e 92%\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eTemp:\u003c/b\u003e 75\u00b0C\u003c/p\u003e\n        ", "title": "Server Beta Details", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"servers": {"id": "servers", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "server-alpha": {"id": "server-alpha", "actions": [{"action_type": "tooltip", "content": "\n        \u003ch3\u003eServer Alpha\u003c/h3\u003e\n        \u003cspan class=\"status-badge\"\u003e\u25cf Online\u003c/span\u003e\n        \u003cp\u003eThis server handles primary database routing and load balancing. Uptime is currently 99.99%.\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eLoad:\u003c/b\u003e 45%\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eTemp:\u003c/b\u003e 42\u00b0C\u003c/p\u003e\n        ", "title": "Server Alpha Details", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#bae6fd", "hover_color": "#7dd3fc", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "server-beta": {"id": "server-beta", "actions": [{"action_type": "tooltip", "content": "\n        \u003ch3\u003eServer Beta\u003c/h3\u003e\n        \u003cspan class=\"status-badge\" style=\"background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.4);\"\u003e\u25cf Warning\u003c/span\u003e\n        \u003cp\u003eThis server is currently experiencing higher than normal latency. Investigation is ongoing.\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eLoad:\u003c/b\u003e 92%\u003c/p\u003e\n        \u003cp\u003e\u003cb\u003eTemp:\u003c/b\u003e 75\u00b0C\u003c/p\u003e\n        ", "title": "Server Beta Details", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#fecaca", "hover_color": "#fca5a5", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/\u003e\n    \u003cpolygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/\u003e\n    \u003cpolygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/\u003e\n    \u003crect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/\u003e\n    \u003cpolygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/\u003e\n    \u003cpath id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1}, {"name": "mountain1", "value": 1}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1}, {"name": "roof", "value": 1}, {"name": "river", "value": 1, "tooltip": "Cafeteria"}], "actions_manifest": {"river": [{"action_type": "tooltip", "content": "\u003cp\u003eEnjoy a nice hot cup of coffee at our cafeteria.\u003c/p\u003e", "title": "Cafeteria", "panel_position": "right"}, {"action_type": "lottie", "lottie_url": "https://assets9.lottiefiles.com/packages/lf20_U1luOq.json", "loop": true, "autoplay": true, "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Lottie Animation Embed", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"scene": {"id": "scene", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "background": {"id": "background", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "sun": {"id": "sun", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain1": {"id": "mountain1", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain2": {"id": "mountain2", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "house": {"id": "house", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "roof": {"id": "roof", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "river": {"id": "river", "actions": [{"action_type": "tooltip", "content": "\u003cp\u003eEnjoy a nice hot cup of coffee at our cafeteria.\u003c/p\u003e", "title": "Cafeteria", "panel_position": "right"}, {"action_type": "lottie", "lottie_url": "https://assets9.lottiefiles.com/packages/lf20_U1luOq.json", "loop": true, "autoplay": true, "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
         var currentViewId = "default_view";
 
         // Apply Global Theme
@@ -3667,83 +3667,7 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">
-/* 1. Global Canvas Background Overlay */
-body {
-    background-color: #f1f5f9; /* Soft background */
-}
-
-/* 2. Sleek Glassmorphism Info Panel */
-#info-panel {
-    background: rgba(15, 23, 42, 0.85) !important; /* Deep dark slate with transparency */
-    backdrop-filter: blur(16px); /* Glass effect */
-    -webkit-backdrop-filter: blur(16px);
-    color: #f8fafc !important; /* High contrast text */
-    border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: -10px 0 25px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* 3. Panel Header refinements */
-.info-panel-header {
-    background: transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* 4. Elegant Close Button */
-.close-btn {
-    background: rgba(255, 255, 255, 0.1) !important;
-    color: #e2e8f0 !important;
-    backdrop-filter: blur(4px);
-}
-.close-btn:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-    color: #ffffff !important;
-    transform: scale(1.05);
-}
-
-/* 5. Modern Zoom Controls */
-.zoom-btn {
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    color: #334155 !important;
-    border-radius: 50% !important; /* Circular buttons */
-    width: 40px !important;
-    height: 40px !important;
-    margin-bottom: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-}
-.zoom-btn:hover {
-    background: #ffffff !important;
-    color: #0f172a !important;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* 6. Formatting inside the panel content */
-.info-panel-content h3 {
-    margin-top: 0;
-    color: #38bdf8; /* Bright blue accent */
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-}
-.info-panel-content p {
-    color: #cbd5e1; /* Softer text for body */
-    line-height: 1.7;
-}
-.status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background: rgba(34, 197, 94, 0.2);
-    color: #4ade80;
-    border: 1px solid rgba(34, 197, 94, 0.4);
-    margin-bottom: 16px;
-}
-</style>
+    <style id="custom-css"></style>
     <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->

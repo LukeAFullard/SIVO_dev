@@ -214,6 +214,10 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             view_dict["tour"] = view_obj["tour"]
         if "layer_toggles" in view_obj:
             view_dict["layer_toggles"] = view_obj["layer_toggles"]
+        if "scratchoff" in view_obj:
+            view_dict["scratchoff"] = view_obj["scratchoff"]
+        if "proportional_symbols" in view_obj:
+            view_dict["proportional_symbols"] = view_obj["proportional_symbols"]
 
         formatted_views[view_id] = view_dict
 

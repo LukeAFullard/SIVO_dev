@@ -98,6 +98,9 @@ class Sivo:
         ecommerce: Optional[dict] = None,
         rich_media: Optional[dict] = None,
         bi: Optional[dict] = None,
+        lottie: Optional[dict] = None,
+        compare: Optional[dict] = None,
+        progress_bar: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
         context_menu: Optional[list[dict]] = None,
@@ -160,6 +163,9 @@ class Sivo:
             ecommerce=ecommerce,
             rich_media=rich_media,
             bi=bi,
+            lottie=lottie,
+            compare=compare,
+            progress_bar=progress_bar,
             replit=replit,
             echarts_option=echarts_option,
             context_menu=context_menu,
@@ -237,6 +243,18 @@ class Sivo:
         Adds a layer toggle legend item for the specified element IDs.
         """
         self.infographic.add_layer_toggle(label, element_ids, default_visible)
+
+    def enable_scratchoff(self, color: str = "#cccccc", image_url: Optional[str] = None, brush_size: int = 40):
+        """
+        Enables a scratch-off reveal layer over the infographic.
+        """
+        self.infographic.enable_scratchoff(color, image_url, brush_size)
+
+    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)"):
+        """
+        Creates a proportional symbol overlay (scatter/bubble map).
+        """
+        self.infographic.apply_proportional_symbols(data_map, min_size, max_size, color)
 
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
         """
@@ -354,6 +372,10 @@ class Sivo:
             view_data["tour"] = [s.model_dump() for s in self.infographic.tour]
         if hasattr(self.infographic, "layer_toggles") and self.infographic.layer_toggles:
             view_data["layer_toggles"] = [s.model_dump() for s in self.infographic.layer_toggles]
+        if hasattr(self.infographic, "scratchoff") and self.infographic.scratchoff:
+            view_data["scratchoff"] = self.infographic.scratchoff
+        if hasattr(self.infographic, "proportional_symbols") and self.infographic.proportional_symbols:
+            view_data["proportional_symbols"] = self.infographic.proportional_symbols
         return view_data
 
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:

@@ -1,4 +1,4 @@
-from typing import Optional, Literal, Union, Annotated
+from typing import Optional, Literal, Union, Annotated, Dict
 from pydantic import BaseModel, Field
 
 class BaseAction(BaseModel):
@@ -134,6 +134,29 @@ class A11yAction(BaseAction):
     tabindex: str = Field(default="0", description="The tabindex for keyboard navigation")
     aria_label: str = Field(description="The screen reader accessible label for the element")
 
+class LottieAction(BaseAction):
+    action_type: Literal["lottie"] = "lottie"
+    lottie_url: str = Field(description="URL to the Lottie JSON animation file")
+    loop: bool = Field(default=True, description="Whether the animation should loop")
+    autoplay: bool = Field(default=True, description="Whether the animation should play automatically")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+class CompareAction(BaseAction):
+    action_type: Literal["compare"] = "compare"
+    before_image: str = Field(description="URL of the 'before' image")
+    after_image: str = Field(description="URL of the 'after' image")
+    label_before: str = Field(default="Before", description="Label for the before image")
+    label_after: str = Field(default="After", description="Label for the after image")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+class ProgressBarAction(BaseAction):
+    action_type: Literal["progress_bar"] = "progress_bar"
+    title: str = Field(description="Title of the progress bar")
+    progress: float = Field(description="Progress value between 0 and 100")
+    color: str = Field(default="#38bdf8", description="Color of the progress bar")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+
+
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -156,7 +179,7 @@ class ThemeOverride(BaseModel):
     odometer_duration_ms: Optional[int] = 2000
     odometer_format: Optional[str] = None
 
-ActionType = Annotated[Union[TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[LottieAction, CompareAction, ProgressBarAction, TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str
