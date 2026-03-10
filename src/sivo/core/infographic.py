@@ -513,10 +513,11 @@ class Infographic:
         from .config import ScratchoffConfig
         self.scratchoff = ScratchoffConfig(color=color, image_url=image_url, brush_size=brush_size).model_dump()
 
-    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
+    def apply_proportional_symbols(self, data_map: Dict[str, Union[float, Dict]], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
         """
         Creates a proportional symbol map (e.g., bubble map) by calculating the center of each
         mapped element and passing the parameters to the frontend to render an ECharts scatter series.
+        data_map can be a dict of {id: value} or {id: {"value": 10, "color": "#00ff00"}} for custom per-marker colors.
         """
         from .config import ProportionalSymbolConfig
 
@@ -524,10 +525,17 @@ class Infographic:
         for elem_id, val in data_map.items():
             center = self.get_element_center(elem_id)
             if center:
-                processed_data[elem_id] = {
-                    "value": val,
-                    "coord": center
-                }
+                if isinstance(val, dict):
+                    processed_data[elem_id] = {
+                        "value": val.get("value", 0),
+                        "coord": center,
+                        "color": val.get("color")
+                    }
+                else:
+                    processed_data[elem_id] = {
+                        "value": val,
+                        "coord": center
+                    }
                 # Also ensure it exists in mappings so it renders an ECharts hit area if needed
                 if elem_id not in self.mappings:
                     # Best effort mapping if it exists in lookup

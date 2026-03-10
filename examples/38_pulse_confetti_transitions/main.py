@@ -41,11 +41,11 @@ sivo_app.map("region_b", confetti={"particle_count": 200, "spread": 90}, tooltip
 # Add Pulse Markers (Live Telemetry)
 live_data = {
     "node_1": 100,
-    "node_2": 50,
-    "node_3": 75
+    "node_2": {"value": 50, "color": "#3b82f6"}, # Blue marker
+    "node_3": {"value": 75, "color": "#10b981"}  # Green marker
 }
 
-sivo_app.apply_proportional_symbols(live_data, min_size=15, max_size=30, color="#ef4444", is_pulse=True)
+sivo_app.apply_proportional_symbols(live_data, min_size=15, max_size=30, color="#ef4444", is_pulse=True) # Red is default
 
 # Generate HTML
 html1 = sivo_app._get_view_data()
