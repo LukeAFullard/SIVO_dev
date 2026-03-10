@@ -260,6 +260,120 @@ class Sivo:
         """
         self.infographic.apply_proportional_symbols(data_map, min_size, max_size, color, is_pulse=is_pulse)
 
+
+    def map_bar_chart(self, element_id: str, title: str, data: list, categories: list, color: str = "#43a2ca", tooltip: str = None, panel_position: str = None):
+        """Helper to map a Bar Chart."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "xAxis": {"data": categories},
+            "yAxis": {},
+            "series": [{
+                "name": title,
+                "type": "bar",
+                "data": data,
+                "itemStyle": {"color": color}
+            }]
+        }
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None):
+        """Helper to map a Line Chart."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "axis"},
+            "xAxis": {"type": "category", "data": categories},
+            "yAxis": {"type": "value"},
+            "series": [{
+                "name": title,
+                "data": data,
+                "type": "line",
+                "smooth": smooth,
+                "itemStyle": {"color": color}
+            }]
+        }
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_pie_chart(self, element_id: str, title: str, data: list[dict], tooltip: str = None, panel_position: str = None):
+        """Helper to map a Pie Chart. data format: [{"name": "A", "value": 10}, ...]"""
+        option = {
+            "title": {"text": title, "left": "center"},
+            "tooltip": {"trigger": "item"},
+            "legend": {"orient": "vertical", "left": "left"},
+            "series": [{
+                "name": title,
+                "type": "pie",
+                "radius": "50%",
+                "data": data,
+                "emphasis": {
+                    "itemStyle": {
+                        "shadowBlur": 10,
+                        "shadowOffsetX": 0,
+                        "shadowColor": "rgba(0, 0, 0, 0.5)"
+                    }
+                }
+            }]
+        }
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_gauge_chart(self, element_id: str, title: str, value: float, max_value: float = 100, tooltip: str = None, panel_position: str = None):
+        """Helper to map a Gauge Chart."""
+        option = {
+            "title": {"text": title, "left": "center"},
+            "tooltip": {"formatter": "{a} <br/>{b} : {c}"},
+            "series": [{
+                "name": title,
+                "type": "gauge",
+                "max": max_value,
+                "detail": {"formatter": "{value}"},
+                "data": [{"value": value, "name": title}]
+            }]
+        }
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_radar_chart(self, element_id: str, title: str, indicators: list[dict], data: list[dict], tooltip: str = None, panel_position: str = None):
+        """Helper to map a Radar Chart. indicators: [{'name': 'A', 'max': 100}], data: [{'name': 'Series 1', 'value': [10, 20]}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "radar": {
+                "indicator": indicators
+            },
+            "series": [{
+                "name": title,
+                "type": "radar",
+                "data": data
+            }]
+        }
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_scatter_chart(self, element_id: str, title: str, data: list[list[float]], tooltip: str = None, panel_position: str = None):
+        """Helper to map a Scatter Chart. data: [[x1, y1], [x2, y2]]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "xAxis": {},
+            "yAxis": {},
+            "series": [{
+                "name": title,
+                "type": "scatter",
+                "data": data
+            }]
+        }
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_treemap_chart(self, element_id: str, title: str, data: list[dict], tooltip: str = None, panel_position: str = None):
+        """Helper to map a Treemap Chart. data: [{'name': 'node1', 'value': 10, 'children': [...]}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"formatter": "{b}: {c}"},
+            "series": [{
+                "type": "treemap",
+                "data": data
+            }]
+        }
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
         """
         Non-default option: Triggers a JavaScript bundler (e.g., esbuild) to minify and
