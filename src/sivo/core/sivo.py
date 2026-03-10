@@ -260,6 +260,186 @@ class Sivo:
         """
         self.infographic.apply_proportional_symbols(data_map, min_size, max_size, color, is_pulse=is_pulse)
 
+
+
+
+    def _apply_chart_styling(self, option: dict, color: str | list[str] = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        if color:
+            if isinstance(color, list):
+                option["color"] = color
+                if "series" in option and isinstance(option["series"], list):
+                    for s in option["series"]:
+                        if s.get("type") in ["bar", "scatter"]:
+                            s["colorBy"] = "data"
+                        elif "itemStyle" in s and "color" in s["itemStyle"]:
+                            del s["itemStyle"]["color"]
+            else:
+                if "series" in option and isinstance(option["series"], list):
+                    for s in option["series"]:
+                        if "itemStyle" not in s: s["itemStyle"] = {}
+                        s["itemStyle"]["color"] = color
+
+        if title_color or title_size:
+            if "title" not in option: option["title"] = {}
+            if "textStyle" not in option["title"]: option["title"]["textStyle"] = {}
+            if title_color: option["title"]["textStyle"]["color"] = title_color
+            if title_size: option["title"]["textStyle"]["fontSize"] = title_size
+
+        if axis_color or axis_size:
+            for axis_type in ["xAxis", "yAxis"]:
+                if axis_type in option and isinstance(option[axis_type], dict):
+                    if "axisLabel" not in option[axis_type]: option[axis_type]["axisLabel"] = {}
+                    if axis_color: option[axis_type]["axisLabel"]["color"] = axis_color
+                    if axis_size: option[axis_type]["axisLabel"]["fontSize"] = axis_size
+                    if "nameTextStyle" not in option[axis_type]: option[axis_type]["nameTextStyle"] = {}
+                    if axis_color: option[axis_type]["nameTextStyle"]["color"] = axis_color
+                    if axis_size: option[axis_type]["nameTextStyle"]["fontSize"] = axis_size
+
+        if tooltip_bg_color:
+            if "tooltip" not in option: option["tooltip"] = {}
+            option["tooltip"]["backgroundColor"] = tooltip_bg_color
+
+        if grid_margin and len(grid_margin) == 4:
+            if "grid" not in option: option["grid"] = {}
+            option["grid"]["top"] = grid_margin[0]
+            option["grid"]["right"] = grid_margin[1]
+            option["grid"]["bottom"] = grid_margin[2]
+            option["grid"]["left"] = grid_margin[3]
+
+        if universal_transition:
+            if "series" in option and isinstance(option["series"], list):
+                for s in option["series"]:
+                    s["universalTransition"] = True
+
+        if extra_options:
+            def merge_dicts(d1, d2):
+                for k, v in d2.items():
+                    if isinstance(v, dict) and k in d1 and isinstance(d1[k], dict):
+                        merge_dicts(d1[k], v)
+                    else:
+                        d1[k] = v
+            merge_dicts(option, extra_options)
+
+        return option
+
+    def map_bar_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Bar Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "xAxis": {"data": categories},
+            "yAxis": {},
+            "series": [{
+                "name": title,
+                "type": "bar",
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Line Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "axis"},
+            "xAxis": {"type": "category", "data": categories},
+            "yAxis": {"type": "value"},
+            "series": [{
+                "name": title,
+                "data": data,
+                "type": "line",
+                "smooth": smooth
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_pie_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Pie Chart. data format: [{"name": "A", "value": 10}, ...] 'color' can be a list of strings (palette)."""
+        option = {
+            "title": {"text": title, "left": "center"},
+            "tooltip": {"trigger": "item"},
+            "legend": {"orient": "vertical", "left": "left"},
+            "series": [{
+                "name": title,
+                "type": "pie",
+                "radius": "50%",
+                "data": data,
+                "emphasis": {
+                    "itemStyle": {
+                        "shadowBlur": 10,
+                        "shadowOffsetX": 0,
+                        "shadowColor": "rgba(0, 0, 0, 0.5)"
+                    }
+                }
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_gauge_chart(self, element_id: str, title: str, value: float, max_value: float = 100, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Gauge Chart."""
+        option = {
+            "title": {"text": title, "left": "center"},
+            "tooltip": {"formatter": "{a} <br/>{b} : {c}"},
+            "series": [{
+                "name": title,
+                "type": "gauge",
+                "max": max_value,
+                "detail": {"formatter": "{value}"},
+                "data": [{"value": value, "name": title}]
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_radar_chart(self, element_id: str, title: str, indicators: list[dict], data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Radar Chart. indicators: [{'name': 'A', 'max': 100}], data: [{'name': 'Series 1', 'value': [10, 20]}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "radar": {
+                "indicator": indicators
+            },
+            "series": [{
+                "name": title,
+                "type": "radar",
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Scatter Chart. data: [[x1, y1], [x2, y2]]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "xAxis": {},
+            "yAxis": {},
+            "series": [{
+                "name": title,
+                "type": "scatter",
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_treemap_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Treemap Chart. data: [{'name': 'node1', 'value': 10, 'children': [...]}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"formatter": "{b}: {c}"},
+            "series": [{
+                "type": "treemap",
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
         """
         Non-default option: Triggers a JavaScript bundler (e.g., esbuild) to minify and

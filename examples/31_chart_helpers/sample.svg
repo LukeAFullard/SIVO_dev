@@ -1,0 +1,13 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+    <rect id="TX" x="10" y="10" width="180" height="180" fill="#add8e6" stroke="#000" stroke-width="2"/>
+    <text x="100" y="100" font-size="20" text-anchor="middle" alignment-baseline="middle">TX (Bar)</text>
+
+    <rect id="CA" x="210" y="10" width="180" height="180" fill="#add8e6" stroke="#000" stroke-width="2"/>
+    <text x="300" y="100" font-size="20" text-anchor="middle" alignment-baseline="middle">CA (Line)</text>
+
+    <rect id="NY" x="10" y="210" width="180" height="180" fill="#add8e6" stroke="#000" stroke-width="2"/>
+    <text x="100" y="300" font-size="20" text-anchor="middle" alignment-baseline="middle">NY (Pie)</text>
+
+    <rect id="WY" x="210" y="210" width="180" height="180" fill="#add8e6" stroke="#000" stroke-width="2"/>
+    <text x="300" y="300" font-size="20" text-anchor="middle" alignment-baseline="middle">WY (Gauge)</text>
+</svg>
