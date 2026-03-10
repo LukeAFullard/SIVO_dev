@@ -1098,8 +1098,6 @@
                     option.geo = {
                         map: mapName,
                         roam: view.lock_canvas ? false : true,
-                        layoutCenter: ['50%', '50%'],
-                        layoutSize: '100%',
                         itemStyle: {
                             color: 'transparent',
                             borderColor: 'transparent'
@@ -1210,8 +1208,6 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
-                            layoutCenter: ['50%', '50%'],
-                            layoutSize: '100%',
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
                         };
@@ -2558,7 +2554,9 @@
 
                         sivoChartsToInit.push({
                             id: chartId,
-                            option: action.option
+                            option: action.option,
+                            map_name: action.map_name,
+                            map_data: action.map_data
                         });
                     } else if (action.action_type === 'lottie') {
                         hasInteraction = true;
@@ -2700,6 +2698,16 @@
                             var container = infoContentShadow.getElementById(chartData.id);
                             if (container && !container.getAttribute('data-echarts-initialized')) {
                                 container.setAttribute('data-echarts-initialized', 'true');
+
+                                if (chartData.map_name && chartData.map_data) {
+                                    var mapDataParsed = chartData.map_data;
+                                    if (typeof mapDataParsed === 'string' && mapDataParsed.trim().startsWith('<svg')) {
+                                        echarts.registerMap(chartData.map_name, { svg: mapDataParsed });
+                                    } else {
+                                        echarts.registerMap(chartData.map_name, mapDataParsed);
+                                    }
+                                }
+
                                 var nestedChart = echarts.init(container);
                                 nestedChart.setOption(chartData.option);
                             }

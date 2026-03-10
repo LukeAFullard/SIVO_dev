@@ -1,0 +1,7 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+    <rect id="regionA" x="50" y="50" width="150" height="400" fill="#e2e8f0" stroke="#94a3b8" />
+    <text x="125" y="250" text-anchor="middle" font-family="sans-serif" pointer-events="none">Region A</text>
+
+    <rect id="regionB" x="250" y="50" width="200" height="400" fill="#e2e8f0" stroke="#94a3b8" />
+    <text x="350" y="250" text-anchor="middle" font-family="sans-serif" pointer-events="none">Region B</text>
+</svg>

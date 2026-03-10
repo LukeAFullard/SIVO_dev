@@ -108,6 +108,8 @@ class Sivo:
         confetti: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
+        map_name: Optional[str] = None,
+        map_data: Optional[Union[str, dict]] = None,
         context_menu: Optional[list[dict]] = None,
         panel_position: Optional[str] = None,
         open_by_default: bool = False,
@@ -174,6 +176,8 @@ class Sivo:
             confetti=confetti,
             replit=replit,
             echarts_option=echarts_option,
+            map_name=map_name,
+            map_data=map_data,
             context_menu=context_menu,
             panel_position=panel_position,
             open_by_default=open_by_default,
@@ -428,6 +432,36 @@ class Sivo:
         }
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_nested_map_chart(self, element_id: str, title: str, map_name: str, map_data: Union[str, dict], data: list[dict], color: str | list[str] = None, min_val: float = 0, max_val: float = 100, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """
+        Helper to map a nested Map Chart inside the side panel.
+        `map_data` can be an SVG string or a GeoJSON dictionary.
+        `data`: [{'name': 'RegionA', 'value': 10}]
+        """
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "visualMap": {
+                "min": min_val,
+                "max": max_val,
+                "left": "left",
+                "bottom": "bottom",
+                "calculable": True,
+                "inRange": {
+                    "color": color if color else ["#e0f3f8", "#014636"]
+                }
+            },
+            "series": [{
+                "name": title,
+                "type": "map",
+                "map": map_name,
+                "roam": True,
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position, map_name=map_name, map_data=map_data)
 
     def map_treemap_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Treemap Chart. data: [{'name': 'node1', 'value': 10, 'children': [...]}]"""

@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Any, List
+from typing import Dict, Optional, Any, List, Union
 from pydantic import BaseModel, Field
 
 class ElementConfig(BaseModel):
@@ -28,6 +28,8 @@ class ElementConfig(BaseModel):
     progress_bar: Optional[Dict[str, Any]] = None
     confetti: Optional[Dict[str, int]] = None
     echarts_option: Optional[Dict[str, Any]] = None
+    map_name: Optional[str] = None
+    map_data: Optional[Union[str, dict]] = None
     context_menu: Optional[List[Dict[str, Any]]] = None
     panel_position: Optional[str] = None
     open_by_default: bool = False
