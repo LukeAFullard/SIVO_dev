@@ -30,5 +30,6 @@ sivo_app.map("btn_doc", document="https://www.w3.org/WAI/ER/tests/xhtml/testfile
 # Map the Map action (Interactive Google Maps embed)
 sivo_app.map("btn_map", map_location="Eiffel Tower, Paris, France", tooltip="View Location on Google Maps", hover_color="#059669", color="#10b981")
 
-sivo_app.to_html("examples/10_document_and_map_embed/output.html")
-print("Document and Map embed test generated at examples/10_document_and_map_embed/output.html")
+output_path = os.path.join(os.path.dirname(__file__), "output.html")
+sivo_app.to_html(output_path)
+print(f"Document and Map embed test generated at {output_path}")

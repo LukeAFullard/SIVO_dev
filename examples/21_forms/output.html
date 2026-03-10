@@ -12,13 +12,15 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Include lottie-player for Lottie animations -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
 
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             display: flex;
             height: 100vh;
         }
@@ -44,6 +46,55 @@
             width: 100%;
             height: 100%;
         }
+
+        #sivo-title-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            max-width: 400px;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-title {
+            margin: 0 0 4px 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        #sivo-subtitle {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        #sivo-attribution {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            display: none;
+            pointer-events: none;
+        }
+
         #scrollytelling-container {
             display: none;
             width: 400px;
@@ -58,12 +109,21 @@
         .scrolly-step {
             padding: 50vh 20px;
             margin: 0;
-            border-bottom: 1px solid #eee;
             opacity: 0.3;
-            transition: opacity 0.3s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px);
         }
         .scrolly-step.active {
             opacity: 1;
+            transform: translateY(0);
+        }
+        .scrolly-step-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         #tour-container {
             display: none;
@@ -71,13 +131,14 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #fff;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             z-index: 1000;
             text-align: center;
-            max-width: 400px;
+            max-width: 450px;
+            border: 1px solid #f1f5f9;
         }
         #tour-content {
             margin-bottom: 15px;
@@ -130,40 +191,208 @@
             transition: all 0.1s ease;
         }
 
+        #sivo-search-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            max-width: 90%;
+            z-index: 1000;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        #sivo-search-container:focus-within {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #38bdf8;
+        }
+
+        #sivo-search-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 12px 20px 12px 40px;
+            font-size: 15px;
+            color: #334155;
+            outline: none;
+            border-radius: 24px;
+            box-sizing: border-box;
+        }
+
+        .sivo-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        #sivo-search-results {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+
+        .sivo-search-result-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sivo-search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .sivo-search-result-item:hover, .sivo-search-result-item.active {
+            background: #f8fafc;
+        }
+
+        .sivo-search-result-title {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .sivo-search-result-subtitle {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        #sivo-context-menu {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 160px;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 8px 0;
+        }
+
+        .sivo-context-menu-item {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #334155;
+            cursor: pointer;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .sivo-context-menu-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+
+        #sivo-watermark-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+            opacity: 0.8;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #sivo-watermark-container:hover {
+            opacity: 1.0;
+        }
+
         #layer-legend {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             z-index: 1000;
             display: none;
             max-height: 80vh;
             overflow-y: auto;
+            color: #334155;
+            font-size: 14px;
         }
 
+        /* Layer Switch Styles */
         .layer-toggle {
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 12px;
             cursor: pointer;
             user-select: none;
+            justify-content: space-between;
         }
-
         .layer-toggle input {
-            margin-right: 8px;
-            cursor: pointer;
+            display: none;
+        }
+        .sivo-switch {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            background-color: #cbd5e1;
+            border-radius: 20px;
+            transition: 0.3s;
+            margin-left: 12px;
+        }
+        .sivo-switch::before {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            background-color: white;
+            transition: 0.3s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .layer-toggle input:checked + .sivo-switch {
+            background-color: #3b82f6;
+        }
+        .layer-toggle input:checked + .sivo-switch::before {
+            transform: translateX(16px);
         }
 
         #info-panel {
-            background: #f9f9f9;
+            background: #ffffff;
             display: none;
             flex-direction: column;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            font-size: 15px;
+            color: #334155;
+            line-height: 1.6;
+            z-index: 1000;
         }
         #info-panel.active {
             display: flex;
@@ -173,30 +402,49 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding: 10px 15px;
-            background: #fff;
-            border-bottom: 1px solid #eaeaea;
+            padding: 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
             position: sticky;
             top: 0;
             z-index: 10;
         }
         .info-panel-content {
-            padding: 20px;
+            padding: 32px 24px;
             overflow-y: auto;
             flex: 1;
         }
+
+        /* Improved typography inside info panel content */
+        .info-panel-content h1, .info-panel-content h2, .info-panel-content h3 {
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .info-panel-content h3 {
+            font-size: 1.25rem;
+        }
+
+        .info-panel-content p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
         /* Layout modifiers for info-panel */
         #info-panel.pos-right {
-            width: 300px;
+            width: 360px;
             height: 100%;
-            border-left: 1px solid #ddd;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            border-left: 1px solid #e2e8f0;
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.05);
         }
         #info-panel.pos-left {
-            width: 300px;
+            width: 360px;
             height: 100%;
-            border-right: 1px solid #ddd;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            border-right: 1px solid #e2e8f0;
+            box-shadow: 10px 0 25px -5px rgba(0, 0, 0, 0.05);
         }
         #info-panel.pos-bottom {
             width: 100%;
@@ -214,7 +462,18 @@
         }
 
         /* Responsive Layout Overrides */
+        .mobile-handle {
+            display: none;
+            width: 40px;
+            height: 4px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            margin: 8px auto 0;
+        }
         @media (max-width: 768px) {
+            .mobile-handle {
+                display: block !important;
+            }
             body, #sivo-app-container {
                 flex-direction: column !important;
                 padding-bottom: env(safe-area-inset-bottom);
@@ -292,49 +551,144 @@
             }
         }
 
-        /* Dark Mode Support */
+        /* Dark Mode Support (Via OS Preference or Explicit Class) */
         @media (prefers-color-scheme: dark) {
-            body {
+            body:not(.sivo-theme-light) {
                 background-color: #121212;
                 color: #e0e0e0;
             }
-            #info-panel {
-                background: #1e1e1e;
+            body:not(.sivo-theme-light) #info-panel {
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(10px);
+                color: #f8fafc;
+                border-color: #334155;
             }
-            .info-panel-header {
-                background: #252525;
-                border-bottom: 1px solid #333;
+            body:not(.sivo-theme-light) .info-panel-header {
+                background: transparent;
+                border-bottom: 1px solid #334155;
             }
-            .close-btn {
-                background: #333;
-                color: #ddd;
+            body:not(.sivo-theme-light) .close-btn {
+                background: rgba(255,255,255,0.1);
+                color: #cbd5e1;
             }
-            .close-btn:hover {
-                background: #444;
-                color: #fff;
+            body:not(.sivo-theme-light) .close-btn:hover {
+                background: rgba(255,255,255,0.2);
+                color: #ffffff;
             }
-            #info-panel.pos-right, #info-panel.pos-left {
-                border-color: #333;
+            body:not(.sivo-theme-light) .zoom-btn {
+                background: rgba(30, 41, 59, 0.9);
+                backdrop-filter: blur(4px);
+                border-color: #334155;
+                color: #94a3b8;
             }
-            #info-panel.pos-bottom, #info-panel.pos-top {
-                border-color: #333;
-            }
-            .sivo-resizer {
-                background-color: #333;
-            }
-            .sivo-resizer:hover {
-                background-color: #555;
-            }
-            .zoom-btn {
-                background: #252525;
-                border-color: #444;
-                color: #ccc;
-            }
-            .zoom-btn:hover {
-                background: #333;
-                color: #fff;
+            body:not(.sivo-theme-light) .zoom-btn:hover {
+                background: #334155;
+                color: #f8fafc;
             }
         }
+
+        body.sivo-theme-dark {
+            background-color: #0f172a !important;
+            color: #f8fafc !important;
+        }
+        body.sivo-theme-dark #info-panel {
+            background: rgba(15, 23, 42, 0.98) !important;
+            backdrop-filter: blur(10px) !important;
+            color: #e2e8f0 !important;
+            border-color: #334155 !important;
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.5) !important;
+        }
+        body.sivo-theme-dark .info-panel-header {
+            background: transparent !important;
+            border-bottom: 1px solid #334155 !important;
+        }
+        body.sivo-theme-dark .info-panel-content h1,
+        body.sivo-theme-dark .info-panel-content h2,
+        body.sivo-theme-dark .info-panel-content h3 {
+            color: #f8fafc !important;
+        }
+        body.sivo-theme-dark .close-btn {
+            background: rgba(255,255,255,0.1) !important;
+            color: #cbd5e1 !important;
+        }
+        body.sivo-theme-dark .close-btn:hover {
+            background: rgba(255,255,255,0.2) !important;
+            color: #ffffff !important;
+        }
+        body.sivo-theme-dark .zoom-btn {
+            background: rgba(30, 41, 59, 0.9) !important;
+            backdrop-filter: blur(4px) !important;
+            border-color: #334155 !important;
+            color: #94a3b8 !important;
+        }
+        body.sivo-theme-dark .zoom-btn:hover {
+            background: #334155 !important;
+            color: #f8fafc !important;
+        }
+        body.sivo-theme-dark .sivo-empty-state {
+            color: #64748b !important;
+        }
+        body.sivo-theme-dark #layer-legend {
+            background: rgba(30, 41, 59, 0.95) !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-title-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-title {
+            color: #f1f5f9 !important;
+        }
+        body.sivo-theme-dark #sivo-subtitle {
+            color: #94a3b8 !important;
+        }
+        body.sivo-theme-dark #sivo-attribution {
+            background: rgba(30, 41, 59, 0.8) !important;
+            border-color: #334155 !important;
+            color: #94a3b8 !important;
+        }
+        body.sivo-theme-dark .sivo-switch {
+            background-color: #475569 !important;
+        }
+        body.sivo-theme-dark #sivo-search-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-search-input {
+            color: #f8fafc !important;
+        }
+        body.sivo-theme-dark #sivo-search-input::placeholder {
+            color: #64748b !important;
+        }
+        body.sivo-theme-dark #sivo-search-results {
+            background: rgba(30, 41, 59, 0.98) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-item {
+            border-bottom-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-item:hover, body.sivo-theme-dark .sivo-search-result-item.active {
+            background: #475569 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-title {
+            color: #f1f5f9 !important;
+        }
+        body.sivo-theme-dark .sivo-search-result-subtitle {
+            color: #94a3b8 !important;
+        }
+        body.sivo-theme-dark #sivo-context-menu {
+            background: rgba(30, 41, 59, 0.98) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark .sivo-context-menu-item {
+            color: #e2e8f0 !important;
+        }
+        body.sivo-theme-dark .sivo-context-menu-item:hover {
+            background: #475569 !important;
+            color: #f8fafc !important;
+        }
+
 
         .sivo-resizer {
             display: none;
@@ -363,21 +717,21 @@
         .close-btn {
             cursor: pointer;
             font-weight: bold;
-            color: #555;
-            background: #eee;
+            color: #64748b;
+            background: #f1f5f9;
             border: none;
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            transition: background 0.2s;
+            font-size: 18px;
+            transition: all 0.2s;
         }
         .close-btn:hover {
-            background: #ddd;
-            color: #000;
+            background: #e2e8f0;
+            color: #0f172a;
         }
         .zoom-controls {
             position: absolute;
@@ -389,23 +743,26 @@
             z-index: 1000;
         }
         .zoom-btn {
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 30px;
-            height: 30px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-weight: bold;
-            color: #555;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            font-weight: 600;
+            color: #475569;
             user-select: none;
+            transition: all 0.2s;
+            font-size: 16px;
         }
         .zoom-btn:hover {
-            background: #f0f0f0;
-            color: #000;
+            background: #f8fafc;
+            color: #0f172a;
+            border-color: #cbd5e1;
         }
 
         /* Accessibility (A11y) Screen Reader Only */
@@ -422,6 +779,44 @@
         }
 
         /* Standard SIVO Animations */
+        @keyframes sivo-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .sivo-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #38bdf8;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: sivo-spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .sivo-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px;
+        }
+        .sivo-empty-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        *:focus-visible {
+            outline: 2px solid #38bdf8;
+            outline-offset: 2px;
+        }
+
         @keyframes sivo-pulse {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.7; }
@@ -448,13 +843,48 @@
         <div id="scrollytelling-container"></div>
         <div id="chart-wrapper">
             <div id="a11y-container" class="sr-only"></div>
+            <div id="sivo-watermark-container"></div>
+            <div id="sivo-context-menu"></div>
+            <div id="sivo-global-loading" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999; background:rgba(255,255,255,0.9); padding:20px 40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); font-weight:bold; color:#333; align-items:center; gap:10px;">
+                <div class="sivo-spinner"></div> Loading...
+            </div>
+
+            <div id="sivo-search-container">
+                <svg class="sivo-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="sivo-search-input" placeholder="Search map..." autocomplete="off">
+                <div id="sivo-search-results"></div>
+            </div>
+
+            <div id="sivo-title-container">
+                <h1 id="sivo-title"></h1>
+                <p id="sivo-subtitle"></p>
+            </div>
+
+            <div id="sivo-attribution"></div>
+
             <div id="chart-container"></div>
             <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
+            <canvas id="sivo-scratchoff-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; display: none;"></canvas>
             <div class="zoom-controls">
+                <div class="zoom-btn" onclick="toggleFullscreen()" id="fullscreen-btn" style="display: none;" title="Toggle Fullscreen">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="shareInfographic()" id="share-btn" style="display: none;" title="Share">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="downloadDataCSV()" id="download-data-btn" style="display: none;" title="Download Data (CSV)">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                </div>
+                <div class="zoom-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+                    <svg id="theme-icon-light" style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg id="theme-icon-dark" style="width:16px; height:16px; display:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
                 <div class="zoom-btn" onclick="zoomIn()">+</div>
                 <div class="zoom-btn" onclick="zoomOut()">-</div>
                 <div class="zoom-btn" onclick="resetZoom()">⌂</div>
-                <div class="zoom-btn" onclick="exportSnapshot()" id="export-btn" style="display: none;" title="Export Snapshot">📷</div>
+                <div class="zoom-btn" onclick="exportSnapshot()" id="export-btn" style="display: none;" title="Export Snapshot">
+                    <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
             </div>
 
             <div id="tour-container">
@@ -479,6 +909,7 @@
         </div>
         <div id="sivo-resizer" class="sivo-resizer"></div>
         <div id="info-panel">
+            <div class="mobile-handle"></div>
             <div class="info-panel-header">
                 <button class="close-btn" onclick="closePanel()" title="Close panel">×</button>
             </div>
@@ -492,8 +923,38 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click to report an issue", "emphasis": {"itemStyle": {"areaColor": "#cc0000", "shadowBlur": 15, "shadowColor": "#cc0000", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to report an issue\u003c/h3\u003e", "title": "Click to report an issue", "panel_position": "left"}, {"action_type": "form", "form_fields": [{"name": "username", "label": "Your Name", "type": "text"}, {"name": "issue", "label": "Describe the Issue", "type": "textarea"}], "submit_event": "issue_reported", "panel_position": "left"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "mappings": {"scene": {"id": "scene", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "background": {"id": "background", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "play_button": {"id": "play_button", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to report an issue\u003c/h3\u003e", "title": "Click to report an issue", "panel_position": "left"}, {"action_type": "form", "form_fields": [{"name": "username", "label": "Your Name", "type": "text"}, {"name": "issue", "label": "Describe the Issue", "type": "textarea"}], "submit_event": "issue_reported", "panel_position": "left"}], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#cc0000", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "play_icon": {"id": "play_icon", "actions": [], "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "play_button", "value": 1, "tooltip": "Click to report an issue", "emphasis": {"itemStyle": {"areaColor": "#cc0000", "shadowBlur": 15, "shadowColor": "#cc0000", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "play_icon", "value": 1}], "actions_manifest": {"play_button": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to report an issue\u003c/h3\u003e", "title": "Click to report an issue", "panel_position": "left"}, {"action_type": "form", "form_fields": [{"name": "username", "label": "Your Name", "type": "text"}, {"name": "issue", "label": "Describe the Issue", "type": "textarea"}], "submit_event": "issue_reported", "panel_position": "left"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"scene": {"id": "scene", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "background": {"id": "background", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "play_button": {"id": "play_button", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eClick to report an issue\u003c/h3\u003e", "title": "Click to report an issue", "panel_position": "left"}, {"action_type": "form", "form_fields": [{"name": "username", "label": "Your Name", "type": "text"}, {"name": "issue", "label": "Describe the Issue", "type": "textarea"}], "submit_event": "issue_reported", "panel_position": "left"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#cc0000", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "play_icon": {"id": "play_icon", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
         var currentViewId = "default_view";
+
+        // Apply Global Theme
+        var currentTheme = viewsData[currentViewId].theme || 'light';
+        document.body.className = 'sivo-theme-' + currentTheme;
+
+        function updateThemeIcons() {
+            var isDark = document.body.classList.contains('sivo-theme-dark') ||
+                         (!document.body.classList.contains('sivo-theme-light') && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.getElementById('theme-icon-light').style.display = isDark ? 'none' : 'block';
+            document.getElementById('theme-icon-dark').style.display = isDark ? 'block' : 'none';
+        }
+        updateThemeIcons();
+
+        function toggleTheme() {
+            if (document.body.classList.contains('sivo-theme-dark')) {
+                document.body.classList.remove('sivo-theme-dark');
+                document.body.classList.add('sivo-theme-light');
+            } else if (document.body.classList.contains('sivo-theme-light')) {
+                document.body.classList.remove('sivo-theme-light');
+                document.body.classList.add('sivo-theme-dark');
+            } else {
+                // If relying on OS preference initially, explicitly set the opposite
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('sivo-theme-light');
+                } else {
+                    document.body.classList.add('sivo-theme-dark');
+                }
+            }
+            updateThemeIcons();
+        }
 
         // Initialize ECharts with the appropriate renderer
         var renderMode = viewsData[currentViewId].render_mode || 'canvas';
@@ -505,9 +966,12 @@
         var overlaysData = {};
         var connectionsData = [];
         var lockZoomOut = false;
+        var fadeUnselected = false;
         var dataBinding = null;
         var timelineBinding = null;
         var liveSocket = null;
+        var enableBrushSelection = false;
+        var currentAudio = null; // Store reference to currently playing tour audio
 
         // History for back navigation
         var viewHistory = [];
@@ -525,6 +989,11 @@
                 tooltip: {
                     trigger: 'item',
                     triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    borderColor: 'rgba(0, 0, 0, 0.05)',
+                    borderWidth: 1,
+                    textStyle: { color: '#334155', fontFamily: 'system-ui, sans-serif' },
+                    extraCssText: 'box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 8px; backdrop-filter: blur(8px); padding: 12px 16px;',
                     position: function (point, params, dom, rect, size) {
                         var x = point[0];
                         var y = point[1];
@@ -567,30 +1036,33 @@
                         name: 'SIVO Series',
                         type: 'map',
                         map: mapName,
-                        roam: true, // Enable zoom and pan
+                        roam: view.lock_canvas ? false : true, // Enable zoom and pan
                         itemStyle: {
-                            borderColor: '#999',
+                            borderColor: '#cbd5e1', // Sleek slate-300
                             borderWidth: 1,
-                            areaColor: '#eee'
+                            areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
                             itemStyle: {
-                                areaColor: '#ffd700', // Highlight color
-                                shadowBlur: 10,
+                                // Strip out default areaColor override so custom colors stay intact on hover
+                                // Keep a very subtle shadow just to indicate it is interactive on hover
+                                shadowBlur: 8,
                                 shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                shadowColor: 'rgba(0, 0, 0, 0.2)'
                             },
                             label: {
                                 show: false
                             }
                         },
+                        selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
                             itemStyle: {
-                                areaColor: '#ff8c00'
+                                // Empty to ensure absolutely no visual change on click natively
                             }
                         },
                         data: echartsData,
-                        zlevel: 1
+                        zlevel: 1,
+                        animationDurationUpdate: 300 // Smooth transition on data/style changes
                     }
                 ]
             };
@@ -605,7 +1077,7 @@
                 if (!option.geo) {
                     option.geo = {
                         map: mapName,
-                        roam: true,
+                        roam: view.lock_canvas ? false : true,
                         layoutCenter: ['50%', '50%'],
                         layoutSize: '100%',
                         itemStyle: {
@@ -691,6 +1163,77 @@
                     calculable: true,
                     inRange: {
                         color: activeDataBinding.colors
+                    }
+                };
+            }
+
+            var proportionalSymbols = viewsData[currentViewId].proportional_symbols;
+            if (proportionalSymbols && proportionalSymbols.data) {
+                var scatterData = [];
+                for (var itemName in proportionalSymbols.data) {
+                    var dataObj = proportionalSymbols.data[itemName];
+                    if (dataObj && dataObj.coord) {
+                        scatterData.push({
+                            name: itemName,
+                            value: [dataObj.coord[0], dataObj.coord[1], dataObj.value],
+                            _rawVal: dataObj.value
+                        });
+                    }
+                }
+
+                if (scatterData.length > 0) {
+                    if (!option.geo) {
+                        option.geo = {
+                            map: mapName,
+                            roam: view.lock_canvas ? false : true,
+                            layoutCenter: ['50%', '50%'],
+                            layoutSize: '100%',
+                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            zlevel: 0
+                        };
+                        option.series[0].geoIndex = 0;
+                    }
+
+                    // Normalize sizes
+                    var minVal = Math.min(...scatterData.map(d => d._rawVal));
+                    var maxVal = Math.max(...scatterData.map(d => d._rawVal));
+                    var range = maxVal - minVal || 1;
+
+                    option.series.push({
+                        name: 'Proportional Symbols',
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        zlevel: 3,
+                        symbol: 'circle',
+                        itemStyle: {
+                            color: proportionalSymbols.color
+                        },
+                        symbolSize: function (val) {
+                            var ratio = (val[2] - minVal) / range;
+                            return proportionalSymbols.min_size + ratio * (proportionalSymbols.max_size - proportionalSymbols.min_size);
+                        },
+                        data: scatterData
+                    });
+                }
+            }
+
+            if (enableBrushSelection) {
+                option.toolbox = {
+                    show: true,
+                    feature: {
+                        brush: {
+                            type: ['polygon', 'rect', 'keep', 'clear']
+                        }
+                    },
+                    right: 20,
+                    top: 20
+                };
+                option.brush = {
+                    geoIndex: 'all',
+                    seriesIndex: 'all',
+                    brushLink: 'all',
+                    outOfBrush: {
+                        colorAlpha: 0.2
                     }
                 };
             }
@@ -1137,6 +1680,8 @@
             overlaysData = view.overlays;
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
+            fadeUnselected = view.fade_unselected || false;
+            enableBrushSelection = view.enable_brush_selection || false;
             dataBinding = view.data_binding || null;
             timelineBinding = view.timeline_binding || null;
             var liveBinding = view.live_binding || null;
@@ -1272,6 +1817,9 @@
             // Generate Accessibility (A11y) DOM Nodes
             generateA11yNodes();
 
+            // Initialize Scratch-off Layer if present
+            initScratchoff(view);
+
             // Initialize Scrollytelling if present
             initScrollytelling(view.scrollytelling);
 
@@ -1290,6 +1838,18 @@
 
             // Initialize Layer Legend
             initLayerLegend(view.layer_toggles);
+
+            // Initialize Search UI
+            initSearch(view);
+
+            // Initialize Watermark
+            initWatermark(view);
+
+            // Initialize Title, Subtitle, Attribution
+            initTitles(view);
+
+            // Initialize Controls (Fullscreen, Share, Download)
+            initControls(view);
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
@@ -1363,7 +1923,15 @@
         // Introduce a lightweight client-side sanitizer
         function sanitizeHTML(str) {
             if (typeof DOMPurify !== 'undefined') {
-                return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
+                return DOMPurify.sanitize(str, {
+                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player'],
+                    ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value'],
+                    CUSTOM_ELEMENT_HANDLING: {
+                        tagNameCheck: (tagName) => tagName.match(/-/),
+                        attributeNameCheck: (attr) => attr.match(/-/),
+                        allowCustomizedBuiltInElements: true,
+                    }
+                });
             }
             // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
             return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -1446,10 +2014,73 @@
         });
 
 
+        function applyFadeUnselected(selectedName, force = false) {
+            if (!fadeUnselected && !force) return;
+            if (force) window.sivoForcedFade = true;
+
+            var currentOption = myChart.getOption();
+            var seriesData = currentOption.series[0].data;
+            var updated = false;
+
+            for (var i = 0; i < seriesData.length; i++) {
+                var itemName = seriesData[i].name;
+
+                if (!seriesData[i].itemStyle) {
+                    seriesData[i].itemStyle = {};
+                }
+
+                // Store original opacity if not already stored
+                if (seriesData[i].itemStyle._originalOpacity === undefined) {
+                    seriesData[i].itemStyle._originalOpacity = seriesData[i].itemStyle.opacity !== undefined ? seriesData[i].itemStyle.opacity : 1.0;
+                }
+
+                if (itemName === selectedName) {
+                    seriesData[i].itemStyle.opacity = seriesData[i].itemStyle._originalOpacity;
+                } else {
+                    seriesData[i].itemStyle.opacity = 0.2; // Fade out unselected
+                }
+                updated = true;
+            }
+
+            if (updated) {
+                myChart.setOption({ series: [{ data: seriesData }] });
+            }
+        }
+
+        function clearFadeUnselected() {
+            if (!fadeUnselected && !window.sivoForcedFade) return;
+            window.sivoForcedFade = false;
+
+            var currentOption = myChart.getOption();
+            var seriesData = currentOption.series[0].data;
+            var updated = false;
+
+            for (var i = 0; i < seriesData.length; i++) {
+                if (seriesData[i].itemStyle && seriesData[i].itemStyle._originalOpacity !== undefined) {
+                    seriesData[i].itemStyle.opacity = seriesData[i].itemStyle._originalOpacity;
+                    updated = true;
+                }
+            }
+
+            if (updated) {
+                myChart.setOption({ series: [{ data: seriesData }] });
+            }
+        }
+
+        // Catch background clicks to clear selection and close panel
+        myChart.getZr().on('click', function (event) {
+            // Check if the click did not hit a target element
+            if (!event.target) {
+                closePanel();
+            }
+        });
+
         // Handle click events
         myChart.on('click', function (params) {
             var infoPanel = document.getElementById('info-panel');
             var name = params.name;
+
+            applyFadeUnselected(name);
 
             var elementActions = actionsManifest[name];
             var htmlContent = '';
@@ -1476,6 +2107,9 @@
                         } else {
                             // Fallback to legacy external fetch
                             console.log('Fetching external drilldown:', action.target_svg);
+                            var loadingIndicator = document.getElementById('sivo-global-loading');
+                            if (loadingIndicator) loadingIndicator.style.display = 'flex';
+
                             fetch(action.target_svg)
                                 .then(response => {
                                     if (!response.ok) {
@@ -1494,6 +2128,9 @@
                                 .catch(error => {
                                     console.error('Error fetching SVG:', error);
                                     alert('Could not load ' + action.target_svg);
+                                })
+                                .finally(() => {
+                                    if (loadingIndicator) loadingIndicator.style.display = 'none';
                                 });
                         }
                     } else if (action.action_type === 'video') {
@@ -1515,7 +2152,7 @@
                         audio.play();
                     } else if (action.action_type === 'fetch') {
                         // Fetch data and display in info panel
-                        htmlContent += `<div id="sivo-fetch-container-${name}"><em>Loading data...</em></div>`;
+                        htmlContent += `<div id="sivo-fetch-container-${name}"><div class="sivo-spinner"></div><em>Loading data...</em></div>`;
                         hasInteraction = true;
                         fetch(action.fetch_url)
                             .then(response => response.text())
@@ -1669,7 +2306,7 @@
                             wikiContainer.style.backgroundColor = "#fff";
                             wikiContainer.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
 
-                            wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="text-align:center; padding: 20px;"><div class="sivo-loader"></div><p style="color:#64748b; font-size:14px;">Loading Wikipedia summary...</p></div>`);
+                            wikiContainer.innerHTML = DOMPurify.sanitize(`<div style="text-align:center; padding: 20px;"><div class="sivo-spinner"></div><p style="color:#64748b; font-size:14px;">Loading Wikipedia summary...</p></div>`);
                             socialIframes.push(wikiContainer);
 
                             // Extract title from URL (e.g., https://en.wikipedia.org/wiki/Python_(programming_language) -> Python_(programming_language))
@@ -1737,7 +2374,7 @@
                         }
                     } else if (action.action_type === 'datasource') {
                         // Fetch data from external source and display in info panel
-                        htmlContent += `<div id="sivo-datasource-container-${name}"><em>Loading data from ${action.provider}...</em></div>`;
+                        htmlContent += `<div id="sivo-datasource-container-${name}"><div class="sivo-spinner"></div><em>Loading data from ${action.provider}...</em></div>`;
                         hasInteraction = true;
 
                         // We use a generic fetch approach here. In a real world scenario, some APIs require authentication.
@@ -1856,6 +2493,37 @@
                             id: chartId,
                             option: action.option
                         });
+                    } else if (action.action_type === 'lottie') {
+                        hasInteraction = true;
+                        var lottieHtml = `<lottie-player src="${action.lottie_url}" background="transparent" speed="1" style="width: 100%; height: 300px; display: block;" ${action.loop ? 'loop' : ''} ${action.autoplay ? 'autoplay' : ''}></lottie-player>`;
+                        htmlContent += lottieHtml;
+                    } else if (action.action_type === 'compare') {
+                        hasInteraction = true;
+                        var compareId = 'sivo-compare-' + name + '-' + Math.random().toString(36).substr(2, 9);
+                        var compareHtml = `
+                        <div style="position:relative; width:100%; height:300px; overflow:hidden; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+                            <img src="${action.before_image}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" />
+                            <div id="${compareId}-after" style="position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; border-right:2px solid white; box-shadow: 2px 0 5px rgba(0,0,0,0.3);">
+                                <img src="${action.after_image}" style="position:absolute; top:0; left:0; width:200%; height:100%; object-fit:cover;" />
+                            </div>
+                            <input type="range" class="sivo-compare-slider" data-target="${compareId}-after" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:ew-resize;" />
+                            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_after}</div>
+                            <div style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_before}</div>
+                        </div>`;
+                        htmlContent += compareHtml;
+                    } else if (action.action_type === 'progress_bar') {
+                        hasInteraction = true;
+                        var progressHtml = `
+                        <div style="margin-bottom:15px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items:center;">
+                                <span style="font-weight:600; color:#334155; font-size:14px;">${action.title}</span>
+                                <span style="font-weight:700; color:${action.color};">${action.progress}%</span>
+                            </div>
+                            <div style="width:100%; background-color:#e2e8f0; border-radius:10px; height:12px; overflow:hidden;">
+                                <div style="width:${action.progress}%; background-color:${action.color}; height:100%; border-radius:10px; transition:width 0.5s ease-in-out;"></div>
+                            </div>
+                        </div>`;
+                        htmlContent += progressHtml;
                     } else if (action.action_type === 'zoom') {
                         var zoomOption = {
                             series: [{
@@ -1956,9 +2624,27 @@
                 socialIframes.forEach(function(iframe) {
                     infoContent.appendChild(iframe);
                 });
+
+                // Attach dynamic listeners for Compare Sliders safely
+                var compareSliders = infoContent.querySelectorAll('.sivo-compare-slider');
+                compareSliders.forEach(function(slider) {
+                    slider.addEventListener('input', function() {
+                        var targetId = this.getAttribute('data-target');
+                        var targetEl = infoContent.querySelector('#' + targetId);
+                        if (targetEl) {
+                            targetEl.style.width = this.value + '%';
+                            var img = targetEl.querySelector('img');
+                            if (img && this.value > 0) {
+                                img.style.width = (10000 / this.value) + '%';
+                            }
+                        }
+                    });
+                });
+
                 applyPanelPosition(panelPosition, true);
             } else if (!hasInteraction && !elementActions) {
-                infoContent.innerHTML = '<h3>' + name + '</h3><p>No additional information available.</p>';
+                var emptySvg = `<svg class="sivo-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                infoContent.innerHTML = `<div class="sivo-empty-state">${emptySvg}<h3>${name}</h3><p>No additional information mapped for this region.</p></div>`;
                 applyPanelPosition(panelPosition, false);
             } else {
                 closePanel();
@@ -2050,6 +2736,8 @@
         });
 
         function closePanel() {
+            clearFadeUnselected();
+
             var infoPanel = document.getElementById('info-panel');
             infoPanel.className = '';
             infoPanel.classList.add('pos-right'); // reset to default
@@ -2210,6 +2898,119 @@
             }
         }
 
+        function initScratchoff(view) {
+            var canvas = document.getElementById('sivo-scratchoff-canvas');
+            if (!view.scratchoff) {
+                canvas.style.display = 'none';
+                return;
+            }
+
+            canvas.style.display = 'block';
+            canvas.style.pointerEvents = 'auto'; // allow scratching
+            canvas.style.touchAction = 'none'; // prevent native scrolling while scratching
+            var ctx = canvas.getContext('2d');
+
+            // Resize canvas to match container
+            function resizeCanvas() {
+                var rect = chartDom.getBoundingClientRect();
+
+                // Save current canvas state to preserve scratch progress on resize
+                var tempCanvas = document.createElement('canvas');
+                tempCanvas.width = canvas.width || rect.width;
+                tempCanvas.height = canvas.height || rect.height;
+                var tempCtx = tempCanvas.getContext('2d');
+                if (canvas.width && canvas.height) {
+                    tempCtx.drawImage(canvas, 0, 0);
+                }
+
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+
+                if (canvas.width > 0 && canvas.height > 0) {
+                    fillCanvas(tempCanvas);
+                }
+            }
+
+            function fillCanvas(savedStateCanvas) {
+                if (view.scratchoff.image_url) {
+                    var img = new Image();
+                    img.crossOrigin = 'Anonymous';
+                    img.onload = function() {
+                        // Draw image to cover
+                        var scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                        var x = (canvas.width / 2) - (img.width / 2) * scale;
+                        var y = (canvas.height / 2) - (img.height / 2) * scale;
+                        ctx.globalCompositeOperation = 'source-over';
+                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                        if (savedStateCanvas && savedStateCanvas.width) {
+                            ctx.globalCompositeOperation = 'destination-out';
+                            ctx.drawImage(savedStateCanvas, 0, 0);
+                        }
+                    };
+                    img.src = view.scratchoff.image_url;
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.fillStyle = view.scratchoff.color || '#cccccc';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    if (savedStateCanvas && savedStateCanvas.width) {
+                        ctx.globalCompositeOperation = 'destination-out';
+                        ctx.drawImage(savedStateCanvas, 0, 0);
+                    }
+                }
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            var isDrawing = false;
+            var brushSize = view.scratchoff.brush_size || 40;
+
+            function scratch(e) {
+                if (!isDrawing) return;
+                var rect = canvas.getBoundingClientRect();
+                var clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+                var clientY = e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+
+                var x = clientX - rect.left;
+                var y = clientY - rect.top;
+
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, brushSize, 0, Math.PI * 2, false);
+                ctx.fill();
+
+                // Check how much is scratched off to potentially disable pointer-events completely
+                // (Too expensive to do every frame, maybe every N frames)
+            }
+
+            canvas.addEventListener('mousedown', function(e) {
+                isDrawing = true;
+                scratch(e);
+            });
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('mouseup', function() { isDrawing = false; });
+            canvas.addEventListener('mouseleave', function() { isDrawing = false; });
+
+            // Touch support
+            canvas.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                isDrawing = true;
+                scratch(e);
+            }, { passive: false });
+            canvas.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                scratch(e);
+            }, { passive: false });
+            canvas.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                isDrawing = false;
+            }, { passive: false });
+        }
+
+
         function initScrollytelling(steps) {
             var container = document.getElementById('scrollytelling-container');
             if (!steps || steps.length === 0) {
@@ -2221,14 +3022,19 @@
             container.innerHTML = '';
 
             steps.forEach(function(step, index) {
-                var stepEl = document.createElement('div');
-                stepEl.className = 'scrolly-step';
-                stepEl.innerHTML = step.content;
-                stepEl.setAttribute('data-index', index);
+                var stepWrapper = document.createElement('div');
+                stepWrapper.className = 'scrolly-step';
+                stepWrapper.setAttribute('data-index', index);
+
+                var stepCard = document.createElement('div');
+                stepCard.className = 'scrolly-step-card';
+                stepCard.innerHTML = step.content;
+                stepWrapper.appendChild(stepCard);
+
                 if (index === steps.length - 1) {
-                    stepEl.style.paddingBottom = '80vh';
+                    stepWrapper.style.paddingBottom = '80vh';
                 }
-                container.appendChild(stepEl);
+                container.appendChild(stepWrapper);
             });
 
             var observerOptions = { root: container, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
@@ -2301,11 +3107,23 @@
         function renderTourStep() {
             if (currentTourStep < 0 || currentTourStep >= tourSteps.length) return;
 
+            // Stop existing audio
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
             // Close info panel to ensure map is visible during tour progression
             closePanel();
 
             var step = tourSteps[currentTourStep];
             document.getElementById('tour-content').innerHTML = sanitizeHTML(step.content);
+
+            // Play audio if present
+            if (step.audio_url) {
+                currentAudio = new Audio(step.audio_url);
+                currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+            }
             document.getElementById('tour-progress').innerText = (currentTourStep + 1) + ' / ' + tourSteps.length;
             document.getElementById('tour-prev').disabled = currentTourStep === 0;
             document.getElementById('tour-next').innerText = currentTourStep === tourSteps.length - 1 ? 'Finish' : 'Next';
@@ -2344,6 +3162,10 @@
 
         function closeTour() {
             document.getElementById('tour-container').style.display = 'none';
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
         }
 
         var isMinimapEnabled = false;
@@ -2461,8 +3283,313 @@
             });
         }
 
+        function initSearch(view) {
+            var searchContainer = document.getElementById('sivo-search-container');
+            var searchInput = document.getElementById('sivo-search-input');
+            var searchResults = document.getElementById('sivo-search-results');
+
+            if (!view.enable_search) {
+                searchContainer.style.display = 'none';
+                return;
+            }
+
+            searchContainer.style.display = 'block';
+
+            // Build search index globally so the event listener doesn't trap old closure scope on re-render
+            window.sivoSearchIndex = [];
+
+            // Helper to strip HTML tags for search display
+            function stripHtml(html) {
+                var tmp = document.createElement("DIV");
+                tmp.innerHTML = html;
+                return tmp.textContent || tmp.innerText || "";
+            }
+
+            echartsData.forEach(function(item) {
+                var rawTitle = item.tooltip || item.name;
+                // Strip HTML from title so we don't accidentally render images/blockquotes in the tiny search dropdown
+                var title = stripHtml(rawTitle);
+
+                var subtitle = item.name !== rawTitle ? item.name : '';
+                window.sivoSearchIndex.push({
+                    id: item.name,
+                    title: title,
+                    subtitle: subtitle,
+                    searchStr: (title + ' ' + subtitle).toLowerCase()
+                });
+            });
+
+            window.sivoRenderSearchResults = function(query) {
+                if (!query) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                var q = query.toLowerCase();
+                var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
+
+                if (results.length === 0) {
+                    searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                    searchResults.style.display = 'block';
+                    return;
+                }
+
+                searchResults.innerHTML = '';
+                results.forEach(function(item) {
+                    var el = document.createElement('div');
+                    el.className = 'sivo-search-result-item';
+                    el.innerHTML = `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
+
+                    el.addEventListener('mousedown', function(e) {
+                        e.preventDefault(); // Prevent input blur
+                        window.sivoSelectSearchResult(item.id);
+                    });
+
+                    searchResults.appendChild(el);
+                });
+                searchResults.style.display = 'block';
+            }
+
+            window.sivoSelectSearchResult = function(elementId) {
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+                searchInput.blur();
+
+                // Focus element
+                myChart.dispatchAction({ type: 'geoSelect', name: elementId });
+
+                // Force highlight by fading everything else
+                applyFadeUnselected(elementId, true);
+
+                // Check if it has a specific overlay bound center
+                var viewMeta = overlaysData[elementId];
+                if (viewMeta && viewMeta.coord) {
+                    myChart.setOption({ series: [{ center: viewMeta.coord, zoom: 3.0 }] });
+                } else {
+                    // Trigger click to center map if ECharts handles it, or trigger panel logic
+                    myChart.trigger('click', { componentType: 'series', name: elementId });
+
+                    // Show tooltip
+                    myChart.dispatchAction({ type: 'showTip', name: elementId });
+                }
+            }
+
+            // Using oninput/onfocus/onblur directly to safely overwrite any old closure references
+            // without stacking up event listeners on re-render.
+            searchInput.oninput = function(e) {
+                window.sivoRenderSearchResults(e.target.value);
+            };
+
+            searchInput.onfocus = function(e) {
+                if (e.target.value) window.sivoRenderSearchResults(e.target.value);
+            };
+
+            searchInput.onblur = function(e) {
+                setTimeout(() => searchResults.style.display = 'none', 100);
+            };
+        }
+
+        function initWatermark(view) {
+            var watermarkContainer = document.getElementById('sivo-watermark-container');
+            if (view.watermark) {
+                watermarkContainer.innerHTML = sanitizeHTML(view.watermark);
+                watermarkContainer.style.display = 'block';
+
+                // Adjust position if zoom controls are present and default right
+                var zoomControls = document.querySelector('.zoom-controls');
+                if (zoomControls && zoomControls.style.display !== 'none') {
+                    watermarkContainer.style.bottom = '180px'; // move above zoom controls
+                } else {
+                    watermarkContainer.style.bottom = '20px';
+                }
+            } else {
+                watermarkContainer.style.display = 'none';
+            }
+        }
+
+        function initTitles(view) {
+            var titleContainer = document.getElementById('sivo-title-container');
+            var titleEl = document.getElementById('sivo-title');
+            var subtitleEl = document.getElementById('sivo-subtitle');
+            var attributionEl = document.getElementById('sivo-attribution');
+
+            if (view.title || view.subtitle) {
+                titleContainer.style.display = 'block';
+                titleEl.style.display = view.title ? 'block' : 'none';
+                subtitleEl.style.display = view.subtitle ? 'block' : 'none';
+                if (view.title) titleEl.innerText = view.title;
+                if (view.subtitle) subtitleEl.innerText = view.subtitle;
+            } else {
+                titleContainer.style.display = 'none';
+            }
+
+            if (view.attribution) {
+                attributionEl.style.display = 'block';
+                attributionEl.innerText = view.attribution;
+            } else {
+                attributionEl.style.display = 'none';
+            }
+        }
+
+        function initControls(view) {
+            document.getElementById('fullscreen-btn').style.display = view.enable_fullscreen ? 'flex' : 'none';
+            // Only show share if Web Share API is supported, or just show it anyway if requested
+            document.getElementById('share-btn').style.display = view.enable_share && navigator.share ? 'flex' : 'none';
+            // Only show data download if there is data
+            document.getElementById('download-data-btn').style.display = view.enable_data_download && (dataBinding || timelineBinding) ? 'flex' : 'none';
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function shareInfographic() {
+            var view = viewsData[currentViewId];
+            if (navigator.share) {
+                navigator.share({
+                    title: view.title || 'Interactive Infographic',
+                    text: view.subtitle || 'Check out this interactive graphic',
+                    url: window.location.href,
+                }).catch((error) => console.log('Error sharing', error));
+            }
+        }
+
+        function downloadDataCSV() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+
+            if (dataBinding && dataBinding.data) {
+                csvContent += "Region," + dataBinding.key + "\n";
+                for (var name in dataBinding.data) {
+                    var val = dataBinding.data[name][dataBinding.key];
+                    if (val !== undefined) {
+                        csvContent += `"${name}",${val}\n`;
+                    }
+                }
+            } else if (timelineBinding && timelineBinding.data) {
+                var firstTimeKey = Object.keys(timelineBinding.data)[0];
+                var keys = ["Region"];
+                var timelineKeys = Object.keys(timelineBinding.data);
+                keys = keys.concat(timelineKeys);
+                csvContent += keys.join(",") + "\n";
+
+                // Collect all regions
+                var regions = new Set();
+                timelineKeys.forEach(tKey => {
+                    Object.keys(timelineBinding.data[tKey]).forEach(r => regions.add(r));
+                });
+
+                regions.forEach(r => {
+                    var row = [`"${r}"`];
+                    timelineKeys.forEach(tKey => {
+                        var val = timelineBinding.data[tKey][r] ? timelineBinding.data[tKey][r][timelineBinding.key] : "";
+                        row.push(val !== undefined ? val : "");
+                    });
+                    csvContent += row.join(",") + "\n";
+                });
+            } else {
+                alert("No data to download.");
+                return;
+            }
+
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            var view = viewsData[currentViewId];
+            link.setAttribute("download", (view.title ? view.title.replace(/\s+/g, '_').toLowerCase() : "sivo_data") + ".csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         // Initialize the first view
         renderView(currentViewId, false);
+
+        // Listen for brush selection events
+        myChart.on('brushSelected', function (params) {
+            if (!enableBrushSelection) return;
+
+            var selectedIds = [];
+            var mainSeries = params.batch[0]; // Assuming map series is first
+            if (mainSeries && mainSeries.selected && mainSeries.selected.length > 0) {
+                var selectedIndices = mainSeries.selected[0].dataIndex;
+                selectedIndices.forEach(function(index) {
+                    var item = echartsData[index];
+                    if (item && item.name) {
+                        selectedIds.push(item.name);
+                    }
+                });
+            }
+
+            // Post message to Streamlit or parent
+            window.parent.postMessage({
+                type: 'sivo_bulk_selection',
+                payload: {
+                    selected_ids: selectedIds
+                }
+            }, '*');
+        });
+
+        // Setup Native Context Menu
+        var contextMenuDOM = document.getElementById('sivo-context-menu');
+
+        myChart.on('contextmenu', function (params) {
+            var name = params.name;
+            var dataIndex = echartsData.findIndex(item => item.name === name);
+            if (dataIndex !== -1 && echartsData[dataIndex].context_menu && echartsData[dataIndex].context_menu.length > 0) {
+                // Prevent default browser menu
+                params.event.event.preventDefault();
+
+                var menuData = echartsData[dataIndex].context_menu;
+                contextMenuDOM.innerHTML = '';
+
+                menuData.forEach(function(menuItem) {
+                    var el = document.createElement('div');
+                    el.className = 'sivo-context-menu-item';
+                    el.innerText = menuItem.label;
+                    el.onclick = function() {
+                        contextMenuDOM.style.display = 'none';
+                        window.parent.postMessage({
+                            type: 'sivo_click',
+                            payload: {
+                                element_id: name,
+                                event_name: menuItem.event || 'context_action',
+                                data: menuItem.payload || {}
+                            }
+                        }, '*');
+                    };
+                    contextMenuDOM.appendChild(el);
+                });
+
+                // Position menu
+                var e = params.event.event;
+                var mouseX = e.offsetX || e.clientX;
+                var mouseY = e.offsetY || e.clientY;
+
+                // Adjust position so it doesn't flow off-screen
+                contextMenuDOM.style.display = 'flex'; // needed to get real width/height
+                var rect = contextMenuDOM.getBoundingClientRect();
+                if (mouseX + rect.width > window.innerWidth) {
+                    mouseX -= rect.width;
+                }
+                if (mouseY + rect.height > window.innerHeight) {
+                    mouseY -= rect.height;
+                }
+
+                contextMenuDOM.style.left = mouseX + 'px';
+                contextMenuDOM.style.top = mouseY + 'px';
+            }
+        });
+
+        // Hide context menu on normal click anywhere
+        myChart.getZr().on('click', function(e) {
+            contextMenuDOM.style.display = 'none';
+        });
 
         // Track zoom natively from georoam events since getOption() might not update on scroll
         myChart.on('georoam', function(params) {

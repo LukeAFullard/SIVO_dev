@@ -40,5 +40,8 @@ sivo_app.map(
     filter="url(#dropShadow)"
 )
 
-sivo_app.to_html("examples/28_morphing_filters/morphing_filters.html")
-print("Exported to examples/28_morphing_filters/morphing_filters.html")
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "morphing_filters.html")
+sivo_app.to_html(output_path)
+print(f"Exported to {output_path}")

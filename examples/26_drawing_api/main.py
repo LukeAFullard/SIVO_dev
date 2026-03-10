@@ -59,6 +59,9 @@ sivo_app.map(
     hover_color="#c0392b"
 )
 
+import os
+
 # 4. Export to HTML
-sivo_app.to_html("examples/26_drawing_api/drawing.html")
-print("Exported to examples/26_drawing_api/drawing.html")
+output_path = os.path.join(os.path.dirname(__file__), "drawing.html")
+sivo_app.to_html(output_path)
+print(f"Exported to {output_path}")

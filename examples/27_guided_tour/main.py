@@ -51,6 +51,8 @@ steps = [
 # Bind the tour to the app
 sivo_app.bind_tour(steps)
 
-output_path = "examples/27_guided_tour/guided_tour.html"
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "guided_tour.html")
 sivo_app.to_html(output_path)
 print(f"Generated {output_path}")

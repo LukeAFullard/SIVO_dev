@@ -36,5 +36,8 @@ sivo_app.map(
     }
 )
 
-sivo_app.to_html("examples/27_gradients_patterns/gradients_patterns.html")
-print("Exported to examples/27_gradients_patterns/gradients_patterns.html")
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "gradients_patterns.html")
+sivo_app.to_html(output_path)
+print(f"Exported to {output_path}")

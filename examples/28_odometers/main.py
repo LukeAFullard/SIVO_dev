@@ -30,6 +30,8 @@ sivo_app.map(
     odometer_format="int"
 )
 
-output_path = "examples/28_odometers/odometers.html"
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "odometers.html")
 sivo_app.to_html(output_path)
 print(f"Generated {output_path}")

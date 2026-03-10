@@ -76,6 +76,8 @@ sivo_app.map("section3", tooltip="Headquarters (Active)")
 # Bind the scrollytelling steps
 sivo_app.bind_scrollytelling(steps)
 
-output_path = "examples/26_scrollytelling/scrollytelling.html"
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "scrollytelling.html")
 sivo_app.to_html(output_path)
 print(f"Generated {output_path}")

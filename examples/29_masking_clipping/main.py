@@ -31,5 +31,8 @@ sivo_app.map(
     mask="url(#myMask)"
 )
 
-sivo_app.to_html("examples/29_masking_clipping/masking_clipping.html")
-print("Exported to examples/29_masking_clipping/masking_clipping.html")
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "masking_clipping.html")
+sivo_app.to_html(output_path)
+print(f"Exported to {output_path}")

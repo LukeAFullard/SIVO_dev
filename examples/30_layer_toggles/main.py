@@ -35,6 +35,8 @@ sivo_app.add_layer_toggle(label="HVAC Systems", element_ids=["layer_hvac"], defa
 # Add standard interactive mapping to an element inside a layer
 sivo_app.map("wire1", tooltip="Main Power Line")
 
-output_path = "examples/30_layer_toggles/layer_toggles.html"
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "layer_toggles.html")
 sivo_app.to_html(output_path)
 print(f"Generated {output_path}")

@@ -21,5 +21,8 @@ sivo_app.map(
     draggable=True
 )
 
-sivo_app.to_html("examples/31_draggable_elements/draggable_elements.html")
-print("Exported to examples/31_draggable_elements/draggable_elements.html")
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "draggable_elements.html")
+sivo_app.to_html(output_path)
+print(f"Exported to {output_path}")

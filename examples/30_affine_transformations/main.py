@@ -35,5 +35,8 @@ sivo_app.map(
     transform="translate(100 50)"
 )
 
-sivo_app.to_html("examples/30_affine_transformations/affine_transformations.html")
-print("Exported to examples/30_affine_transformations/affine_transformations.html")
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "affine_transformations.html")
+sivo_app.to_html(output_path)
+print(f"Exported to {output_path}")
