@@ -193,6 +193,10 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, renders an export button that allows snapshotting the canvas."
     )
+    lock_canvas: bool = Field(
+        default=False,
+        description="Disable panning and zooming on the map canvas"
+    )
     build_js: bool = Field(
         default=False,
         description="If True, runs an optional JavaScript bundler (e.g., Vite/Webpack) to minify frontend assets."

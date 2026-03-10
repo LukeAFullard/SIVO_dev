@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -18,6 +18,7 @@ class Infographic:
         self.connections: list[dict] = []
         self.default_panel_position = default_panel_position
         self.lock_zoom_out = lock_zoom_out
+        self.lock_canvas = lock_canvas
         self.enable_a11y = enable_a11y
         self.render_mode = render_mode
         self.enable_minimap = enable_minimap
@@ -88,6 +89,7 @@ class Infographic:
         infographic.render_mode = getattr(cfg, "render_mode", "canvas")
         infographic.enable_minimap = getattr(cfg, "enable_minimap", False)
         infographic.enable_export = getattr(cfg, "enable_export", False)
+        infographic.lock_canvas = getattr(cfg, "lock_canvas", False)
         infographic.fade_unselected = getattr(cfg, "fade_unselected", False)
         infographic.theme = getattr(cfg, "theme", "light")
         infographic.enable_search = getattr(cfg, "enable_search", False)
@@ -671,6 +673,7 @@ class Infographic:
             "render_mode": self.render_mode,
             "enable_minimap": self.enable_minimap,
             "enable_export": self.enable_export,
+            "lock_canvas": self.lock_canvas,
             "fade_unselected": self.fade_unselected,
             "theme": self.theme,
             "enable_search": self.enable_search,
