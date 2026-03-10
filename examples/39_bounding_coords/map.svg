@@ -1,0 +1,5 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+    <!-- Simplified bounding box of the USA -->
+    <rect id="background" x="0" y="0" width="800" height="500" fill="#e0f2fe" />
+    <path id="usa_mainland" d="M 50,100 L 750,100 L 750,400 L 50,400 Z" fill="#bae6fd" stroke="#0ea5e9" stroke-width="2" />
+</svg>

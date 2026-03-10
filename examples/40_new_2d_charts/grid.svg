@@ -1,0 +1,26 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Grid of interactive boxes -->
+    <rect id="box1" x="50" y="50" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="125" y="130" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">Boxplot</text>
+
+    <rect id="box2" x="250" y="50" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="325" y="130" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">Candlestick</text>
+
+    <rect id="box3" x="450" y="50" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="525" y="130" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">Heatmap</text>
+
+    <rect id="box4" x="50" y="250" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="125" y="330" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">Graph</text>
+
+    <rect id="box5" x="250" y="250" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="325" y="330" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">Sankey</text>
+
+    <rect id="box6" x="450" y="250" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="525" y="330" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">Sunburst</text>
+
+    <rect id="box7" x="150" y="420" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="225" y="500" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">Parallel</text>
+
+    <rect id="box8" x="350" y="420" width="150" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+    <text x="425" y="500" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#64748b" pointer-events="none">ThemeRiver</text>
+</svg>
