@@ -3056,6 +3056,16 @@
                         // Close info panel to ensure map is visible during narrative changes
                         closePanel();
 
+                        // Handle Audio
+                        if (currentAudio) {
+                            currentAudio.pause();
+                            currentAudio.currentTime = 0;
+                        }
+                        if (step.audio_url) {
+                            currentAudio = new Audio(step.audio_url);
+                            currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+                        }
+
                         if (step.zoom_to) {
                             myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
                             var viewMeta = overlaysData[step.zoom_to];

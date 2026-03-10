@@ -94,6 +94,7 @@ class ScrollytellingStepConfig(BaseModel):
     zoom_level: float = Field(default=2.0, description="Zoom level")
     colors: Optional[Dict[str, str]] = Field(default=None, description="Mapping of Element IDs to colors")
     show_tooltips: Optional[List[str]] = Field(default=None, description="List of Element IDs to show tooltips for")
+    audio_url: Optional[str] = Field(default=None, description="Optional audio file URL to play automatically when this step is reached")
 
 class TourStepConfig(BaseModel):
     """Configuration for a single guided tour step."""
