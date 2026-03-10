@@ -10,7 +10,7 @@ def main():
         "river",
         tooltip="Cafeteria",
         lottie={
-            "lottie_url": "https://assets9.lottiefiles.com/packages/lf20_U1luOq.json", # A sample coffee cup lottie
+            "lottie_url": "https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json", # A sample lottie
             "loop": True,
             "autoplay": True
         },

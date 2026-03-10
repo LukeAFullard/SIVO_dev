@@ -190,6 +190,9 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "echarts_data": echarts_data,
             "actions_manifest": actions_manifest,
             "overlays": view_obj["overlays"],
+            "connections": view_obj.get("connections", []),
+            "lock_zoom_out": view_obj.get("lock_zoom_out", False),
+            "lock_canvas": view_obj.get("lock_canvas", False),
             "render_mode": view_obj.get("render_mode", "canvas"),
             "enable_minimap": view_obj.get("enable_minimap", False),
             "enable_export": view_obj.get("enable_export", False),
@@ -208,6 +211,10 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
         }
         if "data_binding" in view_obj:
             view_dict["data_binding"] = view_obj["data_binding"]
+        if "timeline_binding" in view_obj:
+            view_dict["timeline_binding"] = view_obj["timeline_binding"]
+        if "live_binding" in view_obj:
+            view_dict["live_binding"] = view_obj["live_binding"]
         if "scrollytelling" in view_obj:
             view_dict["scrollytelling"] = view_obj["scrollytelling"]
         if "tour" in view_obj:
