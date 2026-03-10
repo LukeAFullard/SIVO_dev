@@ -156,6 +156,11 @@ class ProgressBarAction(BaseAction):
     color: str = Field(default="#38bdf8", description="Color of the progress bar")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
+class ConfettiAction(BaseAction):
+    action_type: Literal["confetti"] = "confetti"
+    particle_count: int = Field(default=100, description="Number of confetti particles")
+    spread: int = Field(default=70, description="Spread of the confetti burst in degrees")
+
 
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
@@ -179,7 +184,7 @@ class ThemeOverride(BaseModel):
     odometer_duration_ms: Optional[int] = 2000
     odometer_format: Optional[str] = None
 
-ActionType = Annotated[Union[LottieAction, CompareAction, ProgressBarAction, TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[ConfettiAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str

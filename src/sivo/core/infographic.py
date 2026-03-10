@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -149,6 +149,7 @@ class Infographic:
                     lottie=getattr(elem_config, 'lottie', None),
                     compare=getattr(elem_config, 'compare', None),
                     progress_bar=getattr(elem_config, 'progress_bar', None),
+                    confetti=getattr(elem_config, 'confetti', None),
                     echarts_option=getattr(elem_config, 'echarts_option', None),
                     context_menu=getattr(elem_config, 'context_menu', None),
                     panel_position=elem_config.panel_position,
@@ -212,6 +213,7 @@ class Infographic:
         lottie: Optional[dict] = None,
         compare: Optional[dict] = None,
         progress_bar: Optional[dict] = None,
+        confetti: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
         context_menu: Optional[list[dict]] = None,
@@ -359,6 +361,9 @@ class Infographic:
 
         if progress_bar and 'title' in progress_bar and 'progress' in progress_bar:
             mapping.actions.append(ProgressBarAction(title=progress_bar['title'], progress=progress_bar['progress'], color=progress_bar.get('color', '#38bdf8'), panel_position=panel_position or self.default_panel_position))
+
+        if confetti:
+            mapping.actions.append(ConfettiAction(particle_count=confetti.get('particle_count', 100), spread=confetti.get('spread', 70)))
 
         if replit:
             mapping.actions.append(ReplitAction(repl_url=replit, panel_position=panel_position or self.default_panel_position))
@@ -508,7 +513,7 @@ class Infographic:
         from .config import ScratchoffConfig
         self.scratchoff = ScratchoffConfig(color=color, image_url=image_url, brush_size=brush_size).model_dump()
 
-    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)"):
+    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
         """
         Creates a proportional symbol map (e.g., bubble map) by calculating the center of each
         mapped element and passing the parameters to the frontend to render an ECharts scatter series.
@@ -533,7 +538,8 @@ class Infographic:
             data=processed_data,
             min_size=min_size,
             max_size=max_size,
-            color=color
+            color=color,
+            is_pulse=is_pulse
         ).model_dump()
 
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):

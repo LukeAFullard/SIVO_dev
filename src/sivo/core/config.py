@@ -26,6 +26,7 @@ class ElementConfig(BaseModel):
     lottie: Optional[Dict[str, Any]] = None
     compare: Optional[Dict[str, str]] = None
     progress_bar: Optional[Dict[str, Any]] = None
+    confetti: Optional[Dict[str, int]] = None
     echarts_option: Optional[Dict[str, Any]] = None
     context_menu: Optional[List[Dict[str, Any]]] = None
     panel_position: Optional[str] = None
@@ -116,6 +117,7 @@ class ProportionalSymbolConfig(BaseModel):
     min_size: float = Field(default=10.0, description="Minimum symbol size")
     max_size: float = Field(default=50.0, description="Maximum symbol size")
     color: str = Field(default="rgba(255, 0, 0, 0.6)", description="Color of the symbols")
+    is_pulse: bool = Field(default=False, description="If True, renders the symbols as animated, rippling markers.")
 
 class LayerToggleConfig(BaseModel):
     """Configuration for an interactive layer toggle legend."""
