@@ -254,7 +254,7 @@ class Sivo:
         """
         self.infographic.enable_scratchoff(color, image_url, brush_size)
 
-    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
+    def apply_proportional_symbols(self, data_map: Dict[str, Union[float, Dict]], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
         """
         Creates a proportional symbol overlay (scatter/bubble map).
         """

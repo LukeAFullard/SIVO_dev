@@ -1193,11 +1193,15 @@
                 for (var itemName in proportionalSymbols.data) {
                     var dataObj = proportionalSymbols.data[itemName];
                     if (dataObj && dataObj.coord) {
-                        scatterData.push({
+                        var dataItem = {
                             name: itemName,
                             value: [dataObj.coord[0], dataObj.coord[1], dataObj.value],
                             _rawVal: dataObj.value
-                        });
+                        };
+                        if (dataObj.color) {
+                            dataItem.itemStyle = { color: dataObj.color };
+                        }
+                        scatterData.push(dataItem);
                     }
                 }
 
