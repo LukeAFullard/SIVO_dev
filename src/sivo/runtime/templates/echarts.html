@@ -1806,7 +1806,12 @@
             if (lockZoomOut) {
                 baseOpt.series[0].scaleLimit = { min: 1.0 };
             }
-            echarts.registerMap(viewId, { svg: view.svg_string });
+
+            var mapOptions = { svg: view.svg_string };
+            if (view.bounding_coords) {
+                mapOptions.boundingCoords = view.bounding_coords;
+            }
+            echarts.registerMap(viewId, mapOptions);
 
             if (timelineBinding && timelineBinding.data) {
                 var timelineKeys = Object.keys(timelineBinding.data);

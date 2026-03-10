@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -34,6 +34,7 @@ class Infographic:
         self.enable_fullscreen = enable_fullscreen
         self.enable_share = enable_share
         self.enable_data_download = enable_data_download
+        self.bounding_coords = bounding_coords
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
         self.scrollytelling: Optional[list] = None
@@ -101,6 +102,7 @@ class Infographic:
         infographic.enable_fullscreen = getattr(cfg, "enable_fullscreen", False)
         infographic.enable_share = getattr(cfg, "enable_share", False)
         infographic.enable_data_download = getattr(cfg, "enable_data_download", False)
+        infographic.bounding_coords = getattr(cfg, "bounding_coords", None)
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
         infographic.scrollytelling = getattr(cfg, "scrollytelling", None)
@@ -698,7 +700,8 @@ class Infographic:
             "attribution": self.attribution,
             "enable_fullscreen": self.enable_fullscreen,
             "enable_share": self.enable_share,
-            "enable_data_download": self.enable_data_download
+            "enable_data_download": self.enable_data_download,
+            "bounding_coords": self.bounding_coords
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()

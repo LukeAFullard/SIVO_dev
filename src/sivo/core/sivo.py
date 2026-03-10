@@ -9,7 +9,7 @@ class Sivo:
     This class serves as the primary declarative Python API for the framework,
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
-    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False):
+    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None):
         self.infographic = infographic
         self.infographic.default_panel_position = default_panel_position
         self.infographic.lock_zoom_out = lock_zoom_out
@@ -29,18 +29,19 @@ class Sivo:
         self.infographic.enable_fullscreen = enable_fullscreen
         self.infographic.enable_share = enable_share
         self.infographic.enable_data_download = enable_data_download
+        self.infographic.bounding_coords = bounding_coords
 
     @classmethod
-    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False) -> "Sivo":
+    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None) -> "Sivo":
         """Initializes a Sivo instance from an SVG file path."""
         info = Infographic.from_svg(filepath)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, bounding_coords=bounding_coords)
 
     @classmethod
-    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False) -> "Sivo":
+    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None) -> "Sivo":
         """Initializes a Sivo instance directly from an SVG string."""
         info = Infographic.from_string(svg_string)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download)
+        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, bounding_coords=bounding_coords)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":
@@ -67,7 +68,8 @@ class Sivo:
             attribution=getattr(info, "attribution", None),
             enable_fullscreen=getattr(info, "enable_fullscreen", False),
             enable_share=getattr(info, "enable_share", False),
-            enable_data_download=getattr(info, "enable_data_download", False)
+            enable_data_download=getattr(info, "enable_data_download", False),
+            bounding_coords=getattr(info, "bounding_coords", None)
         )
 
     def map(
@@ -440,6 +442,176 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
+    def map_boxplot_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Boxplot Chart. data is a 2D array of values for each category."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item", "axisPointer": {"type": "shadow"}},
+            "xAxis": {"type": "category", "data": categories},
+            "yAxis": {"type": "value"},
+            "series": [{
+                "name": title,
+                "type": "boxplot",
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_candlestick_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], item_color: str = '#eb5454', item_color0: str = '#47b262', tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Candlestick Chart (K-line). data: [[open, close, lowest, highest], ...]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross"}},
+            "xAxis": {"data": categories},
+            "yAxis": {"scale": True},
+            "series": [{
+                "name": title,
+                "type": "candlestick",
+                "data": data,
+                "itemStyle": {
+                    "color": item_color,
+                    "color0": item_color0,
+                    "borderColor": item_color,
+                    "borderColor0": item_color0
+                }
+            }]
+        }
+        option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_heatmap_chart(self, element_id: str, title: str, data: list[list[float]], x_categories: list[str], y_categories: list[str], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Cartesian Heatmap Chart. data: [[x_index, y_index, value], ...]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"position": "top"},
+            "xAxis": {"type": "category", "data": x_categories, "splitArea": {"show": True}},
+            "yAxis": {"type": "category", "data": y_categories, "splitArea": {"show": True}},
+            "visualMap": {
+                "min": 0,
+                "max": max([d[2] for d in data]) if data else 100,
+                "calculable": True,
+                "orient": "horizontal",
+                "left": "center",
+                "bottom": "0%",
+                "inRange": {"color": color if color else ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"]}
+            },
+            "series": [{
+                "name": title,
+                "type": "heatmap",
+                "data": data,
+                "label": {"show": True},
+                "emphasis": {
+                    "itemStyle": {
+                        "shadowBlur": 10,
+                        "shadowColor": "rgba(0, 0, 0, 0.5)"
+                    }
+                }
+            }]
+        }
+        option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_graph_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], categories: list[dict] = None, color: str | list[str] = None, layout: str = "force", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Graph Chart (Network). nodes: [{'name': 'Node1'}], links: [{'source': 'Node1', 'target': 'Node2'}]. layout can be 'none', 'circular', or 'force'."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "legend": {"data": [c.get("name") for c in categories]} if categories else None,
+            "series": [{
+                "name": title,
+                "type": "graph",
+                "layout": layout,
+                "data": nodes,
+                "links": links,
+                "categories": categories,
+                "roam": True,
+                "label": {"position": "right", "formatter": "{b}"},
+                "lineStyle": {"color": "source", "curveness": 0.3},
+                "emphasis": {
+                    "focus": "adjacency",
+                    "lineStyle": {"width": 10}
+                }
+            }]
+        }
+        if layout == "force":
+            option["series"][0]["force"] = {"repulsion": 100}
+
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_sankey_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Sankey Diagram. nodes: [{'name': 'A'}], links: [{'source': 'A', 'target': 'B', 'value': 10}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item", "triggerOn": "mousemove"},
+            "series": [{
+                "type": "sankey",
+                "data": nodes,
+                "links": links,
+                "emphasis": {"focus": "adjacency"},
+                "lineStyle": {"color": "gradient", "curveness": 0.5}
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_sunburst_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Sunburst Chart. data: [{'name': 'A', 'value': 10, 'children': [...]}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "series": [{
+                "type": "sunburst",
+                "data": data,
+                "radius": [0, "90%"],
+                "label": {"rotate": "radial"}
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_parallel_chart(self, element_id: str, title: str, schema: list[dict], data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Parallel Coordinates Chart. schema: [{'dim': 0, 'name': 'A'}, ...], data: [[val1, val2], ...]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"padding": 10, "backgroundColor": "#222", "borderColor": "#777", "borderWidth": 1},
+            "parallelAxis": schema,
+            "parallel": {
+                "left": "5%", "right": "18%", "bottom": "10%", "top": "20%",
+                "parallelAxisDefault": {"type": "value", "nameLocation": "end", "nameGap": 20}
+            },
+            "series": [{
+                "name": title,
+                "type": "parallel",
+                "lineStyle": {"width": 1, "opacity": 0.5},
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_theme_river_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], legend_data: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a ThemeRiver (Streamgraph) Chart. data: [[date, value, category_name], ...]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "axis", "axisPointer": {"type": "line", "lineStyle": {"color": "rgba(0,0,0,0.2)", "width": 1, "type": "solid"}}},
+            "legend": {"data": legend_data},
+            "singleAxis": {
+                "top": 50, "bottom": 50,
+                "axisTick": {}, "axisLabel": {}, "type": "time",
+                "axisPointer": {"animation": True, "label": {"show": True}},
+                "splitLine": {"show": True, "lineStyle": {"type": "dashed", "opacity": 0.2}}
+            },
+            "series": [{
+                "type": "themeRiver",
+                "emphasis": {"itemStyle": {"shadowBlur": 20, "shadowColor": "rgba(0, 0, 0, 0.8)"}},
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
         """
         Non-default option: Triggers a JavaScript bundler (e.g., esbuild) to minify and
@@ -543,7 +715,8 @@ class Sivo:
             "attribution": getattr(self.infographic, "attribution", None),
             "enable_fullscreen": getattr(self.infographic, "enable_fullscreen", False),
             "enable_share": getattr(self.infographic, "enable_share", False),
-            "enable_data_download": getattr(self.infographic, "enable_data_download", False)
+            "enable_data_download": getattr(self.infographic, "enable_data_download", False),
+            "bounding_coords": getattr(self.infographic, "bounding_coords", None)
         }
         if self.infographic.data_binding:
             view_data["data_binding"] = self.infographic.data_binding.model_dump()

@@ -248,3 +248,7 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, adds a download button to export the bound data as a CSV."
     )
+    bounding_coords: Optional[List[List[float]]] = Field(
+        default=None,
+        description="Optional bounding coordinates [[minLng, minLat], [maxLng, maxLat]] to map the SVG to a geographic coordinate system."
+    )
