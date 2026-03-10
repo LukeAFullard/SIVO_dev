@@ -3017,6 +3017,8 @@
         }
 
 
+        var scrollyAudioEnabled = false;
+
         function initScrollytelling(steps) {
             var container = document.getElementById('scrollytelling-container');
             if (!steps || steps.length === 0) {
@@ -3026,6 +3028,25 @@
 
             container.style.display = 'block';
             container.innerHTML = '';
+
+            var hasAudio = steps.some(s => s.audio_url);
+
+            if (hasAudio) {
+                // Add an explicit 'Enable Audio' button for the first interaction to satisfy browser autoplay policies
+                var audioStartCard = document.createElement('div');
+                audioStartCard.className = 'scrolly-step';
+                audioStartCard.style.padding = '20vh 20px'; // Less padding so it's visible immediately
+                audioStartCard.innerHTML = `
+                    <div class="scrolly-step-card" style="text-align: center;">
+                        <h3 style="margin-top:0;">Enable Audio Experience</h3>
+                        <p style="margin-bottom:15px; color:#666;">This narrative includes audio narration. Click the button below to allow playback as you scroll.</p>
+                        <button id="sivo-enable-audio-btn" style="background:#3b82f6; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:16px; transition:background 0.2s;">
+                            Start Experience
+                        </button>
+                    </div>
+                `;
+                container.appendChild(audioStartCard);
+            }
 
             steps.forEach(function(step, index) {
                 var stepWrapper = document.createElement('div');
@@ -3043,11 +3064,38 @@
                 container.appendChild(stepWrapper);
             });
 
+            if (hasAudio) {
+                var enableBtn = document.getElementById('sivo-enable-audio-btn');
+                if (enableBtn) {
+                    enableBtn.addEventListener('click', function() {
+                        scrollyAudioEnabled = true;
+
+                        // Play and immediately pause a silent dummy audio to unlock the audio context for this page
+                        var dummyAudio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
+                        dummyAudio.play().then(() => {
+                            dummyAudio.pause();
+                        }).catch(e => console.log("Dummy audio unlock skipped", e));
+
+                        enableBtn.innerText = 'Audio Enabled ✓';
+                        enableBtn.style.background = '#10b981'; // Green
+                        setTimeout(() => {
+                            // Smooth scroll to the first actual step
+                            var firstStep = container.querySelector('.scrolly-step[data-index="0"]');
+                            if (firstStep) {
+                                firstStep.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }, 500);
+                    });
+                }
+            }
+
             var observerOptions = { root: container, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
             var observer = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         var index = parseInt(entry.target.getAttribute('data-index'), 10);
+                        if (isNaN(index)) return; // Ignore the Start Experience card
+
                         var step = steps[index];
 
                         document.querySelectorAll('.scrolly-step').forEach(el => el.classList.remove('active'));
@@ -3057,13 +3105,15 @@
                         closePanel();
 
                         // Handle Audio
-                        if (currentAudio) {
-                            currentAudio.pause();
-                            currentAudio.currentTime = 0;
-                        }
-                        if (step.audio_url) {
-                            currentAudio = new Audio(step.audio_url);
-                            currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+                        if (scrollyAudioEnabled || !hasAudio) {
+                            if (currentAudio) {
+                                currentAudio.pause();
+                                currentAudio.currentTime = 0;
+                            }
+                            if (step.audio_url) {
+                                currentAudio = new Audio(step.audio_url);
+                                currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+                            }
                         }
 
                         if (step.zoom_to) {

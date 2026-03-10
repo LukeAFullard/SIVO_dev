@@ -32,7 +32,7 @@ steps = [
         }
     },
     {
-        "content": "<h2>2. The Data Center</h2><p>This is where all our processing happens. (Playing audio beep 1)</p>",
+        "content": "<h2>2. The Data Center</h2><p>This is where all our processing happens. (Playing short beep...)</p>",
         "zoom_to": "section1",
         "zoom_level": 2.5,
         "audio_url": audio_beep_1,
@@ -44,7 +44,7 @@ steps = [
         "show_tooltips": ["section1"]
     },
     {
-        "content": "<h2>3. The Logistics Hub</h2><p>Physical goods are routed through this circular zone. (Playing audio beep 2)</p>",
+        "content": "<h2>3. The Logistics Hub</h2><p>Physical goods are routed through this circular zone. (Playing digital watch alarm...)</p>",
         "zoom_to": "section2",
         "zoom_level": 2.5,
         "audio_url": audio_beep_2,
@@ -56,7 +56,7 @@ steps = [
         "show_tooltips": ["section2"]
     },
     {
-        "content": "<h2>4. Headquarters</h2><p>The central triangle coordinates both data and physical routing.</p>",
+        "content": "<h2>4. Headquarters</h2><p>The central triangle coordinates both data and physical routing. (Audio stops)</p>",
         "zoom_to": "section3",
         "zoom_level": 2.0,
         "colors": {
