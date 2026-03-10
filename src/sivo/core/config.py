@@ -23,6 +23,9 @@ class ElementConfig(BaseModel):
     ecommerce: Optional[Dict[str, str]] = None
     rich_media: Optional[Dict[str, str]] = None
     bi: Optional[Dict[str, str]] = None
+    lottie: Optional[Dict[str, Any]] = None
+    compare: Optional[Dict[str, str]] = None
+    progress_bar: Optional[Dict[str, Any]] = None
     echarts_option: Optional[Dict[str, Any]] = None
     context_menu: Optional[List[Dict[str, Any]]] = None
     panel_position: Optional[str] = None
@@ -98,6 +101,20 @@ class TourStepConfig(BaseModel):
     zoom_to: Optional[str] = Field(default=None, description="Element ID to zoom to")
     zoom_level: float = Field(default=2.0, description="Zoom level")
     show_tooltips: Optional[List[str]] = Field(default=None, description="List of Element IDs to show tooltips for")
+    audio_url: Optional[str] = Field(default=None, description="Optional audio file URL to play automatically when this step is reached")
+
+class ScratchoffConfig(BaseModel):
+    """Configuration for a scratch-off reveal layer."""
+    image_url: Optional[str] = Field(default=None, description="URL to an image to use as the scratch-off layer. If None, color is used.")
+    color: str = Field(default="#cccccc", description="Solid color to use as the scratch-off layer if image_url is not provided.")
+    brush_size: int = Field(default=40, description="Size of the scratch-off brush.")
+
+class ProportionalSymbolConfig(BaseModel):
+    """Configuration for a proportional symbol map."""
+    data: Dict[str, Dict[str, Any]] = Field(description="Mapping of Element IDs to dicts containing 'value' and 'coord'.")
+    min_size: float = Field(default=10.0, description="Minimum symbol size")
+    max_size: float = Field(default=50.0, description="Maximum symbol size")
+    color: str = Field(default="rgba(255, 0, 0, 0.6)", description="Color of the symbols")
 
 class LayerToggleConfig(BaseModel):
     """Configuration for an interactive layer toggle legend."""
@@ -160,6 +177,14 @@ class ProjectConfig(BaseModel):
         default=None,
         description="Optional list of layer visibility toggles."
     )
+    scratchoff: Optional[ScratchoffConfig] = Field(
+        default=None,
+        description="Optional configuration for a scratch-off layer."
+    )
+    proportional_symbols: Optional[ProportionalSymbolConfig] = Field(
+        default=None,
+        description="Optional configuration for proportional symbol overlays."
+    )
     enable_minimap: bool = Field(
         default=False,
         description="If True, renders a small minimap in the corner to show global viewport context."
@@ -167,6 +192,10 @@ class ProjectConfig(BaseModel):
     enable_export: bool = Field(
         default=False,
         description="If True, renders an export button that allows snapshotting the canvas."
+    )
+    lock_canvas: bool = Field(
+        default=False,
+        description="Disable panning and zooming on the map canvas"
     )
     build_js: bool = Field(
         default=False,

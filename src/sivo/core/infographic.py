@@ -4,12 +4,12 @@ from typing import Dict, Optional, Union
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -18,6 +18,7 @@ class Infographic:
         self.connections: list[dict] = []
         self.default_panel_position = default_panel_position
         self.lock_zoom_out = lock_zoom_out
+        self.lock_canvas = lock_canvas
         self.enable_a11y = enable_a11y
         self.render_mode = render_mode
         self.enable_minimap = enable_minimap
@@ -38,6 +39,8 @@ class Infographic:
         self.scrollytelling: Optional[list] = None
         self.tour: Optional[list] = None
         self.layer_toggles: Optional[list] = None
+        self.scratchoff: Optional[dict] = None
+        self.proportional_symbols: Optional[dict] = None
 
         # Initialize default mappings
         for elem in self.elements:
@@ -86,6 +89,7 @@ class Infographic:
         infographic.render_mode = getattr(cfg, "render_mode", "canvas")
         infographic.enable_minimap = getattr(cfg, "enable_minimap", False)
         infographic.enable_export = getattr(cfg, "enable_export", False)
+        infographic.lock_canvas = getattr(cfg, "lock_canvas", False)
         infographic.fade_unselected = getattr(cfg, "fade_unselected", False)
         infographic.theme = getattr(cfg, "theme", "light")
         infographic.enable_search = getattr(cfg, "enable_search", False)
@@ -102,6 +106,8 @@ class Infographic:
         infographic.scrollytelling = getattr(cfg, "scrollytelling", None)
         infographic.tour = getattr(cfg, "tour", None)
         infographic.layer_toggles = getattr(cfg, "layer_toggles", None)
+        infographic.scratchoff = getattr(cfg, "scratchoff", None)
+        infographic.proportional_symbols = getattr(cfg, "proportional_symbols", None)
 
         if getattr(cfg, "connections", None):
             for conn in cfg.connections:
@@ -140,6 +146,9 @@ class Infographic:
                     ecommerce=getattr(elem_config, 'ecommerce', None),
                     rich_media=getattr(elem_config, 'rich_media', None),
                     bi=getattr(elem_config, 'bi', None),
+                    lottie=getattr(elem_config, 'lottie', None),
+                    compare=getattr(elem_config, 'compare', None),
+                    progress_bar=getattr(elem_config, 'progress_bar', None),
                     echarts_option=getattr(elem_config, 'echarts_option', None),
                     context_menu=getattr(elem_config, 'context_menu', None),
                     panel_position=elem_config.panel_position,
@@ -200,6 +209,9 @@ class Infographic:
         ecommerce: Optional[dict] = None,
         rich_media: Optional[dict] = None,
         bi: Optional[dict] = None,
+        lottie: Optional[dict] = None,
+        compare: Optional[dict] = None,
+        progress_bar: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
         context_menu: Optional[list[dict]] = None,
@@ -338,6 +350,15 @@ class Infographic:
 
         if bi and 'provider' in bi and 'dashboard_url' in bi:
             mapping.actions.append(BIAction(provider=bi['provider'], dashboard_url=bi['dashboard_url'], panel_position=panel_position or self.default_panel_position))
+
+        if lottie and 'lottie_url' in lottie:
+            mapping.actions.append(LottieAction(lottie_url=lottie['lottie_url'], loop=lottie.get('loop', True), autoplay=lottie.get('autoplay', True), panel_position=panel_position or self.default_panel_position))
+
+        if compare and 'before_image' in compare and 'after_image' in compare:
+            mapping.actions.append(CompareAction(before_image=compare['before_image'], after_image=compare['after_image'], label_before=compare.get('label_before', 'Before'), label_after=compare.get('label_after', 'After'), panel_position=panel_position or self.default_panel_position))
+
+        if progress_bar and 'title' in progress_bar and 'progress' in progress_bar:
+            mapping.actions.append(ProgressBarAction(title=progress_bar['title'], progress=progress_bar['progress'], color=progress_bar.get('color', '#38bdf8'), panel_position=panel_position or self.default_panel_position))
 
         if replit:
             mapping.actions.append(ReplitAction(repl_url=replit, panel_position=panel_position or self.default_panel_position))
@@ -482,6 +503,39 @@ class Infographic:
             self.layer_toggles = []
         self.layer_toggles.append(LayerToggleConfig(label=label, element_ids=element_ids, default_visible=default_visible))
 
+    def enable_scratchoff(self, color: str = "#cccccc", image_url: Optional[str] = None, brush_size: int = 40):
+        """Enables a scratch-off reveal layer over the map."""
+        from .config import ScratchoffConfig
+        self.scratchoff = ScratchoffConfig(color=color, image_url=image_url, brush_size=brush_size).model_dump()
+
+    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)"):
+        """
+        Creates a proportional symbol map (e.g., bubble map) by calculating the center of each
+        mapped element and passing the parameters to the frontend to render an ECharts scatter series.
+        """
+        from .config import ProportionalSymbolConfig
+
+        processed_data = {}
+        for elem_id, val in data_map.items():
+            center = self.get_element_center(elem_id)
+            if center:
+                processed_data[elem_id] = {
+                    "value": val,
+                    "coord": center
+                }
+                # Also ensure it exists in mappings so it renders an ECharts hit area if needed
+                if elem_id not in self.mappings:
+                    # Best effort mapping if it exists in lookup
+                    if elem_id in self._element_lookup:
+                        self.mappings[elem_id] = InteractionMapping(id=elem_id)
+
+        self.proportional_symbols = ProportionalSymbolConfig(
+            data=processed_data,
+            min_size=min_size,
+            max_size=max_size,
+            color=color
+        ).model_dump()
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.
@@ -619,6 +673,7 @@ class Infographic:
             "render_mode": self.render_mode,
             "enable_minimap": self.enable_minimap,
             "enable_export": self.enable_export,
+            "lock_canvas": self.lock_canvas,
             "fade_unselected": self.fade_unselected,
             "theme": self.theme,
             "enable_search": self.enable_search,
@@ -641,6 +696,10 @@ class Infographic:
             view_data["tour"] = [s.model_dump() for s in self.tour]
         if self.layer_toggles:
             view_data["layer_toggles"] = [s.model_dump() for s in self.layer_toggles]
+        if self.scratchoff:
+            view_data["scratchoff"] = self.scratchoff
+        if self.proportional_symbols:
+            view_data["proportional_symbols"] = self.proportional_symbols
 
         views_data = {
             "default_view": view_data

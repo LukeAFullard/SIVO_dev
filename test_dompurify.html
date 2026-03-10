@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+</head>
+<body>
+<script>
+const config = {
+    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player'],
+    ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'srcdoc', 'background', 'speed', 'loop', 'autoplay']
+};
+const html = `<lottie-player src="https://assets10.lottiefiles.com/packages/lf20_uidfpm8w.json" background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></lottie-player>`;
+console.log(DOMPurify.sanitize(html, config));
+</script>
+</body>
+</html>
