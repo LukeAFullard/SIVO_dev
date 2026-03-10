@@ -2596,8 +2596,23 @@
                             // Convert map coordinates to window coordinates for confetti origin
                             var x = 0.5, y = 0.5; // default center
                             if (params.event && params.event.event) {
-                                x = params.event.event.clientX / window.innerWidth;
-                                y = params.event.event.clientY / window.innerHeight;
+                                var e = params.event.event;
+                                var clientX = e.clientX;
+                                var clientY = e.clientY;
+
+                                // Handle mobile touch events
+                                if (clientX === undefined && e.changedTouches && e.changedTouches.length > 0) {
+                                    clientX = e.changedTouches[0].clientX;
+                                    clientY = e.changedTouches[0].clientY;
+                                } else if (clientX === undefined && e.touches && e.touches.length > 0) {
+                                    clientX = e.touches[0].clientX;
+                                    clientY = e.touches[0].clientY;
+                                }
+
+                                if (clientX !== undefined && clientY !== undefined) {
+                                    x = clientX / window.innerWidth;
+                                    y = clientY / window.innerHeight;
+                                }
                             }
                             confetti({
                                 particleCount: action.particle_count || 100,
