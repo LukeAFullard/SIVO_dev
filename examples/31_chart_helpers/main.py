@@ -7,13 +7,14 @@ def main():
     # Initialize Sivo from SVG
     sivo_app = Sivo.from_svg(svg_path, theme="dark")
 
-    # 1. Bar Chart with styling
+    # 1. Bar Chart with INDIVIDUAL part colors
+    # Passing a list of colors here will use the color palette for each individual bar
     sivo_app.map_bar_chart(
         element_id="TX",
         title="Texas Regional Sales",
         data=[5000, 20000, 36000, 10000],
         categories=["Austin", "Dallas", "Houston", "San Antonio"],
-        color="#38bdf8",
+        color=["#ef4444", "#f97316", "#eab308", "#22c55e"], # Red, Orange, Yellow, Green
         tooltip="View Regional Data (Bar)",
         title_color="#facc15",
         title_size=20,
@@ -38,7 +39,7 @@ def main():
         extra_options={"series": [{"areaStyle": {"opacity": 0.2}}]} # Example of injecting raw echarts options
     )
 
-    # 3. Pie Chart
+    # 3. Pie Chart (with its own palette)
     sivo_app.map_pie_chart(
         element_id="NY",
         title="NY Demographics",
@@ -47,8 +48,18 @@ def main():
             {"value": 735, "name": "Direct"},
             {"value": 580, "name": "Email"}
         ],
+        color=["#3b82f6", "#10b981", "#8b5cf6"], # Blue, Emerald, Violet
         tooltip="View Demographics (Pie)",
         title_color="#fff"
+    )
+
+    # 4. Gauge Chart
+    sivo_app.map_gauge_chart(
+        element_id="WY",
+        title="Wyoming Energy Output",
+        value=82,
+        max_value=100,
+        tooltip="View Energy Output (Gauge)"
     )
 
     # Export to HTML
