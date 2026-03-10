@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -34,6 +34,7 @@ class Infographic:
         self.enable_fullscreen = enable_fullscreen
         self.enable_share = enable_share
         self.enable_data_download = enable_data_download
+        self.bounding_coords = bounding_coords
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
         self.scrollytelling: Optional[list] = None
@@ -101,6 +102,7 @@ class Infographic:
         infographic.enable_fullscreen = getattr(cfg, "enable_fullscreen", False)
         infographic.enable_share = getattr(cfg, "enable_share", False)
         infographic.enable_data_download = getattr(cfg, "enable_data_download", False)
+        infographic.bounding_coords = getattr(cfg, "bounding_coords", None)
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
         infographic.scrollytelling = getattr(cfg, "scrollytelling", None)
@@ -525,22 +527,33 @@ class Infographic:
         for elem_id, val in data_map.items():
             center = self.get_element_center(elem_id)
             if center:
+                coord = center
+            else:
+                # If we have bounding_coords, users can pass raw coordinates instead of SVG IDs.
+                # Check if the dictionary contains a "coord" value explicitly.
+                if isinstance(val, dict) and "coord" in val:
+                    coord = val["coord"]
+                else:
+                    coord = None
+
+            if coord:
                 if isinstance(val, dict):
                     processed_data[elem_id] = {
                         "value": val.get("value", 0),
-                        "coord": center,
+                        "coord": coord,
                         "color": val.get("color")
                     }
                 else:
                     processed_data[elem_id] = {
                         "value": val,
-                        "coord": center
+                        "coord": coord
                     }
-                # Also ensure it exists in mappings so it renders an ECharts hit area if needed
+                # Ensure it exists in mappings so it renders an ECharts hit area if needed
                 if elem_id not in self.mappings:
-                    # Best effort mapping if it exists in lookup
-                    if elem_id in self._element_lookup:
-                        self.mappings[elem_id] = InteractionMapping(id=elem_id)
+                    # Register an empty mapping so tooltip binding can work for these dynamically added points
+                    self.mappings[elem_id] = InteractionMapping(id=elem_id)
+                    # And add to lookup to prevent crashes on subsequent mappings
+                    self._element_lookup[elem_id] = {"id": elem_id, "name": elem_id, "tag": "virtual_scatter"}
 
         self.proportional_symbols = ProportionalSymbolConfig(
             data=processed_data,
@@ -698,7 +711,8 @@ class Infographic:
             "attribution": self.attribution,
             "enable_fullscreen": self.enable_fullscreen,
             "enable_share": self.enable_share,
-            "enable_data_download": self.enable_data_download
+            "enable_data_download": self.enable_data_download,
+            "bounding_coords": self.bounding_coords
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()

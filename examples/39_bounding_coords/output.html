@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
@@ -21,7 +16,7 @@
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <!-- Include canvas-confetti for gamification effects -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -941,8 +936,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 500\"\u003e\n    \u003c!-- Simplified bounding box of the USA --\u003e\n    \u003crect id=\"background\" x=\"0\" y=\"0\" width=\"800\" height=\"500\" fill=\"#e0f2fe\" name=\"background\"/\u003e\n    \u003cpath id=\"usa_mainland\" d=\"M 50,100 L 750,100 L 750,400 L 50,400 Z\" fill=\"#bae6fd\" stroke=\"#0ea5e9\" stroke-width=\"2\" name=\"usa_mainland\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "background", "value": 1}, {"name": "usa_mainland", "value": 1}, {"name": "San Francisco", "value": 1, "tooltip": "San Francisco"}, {"name": "New York", "value": 1, "tooltip": "New York"}, {"name": "Chicago", "value": 1, "tooltip": "Chicago"}, {"name": "Austin", "value": 1, "tooltip": "Austin"}], "actions_manifest": {"San Francisco": [{"action_type": "tooltip", "content": "\u003ch3\u003eSan Francisco\u003c/h3\u003e\u003cp\u003ePopulation Index: 1500\u003c/p\u003e\u003cp\u003eCoordinates: 37.7749, -122.4194\u003c/p\u003e", "title": "San Francisco", "panel_position": "right"}], "New York": [{"action_type": "tooltip", "content": "\u003ch3\u003eNew York\u003c/h3\u003e\u003cp\u003ePopulation Index: 2500\u003c/p\u003e\u003cp\u003eCoordinates: 40.7128, -74.006\u003c/p\u003e", "title": "New York", "panel_position": "right"}], "Chicago": [{"action_type": "tooltip", "content": "\u003ch3\u003eChicago\u003c/h3\u003e\u003cp\u003ePopulation Index: 1200\u003c/p\u003e\u003cp\u003eCoordinates: 41.8781, -87.6298\u003c/p\u003e", "title": "Chicago", "panel_position": "right"}], "Austin": [{"action_type": "tooltip", "content": "\u003ch3\u003eAustin\u003c/h3\u003e\u003cp\u003ePopulation Index: 900\u003c/p\u003e\u003cp\u003eCoordinates: 30.2672, -97.7431\u003c/p\u003e", "title": "Austin", "panel_position": "right"}]}, "overlays": {}, "connections": [], "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Geographic Coordinate Mapping", "subtitle": "Using `bounding_coords` to place elements via real (lat, lng)", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "bounding_coords": [[-125.0, 25.0], [-65.0, 50.0]], "mappings": {"background": {"id": "background", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "usa_mainland": {"id": "usa_mainland", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "San Francisco": {"id": "San Francisco", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eSan Francisco\u003c/h3\u003e\u003cp\u003ePopulation Index: 1500\u003c/p\u003e\u003cp\u003eCoordinates: 37.7749, -122.4194\u003c/p\u003e", "title": "San Francisco", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "New York": {"id": "New York", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eNew York\u003c/h3\u003e\u003cp\u003ePopulation Index: 2500\u003c/p\u003e\u003cp\u003eCoordinates: 40.7128, -74.006\u003c/p\u003e", "title": "New York", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Chicago": {"id": "Chicago", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eChicago\u003c/h3\u003e\u003cp\u003ePopulation Index: 1200\u003c/p\u003e\u003cp\u003eCoordinates: 41.8781, -87.6298\u003c/p\u003e", "title": "Chicago", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Austin": {"id": "Austin", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eAustin\u003c/h3\u003e\u003cp\u003ePopulation Index: 900\u003c/p\u003e\u003cp\u003eCoordinates: 30.2672, -97.7431\u003c/p\u003e", "title": "Austin", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "proportional_symbols": {"data": {"San Francisco": {"value": 1500, "coord": [-122.4194, 37.7749], "color": "#f87171"}, "New York": {"value": 2500, "coord": [-74.006, 40.7128], "color": "#60a5fa"}, "Chicago": {"value": 1200, "coord": [-87.6298, 41.8781], "color": "#34d399"}, "Austin": {"value": 900, "coord": [-97.7431, 30.2672], "color": "#fbbf24"}}, "min_size": 10.0, "max_size": 40.0, "color": "rgba(255, 0, 0, 0.6)", "is_pulse": true}}};
+        var currentViewId = "default_view";
 
         // Apply Global Theme
         var currentTheme = viewsData[currentViewId].theme || 'light';
@@ -3831,8 +3826,8 @@
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

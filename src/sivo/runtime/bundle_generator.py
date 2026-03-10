@@ -207,6 +207,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "enable_fullscreen": view_obj.get("enable_fullscreen", False),
             "enable_share": view_obj.get("enable_share", False),
             "enable_data_download": view_obj.get("enable_data_download", False),
+            "bounding_coords": view_obj.get("bounding_coords", None),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:
