@@ -984,6 +984,7 @@
         var currentCenter = null;
 
         function getBaseOption(mapName) {
+            var view = viewsData[mapName] || {};
             var option = {
                 aria: {
                     enabled: true,
