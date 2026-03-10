@@ -103,6 +103,7 @@ class Sivo:
         lottie: Optional[dict] = None,
         compare: Optional[dict] = None,
         progress_bar: Optional[dict] = None,
+        confetti: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
         context_menu: Optional[list[dict]] = None,
@@ -168,6 +169,7 @@ class Sivo:
             lottie=lottie,
             compare=compare,
             progress_bar=progress_bar,
+            confetti=confetti,
             replit=replit,
             echarts_option=echarts_option,
             context_menu=context_menu,
@@ -252,11 +254,11 @@ class Sivo:
         """
         self.infographic.enable_scratchoff(color, image_url, brush_size)
 
-    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)"):
+    def apply_proportional_symbols(self, data_map: Dict[str, float], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
         """
         Creates a proportional symbol overlay (scatter/bubble map).
         """
-        self.infographic.apply_proportional_symbols(data_map, min_size, max_size, color)
+        self.infographic.apply_proportional_symbols(data_map, min_size, max_size, color, is_pulse=is_pulse)
 
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
         """
