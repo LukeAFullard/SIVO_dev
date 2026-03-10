@@ -923,7 +923,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"section1\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section1\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eData Center\u003c/text\u003e\n\n  \u003ccircle id=\"section2\" cx=\"700\" cy=\"200\" r=\"100\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section2\"/\u003e\n  \u003ctext x=\"700\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eLogistics\u003c/text\u003e\n\n  \u003cpath id=\"section3\" d=\"M 300 400 L 700 400 L 500 550 Z\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section3\"/\u003e\n  \u003ctext x=\"500\" y=\"470\" font-size=\"24\" text-anchor=\"middle\"\u003eHQ\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "section1", "value": 1, "tooltip": "Data Center (Active)"}, {"name": "section2", "value": 1, "tooltip": "Logistics Hub (Active)"}, {"name": "section3", "value": 1, "tooltip": "Headquarters (Active)"}], "actions_manifest": {"section1": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "section2": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "section3": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}]}, "overlays": {}, "connections": [], "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"section1": {"id": "section1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section2": {"id": "section2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section3": {"id": "section3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "scrollytelling": [{"content": "\u003ch1\u003e1. The Global Network\u003c/h1\u003e\u003cp\u003eOur operations span across three main hubs. Scroll down to trigger audio events as you explore.\u003c/p\u003e", "zoom_to": null, "zoom_level": 2.0, "colors": {"section1": "#f0f0f0", "section2": "#f0f0f0", "section3": "#f0f0f0"}, "show_tooltips": null, "audio_url": null}, {"content": "\u003ch2\u003e2. The Data Center\u003c/h2\u003e\u003cp\u003eThis is where all our processing happens. (Playing audio beep 1)\u003c/p\u003e", "zoom_to": "section1", "zoom_level": 2.5, "colors": {"section1": "#3b82f6", "section2": "#f0f0f0", "section3": "#f0f0f0"}, "show_tooltips": ["section1"], "audio_url": "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"}, {"content": "\u003ch2\u003e3. The Logistics Hub\u003c/h2\u003e\u003cp\u003ePhysical goods are routed through this circular zone. (Playing audio beep 2)\u003c/p\u003e", "zoom_to": "section2", "zoom_level": 2.5, "colors": {"section1": "#f0f0f0", "section2": "#10b981", "section3": "#f0f0f0"}, "show_tooltips": ["section2"], "audio_url": "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"}, {"content": "\u003ch2\u003e4. Headquarters\u003c/h2\u003e\u003cp\u003eThe central triangle coordinates both data and physical routing.\u003c/p\u003e", "zoom_to": "section3", "zoom_level": 2.0, "colors": {"section1": "#f0f0f0", "section2": "#f0f0f0", "section3": "#8b5cf6"}, "show_tooltips": ["section3"], "audio_url": null}]}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n  \u003crect id=\"section1\" x=\"100\" y=\"100\" width=\"200\" height=\"200\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section1\"/\u003e\n  \u003ctext x=\"200\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eData Center\u003c/text\u003e\n\n  \u003ccircle id=\"section2\" cx=\"700\" cy=\"200\" r=\"100\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section2\"/\u003e\n  \u003ctext x=\"700\" y=\"200\" font-size=\"24\" text-anchor=\"middle\"\u003eLogistics\u003c/text\u003e\n\n  \u003cpath id=\"section3\" d=\"M 300 400 L 700 400 L 500 550 Z\" fill=\"#f0f0f0\" stroke=\"#ccc\" name=\"section3\"/\u003e\n  \u003ctext x=\"500\" y=\"470\" font-size=\"24\" text-anchor=\"middle\"\u003eHQ\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "section1", "value": 1, "tooltip": "Data Center (Active)"}, {"name": "section2", "value": 1, "tooltip": "Logistics Hub (Active)"}, {"name": "section3", "value": 1, "tooltip": "Headquarters (Active)"}], "actions_manifest": {"section1": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "section2": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "section3": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}]}, "overlays": {}, "connections": [], "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"section1": {"id": "section1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eData Center (Active)\u003c/h3\u003e", "title": "Data Center (Active)", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section2": {"id": "section2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eLogistics Hub (Active)\u003c/h3\u003e", "title": "Logistics Hub (Active)", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "section3": {"id": "section3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eHeadquarters (Active)\u003c/h3\u003e", "title": "Headquarters (Active)", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "scrollytelling": [{"content": "\u003ch1\u003e1. The Global Network\u003c/h1\u003e\u003cp\u003eOur operations span across three main hubs. Scroll down to trigger audio events as you explore.\u003c/p\u003e", "zoom_to": null, "zoom_level": 2.0, "colors": {"section1": "#f0f0f0", "section2": "#f0f0f0", "section3": "#f0f0f0"}, "show_tooltips": null, "audio_url": null}, {"content": "\u003ch2\u003e2. The Data Center\u003c/h2\u003e\u003cp\u003eThis is where all our processing happens. (Playing short beep...)\u003c/p\u003e", "zoom_to": "section1", "zoom_level": 2.5, "colors": {"section1": "#3b82f6", "section2": "#f0f0f0", "section3": "#f0f0f0"}, "show_tooltips": ["section1"], "audio_url": "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"}, {"content": "\u003ch2\u003e3. The Logistics Hub\u003c/h2\u003e\u003cp\u003ePhysical goods are routed through this circular zone. (Playing digital watch alarm...)\u003c/p\u003e", "zoom_to": "section2", "zoom_level": 2.5, "colors": {"section1": "#f0f0f0", "section2": "#10b981", "section3": "#f0f0f0"}, "show_tooltips": ["section2"], "audio_url": "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"}, {"content": "\u003ch2\u003e4. Headquarters\u003c/h2\u003e\u003cp\u003eThe central triangle coordinates both data and physical routing. (Audio stops)\u003c/p\u003e", "zoom_to": "section3", "zoom_level": 2.0, "colors": {"section1": "#f0f0f0", "section2": "#f0f0f0", "section3": "#8b5cf6"}, "show_tooltips": ["section3"], "audio_url": null}]}};
         var currentViewId = "default_view";
 
         // Apply Global Theme
@@ -3012,6 +3012,8 @@
         }
 
 
+        var scrollyAudioEnabled = false;
+
         function initScrollytelling(steps) {
             var container = document.getElementById('scrollytelling-container');
             if (!steps || steps.length === 0) {
@@ -3021,6 +3023,25 @@
 
             container.style.display = 'block';
             container.innerHTML = '';
+
+            var hasAudio = steps.some(s => s.audio_url);
+
+            if (hasAudio) {
+                // Add an explicit 'Enable Audio' button for the first interaction to satisfy browser autoplay policies
+                var audioStartCard = document.createElement('div');
+                audioStartCard.className = 'scrolly-step';
+                audioStartCard.style.padding = '20vh 20px'; // Less padding so it's visible immediately
+                audioStartCard.innerHTML = `
+                    <div class="scrolly-step-card" style="text-align: center;">
+                        <h3 style="margin-top:0;">Enable Audio Experience</h3>
+                        <p style="margin-bottom:15px; color:#666;">This narrative includes audio narration. Click the button below to allow playback as you scroll.</p>
+                        <button id="sivo-enable-audio-btn" style="background:#3b82f6; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:16px; transition:background 0.2s;">
+                            Start Experience
+                        </button>
+                    </div>
+                `;
+                container.appendChild(audioStartCard);
+            }
 
             steps.forEach(function(step, index) {
                 var stepWrapper = document.createElement('div');
@@ -3038,6 +3059,31 @@
                 container.appendChild(stepWrapper);
             });
 
+            if (hasAudio) {
+                var enableBtn = document.getElementById('sivo-enable-audio-btn');
+                if (enableBtn) {
+                    enableBtn.addEventListener('click', function() {
+                        scrollyAudioEnabled = true;
+
+                        // Play and immediately pause a silent dummy audio to unlock the audio context for this page
+                        var dummyAudio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
+                        dummyAudio.play().then(() => {
+                            dummyAudio.pause();
+                        }).catch(e => console.log("Dummy audio unlock skipped", e));
+
+                        enableBtn.innerText = 'Audio Enabled ✓';
+                        enableBtn.style.background = '#10b981'; // Green
+                        setTimeout(() => {
+                            // Smooth scroll to the first actual step
+                            var firstStep = container.querySelector('.scrolly-step[data-index="0"]');
+                            if (firstStep) {
+                                firstStep.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }, 500);
+                    });
+                }
+            }
+
             var observerOptions = { root: container, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
             var observer = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
@@ -3052,13 +3098,15 @@
                         closePanel();
 
                         // Handle Audio
-                        if (currentAudio) {
-                            currentAudio.pause();
-                            currentAudio.currentTime = 0;
-                        }
-                        if (step.audio_url) {
-                            currentAudio = new Audio(step.audio_url);
-                            currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+                        if (scrollyAudioEnabled || !hasAudio) {
+                            if (currentAudio) {
+                                currentAudio.pause();
+                                currentAudio.currentTime = 0;
+                            }
+                            if (step.audio_url) {
+                                currentAudio = new Audio(step.audio_url);
+                                currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+                            }
                         }
 
                         if (step.zoom_to) {
