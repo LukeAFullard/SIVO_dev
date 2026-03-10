@@ -41,5 +41,6 @@ sivo_app.map("btn_insta", social={"provider": "instagram", "url": "https://www.i
 sivo_app.map("btn_tiktok", social={"provider": "tiktok", "url": "https://www.tiktok.com/@tiktok/video/7106594312293371179"}, tooltip="TikTok Embed", hover_color="#111111", color="#333333")
 sivo_app.map("btn_web", social={"provider": "website", "url": "https://example.com"}, tooltip="Generic Website Embed", hover_color="#22c55e", color="#4ade80")
 
-sivo_app.to_html("examples/9_social_embeds/output.html")
-print("Social embeds test generated at examples/9_social_embeds/output.html")
+output_path = os.path.join(os.path.dirname(__file__), "output.html")
+sivo_app.to_html(output_path)
+print(f"Social embeds test generated at {output_path}")

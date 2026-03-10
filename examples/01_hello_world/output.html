@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Include lottie-player for Lottie animations -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
 
     <style>
@@ -862,6 +864,7 @@
 
             <div id="chart-container"></div>
             <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
+            <canvas id="sivo-scratchoff-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; display: none;"></canvas>
             <div class="zoom-controls">
                 <div class="zoom-btn" onclick="toggleFullscreen()" id="fullscreen-btn" style="display: none;" title="Toggle Fullscreen">
                     <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
@@ -920,7 +923,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/\u003e\n    \u003cpolygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/\u003e\n    \u003cpolygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/\u003e\n    \u003crect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/\u003e\n    \u003cpolygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/\u003e\n    \u003cpath id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1, "tooltip": "The Sun", "itemStyle": {"areaColor": "gold"}, "emphasis": {"itemStyle": {"areaColor": "yellow", "shadowBlur": 15, "shadowColor": "yellow", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "mountain1", "value": 1, "tooltip": "Mountain 1", "itemStyle": {"areaColor": "#a0a0a0"}, "emphasis": {"itemStyle": {"areaColor": "#c0c0c0"}}}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1, "tooltip": "A small house", "itemStyle": {"areaColor": "brown"}, "emphasis": {"itemStyle": {"areaColor": "#a52a2a"}}}, {"name": "roof", "value": 1}, {"name": "river", "value": 1}], "actions_manifest": {"sun": [{"action_type": "tooltip", "content": "\u003ch3\u003eThe Sun\u003c/h3\u003e\u003cp\u003eIt is very bright and hot.\u003c/p\u003e", "title": "The Sun", "panel_position": "right"}], "mountain1": [{"action_type": "tooltip", "content": "\u003ch3\u003eMountain 1\u003c/h3\u003e", "title": "Mountain 1", "panel_position": "right"}], "house": [{"action_type": "tooltip", "content": "\u003ch3\u003eA small house\u003c/h3\u003e", "title": "A small house", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": true, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"scene": {"id": "scene", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "background": {"id": "background", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "sun": {"id": "sun", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eThe Sun\u003c/h3\u003e\u003cp\u003eIt is very bright and hot.\u003c/p\u003e", "title": "The Sun", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "gold", "hover_color": "yellow", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain1": {"id": "mountain1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eMountain 1\u003c/h3\u003e", "title": "Mountain 1", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#a0a0a0", "hover_color": "#c0c0c0", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain2": {"id": "mountain2", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "house": {"id": "house", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eA small house\u003c/h3\u003e", "title": "A small house", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "brown", "hover_color": "#a52a2a", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "roof": {"id": "roof", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "river": {"id": "river", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"sun\" cx=\"300\" cy=\"100\" r=\"50\" fill=\"gold\" name=\"sun\"/\u003e\n    \u003cpolygon id=\"mountain1\" points=\"0,400 150,200 300,400\" fill=\"#a0a0a0\" name=\"mountain1\"/\u003e\n    \u003cpolygon id=\"mountain2\" points=\"150,400 250,250 400,400\" fill=\"#808080\" name=\"mountain2\"/\u003e\n    \u003crect id=\"house\" x=\"50\" y=\"300\" width=\"100\" height=\"100\" fill=\"brown\" name=\"house\"/\u003e\n    \u003cpolygon id=\"roof\" points=\"50,300 100,250 150,300\" fill=\"red\" name=\"roof\"/\u003e\n    \u003cpath id=\"river\" d=\"M 200 400 Q 250 350 300 400\" fill=\"blue\" stroke=\"blue\" stroke-width=\"5\" name=\"river\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "scene", "value": 1}, {"name": "background", "value": 1}, {"name": "sun", "value": 1, "tooltip": "The Sun", "itemStyle": {"areaColor": "gold"}, "emphasis": {"itemStyle": {"areaColor": "yellow", "shadowBlur": 15, "shadowColor": "yellow", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "mountain1", "value": 1, "tooltip": "Mountain 1", "itemStyle": {"areaColor": "#a0a0a0"}, "emphasis": {"itemStyle": {"areaColor": "#c0c0c0"}}}, {"name": "mountain2", "value": 1}, {"name": "house", "value": 1, "tooltip": "A small house", "itemStyle": {"areaColor": "brown"}, "emphasis": {"itemStyle": {"areaColor": "#a52a2a"}}}, {"name": "roof", "value": 1}, {"name": "river", "value": 1}], "actions_manifest": {"sun": [{"action_type": "tooltip", "content": "\u003ch3\u003eThe Sun\u003c/h3\u003e\u003cp\u003eIt is very bright and hot.\u003c/p\u003e", "title": "The Sun", "panel_position": "right"}], "mountain1": [{"action_type": "tooltip", "content": "\u003ch3\u003eMountain 1\u003c/h3\u003e", "title": "Mountain 1", "panel_position": "right"}], "house": [{"action_type": "tooltip", "content": "\u003ch3\u003eA small house\u003c/h3\u003e", "title": "A small house", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": true, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"scene": {"id": "scene", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "background": {"id": "background", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "sun": {"id": "sun", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eThe Sun\u003c/h3\u003e\u003cp\u003eIt is very bright and hot.\u003c/p\u003e", "title": "The Sun", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "gold", "hover_color": "yellow", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain1": {"id": "mountain1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eMountain 1\u003c/h3\u003e", "title": "Mountain 1", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#a0a0a0", "hover_color": "#c0c0c0", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "mountain2": {"id": "mountain2", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "house": {"id": "house", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eA small house\u003c/h3\u003e", "title": "A small house", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "brown", "hover_color": "#a52a2a", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "roof": {"id": "roof", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "river": {"id": "river", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
         var currentViewId = "default_view";
 
         // Apply Global Theme
@@ -968,6 +971,7 @@
         var timelineBinding = null;
         var liveSocket = null;
         var enableBrushSelection = false;
+        var currentAudio = null; // Store reference to currently playing tour audio
 
         // History for back navigation
         var viewHistory = [];
@@ -1032,7 +1036,7 @@
                         name: 'SIVO Series',
                         type: 'map',
                         map: mapName,
-                        roam: true, // Enable zoom and pan
+                        roam: view.lock_canvas ? false : true, // Enable zoom and pan
                         itemStyle: {
                             borderColor: '#cbd5e1', // Sleek slate-300
                             borderWidth: 1,
@@ -1073,7 +1077,7 @@
                 if (!option.geo) {
                     option.geo = {
                         map: mapName,
-                        roam: true,
+                        roam: view.lock_canvas ? false : true,
                         layoutCenter: ['50%', '50%'],
                         layoutSize: '100%',
                         itemStyle: {
@@ -1161,6 +1165,56 @@
                         color: activeDataBinding.colors
                     }
                 };
+            }
+
+            var proportionalSymbols = viewsData[currentViewId].proportional_symbols;
+            if (proportionalSymbols && proportionalSymbols.data) {
+                var scatterData = [];
+                for (var itemName in proportionalSymbols.data) {
+                    var dataObj = proportionalSymbols.data[itemName];
+                    if (dataObj && dataObj.coord) {
+                        scatterData.push({
+                            name: itemName,
+                            value: [dataObj.coord[0], dataObj.coord[1], dataObj.value],
+                            _rawVal: dataObj.value
+                        });
+                    }
+                }
+
+                if (scatterData.length > 0) {
+                    if (!option.geo) {
+                        option.geo = {
+                            map: mapName,
+                            roam: view.lock_canvas ? false : true,
+                            layoutCenter: ['50%', '50%'],
+                            layoutSize: '100%',
+                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            zlevel: 0
+                        };
+                        option.series[0].geoIndex = 0;
+                    }
+
+                    // Normalize sizes
+                    var minVal = Math.min(...scatterData.map(d => d._rawVal));
+                    var maxVal = Math.max(...scatterData.map(d => d._rawVal));
+                    var range = maxVal - minVal || 1;
+
+                    option.series.push({
+                        name: 'Proportional Symbols',
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        zlevel: 3,
+                        symbol: 'circle',
+                        itemStyle: {
+                            color: proportionalSymbols.color
+                        },
+                        symbolSize: function (val) {
+                            var ratio = (val[2] - minVal) / range;
+                            return proportionalSymbols.min_size + ratio * (proportionalSymbols.max_size - proportionalSymbols.min_size);
+                        },
+                        data: scatterData
+                    });
+                }
             }
 
             if (enableBrushSelection) {
@@ -1763,6 +1817,9 @@
             // Generate Accessibility (A11y) DOM Nodes
             generateA11yNodes();
 
+            // Initialize Scratch-off Layer if present
+            initScratchoff(view);
+
             // Initialize Scrollytelling if present
             initScrollytelling(view.scrollytelling);
 
@@ -1866,7 +1923,15 @@
         // Introduce a lightweight client-side sanitizer
         function sanitizeHTML(str) {
             if (typeof DOMPurify !== 'undefined') {
-                return DOMPurify.sanitize(str, {ADD_TAGS: ['form', 'input', 'textarea', 'button'], ADD_ATTR: ['onsubmit', 'required', 'type', 'name']});
+                return DOMPurify.sanitize(str, {
+                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player'],
+                    ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value'],
+                    CUSTOM_ELEMENT_HANDLING: {
+                        tagNameCheck: (tagName) => tagName.match(/-/),
+                        attributeNameCheck: (attr) => attr.match(/-/),
+                        allowCustomizedBuiltInElements: true,
+                    }
+                });
             }
             // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
             return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -2428,6 +2493,37 @@
                             id: chartId,
                             option: action.option
                         });
+                    } else if (action.action_type === 'lottie') {
+                        hasInteraction = true;
+                        var lottieHtml = `<lottie-player src="${action.lottie_url}" background="transparent" speed="1" style="width: 100%; height: 300px; display: block;" ${action.loop ? 'loop' : ''} ${action.autoplay ? 'autoplay' : ''}></lottie-player>`;
+                        htmlContent += lottieHtml;
+                    } else if (action.action_type === 'compare') {
+                        hasInteraction = true;
+                        var compareId = 'sivo-compare-' + name + '-' + Math.random().toString(36).substr(2, 9);
+                        var compareHtml = `
+                        <div style="position:relative; width:100%; height:300px; overflow:hidden; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+                            <img src="${action.before_image}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" />
+                            <div id="${compareId}-after" style="position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; border-right:2px solid white; box-shadow: 2px 0 5px rgba(0,0,0,0.3);">
+                                <img src="${action.after_image}" style="position:absolute; top:0; left:0; width:200%; height:100%; object-fit:cover;" />
+                            </div>
+                            <input type="range" class="sivo-compare-slider" data-target="${compareId}-after" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:ew-resize;" />
+                            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_after}</div>
+                            <div style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_before}</div>
+                        </div>`;
+                        htmlContent += compareHtml;
+                    } else if (action.action_type === 'progress_bar') {
+                        hasInteraction = true;
+                        var progressHtml = `
+                        <div style="margin-bottom:15px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items:center;">
+                                <span style="font-weight:600; color:#334155; font-size:14px;">${action.title}</span>
+                                <span style="font-weight:700; color:${action.color};">${action.progress}%</span>
+                            </div>
+                            <div style="width:100%; background-color:#e2e8f0; border-radius:10px; height:12px; overflow:hidden;">
+                                <div style="width:${action.progress}%; background-color:${action.color}; height:100%; border-radius:10px; transition:width 0.5s ease-in-out;"></div>
+                            </div>
+                        </div>`;
+                        htmlContent += progressHtml;
                     } else if (action.action_type === 'zoom') {
                         var zoomOption = {
                             series: [{
@@ -2528,6 +2624,23 @@
                 socialIframes.forEach(function(iframe) {
                     infoContent.appendChild(iframe);
                 });
+
+                // Attach dynamic listeners for Compare Sliders safely
+                var compareSliders = infoContent.querySelectorAll('.sivo-compare-slider');
+                compareSliders.forEach(function(slider) {
+                    slider.addEventListener('input', function() {
+                        var targetId = this.getAttribute('data-target');
+                        var targetEl = infoContent.querySelector('#' + targetId);
+                        if (targetEl) {
+                            targetEl.style.width = this.value + '%';
+                            var img = targetEl.querySelector('img');
+                            if (img && this.value > 0) {
+                                img.style.width = (10000 / this.value) + '%';
+                            }
+                        }
+                    });
+                });
+
                 applyPanelPosition(panelPosition, true);
             } else if (!hasInteraction && !elementActions) {
                 var emptySvg = `<svg class="sivo-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
@@ -2785,6 +2898,119 @@
             }
         }
 
+        function initScratchoff(view) {
+            var canvas = document.getElementById('sivo-scratchoff-canvas');
+            if (!view.scratchoff) {
+                canvas.style.display = 'none';
+                return;
+            }
+
+            canvas.style.display = 'block';
+            canvas.style.pointerEvents = 'auto'; // allow scratching
+            canvas.style.touchAction = 'none'; // prevent native scrolling while scratching
+            var ctx = canvas.getContext('2d');
+
+            // Resize canvas to match container
+            function resizeCanvas() {
+                var rect = chartDom.getBoundingClientRect();
+
+                // Save current canvas state to preserve scratch progress on resize
+                var tempCanvas = document.createElement('canvas');
+                tempCanvas.width = canvas.width || rect.width;
+                tempCanvas.height = canvas.height || rect.height;
+                var tempCtx = tempCanvas.getContext('2d');
+                if (canvas.width && canvas.height) {
+                    tempCtx.drawImage(canvas, 0, 0);
+                }
+
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+
+                if (canvas.width > 0 && canvas.height > 0) {
+                    fillCanvas(tempCanvas);
+                }
+            }
+
+            function fillCanvas(savedStateCanvas) {
+                if (view.scratchoff.image_url) {
+                    var img = new Image();
+                    img.crossOrigin = 'Anonymous';
+                    img.onload = function() {
+                        // Draw image to cover
+                        var scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                        var x = (canvas.width / 2) - (img.width / 2) * scale;
+                        var y = (canvas.height / 2) - (img.height / 2) * scale;
+                        ctx.globalCompositeOperation = 'source-over';
+                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                        if (savedStateCanvas && savedStateCanvas.width) {
+                            ctx.globalCompositeOperation = 'destination-out';
+                            ctx.drawImage(savedStateCanvas, 0, 0);
+                        }
+                    };
+                    img.src = view.scratchoff.image_url;
+                } else {
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.fillStyle = view.scratchoff.color || '#cccccc';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    if (savedStateCanvas && savedStateCanvas.width) {
+                        ctx.globalCompositeOperation = 'destination-out';
+                        ctx.drawImage(savedStateCanvas, 0, 0);
+                    }
+                }
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            var isDrawing = false;
+            var brushSize = view.scratchoff.brush_size || 40;
+
+            function scratch(e) {
+                if (!isDrawing) return;
+                var rect = canvas.getBoundingClientRect();
+                var clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+                var clientY = e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+
+                var x = clientX - rect.left;
+                var y = clientY - rect.top;
+
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, brushSize, 0, Math.PI * 2, false);
+                ctx.fill();
+
+                // Check how much is scratched off to potentially disable pointer-events completely
+                // (Too expensive to do every frame, maybe every N frames)
+            }
+
+            canvas.addEventListener('mousedown', function(e) {
+                isDrawing = true;
+                scratch(e);
+            });
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('mouseup', function() { isDrawing = false; });
+            canvas.addEventListener('mouseleave', function() { isDrawing = false; });
+
+            // Touch support
+            canvas.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                isDrawing = true;
+                scratch(e);
+            }, { passive: false });
+            canvas.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                scratch(e);
+            }, { passive: false });
+            canvas.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                isDrawing = false;
+            }, { passive: false });
+        }
+
+
         function initScrollytelling(steps) {
             var container = document.getElementById('scrollytelling-container');
             if (!steps || steps.length === 0) {
@@ -2881,11 +3107,23 @@
         function renderTourStep() {
             if (currentTourStep < 0 || currentTourStep >= tourSteps.length) return;
 
+            // Stop existing audio
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+
             // Close info panel to ensure map is visible during tour progression
             closePanel();
 
             var step = tourSteps[currentTourStep];
             document.getElementById('tour-content').innerHTML = sanitizeHTML(step.content);
+
+            // Play audio if present
+            if (step.audio_url) {
+                currentAudio = new Audio(step.audio_url);
+                currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+            }
             document.getElementById('tour-progress').innerText = (currentTourStep + 1) + ' / ' + tourSteps.length;
             document.getElementById('tour-prev').disabled = currentTourStep === 0;
             document.getElementById('tour-next').innerText = currentTourStep === tourSteps.length - 1 ? 'Finish' : 'Next';
@@ -2924,6 +3162,10 @@
 
         function closeTour() {
             document.getElementById('tour-container').style.display = 'none';
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
         }
 
         var isMinimapEnabled = false;

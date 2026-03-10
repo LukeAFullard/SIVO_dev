@@ -1036,7 +1036,7 @@
                         name: 'SIVO Series',
                         type: 'map',
                         map: mapName,
-                        roam: true, // Enable zoom and pan
+                        roam: view.lock_canvas ? false : true, // Enable zoom and pan
                         itemStyle: {
                             borderColor: '#cbd5e1', // Sleek slate-300
                             borderWidth: 1,
@@ -1077,7 +1077,7 @@
                 if (!option.geo) {
                     option.geo = {
                         map: mapName,
-                        roam: true,
+                        roam: view.lock_canvas ? false : true,
                         layoutCenter: ['50%', '50%'],
                         layoutSize: '100%',
                         itemStyle: {
@@ -1185,7 +1185,7 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
-                            roam: true,
+                            roam: view.lock_canvas ? false : true,
                             layoutCenter: ['50%', '50%'],
                             layoutSize: '100%',
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
@@ -1925,7 +1925,12 @@
             if (typeof DOMPurify !== 'undefined') {
                 return DOMPurify.sanitize(str, {
                     ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player'],
-                    ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value']
+                    ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value'],
+                    CUSTOM_ELEMENT_HANDLING: {
+                        tagNameCheck: (tagName) => tagName.match(/-/),
+                        attributeNameCheck: (attr) => attr.match(/-/),
+                        allowCustomizedBuiltInElements: true,
+                    }
                 });
             }
             // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
@@ -2490,7 +2495,7 @@
                         });
                     } else if (action.action_type === 'lottie') {
                         hasInteraction = true;
-                        var lottieHtml = `<lottie-player src="${action.lottie_url}" background="transparent" speed="1" style="width: 100%; height: 300px;" ${action.loop ? 'loop' : ''} ${action.autoplay ? 'autoplay' : ''}></lottie-player>`;
+                        var lottieHtml = `<lottie-player src="${action.lottie_url}" background="transparent" speed="1" style="width: 100%; height: 300px; display: block;" ${action.loop ? 'loop' : ''} ${action.autoplay ? 'autoplay' : ''}></lottie-player>`;
                         htmlContent += lottieHtml;
                     } else if (action.action_type === 'compare') {
                         hasInteraction = true;
@@ -2625,7 +2630,7 @@
                 compareSliders.forEach(function(slider) {
                     slider.addEventListener('input', function() {
                         var targetId = this.getAttribute('data-target');
-                        var targetEl = document.getElementById(targetId);
+                        var targetEl = infoContent.querySelector('#' + targetId);
                         if (targetEl) {
                             targetEl.style.width = this.value + '%';
                             var img = targetEl.querySelector('img');
@@ -2902,6 +2907,7 @@
 
             canvas.style.display = 'block';
             canvas.style.pointerEvents = 'auto'; // allow scratching
+            canvas.style.touchAction = 'none'; // prevent native scrolling while scratching
             var ctx = canvas.getContext('2d');
 
             // Resize canvas to match container
@@ -2988,11 +2994,20 @@
             // Touch support
             canvas.addEventListener('touchstart', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 isDrawing = true;
                 scratch(e);
-            });
-            canvas.addEventListener('touchmove', scratch);
-            canvas.addEventListener('touchend', function() { isDrawing = false; });
+            }, { passive: false });
+            canvas.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                scratch(e);
+            }, { passive: false });
+            canvas.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                isDrawing = false;
+            }, { passive: false });
         }
 
 

@@ -37,6 +37,8 @@ sivo_app.map("zone_sw", tooltip="South West Zone", hover_color="#94a3b8")
 sivo_app.map("zone_se", tooltip="South East Zone", hover_color="#94a3b8")
 sivo_app.map("center_core", tooltip="Core Facility", glow=True)
 
-output_path = "examples/29_minimap_export/minimap_export.html"
+import os
+
+output_path = os.path.join(os.path.dirname(__file__), "minimap_export.html")
 sivo_app.to_html(output_path)
 print(f"Generated {output_path}")
