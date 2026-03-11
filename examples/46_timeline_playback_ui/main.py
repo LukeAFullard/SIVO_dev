@@ -53,7 +53,7 @@ def main():
     )
 
     # 5. Output to HTML
-    output_path = os.path.join(os.path.dirname(__file__), '31_timeline_playback_ui.html')
+    output_path = os.path.join(os.path.dirname(__file__), 'output.html')
     app.to_html(output_path)
     print(f"Generated Example: {output_path}")
 
