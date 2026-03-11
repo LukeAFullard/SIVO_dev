@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, bounding_coords: Optional[list[list[float]]] = None):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -41,6 +41,7 @@ class Infographic:
         self.enable_share = enable_share
         self.enable_data_download = enable_data_download
         self.enable_drawing_tools = enable_drawing_tools
+        self.ambient_effect = ambient_effect
         self.bounding_coords = bounding_coords
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
@@ -116,6 +117,7 @@ class Infographic:
         infographic.enable_share = getattr(cfg, "enable_share", False)
         infographic.enable_data_download = getattr(cfg, "enable_data_download", False)
         infographic.enable_drawing_tools = getattr(cfg, "enable_drawing_tools", False)
+        infographic.ambient_effect = getattr(cfg, "ambient_effect", None)
         infographic.bounding_coords = getattr(cfg, "bounding_coords", None)
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
@@ -742,6 +744,7 @@ class Infographic:
             "enable_share": self.enable_share,
             "enable_data_download": self.enable_data_download,
             "enable_drawing_tools": self.enable_drawing_tools,
+            "ambient_effect": self.ambient_effect,
             "bounding_coords": self.bounding_coords
         }
         if self.data_binding:

@@ -216,6 +216,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "enable_share": view_obj.get("enable_share", False),
             "enable_data_download": view_obj.get("enable_data_download", False),
             "enable_drawing_tools": view_obj.get("enable_drawing_tools", False),
+            "ambient_effect": view_obj.get("ambient_effect", None),
             "bounding_coords": view_obj.get("bounding_coords", None),
             "mappings": safe_mappings
         }

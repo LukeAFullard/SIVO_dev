@@ -281,6 +281,10 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, renders a drawing/annotation toolbar to draw freely over the canvas."
     )
+    ambient_effect: Optional[str] = Field(
+        default=None,
+        description="Optional full-screen ambient effect overlay. Options: 'snow', 'rain', 'particles', 'fireflies'."
+    )
     bounding_coords: Optional[List[List[float]]] = Field(
         default=None,
         description="Optional bounding coordinates [[minLng, minLat], [maxLng, maxLat]] to map the SVG to a geographic coordinate system."
