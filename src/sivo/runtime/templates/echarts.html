@@ -3015,7 +3015,33 @@
                                 }
 
                                 var nestedChart = echarts.init(container);
-                                nestedChart.setOption(chartData.option);
+
+                                // Check for Word Cloud mask image intercept
+                                var hasMaskImage = false;
+                                if (chartData.option && chartData.option.series && Array.isArray(chartData.option.series)) {
+                                    for (let s = 0; s < chartData.option.series.length; s++) {
+                                        if (chartData.option.series[s].type === 'wordCloud' && chartData.option.series[s]._sivo_mask_image_url) {
+                                            hasMaskImage = true;
+                                            let imgUrl = chartData.option.series[s]._sivo_mask_image_url;
+                                            let seriesRef = chartData.option.series[s];
+                                            let img = new Image();
+                                            img.crossOrigin = "Anonymous";
+                                            img.onload = function() {
+                                                seriesRef.maskImage = img;
+                                                nestedChart.setOption(chartData.option);
+                                            };
+                                            img.onerror = function() {
+                                                console.warn("SIVO: Failed to load Word Cloud mask image:", imgUrl);
+                                                nestedChart.setOption(chartData.option);
+                                            };
+                                            img.src = imgUrl;
+                                        }
+                                    }
+                                }
+
+                                if (!hasMaskImage) {
+                                    nestedChart.setOption(chartData.option);
+                                }
                             }
                         });
                         // clear so we only init once
