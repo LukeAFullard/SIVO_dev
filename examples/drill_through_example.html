@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include echarts-wordcloud -->
@@ -27,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -1098,8 +1093,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 200\"\u003e\n        \u003crect id=\"button_dashboard\" x=\"50\" y=\"50\" width=\"300\" height=\"100\" fill=\"#4CAF50\" rx=\"10\" name=\"button_dashboard\"/\u003e\n        \u003ctext x=\"200\" y=\"110\" font-family=\"Arial\" font-size=\"24\" fill=\"white\" text-anchor=\"middle\" pointer-events=\"none\"\u003eClick to Drill-Through\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "button_dashboard", "value": 1, "tooltip": "Navigates to example.com in same tab"}], "actions_manifest": {"button_dashboard": [{"action_type": "tooltip", "content": "\u003ch3\u003eNavigates to example.com in same tab\u003c/h3\u003e", "title": "Navigates to example.com in same tab", "panel_position": "right"}, {"action_type": "drill_through", "url": "https://example.com", "target": "_self"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Drill-Through Action Example", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "bounding_coords": null, "mappings": {"button_dashboard": {"id": "button_dashboard", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eNavigates to example.com in same tab\u003c/h3\u003e", "title": "Navigates to example.com in same tab", "panel_position": "right"}, {"action_type": "drill_through", "url": "https://example.com", "target": "_self"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -2242,22 +2237,8 @@
                                 if (!actionsManifest[id]) {
                                     actionsManifest[id] = { actions: [], theme: {} };
                                 }
-                                if (!actionsManifest[id].theme) {
-                                    actionsManifest[id].theme = {};
-                                }
-                                if (!actionsManifest[id].actions) {
-                                    actionsManifest[id].actions = [];
-                                }
                                 if (item.color && actionsManifest[id].theme.color !== item.color) {
                                     actionsManifest[id].theme.color = item.color;
-                                    hasChanges = true;
-                                }
-                                if (item.fill_gradient) {
-                                    actionsManifest[id].theme.fill_gradient = item.fill_gradient;
-                                    hasChanges = true;
-                                }
-                                if (item.fill_pattern) {
-                                    actionsManifest[id].theme.fill_pattern = item.fill_pattern;
                                     hasChanges = true;
                                 }
                                 if (item.tooltip) {
@@ -5037,8 +5018,8 @@ function tourNext() {
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

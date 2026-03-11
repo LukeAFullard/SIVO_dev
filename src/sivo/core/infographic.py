@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union, List
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction
+from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -45,6 +45,7 @@ class Infographic:
         self.bounding_coords = bounding_coords
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
+        self.api_binding: Optional[dict] = None
         self.scrollytelling: Optional[list] = None
         self.tour: Optional[list] = None
         self.layer_toggles: Optional[list] = None
@@ -123,6 +124,7 @@ class Infographic:
         infographic.bounding_coords = getattr(cfg, "bounding_coords", None)
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
+        infographic.api_binding = getattr(cfg, "api_binding", None)
         infographic.scrollytelling = getattr(cfg, "scrollytelling", None)
         infographic.tour = getattr(cfg, "tour", None)
         infographic.layer_toggles = getattr(cfg, "layer_toggles", None)
@@ -158,6 +160,7 @@ class Infographic:
                     html=elem_config.html,
                     url=elem_config.url,
                     drill_to=elem_config.drill_to,
+                    drill_through=getattr(elem_config, 'drill_through', None),
                     callback_event=elem_config.callback_event,
                     callback_payload=elem_config.callback_payload,
                     hover_callback_event=elem_config.hover_callback_event,
@@ -215,6 +218,7 @@ class Infographic:
         html: Optional[str] = None,
         url: Optional[str] = None,
         drill_to: Optional[str] = None,
+        drill_through: Optional[str] = None,
         callback_event: Optional[str] = None,
         callback_payload: Optional[dict] = None,
         hover_callback_event: Optional[str] = None,
@@ -328,6 +332,9 @@ class Infographic:
 
         if drill_to:
             mapping.actions.append(DrillDownAction(target_svg=drill_to))
+
+        if drill_through:
+            mapping.actions.append(DrillThroughAction(url=drill_through))
 
         if callback_event:
             mapping.actions.append(CallbackAction(event_name=callback_event, payload=callback_payload))
@@ -522,6 +529,18 @@ class Infographic:
             topic=topic,
             auth_token=auth_token
         )
+
+    def bind_api(self, url: str, polling_interval_ms: int = 5000, method: str = "GET", headers: Optional[Dict[str, str]] = None, payload: Optional[dict] = None, data_path: Optional[str] = None):
+        """Binds an API endpoint for live UI updates via polling in the frontend runtime."""
+        from .config import ApiBindingConfig
+        self.api_binding = ApiBindingConfig(
+            url=url,
+            polling_interval_ms=polling_interval_ms,
+            method=method,
+            headers=headers,
+            payload=payload,
+            data_path=data_path
+        ).model_dump()
 
     def bind_scrollytelling(self, steps: list[Dict]):
         from .config import ScrollytellingStepConfig
@@ -890,6 +909,13 @@ class Infographic:
             view_data["data_binding"] = self.data_binding.model_dump()
         if self.timeline_binding:
             view_data["timeline_binding"] = self.timeline_binding.model_dump()
+        if self.api_binding:
+            if hasattr(self.api_binding, "model_dump"):
+                view_data["api_binding"] = self.api_binding.model_dump()
+            elif hasattr(self.api_binding, "dict"):
+                view_data["api_binding"] = self.api_binding.dict()
+            else:
+                view_data["api_binding"] = self.api_binding
         if self.scrollytelling:
             view_data["scrollytelling"] = [s.model_dump() for s in self.scrollytelling]
         if self.tour:

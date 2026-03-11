@@ -19,6 +19,11 @@ class DrillDownAction(BaseAction):
     action_type: Literal["drilldown"] = "drilldown"
     target_svg: str = Field(description="Registered view_id from SivoProject OR path to an external secondary SVG file")
 
+class DrillThroughAction(BaseAction):
+    action_type: Literal["drill_through"] = "drill_through"
+    url: str = Field(description="URL to a deeply detailed sub-dashboard or external page to navigate to")
+    target: Literal["_blank", "_self"] = Field(default="_self")
+
 class CallbackAction(BaseAction):
     action_type: Literal["callback"] = "callback"
     event_name: str = Field(description="Event name to send back to Streamlit or backend")
@@ -186,7 +191,7 @@ class ThemeOverride(BaseModel):
     odometer_duration_ms: Optional[int] = 2000
     odometer_format: Optional[str] = None
 
-ActionType = Annotated[Union[ConfettiAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, URLAction, DrillDownAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[ConfettiAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str

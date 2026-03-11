@@ -10,6 +10,7 @@ class ElementConfig(BaseModel):
     html: Optional[str] = None
     url: Optional[str] = None
     drill_to: Optional[str] = None
+    drill_through: Optional[str] = None
     callback_event: Optional[str] = None
     callback_payload: Optional[Dict[str, Any]] = None
     hover_callback_event: Optional[str] = None
@@ -116,6 +117,15 @@ class LiveBindingConfig(BaseModel):
     reconnect_attempts: int = 5
     fallback_polling_interval: int = 0
 
+class ApiBindingConfig(BaseModel):
+    """Configuration for Live API & Database Connections via polling."""
+    url: str = Field(description="The API endpoint to poll for data updates.")
+    polling_interval_ms: int = Field(default=5000, description="Interval in milliseconds to poll the API.")
+    method: str = Field(default="GET", description="HTTP method to use (GET, POST).")
+    headers: Optional[Dict[str, str]] = Field(default=None, description="Optional HTTP headers (e.g., Authorization).")
+    payload: Optional[Dict[str, Any]] = Field(default=None, description="Optional JSON payload for POST requests.")
+    data_path: Optional[str] = Field(default=None, description="Optional dot-notation path to extract the relevant data array/object from the response (e.g., 'data.results').")
+
 class ScrollytellingStepConfig(BaseModel):
     """Configuration for a single scrollytelling step."""
     content: str = Field(description="HTML content for the step text")
@@ -219,6 +229,10 @@ class ProjectConfig(BaseModel):
     live_binding: Optional[LiveBindingConfig] = Field(
         default=None,
         description="Optional WebSocket connection for live telemetry."
+    )
+    api_binding: Optional[ApiBindingConfig] = Field(
+        default=None,
+        description="Optional API connection for polling live data updates."
     )
     scrollytelling: Optional[List[ScrollytellingStepConfig]] = Field(
         default=None,
