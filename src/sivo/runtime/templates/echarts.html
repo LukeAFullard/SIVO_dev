@@ -1236,22 +1236,11 @@
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
-                            itemStyle: {
-                                // Strip out default areaColor override so custom colors stay intact on hover
-                                // Keep a very subtle shadow just to indicate it is interactive on hover
-                                shadowBlur: 8,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.2)'
-                            },
-                            label: {
-                                show: false
-                            }
+                            disabled: true
                         },
                         selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
-                            itemStyle: {
-                                // Empty to ensure absolutely no visual change on click natively
-                            }
+                            disabled: true
                         },
                         data: echartsData,
                         zlevel: 1,
@@ -2301,6 +2290,20 @@
 
                                     echartsDataItem.tooltip = item.tooltip;
                                 }
+
+                                // We check if the panel is currently open for THIS element,
+                                // and if the tooltip/content just changed, we must re-trigger the click event
+                                // so the sidebar DOM regenerates with the new content
+                                if (window.sivoCurrentPanelElement === id && hasChanges) {
+                                    // Make sure we update a global flag or timeout so that AFTER the ECharts setOption call happens,
+                                    // we re-trigger the element click. Otherwise, triggerElementClick might be reading stale state
+                                    // if it's called synchronously before actionsManifest is fully settled in the render loop.
+                                    // Actually, actionsManifest is mutated in place, but let's queue the redraw.
+                                    setTimeout(() => {
+                                        // Ensure the latest data is used
+                                        window.triggerElementClick(id);
+                                    }, 150);
+                                }
                             };
 
                             if (Array.isArray(targetData)) {
@@ -2740,12 +2743,21 @@
 
         // Handle click events
         myChart.on('click', function (params) {
+            triggerElementClick(params.name);
+        });
+
+        window.sivoCurrentPanelElement = null;
+
+        window.triggerElementClick = function(name) {
             var infoPanel = document.getElementById('info-panel');
-            var name = params.name;
 
             applyFadeUnselected(name);
 
-            var elementActions = actionsManifest[name];
+            // actionsManifest[name] in Python corresponds to ElementActionsManifest(actions=[...], theme=...)
+            // If it's passed from python it looks like { actions: [...], theme: {...} }
+            // Or historically it might just be the array if accessed weirdly.
+            var elementData = actionsManifest[name];
+            var elementActions = elementData ? (elementData.actions || elementData) : null;
             var htmlContent = '';
             var hasInteraction = false;
             var panelPosition = 'right'; // Default
@@ -3451,19 +3463,22 @@
                 });
 
                 applyPanelPosition(panelPosition, true);
+                window.sivoCurrentPanelElement = name;
             } else if (!hasInteraction && !elementActions) {
                 var emptySvg = `<svg class="sivo-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
                 infoContent.innerHTML = `<div class="sivo-empty-state">${emptySvg}<h3>${name}</h3><p>No additional information mapped for this region.</p></div>`;
                 applyPanelPosition(panelPosition, false);
+                window.sivoCurrentPanelElement = name;
             } else {
                 closePanel();
             }
-        });
+        }
 
         // Handle hover events
         myChart.on('mouseover', function (params) {
             var name = params.name;
-            var elementActions = actionsManifest[name];
+            var elementData = actionsManifest[name];
+            var elementActions = elementData ? (elementData.actions || elementData) : null;
 
             if (elementActions) {
                 elementActions.forEach(function(action) {
@@ -3545,6 +3560,7 @@
         });
 
         function closePanel() {
+            window.sivoCurrentPanelElement = null;
             clearFadeUnselected();
 
             var infoPanel = document.getElementById('info-panel');

@@ -21,7 +21,7 @@ def main():
         "status_dot",
         tooltip="Waiting for live connection...",
         glow=False,
-        hover_color="transparent"
+        hover_color=None
     )
 
     # Use a Data URI to return a static JSON array that confirms data was received and parsed natively

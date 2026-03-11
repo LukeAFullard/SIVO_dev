@@ -1093,7 +1093,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 100\"\u003e\n        \u003c!-- Status Indicator Dot --\u003e\n        \u003ccircle id=\"status_dot\" cx=\"30\" cy=\"50\" r=\"15\" fill=\"#9ca3af\" name=\"status_dot\"/\u003e\n        \n        \u003c!-- Static Label --\u003e\n        \u003ctext x=\"60\" y=\"55\" font-family=\"Arial\" font-size=\"16\" fill=\"#374151\" pointer-events=\"none\"\u003eSystem Status Connection\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "status_dot", "value": 1, "tooltip": "Waiting for live connection...", "emphasis": {"itemStyle": {"areaColor": "transparent"}}}], "actions_manifest": {"status_dot": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e", "title": "Waiting for live connection...", "panel_position": "right"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Live API Binding Test", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "bounding_coords": null, "mappings": {"status_dot": {"id": "status_dot", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e", "title": "Waiting for live connection...", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "transparent", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": false, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "api_binding": {"url": "data:application/json,%5B%7B%22id%22%3A%22status_dot%22%2C%22color%22%3A%22%2310b981%22%2C%22tooltip%22%3A%22Connected%3A%20Data%20successfully%20received%20and%20processed.%22%7D%5D", "polling_interval_ms": 3000, "method": "GET", "headers": null, "payload": null, "data_path": null}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 100\"\u003e\n        \u003c!-- Status Indicator Dot --\u003e\n        \u003ccircle id=\"status_dot\" cx=\"30\" cy=\"50\" r=\"15\" fill=\"#9ca3af\" name=\"status_dot\"/\u003e\n        \n        \u003c!-- Static Label --\u003e\n        \u003ctext x=\"60\" y=\"55\" font-family=\"Arial\" font-size=\"16\" fill=\"#374151\" pointer-events=\"none\"\u003eSystem Status Connection\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "status_dot", "value": 1, "tooltip": "Waiting for live connection..."}], "actions_manifest": {"status_dot": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e", "title": "Waiting for live connection...", "panel_position": "right"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Live API Binding Test", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "bounding_coords": null, "mappings": {"status_dot": {"id": "status_dot", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e", "title": "Waiting for live connection...", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": false, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "api_binding": {"url": "data:application/json,%5B%7B%22id%22%3A%22status_dot%22%2C%22color%22%3A%22%2310b981%22%2C%22tooltip%22%3A%22Connected%3A%20Data%20successfully%20received%20and%20processed.%22%7D%5D", "polling_interval_ms": 3000, "method": "GET", "headers": null, "payload": null, "data_path": null}}};
         var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
@@ -1231,22 +1231,11 @@
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
-                            itemStyle: {
-                                // Strip out default areaColor override so custom colors stay intact on hover
-                                // Keep a very subtle shadow just to indicate it is interactive on hover
-                                shadowBlur: 8,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.2)'
-                            },
-                            label: {
-                                show: false
-                            }
+                            disabled: true
                         },
                         selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
-                            itemStyle: {
-                                // Empty to ensure absolutely no visual change on click natively
-                            }
+                            disabled: true
                         },
                         data: echartsData,
                         zlevel: 1,
@@ -2296,6 +2285,20 @@
 
                                     echartsDataItem.tooltip = item.tooltip;
                                 }
+
+                                // We check if the panel is currently open for THIS element,
+                                // and if the tooltip/content just changed, we must re-trigger the click event
+                                // so the sidebar DOM regenerates with the new content
+                                if (window.sivoCurrentPanelElement === id && hasChanges) {
+                                    // Make sure we update a global flag or timeout so that AFTER the ECharts setOption call happens,
+                                    // we re-trigger the element click. Otherwise, triggerElementClick might be reading stale state
+                                    // if it's called synchronously before actionsManifest is fully settled in the render loop.
+                                    // Actually, actionsManifest is mutated in place, but let's queue the redraw.
+                                    setTimeout(() => {
+                                        // Ensure the latest data is used
+                                        window.triggerElementClick(id);
+                                    }, 150);
+                                }
                             };
 
                             if (Array.isArray(targetData)) {
@@ -2735,12 +2738,21 @@
 
         // Handle click events
         myChart.on('click', function (params) {
+            triggerElementClick(params.name);
+        });
+
+        window.sivoCurrentPanelElement = null;
+
+        window.triggerElementClick = function(name) {
             var infoPanel = document.getElementById('info-panel');
-            var name = params.name;
 
             applyFadeUnselected(name);
 
-            var elementActions = actionsManifest[name];
+            // actionsManifest[name] in Python corresponds to ElementActionsManifest(actions=[...], theme=...)
+            // If it's passed from python it looks like { actions: [...], theme: {...} }
+            // Or historically it might just be the array if accessed weirdly.
+            var elementData = actionsManifest[name];
+            var elementActions = elementData ? (elementData.actions || elementData) : null;
             var htmlContent = '';
             var hasInteraction = false;
             var panelPosition = 'right'; // Default
@@ -3446,14 +3458,16 @@
                 });
 
                 applyPanelPosition(panelPosition, true);
+                window.sivoCurrentPanelElement = name;
             } else if (!hasInteraction && !elementActions) {
                 var emptySvg = `<svg class="sivo-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
                 infoContent.innerHTML = `<div class="sivo-empty-state">${emptySvg}<h3>${name}</h3><p>No additional information mapped for this region.</p></div>`;
                 applyPanelPosition(panelPosition, false);
+                window.sivoCurrentPanelElement = name;
             } else {
                 closePanel();
             }
-        });
+        }
 
         // Handle hover events
         myChart.on('mouseover', function (params) {
@@ -3540,6 +3554,7 @@
         });
 
         function closePanel() {
+            window.sivoCurrentPanelElement = null;
             clearFadeUnselected();
 
             var infoPanel = document.getElementById('info-panel');
