@@ -9,9 +9,11 @@ class Sivo:
     This class serves as the primary declarative Python API for the framework,
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
-    def __init__(self, infographic: Infographic, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None):
+    def __init__(self, infographic: Infographic, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None):
         self.infographic = infographic
         self.infographic.default_panel_position = default_panel_position
+        self.infographic.disable_panel = disable_panel
+        self.infographic.panel_width = panel_width
         self.infographic.lock_zoom_out = lock_zoom_out
         self.infographic.enable_a11y = enable_a11y
         self.infographic.render_mode = render_mode
@@ -32,16 +34,16 @@ class Sivo:
         self.infographic.bounding_coords = bounding_coords
 
     @classmethod
-    def from_svg(cls, filepath: str, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None) -> "Sivo":
+    def from_svg(cls, filepath: str, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None) -> "Sivo":
         """Initializes a Sivo instance from an SVG file path."""
         info = Infographic.from_svg(filepath)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, bounding_coords=bounding_coords)
+        return cls(info, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, bounding_coords=bounding_coords)
 
     @classmethod
-    def from_string(cls, svg_string: str, default_panel_position: str = "right", lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None) -> "Sivo":
+    def from_string(cls, svg_string: str, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None) -> "Sivo":
         """Initializes a Sivo instance directly from an SVG string."""
         info = Infographic.from_string(svg_string)
-        return cls(info, default_panel_position=default_panel_position, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, bounding_coords=bounding_coords)
+        return cls(info, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, bounding_coords=bounding_coords)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":
@@ -52,6 +54,8 @@ class Sivo:
         return cls(
             info,
             default_panel_position=info.default_panel_position,
+            disable_panel=getattr(info, "disable_panel", False),
+            panel_width=getattr(info, "panel_width", None),
             lock_zoom_out=info.lock_zoom_out,
             enable_a11y=info.enable_a11y,
             render_mode=info.render_mode,
@@ -735,6 +739,8 @@ class Sivo:
             "overlays": self.infographic.overlays,
             "connections": self.infographic.connections,
             "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False),
+            "disable_panel": getattr(self.infographic, "disable_panel", False),
+            "panel_width": getattr(self.infographic, "panel_width", None),
             "render_mode": getattr(self.infographic, "render_mode", "canvas"),
             "enable_minimap": getattr(self.infographic, "enable_minimap", False),
             "enable_export": getattr(self.infographic, "enable_export", False),

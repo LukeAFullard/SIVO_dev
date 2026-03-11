@@ -1731,6 +1731,8 @@
             dataBinding = view.data_binding || null;
             timelineBinding = view.timeline_binding || null;
             var liveBinding = view.live_binding || null;
+            window.sivoDisablePanel = view.disable_panel || false;
+            window.sivoPanelWidth = view.panel_width || null;
 
             // Handle Live Binding (WebSocket Telemetry) if present
             if (liveSocket) {
@@ -2657,6 +2659,8 @@
 
 
             function applyPanelPosition(position, initCharts) {
+                if (window.sivoDisablePanel) return;
+
                 infoPanel.className = 'active'; // reset classes but keep active
                 var resizer = document.getElementById('sivo-resizer');
                 resizer.className = 'sivo-resizer active';
@@ -2681,9 +2685,30 @@
                     resizer.classList.add('resizer-horizontal');
                 }
 
-                // Clear any manual sizing inline styles from dragging
-                infoPanel.style.width = '';
-                infoPanel.style.height = '';
+                // Apply custom panel width if provided
+                if (window.sivoPanelWidth) {
+                    if (window.innerWidth <= 768) {
+                        // On mobile, the panel is full width and positioned at bottom/top, so we adjust height instead
+                        infoPanel.style.height = window.sivoPanelWidth;
+                        infoPanel.style.width = '';
+                    } else {
+                        // Desktop
+                        if (position === 'left' || position === 'right') {
+                            infoPanel.style.width = window.sivoPanelWidth;
+                            infoPanel.style.flexBasis = window.sivoPanelWidth;
+                            infoPanel.style.height = '';
+                        } else {
+                            // Desktop but panel at top/bottom (rare but supported)
+                            infoPanel.style.height = window.sivoPanelWidth;
+                            infoPanel.style.width = '';
+                        }
+                    }
+                } else {
+                    // Clear any manual sizing inline styles from dragging or old views
+                    infoPanel.style.width = '';
+                    infoPanel.style.height = '';
+                    infoPanel.style.flexBasis = '';
+                }
 
                 // Smoothly resize ECharts during CSS transition
                 let start = null;
@@ -2721,6 +2746,11 @@
                     }
                 }
                 window.requestAnimationFrame(step);
+            }
+
+            if (window.sivoDisablePanel) {
+                closePanel();
+                return;
             }
 
             if (hasInteraction && (htmlContent || socialIframes.length > 0)) {
