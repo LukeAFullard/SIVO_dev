@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ECharts Universal Transition (Morphing) Example</title>
+    <!-- Include ECharts library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        #main {
+            width: 600px;
+            height: 400px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>ECharts Morphing (Universal Transition)</h2>
+    <div id="main"></div>
+    <button id="toggleBtn">Morph to Pie Chart</button>
+
+    <script>
+        // Initialize the ECharts instance
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // Shared data source for both charts to enable seamless transition
+        const dataset = {
+            source: [
+                ['Product', '2023 Sales'],
+                ['Matcha Latte', 43.3],
+                ['Milk Tea', 83.1],
+                ['Cheese Cocoa', 86.4],
+                ['Walnut Brownie', 72.4]
+            ]
+        };
+
+        // Configuration for the Bar Chart
+        const barOption = {
+            dataset: dataset,
+            xAxis: { type: 'category' },
+            yAxis: {},
+            series: [
+                {
+                    type: 'bar',
+                    // Enable universal transition
+                    universalTransition: true,
+                    animationDurationUpdate: 1000,
+                    itemStyle: {
+                        color: function(params) {
+                            // Assign distinct colors to each bar for a better visual transition to pie slices
+                            const colorList = ['#5470c6', '#91cc75', '#fac858', '#ee6666'];
+                            return colorList[params.dataIndex];
+                        }
+                    }
+                }
+            ]
+        };
+
+        // Configuration for the Pie Chart
+        const pieOption = {
+            dataset: dataset,
+            series: [
+                {
+                    type: 'pie',
+                    radius: '50%',
+                    // Enable universal transition
+                    universalTransition: true,
+                    animationDurationUpdate: 1000
+                }
+            ]
+        };
+
+        // Initial chart state
+        let currentOption = barOption;
+        myChart.setOption(currentOption);
+
+        // Toggle functionality
+        document.getElementById('toggleBtn').addEventListener('click', function() {
+            if (currentOption === barOption) {
+                currentOption = pieOption;
+                this.innerText = 'Morph to Bar Chart';
+            } else {
+                currentOption = barOption;
+                this.innerText = 'Morph to Pie Chart';
+            }
+            // Update the chart with the new option to trigger the morph
+            myChart.setOption(currentOption, true);
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    </script>
+</body>
+</html>
