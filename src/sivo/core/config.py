@@ -132,6 +132,14 @@ class ProjectConfig(BaseModel):
         default="right",
         description="Global default position for the info panel ('right', 'left', 'top', 'bottom')."
     )
+    disable_panel: bool = Field(
+        default=False,
+        description="If True, completely suppresses the info panel from opening."
+    )
+    panel_width: Optional[str] = Field(
+        default=None,
+        description="Optional width (or height on mobile) for the info panel as a percentage or valid CSS unit (e.g., '50%', '30vw')."
+    )
     lock_zoom_out: bool = Field(
         default=False,
         description="If True, prevents the user from zooming out further than the initial zoom level (1.0)."

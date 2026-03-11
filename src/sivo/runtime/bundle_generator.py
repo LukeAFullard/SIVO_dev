@@ -191,6 +191,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "actions_manifest": actions_manifest,
             "overlays": view_obj["overlays"],
             "connections": view_obj.get("connections", []),
+            "disable_panel": view_obj.get("disable_panel", False),
+            "panel_width": view_obj.get("panel_width", None),
             "lock_zoom_out": view_obj.get("lock_zoom_out", False),
             "lock_canvas": view_obj.get("lock_canvas", False),
             "render_mode": view_obj.get("render_mode", "canvas"),
