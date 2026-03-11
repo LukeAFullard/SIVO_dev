@@ -1501,7 +1501,8 @@
                         zlevel: 2,
                         renderItem: function (params, api) {
                             var pt = api.coord([api.value(0), api.value(1)]);
-                            var r = hexbinConfig.hex_size * api.scale([1, 1])[0]; // approximate scaling if zoomed
+                            var sizePtY = api.coord([api.value(0), api.value(1) + hexbinConfig.hex_size]); // Calculate radius in pixel space
+                            var r = Math.abs(sizePtY[1] - pt[1]);
                             var w = Math.sqrt(3) * r;
                             var h = 2 * r;
 
