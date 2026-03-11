@@ -2355,6 +2355,15 @@
                             iframe.src = action.url.replace('/comments/', '/embed/');
                         } else if (action.provider === 'website') {
                             // Generic Website embed
+                            // Special case for observablehq embeds
+                            if (action.url.includes("observablehq.com")) {
+                                var parsedUrl = new URL(action.url);
+                                // The framework renders inside an iframe or local html file.
+                                // It could be served from various origins.
+                                // However, passing an empty sandbox attribute to the iframe
+                                // helps mitigate CSP issues when embedding ObservableHQ
+                                iframe.setAttribute('sandbox', 'allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-same-origin');
+                            }
                             iframe.src = action.url;
                         } else if (action.provider === 'wikipedia') {
                             // Wikipedia via REST API (since Wikipedia enforces X-Frame-Options: deny)
