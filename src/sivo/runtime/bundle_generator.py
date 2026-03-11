@@ -226,6 +226,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             view_dict["timeline_binding"] = view_obj["timeline_binding"]
         if "live_binding" in view_obj:
             view_dict["live_binding"] = view_obj["live_binding"]
+        if "api_binding" in view_obj:
+            view_dict["api_binding"] = view_obj["api_binding"]
         if "scrollytelling" in view_obj:
             view_dict["scrollytelling"] = view_obj["scrollytelling"]
         if "tour" in view_obj:

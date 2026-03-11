@@ -98,6 +98,7 @@ class Sivo:
         html: Optional[str] = None,
         url: Optional[str] = None,
         drill_to: Optional[str] = None,
+        drill_through: Optional[str] = None,
         callback_event: Optional[str] = None,
         callback_payload: Optional[dict] = None,
         hover_callback_event: Optional[str] = None,
@@ -166,6 +167,7 @@ class Sivo:
             html=html,
             url=url,
             drill_to=drill_to,
+            drill_through=drill_through,
             callback_event=callback_event,
             callback_payload=callback_payload,
             hover_callback_event=hover_callback_event,
@@ -250,6 +252,12 @@ class Sivo:
         telemetry data, completely bypassing Streamlit re-renders.
         """
         self.infographic.bind_live(url, topic, auth_token)
+
+    def bind_api(self, url: str, polling_interval_ms: int = 5000, method: str = "GET", headers: Optional[Dict[str, str]] = None, payload: Optional[dict] = None, data_path: Optional[str] = None):
+        """
+        Binds an API endpoint for live UI updates via polling.
+        """
+        self.infographic.bind_api(url, polling_interval_ms, method, headers, payload, data_path)
 
     def bind_scrollytelling(self, steps: list[Dict]):
         """
@@ -1117,6 +1125,13 @@ class Sivo:
             view_data["timeline_binding"] = self.infographic.timeline_binding.model_dump()
         if hasattr(self.infographic, "live_binding") and self.infographic.live_binding:
             view_data["live_binding"] = self.infographic.live_binding.model_dump()
+        if hasattr(self.infographic, "api_binding") and self.infographic.api_binding:
+            if hasattr(self.infographic.api_binding, "model_dump"):
+                view_data["api_binding"] = self.infographic.api_binding.model_dump()
+            elif hasattr(self.infographic.api_binding, "dict"):
+                view_data["api_binding"] = self.infographic.api_binding.dict()
+            else:
+                view_data["api_binding"] = self.infographic.api_binding
         if hasattr(self.infographic, "scrollytelling") and self.infographic.scrollytelling:
             view_data["scrollytelling"] = [s.model_dump() for s in self.infographic.scrollytelling]
         if hasattr(self.infographic, "tour") and self.infographic.tour:
