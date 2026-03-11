@@ -42,25 +42,26 @@ wordcloud_data = [
     {"name": "Streamlit", "value": 750},
     {"name": "Word Cloud", "value": 500},
     {"name": "Calendar", "value": 400},
+    {"name": "Dashboard", "value": 300},
+    {"name": "Components", "value": 200},
+    {"name": "Maps", "value": 100},
+    {"name": "Scrollytelling", "value": 150},
 ]
 
-# We use extra_options to inject a color callback for the word cloud natively if we want,
-# but echarts-wordcloud handles random colors by default if we don't specify textStyle.color.
-# We use a base64 string of a simple black star shape for the mask
-star_mask_b64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAArhJREFUaEPtWst2wjAMdZ4/0I2zY+es1L3//w+snO3G6IIGQhVInMQm0qWdE1uS7yPZ8uI44l+aC/xLFmRBgXw8Ho/9fr/VdV2b/1+S5GiaBvM8I1xL0/R9Pp/fI4hYgDzAbrfblGXJWZbBMAz4fD5gMpmw2rB5NptBHMffXdf9cBxnM4vInLIs+c1mA0VRyB/Qh2vKsgRVVQHruu9VVSXXbTYb115EZADzPF+yA7/fL6zXawwGA1BVFcIwBFmWWf+1Wq2grmuGf7FYsL5N13VRkiTvLJeYkI7jcD8MwyCEYfT7PWsM7/f7c1+w1+sBmqZ1d2EYMv/lcjkjG3wz2Qx2u11AkiTwPA+0Wq1O281mEyRJYn33+/3PPoH1eq25rst+q6oKu92OlS4WiwE1TTNEFhF01DQNer0ew+J5Howx9jEajUAURYbf7XYM8XQ6HdoB1nUd/rB932fXbDYbeL/f3w1yvV5Z3bVarR/7TNPwfd/M8xx2u927y6cR4bpuAId9g7ZcLu9gYRgGSqWSERQ/o6pqQkS4rhvx1Hq9ZgQeDgfot57nQbPZ7NyN2Ijj4+R5/tJ4PMYj4Z/I9/2nQ0aIf4pEItfRarWCIAicIPIhWq1WoFgsGvF4/K6RSI1Go+D1ev27K41EwslkEkwmkw9ycnMqlYKz2Yz1nUql4Hg8Hl5XFAr1ZlOpFFyv1+/06nQ6gA0M9gO2KwqF2kwmE7b+A0A2iZzP50+LXC6X7b/b7Yblcnl3QhAEXvJ4PB4kSeLEyI7j2DkchmF2dJvNpjt9l8sFIpFIRw4oimIH7vf77QnJ5XLsdwBgT00mk3dObrVaQaFQsAMx4r228iQSiYDD4bB7QhRFQbfbrROk2+0Co9H4621C/V14s9kEoVDIHiKfzyeXy+XbgcK8SiaTgcFgwHqLRCIQCoW6a/FwOKQv+P4fEQwGQS6Xs254NBqx/rLZLGy32x/Iu/sI7A1c1+1Yg02O0WgEgUDAv2nEbR1N02CaJltHMBiEVCp1a13X/b2+RSLRRCJBNs+2tN1uh0wmA71ez1qjYyN070xGCMsylMvtUj6fh1wuR/Y7X/eZ2ZGMkEAgkCqXyxAMBu0rVqvV72kOa8pmszQJk8mEvb1oZLPZ8Hw+fz2261yTjRDaWdM0sD1pNBq3z/99w3Q6DcFg8D316f+N7B/r51/L+l+yIL//B77L0Q8q+rYBAAAAAElFTkSuQmCC"
+# We use a larger base64 string of a circle shape for the mask so the words have room to render
+# Generated via a 400x400 PIL image with a black circle
+large_mask_b64 = open("mask_b64.txt").read().strip()
 
 sivo_app.map_word_cloud_chart(
     element_id="wordcloud_box",
-    title="Topic Relevance",
+    title="Topic Relevance (Circle Mask)",
     data=wordcloud_data,
-    mask_image=star_mask_b64,
+    mask_image=large_mask_b64,
     tooltip="View full word cloud",
     extra_options={
         "series": [{
-            "textStyle": {
-                # This string gets interpreted as JS by ECharts if we pass it through carefully,
-                # but ECharts wordcloud actually handles random if color is omitted or we can just pass an array of colors via generic option color
-            }
+            "sizeRange": [10, 40], # Reduced size range to ensure words fit in the mask
+            "textStyle": {}
         }],
         "color": ["#5470c6", "#91cc75", "#fac858", "#ee6666", "#73c0de", "#3ba272", "#fc8452", "#9a60b4", "#ea7ccc"]
     }
