@@ -81,6 +81,9 @@ class ConnectionConfig(BaseModel):
     animation_speed: float = 3.0
     type: str = "solid"
     opacity: float = 0.6
+    flow_effect: bool = False
+    effect_symbol: str = "circle"
+    effect_size: float = 3.0
 
 class LiveBindingConfig(BaseModel):
     """Configuration for native WebSocket/PubSub real-time data updates without Streamlit re-renders."""
@@ -273,6 +276,10 @@ class ProjectConfig(BaseModel):
     enable_data_download: bool = Field(
         default=False,
         description="If True, adds a download button to export the bound data as a CSV."
+    )
+    enable_drawing_tools: bool = Field(
+        default=False,
+        description="If True, renders a drawing/annotation toolbar to draw freely over the canvas."
     )
     bounding_coords: Optional[List[List[float]]] = Field(
         default=None,
