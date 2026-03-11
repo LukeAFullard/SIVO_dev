@@ -2,34 +2,33 @@ import os
 from sivo import Sivo
 
 def main():
-    # Simple SVG with regions
+    # Simple SVG representing a basic dashboard status panel
     svg = """
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
-        <circle id="sensor_1" cx="50" cy="50" r="40" fill="#ccc" />
-        <circle id="sensor_2" cx="150" cy="50" r="40" fill="#ccc" />
-        <circle id="sensor_3" cx="250" cy="50" r="40" fill="#ccc" />
+        <!-- Status Indicator Dot -->
+        <circle id="status_dot" cx="30" cy="50" r="15" fill="#9ca3af" />
 
-        <text x="50" y="55" font-family="Arial" font-size="12" fill="black" text-anchor="middle" pointer-events="none">Sensor 1</text>
-        <text x="150" y="55" font-family="Arial" font-size="12" fill="black" text-anchor="middle" pointer-events="none">Sensor 2</text>
-        <text x="250" y="55" font-family="Arial" font-size="12" fill="black" text-anchor="middle" pointer-events="none">Sensor 3</text>
+        <!-- Static Label -->
+        <text x="60" y="55" font-family="Arial" font-size="16" fill="#374151" pointer-events="none">System Status Connection</text>
     </svg>
     """
 
-    sivo_app = Sivo.from_string(svg, title="Live API Polling Example")
+    sivo_app = Sivo.from_string(svg, title="Live API Binding Test")
 
-    # Map the sensors initially
-    sivo_app.map("sensor_1", tooltip="Waiting for API data...")
-    sivo_app.map("sensor_2", tooltip="Waiting for API data...")
-    sivo_app.map("sensor_3", tooltip="Waiting for API data...")
+    # Map the status dot initially
+    # We turn off the glow and hover_color so it doesn't confusingly "highlight" when hovered
+    sivo_app.map(
+        "status_dot",
+        tooltip="Waiting for live connection...",
+        glow=False,
+        hover_color="transparent"
+    )
 
-    # Bind to a hypothetical REST API endpoint
-    # This example assumes the API returns a JSON array:
-    # [{"id": "sensor_1", "color": "red", "tooltip": "Alert!"}, ...]
+    # Use a Data URI to return a static JSON array that confirms data was received and parsed natively
+    # Returns: [{"id": "status_dot", "color": "#10b981", "tooltip": "Connected: Data successfully received and processed."}]
+    mock_api_url = "data:application/json,%5B%7B%22id%22%3A%22status_dot%22%2C%22color%22%3A%22%2310b981%22%2C%22tooltip%22%3A%22Connected%3A%20Data%20successfully%20received%20and%20processed.%22%7D%5D"
 
-    # Use a Data URI to simulate an API returning JSON data that SIVO can natively parse:
-    # [{"id": "sensor_1", "color": "red", "tooltip": "Alert!"}, {"id": "sensor_2", "color": "orange", "tooltip": "Warning"}]
-    mock_api_url = "data:application/json,%5B%7B%22id%22%3A%22sensor_1%22%2C%22color%22%3A%22red%22%2C%22tooltip%22%3A%22Alert%21%22%7D%2C%7B%22id%22%3A%22sensor_2%22%2C%22color%22%3A%22orange%22%2C%22tooltip%22%3A%22Warning%22%7D%5D"
-
+    # Bind the mock API endpoint with a 3-second delay to show the "before" and "after" state
     sivo_app.bind_api(
         url=mock_api_url,
         polling_interval_ms=3000,

@@ -1093,7 +1093,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 100\"\u003e\n        \u003ccircle id=\"sensor_1\" cx=\"50\" cy=\"50\" r=\"40\" fill=\"#ccc\" name=\"sensor_1\"/\u003e\n        \u003ccircle id=\"sensor_2\" cx=\"150\" cy=\"50\" r=\"40\" fill=\"#ccc\" name=\"sensor_2\"/\u003e\n        \u003ccircle id=\"sensor_3\" cx=\"250\" cy=\"50\" r=\"40\" fill=\"#ccc\" name=\"sensor_3\"/\u003e\n        \n        \u003ctext x=\"50\" y=\"55\" font-family=\"Arial\" font-size=\"12\" fill=\"black\" text-anchor=\"middle\" pointer-events=\"none\"\u003eSensor 1\u003c/text\u003e\n        \u003ctext x=\"150\" y=\"55\" font-family=\"Arial\" font-size=\"12\" fill=\"black\" text-anchor=\"middle\" pointer-events=\"none\"\u003eSensor 2\u003c/text\u003e\n        \u003ctext x=\"250\" y=\"55\" font-family=\"Arial\" font-size=\"12\" fill=\"black\" text-anchor=\"middle\" pointer-events=\"none\"\u003eSensor 3\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "sensor_1", "value": 1, "tooltip": "Waiting for API data..."}, {"name": "sensor_2", "value": 1, "tooltip": "Waiting for API data..."}, {"name": "sensor_3", "value": 1, "tooltip": "Waiting for API data..."}], "actions_manifest": {"sensor_1": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for API data...\u003c/h3\u003e", "title": "Waiting for API data...", "panel_position": "right"}], "sensor_2": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for API data...\u003c/h3\u003e", "title": "Waiting for API data...", "panel_position": "right"}], "sensor_3": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for API data...\u003c/h3\u003e", "title": "Waiting for API data...", "panel_position": "right"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Live API Polling Example", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "bounding_coords": null, "mappings": {"sensor_1": {"id": "sensor_1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for API data...\u003c/h3\u003e", "title": "Waiting for API data...", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "sensor_2": {"id": "sensor_2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for API data...\u003c/h3\u003e", "title": "Waiting for API data...", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "sensor_3": {"id": "sensor_3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for API data...\u003c/h3\u003e", "title": "Waiting for API data...", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "api_binding": {"url": "data:application/json,%5B%7B%22id%22%3A%22sensor_1%22%2C%22color%22%3A%22red%22%2C%22tooltip%22%3A%22Alert%21%22%7D%2C%7B%22id%22%3A%22sensor_2%22%2C%22color%22%3A%22orange%22%2C%22tooltip%22%3A%22Warning%22%7D%5D", "polling_interval_ms": 3000, "method": "GET", "headers": null, "payload": null, "data_path": null}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 100\"\u003e\n        \u003c!-- Status Indicator Dot --\u003e\n        \u003ccircle id=\"status_dot\" cx=\"30\" cy=\"50\" r=\"15\" fill=\"#9ca3af\" name=\"status_dot\"/\u003e\n        \n        \u003c!-- Static Label --\u003e\n        \u003ctext x=\"60\" y=\"55\" font-family=\"Arial\" font-size=\"16\" fill=\"#374151\" pointer-events=\"none\"\u003eSystem Status Connection\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "status_dot", "value": 1, "tooltip": "Waiting for live connection...", "emphasis": {"itemStyle": {"areaColor": "transparent"}}}], "actions_manifest": {"status_dot": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e", "title": "Waiting for live connection...", "panel_position": "right"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Live API Binding Test", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "bounding_coords": null, "mappings": {"status_dot": {"id": "status_dot", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e", "title": "Waiting for live connection...", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "transparent", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": false, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "api_binding": {"url": "data:application/json,%5B%7B%22id%22%3A%22status_dot%22%2C%22color%22%3A%22%2310b981%22%2C%22tooltip%22%3A%22Connected%3A%20Data%20successfully%20received%20and%20processed.%22%7D%5D", "polling_interval_ms": 3000, "method": "GET", "headers": null, "payload": null, "data_path": null}}};
         var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
@@ -2243,19 +2243,48 @@
                                 if (!actionsManifest[id].actions) {
                                     actionsManifest[id].actions = [];
                                 }
+
+                                var echartsDataItem = echartsData.find(d => d.name === id);
+                                if (!echartsDataItem) {
+                                    echartsDataItem = { name: id, value: 1 };
+                                    echartsData.push(echartsDataItem);
+                                }
+                                if (!echartsDataItem.itemStyle) {
+                                    echartsDataItem.itemStyle = {};
+                                }
+
                                 if (item.color && actionsManifest[id].theme.color !== item.color) {
                                     actionsManifest[id].theme.color = item.color;
+                                    echartsDataItem.itemStyle.areaColor = item.color;
                                     hasChanges = true;
                                 }
                                 if (item.fill_gradient) {
                                     actionsManifest[id].theme.fill_gradient = item.fill_gradient;
+                                    echartsDataItem.itemStyle.areaColor = {
+                                        type: item.fill_gradient.type || 'linear',
+                                        x: item.fill_gradient.x || 0,
+                                        y: item.fill_gradient.y || 0,
+                                        x2: item.fill_gradient.x2 || 0,
+                                        y2: item.fill_gradient.y2 || 1,
+                                        colorStops: item.fill_gradient.stops || [],
+                                        global: item.fill_gradient.global || false
+                                    };
                                     hasChanges = true;
                                 }
                                 if (item.fill_pattern) {
                                     actionsManifest[id].theme.fill_pattern = item.fill_pattern;
+                                    echartsDataItem.itemStyle.areaColor = {
+                                        image: item.fill_pattern.image || '',
+                                        repeat: item.fill_pattern.repeat || 'repeat'
+                                    };
                                     hasChanges = true;
                                 }
                                 if (item.tooltip) {
+                                    var currentTooltipAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
+                                    if (!currentTooltipAction || currentTooltipAction.title !== item.tooltip) {
+                                        hasChanges = true;
+                                    }
+
                                     var tAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
                                     if (!tAction) {
                                         tAction = { action_type: 'tooltip', title: item.tooltip, content: `<h3>${item.tooltip}</h3>` };
@@ -2264,10 +2293,8 @@
                                         tAction.title = item.tooltip;
                                         tAction.content = `<h3>${item.tooltip}</h3>`;
                                     }
-                                    var currentTooltipAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
-                                    if (!currentTooltipAction || currentTooltipAction.title !== item.tooltip) {
-                                        hasChanges = true;
-                                    }
+
+                                    echartsDataItem.tooltip = item.tooltip;
                                 }
                             };
 

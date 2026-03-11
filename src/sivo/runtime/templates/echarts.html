@@ -2248,19 +2248,48 @@
                                 if (!actionsManifest[id].actions) {
                                     actionsManifest[id].actions = [];
                                 }
+
+                                var echartsDataItem = echartsData.find(d => d.name === id);
+                                if (!echartsDataItem) {
+                                    echartsDataItem = { name: id, value: 1 };
+                                    echartsData.push(echartsDataItem);
+                                }
+                                if (!echartsDataItem.itemStyle) {
+                                    echartsDataItem.itemStyle = {};
+                                }
+
                                 if (item.color && actionsManifest[id].theme.color !== item.color) {
                                     actionsManifest[id].theme.color = item.color;
+                                    echartsDataItem.itemStyle.areaColor = item.color;
                                     hasChanges = true;
                                 }
                                 if (item.fill_gradient) {
                                     actionsManifest[id].theme.fill_gradient = item.fill_gradient;
+                                    echartsDataItem.itemStyle.areaColor = {
+                                        type: item.fill_gradient.type || 'linear',
+                                        x: item.fill_gradient.x || 0,
+                                        y: item.fill_gradient.y || 0,
+                                        x2: item.fill_gradient.x2 || 0,
+                                        y2: item.fill_gradient.y2 || 1,
+                                        colorStops: item.fill_gradient.stops || [],
+                                        global: item.fill_gradient.global || false
+                                    };
                                     hasChanges = true;
                                 }
                                 if (item.fill_pattern) {
                                     actionsManifest[id].theme.fill_pattern = item.fill_pattern;
+                                    echartsDataItem.itemStyle.areaColor = {
+                                        image: item.fill_pattern.image || '',
+                                        repeat: item.fill_pattern.repeat || 'repeat'
+                                    };
                                     hasChanges = true;
                                 }
                                 if (item.tooltip) {
+                                    var currentTooltipAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
+                                    if (!currentTooltipAction || currentTooltipAction.title !== item.tooltip) {
+                                        hasChanges = true;
+                                    }
+
                                     var tAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
                                     if (!tAction) {
                                         tAction = { action_type: 'tooltip', title: item.tooltip, content: `<h3>${item.tooltip}</h3>` };
@@ -2269,10 +2298,8 @@
                                         tAction.title = item.tooltip;
                                         tAction.content = `<h3>${item.tooltip}</h3>`;
                                     }
-                                    var currentTooltipAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
-                                    if (!currentTooltipAction || currentTooltipAction.title !== item.tooltip) {
-                                        hasChanges = true;
-                                    }
+
+                                    echartsDataItem.tooltip = item.tooltip;
                                 }
                             };
 
