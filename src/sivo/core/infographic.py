@@ -1,6 +1,6 @@
 import os
 import json
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, List
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
@@ -489,7 +489,7 @@ class Infographic:
             max_val=max_val
         )
 
-    def bind_timeline(self, data: Dict[str, Dict[str, Dict[str, float]]], key: str, colors: list, min_val: float, max_val: float, auto_play: bool = True, play_interval: int = 1000, show_play_btn: bool = True, loop: bool = True, control_position: str = "left", symbol: str = "emptyCircle", symbol_size: Union[int, list[int]] = 10, bottom: Union[int, str] = 20):
+    def bind_timeline(self, data: Dict[str, Dict[str, Dict[str, float]]], key: str, colors: list, min_val: float, max_val: float, auto_play: bool = True, play_interval: int = 1000, show_play_btn: bool = True, loop: bool = True, control_position: str = "left", symbol: str = "emptyCircle", symbol_size: Union[int, List[int]] = 10, bottom: Union[int, str] = 20):
         """
         Binds quantitative time-series data to SVG IDs dynamically and applies a color scale over an animated timeline.
         data format: { "2020": { "RegionA": { "value": 10 }, "RegionB": { "value": 20 } }, "2021": ... }
