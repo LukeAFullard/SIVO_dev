@@ -236,6 +236,10 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             view_dict["scratchoff"] = view_obj["scratchoff"]
         if "proportional_symbols" in view_obj:
             view_dict["proportional_symbols"] = view_obj["proportional_symbols"]
+        if "hexbin" in view_obj:
+            view_dict["hexbin"] = view_obj["hexbin"]
+        if "dot_density" in view_obj:
+            view_dict["dot_density"] = view_obj["dot_density"]
 
         formatted_views[view_id] = view_dict
 

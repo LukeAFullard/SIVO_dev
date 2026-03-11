@@ -53,6 +53,10 @@ class SVGParser:
                         'name': elem_name,
                         'tag': tag_name
                     }
+
+                    if tag_name == 'path' and elem.get('d'):
+                        element_data['d'] = elem.get('d')
+
                     if bbox:
                         element_data['bbox'] = bbox
 

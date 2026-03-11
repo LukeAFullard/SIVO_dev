@@ -120,6 +120,16 @@ This document outlines a structured plan for creating example scripts and applic
 *   **Description:** Generates an absolute positioned checklist legend overlay that manipulates the visibility and opacity of distinct layer groups.
 *   **Key Concepts:** `add_layer_toggle()`.
 
+### Example 4.6: Hexbin Maps
+*   **Location:** `examples/31_hexbin_map/`
+*   **Description:** Generates a dense point data grid by aggregating overlapping markers into distinct, color-scaled hexagonal regions using an internal hex grid algorithm.
+*   **Key Concepts:** `apply_hexbin()`.
+
+### Example 4.7: Dot Density Maps
+*   **Location:** `examples/32_dot_density_map/`
+*   **Description:** Translates scalar values into scattered points that strictly adhere to the irregular polygonal bounds of an SVG path using HTML5 Canvas raycasting (`isPointInPath`).
+*   **Key Concepts:** `apply_dot_density()`.
+
 ---
 
 ## Process for Creating Examples
