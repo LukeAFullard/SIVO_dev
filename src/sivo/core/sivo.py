@@ -685,6 +685,125 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
+
+    def map_effect_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map an Effect Scatter Chart. data: [[x1, y1], [x2, y2]]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "xAxis": {},
+            "yAxis": {},
+            "series": [{
+                "name": title,
+                "type": "effectScatter",
+                "data": data,
+                "showEffectOn": "render",
+                "rippleEffect": {
+                    "brushType": "stroke"
+                }
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_lines_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Lines Chart. data: [{'coords': [[lng1, lat1], [lng2, lat2]]}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "xAxis": {"show": False},
+            "yAxis": {"show": False},
+            "series": [{
+                "name": title,
+                "type": "lines",
+                "data": data,
+                "coordinateSystem": "cartesian2d",
+                "polyline": True,
+                "lineStyle": {
+                    "width": 2
+                }
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_funnel_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Funnel Chart. data: [{'value': 60, 'name': 'Visit'}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "series": [{
+                "name": title,
+                "type": "funnel",
+                "data": data,
+                "left": "10%",
+                "top": 60,
+                "bottom": 60,
+                "width": "80%",
+                "min": 0,
+                "max": 100,
+                "minSize": "0%",
+                "maxSize": "100%",
+                "sort": "descending",
+                "gap": 2,
+                "label": {
+                    "show": True,
+                    "position": "inside"
+                },
+                "labelLine": {
+                    "length": 10,
+                    "lineStyle": {
+                        "width": 1,
+                        "type": "solid"
+                    }
+                },
+                "itemStyle": {
+                    "borderColor": "#fff",
+                    "borderWidth": 1
+                }
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_tree_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Tree Chart. data: [{'name': 'Root', 'children': [...]}]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item", "triggerOn": "mousemove"},
+            "series": [{
+                "name": title,
+                "type": "tree",
+                "data": data,
+                "top": "10%",
+                "left": "20%",
+                "bottom": "10%",
+                "right": "20%",
+                "symbolSize": 7,
+                "label": {
+                    "position": "left",
+                    "verticalAlign": "middle",
+                    "align": "right",
+                    "fontSize": 9
+                },
+                "leaves": {
+                    "label": {
+                        "position": "right",
+                        "verticalAlign": "middle",
+                        "align": "left"
+                    }
+                },
+                "emphasis": {
+                    "focus": "descendant"
+                },
+                "expandAndCollapse": True,
+                "animationDuration": 550,
+                "animationDurationUpdate": 750
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
         """
         Non-default option: Triggers a JavaScript bundler (e.g., esbuild) to minify and
