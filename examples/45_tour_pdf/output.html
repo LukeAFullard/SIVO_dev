@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
@@ -23,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -946,8 +941,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n    \u003crect id=\"rect1\" x=\"0\" y=\"0\" width=\"400\" height=\"300\" fill=\"#f0f0f0\" name=\"rect1\"/\u003e\n    \u003crect id=\"rect2\" x=\"400\" y=\"0\" width=\"400\" height=\"300\" fill=\"#e0e0e0\" name=\"rect2\"/\u003e\n    \u003crect id=\"rect3\" x=\"0\" y=\"300\" width=\"400\" height=\"300\" fill=\"#d0d0d0\" name=\"rect3\"/\u003e\n    \u003crect id=\"rect4\" x=\"400\" y=\"300\" width=\"400\" height=\"300\" fill=\"#c0c0c0\" name=\"rect4\"/\u003e\n    \u003ctext x=\"200\" y=\"150\" text-anchor=\"middle\"\u003eStep 1: Introduction\u003c/text\u003e\n    \u003ctext x=\"600\" y=\"150\" text-anchor=\"middle\"\u003eStep 2: Analysis\u003c/text\u003e\n    \u003ctext x=\"200\" y=\"450\" text-anchor=\"middle\"\u003eStep 3: Details\u003c/text\u003e\n    \u003ctext x=\"600\" y=\"450\" text-anchor=\"middle\"\u003eStep 4: Conclusion\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "rect1", "value": 1}, {"name": "rect2", "value": 1}, {"name": "rect3", "value": 1}, {"name": "rect4", "value": 1}], "actions_manifest": {}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Interactive Guided Tour to PDF Export Demo", "subtitle": "Walk through the map and download a PDF presentation deck offline", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "bounding_coords": null, "mappings": {"rect1": {"id": "rect1", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "rect2": {"id": "rect2", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "rect3": {"id": "rect3", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "rect4": {"id": "rect4", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "tour": [{"content": "Welcome to the SIVO Tour to PDF demo. Click 'Download PDF' below to export the whole tour.", "zoom_to": "rect1", "zoom_level": 2.5, "show_tooltips": null, "audio_url": null}, {"content": "This slide highlights our new findings. Notice how the map dynamically zoomed to focus on this area.", "zoom_to": "rect2", "zoom_level": 3.0, "show_tooltips": null, "audio_url": null}, {"content": "Here we can explore further details of the graphic and include any extra narrative context.", "zoom_to": "rect3", "zoom_level": 2.5, "show_tooltips": null, "audio_url": null}, {"content": "We've reached the end of the tour. Now go ahead and click 'Download PDF' to generate the deck!", "zoom_to": "rect4", "zoom_level": 2.0, "show_tooltips": null, "audio_url": null}]}};
+        var currentViewId = "default_view";
 
         // Apply Global Theme
         var currentTheme = viewsData[currentViewId].theme || 'light';
@@ -4009,8 +4004,8 @@ function tourNext() {
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>
