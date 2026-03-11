@@ -356,6 +356,25 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
+    def map_pictorial_bar_chart(self, element_id: str, title: str, data: list, categories: list, symbol: str, symbol_repeat: bool | str = True, symbol_size: list | int | str = ['100%', '100%'], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Pictorial Bar Chart. 'symbol' can be 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none', an image URL ('image://url'), or an SVG path ('path://...')."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "xAxis": {"data": categories},
+            "yAxis": {},
+            "series": [{
+                "name": title,
+                "type": "pictorialBar",
+                "symbol": symbol,
+                "symbolRepeat": symbol_repeat,
+                "symbolSize": symbol_size,
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Line Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
         option = {
