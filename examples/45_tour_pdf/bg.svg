@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+    <rect id="rect1" x="0" y="0" width="400" height="300" fill="#f0f0f0"/>
+    <rect id="rect2" x="400" y="0" width="400" height="300" fill="#e0e0e0"/>
+    <rect id="rect3" x="0" y="300" width="400" height="300" fill="#d0d0d0"/>
+    <rect id="rect4" x="400" y="300" width="400" height="300" fill="#c0c0c0"/>
+    <text x="200" y="150" text-anchor="middle">Step 1: Introduction</text>
+    <text x="600" y="150" text-anchor="middle">Step 2: Analysis</text>
+    <text x="200" y="450" text-anchor="middle">Step 3: Details</text>
+    <text x="600" y="450" text-anchor="middle">Step 4: Conclusion</text>
+</svg>
