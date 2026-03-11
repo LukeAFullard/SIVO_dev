@@ -157,5 +157,41 @@ class TestSivoRender(unittest.TestCase):
         self.assertIn("Star Room", overlays["rect1"]["html"])
         self.assertEqual(overlays["rect1"]["coord"], [50.0, 50.0])
 
+    def test_missing_chart_types(self):
+        svg_content = """
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <rect id="rect1" x="0" y="0" width="100" height="100"/>
+        </svg>
+        """
+        sivo_app = Sivo.from_string(svg_content)
+
+        sivo_app.map_polar_bar_chart("rect1", "Polar Bar", [10, 20], ["A", "B"])
+        actions = sivo_app.infographic.mappings["rect1"].actions
+        echarts_action = next(a for a in actions if a.action_type == "echarts")
+        self.assertIn("polar", echarts_action.option)
+        self.assertEqual(echarts_action.option["series"][0]["type"], "bar")
+        self.assertEqual(echarts_action.option["series"][0]["coordinateSystem"], "polar")
+
+        sivo_app.map_polar_line_chart("rect1", "Polar Line", [10, 20])
+        actions = sivo_app.infographic.mappings["rect1"].actions
+        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "line")
+        self.assertEqual(echarts_action.option["series"][0]["coordinateSystem"], "polar")
+
+        sivo_app.map_polar_scatter_chart("rect1", "Polar Scatter", [[10, 20]])
+        actions = sivo_app.infographic.mappings["rect1"].actions
+        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "scatter")
+        self.assertEqual(echarts_action.option["series"][0]["coordinateSystem"], "polar")
+
+        sivo_app.map_liquidfill_chart("rect1", "Liquid Fill", [0.6])
+        actions = sivo_app.infographic.mappings["rect1"].actions
+        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "liquidFill")
+        self.assertEqual(echarts_action.option["series"][0]["type"], "liquidFill")
+
+        sivo_app.map_custom_chart("rect1", "Custom", "return {}", [10])
+        actions = sivo_app.infographic.mappings["rect1"].actions
+        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "custom")
+        self.assertEqual(echarts_action.option["series"][0]["type"], "custom")
+        self.assertEqual(echarts_action.option["series"][0]["_sivo_render_item"], "return {}")
+
 if __name__ == '__main__':
     unittest.main()

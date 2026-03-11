@@ -519,6 +519,109 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
+    def map_polar_bar_chart(self, element_id: str, title: str, data: list[float], categories: list[str], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Polar Bar Chart. data: [10, 20, 30] corresponding to categories."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "polar": {"radius": ["10%", "80%"]},
+            "angleAxis": {"max": max(data) if data else 100, "startAngle": 90},
+            "radiusAxis": {"type": "category", "data": categories},
+            "series": [{
+                "name": title,
+                "type": "bar",
+                "data": data,
+                "coordinateSystem": "polar",
+                "label": {"show": True, "position": "middle", "formatter": "{b}: {c}"}
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_polar_line_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = "#ff7f50", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Polar Line Chart (often used for math functions or cyclical data). data: list of values."""
+        # Typically, a simple polar line chart maps values to angles.
+        # We can map the index to the angle.
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross"}},
+            "polar": {},
+            "angleAxis": {"type": "value", "startAngle": 0},
+            "radiusAxis": {"min": 0},
+            "series": [{
+                "name": title,
+                "type": "line",
+                "coordinateSystem": "polar",
+                "showSymbol": False,
+                "data": [[d, i * (360 / len(data))] for i, d in enumerate(data)] if data else []
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_polar_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Polar Scatter Chart. data: [[radius, angle], ...]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "polar": {},
+            "angleAxis": {"type": "value", "startAngle": 0},
+            "radiusAxis": {"type": "value"},
+            "series": [{
+                "name": title,
+                "type": "scatter",
+                "coordinateSystem": "polar",
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_liquidfill_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Liquid Fill Chart. data: [0.6, 0.5] (percentages as floats between 0 and 1).
+        Note: Requires echarts-liquidfill plugin."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"show": True},
+            "series": [{
+                "name": title,
+                "type": "liquidFill",
+                "data": data,
+                "radius": "80%"
+            }]
+        }
+        # echarts-liquidfill has specific coloring parameters
+        if color:
+            if isinstance(color, list):
+                option["series"][0]["color"] = color
+            else:
+                option["series"][0]["color"] = [color]
+
+        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_custom_chart(self, element_id: str, title: str, render_item_js: str, data: list, tooltip: str = None, panel_position: str = None, extra_options: dict = None):
+        """Helper to map a Custom Series Chart.
+        render_item_js must be a string containing a valid JavaScript function for the 'renderItem' property.
+        Since JSON serialization cannot pass raw JS functions, we pass it as a special _sivo_render_item string
+        which the HTML runtime will `eval()` during option generation.
+        """
+        option = {
+            "title": {"text": title},
+            "tooltip": {},
+            "xAxis": {},
+            "yAxis": {},
+            "series": [{
+                "name": title,
+                "type": "custom",
+                "_sivo_render_item": render_item_js,
+                "data": data
+            }]
+        }
+        if extra_options:
+            option = self._apply_chart_styling(option, None, None, None, None, None, None, None, True, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def map_boxplot_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Boxplot Chart. data is a 2D array of values for each category."""
         option = {
