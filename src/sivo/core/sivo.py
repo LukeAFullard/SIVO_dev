@@ -334,6 +334,14 @@ class Sivo:
                 for k, v in d2.items():
                     if isinstance(v, dict) and k in d1 and isinstance(d1[k], dict):
                         merge_dicts(d1[k], v)
+                    elif isinstance(v, list) and k in d1 and isinstance(d1[k], list):
+                        for i in range(min(len(d1[k]), len(v))):
+                            if isinstance(v[i], dict) and isinstance(d1[k][i], dict):
+                                merge_dicts(d1[k][i], v[i])
+                            else:
+                                d1[k][i] = v[i]
+                        if len(v) > len(d1[k]):
+                            d1[k].extend(v[len(d1[k]):])
                     else:
                         d1[k] = v
             merge_dicts(option, extra_options)
