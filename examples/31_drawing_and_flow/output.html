@@ -959,6 +959,9 @@
                     <button class="sivo-drawing-btn active" id="sivo-draw-pen" title="Pen">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
                     </button>
+                    <button class="sivo-drawing-btn" id="sivo-draw-text" title="Text">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"></path></svg>
+                    </button>
                     <button class="sivo-drawing-btn" id="sivo-draw-eraser" title="Eraser">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H4M16 16l3.5-3.5a2.121 2.121 0 0 0-3-3L13 13m-3 3L6 12a2.121 2.121 0 0 1 3-3l4 4"></path></svg>
                     </button>
@@ -4083,7 +4086,7 @@ function tourNext() {
         var drawingCanvas = document.getElementById('sivo-drawing-canvas');
         var drawingCtx = drawingCanvas ? drawingCanvas.getContext('2d') : null;
         var isDrawingMode = false;
-        var currentDrawMode = 'pen'; // 'pen' or 'eraser'
+        var currentDrawMode = 'pen'; // 'pen', 'text', or 'eraser'
         var drawColor = '#ef4444';
 
         // We will store paths as arrays of logical points [x, y] in the chart's base coordinate system
@@ -4091,6 +4094,7 @@ function tourNext() {
         window.sivoDrawings = [];
         var currentPath = null;
         var isDrawingMouse = false;
+        var textInputEl = null;
 
         function initDrawingTools(view) {
             var toolbar = document.getElementById('sivo-drawing-toolbar');
@@ -4118,6 +4122,7 @@ function tourNext() {
         var toggleBtn = document.getElementById('sivo-draw-toggle');
         var toolsDiv = document.getElementById('sivo-draw-tools');
         var penBtn = document.getElementById('sivo-draw-pen');
+        var textBtn = document.getElementById('sivo-draw-text');
         var eraserBtn = document.getElementById('sivo-draw-eraser');
         var colorInput = document.getElementById('sivo-drawing-color');
         var clearBtn = document.getElementById('sivo-draw-clear');
@@ -4139,6 +4144,14 @@ function tourNext() {
         if (penBtn) penBtn.addEventListener('click', function() {
             currentDrawMode = 'pen';
             penBtn.classList.add('active');
+            textBtn.classList.remove('active');
+            eraserBtn.classList.remove('active');
+        });
+
+        if (textBtn) textBtn.addEventListener('click', function() {
+            currentDrawMode = 'text';
+            textBtn.classList.add('active');
+            penBtn.classList.remove('active');
             eraserBtn.classList.remove('active');
         });
 
@@ -4146,6 +4159,7 @@ function tourNext() {
             currentDrawMode = 'eraser';
             eraserBtn.classList.add('active');
             penBtn.classList.remove('active');
+            textBtn.classList.remove('active');
         });
 
         if (colorInput) colorInput.addEventListener('input', function(e) {
@@ -4174,9 +4188,25 @@ function tourNext() {
             return px || point;
         }
 
+        function finalizeText() {
+            if (!textInputEl) return;
+            var val = textInputEl.value.trim();
+            if (val !== '') {
+                window.sivoDrawings.push({
+                    mode: 'text',
+                    text: val,
+                    color: drawColor,
+                    // store the logical anchor point
+                    point: convertToLogical(parseFloat(textInputEl.style.left), parseFloat(textInputEl.style.top) + 20) // approx baseline
+                });
+                redrawCanvas();
+            }
+            document.body.removeChild(textInputEl);
+            textInputEl = null;
+        }
+
         function startDrawing(e) {
             if (!isDrawingMode) return;
-            isDrawingMouse = true;
 
             var rect = drawingCanvas.getBoundingClientRect();
             var clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -4184,6 +4214,46 @@ function tourNext() {
 
             var x = clientX - rect.left;
             var y = clientY - rect.top;
+
+            if (currentDrawMode === 'text') {
+                if (textInputEl) {
+                    finalizeText();
+                    return; // Next click will spawn a new one, this click just closes the old
+                }
+
+                textInputEl = document.createElement('input');
+                textInputEl.type = 'text';
+                textInputEl.style.position = 'absolute';
+                textInputEl.style.left = (clientX) + 'px';
+                textInputEl.style.top = (clientY - 10) + 'px';
+                textInputEl.style.zIndex = 10000;
+                textInputEl.style.background = 'transparent';
+                textInputEl.style.border = '1px dashed #ccc';
+                textInputEl.style.outline = 'none';
+                textInputEl.style.color = drawColor;
+                textInputEl.style.fontFamily = 'system-ui, sans-serif';
+                textInputEl.style.fontSize = (16 * (currentZoom || 1)) + 'px';
+                textInputEl.style.padding = '2px';
+                textInputEl.style.minWidth = '100px';
+
+                document.body.appendChild(textInputEl);
+                textInputEl.focus();
+
+                textInputEl.addEventListener('keydown', function(evt) {
+                    if (evt.key === 'Enter') {
+                        finalizeText();
+                    }
+                });
+                textInputEl.addEventListener('blur', function() {
+                    // Slight delay to allow clicks to register
+                    setTimeout(finalizeText, 100);
+                });
+
+                e.preventDefault();
+                return;
+            }
+
+            isDrawingMouse = true;
 
             currentPath = {
                 mode: currentDrawMode,
@@ -4197,7 +4267,7 @@ function tourNext() {
         }
 
         function continueDrawing(e) {
-            if (!isDrawingMode || !isDrawingMouse || !currentPath) return;
+            if (!isDrawingMode || !isDrawingMouse || !currentPath || currentDrawMode === 'text') return;
 
             var rect = drawingCanvas.getBoundingClientRect();
             var clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -4223,25 +4293,35 @@ function tourNext() {
             drawingCtx.lineCap = 'round';
             drawingCtx.lineJoin = 'round';
 
-            window.sivoDrawings.forEach(function(path) {
-                if (path.points.length < 2) return;
-
-                drawingCtx.beginPath();
-                if (path.mode === 'eraser') {
-                    drawingCtx.globalCompositeOperation = 'destination-out';
-                    drawingCtx.lineWidth = path.width;
-                } else {
+            window.sivoDrawings.forEach(function(item) {
+                if (item.mode === 'text') {
                     drawingCtx.globalCompositeOperation = 'source-over';
-                    drawingCtx.strokeStyle = path.color;
-                    // Scale width with zoom?
-                    drawingCtx.lineWidth = path.width * (currentZoom || 1);
+                    drawingCtx.fillStyle = item.color;
+                    var fontSize = 16 * (currentZoom || 1);
+                    drawingCtx.font = fontSize + 'px system-ui, sans-serif';
+                    var px = convertToPixel(item.point);
+                    drawingCtx.fillText(item.text, px[0], px[1]);
+                    return;
                 }
 
-                var startPx = convertToPixel(path.points[0]);
+                if (item.points.length < 2) return;
+
+                drawingCtx.beginPath();
+                if (item.mode === 'eraser') {
+                    drawingCtx.globalCompositeOperation = 'destination-out';
+                    drawingCtx.lineWidth = item.width;
+                } else {
+                    drawingCtx.globalCompositeOperation = 'source-over';
+                    drawingCtx.strokeStyle = item.color;
+                    // Scale width with zoom?
+                    drawingCtx.lineWidth = item.width * (currentZoom || 1);
+                }
+
+                var startPx = convertToPixel(item.points[0]);
                 drawingCtx.moveTo(startPx[0], startPx[1]);
 
-                for (var i = 1; i < path.points.length; i++) {
-                    var px = convertToPixel(path.points[i]);
+                for (var i = 1; i < item.points.length; i++) {
+                    var px = convertToPixel(item.points[i]);
                     drawingCtx.lineTo(px[0], px[1]);
                 }
 
