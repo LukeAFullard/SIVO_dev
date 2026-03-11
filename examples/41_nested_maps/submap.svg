@@ -1,0 +1,5 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+    <path id="district1" name="district1" d="M 10,10 L 150,10 L 150,150 L 10,150 Z" fill="#ccc" stroke="#fff" />
+    <path id="district2" name="district2" d="M 150,10 L 290,10 L 290,150 L 150,150 Z" fill="#ccc" stroke="#fff" />
+    <path id="district3" name="district3" d="M 10,150 L 290,150 L 290,290 L 10,290 Z" fill="#ccc" stroke="#fff" />
+</svg>

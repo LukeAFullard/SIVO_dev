@@ -218,6 +218,8 @@ class Infographic:
         confetti: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
+        map_name: Optional[str] = None,
+        map_data: Optional[Union[str, dict]] = None,
         context_menu: Optional[list[dict]] = None,
         panel_position: Optional[str] = None,
         open_by_default: bool = False,
@@ -371,7 +373,7 @@ class Infographic:
             mapping.actions.append(ReplitAction(repl_url=replit, panel_position=panel_position or self.default_panel_position))
 
         if echarts_option:
-            mapping.actions.append(EchartsAction(option=echarts_option, panel_position=panel_position or self.default_panel_position))
+            mapping.actions.append(EchartsAction(option=echarts_option, panel_position=panel_position or self.default_panel_position, map_name=map_name, map_data=map_data))
 
         if color:
             mapping.theme.color = color

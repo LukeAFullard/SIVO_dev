@@ -122,6 +122,8 @@ class EchartsAction(BaseAction):
     option: dict = Field(description="The Apache ECharts option dictionary to render")
     height: str = Field(default="400px", description="The CSS height for the ECharts container")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
+    map_name: Optional[str] = Field(default=None, description="Optional map name to register before rendering the chart.")
+    map_data: Optional[Union[str, dict]] = Field(default=None, description="Optional map data (SVG string or GeoJSON dict) to register.")
 
 class ZoomAction(BaseAction):
     action_type: Literal["zoom"] = "zoom"
