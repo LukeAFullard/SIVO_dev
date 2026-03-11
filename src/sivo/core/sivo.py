@@ -557,6 +557,75 @@ class Sivo:
         option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
+    def map_word_cloud_chart(self, element_id: str, title: str, data: list[dict], color: Union[str, list[str]] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Word Cloud Chart. data: [{'name': 'Word', 'value': 100}, ...]
+        Note: Requires echarts-wordcloud plugin (included by default in SIVO CDN templates)."""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"show": True},
+            "series": [{
+                "name": title,
+                "type": "wordCloud",
+                "shape": "circle",
+                "left": "center",
+                "top": "center",
+                "width": "90%",
+                "height": "90%",
+                "right": None,
+                "bottom": None,
+                "sizeRange": [12, 60],
+                "rotationRange": [-90, 90],
+                "rotationStep": 45,
+                "gridSize": 8,
+                "drawOutOfBound": False,
+                "layoutAnimation": True,
+                "textStyle": {
+                    "fontFamily": "sans-serif",
+                    "fontWeight": "bold"
+                },
+                "emphasis": {
+                    "focus": "self",
+                    "textStyle": {
+                        "textShadowBlur": 10,
+                        "textShadowColor": "#333"
+                    }
+                },
+                "data": data
+            }]
+        }
+
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
+    def map_calendar_heatmap_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], calendar_range: Union[str, list[str]], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Calendar Heatmap Chart. data: [['2017-01-01', 10], ['2017-01-02', 20], ...], calendar_range: '2017' or ['2017-01-01', '2017-12-31']"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"position": "top"},
+            "visualMap": {
+                "min": 0,
+                "max": max([d[1] for d in data]) if data else 100,
+                "calculable": True,
+                "orient": "horizontal",
+                "left": "center",
+                "top": "top",
+                "inRange": {"color": color if color else ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"]}
+            },
+            "calendar": [{
+                "range": calendar_range,
+                "cellSize": ["auto", 20],
+                "yearLabel": {"show": True, "margin": 40}
+            }],
+            "series": [{
+                "name": title,
+                "type": "heatmap",
+                "coordinateSystem": "calendar",
+                "data": data
+            }]
+        }
+        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def map_heatmap_chart(self, element_id: str, title: str, data: list[list[float]], x_categories: list[str], y_categories: list[str], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Cartesian Heatmap Chart. data: [[x_index, y_index, value], ...]"""
         option = {
