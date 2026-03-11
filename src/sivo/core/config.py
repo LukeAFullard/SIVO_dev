@@ -140,7 +140,23 @@ class ProjectConfig(BaseModel):
     )
     panel_width: Optional[str] = Field(
         default=None,
-        description="Optional width (or height on mobile) for the info panel as a percentage or valid CSS unit (e.g., '50%', '30vw')."
+        description="Optional explicit width for the info panel as a percentage or valid CSS unit (e.g., '50%', '30vw')."
+    )
+    panel_height: Optional[str] = Field(
+        default=None,
+        description="Optional explicit height for the info panel (used on mobile or when positioned top/bottom)."
+    )
+    disable_resizer: bool = Field(
+        default=False,
+        description="If True, hides the draggable panel resizer."
+    )
+    disable_tooltips: bool = Field(
+        default=False,
+        description="If True, disables the default hover popover tooltips on interactive elements."
+    )
+    disable_zoom_controls: bool = Field(
+        default=False,
+        description="If True, hides the built-in map zoom controls (+/-) and home button."
     )
     lock_zoom_out: bool = Field(
         default=False,
