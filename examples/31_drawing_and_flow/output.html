@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include DOMPurify -->
@@ -23,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -1035,8 +1030,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n        \u003crect id=\"background\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" rx=\"15\" name=\"background\"/\u003e\n        \n        \u003c!-- Server Nodes --\u003e\n        \u003ccircle id=\"node_database\" cx=\"200\" cy=\"300\" r=\"60\" fill=\"#3b82f6\" name=\"node_database\"/\u003e\n        \u003ctext x=\"200\" y=\"305\" font-family=\"sans-serif\" font-size=\"16\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\" pointer-events=\"none\"\u003eDatabase\u003c/text\u003e\n\n        \u003ccircle id=\"node_api\" cx=\"500\" cy=\"150\" r=\"60\" fill=\"#10b981\" name=\"node_api\"/\u003e\n        \u003ctext x=\"500\" y=\"155\" font-family=\"sans-serif\" font-size=\"16\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\" pointer-events=\"none\"\u003eAPI\u003c/text\u003e\n\n        \u003ccircle id=\"node_client\" cx=\"800\" cy=\"300\" r=\"60\" fill=\"#8b5cf6\" name=\"node_client\"/\u003e\n        \u003ctext x=\"800\" y=\"305\" font-family=\"sans-serif\" font-size=\"16\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\" pointer-events=\"none\"\u003eClient\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "background", "value": 1}, {"name": "node_database", "value": 1, "tooltip": "Primary SQL Database Cluster", "emphasis": {"itemStyle": {"areaColor": "#2563eb", "shadowBlur": 15, "shadowColor": "#2563eb", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "node_api", "value": 1, "tooltip": "GraphQL API Gateway", "emphasis": {"itemStyle": {"areaColor": "#059669", "shadowBlur": 15, "shadowColor": "#059669", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "node_client", "value": 1, "tooltip": "Web / Mobile Client Apps", "emphasis": {"itemStyle": {"areaColor": "#7c3aed", "shadowBlur": 15, "shadowColor": "#7c3aed", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"node_database": [{"action_type": "tooltip", "content": "\u003ch3\u003ePrimary SQL Database Cluster\u003c/h3\u003e", "title": "Primary SQL Database Cluster", "panel_position": "right"}], "node_api": [{"action_type": "tooltip", "content": "\u003ch3\u003eGraphQL API Gateway\u003c/h3\u003e", "title": "GraphQL API Gateway", "panel_position": "right"}], "node_client": [{"action_type": "tooltip", "content": "\u003ch3\u003eWeb / Mobile Client Apps\u003c/h3\u003e", "title": "Web / Mobile Client Apps", "panel_position": "right"}]}, "overlays": {}, "connections": [{"source_id": "node_database", "target_id": "node_api", "coords": [[200.0, 300.0], [500.0, 150.0]], "label": "Data Fetch", "color": "#3b82f6", "width": 3, "animation_speed": 4, "type": "dashed", "opacity": 0.6, "flow_effect": true, "effect_symbol": "arrow", "effect_size": 12}, {"source_id": "node_api", "target_id": "node_client", "coords": [[500.0, 150.0], [800.0, 300.0]], "label": "Response", "color": "#10b981", "width": 3, "animation_speed": 3, "type": "solid", "opacity": 0.6, "flow_effect": true, "effect_symbol": "circle", "effect_size": 8}], "disable_panel": true, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Network Architecture \u0026 Annotations", "subtitle": "Test the new Dynamic Flow Arrows and Drawing Tools.", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": true, "bounding_coords": null, "mappings": {"background": {"id": "background", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_database": {"id": "node_database", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003ePrimary SQL Database Cluster\u003c/h3\u003e", "title": "Primary SQL Database Cluster", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_api": {"id": "node_api", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eGraphQL API Gateway\u003c/h3\u003e", "title": "GraphQL API Gateway", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#059669", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_client": {"id": "node_client", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eWeb / Mobile Client Apps\u003c/h3\u003e", "title": "Web / Mobile Client Apps", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#7c3aed", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Apply Global Theme
         var currentTheme = viewsData[currentViewId].theme || 'light';
@@ -4316,8 +4311,8 @@ function tourNext() {
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>
