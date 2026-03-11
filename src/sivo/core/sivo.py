@@ -276,6 +276,18 @@ class Sivo:
         """
         self.infographic.enable_scratchoff(color, image_url, brush_size)
 
+    def apply_hexbin(self, points: List[List[float]], hex_size: float = 15.0, color_palette: list[str] = ["#e0f3f8", "#014636"], min_opacity: float = 0.3, max_opacity: float = 0.9, stroke_color: str = "#ffffff", stroke_width: float = 1.0):
+        """
+        Creates a hexagonal binning overlay map by aggregating raw coordinates.
+        """
+        self.infographic.apply_hexbin(points, hex_size, color_palette, min_opacity, max_opacity, stroke_color, stroke_width)
+
+    def apply_dot_density(self, data_map: Dict[str, Union[int, Dict]], dot_size: float = 3.0, dot_color: str = "rgba(255, 0, 0, 0.8)", dots_per_value: float = 1.0):
+        """
+        Creates a dot density map by specifying the number of dots per region.
+        """
+        self.infographic.apply_dot_density(data_map, dot_size, dot_color, dots_per_value)
+
     def apply_proportional_symbols(self, data_map: Dict[str, Union[float, Dict]], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
         """
         Creates a proportional symbol overlay (scatter/bubble map).
@@ -1115,6 +1127,10 @@ class Sivo:
             view_data["scratchoff"] = self.infographic.scratchoff
         if hasattr(self.infographic, "proportional_symbols") and self.infographic.proportional_symbols:
             view_data["proportional_symbols"] = self.infographic.proportional_symbols
+        if hasattr(self.infographic, "hexbin") and self.infographic.hexbin:
+            view_data["hexbin"] = self.infographic.hexbin
+        if hasattr(self.infographic, "dot_density") and self.infographic.dot_density:
+            view_data["dot_density"] = self.infographic.dot_density
         return view_data
 
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:

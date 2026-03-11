@@ -50,6 +50,8 @@ class Infographic:
         self.layer_toggles: Optional[list] = None
         self.scratchoff: Optional[dict] = None
         self.proportional_symbols: Optional[dict] = None
+        self.hexbin: Optional[dict] = None
+        self.dot_density: Optional[dict] = None
 
         # Initialize default mappings
         for elem in self.elements:
@@ -126,6 +128,8 @@ class Infographic:
         infographic.layer_toggles = getattr(cfg, "layer_toggles", None)
         infographic.scratchoff = getattr(cfg, "scratchoff", None)
         infographic.proportional_symbols = getattr(cfg, "proportional_symbols", None)
+        infographic.hexbin = getattr(cfg, "hexbin", None)
+        infographic.dot_density = getattr(cfg, "dot_density", None)
 
         if getattr(cfg, "connections", None):
             for conn in cfg.connections:
@@ -542,6 +546,135 @@ class Infographic:
         from .config import ScratchoffConfig
         self.scratchoff = ScratchoffConfig(color=color, image_url=image_url, brush_size=brush_size).model_dump()
 
+    def apply_hexbin(self, points: List[List[float]], hex_size: float = 15.0, color_palette: list[str] = ["#e0f3f8", "#014636"], min_opacity: float = 0.3, max_opacity: float = 0.9, stroke_color: str = "#ffffff", stroke_width: float = 1.0):
+        """
+        Creates a hexagonal binning layer overlay map by aggregating a list of [x, y] coordinates
+        into hexagonal bins and passing the aggregated data to the frontend to render.
+        """
+        from .config import HexbinConfig
+        import math
+
+        if not points:
+            return
+
+        # Hexagon grid math (pointy-topped)
+        # width = sqrt(3) * size
+        # height = 2 * size
+        # horizontal spacing = width
+        # vertical spacing = 3/4 * height = 1.5 * size
+
+        w = math.sqrt(3) * hex_size
+        h = 2 * hex_size
+
+        bins = {}
+
+        for pt in points:
+            x, y = pt[0], pt[1]
+
+            # Convert to axial coordinates
+            q = (math.sqrt(3)/3 * x - 1/3 * y) / hex_size
+            r = (2/3 * y) / hex_size
+
+            # Cube coordinates
+            rx = q
+            rz = r
+            ry = -rx - rz
+
+            # Rounding to nearest hex
+            rx_round = round(rx)
+            ry_round = round(ry)
+            rz_round = round(rz)
+
+            x_diff = abs(rx_round - rx)
+            y_diff = abs(ry_round - ry)
+            z_diff = abs(rz_round - rz)
+
+            if x_diff > y_diff and x_diff > z_diff:
+                rx_round = -ry_round - rz_round
+            elif y_diff > z_diff:
+                ry_round = -rx_round - rz_round
+            else:
+                rz_round = -rx_round - ry_round
+
+            hex_q = rx_round
+            hex_r = rz_round
+
+            key = f"{hex_q},{hex_r}"
+            if key not in bins:
+                # Convert back to pixel coordinates for the center
+                cx = hex_size * math.sqrt(3) * (hex_q + hex_r/2)
+                cy = hex_size * 3/2 * hex_r
+                bins[key] = {"coord": [cx, cy], "value": 0}
+
+            bins[key]["value"] += 1
+
+        aggregated_data = list(bins.values())
+
+        self.hexbin = HexbinConfig(
+            data=aggregated_data,
+            hex_size=hex_size,
+            color_palette=color_palette,
+            min_opacity=min_opacity,
+            max_opacity=max_opacity,
+            stroke_color=stroke_color,
+            stroke_width=stroke_width
+        ).model_dump()
+
+    def apply_dot_density(self, data_map: Dict[str, Union[int, Dict]], dot_size: float = 3.0, dot_color: str = "rgba(255, 0, 0, 0.8)", dots_per_value: float = 1.0):
+        """
+        Creates a dot density map by specifying the number of dots per region.
+        The frontend JS will randomly distribute the dots within the bounding box of each mapped element.
+        """
+        from .config import DotDensityConfig
+
+        processed_data = {}
+        for elem_id, val in data_map.items():
+            target_elem = self._element_lookup.get(elem_id)
+            bbox = target_elem.get('bbox') if target_elem else None
+            center = self.get_element_center(elem_id)
+            d_path = target_elem.get('d') if target_elem else None
+
+            # For geometric primitives (rect, circle, etc.), we don't have 'd'.
+            # We can rely on bbox if 'd' is missing, but 'd' provides pixel-perfect bounds.
+            if not d_path and target_elem and target_elem.get('tag') == 'path':
+                pass # parser should have extracted 'd' if it was a path, but maybe not in all cases
+
+            coord = None
+            if center:
+                coord = center
+            else:
+                if isinstance(val, dict) and "coord" in val:
+                    coord = val["coord"]
+
+            if isinstance(val, dict) and "bbox" in val:
+                bbox = val["bbox"]
+
+            if coord:
+                if isinstance(val, dict):
+                    processed_data[elem_id] = {
+                        "value": val.get("value", 0),
+                        "coord": coord,
+                        "bbox": bbox,
+                        "d": d_path
+                    }
+                else:
+                    processed_data[elem_id] = {
+                        "value": val,
+                        "coord": coord,
+                        "bbox": bbox,
+                        "d": d_path
+                    }
+                if elem_id not in self.mappings:
+                    self.mappings[elem_id] = InteractionMapping(id=elem_id)
+                    self._element_lookup[elem_id] = {"id": elem_id, "name": elem_id, "tag": "virtual_dotdensity"}
+
+        self.dot_density = DotDensityConfig(
+            data=processed_data,
+            dot_size=dot_size,
+            dot_color=dot_color,
+            dots_per_value=dots_per_value
+        ).model_dump()
+
     def apply_proportional_symbols(self, data_map: Dict[str, Union[float, Dict]], min_size: float = 10.0, max_size: float = 50.0, color: str = "rgba(255, 0, 0, 0.6)", is_pulse: bool = False):
         """
         Creates a proportional symbol map (e.g., bubble map) by calculating the center of each
@@ -767,6 +900,10 @@ class Infographic:
             view_data["scratchoff"] = self.scratchoff
         if self.proportional_symbols:
             view_data["proportional_symbols"] = self.proportional_symbols
+        if self.hexbin:
+            view_data["hexbin"] = self.hexbin
+        if self.dot_density:
+            view_data["dot_density"] = self.dot_density
 
         views_data = {
             "default_view": view_data

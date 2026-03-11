@@ -78,6 +78,23 @@ class TimelineBindingConfig(BaseModel):
     symbol_size: Union[int, List[int]] = 10
     bottom: Union[int, str] = 20
 
+class HexbinConfig(BaseModel):
+    """Configuration for hexagonal binning (hexbins)."""
+    data: List[Dict[str, Any]] = Field(description="List of aggregated hexbins containing 'coord' and 'value'.")
+    hex_size: float = Field(default=15.0, description="Size (radius) of each hexagon.")
+    color_palette: List[str] = Field(default=["#e0f3f8", "#014636"], description="List of colors for the gradient scale.")
+    min_opacity: float = Field(default=0.3, description="Minimum opacity for low values.")
+    max_opacity: float = Field(default=0.9, description="Maximum opacity for high values.")
+    stroke_color: str = Field(default="#ffffff", description="Stroke color for hexagons.")
+    stroke_width: float = Field(default=1.0, description="Stroke width for hexagons.")
+
+class DotDensityConfig(BaseModel):
+    """Configuration for dot density maps."""
+    data: Dict[str, Dict[str, Any]] = Field(description="Mapping of Element IDs to dicts containing 'value', 'coord', 'bbox', and 'd' (path data).")
+    dot_size: float = Field(default=3.0, description="Size (radius) of each dot.")
+    dot_color: str = Field(default="rgba(255, 0, 0, 0.8)", description="Color of the dots.")
+    dots_per_value: float = Field(default=1.0, description="Number of dots to render per unit of value (e.g., 1 dot per 100 people).")
+
 class ConnectionConfig(BaseModel):
     source_id: str
     target_id: str
@@ -222,6 +239,14 @@ class ProjectConfig(BaseModel):
     proportional_symbols: Optional[ProportionalSymbolConfig] = Field(
         default=None,
         description="Optional configuration for proportional symbol overlays."
+    )
+    hexbin: Optional[HexbinConfig] = Field(
+        default=None,
+        description="Optional configuration for hexagonal binning maps."
+    )
+    dot_density: Optional[DotDensityConfig] = Field(
+        default=None,
+        description="Optional configuration for dot density maps."
     )
     enable_minimap: bool = Field(
         default=False,
