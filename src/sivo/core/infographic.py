@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, bounding_coords: Optional[list[list[float]]] = None):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -19,6 +19,10 @@ class Infographic:
         self.default_panel_position = default_panel_position
         self.disable_panel = disable_panel
         self.panel_width = panel_width
+        self.panel_height = panel_height
+        self.disable_resizer = disable_resizer
+        self.disable_tooltips = disable_tooltips
+        self.disable_zoom_controls = disable_zoom_controls
         self.lock_zoom_out = lock_zoom_out
         self.lock_canvas = lock_canvas
         self.enable_a11y = enable_a11y
@@ -88,6 +92,10 @@ class Infographic:
         infographic.default_panel_position = getattr(cfg, "default_panel_position", "right")
         infographic.disable_panel = getattr(cfg, "disable_panel", False)
         infographic.panel_width = getattr(cfg, "panel_width", None)
+        infographic.panel_height = getattr(cfg, "panel_height", None)
+        infographic.disable_resizer = getattr(cfg, "disable_resizer", False)
+        infographic.disable_tooltips = getattr(cfg, "disable_tooltips", False)
+        infographic.disable_zoom_controls = getattr(cfg, "disable_zoom_controls", False)
         infographic.lock_zoom_out = getattr(cfg, "lock_zoom_out", False)
 
         infographic.enable_a11y = getattr(cfg, "enable_a11y", False)
@@ -702,6 +710,10 @@ class Infographic:
             "connections": self.connections,
             "disable_panel": self.disable_panel,
             "panel_width": self.panel_width,
+            "panel_height": self.panel_height,
+            "disable_resizer": self.disable_resizer,
+            "disable_tooltips": self.disable_tooltips,
+            "disable_zoom_controls": self.disable_zoom_controls,
             "lock_zoom_out": self.lock_zoom_out,
             "render_mode": self.render_mode,
             "enable_minimap": self.enable_minimap,

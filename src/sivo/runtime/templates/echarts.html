@@ -1006,6 +1006,7 @@
                     }
                 },
                 tooltip: {
+                    show: !window.sivoDisableTooltips,
                     trigger: 'item',
                     triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -1737,6 +1738,10 @@
             var liveBinding = view.live_binding || null;
             window.sivoDisablePanel = view.disable_panel || false;
             window.sivoPanelWidth = view.panel_width || null;
+            window.sivoPanelHeight = view.panel_height || null;
+            window.sivoDisableResizer = view.disable_resizer || false;
+            window.sivoDisableTooltips = view.disable_tooltips || false;
+            window.sivoDisableZoomControls = view.disable_zoom_controls || false;
 
             // Handle Live Binding (WebSocket Telemetry) if present
             if (liveSocket) {
@@ -1907,6 +1912,12 @@
 
             // Initialize Controls (Fullscreen, Share, Download)
             initControls(view);
+
+            // Handle Zoom Controls
+            var zoomControlsContainer = document.querySelector('.zoom-controls');
+            if (zoomControlsContainer) {
+                zoomControlsContainer.style.display = window.sivoDisableZoomControls ? 'none' : 'flex';
+            }
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
@@ -2687,29 +2698,43 @@
                     resizer.classList.add('resizer-horizontal');
                 }
 
-                // Apply custom panel width if provided
-                if (window.sivoPanelWidth) {
-                    if (window.innerWidth <= 768) {
-                        // On mobile, the panel is full width and positioned at bottom/top, so we adjust height instead
+                // Apply custom panel width or height if provided
+                var isMobile = window.innerWidth <= 768;
+
+                infoPanel.style.width = '';
+                infoPanel.style.height = '';
+                infoPanel.style.flexBasis = '';
+
+                if (isMobile) {
+                    // Mobile is forced to column layout (top/bottom).
+                    // Prefer panel_height if set, else fallback to panel_width for backwards compatibility.
+                    if (window.sivoPanelHeight) {
+                        infoPanel.style.height = window.sivoPanelHeight;
+                    } else if (window.sivoPanelWidth) {
                         infoPanel.style.height = window.sivoPanelWidth;
-                        infoPanel.style.width = '';
-                    } else {
-                        // Desktop
-                        if (position === 'left' || position === 'right') {
-                            infoPanel.style.width = window.sivoPanelWidth;
-                            infoPanel.style.flexBasis = window.sivoPanelWidth;
-                            infoPanel.style.height = '';
-                        } else {
-                            // Desktop but panel at top/bottom (rare but supported)
-                            infoPanel.style.height = window.sivoPanelWidth;
-                            infoPanel.style.width = '';
-                        }
                     }
                 } else {
-                    // Clear any manual sizing inline styles from dragging or old views
-                    infoPanel.style.width = '';
-                    infoPanel.style.height = '';
-                    infoPanel.style.flexBasis = '';
+                    // Desktop
+                    if (position === 'left' || position === 'right') {
+                        if (window.sivoPanelWidth) {
+                            infoPanel.style.width = window.sivoPanelWidth;
+                            infoPanel.style.flexBasis = window.sivoPanelWidth;
+                        }
+                    } else {
+                        // Desktop Top/Bottom
+                        if (window.sivoPanelHeight) {
+                            infoPanel.style.height = window.sivoPanelHeight;
+                        } else if (window.sivoPanelWidth) {
+                            // Fallback logic
+                            infoPanel.style.height = window.sivoPanelWidth;
+                        }
+                    }
+                }
+
+                if (window.sivoDisableResizer) {
+                    resizer.style.display = 'none';
+                } else {
+                    resizer.style.display = '';
                 }
 
                 // Smoothly resize ECharts during CSS transition
