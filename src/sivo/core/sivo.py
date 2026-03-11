@@ -557,8 +557,9 @@ class Sivo:
         option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_word_cloud_chart(self, element_id: str, title: str, data: list[dict], color: Union[str, list[str]] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_word_cloud_chart(self, element_id: str, title: str, data: list[dict], mask_image: str = None, color: Union[str, list[str]] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Word Cloud Chart. data: [{'name': 'Word', 'value': 100}, ...]
+        mask_image: Optional URL or base64 string to a silhouette image (black and white) to constrain the word cloud shape.
         Note: Requires echarts-wordcloud plugin (included by default in SIVO CDN templates)."""
         option = {
             "title": {"text": title},
@@ -593,6 +594,10 @@ class Sivo:
                 "data": data
             }]
         }
+
+        if mask_image:
+            # We pass this as a custom property. The JS runtime will intercept it, load the image, and attach the DOM object to maskImage
+            option["series"][0]["_sivo_mask_image_url"] = mask_image
 
         option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
