@@ -15,6 +15,8 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include echarts-wordcloud -->
     <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
+    <!-- Include echarts-liquidfill -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
@@ -3046,8 +3048,29 @@
                                     }
                                 }
 
+                                // Handle Custom Series _sivo_render_item safely using new Function
+                                var processedOption = chartData.option;
+                                if (processedOption.series && Array.isArray(processedOption.series)) {
+                                    processedOption.series.forEach(function(s) {
+                                        if (s.type === 'custom' && s._sivo_render_item) {
+                                            try {
+                                                // Create the function dynamically. The string should be a function body or the whole function
+                                                // If it's the whole function e.g., 'function (params, api) { ... }'
+                                                var jsStr = s._sivo_render_item.trim();
+                                                if (jsStr.startsWith('function')) {
+                                                    s.renderItem = eval('(' + jsStr + ')');
+                                                } else {
+                                                    s.renderItem = new Function('params', 'api', jsStr);
+                                                }
+                                            } catch (e) {
+                                                console.error("SIVO: Failed to evaluate custom renderItem:", e);
+                                            }
+                                        }
+                                    });
+                                }
+
                                 if (!hasMaskImage) {
-                                    nestedChart.setOption(chartData.option);
+                                    nestedChart.setOption(processedOption);
                                 }
                             }
                         });
