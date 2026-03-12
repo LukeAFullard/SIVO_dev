@@ -396,6 +396,117 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
+    def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", trendline_width: int = 2, trendline_arrow: bool = False, trendline_arrow_size: int = 10, trendline_label: str = None, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Scatter Chart with an overlaid trendline. trendline_type can be 'linear', 'exponential', 'logarithmic', 'polynomial'. data: [[x1, y1], [x2, y2]]"""
+
+        symbol = "none"
+
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "xAxis": {},
+            "yAxis": {},
+            "dataset": [
+                {
+                    "source": data
+                },
+                {
+                    "transform": {
+                        "type": "ecStat:regression",
+                        "config": {"method": trendline_type}
+                    }
+                }
+            ],
+            "series": [
+                {
+                    "name": title,
+                    "type": "scatter",
+                    "datasetIndex": 0
+                },
+                {
+                    "name": "Trendline",
+                    "type": "line",
+                    "datasetIndex": 1,
+                    "symbol": symbol,
+                    "symbolSize": 0,
+                    "lineStyle": {
+                        "color": trendline_color,
+                        "width": trendline_width
+                    }
+                }
+            ]
+        }
+
+        # In ECharts, dataset-driven line series cannot dynamically calculate arrow angles via markPoint
+        # To make arrows point perfectly along the path of the slope, we overlay a custom series that evaluates
+        # the angle between the last two points of the generated dataset on render.
+        if trendline_arrow or trendline_label:
+            js_str = f"""
+                var currPos = api.coord([api.value(0), api.value(1)]);
+                var sid = params.seriesIndex;
+                if (!window._sivo_prev_pos) window._sivo_prev_pos = {{}};
+
+                if (params.dataIndex === params.dataInsideLength - 2) {{
+                    window._sivo_prev_pos[sid] = currPos;
+                }}
+
+                if (params.dataIndex !== params.dataInsideLength - 1) return;
+
+                var prev = window._sivo_prev_pos[sid] || [currPos[0] - 1, currPos[1]];
+                var dx = currPos[0] - prev[0];
+                var dy = currPos[1] - prev[1];
+                var angle = Math.atan2(dy, dx);
+
+                var size = {trendline_arrow_size};
+                var color = '{trendline_color}';
+                var labelText = {f"'{trendline_label}'" if trendline_label else "null"};
+                var showArrow = {'true' if trendline_arrow else 'false'};
+
+                var half = size / 2;
+
+                var returnObj = {{
+                    type: 'group',
+                    children: []
+                }};
+
+                if (showArrow) {{
+                    returnObj.children.push({{
+                        type: 'path',
+                        shape: {{
+                            pathData: 'M' + (-half) + ',' + (-half) + ' L' + half + ',0 L' + (-half) + ',' + half + ' Z',
+                        }},
+                        position: currPos,
+                        rotation: angle,
+                        style: {{ fill: color }}
+                    }});
+                }}
+
+                if (labelText) {{
+                    returnObj.children.push({{
+                        type: 'text',
+                        position: [currPos[0] + size, currPos[1]],
+                        style: {{
+                            text: labelText,
+                            fill: color,
+                            fontSize: 14,
+                            fontWeight: 'bold',
+                            textVerticalAlign: 'middle'
+                        }}
+                    }});
+                }}
+
+                return returnObj;
+            """
+
+            option["series"].append({
+                "type": "custom",
+                "datasetIndex": 1,
+                "_sivo_render_item": js_str
+            })
+
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def map_pictorial_bar_chart(self, element_id: str, title: str, data: list, categories: list, symbol: str, symbol_repeat: bool | str = True, symbol_size: list | int | str = ['100%', '100%'], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Pictorial Bar Chart. 'symbol' can be 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none', an image URL ('image://url'), or an SVG path ('path://...')."""
         option = {

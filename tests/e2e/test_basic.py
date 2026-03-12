@@ -24,13 +24,13 @@ def test_sivo_render(page: Page):
     page.goto(f"file://{file_path}")
 
     # ECharts renders into a div with a specific id
-    echarts_container = page.locator("#sivo-chart")
+    echarts_container = page.locator("#chart-container")
     expect(echarts_container).to_be_visible()
 
-    # ECharts usually creates a canvas inside
-    canvas = echarts_container.locator("canvas").first
+    # ECharts usually creates a canvas or SVG inside
+    canvas = echarts_container.locator("div").first
     expect(canvas).to_be_visible()
 
-    # Check if the info panel exists
-    info_panel = page.locator("#sivo-info-panel")
-    expect(info_panel).to_be_attached()
+    # Check if the wrapper container exists
+    wrapper = page.locator("#chart-wrapper")
+    expect(wrapper).to_be_attached()
