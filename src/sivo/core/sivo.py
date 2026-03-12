@@ -396,6 +396,42 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
+    def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+        """Helper to map a Scatter Chart with an overlaid trendline. trendline_type can be 'linear', 'exponential', 'logarithmic', 'polynomial'. data: [[x1, y1], [x2, y2]]"""
+        option = {
+            "title": {"text": title},
+            "tooltip": {"trigger": "item"},
+            "xAxis": {},
+            "yAxis": {},
+            "dataset": [
+                {
+                    "source": data
+                },
+                {
+                    "transform": {
+                        "type": "ecStat:regression",
+                        "config": {"method": trendline_type}
+                    }
+                }
+            ],
+            "series": [
+                {
+                    "name": title,
+                    "type": "scatter",
+                    "datasetIndex": 0
+                },
+                {
+                    "name": "Trendline",
+                    "type": "line",
+                    "datasetIndex": 1,
+                    "symbol": "none",
+                    "lineStyle": {"color": trendline_color}
+                }
+            ]
+        }
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
+
     def map_pictorial_bar_chart(self, element_id: str, title: str, data: list, categories: list, symbol: str, symbol_repeat: bool | str = True, symbol_size: list | int | str = ['100%', '100%'], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Pictorial Bar Chart. 'symbol' can be 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none', an image URL ('image://url'), or an SVG path ('path://...')."""
         option = {

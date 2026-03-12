@@ -8,12 +8,22 @@
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <!-- Include echarts-stat -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+    <!-- Include echarts-wordcloud -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
+    <!-- Include echarts-liquidfill -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Include lottie-player for Lottie animations -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <!-- Include canvas-confetti for gamification effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <!-- Include jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
     <style>
@@ -45,6 +55,140 @@
             left: 0;
             width: 100%;
             height: 100%;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        #chart-container-compare-right {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            display: none;
+            clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+        }
+
+        #sivo-compare-slider-ui {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            cursor: ew-resize;
+            z-index: 101;
+            display: none;
+            transform: translateX(-50%);
+        }
+        #sivo-compare-slider-ui::after {
+            content: "↔";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        #sivo-ambient-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 15;
+            display: none;
+        }
+
+        #sivo-drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+
+        #sivo-drawing-toolbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .sivo-drawing-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.2s;
+        }
+
+        .sivo-drawing-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .sivo-drawing-btn.active {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        #sivo-drawing-color {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        #sivo-drawing-color::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        #sivo-drawing-color::-webkit-color-swatch {
+            border: none;
+        }
+
+        .sivo-view-transition-out {
+            opacity: 0 !important;
+            transform: scale(0.95);
+        }
+
+        .sivo-view-transition-in {
+            opacity: 1 !important;
+            transform: scale(1);
         }
 
         #sivo-title-container {
@@ -863,8 +1007,33 @@
             <div id="sivo-attribution"></div>
 
             <div id="chart-container"></div>
+            <div id="chart-container-compare-right"></div>
+            <div id="sivo-compare-slider-ui"></div>
             <div id="sivo-native-overlay-svg-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: none; z-index: 10;"></div>
             <canvas id="sivo-scratchoff-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; display: none;"></canvas>
+            <canvas id="sivo-ambient-canvas"></canvas>
+            <canvas id="sivo-drawing-canvas"></canvas>
+            <div id="sivo-drawing-toolbar">
+                <button class="sivo-drawing-btn" id="sivo-draw-toggle" title="Toggle Drawing Mode">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                </button>
+                <div id="sivo-draw-tools" style="display:none; gap:8px; align-items:center;">
+                    <button class="sivo-drawing-btn active" id="sivo-draw-pen" title="Pen">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
+                    </button>
+                    <button class="sivo-drawing-btn" id="sivo-draw-text" title="Text">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"></path></svg>
+                    </button>
+                    <button class="sivo-drawing-btn" id="sivo-draw-eraser" title="Eraser">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H4M16 16l3.5-3.5a2.121 2.121 0 0 0-3-3L13 13m-3 3L6 12a2.121 2.121 0 0 1 3-3l4 4"></path></svg>
+                    </button>
+                    <input type="color" id="sivo-drawing-color" value="#ef4444" title="Color">
+                    <button class="sivo-drawing-btn" id="sivo-draw-clear" title="Clear All">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            </div>
+
             <div class="zoom-controls">
                 <div class="zoom-btn" onclick="toggleFullscreen()" id="fullscreen-btn" style="display: none;" title="Toggle Fullscreen">
                     <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
@@ -893,6 +1062,9 @@
                     <button class="tour-btn" id="tour-prev" onclick="tourPrev()">Prev</button>
                     <span id="tour-progress" style="line-height: 32px; font-size: 14px; color: #666;"></span>
                     <button class="tour-btn" id="tour-next" onclick="tourNext()">Next</button>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <button class="tour-btn" id="tour-pdf" onclick="exportTourToPDF()" style="width: 100%; font-size: 12px; background: #3b82f6; color: white;">Download PDF</button>
                 </div>
                 <button class="close-btn" onclick="closeTour()" style="position: absolute; top: -10px; right: -10px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">×</button>
             </div>
@@ -923,11 +1095,17 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\"\u003e\n    \u003crect id=\"TX\" x=\"10\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"TX\"/\u003e\n    \u003crect id=\"CA\" x=\"110\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"CA\"/\u003e\n    \u003crect id=\"NY\" x=\"10\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"NY\"/\u003e\n    \u003crect id=\"WY\" x=\"110\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"WY\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "TX", "value": 1, "tooltip": "State: TX"}, {"name": "CA", "value": 1, "tooltip": "State: CA"}, {"name": "NY", "value": 1, "tooltip": "State: NY"}, {"name": "WY", "value": 1, "tooltip": "State: WY"}], "actions_manifest": {"TX": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "CA": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "NY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "WY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}]}, "overlays": {}, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "mappings": {"TX": {"id": "TX", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "CA": {"id": "CA", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "NY": {"id": "NY", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "WY": {"id": "WY", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "data_binding": {"data": {"TX": {"sales": 15000.0}, "CA": {"sales": 22000.0}, "NY": {"sales": 8000.0}, "WY": {"sales": 500.0}}, "key": "sales", "colors": ["#e0f3db", "#43a2ca"], "min_val": 0.0, "max_val": 25000.0}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\"\u003e\n    \u003crect id=\"TX\" x=\"10\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"TX\"/\u003e\n    \u003crect id=\"CA\" x=\"110\" y=\"10\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"CA\"/\u003e\n    \u003crect id=\"NY\" x=\"10\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"NY\"/\u003e\n    \u003crect id=\"WY\" x=\"110\" y=\"110\" width=\"80\" height=\"80\" fill=\"#ccc\" name=\"WY\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "TX", "value": 1, "tooltip": "State: TX"}, {"name": "CA", "value": 1, "tooltip": "State: CA"}, {"name": "NY", "value": 1, "tooltip": "State: NY"}, {"name": "WY", "value": 1, "tooltip": "State: WY"}], "actions_manifest": {"TX": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "CA": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "NY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "WY": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "bounding_coords": null, "mappings": {"TX": {"id": "TX", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: TX\u003c/h3\u003e", "title": "State: TX", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "CA": {"id": "CA", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: CA\u003c/h3\u003e", "title": "State: CA", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "NY": {"id": "NY", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: NY\u003c/h3\u003e", "title": "State: NY", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "WY": {"id": "WY", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eState: WY\u003c/h3\u003e", "title": "State: WY", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "data_binding": {"data": {"TX": {"sales": 15000.0}, "CA": {"sales": 22000.0}, "NY": {"sales": 8000.0}, "WY": {"sales": 500.0}}, "key": "sales", "colors": ["#e0f3db", "#43a2ca"], "min_val": 0.0, "max_val": 25000.0}}};
         var currentViewId = "default_view";
 
+        // Check if we are in Compare Mode
+        var isCompareMode = currentViewId === "compare_mode";
+
+        // Setup base views to render
+        var leftViewId = isCompareMode ? "compare_left" : currentViewId;
+
         // Apply Global Theme
-        var currentTheme = viewsData[currentViewId].theme || 'light';
+        var currentTheme = viewsData[leftViewId] ? (viewsData[leftViewId].theme || 'light') : 'light';
         document.body.className = 'sivo-theme-' + currentTheme;
 
         function updateThemeIcons() {
@@ -956,9 +1134,24 @@
             updateThemeIcons();
         }
 
+        // Register ecStat transforms for trendlines if available
+        if (typeof ecStat !== 'undefined') {
+            echarts.registerTransform(ecStat.transform.regression);
+        }
+
         // Initialize ECharts with the appropriate renderer
-        var renderMode = viewsData[currentViewId].render_mode || 'canvas';
+        var renderMode = viewsData[leftViewId] ? (viewsData[leftViewId].render_mode || 'canvas') : 'canvas';
         var myChart = echarts.init(chartDom, null, { renderer: renderMode });
+        var myChartCompareRight = null;
+
+        if (isCompareMode) {
+            document.getElementById('chart-container-compare-right').style.display = 'block';
+            document.getElementById('sivo-compare-slider-ui').style.display = 'block';
+            myChartCompareRight = echarts.init(document.getElementById('chart-container-compare-right'), null, { renderer: renderMode });
+
+            // Sync georoam between the two charts
+            echarts.connect([myChart, myChartCompareRight]);
+        }
 
         // Active variables for the current view
         var echartsData = [];
@@ -979,6 +1172,7 @@
         var currentCenter = null;
 
         function getBaseOption(mapName) {
+            var view = viewsData[mapName] || viewsData[currentViewId] || {};
             var option = {
                 aria: {
                     enabled: true,
@@ -987,6 +1181,7 @@
                     }
                 },
                 tooltip: {
+                    show: !window.sivoDisableTooltips,
                     trigger: 'item',
                     triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -1043,26 +1238,16 @@
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
-                            itemStyle: {
-                                // Strip out default areaColor override so custom colors stay intact on hover
-                                // Keep a very subtle shadow just to indicate it is interactive on hover
-                                shadowBlur: 8,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.2)'
-                            },
-                            label: {
-                                show: false
-                            }
+                            disabled: true
                         },
                         selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
-                            itemStyle: {
-                                // Empty to ensure absolutely no visual change on click natively
-                            }
+                            disabled: true
                         },
                         data: echartsData,
                         zlevel: 1,
-                        animationDurationUpdate: 300 // Smooth transition on data/style changes
+                        animationDurationUpdate: 800, // Smooth transition on data/style changes and zoom
+                        animationEasingUpdate: 'cubicInOut'
                     }
                 ]
             };
@@ -1078,8 +1263,6 @@
                     option.geo = {
                         map: mapName,
                         roam: view.lock_canvas ? false : true,
-                        layoutCenter: ['50%', '50%'],
-                        layoutSize: '100%',
                         itemStyle: {
                             color: 'transparent',
                             borderColor: 'transparent'
@@ -1098,8 +1281,11 @@
                     option.series[0].geoIndex = 0;
                 }
 
-                var linesData = connectionsData.map(function(conn) {
-                    return {
+                var linesDataWithEffect = [];
+                var linesDataStatic = [];
+
+                connectionsData.forEach(function(conn) {
+                    var lineItem = {
                         coords: [
                             [conn.coords[0][0], conn.coords[0][1]],
                             [conn.coords[1][0], conn.coords[1][1]]
@@ -1112,43 +1298,63 @@
                         },
                         name: conn.label
                     };
+
+                    linesDataStatic.push(lineItem);
+
+                    if (conn.flow_effect) {
+                        linesDataWithEffect.push({
+                            ...lineItem,
+                            effect: {
+                                show: true,
+                                period: conn.animation_speed || 3,
+                                trailLength: conn.effect_symbol === 'arrow' ? 0 : 0.7,
+                                color: conn.color,
+                                symbol: conn.effect_symbol || 'circle',
+                                symbolSize: conn.effect_size || 5
+                            }
+                        });
+                    }
                 });
 
-                option.series.push({
-                    type: 'lines',
-                    coordinateSystem: 'geo',
-                    zlevel: 2,
-                    polyline: false,
-                    effect: {
-                        show: true,
-                        period: connectionsData[0].animation_speed || 3,
-                        trailLength: 0.7,
-                        color: '#fff',
-                        symbolSize: 3
-                    },
-                    lineStyle: {
-                        color: function(params) { return params.data.lineStyle.color; },
-                        width: 0,
-                        curveness: 0.2
-                    },
-                    data: linesData
-                });
+                // Add the static solid lines
+                if (linesDataStatic.length > 0) {
+                    option.series.push({
+                        type: 'lines',
+                        coordinateSystem: 'geo',
+                        zlevel: 1,
+                        polyline: false,
+                        lineStyle: {
+                            color: function(params) { return params.data.lineStyle.color; },
+                            width: function(params) { return params.data.lineStyle.width; },
+                            opacity: function(params) { return params.data.lineStyle.opacity; },
+                            type: function(params) { return params.data.lineStyle.type; },
+                            curveness: 0.2
+                        },
+                        data: linesDataStatic
+                    });
+                }
 
-                // Add the static solid line underneath the effect
-                option.series.push({
-                    type: 'lines',
-                    coordinateSystem: 'geo',
-                    zlevel: 1,
-                    polyline: false,
-                    lineStyle: {
-                        color: function(params) { return params.data.lineStyle.color; },
-                        width: function(params) { return params.data.lineStyle.width; },
-                        opacity: function(params) { return params.data.lineStyle.opacity; },
-                        type: function(params) { return params.data.lineStyle.type; },
-                        curveness: 0.2
-                    },
-                    data: linesData
-                });
+                // Add the effect lines
+                if (linesDataWithEffect.length > 0) {
+                    // Group by effect configuration to allow distinct effects per line
+                    // ECharts `lines` series allows effect configuration per-series, not per-data item reliably in all versions,
+                    // but we can try to spread them, or better yet, create a series per distinct effect.
+                    // For simplicity, we create a series for each line with an effect to guarantee styling.
+                    linesDataWithEffect.forEach(function(effectLine) {
+                        option.series.push({
+                            type: 'lines',
+                            coordinateSystem: 'geo',
+                            zlevel: 2,
+                            polyline: false,
+                            effect: effectLine.effect,
+                            lineStyle: {
+                                width: 0,
+                                curveness: 0.2
+                            },
+                            data: [effectLine]
+                        });
+                    });
+                }
             }
 
             var activeDataBinding = dataBinding || timelineBinding;
@@ -1167,17 +1373,24 @@
                 };
             }
 
-            var proportionalSymbols = viewsData[currentViewId].proportional_symbols;
+            // Check view definition (handles compare mode gracefully)
+            var actualViewId = (currentViewId === "compare_mode" && mapName === "compare_right") ? "compare_right" : (currentViewId === "compare_mode" ? "compare_left" : currentViewId);
+
+            var proportionalSymbols = viewsData[actualViewId] ? viewsData[actualViewId].proportional_symbols : null;
             if (proportionalSymbols && proportionalSymbols.data) {
                 var scatterData = [];
                 for (var itemName in proportionalSymbols.data) {
                     var dataObj = proportionalSymbols.data[itemName];
                     if (dataObj && dataObj.coord) {
-                        scatterData.push({
+                        var dataItem = {
                             name: itemName,
                             value: [dataObj.coord[0], dataObj.coord[1], dataObj.value],
                             _rawVal: dataObj.value
-                        });
+                        };
+                        if (dataObj.color) {
+                            dataItem.itemStyle = { color: dataObj.color };
+                        }
+                        scatterData.push(dataItem);
                     }
                 }
 
@@ -1186,8 +1399,6 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
-                            layoutCenter: ['50%', '50%'],
-                            layoutSize: '100%',
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
                         };
@@ -1199,9 +1410,9 @@
                     var maxVal = Math.max(...scatterData.map(d => d._rawVal));
                     var range = maxVal - minVal || 1;
 
-                    option.series.push({
+                    var scatterSeries = {
                         name: 'Proportional Symbols',
-                        type: 'scatter',
+                        type: proportionalSymbols.is_pulse ? 'effectScatter' : 'scatter',
                         coordinateSystem: 'geo',
                         zlevel: 3,
                         symbol: 'circle',
@@ -1213,7 +1424,223 @@
                             return proportionalSymbols.min_size + ratio * (proportionalSymbols.max_size - proportionalSymbols.min_size);
                         },
                         data: scatterData
-                    });
+                    };
+
+                    if (proportionalSymbols.is_pulse) {
+                        scatterSeries.showEffectOn = 'render';
+                        scatterSeries.rippleEffect = {
+                            brushType: 'stroke',
+                            scale: 2.5,
+                            period: 4
+                        };
+                    }
+
+                    option.series.push(scatterSeries);
+                }
+            }
+
+            var hexbinConfig = viewsData[actualViewId] ? viewsData[actualViewId].hexbin : null;
+            if (hexbinConfig && hexbinConfig.data) {
+                var hexData = [];
+                for (var i = 0; i < hexbinConfig.data.length; i++) {
+                    var dataObj = hexbinConfig.data[i];
+                    if (dataObj && dataObj.coord) {
+                        hexData.push({
+                            name: 'Hexbin ' + i,
+                            value: [dataObj.coord[0], dataObj.coord[1], dataObj.value],
+                            _rawVal: dataObj.value
+                        });
+                    }
+                }
+
+                if (hexData.length > 0) {
+                    if (!option.geo) {
+                        option.geo = {
+                            map: mapName,
+                            roam: view.lock_canvas ? false : true,
+                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            zlevel: 0
+                        };
+                        option.series[0].geoIndex = 0;
+                    }
+
+                    var hexMinVal = Math.min(...hexData.map(d => d._rawVal));
+                    var hexMaxVal = Math.max(...hexData.map(d => d._rawVal));
+                    var hexRange = hexMaxVal - hexMinVal || 1;
+
+                    // A pointy-topped hexagon path centered around 0,0
+                    // using standard radius geometry to make width correct
+                    // path:// doesn't cleanly support variable bounds without mapping
+                    // We can use custom series or standard scatter.
+                    var hexPath = 'path://M 0 -1 L 0.866 -0.5 L 0.866 0.5 L 0 1 L -0.866 0.5 L -0.866 -0.5 Z';
+
+                    // Parse color palette
+                    var c1 = hexbinConfig.color_palette[0] || "#e0f3f8";
+                    var c2 = hexbinConfig.color_palette[hexbinConfig.color_palette.length - 1] || "#014636";
+
+                    function hexToRgb(h) {
+                        var hMatch = h.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+                        return hMatch ? [parseInt(hMatch[1], 16), parseInt(hMatch[2], 16), parseInt(hMatch[3], 16)] : [255, 255, 255];
+                    }
+                    var rgb1 = hexToRgb(c1);
+                    var rgb2 = hexToRgb(c2);
+
+                    var hexSeries = {
+                        name: 'Hexbin',
+                        type: 'custom',
+                        coordinateSystem: 'geo',
+                        zlevel: 2,
+                        renderItem: function (params, api) {
+                            var pt = api.coord([api.value(0), api.value(1)]);
+                            var sizePtY = api.coord([api.value(0), api.value(1) + hexbinConfig.hex_size]); // Calculate radius in pixel space
+                            var r = Math.abs(sizePtY[1] - pt[1]);
+                            var w = Math.sqrt(3) * r;
+                            var h = 2 * r;
+
+                            // Pointy topped hexagon
+                            var points = [
+                                [pt[0], pt[1] - r],
+                                [pt[0] + w/2, pt[1] - r/2],
+                                [pt[0] + w/2, pt[1] + r/2],
+                                [pt[0], pt[1] + r],
+                                [pt[0] - w/2, pt[1] + r/2],
+                                [pt[0] - w/2, pt[1] - r/2]
+                            ];
+
+                            return {
+                                type: 'polygon',
+                                shape: {
+                                    points: points
+                                },
+                                style: api.style()
+                            };
+                        },
+                        itemStyle: {
+                            borderColor: hexbinConfig.stroke_color,
+                            borderWidth: hexbinConfig.stroke_width,
+                            color: function(params) {
+                                var ratio = (params.value[2] - hexMinVal) / hexRange;
+                                var r = Math.round(rgb1[0] + (rgb2[0] - rgb1[0]) * ratio);
+                                var g = Math.round(rgb1[1] + (rgb2[1] - rgb1[1]) * ratio);
+                                var b = Math.round(rgb1[2] + (rgb2[2] - rgb1[2]) * ratio);
+                                var opacity = hexbinConfig.min_opacity + ratio * (hexbinConfig.max_opacity - hexbinConfig.min_opacity);
+                                return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+                            }
+                        },
+                        data: hexData
+                    };
+
+                    option.series.push(hexSeries);
+                }
+            }
+
+            var dotDensityConfig = viewsData[actualViewId] ? viewsData[actualViewId].dot_density : null;
+            if (dotDensityConfig && dotDensityConfig.data) {
+                var dotData = [];
+                // Create an offscreen canvas to use isPointInPath for exact boundary testing
+                var _offCanvas = document.createElement('canvas');
+                var _offCtx = _offCanvas.getContext('2d');
+
+                for (var itemName in dotDensityConfig.data) {
+                    var dataObj = dotDensityConfig.data[itemName];
+                    var val = dataObj.value;
+                    var numDots = Math.floor(val * dotDensityConfig.dots_per_value);
+                    if (numDots > 0 && dataObj.coord) {
+                        var cx = dataObj.coord[0];
+                        var cy = dataObj.coord[1];
+
+                        var spreadX = 20;
+                        var spreadY = 20;
+
+                        var minX = cx - spreadX;
+                        var maxX = cx + spreadX;
+                        var minY = cy - spreadY;
+                        var maxY = cy + spreadY;
+
+                        if (dataObj.bbox) {
+                            minX = dataObj.bbox[0];
+                            minY = dataObj.bbox[1];
+                            maxX = dataObj.bbox[2];
+                            maxY = dataObj.bbox[3];
+                        }
+
+                        var path2d = null;
+                        if (dataObj.d && typeof Path2D !== 'undefined') {
+                            path2d = new Path2D(dataObj.d);
+                        }
+
+                        var dotsGenerated = 0;
+                        var attempts = 0;
+                        var maxAttempts = numDots * 10; // Prevent infinite loops
+
+                        while (dotsGenerated < numDots && attempts < maxAttempts) {
+                            attempts++;
+                            var x = minX + Math.random() * (maxX - minX);
+                            var y = minY + Math.random() * (maxY - minY);
+
+                            var isValid = false;
+
+                            if (path2d) {
+                                // Strict point-in-polygon
+                                isValid = _offCtx.isPointInPath(path2d, x, y);
+                            } else {
+                                // Fallback: simple rejection sampling for ellipse inscribed in bounding box
+                                var rx = (maxX - minX) / 2;
+                                var ry = (maxY - minY) / 2;
+                                var dx = x - cx;
+                                var dy = y - cy;
+                                if (rx > 0 && ry > 0 && ((dx*dx)/(rx*rx) + (dy*dy)/(ry*ry) <= 1)) {
+                                    isValid = true;
+                                }
+                            }
+
+                            if (isValid) {
+                                dotData.push({
+                                    name: itemName,
+                                    value: [x, y, val]
+                                });
+                                dotsGenerated++;
+                            }
+                        }
+
+                        // Fallback if maxAttempts reached but we still need dots
+                        // just scatter them near the center
+                        if (dotsGenerated === 0 && numDots > 0) {
+                            for (var j = 0; j < numDots; j++) {
+                                dotData.push({
+                                    name: itemName,
+                                    value: [cx + (Math.random() - 0.5) * 10, cy + (Math.random() - 0.5) * 10, val]
+                                });
+                            }
+                        }
+                    }
+                }
+
+                if (dotData.length > 0) {
+                    if (!option.geo) {
+                        option.geo = {
+                            map: mapName,
+                            roam: view.lock_canvas ? false : true,
+                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            zlevel: 0
+                        };
+                        option.series[0].geoIndex = 0;
+                    }
+
+                    var dotSeries = {
+                        name: 'Dot Density',
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        zlevel: 3,
+                        symbol: 'circle',
+                        symbolSize: dotDensityConfig.dot_size,
+                        itemStyle: {
+                            color: dotDensityConfig.dot_color
+                        },
+                        data: dotData
+                    };
+
+                    option.series.push(dotSeries);
                 }
             }
 
@@ -1658,17 +2085,33 @@
         }
 
         function renderView(viewId, isBackNavigation) {
-            if (!viewsData[viewId]) {
+            if (viewId !== "compare_mode" && !viewsData[viewId]) {
                 console.error("View not found:", viewId);
                 return;
             }
 
-            if (!isBackNavigation && currentViewId && currentViewId !== viewId) {
-                viewHistory.push(currentViewId);
+            // Apply transition out if not the first load
+            var isFirstLoad = (!currentViewId || currentViewId === viewId) && !isBackNavigation;
+            if (!isFirstLoad) {
+                chartDom.classList.remove('sivo-view-transition-in');
+                chartDom.classList.add('sivo-view-transition-out');
+
+                // Overlay also transitions
+                var overlayContainer = document.getElementById('sivo-native-overlay-svg-container');
+                if (overlayContainer) {
+                    overlayContainer.style.transition = 'opacity 0.5s ease-in-out';
+                    overlayContainer.style.opacity = '0';
+                }
             }
 
-            currentViewId = viewId;
-            var view = viewsData[viewId];
+            setTimeout(function() {
+                if (!isBackNavigation && currentViewId && currentViewId !== viewId) {
+                    viewHistory.push(currentViewId);
+                }
+
+                currentViewId = viewId;
+                var primaryViewId = viewId === "compare_mode" ? "compare_left" : viewId;
+                var view = viewsData[primaryViewId];
 
             // Note: ECharts doesn't support changing renderer after init natively.
             // We assume multi-view projects will use the same renderer, or default to the first view's.
@@ -1685,6 +2128,13 @@
             dataBinding = view.data_binding || null;
             timelineBinding = view.timeline_binding || null;
             var liveBinding = view.live_binding || null;
+            var apiBinding = view.api_binding || null;
+            window.sivoDisablePanel = view.disable_panel || false;
+            window.sivoPanelWidth = view.panel_width || null;
+            window.sivoPanelHeight = view.panel_height || null;
+            window.sivoDisableResizer = view.disable_resizer || false;
+            window.sivoDisableTooltips = view.disable_tooltips || false;
+            window.sivoDisableZoomControls = view.disable_zoom_controls || false;
 
             // Handle Live Binding (WebSocket Telemetry) if present
             if (liveSocket) {
@@ -1728,7 +2178,7 @@
                                 }
                             }
                             // Re-apply base option dynamically without breaking current zoom state
-                            var updatedOption = createBaseOption(viewId, view.svg_string, actionsManifest);
+                            var updatedOption = getBaseOption(viewId);
                             myChart.setOption(updatedOption, false);
                         }
                     } catch(err) {
@@ -1739,6 +2189,145 @@
                 liveSocket.onclose = function(event) {
                     console.warn("[SIVO] Live binding WebSocket closed.", event);
                 };
+            }
+
+            // Handle API Binding (Polling) if present
+            if (window.sivoApiPollingInterval) {
+                clearInterval(window.sivoApiPollingInterval);
+                window.sivoApiPollingInterval = null;
+            }
+            if (apiBinding) {
+                console.log("[SIVO] Initializing API binding to poll:", apiBinding.url);
+                window.sivoApiPollingInterval = setInterval(() => {
+                    var fetchOptions = {
+                        method: apiBinding.method || 'GET',
+                        headers: apiBinding.headers || {}
+                    };
+                    if (apiBinding.payload && apiBinding.method === 'POST') {
+                        fetchOptions.body = JSON.stringify(apiBinding.payload);
+                        fetchOptions.headers['Content-Type'] = 'application/json';
+                    }
+
+                    fetch(apiBinding.url, fetchOptions)
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log("[SIVO] API binding data received:", data);
+                            var targetData = data;
+                            if (apiBinding.data_path) {
+                                var parts = apiBinding.data_path.split('.');
+                                for (var i = 0; i < parts.length; i++) {
+                                    if (targetData && targetData[parts[i]] !== undefined) {
+                                        targetData = targetData[parts[i]];
+                                    } else {
+                                        console.warn("[SIVO] apiBinding.data_path not found in response:", apiBinding.data_path);
+                                        return;
+                                    }
+                                }
+                            }
+
+                            // Expected array format: [{id: "id1", color: "#ff0000", tooltip: "val"}]
+                            // Or dict format: {"id1": {"color": "#ff0000", "tooltip": "val"}}
+                            var hasChanges = false;
+
+                            var processItem = function(id, item) {
+                                if (!actionsManifest[id]) {
+                                    actionsManifest[id] = { actions: [], theme: {} };
+                                }
+                                if (!actionsManifest[id].theme) {
+                                    actionsManifest[id].theme = {};
+                                }
+                                if (!actionsManifest[id].actions) {
+                                    actionsManifest[id].actions = [];
+                                }
+
+                                var echartsDataItem = echartsData.find(d => d.name === id);
+                                if (!echartsDataItem) {
+                                    echartsDataItem = { name: id, value: 1 };
+                                    echartsData.push(echartsDataItem);
+                                }
+                                if (!echartsDataItem.itemStyle) {
+                                    echartsDataItem.itemStyle = {};
+                                }
+
+                                if (item.color && actionsManifest[id].theme.color !== item.color) {
+                                    actionsManifest[id].theme.color = item.color;
+                                    echartsDataItem.itemStyle.areaColor = item.color;
+                                    hasChanges = true;
+                                }
+                                if (item.fill_gradient) {
+                                    actionsManifest[id].theme.fill_gradient = item.fill_gradient;
+                                    echartsDataItem.itemStyle.areaColor = {
+                                        type: item.fill_gradient.type || 'linear',
+                                        x: item.fill_gradient.x || 0,
+                                        y: item.fill_gradient.y || 0,
+                                        x2: item.fill_gradient.x2 || 0,
+                                        y2: item.fill_gradient.y2 || 1,
+                                        colorStops: item.fill_gradient.stops || [],
+                                        global: item.fill_gradient.global || false
+                                    };
+                                    hasChanges = true;
+                                }
+                                if (item.fill_pattern) {
+                                    actionsManifest[id].theme.fill_pattern = item.fill_pattern;
+                                    echartsDataItem.itemStyle.areaColor = {
+                                        image: item.fill_pattern.image || '',
+                                        repeat: item.fill_pattern.repeat || 'repeat'
+                                    };
+                                    hasChanges = true;
+                                }
+                                if (item.tooltip) {
+                                    var currentTooltipAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
+                                    if (!currentTooltipAction || currentTooltipAction.title !== item.tooltip) {
+                                        hasChanges = true;
+                                    }
+
+                                    var tAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
+                                    if (!tAction) {
+                                        tAction = { action_type: 'tooltip', title: item.tooltip, content: `<h3>${item.tooltip}</h3>` };
+                                        actionsManifest[id].actions.push(tAction);
+                                    } else {
+                                        tAction.title = item.tooltip;
+                                        tAction.content = `<h3>${item.tooltip}</h3>`;
+                                    }
+
+                                    echartsDataItem.tooltip = item.tooltip;
+                                }
+
+                                // We check if the panel is currently open for THIS element,
+                                // and if the tooltip/content just changed, we must re-trigger the click event
+                                // so the sidebar DOM regenerates with the new content
+                                if (window.sivoCurrentPanelElement === id && hasChanges) {
+                                    // Make sure we update a global flag or timeout so that AFTER the ECharts setOption call happens,
+                                    // we re-trigger the element click. Otherwise, triggerElementClick might be reading stale state
+                                    // if it's called synchronously before actionsManifest is fully settled in the render loop.
+                                    // Actually, actionsManifest is mutated in place, but let's queue the redraw.
+                                    setTimeout(() => {
+                                        // Ensure the latest data is used
+                                        window.triggerElementClick(id);
+                                    }, 150);
+                                }
+                            };
+
+                            if (Array.isArray(targetData)) {
+                                targetData.forEach(item => {
+                                    if (item.id) processItem(item.id, item);
+                                });
+                            } else if (typeof targetData === 'object' && targetData !== null) {
+                                Object.keys(targetData).forEach(key => {
+                                    processItem(key, targetData[key]);
+                                });
+                            }
+
+                            if (hasChanges) {
+                                console.log("[SIVO] API binding detected changes, updating chart.");
+                                var updatedOption = getBaseOption(viewId);
+                                myChart.setOption(updatedOption, false);
+                            } else {
+                                console.log("[SIVO] API binding data fetched, but no visual changes detected.");
+                            }
+                        })
+                        .catch(err => console.error("[SIVO] API binding fetch error:", err));
+                }, apiBinding.polling_interval_ms || 5000);
             }
 
             if (dataBinding && dataBinding.data) {
@@ -1756,7 +2345,12 @@
             if (lockZoomOut) {
                 baseOpt.series[0].scaleLimit = { min: 1.0 };
             }
-            echarts.registerMap(viewId, { svg: view.svg_string });
+
+            var mapOptions = { svg: view.svg_string };
+            if (view.bounding_coords) {
+                mapOptions.boundingCoords = view.bounding_coords;
+            }
+            echarts.registerMap(viewId, mapOptions);
 
             if (timelineBinding && timelineBinding.data) {
                 var timelineKeys = Object.keys(timelineBinding.data);
@@ -1768,8 +2362,15 @@
                             axisType: 'category',
                             autoPlay: timelineBinding.auto_play,
                             playInterval: timelineBinding.play_interval,
-                            data: timelineKeys,
-                            bottom: 20
+                            loop: timelineBinding.loop,
+                            symbol: timelineBinding.symbol,
+                            symbolSize: timelineBinding.symbol_size,
+                            bottom: timelineBinding.bottom,
+                            controlPosition: timelineBinding.control_position,
+                            controlStyle: {
+                                showPlayBtn: timelineBinding.show_play_btn
+                            },
+                            data: timelineKeys
                         }
                     },
                     options: []
@@ -1814,11 +2415,57 @@
             // Start animations if any
             applyAnimations();
 
+            // Render Compare Right Side if applicable
+            if (viewId === "compare_mode") {
+                var rightView = viewsData["compare_right"];
+                var rightOpt = getBaseOption("compare_right");
+
+                // Need to temporarily swap data out for getBaseOption to work correctly for the right side
+                var tempEchartsData = echartsData;
+                var tempDataBinding = dataBinding;
+
+                echartsData = rightView.echarts_data;
+                dataBinding = rightView.data_binding || null;
+
+                var rightOpt = getBaseOption("compare_right");
+
+                if (dataBinding && dataBinding.data) {
+                    for (var i = 0; i < echartsData.length; i++) {
+                        var itemName = echartsData[i].name;
+                        if (dataBinding.data[itemName] && dataBinding.data[itemName][dataBinding.key] !== undefined) {
+                            echartsData[i].value = dataBinding.data[itemName][dataBinding.key];
+                        }
+                    }
+                    rightOpt.visualMap = {
+                        min: dataBinding.min_val,
+                        max: dataBinding.max_val,
+                        left: 'right', // put right legend on the right
+                        bottom: 'bottom',
+                        text: [dataBinding.max_val.toString(), dataBinding.min_val.toString()],
+                        calculable: true,
+                        inRange: { color: dataBinding.colors }
+                    };
+                }
+
+                var mapOptions = { svg: rightView.svg_string };
+                if (rightView.bounding_coords) mapOptions.boundingCoords = rightView.bounding_coords;
+                echarts.registerMap("compare_right", mapOptions);
+
+                myChartCompareRight.setOption(rightOpt, true);
+
+                // restore
+                echartsData = tempEchartsData;
+                dataBinding = tempDataBinding;
+            }
+
             // Generate Accessibility (A11y) DOM Nodes
             generateA11yNodes();
 
             // Initialize Scratch-off Layer if present
             initScratchoff(view);
+
+            // Initialize Ambient Effects
+            initAmbientEffects(view);
 
             // Initialize Scrollytelling if present
             initScrollytelling(view.scrollytelling);
@@ -1836,6 +2483,9 @@
                 document.getElementById('export-btn').style.display = 'none';
             }
 
+            // Initialize Drawing Tools
+            initDrawingTools(view);
+
             // Initialize Layer Legend
             initLayerLegend(view.layer_toggles);
 
@@ -1850,6 +2500,12 @@
 
             // Initialize Controls (Fullscreen, Share, Download)
             initControls(view);
+
+            // Handle Zoom Controls
+            var zoomControlsContainer = document.querySelector('.zoom-controls');
+            if (zoomControlsContainer) {
+                zoomControlsContainer.style.display = window.sivoDisableZoomControls ? 'none' : 'flex';
+            }
 
             // Apply SVG Render Mode Native Manipulations
             if (renderMode === 'svg') {
@@ -1870,6 +2526,18 @@
                     }, 500); // Wait a half second for the map to finish rendering
                 }
             });
+
+            // Trigger transition in
+            setTimeout(function() {
+                chartDom.classList.remove('sivo-view-transition-out');
+                chartDom.classList.add('sivo-view-transition-in');
+                var overlayContainer = document.getElementById('sivo-native-overlay-svg-container');
+                if (overlayContainer) {
+                    overlayContainer.style.opacity = '1';
+                }
+            }, 50); // slight delay to ensure DOM is ready
+
+            }, isFirstLoad ? 0 : 500); // Wait for transition out if changing views
         }
 
         function zoomIn() {
@@ -2077,12 +2745,21 @@
 
         // Handle click events
         myChart.on('click', function (params) {
+            triggerElementClick(params.name);
+        });
+
+        window.sivoCurrentPanelElement = null;
+
+        window.triggerElementClick = function(name) {
             var infoPanel = document.getElementById('info-panel');
-            var name = params.name;
 
             applyFadeUnselected(name);
 
-            var elementActions = actionsManifest[name];
+            // actionsManifest[name] in Python corresponds to ElementActionsManifest(actions=[...], theme=...)
+            // If it's passed from python it looks like { actions: [...], theme: {...} }
+            // Or historically it might just be the array if accessed weirdly.
+            var elementData = actionsManifest[name];
+            var elementActions = elementData ? (elementData.actions || elementData) : null;
             var htmlContent = '';
             var hasInteraction = false;
             var panelPosition = 'right'; // Default
@@ -2097,8 +2774,44 @@
                     if (action.action_type === 'tooltip') {
                         htmlContent += action.content;
                         hasInteraction = true;
+                    } else if (action.action_type === 'footnote') {
+                        hasInteraction = true;
+                        var title = action.title || "Data Note";
+                        htmlContent += `
+                        <div style="margin-top: 10px; padding: 10px; border-left: 3px solid #3b82f6; background-color: #f8fafc; border-radius: 4px; font-size: 13px; color: #475569;">
+                            <div style="font-weight: 600; margin-bottom: 5px; color: #1e293b; display: flex; align-items: center;">
+                                <svg style="width: 14px; height: 14px; margin-right: 5px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ${title}
+                            </div>
+                            <div style="line-height: 1.4;">
+                                ${action.content}
+                            </div>
+                        </div>`;
                     } else if (action.action_type === 'url') {
                         window.open(action.url, action.target);
+                    } else if (action.action_type === 'drill_through') {
+                        if (action.target === '_blank') {
+                            window.open(action.url, '_blank');
+                        } else {
+                            window.location.href = action.url;
+                        }
+                    } else if (action.action_type === 'explode') {
+                        console.log('Exploding view to:', action.target_svg);
+                        if (viewsData[action.target_svg]) {
+                            // First, let's gracefully morph existing paths if possible, then swap
+                            // ECharts Universal Transition handles data-level morphing, but SIVO map morphing
+                            // is usually done by transitioning the SVG if we had a MorphAction.
+                            // For an Exploded View, we transition the entire map container safely.
+                            var loadingIndicator = document.getElementById('sivo-global-loading');
+                            if (loadingIndicator) loadingIndicator.style.display = 'flex';
+
+                            setTimeout(() => {
+                                renderView(action.target_svg, false);
+                                if (loadingIndicator) loadingIndicator.style.display = 'none';
+                            }, action.duration_ms || 1000);
+                        } else {
+                            console.warn("Target SVG for explosion not found in viewsData: " + action.target_svg);
+                        }
                     } else if (action.action_type === 'drilldown') {
                         // Check if it's an internal multi-view drill down
                         if (viewsData[action.target_svg]) {
@@ -2292,6 +3005,15 @@
                             iframe.src = action.url.replace('/comments/', '/embed/');
                         } else if (action.provider === 'website') {
                             // Generic Website embed
+                            // Special case for observablehq embeds
+                            if (action.url.includes("observablehq.com")) {
+                                var parsedUrl = new URL(action.url);
+                                // The framework renders inside an iframe or local html file.
+                                // It could be served from various origins.
+                                // However, passing an empty sandbox attribute to the iframe
+                                // helps mitigate CSP issues when embedding ObservableHQ
+                                iframe.setAttribute('sandbox', 'allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox allow-same-origin');
+                            }
                             iframe.src = action.url;
                         } else if (action.provider === 'wikipedia') {
                             // Wikipedia via REST API (since Wikipedia enforces X-Frame-Options: deny)
@@ -2491,7 +3213,9 @@
 
                         sivoChartsToInit.push({
                             id: chartId,
-                            option: action.option
+                            option: action.option,
+                            map_name: action.map_name,
+                            map_data: action.map_data
                         });
                     } else if (action.action_type === 'lottie') {
                         hasInteraction = true;
@@ -2533,6 +3257,36 @@
                         };
                         myChart.setOption(zoomOption);
                         currentZoom = action.zoom_level;
+                    } else if (action.action_type === 'confetti') {
+                        if (typeof confetti === 'function') {
+                            // Convert map coordinates to window coordinates for confetti origin
+                            var x = 0.5, y = 0.5; // default center
+                            if (params.event && params.event.event) {
+                                var e = params.event.event;
+                                var clientX = e.clientX;
+                                var clientY = e.clientY;
+
+                                // Handle mobile touch events
+                                if (clientX === undefined && e.changedTouches && e.changedTouches.length > 0) {
+                                    clientX = e.changedTouches[0].clientX;
+                                    clientY = e.changedTouches[0].clientY;
+                                } else if (clientX === undefined && e.touches && e.touches.length > 0) {
+                                    clientX = e.touches[0].clientX;
+                                    clientY = e.touches[0].clientY;
+                                }
+
+                                if (clientX !== undefined && clientY !== undefined) {
+                                    x = clientX / window.innerWidth;
+                                    y = clientY / window.innerHeight;
+                                }
+                            }
+                            confetti({
+                                particleCount: action.particle_count || 100,
+                                spread: action.spread || 70,
+                                origin: { x: x, y: y },
+                                zIndex: 10000
+                            });
+                        }
                     } else if (action.action_type === 'callback') {
                         console.log('Triggering callback:', action.event_name, action.payload);
                         // Post message to parent window (e.g. Streamlit iframe wrapper)
@@ -2562,6 +3316,8 @@
 
 
             function applyPanelPosition(position, initCharts) {
+                if (window.sivoDisablePanel) return;
+
                 infoPanel.className = 'active'; // reset classes but keep active
                 var resizer = document.getElementById('sivo-resizer');
                 resizer.className = 'sivo-resizer active';
@@ -2586,9 +3342,44 @@
                     resizer.classList.add('resizer-horizontal');
                 }
 
-                // Clear any manual sizing inline styles from dragging
+                // Apply custom panel width or height if provided
+                var isMobile = window.innerWidth <= 768;
+
                 infoPanel.style.width = '';
                 infoPanel.style.height = '';
+                infoPanel.style.flexBasis = '';
+
+                if (isMobile) {
+                    // Mobile is forced to column layout (top/bottom).
+                    // Prefer panel_height if set, else fallback to panel_width for backwards compatibility.
+                    if (window.sivoPanelHeight) {
+                        infoPanel.style.height = window.sivoPanelHeight;
+                    } else if (window.sivoPanelWidth) {
+                        infoPanel.style.height = window.sivoPanelWidth;
+                    }
+                } else {
+                    // Desktop
+                    if (position === 'left' || position === 'right') {
+                        if (window.sivoPanelWidth) {
+                            infoPanel.style.width = window.sivoPanelWidth;
+                            infoPanel.style.flexBasis = window.sivoPanelWidth;
+                        }
+                    } else {
+                        // Desktop Top/Bottom
+                        if (window.sivoPanelHeight) {
+                            infoPanel.style.height = window.sivoPanelHeight;
+                        } else if (window.sivoPanelWidth) {
+                            // Fallback logic
+                            infoPanel.style.height = window.sivoPanelWidth;
+                        }
+                    }
+                }
+
+                if (window.sivoDisableResizer) {
+                    resizer.style.display = 'none';
+                } else {
+                    resizer.style.display = '';
+                }
 
                 // Smoothly resize ECharts during CSS transition
                 let start = null;
@@ -2603,8 +3394,65 @@
                             var container = infoContentShadow.getElementById(chartData.id);
                             if (container && !container.getAttribute('data-echarts-initialized')) {
                                 container.setAttribute('data-echarts-initialized', 'true');
+
+                                if (chartData.map_name && chartData.map_data) {
+                                    var mapDataParsed = chartData.map_data;
+                                    if (typeof mapDataParsed === 'string' && mapDataParsed.trim().startsWith('<svg')) {
+                                        echarts.registerMap(chartData.map_name, { svg: mapDataParsed });
+                                    } else {
+                                        echarts.registerMap(chartData.map_name, mapDataParsed);
+                                    }
+                                }
+
                                 var nestedChart = echarts.init(container);
-                                nestedChart.setOption(chartData.option);
+
+                                // Check for Word Cloud mask image intercept
+                                var hasMaskImage = false;
+                                if (chartData.option && chartData.option.series && Array.isArray(chartData.option.series)) {
+                                    for (let s = 0; s < chartData.option.series.length; s++) {
+                                        if (chartData.option.series[s].type === 'wordCloud' && chartData.option.series[s]._sivo_mask_image_url) {
+                                            hasMaskImage = true;
+                                            let imgUrl = chartData.option.series[s]._sivo_mask_image_url;
+                                            let seriesRef = chartData.option.series[s];
+                                            let img = new Image();
+                                            img.crossOrigin = "Anonymous";
+                                            img.onload = function() {
+                                                seriesRef.maskImage = img;
+                                                nestedChart.setOption(chartData.option);
+                                            };
+                                            img.onerror = function() {
+                                                console.warn("SIVO: Failed to load Word Cloud mask image:", imgUrl);
+                                                nestedChart.setOption(chartData.option);
+                                            };
+                                            img.src = imgUrl;
+                                        }
+                                    }
+                                }
+
+                                // Handle Custom Series _sivo_render_item safely using new Function
+                                var processedOption = chartData.option;
+                                if (processedOption.series && Array.isArray(processedOption.series)) {
+                                    processedOption.series.forEach(function(s) {
+                                        if (s.type === 'custom' && s._sivo_render_item) {
+                                            try {
+                                                // Create the function dynamically. The string should be a function body or the whole function
+                                                // If it's the whole function e.g., 'function (params, api) { ... }'
+                                                var jsStr = s._sivo_render_item.trim();
+                                                if (jsStr.startsWith('function')) {
+                                                    s.renderItem = eval('(' + jsStr + ')');
+                                                } else {
+                                                    s.renderItem = new Function('params', 'api', jsStr);
+                                                }
+                                            } catch (e) {
+                                                console.error("SIVO: Failed to evaluate custom renderItem:", e);
+                                            }
+                                        }
+                                    });
+                                }
+
+                                if (!hasMaskImage) {
+                                    nestedChart.setOption(processedOption);
+                                }
                             }
                         });
                         // clear so we only init once
@@ -2616,6 +3464,11 @@
                     }
                 }
                 window.requestAnimationFrame(step);
+            }
+
+            if (window.sivoDisablePanel) {
+                closePanel();
+                return;
             }
 
             if (hasInteraction && (htmlContent || socialIframes.length > 0)) {
@@ -2642,19 +3495,22 @@
                 });
 
                 applyPanelPosition(panelPosition, true);
+                window.sivoCurrentPanelElement = name;
             } else if (!hasInteraction && !elementActions) {
                 var emptySvg = `<svg class="sivo-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
                 infoContent.innerHTML = `<div class="sivo-empty-state">${emptySvg}<h3>${name}</h3><p>No additional information mapped for this region.</p></div>`;
                 applyPanelPosition(panelPosition, false);
+                window.sivoCurrentPanelElement = name;
             } else {
                 closePanel();
             }
-        });
+        }
 
         // Handle hover events
         myChart.on('mouseover', function (params) {
             var name = params.name;
-            var elementActions = actionsManifest[name];
+            var elementData = actionsManifest[name];
+            var elementActions = elementData ? (elementData.actions || elementData) : null;
 
             if (elementActions) {
                 elementActions.forEach(function(action) {
@@ -2736,6 +3592,7 @@
         });
 
         function closePanel() {
+            window.sivoCurrentPanelElement = null;
             clearFadeUnselected();
 
             var infoPanel = document.getElementById('info-panel');
@@ -2858,6 +3715,195 @@
                 }
             }
         }
+
+        // Ambient Effects Logic
+        var ambientCanvas = document.getElementById('sivo-ambient-canvas');
+        var ambientCtx = ambientCanvas ? ambientCanvas.getContext('2d') : null;
+        var ambientParticles = [];
+        var ambientAnimFrame = null;
+
+        function initAmbientEffects(view) {
+            if (ambientAnimFrame) {
+                cancelAnimationFrame(ambientAnimFrame);
+                ambientAnimFrame = null;
+            }
+            ambientParticles = [];
+
+            if (!view.ambient_effect || !ambientCanvas) {
+                if (ambientCanvas) ambientCanvas.style.display = 'none';
+                return;
+            }
+
+            ambientCanvas.style.display = 'block';
+            var rect = chartDom.getBoundingClientRect();
+            ambientCanvas.width = rect.width;
+            ambientCanvas.height = rect.height;
+
+            var count = 100;
+            var type = view.ambient_effect.toLowerCase(); // 'snow', 'rain', 'particles', 'fireflies', 'summer', 'winter', 'spring', 'fall'
+
+            for (var i = 0; i < count; i++) {
+                var r = Math.random() * 3 + 1;
+                if (type === 'snow' || type === 'winter') {
+                    r = Math.random() * 4 + 1;
+                } else if (type === 'rain') {
+                    r = Math.random() * 1 + 1;
+                } else if (type === 'fireflies' || type === 'summer') {
+                    r = Math.random() * 3 + 1;
+                } else if (type === 'spring') {
+                    r = Math.random() * 4 + 3; // petals
+                } else if (type === 'fall') {
+                    r = Math.random() * 5 + 4; // leaves
+                }
+
+                var colorPalette = [];
+                if (type === 'spring') {
+                    colorPalette = ['#ffb7c5', '#ffc0cb', '#ff69b4', '#ff1493'];
+                } else if (type === 'fall') {
+                    colorPalette = ['#d9534f', '#f0ad4e', '#c9302c', '#ec971f', '#8a6d3b'];
+                }
+                var selectedColor = colorPalette.length > 0 ? colorPalette[Math.floor(Math.random() * colorPalette.length)] : null;
+
+                ambientParticles.push({
+                    x: Math.random() * ambientCanvas.width,
+                    y: Math.random() * ambientCanvas.height,
+                    r: r,
+                    d: Math.random() * count, // density / speed
+                    opacity: Math.random(),
+                    angle: Math.random() * 360,
+                    spin: (Math.random() - 0.5) * 5,
+                    color: selectedColor
+                });
+            }
+
+            function drawAmbient() {
+                ambientCtx.clearRect(0, 0, ambientCanvas.width, ambientCanvas.height);
+
+                for (var i = 0; i < count; i++) {
+                    var p = ambientParticles[i];
+                    ambientCtx.beginPath();
+
+                    if (type === 'snow' || type === 'winter') {
+                        ambientCtx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                        ambientCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+                    } else if (type === 'rain') {
+                        ambientCtx.fillStyle = `rgba(150, 180, 255, ${p.opacity})`;
+                        ambientCtx.fillRect(p.x, p.y, p.r, p.r * 10); // long streaks
+                    } else if (type === 'fireflies' || type === 'summer') {
+                        ambientCtx.fillStyle = `rgba(255, 255, 100, ${Math.sin(Date.now()/500 + p.d)*0.5 + 0.5})`;
+                        ambientCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+                        ambientCtx.shadowBlur = 10;
+                        ambientCtx.shadowColor = "yellow";
+                    } else if (type === 'spring' || type === 'fall') {
+                        ambientCtx.save();
+                        ambientCtx.translate(p.x, p.y);
+                        ambientCtx.rotate(p.angle * Math.PI / 180);
+                        ambientCtx.globalAlpha = p.opacity;
+                        ambientCtx.fillStyle = p.color;
+
+                        if (type === 'spring') {
+                            // Petal shape (ellipse)
+                            ambientCtx.ellipse(0, 0, p.r, p.r * 0.6, 0, 0, Math.PI * 2);
+                        } else {
+                            // Leaf shape (rough ellipse with slight point)
+                            ambientCtx.ellipse(0, 0, p.r, p.r * 0.8, 0, 0, Math.PI * 2);
+                        }
+
+                        ambientCtx.fill();
+                        ambientCtx.restore();
+                        continue; // skip the default fill below since we restored
+                    } else { // generic particles
+                        ambientCtx.fillStyle = `rgba(100, 100, 100, ${p.opacity})`;
+                        ambientCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+                    }
+
+                    ambientCtx.fill();
+                    ambientCtx.shadowBlur = 0;
+                }
+                updateAmbient();
+                ambientAnimFrame = requestAnimationFrame(drawAmbient);
+            }
+
+            function updateAmbient() {
+                for (var i = 0; i < count; i++) {
+                    var p = ambientParticles[i];
+
+                    if (type === 'snow' || type === 'winter') {
+                        p.y += Math.cos(p.d) + 1 + p.r / 2;
+                        p.x += Math.sin(p.d) * 2;
+                    } else if (type === 'rain') {
+                        p.y += 10 + p.r;
+                    } else if (type === 'fireflies' || type === 'summer') {
+                        p.y += Math.sin(Date.now()/1000 + p.d) * 0.5;
+                        p.x += Math.cos(Date.now()/1000 + p.d) * 0.5;
+                    } else if (type === 'spring' || type === 'fall') {
+                        p.y += Math.cos(p.d) + 1 + p.r / 3;
+                        p.x += Math.sin(p.d) * 1.5;
+                        p.angle += p.spin;
+                    } else {
+                        p.y -= 1; // float up
+                        p.x += Math.sin(p.d) * 0.5;
+                    }
+
+                    // wrap around
+                    if (p.x > ambientCanvas.width + 15 || p.x < -15 || p.y > ambientCanvas.height + 15) {
+                        if (type === 'particles' || type === 'fireflies' || type === 'summer') {
+                             if (p.y < -15) p.y = ambientCanvas.height + 15;
+                        } else {
+                            if (Math.random() > 0.3) {
+                                ambientParticles[i] = {x: Math.random() * ambientCanvas.width, y: -15, r: p.r, d: p.d, opacity: p.opacity, angle: p.angle, spin: p.spin, color: p.color};
+                            } else {
+                                // Enter from right
+                                ambientParticles[i] = {x: -15, y: Math.random() * ambientCanvas.height, r: p.r, d: p.d, opacity: p.opacity, angle: p.angle, spin: p.spin, color: p.color};
+                            }
+                        }
+                    }
+                }
+            }
+
+            drawAmbient();
+        }
+
+        // Compare Slider Drag Logic
+        (function() {
+            var sliderUi = document.getElementById('sivo-compare-slider-ui');
+            var rightChart = document.getElementById('chart-container-compare-right');
+            var isDraggingSlider = false;
+
+            if (sliderUi) {
+                sliderUi.addEventListener('mousedown', function(e) {
+                    isDraggingSlider = true;
+                    e.preventDefault();
+                });
+
+                sliderUi.addEventListener('touchstart', function(e) {
+                    isDraggingSlider = true;
+                    e.preventDefault();
+                });
+
+                window.addEventListener('mousemove', function(e) {
+                    if (!isDraggingSlider) return;
+                    var pct = (e.clientX / window.innerWidth) * 100;
+                    if (pct < 0) pct = 0;
+                    if (pct > 100) pct = 100;
+                    sliderUi.style.left = pct + '%';
+                    rightChart.style.clipPath = `polygon(${pct}% 0, 100% 0, 100% 100%, ${pct}% 100%)`;
+                });
+
+                window.addEventListener('touchmove', function(e) {
+                    if (!isDraggingSlider) return;
+                    var clientX = e.touches[0].clientX;
+                    var pct = (clientX / window.innerWidth) * 100;
+                    if (pct < 0) pct = 0;
+                    if (pct > 100) pct = 100;
+                    sliderUi.style.left = pct + '%';
+                    rightChart.style.clipPath = `polygon(${pct}% 0, 100% 0, 100% 100%, ${pct}% 100%)`;
+                }, {passive: false});
+
+                window.addEventListener('mouseup', function() { isDraggingSlider = false; });
+                window.addEventListener('touchend', function() { isDraggingSlider = false; });
+            }
+        })();
 
         function updateOverlaysPosition() {
             var zoomLevel = currentZoom;
@@ -3011,6 +4057,8 @@
         }
 
 
+        var scrollyAudioEnabled = false;
+
         function initScrollytelling(steps) {
             var container = document.getElementById('scrollytelling-container');
             if (!steps || steps.length === 0) {
@@ -3020,6 +4068,25 @@
 
             container.style.display = 'block';
             container.innerHTML = '';
+
+            var hasAudio = steps.some(s => s.audio_url);
+
+            if (hasAudio) {
+                // Add an explicit 'Enable Audio' button for the first interaction to satisfy browser autoplay policies
+                var audioStartCard = document.createElement('div');
+                audioStartCard.className = 'scrolly-step';
+                audioStartCard.style.padding = '20vh 20px'; // Less padding so it's visible immediately
+                audioStartCard.innerHTML = `
+                    <div class="scrolly-step-card" style="text-align: center;">
+                        <h3 style="margin-top:0;">Enable Audio Experience</h3>
+                        <p style="margin-bottom:15px; color:#666;">This narrative includes audio narration. Click the button below to allow playback as you scroll.</p>
+                        <button id="sivo-enable-audio-btn" style="background:#3b82f6; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:bold; font-size:16px; transition:background 0.2s;">
+                            Start Experience
+                        </button>
+                    </div>
+                `;
+                container.appendChild(audioStartCard);
+            }
 
             steps.forEach(function(step, index) {
                 var stepWrapper = document.createElement('div');
@@ -3037,11 +4104,38 @@
                 container.appendChild(stepWrapper);
             });
 
+            if (hasAudio) {
+                var enableBtn = document.getElementById('sivo-enable-audio-btn');
+                if (enableBtn) {
+                    enableBtn.addEventListener('click', function() {
+                        scrollyAudioEnabled = true;
+
+                        // Play and immediately pause a silent dummy audio to unlock the audio context for this page
+                        var dummyAudio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
+                        dummyAudio.play().then(() => {
+                            dummyAudio.pause();
+                        }).catch(e => console.log("Dummy audio unlock skipped", e));
+
+                        enableBtn.innerText = 'Audio Enabled ✓';
+                        enableBtn.style.background = '#10b981'; // Green
+                        setTimeout(() => {
+                            // Smooth scroll to the first actual step
+                            var firstStep = container.querySelector('.scrolly-step[data-index="0"]');
+                            if (firstStep) {
+                                firstStep.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }, 500);
+                    });
+                }
+            }
+
             var observerOptions = { root: container, rootMargin: '-50% 0px -50% 0px', threshold: 0 };
             var observer = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         var index = parseInt(entry.target.getAttribute('data-index'), 10);
+                        if (isNaN(index)) return; // Ignore the Start Experience card
+
                         var step = steps[index];
 
                         document.querySelectorAll('.scrolly-step').forEach(el => el.classList.remove('active'));
@@ -3049,6 +4143,18 @@
 
                         // Close info panel to ensure map is visible during narrative changes
                         closePanel();
+
+                        // Handle Audio
+                        if (scrollyAudioEnabled || !hasAudio) {
+                            if (currentAudio) {
+                                currentAudio.pause();
+                                currentAudio.currentTime = 0;
+                            }
+                            if (step.audio_url) {
+                                currentAudio = new Audio(step.audio_url);
+                                currentAudio.play().catch(e => console.error("Audio playback failed:", e));
+                            }
+                        }
 
                         if (step.zoom_to) {
                             myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
@@ -3144,7 +4250,108 @@
             }
         }
 
-        function tourNext() {
+
+        async function exportTourToPDF() {
+            if (!window.jspdf) {
+                alert("jsPDF library is not loaded.");
+                return;
+            }
+
+            var btn = document.getElementById('tour-pdf');
+            var originalText = btn.innerText;
+            btn.innerText = "Generating PDF...";
+            btn.disabled = true;
+
+            try {
+                const { jsPDF } = window.jspdf;
+                // Create a new PDF document (landscape mode for slides)
+                const doc = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'px',
+                    format: [800, 600]
+                });
+
+                // Save original state to restore later
+                var originalStep = currentTourStep;
+
+                // Iterate over all tour steps
+                for (let i = 0; i < tourSteps.length; i++) {
+                    currentTourStep = i;
+
+                    // Render the step but without audio
+                    var step = tourSteps[i];
+                    if (currentAudio) {
+                        currentAudio.pause();
+                        currentAudio.currentTime = 0;
+                    }
+                    closePanel();
+                    document.getElementById('tour-content').innerHTML = sanitizeHTML(step.content);
+                    document.getElementById('tour-progress').innerText = (currentTourStep + 1) + ' / ' + tourSteps.length;
+
+                    if (step.zoom_to) {
+                        myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
+                        var viewMeta = overlaysData[step.zoom_to];
+                        if (viewMeta && viewMeta.coord) {
+                            myChart.setOption({ series: [{ center: viewMeta.coord, zoom: step.zoom_level || 2.0 }] });
+                        } else {
+                            myChart.setOption({ series: [{ zoom: step.zoom_level || 2.0 }] });
+                        }
+                    }
+                    myChart.dispatchAction({ type: 'hideTip' });
+
+                    // Trigger the action if any
+                    if (step.action) {
+                        handleSivoEvent(step.action);
+                    }
+
+                    // Wait for the chart to finish any transition animations
+                    await new Promise(resolve => setTimeout(resolve, 800));
+
+                    // Capture ECharts canvas
+                    var imgData = myChart.getDataURL({ type: 'jpeg', pixelRatio: 2, backgroundColor: '#ffffff' });
+
+                    // Add a new page if it's not the first slide
+                    if (i > 0) {
+                        doc.addPage();
+                    }
+
+                    // Draw the chart image taking up most of the page
+                    doc.addImage(imgData, 'JPEG', 0, 0, 800, 600);
+
+                    // Draw a semi-transparent overlay for the text box
+                    doc.setFillColor(255, 255, 255);
+                    doc.setDrawColor(200, 200, 200);
+                    // We draw the text box similar to the tour container on the bottom right or center
+                    doc.rect(40, 480, 720, 100, 'DF'); // Fill and border
+
+                    // Add text
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(20);
+                    doc.text(step.title || 'Step ' + (i+1), 60, 510);
+                    doc.setFontSize(14);
+                    // We strip HTML from content to render in PDF cleanly
+                    var plainText = document.createElement("div");
+                    plainText.innerHTML = sanitizeHTML(step.content);
+                    var textLines = doc.splitTextToSize(plainText.innerText || plainText.textContent || "", 680);
+                    doc.text(textLines, 60, 535);
+                }
+
+                // Save the PDF
+                doc.save("SIVO_Guided_Tour.pdf");
+
+                // Restore original state
+                currentTourStep = originalStep;
+                renderTourStep();
+
+            } catch (err) {
+                console.error("PDF generation failed:", err);
+                alert("Failed to generate PDF. Check console for details.");
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+function tourNext() {
             if (currentTourStep < tourSteps.length - 1) {
                 currentTourStep++;
                 renderTourStep();
@@ -3613,6 +4820,10 @@
                 }
             }
 
+            if (window.sivoDrawings && window.sivoDrawings.length > 0) {
+                redrawCanvas();
+            }
+
             // If dragging, params.zoom is undefined, but we still need to update position
             updateOverlaysPosition();
             updateMinimapViewport();
@@ -3621,8 +4832,279 @@
         // Handle window resize
         window.addEventListener('resize', function() {
             myChart.resize();
+            if (myChartCompareRight) myChartCompareRight.resize();
             updateOverlaysPosition();
+
+            var rect = chartDom.getBoundingClientRect();
+            if (drawingCanvas) {
+                drawingCanvas.width = rect.width;
+                drawingCanvas.height = rect.height;
+                if (window.sivoDrawings) redrawCanvas();
+            }
+            if (ambientCanvas && ambientCtx) {
+                ambientCanvas.width = rect.width;
+                ambientCanvas.height = rect.height;
+            }
         });
+
+        // Drawing Tools Logic
+        var drawingCanvas = document.getElementById('sivo-drawing-canvas');
+        var drawingCtx = drawingCanvas ? drawingCanvas.getContext('2d') : null;
+        var isDrawingMode = false;
+        var currentDrawMode = 'pen'; // 'pen', 'text', or 'eraser'
+        var drawColor = '#ef4444';
+
+        // We will store paths as arrays of logical points [x, y] in the chart's base coordinate system
+        // to properly handle ECharts zoom/pan.
+        window.sivoDrawings = [];
+        var currentPath = null;
+        var isDrawingMouse = false;
+        var textInputEl = null;
+
+        function initDrawingTools(view) {
+            var toolbar = document.getElementById('sivo-drawing-toolbar');
+            if (view.enable_drawing_tools) {
+                toolbar.style.display = 'flex';
+                // Move toolbar down if there is a top-right layer legend to prevent overlap
+                if (view.layer_toggles && view.layer_toggles.length > 0) {
+                    toolbar.style.top = '70px';
+                } else {
+                    toolbar.style.top = '20px';
+                }
+
+                var rect = chartDom.getBoundingClientRect();
+                drawingCanvas.width = rect.width;
+                drawingCanvas.height = rect.height;
+                drawingCanvas.style.display = 'block';
+            } else {
+                toolbar.style.display = 'none';
+                drawingCanvas.style.display = 'none';
+                isDrawingMode = false;
+            }
+        }
+
+        // Toolbar Events
+        var toggleBtn = document.getElementById('sivo-draw-toggle');
+        var toolsDiv = document.getElementById('sivo-draw-tools');
+        var penBtn = document.getElementById('sivo-draw-pen');
+        var textBtn = document.getElementById('sivo-draw-text');
+        var eraserBtn = document.getElementById('sivo-draw-eraser');
+        var colorInput = document.getElementById('sivo-drawing-color');
+        var clearBtn = document.getElementById('sivo-draw-clear');
+
+        if (toggleBtn) toggleBtn.addEventListener('click', function() {
+            isDrawingMode = !isDrawingMode;
+            if (isDrawingMode) {
+                toggleBtn.classList.add('active');
+                toolsDiv.style.display = 'flex';
+                drawingCanvas.style.pointerEvents = 'auto'; // intercept clicks
+                // Lock roam on echarts while drawing if desired, or let it pass through if not drawing
+            } else {
+                toggleBtn.classList.remove('active');
+                toolsDiv.style.display = 'none';
+                drawingCanvas.style.pointerEvents = 'none';
+            }
+        });
+
+        if (penBtn) penBtn.addEventListener('click', function() {
+            currentDrawMode = 'pen';
+            penBtn.classList.add('active');
+            textBtn.classList.remove('active');
+            eraserBtn.classList.remove('active');
+        });
+
+        if (textBtn) textBtn.addEventListener('click', function() {
+            currentDrawMode = 'text';
+            textBtn.classList.add('active');
+            penBtn.classList.remove('active');
+            eraserBtn.classList.remove('active');
+        });
+
+        if (eraserBtn) eraserBtn.addEventListener('click', function() {
+            currentDrawMode = 'eraser';
+            eraserBtn.classList.add('active');
+            penBtn.classList.remove('active');
+            textBtn.classList.remove('active');
+        });
+
+        if (colorInput) colorInput.addEventListener('input', function(e) {
+            drawColor = e.target.value;
+        });
+
+        if (clearBtn) clearBtn.addEventListener('click', function() {
+            window.sivoDrawings = [];
+            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        });
+
+        function convertToLogical(x, y) {
+            // Because ECharts doesn't provide a perfect public API to convert pixel to logical coordinate
+            // taking into account BOTH pan and zoom for the map series simply, we use a rough heuristic,
+            // or we store the raw mouse pixels and apply the ECharts transform manually.
+            // A more robust way is to just use ECharts convertFromPixel if geo is used, or store relative to canvas
+            // For a simple annotation layer, we will just store raw pixels and apply the getOption().series[0].zoom manually on redraw.
+
+            // Actually, myChart.convertFromPixel({seriesIndex: 0}, [x, y]) works perfectly for maps!
+            var logical = myChart.convertFromPixel({seriesIndex: 0}, [x, y]);
+            return logical || [x, y]; // fallback to raw
+        }
+
+        function convertToPixel(point) {
+            var px = myChart.convertToPixel({seriesIndex: 0}, point);
+            return px || point;
+        }
+
+        function finalizeText() {
+            if (!textInputEl) return;
+            var val = textInputEl.value.trim();
+            if (val !== '') {
+                window.sivoDrawings.push({
+                    mode: 'text',
+                    text: val,
+                    color: drawColor,
+                    // store the logical anchor point
+                    point: convertToLogical(parseFloat(textInputEl.style.left), parseFloat(textInputEl.style.top) + 20) // approx baseline
+                });
+                redrawCanvas();
+            }
+            document.body.removeChild(textInputEl);
+            textInputEl = null;
+        }
+
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+
+            var rect = drawingCanvas.getBoundingClientRect();
+            var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            var x = clientX - rect.left;
+            var y = clientY - rect.top;
+
+            if (currentDrawMode === 'text') {
+                if (textInputEl) {
+                    finalizeText();
+                    return; // Next click will spawn a new one, this click just closes the old
+                }
+
+                textInputEl = document.createElement('input');
+                textInputEl.type = 'text';
+                textInputEl.style.position = 'absolute';
+                textInputEl.style.left = (clientX) + 'px';
+                textInputEl.style.top = (clientY - 10) + 'px';
+                textInputEl.style.zIndex = 10000;
+                textInputEl.style.background = 'transparent';
+                textInputEl.style.border = '1px dashed #ccc';
+                textInputEl.style.outline = 'none';
+                textInputEl.style.color = drawColor;
+                textInputEl.style.fontFamily = 'system-ui, sans-serif';
+                textInputEl.style.fontSize = (16 * (currentZoom || 1)) + 'px';
+                textInputEl.style.padding = '2px';
+                textInputEl.style.minWidth = '100px';
+
+                document.body.appendChild(textInputEl);
+                textInputEl.focus();
+
+                textInputEl.addEventListener('keydown', function(evt) {
+                    if (evt.key === 'Enter') {
+                        finalizeText();
+                    }
+                });
+                textInputEl.addEventListener('blur', function() {
+                    // Slight delay to allow clicks to register
+                    setTimeout(finalizeText, 100);
+                });
+
+                e.preventDefault();
+                return;
+            }
+
+            isDrawingMouse = true;
+
+            currentPath = {
+                mode: currentDrawMode,
+                color: currentDrawMode === 'eraser' ? null : drawColor,
+                width: currentDrawMode === 'eraser' ? 20 : 3,
+                points: [convertToLogical(x, y)]
+            };
+
+            window.sivoDrawings.push(currentPath);
+            e.preventDefault();
+        }
+
+        function continueDrawing(e) {
+            if (!isDrawingMode || !isDrawingMouse || !currentPath || currentDrawMode === 'text') return;
+
+            var rect = drawingCanvas.getBoundingClientRect();
+            var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            var x = clientX - rect.left;
+            var y = clientY - rect.top;
+
+            currentPath.points.push(convertToLogical(x, y));
+            redrawCanvas(); // Optimizable: could just draw the line segment instead of full redraw
+            e.preventDefault();
+        }
+
+        function endDrawing(e) {
+            isDrawingMouse = false;
+            currentPath = null;
+        }
+
+        function redrawCanvas() {
+            if (!drawingCtx) return;
+            drawingCtx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+
+            drawingCtx.lineCap = 'round';
+            drawingCtx.lineJoin = 'round';
+
+            window.sivoDrawings.forEach(function(item) {
+                if (item.mode === 'text') {
+                    drawingCtx.globalCompositeOperation = 'source-over';
+                    drawingCtx.fillStyle = item.color;
+                    var fontSize = 16 * (currentZoom || 1);
+                    drawingCtx.font = fontSize + 'px system-ui, sans-serif';
+                    var px = convertToPixel(item.point);
+                    drawingCtx.fillText(item.text, px[0], px[1]);
+                    return;
+                }
+
+                if (item.points.length < 2) return;
+
+                drawingCtx.beginPath();
+                if (item.mode === 'eraser') {
+                    drawingCtx.globalCompositeOperation = 'destination-out';
+                    drawingCtx.lineWidth = item.width;
+                } else {
+                    drawingCtx.globalCompositeOperation = 'source-over';
+                    drawingCtx.strokeStyle = item.color;
+                    // Scale width with zoom?
+                    drawingCtx.lineWidth = item.width * (currentZoom || 1);
+                }
+
+                var startPx = convertToPixel(item.points[0]);
+                drawingCtx.moveTo(startPx[0], startPx[1]);
+
+                for (var i = 1; i < item.points.length; i++) {
+                    var px = convertToPixel(item.points[i]);
+                    drawingCtx.lineTo(px[0], px[1]);
+                }
+
+                drawingCtx.stroke();
+            });
+            drawingCtx.globalCompositeOperation = 'source-over';
+        }
+
+        if (drawingCanvas) {
+            drawingCanvas.addEventListener('mousedown', startDrawing);
+            drawingCanvas.addEventListener('mousemove', continueDrawing);
+            drawingCanvas.addEventListener('mouseup', endDrawing);
+            drawingCanvas.addEventListener('mouseleave', endDrawing);
+
+            drawingCanvas.addEventListener('touchstart', startDrawing, {passive: false});
+            drawingCanvas.addEventListener('touchmove', continueDrawing, {passive: false});
+            drawingCanvas.addEventListener('touchend', endDrawing, {passive: false});
+        }
 
         // Back Navigation Button functionality
         var backBtn = document.createElement('div');
