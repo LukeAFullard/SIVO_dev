@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union, List
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction
+from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -219,6 +219,10 @@ class Infographic:
         url: Optional[str] = None,
         drill_to: Optional[str] = None,
         drill_through: Optional[str] = None,
+        explode_to: Optional[str] = None,
+        explode_duration_ms: int = 1000,
+        footnote: Optional[str] = None,
+        footnote_title: Optional[str] = None,
         callback_event: Optional[str] = None,
         callback_payload: Optional[dict] = None,
         hover_callback_event: Optional[str] = None,
@@ -335,6 +339,15 @@ class Infographic:
 
         if drill_through:
             mapping.actions.append(DrillThroughAction(url=drill_through))
+
+        if explode_to:
+            mapping.actions.append(ExplodeAction(target_svg=explode_to, duration_ms=explode_duration_ms))
+
+        if footnote:
+            mapping.actions.append(FootnoteAction(
+                content=footnote,
+                title=footnote_title or "Data Note"
+            ))
 
         if callback_event:
             mapping.actions.append(CallbackAction(event_name=callback_event, payload=callback_payload))

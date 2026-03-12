@@ -2772,6 +2772,19 @@
                     if (action.action_type === 'tooltip') {
                         htmlContent += action.content;
                         hasInteraction = true;
+                    } else if (action.action_type === 'footnote') {
+                        hasInteraction = true;
+                        var title = action.title || "Data Note";
+                        htmlContent += `
+                        <div style="margin-top: 10px; padding: 10px; border-left: 3px solid #3b82f6; background-color: #f8fafc; border-radius: 4px; font-size: 13px; color: #475569;">
+                            <div style="font-weight: 600; margin-bottom: 5px; color: #1e293b; display: flex; align-items: center;">
+                                <svg style="width: 14px; height: 14px; margin-right: 5px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ${title}
+                            </div>
+                            <div style="line-height: 1.4;">
+                                ${action.content}
+                            </div>
+                        </div>`;
                     } else if (action.action_type === 'url') {
                         window.open(action.url, action.target);
                     } else if (action.action_type === 'drill_through') {
@@ -2779,6 +2792,23 @@
                             window.open(action.url, '_blank');
                         } else {
                             window.location.href = action.url;
+                        }
+                    } else if (action.action_type === 'explode') {
+                        console.log('Exploding view to:', action.target_svg);
+                        if (viewsData[action.target_svg]) {
+                            // First, let's gracefully morph existing paths if possible, then swap
+                            // ECharts Universal Transition handles data-level morphing, but SIVO map morphing
+                            // is usually done by transitioning the SVG if we had a MorphAction.
+                            // For an Exploded View, we transition the entire map container safely.
+                            var loadingIndicator = document.getElementById('sivo-global-loading');
+                            if (loadingIndicator) loadingIndicator.style.display = 'flex';
+
+                            setTimeout(() => {
+                                renderView(action.target_svg, false);
+                                if (loadingIndicator) loadingIndicator.style.display = 'none';
+                            }, action.duration_ms || 1000);
+                        } else {
+                            console.warn("Target SVG for explosion not found in viewsData: " + action.target_svg);
                         }
                     } else if (action.action_type === 'drilldown') {
                         // Check if it's an internal multi-view drill down

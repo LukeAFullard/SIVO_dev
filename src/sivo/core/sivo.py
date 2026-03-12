@@ -99,6 +99,10 @@ class Sivo:
         url: Optional[str] = None,
         drill_to: Optional[str] = None,
         drill_through: Optional[str] = None,
+        explode_to: Optional[str] = None,
+        explode_duration_ms: int = 1000,
+        footnote: Optional[str] = None,
+        footnote_title: Optional[str] = None,
         callback_event: Optional[str] = None,
         callback_payload: Optional[dict] = None,
         hover_callback_event: Optional[str] = None,
@@ -168,6 +172,10 @@ class Sivo:
             url=url,
             drill_to=drill_to,
             drill_through=drill_through,
+            explode_to=explode_to,
+            explode_duration_ms=explode_duration_ms,
+            footnote=footnote,
+            footnote_title=footnote_title,
             callback_event=callback_event,
             callback_payload=callback_payload,
             hover_callback_event=hover_callback_event,
@@ -407,19 +415,50 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, uncertainty_lower: list = None, uncertainty_upper: list = None, uncertainty_color: str = 'rgba(204, 204, 204, 0.5)', extra_options: dict = None):
         """Helper to map a Line Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
+
+        series_data = []
+
+        if uncertainty_lower and uncertainty_upper:
+            # Add the lower invisible boundary
+            series_data.append({
+                "name": f"{title} (Lower)",
+                "type": "line",
+                "data": uncertainty_lower,
+                "lineStyle": {"opacity": 0},
+                "stack": "uncertainty_band",
+                "symbol": "none",
+                "tooltip": {"show": False}
+            })
+
+            # Add the upper colored band (difference between upper and lower)
+            diff_data = [u - l for u, l in zip(uncertainty_upper, uncertainty_lower)]
+            series_data.append({
+                "name": f"{title} (Upper)",
+                "type": "line",
+                "data": diff_data,
+                "lineStyle": {"opacity": 0},
+                "areaStyle": {"color": uncertainty_color},
+                "stack": "uncertainty_band",
+                "symbol": "none",
+                "tooltip": {"show": False}
+            })
+
+        series_data.append({
+            "name": title,
+            "data": data,
+            "type": "line",
+            "smooth": smooth,
+            "z": 10
+        })
+
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "axis"},
             "xAxis": {"type": "category", "data": categories},
             "yAxis": {"type": "value"},
-            "series": [{
-                "name": title,
-                "data": data,
-                "type": "line",
-                "smooth": smooth
-            }]
+            "series": series_data
         }
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)

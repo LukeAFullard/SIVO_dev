@@ -10,6 +10,16 @@ class TooltipAction(BaseAction):
     title: Optional[str] = Field(default=None, description="Optional title for the tooltip")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
+class FootnoteAction(BaseAction):
+    action_type: Literal["footnote"] = "footnote"
+    content: str = Field(description="HTML content explaining provenance or footnotes")
+    title: Optional[str] = Field(default="Data Note", description="Optional title for the footnote popover")
+
+class ExplodeAction(BaseAction):
+    action_type: Literal["explode"] = "explode"
+    target_svg: str = Field(description="The path or content of the stylized hex/grid SVG to explode into.")
+    duration_ms: int = Field(default=1000, description="Animation duration in milliseconds.")
+
 class URLAction(BaseAction):
     action_type: Literal["url"] = "url"
     url: str = Field(description="External URL to navigate to")
@@ -191,7 +201,7 @@ class ThemeOverride(BaseModel):
     odometer_duration_ms: Optional[int] = 2000
     odometer_format: Optional[str] = None
 
-ActionType = Annotated[Union[ConfettiAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[ExplodeAction, ConfettiAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, FootnoteAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str
