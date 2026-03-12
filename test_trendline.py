@@ -21,6 +21,8 @@ app.map_trendline_chart(
     data=data,
     trendline_type="linear",
     trendline_color="green",
+    trendline_width=4,
+    trendline_arrow=True,
     color="blue"
 )
 
