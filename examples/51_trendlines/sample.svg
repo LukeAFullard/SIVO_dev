@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect id="background" width="800" height="600" fill="#f8fafc" />
+
+  <text x="400" y="50" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#1e293b">
+    Sales &amp; Growth Trendlines
+  </text>
+
+  <!-- Linear Trendline Chart Area -->
+  <g id="chart_linear" transform="translate(50, 100)">
+    <rect width="300" height="200" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="8" />
+    <text x="150" y="30" font-family="Arial" font-size="16" text-anchor="middle" fill="#475569">
+      Click for Linear Trendline
+    </text>
+  </g>
+
+  <!-- Exponential Trendline Chart Area -->
+  <g id="chart_exponential" transform="translate(450, 100)">
+    <rect width="300" height="200" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="8" />
+    <text x="150" y="30" font-family="Arial" font-size="16" text-anchor="middle" fill="#475569">
+      Click for Exponential Trendline
+    </text>
+  </g>
+
+  <!-- Logarithmic Trendline Chart Area -->
+  <g id="chart_logarithmic" transform="translate(50, 350)">
+    <rect width="300" height="200" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="8" />
+    <text x="150" y="30" font-family="Arial" font-size="16" text-anchor="middle" fill="#475569">
+      Click for Logarithmic Trendline
+    </text>
+  </g>
+
+  <!-- Polynomial Trendline Chart Area -->
+  <g id="chart_polynomial" transform="translate(450, 350)">
+    <rect width="300" height="200" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="8" />
+    <text x="150" y="30" font-family="Arial" font-size="16" text-anchor="middle" fill="#475569">
+      Click for Polynomial Trendline
+    </text>
+  </g>
+
+</svg>

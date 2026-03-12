@@ -399,7 +399,7 @@ class Sivo:
     def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", trendline_width: int = 2, trendline_arrow: bool = False, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Scatter Chart with an overlaid trendline. trendline_type can be 'linear', 'exponential', 'logarithmic', 'polynomial'. data: [[x1, y1], [x2, y2]]"""
 
-        symbol = ["none", "arrow"] if trendline_arrow else "none"
+        symbol = "none"
 
         option = {
             "title": {"text": title},
@@ -428,7 +428,7 @@ class Sivo:
                     "type": "line",
                     "datasetIndex": 1,
                     "symbol": symbol,
-                    "symbolSize": 10 if trendline_arrow else 0,
+                    "symbolSize": 0,
                     "lineStyle": {
                         "color": trendline_color,
                         "width": trendline_width
@@ -436,6 +436,17 @@ class Sivo:
                 }
             ]
         }
+
+        # In ECharts, dataset-driven line series don't support `symbol: ['none', 'arrow']` directly
+        # We simulate the arrow by formatting the end marker via markPoint if requested
+        if trendline_arrow:
+            option["series"][1]["markPoint"] = {
+                "symbol": "arrow",
+                "symbolSize": 10,
+                "itemStyle": {"color": trendline_color},
+                "data": [{"type": "max", "valueIndex": 0}]
+            }
+
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
