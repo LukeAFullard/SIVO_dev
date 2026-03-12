@@ -483,7 +483,7 @@ class Sivo:
                             pathData: 'M0,' + (-half) + ' L' + size + ',0 L0,' + half + ' Z',
                         }},
                         position: currPos,
-                        rotation: angle,
+                        rotation: -angle, // Invert angle: Math.atan2 returns negative for up-right, but ECharts requires positive to rotate counter-clockwise (up-right)
                         origin: [0, 0], // Pivot exactly around the base to maintain correct trajectory angle
                         style: {{ fill: color }},
                         enterFrom: {{ position: start }},
