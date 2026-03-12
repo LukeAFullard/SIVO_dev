@@ -445,6 +445,11 @@ class Sivo:
                 var currPos = api.coord([api.value(0), api.value(1)]);
                 var sid = params.seriesIndex;
                 if (!window._sivo_prev_pos) window._sivo_prev_pos = {{}};
+                if (!window._sivo_start_pos) window._sivo_start_pos = {{}};
+
+                if (params.dataIndex === 0) {{
+                    window._sivo_start_pos[sid] = currPos;
+                }}
 
                 if (params.dataIndex === params.dataInsideLength - 2) {{
                     window._sivo_prev_pos[sid] = currPos;
@@ -452,6 +457,7 @@ class Sivo:
 
                 if (params.dataIndex !== params.dataInsideLength - 1) return;
 
+                var start = window._sivo_start_pos[sid] || currPos;
                 var prev = window._sivo_prev_pos[sid] || [currPos[0] - 1, currPos[1]];
                 var dx = currPos[0] - prev[0];
                 var dy = currPos[1] - prev[1];
@@ -473,25 +479,30 @@ class Sivo:
                     returnObj.children.push({{
                         type: 'path',
                         shape: {{
-                            pathData: 'M' + (-half) + ',' + (-half) + ' L' + half + ',0 L' + (-half) + ',' + half + ' Z',
+                            // Tip is precisely at (0,0) to seamlessly terminate the line
+                            pathData: 'M' + (-size) + ',' + (-half) + ' L0,0 L' + (-size) + ',' + half + ' Z',
                         }},
                         position: currPos,
                         rotation: angle,
-                        style: {{ fill: color }}
+                        style: {{ fill: color }},
+                        enterFrom: {{ position: start }},
+                        transition: 'position'
                     }});
                 }}
 
                 if (labelText) {{
                     returnObj.children.push({{
                         type: 'text',
-                        position: [currPos[0] + size, currPos[1]],
+                        position: [currPos[0] + 10, currPos[1]],
                         style: {{
                             text: labelText,
                             fill: color,
                             fontSize: 14,
                             fontWeight: 'bold',
                             textVerticalAlign: 'middle'
-                        }}
+                        }},
+                        enterFrom: {{ position: [start[0] + 10, start[1]], style: {{ opacity: 0 }} }},
+                        transition: ['position', 'style']
                     }});
                 }}
 
