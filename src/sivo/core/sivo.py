@@ -479,8 +479,8 @@ class Sivo:
                     returnObj.children.push({{
                         type: 'path',
                         shape: {{
-                            // Tip is precisely at (0,0) to seamlessly terminate the line
-                            pathData: 'M' + (-size) + ',' + (-half) + ' L0,0 L' + (-size) + ',' + half + ' Z',
+                            // Base is precisely at (0,0) so the line connects to the base and the tip extends to +size
+                            pathData: 'M0,' + (-half) + ' L' + size + ',0 L0,' + half + ' Z',
                         }},
                         position: currPos,
                         rotation: angle,
@@ -491,9 +491,11 @@ class Sivo:
                 }}
 
                 if (labelText) {{
+                    // Offset text further right to prevent overlapping with the new extended arrow
+                    var textOffsetX = showArrow ? size + 10 : 10;
                     returnObj.children.push({{
                         type: 'text',
-                        position: [currPos[0] + 10, currPos[1]],
+                        position: [currPos[0] + textOffsetX, currPos[1]],
                         style: {{
                             text: labelText,
                             fill: color,
@@ -501,7 +503,7 @@ class Sivo:
                             fontWeight: 'bold',
                             textVerticalAlign: 'middle'
                         }},
-                        enterFrom: {{ position: [start[0] + 10, start[1]], style: {{ opacity: 0 }} }},
+                        enterFrom: {{ position: [start[0] + textOffsetX, start[1]], style: {{ opacity: 0 }} }},
                         transition: ['position', 'style']
                     }});
                 }}
