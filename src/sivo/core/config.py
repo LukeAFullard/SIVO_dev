@@ -328,7 +328,7 @@ class ProjectConfig(BaseModel):
     )
     ambient_effect: Optional[str] = Field(
         default=None,
-        description="Optional full-screen ambient effect overlay. Options: 'snow', 'rain', 'particles', 'fireflies'."
+        description="Optional full-screen ambient effect overlay. Options: 'snow', 'rain', 'particles', 'fireflies', 'summer', 'winter', 'spring', 'fall'."
     )
     bounding_coords: Optional[List[List[float]]] = Field(
         default=None,
