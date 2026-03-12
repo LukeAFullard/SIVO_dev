@@ -396,7 +396,7 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", trendline_width: int = 2, trendline_arrow: bool = False, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", trendline_width: int = 2, trendline_arrow: bool = False, trendline_arrow_size: int = 10, trendline_label: str = None, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
         """Helper to map a Scatter Chart with an overlaid trendline. trendline_type can be 'linear', 'exponential', 'logarithmic', 'polynomial'. data: [[x1, y1], [x2, y2]]"""
 
         symbol = "none"
@@ -439,13 +439,33 @@ class Sivo:
 
         # In ECharts, dataset-driven line series don't support `symbol: ['none', 'arrow']` directly
         # We simulate the arrow by formatting the end marker via markPoint if requested
-        if trendline_arrow:
-            option["series"][1]["markPoint"] = {
-                "symbol": "arrow",
-                "symbolSize": 10,
-                "itemStyle": {"color": trendline_color},
-                "data": [{"type": "max", "valueIndex": 0}]
+        if trendline_arrow or trendline_label:
+            mark_data = {
+                "type": "max",
+                "valueIndex": 0
             }
+
+            mark_point_options = {
+                "symbol": "arrow" if trendline_arrow else "circle",
+                "symbolSize": trendline_arrow_size if trendline_arrow else 1,
+                "itemStyle": {"color": trendline_color if trendline_arrow else "transparent"},
+                "data": [mark_data]
+            }
+
+            if trendline_label:
+                # Add text label to the right of the arrow or point
+                mark_point_options["label"] = {
+                    "show": True,
+                    "formatter": trendline_label,
+                    "position": "right",
+                    "color": trendline_color,
+                    "fontSize": 14,
+                    "fontWeight": "bold"
+                }
+            else:
+                mark_point_options["label"] = {"show": False}
+
+            option["series"][1]["markPoint"] = mark_point_options
 
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)

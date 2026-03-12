@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" width="1000" height="400">
+  <rect id="background" width="1000" height="400" fill="#f8fafc" />
+
+  <text x="500" y="50" font-family="Arial" font-size="28" font-weight="bold" text-anchor="middle" fill="#1e293b">
+    Exaggerated Trendlines Example
+  </text>
+
+  <!-- Increasing Chart Area -->
+  <g id="chart_increasing" transform="translate(50, 100)">
+    <rect width="280" height="250" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="8" />
+    <text x="140" y="30" font-family="Arial" font-size="18" text-anchor="middle" fill="#475569">
+      Click for Increasing
+    </text>
+  </g>
+
+  <!-- Reducing Chart Area -->
+  <g id="chart_reducing" transform="translate(360, 100)">
+    <rect width="280" height="250" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="8" />
+    <text x="140" y="30" font-family="Arial" font-size="18" text-anchor="middle" fill="#475569">
+      Click for Reducing
+    </text>
+  </g>
+
+  <!-- Flat Chart Area -->
+  <g id="chart_flat" transform="translate(670, 100)">
+    <rect width="280" height="250" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="8" />
+    <text x="140" y="30" font-family="Arial" font-size="18" text-anchor="middle" fill="#475569">
+      Click for Flat
+    </text>
+  </g>
+
+</svg>
