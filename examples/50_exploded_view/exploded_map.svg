@@ -1,0 +1,12 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+        <rect id="bg2" width="600" height="400" fill="#f1f5f9" />
+        <g id="grid_cluster">
+            <path id="r1_exp" d="M150 150 l50 0 l25 43 l-25 43 l-50 0 l-25 -43 Z" fill="#3b82f6" stroke="white" stroke-width="4" />
+            <path id="r2_exp" d="M300 150 l50 0 l25 43 l-25 43 l-50 0 l-25 -43 Z" fill="#ef4444" stroke="white" stroke-width="4" />
+            <path id="r3_exp" d="M150 250 l50 0 l25 43 l-25 43 l-50 0 l-25 -43 Z" fill="#10b981" stroke="white" stroke-width="4" />
+            <path id="r4_exp" d="M300 250 l50 0 l25 43 l-25 43 l-50 0 l-25 -43 Z" fill="#f59e0b" stroke="white" stroke-width="4" />
+        </g>
+        <rect id="reset_btn" x="450" y="340" width="130" height="40" rx="8" fill="#1e293b" cursor="pointer" />
+        <text x="515" y="365" font-family="Arial" font-size="14" fill="white" text-anchor="middle" font-weight="bold" pointer-events="none">Back to Map</text>
+        <text x="300" y="50" font-family="Arial" font-size="20" text-anchor="middle" fill="#333" font-weight="bold">Hexbin Stylized View</text>
+    </svg>

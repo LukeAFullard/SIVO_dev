@@ -1,0 +1,6 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+        <rect id="bg" width="400" height="300" fill="#e2e8f0" />
+        <circle id="point1" cx="100" cy="150" r="20" fill="#ef4444" cursor="pointer" />
+        <circle id="point2" cx="300" cy="150" r="20" fill="#10b981" cursor="pointer" />
+        <text x="200" y="50" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Click points for Data Provenance</text>
+    </svg>
