@@ -437,35 +437,72 @@ class Sivo:
             ]
         }
 
-        # In ECharts, dataset-driven line series don't support `symbol: ['none', 'arrow']` directly
-        # We simulate the arrow by formatting the end marker via markPoint if requested
+        # In ECharts, dataset-driven line series cannot dynamically calculate arrow angles via markPoint
+        # To make arrows point perfectly along the path of the slope, we overlay a custom series that evaluates
+        # the angle between the last two points of the generated dataset on render.
         if trendline_arrow or trendline_label:
-            mark_data = {
-                "type": "max",
-                "valueIndex": 0
-            }
+            js_str = f"""
+                var currPos = api.coord([api.value(0), api.value(1)]);
+                var sid = params.seriesIndex;
+                if (!window._sivo_prev_pos) window._sivo_prev_pos = {{}};
 
-            mark_point_options = {
-                "symbol": "arrow" if trendline_arrow else "circle",
-                "symbolSize": trendline_arrow_size if trendline_arrow else 1,
-                "itemStyle": {"color": trendline_color if trendline_arrow else "transparent"},
-                "data": [mark_data]
-            }
+                if (params.dataIndex === params.dataInsideLength - 2) {{
+                    window._sivo_prev_pos[sid] = currPos;
+                }}
 
-            if trendline_label:
-                # Add text label to the right of the arrow or point
-                mark_point_options["label"] = {
-                    "show": True,
-                    "formatter": trendline_label,
-                    "position": "right",
-                    "color": trendline_color,
-                    "fontSize": 14,
-                    "fontWeight": "bold"
-                }
-            else:
-                mark_point_options["label"] = {"show": False}
+                if (params.dataIndex !== params.dataInsideLength - 1) return;
 
-            option["series"][1]["markPoint"] = mark_point_options
+                var prev = window._sivo_prev_pos[sid] || [currPos[0] - 1, currPos[1]];
+                var dx = currPos[0] - prev[0];
+                var dy = currPos[1] - prev[1];
+                var angle = Math.atan2(dy, dx);
+
+                var size = {trendline_arrow_size};
+                var color = '{trendline_color}';
+                var labelText = {f"'{trendline_label}'" if trendline_label else "null"};
+                var showArrow = {'true' if trendline_arrow else 'false'};
+
+                var half = size / 2;
+
+                var returnObj = {{
+                    type: 'group',
+                    children: []
+                }};
+
+                if (showArrow) {{
+                    returnObj.children.push({{
+                        type: 'path',
+                        shape: {{
+                            pathData: 'M' + (-half) + ',' + (-half) + ' L' + half + ',0 L' + (-half) + ',' + half + ' Z',
+                        }},
+                        position: currPos,
+                        rotation: angle,
+                        style: {{ fill: color }}
+                    }});
+                }}
+
+                if (labelText) {{
+                    returnObj.children.push({{
+                        type: 'text',
+                        position: [currPos[0] + size, currPos[1]],
+                        style: {{
+                            text: labelText,
+                            fill: color,
+                            fontSize: 14,
+                            fontWeight: 'bold',
+                            textVerticalAlign: 'middle'
+                        }}
+                    }});
+                }}
+
+                return returnObj;
+            """
+
+            option["series"].append({
+                "type": "custom",
+                "datasetIndex": 1,
+                "_sivo_render_item": js_str
+            })
 
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
