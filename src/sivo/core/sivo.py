@@ -461,7 +461,7 @@ class Sivo:
                 var prev = window._sivo_prev_pos[sid] || [currPos[0] - 1, currPos[1]];
                 var dx = currPos[0] - prev[0];
                 var dy = currPos[1] - prev[1];
-                var angle = Math.atan2(dy, dx);
+                var angle = -Math.atan2(dy, dx);
 
                 var size = {trendline_arrow_size};
                 var color = '{trendline_color}';
