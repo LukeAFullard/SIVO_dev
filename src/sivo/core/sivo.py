@@ -484,6 +484,7 @@ class Sivo:
                         }},
                         position: currPos,
                         rotation: angle,
+                        origin: [0, 0], // Pivot exactly around the base to maintain correct trajectory angle
                         style: {{ fill: color }},
                         enterFrom: {{ position: start }},
                         transition: 'position'
