@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Union, List
+from typing import Dict, Optional, Union, List, Any
 
 from .config import ProjectConfig
 from .infographic import Infographic
@@ -50,6 +50,43 @@ class Sivo:
         """Initializes a Sivo instance directly from an SVG string."""
         info = Infographic.from_string(svg_string)
         return cls(info, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, panel_height=panel_height, disable_resizer=disable_resizer, disable_tooltips=disable_tooltips, disable_zoom_controls=disable_zoom_controls, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, enable_drawing_tools=enable_drawing_tools, ambient_effect=ambient_effect, bounding_coords=bounding_coords)
+
+    @classmethod
+    def from_geodataframe(cls, gdf: Any, id_col: str, name_col: Optional[str] = None, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None) -> "Sivo":
+        """
+        Initializes a Sivo instance directly from a geopandas GeoDataFrame.
+        Automatically converts geometries to SVG paths, assigns IDs and Names,
+        and sets bounding coordinates for native geographical projection mapping.
+        """
+        if name_col is None:
+            name_col = id_col
+
+        svg_parts = []
+        minx, miny, maxx, maxy = gdf.total_bounds
+        width = maxx - minx
+        height = maxy - miny
+
+        for idx, row in gdf.iterrows():
+            geom_svg = row.geometry.svg()
+            elem_id = str(row[id_col]).replace('"', '&quot;')
+            elem_name = str(row[name_col]).replace('"', '&quot;')
+            g_tag = f'<g id="{elem_id}" name="{elem_name}">{geom_svg}</g>'
+            svg_parts.append(g_tag)
+
+        # Invert the Y-axis using an SVG transform since geographic coordinates (Y points North)
+        # are inverted relative to standard screen coordinates (Y points South).
+        newline = '\n'
+        svg_str = f'''<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="{minx} {miny} {width} {height}">
+  <g transform="matrix(1, 0, 0, -1, 0, {maxy + miny})">
+    {newline.join(svg_parts)}
+  </g>
+</svg>'''
+
+        if bounding_coords is None:
+            bounding_coords = [[minx, miny], [maxx, maxy]]
+
+        return cls.from_string(svg_str, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, panel_height=panel_height, disable_resizer=disable_resizer, disable_tooltips=disable_tooltips, disable_zoom_controls=disable_zoom_controls, lock_zoom_out=lock_zoom_out, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, enable_drawing_tools=enable_drawing_tools, ambient_effect=ambient_effect, bounding_coords=bounding_coords)
 
     @classmethod
     def from_config(cls, config: Union[str, dict, ProjectConfig], base_dir: str = ".") -> "Sivo":
