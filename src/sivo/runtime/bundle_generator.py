@@ -218,6 +218,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "enable_drawing_tools": view_obj.get("enable_drawing_tools", False),
             "ambient_effect": view_obj.get("ambient_effect", None),
             "bounding_coords": view_obj.get("bounding_coords", None),
+            "graphic": view_obj.get("graphic", None),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:

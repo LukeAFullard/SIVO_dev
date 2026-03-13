@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include echarts-stat -->
@@ -29,7 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -1100,8 +1095,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\n    \u003ccircle id=\"regionA\" cx=\"30\" cy=\"50\" r=\"20\" fill=\"#e0f2fe\" stroke=\"#0ea5e9\" stroke-width=\"2\" name=\"regionA\"/\u003e\n    \u003ccircle id=\"regionB\" cx=\"70\" cy=\"50\" r=\"20\" fill=\"#e0f2fe\" stroke=\"#0ea5e9\" stroke-width=\"2\" name=\"regionB\"/\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "regionA", "value": 1, "tooltip": "Region A"}, {"name": "regionB", "value": 1, "tooltip": "Region B"}], "actions_manifest": {"regionA": [{"action_type": "tooltip", "content": "\u003ch3\u003eRegion A\u003c/h3\u003e", "title": "Region A", "panel_position": "right"}], "regionB": [{"action_type": "tooltip", "content": "\u003ch3\u003eRegion B\u003c/h3\u003e", "title": "Region B", "panel_position": "right"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "bounding_coords": null, "graphic": [{"type": "group", "left": "center", "top": "20%", "children": [{"type": "rect", "z": 100, "left": "center", "top": "middle", "shape": {"width": 250, "height": 50, "r": [5, 5, 5, 5]}, "style": {"fill": "rgba(255,255,255,0.8)", "stroke": "#cbd5e1", "lineWidth": 1}}, {"type": "text", "z": 100, "left": "center", "top": "middle", "style": {"fill": "#1e293b", "text": "Native ECharts Graphic Element", "font": "bold 16px sans-serif"}}]}, {"type": "text", "right": 20, "bottom": 20, "z": 100, "style": {"fill": "#94a3b8", "text": "SIVO x ECharts", "font": "italic 14px sans-serif"}}], "mappings": {"regionA": {"id": "regionA", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eRegion A\u003c/h3\u003e", "title": "Region A", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "regionB": {"id": "regionB", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eRegion B\u003c/h3\u003e", "title": "Region B", "panel_position": "right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -1374,9 +1369,6 @@
                     calculable: true,
                     inRange: {
                         color: activeDataBinding.colors
-                    },
-                    outOfRange: {
-                        opacity: 0 // Completely hide geometries that lack a value for this year
                     }
                 };
             }
@@ -2397,8 +2389,6 @@
                         var itemName = stepSeriesData[i].name;
                         if (stepDataMap[itemName] && stepDataMap[itemName][timelineBinding.key] !== undefined) {
                             stepSeriesData[i].value = stepDataMap[itemName][timelineBinding.key];
-                        } else {
-                            stepSeriesData[i].value = '-'; // Explicitly unset missing data for ECharts timeline merge
                         }
                     }
 
@@ -5170,8 +5160,8 @@ function tourNext() {
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

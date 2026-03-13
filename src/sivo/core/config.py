@@ -334,3 +334,7 @@ class ProjectConfig(BaseModel):
         default=None,
         description="Optional bounding coordinates [[minLng, minLat], [maxLng, maxLat]] to map the SVG to a geographic coordinate system."
     )
+    graphic: Optional[List[Dict[str, Any]]] = Field(
+        default=None,
+        description="Optional list of Apache ECharts graphic components (images, text, shapes) to overlay."
+    )
