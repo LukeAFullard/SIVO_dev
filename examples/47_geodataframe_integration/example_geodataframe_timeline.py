@@ -156,7 +156,7 @@ def main():
     try:
         sivo_app.map(
             element_id="FRA",
-            tooltip="France - Click to view Sidebar Timeline",
+            tooltip="France - Click to view Population Timeline",
             echarts_option=sidebar_timeline_option,
             map_name="europe_geojson",
             map_data=json.loads(europe.to_json()), # Pass GeoJSON dict
@@ -165,6 +165,48 @@ def main():
         )
     except ValueError:
         pass # In case FRA isn't in the dataset
+
+    # 3. A Second Sidebar Map Example
+    # Let's add a static GDP Choropleth map when the user clicks the United Kingdom.
+    uk_gdp_data = []
+    for idx, row in europe.iterrows():
+        uk_gdp_data.append({
+            "name": row['NAME'],
+            "value": row['GDP_MD']
+        })
+
+    sidebar_gdp_option = {
+        "title": {"text": "European GDP (Millions)", "left": "center"},
+        "tooltip": {"trigger": "item"},
+        "visualMap": {
+            "min": 0,
+            "max": 4000000, # Approx scale for major European economies in millions
+            "left": "left",
+            "bottom": "bottom",
+            "inRange": {"color": ["#e0f3f8", "#014636"]}
+        },
+        "series": [{
+            "name": "GDP",
+            "type": "map",
+            "map": "europe_geojson", # Reusing the registered map from France
+            "roam": True,
+            "data": uk_gdp_data
+        }]
+    }
+
+    try:
+        sivo_app.map(
+            element_id="GBR",
+            tooltip="United Kingdom - Click to view GDP Map",
+            echarts_option=sidebar_gdp_option,
+            # We don't necessarily need to pass map_name/map_data again if FRA already registered it globally,
+            # but SIVO handles duplicate registrations gracefully.
+            map_name="europe_geojson",
+            map_data=json.loads(europe.to_json()),
+            panel_position="right"
+        )
+    except ValueError:
+        pass # In case GBR isn't in the dataset
 
     # Save to HTML
     output_path = os.path.join(os.path.dirname(__file__), 'interactive_europe_timeline.html')
