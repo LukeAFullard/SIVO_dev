@@ -390,7 +390,7 @@ class Sivo:
 
 
 
-    def _apply_chart_styling(self, option: dict, color: str | list[str] = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def _apply_chart_styling(self, option: dict, color: str | list[str] = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         if color:
             if isinstance(color, list):
                 option["color"] = color
@@ -438,6 +438,30 @@ class Sivo:
                 for s in option["series"]:
                     s["universalTransition"] = True
 
+        if datazoom:
+            option["dataZoom"] = [
+                {
+                    "type": "slider",
+                    "xAxisIndex": 0,
+                    "filterMode": "filter"
+                },
+                {
+                    "type": "slider",
+                    "yAxisIndex": 0,
+                    "filterMode": "filter"
+                },
+                {
+                    "type": "inside",
+                    "xAxisIndex": 0,
+                    "filterMode": "filter"
+                },
+                {
+                    "type": "inside",
+                    "yAxisIndex": 0,
+                    "filterMode": "filter"
+                }
+            ]
+
         if extra_options:
             def merge_dicts(d1, d2):
                 for k, v in d2.items():
@@ -457,7 +481,7 @@ class Sivo:
 
         return option
 
-    def map_bar_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_bar_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Bar Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
         option = {
             "title": {"text": title},
@@ -470,10 +494,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", trendline_width: int = 2, trendline_arrow: bool = False, trendline_arrow_size: int = 10, trendline_label: str = None, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", trendline_width: int = 2, trendline_arrow: bool = False, trendline_arrow_size: int = 10, trendline_label: str = None, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Scatter Chart with an overlaid trendline. trendline_type can be 'linear', 'exponential', 'logarithmic', 'polynomial'. data: [[x1, y1], [x2, y2]]"""
 
         symbol = "none"
@@ -595,10 +619,10 @@ class Sivo:
                 "_sivo_render_item": js_str
             })
 
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_pictorial_bar_chart(self, element_id: str, title: str, data: list, categories: list, symbol: str, symbol_repeat: bool | str = True, symbol_size: list | int | str = ['100%', '100%'], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_pictorial_bar_chart(self, element_id: str, title: str, data: list, categories: list, symbol: str, symbol_repeat: bool | str = True, symbol_size: list | int | str = ['100%', '100%'], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Pictorial Bar Chart. 'symbol' can be 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none', an image URL ('image://url'), or an SVG path ('path://...')."""
         option = {
             "title": {"text": title},
@@ -614,10 +638,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, uncertainty_lower: list = None, uncertainty_upper: list = None, uncertainty_color: str = 'rgba(204, 204, 204, 0.5)', extra_options: dict = None):
+    def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, uncertainty_lower: list = None, uncertainty_upper: list = None, uncertainty_color: str = 'rgba(204, 204, 204, 0.5)', datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Line Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
 
         series_data = []
@@ -662,10 +686,10 @@ class Sivo:
             "yAxis": {"type": "value"},
             "series": series_data
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_pie_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_pie_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Pie Chart. data format: [{"name": "A", "value": 10}, ...] 'color' can be a list of strings (palette)."""
         option = {
             "title": {"text": title, "left": "center"},
@@ -685,10 +709,10 @@ class Sivo:
                 }
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_gauge_chart(self, element_id: str, title: str, value: float, max_value: float = 100, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_gauge_chart(self, element_id: str, title: str, value: float, max_value: float = 100, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Gauge Chart."""
         option = {
             "title": {"text": title, "left": "center"},
@@ -701,10 +725,10 @@ class Sivo:
                 "data": [{"value": value, "name": title}]
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_radar_chart(self, element_id: str, title: str, indicators: list[dict], data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_radar_chart(self, element_id: str, title: str, indicators: list[dict], data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Radar Chart. indicators: [{'name': 'A', 'max': 100}], data: [{'name': 'Series 1', 'value': [10, 20]}]"""
         option = {
             "title": {"text": title},
@@ -718,10 +742,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Scatter Chart. data: [[x1, y1], [x2, y2]]"""
         option = {
             "title": {"text": title},
@@ -734,10 +758,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_nested_map_chart(self, element_id: str, title: str, map_name: str, map_data: Union[str, dict], data: list[dict], color: str | list[str] = None, min_val: float = 0, max_val: float = 100, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_nested_map_chart(self, element_id: str, title: str, map_name: str, map_data: Union[str, dict], data: list[dict], color: str | list[str] = None, min_val: float = 0, max_val: float = 100, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """
         Helper to map a nested Map Chart inside the side panel.
         `map_data` can be an SVG string or a GeoJSON dictionary.
@@ -764,10 +788,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position, map_name=map_name, map_data=map_data)
 
-    def map_treemap_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_treemap_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Treemap Chart. data: [{'name': 'node1', 'value': 10, 'children': [...]}]"""
         option = {
             "title": {"text": title},
@@ -777,10 +801,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_polar_bar_chart(self, element_id: str, title: str, data: list[float], categories: list[str], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_polar_bar_chart(self, element_id: str, title: str, data: list[float], categories: list[str], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Polar Bar Chart. data: [10, 20, 30] corresponding to categories."""
         option = {
             "title": {"text": title},
@@ -796,10 +820,10 @@ class Sivo:
                 "label": {"show": True, "position": "middle", "formatter": "{b}: {c}"}
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_polar_line_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = "#ff7f50", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_polar_line_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = "#ff7f50", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Polar Line Chart (often used for math functions or cyclical data). data: list of values."""
         # Typically, a simple polar line chart maps values to angles.
         # We can map the index to the angle.
@@ -817,10 +841,10 @@ class Sivo:
                 "data": [[d, i * (360 / len(data))] for i, d in enumerate(data)] if data else []
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_polar_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_polar_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Polar Scatter Chart. data: [[radius, angle], ...]"""
         option = {
             "title": {"text": title},
@@ -835,10 +859,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_liquidfill_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_liquidfill_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Liquid Fill Chart. data: [0.6, 0.5] (percentages as floats between 0 and 1).
         Note: Requires echarts-liquidfill plugin."""
         option = {
@@ -858,10 +882,10 @@ class Sivo:
             else:
                 option["series"][0]["color"] = [color]
 
-        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_custom_chart(self, element_id: str, title: str, render_item_js: str, data: list, tooltip: str = None, panel_position: str = None, extra_options: dict = None):
+    def map_custom_chart(self, element_id: str, title: str, render_item_js: str, data: list, tooltip: str = None, panel_position: str = None, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Custom Series Chart.
         render_item_js must be a string containing a valid JavaScript function for the 'renderItem' property.
         Since JSON serialization cannot pass raw JS functions, we pass it as a special _sivo_render_item string
@@ -879,11 +903,35 @@ class Sivo:
                 "data": data
             }]
         }
+        if datazoom:
+            option["dataZoom"] = [
+                {
+                    "type": "slider",
+                    "xAxisIndex": 0,
+                    "filterMode": "filter"
+                },
+                {
+                    "type": "slider",
+                    "yAxisIndex": 0,
+                    "filterMode": "filter"
+                },
+                {
+                    "type": "inside",
+                    "xAxisIndex": 0,
+                    "filterMode": "filter"
+                },
+                {
+                    "type": "inside",
+                    "yAxisIndex": 0,
+                    "filterMode": "filter"
+                }
+            ]
+
         if extra_options:
-            option = self._apply_chart_styling(option, None, None, None, None, None, None, None, True, extra_options)
+            option = self._apply_chart_styling(option, None, None, None, None, None, None, None, True, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_boxplot_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_boxplot_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Boxplot Chart. data is a 2D array of values for each category."""
         option = {
             "title": {"text": title},
@@ -896,10 +944,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_candlestick_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], item_color: str = '#eb5454', item_color0: str = '#47b262', tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_candlestick_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], item_color: str = '#eb5454', item_color0: str = '#47b262', tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Candlestick Chart (K-line). data: [[open, close, lowest, highest], ...]"""
         option = {
             "title": {"text": title},
@@ -918,10 +966,10 @@ class Sivo:
                 }
             }]
         }
-        option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_word_cloud_chart(self, element_id: str, title: str, data: list[dict], mask_image: str = None, color: Union[str, list[str]] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_word_cloud_chart(self, element_id: str, title: str, data: list[dict], mask_image: str = None, color: Union[str, list[str]] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Word Cloud Chart. data: [{'name': 'Word', 'value': 100}, ...]
         mask_image: Optional URL or base64 string to a silhouette image (black and white) to constrain the word cloud shape.
         Note: Requires echarts-wordcloud plugin (included by default in SIVO CDN templates)."""
@@ -963,10 +1011,10 @@ class Sivo:
             # We pass this as a custom property. The JS runtime will intercept it, load the image, and attach the DOM object to maskImage
             option["series"][0]["_sivo_mask_image_url"] = mask_image
 
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_calendar_heatmap_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], calendar_range: Union[str, list[str]], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_calendar_heatmap_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], calendar_range: Union[str, list[str]], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Calendar Heatmap Chart. data: [['2017-01-01', 10], ['2017-01-02', 20], ...], calendar_range: '2017' or ['2017-01-01', '2017-12-31']"""
         option = {
             "title": {"text": title},
@@ -992,10 +1040,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, None, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_heatmap_chart(self, element_id: str, title: str, data: list[list[float]], x_categories: list[str], y_categories: list[str], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_heatmap_chart(self, element_id: str, title: str, data: list[list[float]], x_categories: list[str], y_categories: list[str], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Cartesian Heatmap Chart. data: [[x_index, y_index, value], ...]"""
         option = {
             "title": {"text": title},
@@ -1024,10 +1072,10 @@ class Sivo:
                 }
             }]
         }
-        option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, None, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_graph_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], categories: list[dict] = None, color: str | list[str] = None, layout: str = "force", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_graph_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], categories: list[dict] = None, color: str | list[str] = None, layout: str = "force", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Graph Chart (Network). nodes: [{'name': 'Node1'}], links: [{'source': 'Node1', 'target': 'Node2'}]. layout can be 'none', 'circular', or 'force'."""
         option = {
             "title": {"text": title},
@@ -1052,10 +1100,10 @@ class Sivo:
         if layout == "force":
             option["series"][0]["force"] = {"repulsion": 100}
 
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_sankey_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_sankey_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Sankey Diagram. nodes: [{'name': 'A'}], links: [{'source': 'A', 'target': 'B', 'value': 10}]"""
         option = {
             "title": {"text": title},
@@ -1068,10 +1116,10 @@ class Sivo:
                 "lineStyle": {"color": "gradient", "curveness": 0.5}
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_sunburst_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_sunburst_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Sunburst Chart. data: [{'name': 'A', 'value': 10, 'children': [...]}]"""
         option = {
             "title": {"text": title},
@@ -1083,10 +1131,10 @@ class Sivo:
                 "label": {"rotate": "radial"}
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_parallel_chart(self, element_id: str, title: str, schema: list[dict], data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_parallel_chart(self, element_id: str, title: str, schema: list[dict], data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Parallel Coordinates Chart. schema: [{'dim': 0, 'name': 'A'}, ...], data: [[val1, val2], ...]"""
         option = {
             "title": {"text": title},
@@ -1103,10 +1151,10 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_theme_river_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], legend_data: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_theme_river_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], legend_data: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a ThemeRiver (Streamgraph) Chart. data: [[date, value, category_name], ...]"""
         option = {
             "title": {"text": title},
@@ -1124,11 +1172,11 @@ class Sivo:
                 "data": data
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
 
-    def map_effect_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_effect_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map an Effect Scatter Chart. data: [[x1, y1], [x2, y2]]"""
         option = {
             "title": {"text": title},
@@ -1145,10 +1193,10 @@ class Sivo:
                 }
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_lines_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_lines_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Lines Chart. data: [{'coords': [[lng1, lat1], [lng2, lat2]]}]"""
         option = {
             "title": {"text": title},
@@ -1166,10 +1214,10 @@ class Sivo:
                 }
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_funnel_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_funnel_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Funnel Chart. data: [{'value': 60, 'name': 'Visit'}]"""
         option = {
             "title": {"text": title},
@@ -1205,10 +1253,10 @@ class Sivo:
                 }
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_tree_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, extra_options: dict = None):
+    def map_tree_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """Helper to map a Tree Chart. data: [{'name': 'Root', 'children': [...]}]"""
         option = {
             "title": {"text": title},
@@ -1243,7 +1291,7 @@ class Sivo:
                 "animationDurationUpdate": 750
             }]
         }
-        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, extra_options)
+        option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def build_javascript(self, entry_point: str = "src/sivo/runtime/templates/sivo_bundle.js", output_dir: str = "dist"):
