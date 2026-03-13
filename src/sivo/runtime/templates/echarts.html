@@ -1029,6 +1029,25 @@
                     <button class="sivo-drawing-btn" id="sivo-draw-text" title="Text">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"></path></svg>
                     </button>
+                    <button class="sivo-drawing-btn" id="sivo-draw-arrow" title="Arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                    <button class="sivo-drawing-btn" id="sivo-draw-sticker" title="Sticker">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </button>
+                    <select id="sivo-sticker-select" style="display:none; height:32px; border:1px solid #cbd5e1; border-radius:4px; background:white; font-size:16px; padding:0 4px; outline:none; cursor:pointer;">
+                        <option value="😊">😊</option>
+                        <option value="😐">😐</option>
+                        <option value="😢">😢</option>
+                        <option value="✅">✅</option>
+                        <option value="❌">❌</option>
+                        <option value="❓">❓</option>
+                        <option value="⭐">⭐</option>
+                        <option value="💡">💡</option>
+                        <option value="🔥">🔥</option>
+                        <option value="📍">📍</option>
+                        <option value="❤️">❤️</option>
+                    </select>
                     <button class="sivo-drawing-btn" id="sivo-draw-eraser" title="Eraser">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 20H4M16 16l3.5-3.5a2.121 2.121 0 0 0-3-3L13 13m-3 3L6 12a2.121 2.121 0 0 1 3-3l4 4"></path></svg>
                     </button>
@@ -4893,6 +4912,9 @@ function tourNext() {
         var toolsDiv = document.getElementById('sivo-draw-tools');
         var penBtn = document.getElementById('sivo-draw-pen');
         var textBtn = document.getElementById('sivo-draw-text');
+        var arrowBtn = document.getElementById('sivo-draw-arrow');
+        var stickerBtn = document.getElementById('sivo-draw-sticker');
+        var stickerSelect = document.getElementById('sivo-sticker-select');
         var eraserBtn = document.getElementById('sivo-draw-eraser');
         var colorInput = document.getElementById('sivo-drawing-color');
         var clearBtn = document.getElementById('sivo-draw-clear');
@@ -4911,25 +4933,45 @@ function tourNext() {
             }
         });
 
+        function updateDrawModeUI() {
+            [penBtn, textBtn, arrowBtn, stickerBtn, eraserBtn].forEach(btn => {
+                if (btn) btn.classList.remove('active');
+            });
+            if (stickerSelect) stickerSelect.style.display = 'none';
+
+            if (currentDrawMode === 'pen' && penBtn) penBtn.classList.add('active');
+            if (currentDrawMode === 'text' && textBtn) textBtn.classList.add('active');
+            if (currentDrawMode === 'arrow' && arrowBtn) arrowBtn.classList.add('active');
+            if (currentDrawMode === 'sticker' && stickerBtn) {
+                stickerBtn.classList.add('active');
+                if (stickerSelect) stickerSelect.style.display = 'block';
+            }
+            if (currentDrawMode === 'eraser' && eraserBtn) eraserBtn.classList.add('active');
+        }
+
         if (penBtn) penBtn.addEventListener('click', function() {
             currentDrawMode = 'pen';
-            penBtn.classList.add('active');
-            textBtn.classList.remove('active');
-            eraserBtn.classList.remove('active');
+            updateDrawModeUI();
         });
 
         if (textBtn) textBtn.addEventListener('click', function() {
             currentDrawMode = 'text';
-            textBtn.classList.add('active');
-            penBtn.classList.remove('active');
-            eraserBtn.classList.remove('active');
+            updateDrawModeUI();
+        });
+
+        if (arrowBtn) arrowBtn.addEventListener('click', function() {
+            currentDrawMode = 'arrow';
+            updateDrawModeUI();
+        });
+
+        if (stickerBtn) stickerBtn.addEventListener('click', function() {
+            currentDrawMode = 'sticker';
+            updateDrawModeUI();
         });
 
         if (eraserBtn) eraserBtn.addEventListener('click', function() {
             currentDrawMode = 'eraser';
-            eraserBtn.classList.add('active');
-            penBtn.classList.remove('active');
-            textBtn.classList.remove('active');
+            updateDrawModeUI();
         });
 
         if (colorInput) colorInput.addEventListener('input', function(e) {
@@ -4985,6 +5027,18 @@ function tourNext() {
             var x = clientX - rect.left;
             var y = clientY - rect.top;
 
+            if (currentDrawMode === 'sticker') {
+                var emoji = stickerSelect ? stickerSelect.value : '😊';
+                window.sivoDrawings.push({
+                    mode: 'sticker',
+                    text: emoji,
+                    point: convertToLogical(x, y)
+                });
+                redrawCanvas();
+                e.preventDefault();
+                return;
+            }
+
             if (currentDrawMode === 'text') {
                 if (textInputEl) {
                     finalizeText();
@@ -5029,7 +5083,7 @@ function tourNext() {
                 mode: currentDrawMode,
                 color: currentDrawMode === 'eraser' ? null : drawColor,
                 width: currentDrawMode === 'eraser' ? 20 : 3,
-                points: [convertToLogical(x, y)]
+                points: currentDrawMode === 'arrow' ? [convertToLogical(x, y), convertToLogical(x, y)] : [convertToLogical(x, y)]
             };
 
             window.sivoDrawings.push(currentPath);
@@ -5037,7 +5091,7 @@ function tourNext() {
         }
 
         function continueDrawing(e) {
-            if (!isDrawingMode || !isDrawingMouse || !currentPath || currentDrawMode === 'text') return;
+            if (!isDrawingMode || !isDrawingMouse || !currentPath || currentDrawMode === 'text' || currentDrawMode === 'sticker') return;
 
             var rect = drawingCanvas.getBoundingClientRect();
             var clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -5046,7 +5100,11 @@ function tourNext() {
             var x = clientX - rect.left;
             var y = clientY - rect.top;
 
-            currentPath.points.push(convertToLogical(x, y));
+            if (currentDrawMode === 'arrow') {
+                currentPath.points[1] = convertToLogical(x, y);
+            } else {
+                currentPath.points.push(convertToLogical(x, y));
+            }
             redrawCanvas(); // Optimizable: could just draw the line segment instead of full redraw
             e.preventDefault();
         }
@@ -5064,13 +5122,25 @@ function tourNext() {
             drawingCtx.lineJoin = 'round';
 
             window.sivoDrawings.forEach(function(item) {
-                if (item.mode === 'text') {
+                if (item.mode === 'text' || item.mode === 'sticker') {
                     drawingCtx.globalCompositeOperation = 'source-over';
-                    drawingCtx.fillStyle = item.color;
-                    var fontSize = 16 * (currentZoom || 1);
-                    drawingCtx.font = fontSize + 'px system-ui, sans-serif';
+
                     var px = convertToPixel(item.point);
-                    drawingCtx.fillText(item.text, px[0], px[1]);
+                    if (item.mode === 'text') {
+                        drawingCtx.fillStyle = item.color;
+                        var fontSize = 16 * (currentZoom || 1);
+                        drawingCtx.font = fontSize + 'px system-ui, sans-serif';
+                        drawingCtx.fillText(item.text, px[0], px[1]);
+                    } else if (item.mode === 'sticker') {
+                        var fontSize = 32 * (currentZoom || 1);
+                        drawingCtx.font = fontSize + 'px sans-serif';
+                        drawingCtx.textAlign = 'center';
+                        drawingCtx.textBaseline = 'middle';
+                        drawingCtx.fillText(item.text, px[0], px[1]);
+                        // reset alignments
+                        drawingCtx.textAlign = 'start';
+                        drawingCtx.textBaseline = 'alphabetic';
+                    }
                     return;
                 }
 
@@ -5096,6 +5166,26 @@ function tourNext() {
                 }
 
                 drawingCtx.stroke();
+
+                if (item.mode === 'arrow') {
+                    // Draw arrowhead at the end point
+                    var p0 = convertToPixel(item.points[0]);
+                    var p1 = convertToPixel(item.points[1]);
+                    var dx = p1[0] - p0[0];
+                    var dy = p1[1] - p0[1];
+                    var angle = Math.atan2(dy, dx);
+                    var headlen = 10 * (currentZoom || 1) + item.width; // arrowhead length
+
+                    drawingCtx.beginPath();
+                    drawingCtx.moveTo(p1[0], p1[1]);
+                    drawingCtx.lineTo(p1[0] - headlen * Math.cos(angle - Math.PI / 6), p1[1] - headlen * Math.sin(angle - Math.PI / 6));
+                    drawingCtx.lineTo(p1[0] - headlen * Math.cos(angle + Math.PI / 6), p1[1] - headlen * Math.sin(angle + Math.PI / 6));
+                    drawingCtx.lineTo(p1[0], p1[1]);
+                    drawingCtx.lineTo(p1[0] - headlen * Math.cos(angle - Math.PI / 6), p1[1] - headlen * Math.sin(angle - Math.PI / 6)); // ensure closure stroke
+                    drawingCtx.fillStyle = item.color;
+                    drawingCtx.fill();
+                    drawingCtx.stroke();
+                }
             });
             drawingCtx.globalCompositeOperation = 'source-over';
         }
