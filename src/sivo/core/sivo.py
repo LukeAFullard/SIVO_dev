@@ -66,12 +66,52 @@ class Sivo:
         width = maxx - minx
         height = maxy - miny
 
+        import xml.etree.ElementTree as ET
+        import re
+
         for idx, row in gdf.iterrows():
             geom_svg = row.geometry.svg()
-            elem_id = str(row[id_col]).replace('"', '&quot;')
-            elem_name = str(row[name_col]).replace('"', '&quot;')
-            g_tag = f'<g id="{elem_id}" name="{elem_name}">{geom_svg}</g>'
-            svg_parts.append(g_tag)
+            elem_id = str(row[id_col])
+            elem_name = str(row[name_col])
+
+            # ECharts requires the `name` attribute directly on the shape tag (<path>, <polygon>, etc.)
+            # in order to apply dynamic visualMap/timeline colors. A wrapper <g> is insufficient because
+            # ECharts SVG renderer does not cascade fill colors to child paths.
+            # We parse the geometry SVG, strip Shapely's hardcoded inline styles, and inject the Name directly into the shapes,
+            # then wrap the whole thing in a <g id="..."> so SIVO's Python mapping lookup can still find the root ID.
+            try:
+                root = ET.fromstring(f"<root>{geom_svg}</root>")
+
+                path_idx = 0
+                for elem in root.iter():
+                    # ET parses namespaces if present, though shapely usually outputs raw tags.
+                    tag = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
+                    if tag in ['path', 'polygon', 'rect', 'circle', 'polyline']:
+                        # Inject SIVO attributes directly onto the path
+                        # Multiple paths can share the same name, ECharts will group them into one region
+                        elem.set('id', f"{elem_id}_{path_idx}")
+                        elem.set('name', elem_name)
+                        path_idx += 1
+
+                        # Strip inline styles so ECharts can inject dynamic styles
+                        for attr in ['fill', 'stroke', 'stroke-width', 'opacity']:
+                            if attr in elem.attrib:
+                                del elem.attrib[attr]
+
+                # Re-serialize the children
+                cleaned_svg = ''.join([ET.tostring(child, encoding='unicode') for child in root])
+
+                safe_id = elem_id.replace('"', '&quot;')
+                safe_name = elem_name.replace('"', '&quot;')
+                g_tag = f'<g id="{safe_id}" name="{safe_name}">{cleaned_svg}</g>'
+                svg_parts.append(g_tag)
+
+            except Exception:
+                # Fallback if parsing fails, though ET should handle shapely output perfectly
+                safe_id = elem_id.replace('"', '&quot;')
+                safe_name = elem_name.replace('"', '&quot;')
+                clean = re.sub(r'\s*(fill|stroke|stroke-width|opacity)="[^"]*"', '', geom_svg)
+                svg_parts.append(f'<g id="{safe_id}" name="{safe_name}">{clean}</g>')
 
         # Invert the Y-axis using an SVG transform since geographic coordinates (Y points North)
         # are inverted relative to standard screen coordinates (Y points South).
