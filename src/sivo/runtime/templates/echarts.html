@@ -1374,6 +1374,9 @@
                     calculable: true,
                     inRange: {
                         color: activeDataBinding.colors
+                    },
+                    outOfRange: {
+                        opacity: 0 // Completely hide geometries that lack a value for this year
                     }
                 };
             }
@@ -2390,6 +2393,8 @@
                         var itemName = stepSeriesData[i].name;
                         if (stepDataMap[itemName] && stepDataMap[itemName][timelineBinding.key] !== undefined) {
                             stepSeriesData[i].value = stepDataMap[itemName][timelineBinding.key];
+                        } else {
+                            stepSeriesData[i].value = '-'; // Explicitly unset missing data for ECharts timeline merge
                         }
                     }
 
