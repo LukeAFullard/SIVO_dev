@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #f0f4f8; }
+            .canvas-area { fill: #e2e8f0; rx: 16; }
+            .glass-panel { fill: #ffffff; fill-opacity: 0.6; backdrop-filter: blur(24px); rx: 20; stroke: #ffffff; stroke-width: 1.5; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.08)); }
+            .headline { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 800; fill: #1e293b; }
+            .sub-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 500; fill: #64748b; }
+            .search-bar { fill: #ffffff; rx: 24; stroke: #e2e8f0; stroke-width: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.02)); }
+        </style>
+    </defs>
+
+    <rect width="1440" height="900" class="bg" />
+
+    <!-- Full Bleed Map Canvas Area -->
+    <rect id="full-map-canvas" x="20" y="20" width="1400" height="860" class="canvas-area" />
+
+    <!-- Glassmorphic Search / Header Bar (Floating Top Center) -->
+    <g id="glass-search-header">
+        <rect x="420" y="60" width="600" height="64" class="search-bar" />
+        <!-- Placeholder for search input text / SIVO search action -->
+        <text x="460" y="98" class="sub-text">Search regions, coordinates, or assets...</text>
+    </g>
+
+    <!-- Glassmorphic Main Data Panel (Floating Left) -->
+    <g id="glass-panel-data">
+        <rect x="60" y="160" width="380" height="660" class="glass-panel" />
+        <text x="100" y="220" class="headline" font-size="28">Live Analysis</text>
+        <text x="100" y="250" class="sub-text">Interact with the map to drill down.</text>
+
+        <!-- List or Chart Placeholder -->
+        <rect x="100" y="290" width="300" height="200" fill="#f8fafc" rx="12" opacity="0.8" />
+        <rect x="100" y="520" width="300" height="200" fill="#f8fafc" rx="12" opacity="0.8" />
+    </g>
+
+    <!-- Glassmorphic Map Legend/Filter (Floating Right Bottom) -->
+    <g id="glass-panel-legend">
+        <rect x="1080" y="560" width="280" height="260" class="glass-panel" />
+        <text x="1110" y="610" class="headline" font-size="20">Map Legend & Filters</text>
+        <!-- Filter Checkbox Placeholders -->
+        <rect x="1110" y="640" width="24" height="24" rx="4" fill="#3b82f6" />
+        <rect x="1110" y="680" width="24" height="24" rx="4" fill="#10b981" />
+        <rect x="1110" y="720" width="24" height="24" rx="4" fill="#f59e0b" />
+        <rect x="1110" y="760" width="24" height="24" rx="4" fill="#ef4444" />
+    </g>
+
+</svg>
