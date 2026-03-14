@@ -33,10 +33,17 @@ app = Sivo.from_svg(
 
 # Add custom HTML overlays to perfectly anchor to the SVG shapes
 # Using standard HTML elements. The JS runtime applies translate(-50%, -50%) to ensure true centering.
-marker_html = '<div style="width: 32px; height: 32px; background: #0f172a; border: 2px solid white; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">X</div>'
 
-app.add_overlay("box-1", marker_html, scale_with_zoom=True)
-app.add_overlay("box-2", marker_html, scale_with_zoom=True)
+# 1. Text Overlay
+text_html = '<div style="background: white; color: #1e293b; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-family: sans-serif; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); white-space: nowrap;">✨ Hello SIVO!</div>'
+app.add_overlay("box-1", text_html, scale_with_zoom=True)
+
+# 2. Figure/Image Overlay
+figure_html = '<div style="background: white; padding: 4px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center;"><img src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=100&auto=format&fit=crop" width="80" height="80" style="border-radius: 8px;" /><span style="font-family: sans-serif; font-size: 10px; margin-top: 4px; color: #64748b;">Figure 1</span></div>'
+app.add_overlay("box-2", figure_html, scale_with_zoom=True)
+
+# 3. Simple Marker Overlay
+marker_html = '<div style="width: 48px; height: 48px; background: #0f172a; border: 4px solid white; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">X</div>'
 app.add_overlay("box-3", marker_html, scale_with_zoom=True)
 
 # Generate the output HTML
