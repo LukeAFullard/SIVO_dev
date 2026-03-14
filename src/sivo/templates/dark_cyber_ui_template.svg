@@ -1,0 +1,55 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #050505; }
+      .grid-lines { stroke: #1a1a1a; stroke-width: 1; }
+      .neon-card { fill: rgba(10, 15, 20, 0.8); stroke: #00ffcc; stroke-width: 1.5; filter: drop-shadow(0 0 8px rgba(0,255,204,0.3)); rx: 8; ry: 8; }
+      .neon-card-alt { fill: rgba(15, 10, 20, 0.8); stroke: #ff00ff; stroke-width: 1.5; filter: drop-shadow(0 0 8px rgba(255,0,255,0.3)); rx: 8; ry: 8; }
+      .neon-text-title { fill: #ffffff; font-family: monospace, system-ui; font-size: 20px; font-weight: bold; letter-spacing: 2px; }
+      .neon-text-sub { fill: #00ffcc; font-family: monospace, system-ui; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+      .accent-line { stroke: #00ffcc; stroke-width: 2; stroke-linecap: square; }
+      .accent-line-alt { stroke: #ff00ff; stroke-width: 2; stroke-linecap: square; }
+    </style>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="none" class="grid-lines"/>
+      <path d="M 40 0 L 0 0 0 40" fill="none" class="grid-lines"/>
+    </pattern>
+  </defs>
+
+  <rect class="bg" width="1200" height="800" />
+  <rect width="1200" height="800" fill="url(#grid)" />
+
+  <!-- Top Navigation / Header -->
+  <g id="neon-header">
+    <rect class="neon-card" x="40" y="40" width="1120" height="80" />
+    <text class="neon-text-title" x="80" y="85">SYS.OVERVIEW // CYBER UI</text>
+    <line class="accent-line" x1="40" y1="120" x2="1160" y2="120" />
+  </g>
+
+  <!-- Left Sidebar (Stats) -->
+  <g id="neon-sidebar">
+    <rect class="neon-card-alt" x="40" y="160" width="300" height="600" />
+    <text class="neon-text-sub" x="60" y="200" style="fill: #ff00ff;">> DIAGNOSTICS</text>
+    <line class="accent-line-alt" x1="60" y1="210" x2="300" y2="210" />
+    <rect id="neon-sidebar-data" fill="transparent" x="60" y="230" width="260" height="500" />
+  </g>
+
+  <!-- Main Central Radar/Map Area -->
+  <g id="neon-main-view">
+    <rect class="neon-card" x="380" y="160" width="780" height="400" />
+    <text class="neon-text-sub" x="400" y="200">> PRIMARY NODE</text>
+    <line class="accent-line" x1="400" y1="210" x2="1120" y2="210" />
+    <!-- Center reticle decoration -->
+    <circle cx="770" cy="360" r="120" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="4 4"/>
+    <rect id="neon-main-data" fill="transparent" x="400" y="220" width="740" height="320" />
+  </g>
+
+  <!-- Bottom Data Terminal -->
+  <g id="neon-terminal">
+    <rect class="neon-card" x="380" y="600" width="780" height="160" />
+    <text class="neon-text-sub" x="400" y="640">> LOG OUTPUT</text>
+    <line class="accent-line" x1="400" y1="650" x2="1120" y2="650" />
+    <rect id="neon-terminal-data" fill="transparent" x="400" y="660" width="740" height="80" />
+  </g>
+
+</svg>

@@ -1,0 +1,71 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #fafafa; }
+      .orbit-ring { fill: none; stroke: #e5e5e5; stroke-width: 2; stroke-dasharray: 8 8; }
+      .center-orb { fill: #10b981; filter: drop-shadow(0 15px 30px rgba(16,185,129,0.3)); }
+      .orb-text { fill: #ffffff; font-family: system-ui, sans-serif; font-size: 32px; font-weight: 800; text-anchor: middle; alignment-baseline: middle; }
+
+      .satellite-card { fill: #ffffff; rx: 50; ry: 50; stroke: #f3f4f6; stroke-width: 3; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.06)); transition: transform 0.3s; cursor: pointer; }
+      .satellite-title { fill: #374151; font-family: system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; alignment-baseline: middle; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Orbit Rings -->
+  <circle class="orbit-ring" cx="600" cy="400" r="200" />
+  <circle class="orbit-ring" cx="600" cy="400" r="320" />
+
+  <!-- Center Hub -->
+  <g id="radial-center">
+    <circle class="center-orb" cx="600" cy="400" r="100" />
+    <text class="orb-text" x="600" y="405">HUB</text>
+    <circle cx="600" cy="400" r="90" fill="transparent" id="radial-center-data" />
+  </g>
+
+  <!-- Inner Orbit Satellites (Radius 200) -->
+  <g id="sat-inner-1" transform="translate(600, 200)">
+    <circle class="satellite-card" cx="0" cy="0" r="60" />
+    <text class="satellite-title" x="0" y="0">Sys A</text>
+    <circle cx="0" cy="0" r="50" fill="transparent" id="sat-inner-1-data"/>
+  </g>
+
+  <g id="sat-inner-2" transform="translate(773, 500)"> <!-- approx 120deg -->
+    <circle class="satellite-card" cx="0" cy="0" r="60" />
+    <text class="satellite-title" x="0" y="0">Sys B</text>
+    <circle cx="0" cy="0" r="50" fill="transparent" id="sat-inner-2-data"/>
+  </g>
+
+  <g id="sat-inner-3" transform="translate(427, 500)"> <!-- approx 240deg -->
+    <circle class="satellite-card" cx="0" cy="0" r="60" />
+    <text class="satellite-title" x="0" y="0">Sys C</text>
+    <circle cx="0" cy="0" r="50" fill="transparent" id="sat-inner-3-data"/>
+  </g>
+
+  <!-- Outer Orbit Satellites (Radius 320) -->
+  <g id="sat-outer-1" transform="translate(920, 400)"> <!-- 0deg -->
+    <circle class="satellite-card" cx="0" cy="0" r="70" />
+    <text class="satellite-title" x="0" y="-10">Ext 1</text>
+    <rect fill="transparent" x="-50" y="-50" width="100" height="100" id="sat-outer-1-data"/>
+  </g>
+
+  <g id="sat-outer-2" transform="translate(600, 720)"> <!-- 90deg -->
+    <circle class="satellite-card" cx="0" cy="0" r="70" />
+    <text class="satellite-title" x="0" y="-10">Ext 2</text>
+    <rect fill="transparent" x="-50" y="-50" width="100" height="100" id="sat-outer-2-data"/>
+  </g>
+
+  <g id="sat-outer-3" transform="translate(280, 400)"> <!-- 180deg -->
+    <circle class="satellite-card" cx="0" cy="0" r="70" />
+    <text class="satellite-title" x="0" y="-10">Ext 3</text>
+    <rect fill="transparent" x="-50" y="-50" width="100" height="100" id="sat-outer-3-data"/>
+  </g>
+
+  <g id="sat-outer-4" transform="translate(600, 80)"> <!-- 270deg -->
+    <circle class="satellite-card" cx="0" cy="0" r="70" />
+    <text class="satellite-title" x="0" y="-10">Ext 4</text>
+    <rect fill="transparent" x="-50" y="-50" width="100" height="100" id="sat-outer-4-data"/>
+  </g>
+
+</svg>

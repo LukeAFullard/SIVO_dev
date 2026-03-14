@@ -1,0 +1,70 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .hex-shape { fill: #ffffff; stroke: #e2e8f0; stroke-width: 4; transition: fill 0.3s, filter 0.3s; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+      .hex-shape:hover { fill: #f1f5f9; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); cursor: pointer; }
+      .hex-center { fill: #3b82f6; stroke: #2563eb; stroke-width: 4; filter: drop-shadow(0 10px 20px rgba(59,130,246,0.2)); }
+      .hex-text-title { fill: #1e293b; font-family: system-ui, sans-serif; font-size: 20px; font-weight: 700; text-anchor: middle; alignment-baseline: middle; }
+      .hex-text-center { fill: #ffffff; font-family: system-ui, sans-serif; font-size: 24px; font-weight: 800; text-anchor: middle; alignment-baseline: middle; }
+
+      .side-panel { fill: #ffffff; rx: 16; ry: 16; stroke: #e2e8f0; stroke-width: 2; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.05)); }
+    </style>
+    <!-- Hexagon path math: radius 100. Center 0,0. Points: (0,-100), (86.6,-50), (86.6,50), (0,100), (-86.6,50), (-86.6,-50) -->
+    <polygon id="hex" points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" />
+  </defs>
+
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Honeycomb Cluster -->
+  <!-- Row 1 -->
+  <g id="hex-node-1" transform="translate(400, 200)">
+    <use href="#hex" class="hex-shape" />
+    <text class="hex-text-title" y="0">Data 1</text>
+    <circle cx="0" cy="0" r="70" fill="transparent" id="hex-1-data"/>
+  </g>
+  <g id="hex-node-2" transform="translate(600, 200)">
+    <use href="#hex" class="hex-shape" />
+    <text class="hex-text-title" y="0">Data 2</text>
+    <circle cx="0" cy="0" r="70" fill="transparent" id="hex-2-data"/>
+  </g>
+
+  <!-- Row 2 -->
+  <g id="hex-node-3" transform="translate(300, 350)">
+    <use href="#hex" class="hex-shape" />
+    <text class="hex-text-title" y="0">Data 3</text>
+    <circle cx="0" cy="0" r="70" fill="transparent" id="hex-3-data"/>
+  </g>
+
+  <g id="hex-center-node" transform="translate(500, 350)">
+    <use href="#hex" class="hex-center" />
+    <text class="hex-text-center" y="0">CORE</text>
+    <circle cx="0" cy="0" r="70" fill="transparent" id="hex-core-data"/>
+  </g>
+
+  <g id="hex-node-4" transform="translate(700, 350)">
+    <use href="#hex" class="hex-shape" />
+    <text class="hex-text-title" y="0">Data 4</text>
+    <circle cx="0" cy="0" r="70" fill="transparent" id="hex-4-data"/>
+  </g>
+
+  <!-- Row 3 -->
+  <g id="hex-node-5" transform="translate(400, 500)">
+    <use href="#hex" class="hex-shape" />
+    <text class="hex-text-title" y="0">Data 5</text>
+    <circle cx="0" cy="0" r="70" fill="transparent" id="hex-5-data"/>
+  </g>
+  <g id="hex-node-6" transform="translate(600, 500)">
+    <use href="#hex" class="hex-shape" />
+    <text class="hex-text-title" y="0">Data 6</text>
+    <circle cx="0" cy="0" r="70" fill="transparent" id="hex-6-data"/>
+  </g>
+
+  <!-- Right Details Panel -->
+  <g id="details-panel">
+    <rect class="side-panel" x="850" y="100" width="300" height="600" />
+    <text class="hex-text-title" x="1000" y="150" style="text-anchor: middle;">Node Details</text>
+    <rect id="details-panel-data" fill="transparent" x="880" y="180" width="240" height="490" />
+  </g>
+
+</svg>

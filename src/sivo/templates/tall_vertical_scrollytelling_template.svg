@@ -1,0 +1,63 @@
+<svg width="800" height="2400" viewBox="0 0 800 2400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .scroll-path { fill: none; stroke: #cbd5e1; stroke-width: 8; stroke-dasharray: 12 12; stroke-linecap: round; }
+      .section-card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 2; rx: 16; ry: 16; filter: drop-shadow(0 10px 25px rgba(0,0,0,0.05)); }
+      .section-title { fill: #0f172a; font-family: system-ui, sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+      .section-marker { fill: #f43f5e; stroke: #ffffff; stroke-width: 6; filter: drop-shadow(0 4px 6px rgba(244,63,94,0.3)); }
+      .header-title { fill: #1e293b; font-family: system-ui, sans-serif; font-size: 48px; font-weight: 900; text-anchor: middle; }
+      .header-sub { fill: #64748b; font-family: system-ui, sans-serif; font-size: 20px; font-weight: 500; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="800" height="2400" />
+
+  <!-- Top Header Area -->
+  <text class="header-title" x="400" y="120">The Journey</text>
+  <text class="header-sub" x="400" y="160">A vertical scrollytelling experience</text>
+
+  <!-- Central Winding Path connecting all elements -->
+  <!-- Starts center, goes right, curves left, curves right -->
+  <path class="scroll-path" d="M 400 200
+                               L 400 400
+                               C 400 600, 600 600, 600 800
+                               L 600 1000
+                               C 600 1200, 200 1200, 200 1400
+                               L 200 1600
+                               C 200 1800, 400 1800, 400 2000
+                               L 400 2200" />
+
+  <!-- Section 1 (Top Center) -->
+  <g id="scroll-section-1">
+    <rect class="section-card" x="100" y="250" width="600" height="250" />
+    <text class="section-title" x="140" y="310">1. Origins</text>
+    <rect id="scroll-sec-1-data" fill="transparent" x="140" y="340" width="520" height="130" />
+    <circle class="section-marker" cx="400" cy="250" r="16" />
+  </g>
+
+  <!-- Section 2 (Middle Right) -->
+  <g id="scroll-section-2">
+    <rect class="section-card" x="100" y="800" width="400" height="250" />
+    <text class="section-title" x="140" y="860">2. Development</text>
+    <rect id="scroll-sec-2-data" fill="transparent" x="140" y="890" width="320" height="130" />
+    <circle class="section-marker" cx="600" cy="800" r="16" />
+  </g>
+
+  <!-- Section 3 (Middle Left) -->
+  <g id="scroll-section-3">
+    <rect class="section-card" x="300" y="1400" width="400" height="250" />
+    <text class="section-title" x="340" y="1460">3. Growth</text>
+    <rect id="scroll-sec-3-data" fill="transparent" x="340" y="1490" width="320" height="130" />
+    <circle class="section-marker" cx="200" cy="1400" r="16" />
+  </g>
+
+  <!-- Section 4 (Bottom Center) -->
+  <g id="scroll-section-4">
+    <rect class="section-card" x="100" y="1950" width="600" height="250" />
+    <text class="section-title" x="140" y="2010">4. Future</text>
+    <rect id="scroll-sec-4-data" fill="transparent" x="140" y="2040" width="520" height="130" />
+    <circle class="section-marker" cx="400" cy="1950" r="16" />
+  </g>
+
+</svg>
