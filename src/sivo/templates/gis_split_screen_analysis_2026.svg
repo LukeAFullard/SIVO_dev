@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #f8fafc; }
+            .panel { fill: #ffffff; rx: 24; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.05)); }
+            .map-container { fill: #f1f5f9; rx: 16; stroke: #e2e8f0; stroke-width: 1; }
+            .header-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 32px; font-weight: 800; fill: #0f172a; }
+            .sub-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; fill: #64748b; }
+            .metric-box { fill: #f8fafc; rx: 12; stroke: #e2e8f0; stroke-width: 1; }
+        </style>
+    </defs>
+
+    <rect width="1440" height="900" class="bg" />
+
+    <!-- Split Structure: Map Left (60%), Analytics Right (40%) -->
+
+    <!-- Left Side: Interactive Map/GIS Layer -->
+    <g id="map-section">
+        <rect x="40" y="40" width="820" height="820" class="panel" />
+        <text x="80" y="100" class="header-text" font-size="24">Geospatial Distribution</text>
+        <text x="80" y="130" class="sub-text">Interact with regions to view specific data points.</text>
+
+        <!-- Primary Map Container (for SIVO map action) -->
+        <rect id="map-primary" x="80" y="160" width="740" height="660" class="map-container" />
+    </g>
+
+    <!-- Right Side: Analytical Dashboard -->
+    <g id="analytics-section">
+        <rect x="880" y="40" width="520" height="820" class="panel" />
+        <text x="920" y="100" class="header-text">Regional Analytics</text>
+        <text x="920" y="130" class="sub-text">Selected Region: Aggregate Statistics</text>
+
+        <!-- KPI Grid (Bento Style) -->
+        <g id="kpi-1">
+            <rect x="920" y="160" width="210" height="140" class="metric-box" />
+        </g>
+        <g id="kpi-2">
+            <rect x="1150" y="160" width="210" height="140" class="metric-box" />
+        </g>
+        <g id="kpi-3">
+            <rect x="920" y="320" width="440" height="140" class="metric-box" />
+        </g>
+
+        <!-- Dynamic Chart Area -->
+        <g id="chart-regional">
+            <rect x="920" y="480" width="440" height="340" class="metric-box" />
+        </g>
+    </g>
+
+</svg>

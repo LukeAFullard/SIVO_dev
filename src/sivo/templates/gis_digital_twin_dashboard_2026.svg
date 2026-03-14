@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #0f172a; }
+            .map-area { fill: #1e293b; rx: 16; }
+            .panel { fill: #1e293b; fill-opacity: 0.8; stroke: #334155; stroke-width: 1; filter: drop-shadow(0 20px 25px rgba(0,0,0,0.5)); rx: 16; backdrop-filter: blur(12px); }
+            .header { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 24px; font-weight: 700; fill: #f8fafc; }
+            .sub-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; fill: #94a3b8; }
+            .data-box { fill: #0f172a; stroke: #334155; stroke-width: 1; rx: 8; }
+        </style>
+    </defs>
+
+    <!-- Background (Deep Dark Mode for Maps) -->
+    <rect width="1440" height="900" class="bg" />
+
+    <!-- Main Map Canvas -->
+    <!-- SIVO Map Container Area -->
+    <rect id="map-container-main" x="20" y="20" width="1400" height="860" class="map-area" />
+
+    <!-- Floating Top Nav/Title Bar -->
+    <g id="panel-header">
+        <rect x="40" y="40" width="1360" height="80" class="panel" />
+        <text x="70" y="88" class="header">Global Operations Digital Twin</text>
+        <circle cx="1360" cy="80" r="16" fill="#3b82f6" opacity="0.2" />
+        <circle cx="1360" cy="80" r="6" fill="#3b82f6" />
+    </g>
+
+    <!-- Floating Left Sidebar (Live Metrics & IoT) -->
+    <g id="panel-sidebar-left">
+        <rect x="40" y="140" width="340" height="720" class="panel" />
+        <text x="70" y="190" class="header" font-size="18">Real-Time Sensor Feeds</text>
+        <text x="70" y="215" class="sub-text">Live telemetry from deployed assets.</text>
+
+        <!-- Metric Box 1 -->
+        <g id="metric-iot-1">
+            <rect x="70" y="240" width="280" height="100" class="data-box" />
+        </g>
+
+        <!-- Metric Box 2 -->
+        <g id="metric-iot-2">
+            <rect x="70" y="360" width="280" height="100" class="data-box" />
+        </g>
+
+        <!-- Metric Box 3 -->
+        <g id="metric-iot-3">
+            <rect x="70" y="480" width="280" height="100" class="data-box" />
+        </g>
+
+        <!-- Chart Area -->
+        <g id="chart-predictive">
+            <rect x="70" y="600" width="280" height="230" class="data-box" />
+        </g>
+    </g>
+
+    <!-- Floating Bottom Timeline (For SIVO bind_timeline) -->
+    <g id="panel-timeline">
+        <rect x="400" y="760" width="1000" height="100" class="panel" />
+        <!-- SIVO will overlay its native timeline here. This is the structural container. -->
+    </g>
+
+    <!-- Floating Legend & Alerts (Right) -->
+    <g id="panel-alerts">
+        <rect x="1100" y="140" width="300" height="400" class="panel" />
+        <text x="1130" y="190" class="header" font-size="18">System Alerts</text>
+        <!-- Alert Items Placeholder -->
+        <rect x="1130" y="220" width="240" height="60" class="data-box" stroke="#ef4444" stroke-opacity="0.5" />
+        <rect x="1130" y="300" width="240" height="60" class="data-box" stroke="#f59e0b" stroke-opacity="0.5" />
+    </g>
+
+</svg>

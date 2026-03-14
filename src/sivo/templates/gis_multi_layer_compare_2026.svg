@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #ffffff; }
+            .card { fill: #f8fafc; rx: 16; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); stroke: #e2e8f0; stroke-width: 1; }
+            .map-pane { fill: #e2e8f0; rx: 12; }
+            .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 28px; font-weight: 700; fill: #0f172a; }
+            .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; fill: #64748b; }
+            .vs-badge { fill: #3b82f6; rx: 24; }
+        </style>
+    </defs>
+
+    <rect width="1440" height="900" class="bg" />
+
+    <text x="60" y="80" class="title">Comparative Geospatial Analysis</text>
+    <text x="60" y="110" class="subtitle">Evaluate differences between distinct temporal or scenario-based maps.</text>
+
+    <!-- Top Left Controls/Filters -->
+    <g id="controls-top">
+        <rect x="60" y="140" width="1320" height="80" class="card" />
+        <rect x="90" y="160" width="200" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+        <rect x="310" y="160" width="200" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+    </g>
+
+    <!-- Left Map View (e.g., Year 2020 or Scenario A) -->
+    <g id="map-view-a">
+        <rect x="60" y="240" width="640" height="600" class="card" />
+        <text x="90" y="290" class="title" font-size="20">Baseline Scenario (T-0)</text>
+        <!-- Map Canvas Placeholder -->
+        <rect id="map-canvas-a" x="90" y="320" width="580" height="490" class="map-pane" />
+    </g>
+
+    <!-- Center VS Indicator -->
+    <g id="vs-indicator">
+        <rect x="696" y="500" width="48" height="48" class="vs-badge" />
+        <text x="720" y="530" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">VS</text>
+    </g>
+
+    <!-- Right Map View (e.g., Year 2026 or Scenario B) -->
+    <g id="map-view-b">
+        <rect x="740" y="240" width="640" height="600" class="card" />
+        <text x="770" y="290" class="title" font-size="20">Predictive Model (T+1)</text>
+        <!-- Map Canvas Placeholder -->
+        <rect id="map-canvas-b" x="770" y="320" width="580" height="490" class="map-pane" />
+    </g>
+
+</svg>
