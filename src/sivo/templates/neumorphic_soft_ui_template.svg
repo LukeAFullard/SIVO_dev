@@ -1,0 +1,54 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #e0e5ec; }
+      /* Classic neumorphic drop shadow: light source top-left */
+      .neu-card {
+        fill: #e0e5ec;
+        rx: 30; ry: 30;
+        filter: drop-shadow(9px 9px 16px rgba(163,177,198,0.6)) drop-shadow(-9px -9px 16px rgba(255,255,255,0.5));
+      }
+      /* Pressed / Inner Neumorphic simulation via gradients and reverse shadows */
+      .neu-inset {
+        fill: #d1d9e6;
+        rx: 20; ry: 20;
+        filter: drop-shadow(inset 4px 4px 8px rgba(163,177,198,0.5)) drop-shadow(inset -4px -4px 8px rgba(255,255,255,0.5));
+      }
+      .neu-title { fill: #4a5568; font-family: system-ui, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+      .neu-subtext { fill: #a0aec0; font-family: system-ui, sans-serif; font-size: 16px; font-weight: 500; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Main Hero Card -->
+  <g id="neu-hero">
+    <rect class="neu-card" x="60" y="60" width="600" height="300" />
+    <text class="neu-title" x="110" y="130">Overview Analytics</text>
+    <!-- Placeholder data zone disguised as an inset well -->
+    <rect class="neu-inset" x="100" y="160" width="520" height="160" />
+    <rect id="neu-hero-data" fill="transparent" x="100" y="160" width="520" height="160" />
+  </g>
+
+  <!-- Right Side Stat Blocks -->
+  <g id="neu-stat-1">
+    <rect class="neu-card" x="720" y="60" width="420" height="130" />
+    <text class="neu-title" x="760" y="110">Revenue</text>
+    <rect id="neu-stat-1-data" fill="transparent" x="880" y="70" width="240" height="110" />
+  </g>
+
+  <g id="neu-stat-2">
+    <rect class="neu-card" x="720" y="230" width="420" height="130" />
+    <text class="neu-title" x="760" y="280">Growth</text>
+    <rect id="neu-stat-2-data" fill="transparent" x="880" y="240" width="240" height="110" />
+  </g>
+
+  <!-- Bottom Wide Chart -->
+  <g id="neu-chart">
+    <rect class="neu-card" x="60" y="420" width="1080" height="320" />
+    <text class="neu-title" x="110" y="480">Yearly Performance Trend</text>
+    <rect class="neu-inset" x="100" y="520" width="1000" height="190" />
+    <rect id="neu-chart-data" fill="transparent" x="100" y="520" width="1000" height="190" />
+  </g>
+
+</svg>
