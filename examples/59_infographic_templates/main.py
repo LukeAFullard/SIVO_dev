@@ -1,9 +1,8 @@
 from sivo import Sivo
 import os
 
-# 1. Build the Dashboard Infographic
-dashboard_svg = os.path.join(os.path.dirname(__file__), "dashboard_template.svg")
-dashboard = Sivo.from_svg(dashboard_svg)
+# 1. Build the Dashboard Infographic using the new from_template method
+dashboard = Sivo.from_template("dashboard")
 
 # --- Overlays on Dashboard ---
 # Header overlay
@@ -90,9 +89,8 @@ dashboard.map(
 dashboard.to_html(os.path.join(os.path.dirname(__file__), "dashboard_infographic.html"))
 print("Generated dashboard_infographic.html")
 
-# 2. Build the Timeline Infographic
-timeline_svg = os.path.join(os.path.dirname(__file__), "timeline_template.svg")
-timeline = Sivo.from_svg(timeline_svg)
+# 2. Build the Timeline Infographic using the new from_template method
+timeline = Sivo.from_template("timeline")
 
 header_html2 = """
 <div style="text-align: center; width: 900px;">
