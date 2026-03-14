@@ -1,0 +1,52 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .bento-card { fill: #ffffff; rx: 24; ry: 24; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.03)); stroke: #f1f5f9; stroke-width: 2; transition: all 0.3s ease; }
+      .bento-card-dark { fill: #0f172a; rx: 24; ry: 24; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
+      .card-header-line { stroke: #e2e8f0; stroke-width: 2; stroke-linecap: round; }
+      .placeholder-text { fill: #94a3b8; font-family: system-ui, -apple-system, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: 0.5px; }
+      .placeholder-title { fill: #334155; font-family: system-ui, -apple-system, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+      .placeholder-title-dark { fill: #f8fafc; font-family: system-ui, -apple-system, sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+    </style>
+    <!-- Soft Gradient for Accent Cards -->
+    <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base Background -->
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Main Hero/Title Bento (Top Left) -->
+  <g id="bento-hero">
+    <rect class="bento-card" x="40" y="40" width="740" height="240" />
+    <text class="placeholder-title" x="80" y="100">Hero Insight Section</text>
+    <line class="card-header-line" x1="80" y1="120" x2="740" y2="120" />
+    <!-- Empty space for SIVO graphic or data text binding -->
+    <rect id="bento-hero-data" fill="transparent" x="80" y="140" width="660" height="100" />
+  </g>
+
+  <!-- Highlight Metric (Top Right) -->
+  <g id="bento-metric-1">
+    <rect class="bento-card" x="820" y="40" width="340" height="240" />
+    <text class="placeholder-title" x="860" y="100">Key Metric</text>
+    <rect id="bento-metric-1-data" fill="transparent" x="860" y="120" width="260" height="100" />
+  </g>
+
+  <!-- Tall Vertical Sidebar (Bottom Left) -->
+  <g id="bento-sidebar">
+    <rect class="bento-card" x="40" y="320" width="340" height="440" />
+    <text class="placeholder-title" x="80" y="380">Demographics</text>
+    <rect id="bento-sidebar-data" fill="transparent" x="80" y="400" width="260" height="320" />
+  </g>
+
+  <!-- Large Central Data Area (Bottom Middle) -->
+  <g id="bento-main-chart">
+    <rect class="bento-card" x="420" y="320" width="740" height="440" />
+    <text class="placeholder-title" x="460" y="380">Primary Visualization</text>
+    <rect id="bento-main-chart-data" fill="transparent" x="460" y="400" width="660" height="320" />
+  </g>
+
+</svg>

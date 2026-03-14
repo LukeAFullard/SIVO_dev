@@ -1,0 +1,63 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #111827; }
+      .process-line { stroke: #374151; stroke-width: 6; stroke-linecap: round; }
+      .process-line-active { stroke: url(#progress-grad); stroke-width: 6; stroke-linecap: round; }
+      .step-circle { fill: #1f2937; stroke: #4b5563; stroke-width: 4; rx: 32; ry: 32; transition: all 0.3s; }
+      .step-circle-active { fill: #3b82f6; stroke: #60a5fa; stroke-width: 4; filter: drop-shadow(0 0 15px rgba(59,130,246,0.5)); }
+      .step-card { fill: #1f2937; rx: 16; ry: 16; stroke: #374151; stroke-width: 2; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+      .step-number { fill: #9ca3af; font-family: system-ui, sans-serif; font-size: 24px; font-weight: 700; text-anchor: middle; alignment-baseline: central; }
+      .step-number-active { fill: #ffffff; font-family: system-ui, sans-serif; font-size: 24px; font-weight: 700; text-anchor: middle; alignment-baseline: central; }
+      .step-title { fill: #f3f4f6; font-family: system-ui, sans-serif; font-size: 20px; font-weight: 600; }
+    </style>
+    <linearGradient id="progress-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Mode Background -->
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Horizontal Timeline Track -->
+  <line class="process-line" x1="150" y1="400" x2="1050" y2="400" />
+  <line class="process-line-active" x1="150" y1="400" x2="450" y2="400" />
+
+  <!-- Step 1 (Active) -->
+  <g id="step-1">
+    <rect class="step-card" x="75" y="160" width="250" height="160" />
+    <text class="step-title" x="105" y="200">Discovery</text>
+    <rect id="step-1-data" fill="transparent" x="105" y="215" width="190" height="85" />
+    <circle class="step-circle-active" cx="150" cy="400" r="32" />
+    <text class="step-number-active" x="150" y="400">1</text>
+  </g>
+
+  <!-- Step 2 -->
+  <g id="step-2">
+    <rect class="step-card" x="375" y="480" width="250" height="160" />
+    <text class="step-title" x="405" y="520">Design</text>
+    <rect id="step-2-data" fill="transparent" x="405" y="535" width="190" height="85" />
+    <circle class="step-circle" cx="450" cy="400" r="32" />
+    <text class="step-number" x="450" y="400">2</text>
+  </g>
+
+  <!-- Step 3 -->
+  <g id="step-3">
+    <rect class="step-card" x="675" y="160" width="250" height="160" />
+    <text class="step-title" x="705" y="200">Development</text>
+    <rect id="step-3-data" fill="transparent" x="705" y="215" width="190" height="85" />
+    <circle class="step-circle" cx="750" cy="400" r="32" />
+    <text class="step-number" x="750" y="400">3</text>
+  </g>
+
+  <!-- Step 4 -->
+  <g id="step-4">
+    <rect class="step-card" x="925" y="480" width="200" height="160" />
+    <text class="step-title" x="955" y="520">Launch</text>
+    <rect id="step-4-data" fill="transparent" x="955" y="535" width="140" height="85" />
+    <circle class="step-circle" cx="1050" cy="400" r="32" />
+    <text class="step-number" x="1050" y="400">4</text>
+  </g>
+
+</svg>

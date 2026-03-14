@@ -1,0 +1,51 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .pyramid-tier { stroke: #ffffff; stroke-width: 4; transition: fill 0.3s, opacity 0.3s; cursor: pointer; }
+      .tier-1 { fill: #f87171; opacity: 0.9; }
+      .tier-2 { fill: #fbbf24; opacity: 0.9; }
+      .tier-3 { fill: #34d399; opacity: 0.9; }
+      .tier-4 { fill: #60a5fa; opacity: 0.9; }
+      .tier-text { fill: #ffffff; font-family: system-ui, sans-serif; font-size: 22px; font-weight: 700; text-anchor: middle; }
+
+      .info-panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 2; rx: 16; ry: 16; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+      .panel-title { fill: #0f172a; font-family: system-ui, sans-serif; font-size: 28px; font-weight: 800; }
+    </style>
+  </defs>
+
+  <!-- Clean Background -->
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Pyramid Chart (Left Side) -->
+  <g id="pyramid-group" transform="translate(150, 100)">
+    <!-- Top Tier -->
+    <g id="tier-1">
+      <polygon class="pyramid-tier tier-1" points="250,50 150,200 350,200" />
+      <text class="tier-text" x="250" y="160">Tier 1</text>
+    </g>
+    <!-- Second Tier -->
+    <g id="tier-2">
+      <polygon class="pyramid-tier tier-2" points="150,200 50,350 450,350 350,200" />
+      <text class="tier-text" x="250" y="300">Tier 2</text>
+    </g>
+    <!-- Third Tier -->
+    <g id="tier-3">
+      <polygon class="pyramid-tier tier-3" points="50,350 -50,500 550,500 450,350" />
+      <text class="tier-text" x="250" y="440">Tier 3</text>
+    </g>
+    <!-- Base Tier -->
+    <g id="tier-4">
+      <polygon class="pyramid-tier tier-4" points="-50,500 -150,650 650,650 550,500" />
+      <text class="tier-text" x="250" y="590">Tier 4 (Base)</text>
+    </g>
+  </g>
+
+  <!-- Context / Information Panel (Right Side) -->
+  <g id="info-panel">
+    <rect class="info-panel" x="720" y="100" width="430" height="600" />
+    <text class="panel-title" x="740" y="160">Hierarchy Details</text>
+    <rect id="info-panel-data" fill="transparent" x="740" y="200" width="370" height="460" />
+  </g>
+
+</svg>
