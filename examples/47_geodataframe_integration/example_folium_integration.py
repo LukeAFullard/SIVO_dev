@@ -5,19 +5,46 @@ import folium
 from folium.plugins import TimestampedGeoJson
 from sivo.core.sivo import Sivo
 
-def create_folium_maps():
-    """Generates standalone Leaflet HTML files using Folium."""
-    print("Generating standalone Folium/Leaflet maps...")
+def create_folium_maps(europe_gdf):
+    """Generates standalone Leaflet HTML files using Folium and GeoDataFrames."""
+    print("Generating standalone Folium/Leaflet maps with GeoDataFrame Polygons...")
 
-    # 1. Standard Leaflet Map for France
+    # 1. Standard Leaflet Map for France (using GeoDataFrame Polygons)
     m_france = folium.Map(location=[46.603354, 1.888334], zoom_start=5)
+
+    # Extract France polygon from the GeoDataFrame
+    france_gdf = europe_gdf[europe_gdf['NAME'] == 'France']
+    # Add the polygon to Folium
+    folium.GeoJson(
+        france_gdf,
+        name='France Boundary',
+        style_function=lambda feature: {
+            'fillColor': 'blue',
+            'color': 'black',
+            'weight': 2,
+            'fillOpacity': 0.3
+        }
+    ).add_to(m_france)
+
     folium.Marker([48.8566, 2.3522], popup='Paris').add_to(m_france)
-    folium.Marker([45.7640, 4.8357], popup='Lyon').add_to(m_france)
     france_path = os.path.join(os.path.dirname(__file__), 'folium_france.html')
     m_france.save(france_path)
 
-    # 2. Timeline Leaflet Map for Germany (using TimestampedGeoJson)
+    # 2. Timeline Leaflet Map for Germany (using TimestampedGeoJson + GeoDataFrame Polygon)
     m_germany = folium.Map(location=[51.165691, 10.451526], zoom_start=5)
+
+    # Extract Germany polygon
+    germany_gdf = europe_gdf[europe_gdf['NAME'] == 'Germany']
+    folium.GeoJson(
+        germany_gdf,
+        name='Germany Boundary',
+        style_function=lambda feature: {
+            'fillColor': 'green',
+            'color': 'black',
+            'weight': 2,
+            'fillOpacity': 0.1
+        }
+    ).add_to(m_germany)
 
     # Generate some fake temporal GeoJSON data for points in Germany
     lines = [
@@ -74,7 +101,7 @@ def main():
     europe = world[world.CONTINENT == 'Europe'].copy()
 
     # Generate the Folium maps that we will embed
-    france_path, germany_path = create_folium_maps()
+    france_path, germany_path = create_folium_maps(europe)
 
     # Create the main SIVO Map (ECharts SVG native)
     sivo_app = Sivo.from_geodataframe(
