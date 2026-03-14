@@ -45,40 +45,30 @@
     <!-- Center Hub -->
     <g id="hub-center">
         <circle cx="600" cy="450" r="100" class="center-node" />
-        <text x="600" y="445" class="text-center">CORE</text>
-        <text x="600" y="475" class="text-center" font-size="16" font-weight="500">SYSTEM</text>
     </g>
 
     <!-- Node 1: Top (Discover) -->
     <g id="node-discover">
         <circle cx="600" cy="150" r="60" class="node" stroke="#3b82f6" fill="url(#gradTop)" />
         <circle cx="600" cy="150" r="45" fill="#ffffff" />
-        <text x="600" y="145" class="text-main">Discover</text>
-        <text x="600" y="165" class="text-sub">Phase 1</text>
     </g>
 
     <!-- Node 2: Right (Design) -->
     <g id="node-design">
         <circle cx="900" cy="450" r="60" class="node" stroke="#8b5cf6" fill="url(#gradTop)" />
         <circle cx="900" cy="450" r="45" fill="#ffffff" />
-        <text x="900" y="445" class="text-main">Design</text>
-        <text x="900" y="465" class="text-sub">Phase 2</text>
     </g>
 
     <!-- Node 3: Bottom (Develop) -->
     <g id="node-develop">
         <circle cx="600" cy="750" r="60" class="node" stroke="#10b981" fill="url(#gradTop)" />
         <circle cx="600" cy="750" r="45" fill="#ffffff" />
-        <text x="600" y="745" class="text-main">Develop</text>
-        <text x="600" y="765" class="text-sub">Phase 3</text>
     </g>
 
     <!-- Node 4: Left (Deploy) -->
     <g id="node-deploy">
         <circle cx="300" cy="450" r="60" class="node" stroke="#f59e0b" fill="url(#gradTop)" />
         <circle cx="300" cy="450" r="45" fill="#ffffff" />
-        <text x="300" y="445" class="text-main">Deploy</text>
-        <text x="300" y="465" class="text-sub">Phase 4</text>
     </g>
 
 </svg>

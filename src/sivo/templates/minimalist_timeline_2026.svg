@@ -33,9 +33,6 @@
         <circle id="node-point-1" cx="200" cy="240" r="16" class="node" />
         <circle cx="200" cy="240" r="6" class="node-inner" />
         <path class="line" stroke-dasharray="4" d="M 216 240 L 260 240" />
-        <text x="290" y="220" class="text-date">Q1 2026</text>
-        <text x="290" y="250" class="text-title" font-size="20">Foundation Phase</text>
-        <text x="290" y="275" class="text-body">Core infrastructure and API setup.</text>
     </g>
 
     <!-- Node 2 -->
@@ -45,9 +42,6 @@
         <circle id="node-point-2" cx="200" cy="380" r="16" class="node" />
         <circle cx="200" cy="380" r="6" class="node-inner" />
         <path class="line" stroke-dasharray="4" d="M 216 380 L 600 380" />
-        <text x="630" y="360" class="text-date">Q2 2026</text>
-        <text x="630" y="390" class="text-title" font-size="20">Beta Launch</text>
-        <text x="630" y="415" class="text-body">Early access for selected partners.</text>
     </g>
 
     <!-- Node 3 -->
@@ -57,9 +51,6 @@
         <circle id="node-point-3" cx="200" cy="520" r="16" class="node" />
         <circle cx="200" cy="520" r="6" class="node-inner" />
         <path class="line" stroke-dasharray="4" d="M 216 520 L 260 520" />
-        <text x="290" y="500" class="text-date">Q3 2026</text>
-        <text x="290" y="530" class="text-title" font-size="20">Global Rollout</text>
-        <text x="290" y="555" class="text-body">Public release across all regions.</text>
     </g>
 
     <!-- Node 4 -->
@@ -69,9 +60,6 @@
         <circle id="node-point-4" cx="200" cy="660" r="16" class="node" />
         <circle cx="200" cy="660" r="6" class="node-inner" />
         <path class="line" stroke-dasharray="4" d="M 216 660 L 600 660" />
-        <text x="630" y="640" class="text-date">Q4 2026</text>
-        <text x="630" y="670" class="text-title" font-size="20">Expansion</text>
-        <text x="630" y="695" class="text-body">New features and marketplace integration.</text>
     </g>
 
 </svg>
