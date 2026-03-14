@@ -1,0 +1,68 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #fcfcfc; }
+      .circle-bg { fill: none; stroke: #f1f5f9; stroke-width: 40; }
+      .circle-progress { fill: none; stroke: url(#brand-grad); stroke-width: 40; stroke-linecap: round; }
+      .node-card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 2; rx: 16; ry: 16; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.04)); }
+      .node-title { fill: #1e293b; font-family: system-ui, sans-serif; font-size: 18px; font-weight: 600; }
+      .node-text { fill: #64748b; font-family: system-ui, sans-serif; font-size: 14px; }
+      .connector { fill: none; stroke: #cbd5e1; stroke-width: 3; stroke-dasharray: 6 6; }
+      .center-circle { fill: #ffffff; stroke: url(#brand-grad); stroke-width: 8; filter: drop-shadow(0 12px 24px rgba(59,130,246,0.15)); }
+      .center-text { fill: #0f172a; font-family: system-ui, sans-serif; font-size: 28px; font-weight: 800; text-anchor: middle; }
+    </style>
+    <linearGradient id="brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e1" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Background Decorative Circles -->
+  <circle class="circle-bg" cx="600" cy="400" r="280" />
+
+  <!-- Central Hub -->
+  <g id="hub-center">
+    <circle class="center-circle" cx="600" cy="400" r="100" />
+    <text class="center-text" x="600" y="410">CORE</text>
+  </g>
+
+  <!-- Connectors -->
+  <path class="connector" d="M 600 300 L 600 180" marker-end="url(#arrow)" /> <!-- Top -->
+  <path class="connector" d="M 700 400 L 880 400" marker-end="url(#arrow)" /> <!-- Right -->
+  <path class="connector" d="M 600 500 L 600 620" marker-end="url(#arrow)" /> <!-- Bottom -->
+  <path class="connector" d="M 500 400 L 320 400" marker-end="url(#arrow)" /> <!-- Left -->
+
+  <!-- Node: Top -->
+  <g id="node-top">
+    <rect class="node-card" x="480" y="60" width="240" height="120" />
+    <text class="node-title" x="500" y="95">Phase 1</text>
+    <rect id="node-top-data" fill="transparent" x="500" y="105" width="200" height="60" />
+  </g>
+
+  <!-- Node: Right -->
+  <g id="node-right">
+    <rect class="node-card" x="880" y="340" width="240" height="120" />
+    <text class="node-title" x="900" y="375">Phase 2</text>
+    <rect id="node-right-data" fill="transparent" x="900" y="385" width="200" height="60" />
+  </g>
+
+  <!-- Node: Bottom -->
+  <g id="node-bottom">
+    <rect class="node-card" x="480" y="620" width="240" height="120" />
+    <text class="node-title" x="500" y="655">Phase 3</text>
+    <rect id="node-bottom-data" fill="transparent" x="500" y="665" width="200" height="60" />
+  </g>
+
+  <!-- Node: Left -->
+  <g id="node-left">
+    <rect class="node-card" x="80" y="340" width="240" height="120" />
+    <text class="node-title" x="100" y="375">Phase 4</text>
+    <rect id="node-left-data" fill="transparent" x="100" y="385" width="200" height="60" />
+  </g>
+
+</svg>
