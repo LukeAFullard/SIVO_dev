@@ -1,0 +1,36 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #f8f9fa; }
+      .card { fill: #ffffff; stroke: #e9ecef; stroke-width: 2; rx: 12; ry: 12; }
+      .card-header { fill: #e9ecef; rx: 12; ry: 12; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Header Area -->
+  <rect id="header_area" class="card" x="40" y="40" width="1120" height="100" />
+
+  <!-- Key Metrics Area -->
+  <rect id="metric_1" class="card" x="40" y="160" width="350" height="150" />
+  <rect id="metric_2" class="card" x="425" y="160" width="350" height="150" />
+  <rect id="metric_3" class="card" x="810" y="160" width="350" height="150" />
+
+  <!-- Main Chart Area -->
+  <g id="main_chart_area">
+    <rect class="card" x="40" y="340" width="735" height="420" />
+    <rect class="card-header" x="40" y="340" width="735" height="50" style="clip-path: inset(0 0 -50px 0);" />
+  </g>
+
+  <!-- Secondary Sidebar Area -->
+  <g id="sidebar_area_top">
+    <rect class="card" x="810" y="340" width="350" height="200" />
+    <rect class="card-header" x="810" y="340" width="350" height="40" style="clip-path: inset(0 0 -40px 0);" />
+  </g>
+  <g id="sidebar_area_bottom">
+    <rect class="card" x="810" y="560" width="350" height="200" />
+    <rect class="card-header" x="810" y="560" width="350" height="40" style="clip-path: inset(0 0 -40px 0);" />
+  </g>
+</svg>
