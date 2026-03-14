@@ -3962,7 +3962,19 @@
                             var rect = region._elOnlyForCalculate.getBoundingRect();
                             var cx = rect.x + rect.width / 2;
                             var cy = rect.y + rect.height / 2;
-                            pixel = myChart.convertToPixel({seriesIndex: 0}, [cx, cy]);
+
+                            // ECharts `convertToPixel` often fails on normalized SVG viewBox geo layouts.
+                            // However, ECharts ZRender stores the exact mathematical affine transform mapping
+                            // the raw SVG geometry path directly to the live screen pixels.
+                            var t = region._elOnlyForCalculate.transform; // [a, b, c, d, tx, ty]
+                            if (t) {
+                                var screenX = t[0] * cx + t[2] * cy + t[4];
+                                var screenY = t[1] * cx + t[3] * cy + t[5];
+                                pixel = [screenX, screenY];
+                            } else {
+                                // If there's no transform matrix, it's drawn at 1:1 scale natively
+                                pixel = [cx, cy];
+                            }
                         }
                     }
                 } catch (e) {
