@@ -209,7 +209,8 @@
             border: 1px solid #e2e8f0;
             max-width: 400px;
             display: none;
-            pointer-events: none;
+            pointer-events: auto;
+            cursor: move;
         }
 
         #sivo-title {
@@ -241,7 +242,8 @@
             color: #64748b;
             border: 1px solid #e2e8f0;
             display: none;
-            pointer-events: none;
+            pointer-events: auto;
+            cursor: move;
         }
 
         #scrollytelling-container {
@@ -354,7 +356,8 @@
             border: 1px solid #e2e8f0;
             border-radius: 24px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            cursor: move;
         }
 
         #sivo-search-container:focus-within {
@@ -466,8 +469,9 @@
             z-index: 1000;
             display: none;
             opacity: 0.8;
-            pointer-events: none;
+            pointer-events: auto;
             transition: opacity 0.3s;
+            cursor: move;
         }
 
         #sivo-watermark-container:hover {
@@ -490,6 +494,7 @@
             overflow-y: auto;
             color: #334155;
             font-size: 14px;
+            cursor: move;
         }
 
         /* Layer Switch Styles */
@@ -890,6 +895,11 @@
             flex-direction: column;
             gap: 5px;
             z-index: 1000;
+            cursor: move;
+            padding: 4px; /* Give a small drag area around the buttons */
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            backdrop-filter: blur(2px);
         }
         .zoom-btn {
             background: #ffffff;
@@ -4811,6 +4821,98 @@ function tourNext() {
         myChart.getZr().on('click', function(e) {
             contextMenuDOM.style.display = 'none';
         });
+
+        // Draggable Overlay Functionality
+        function makeDraggable(elmnt) {
+            if (!elmnt) return;
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+            // Set explicit cursor
+            if (!elmnt.style.cursor) {
+                elmnt.style.cursor = 'move';
+            }
+
+            // Reset cursor for interactive inner elements
+            var interactiveSelectors = 'input, button, a, select, textarea, .zoom-btn, .sivo-switch, .close-btn, label, .layer-toggle, .tour-btn, .sivo-search-result-item';
+            var interactives = elmnt.querySelectorAll(interactiveSelectors);
+            interactives.forEach(function(el) { el.style.cursor = 'default'; });
+
+            elmnt.addEventListener('mousedown', dragMouseDown);
+            elmnt.addEventListener('touchstart', dragMouseDown, {passive: false});
+
+            function dragMouseDown(e) {
+                // Ignore clicks on interactive elements inside the draggable container
+                if (e.target.closest(interactiveSelectors)) return;
+
+                // Allow user to highlight text inside the element without triggering drag
+                if (e.target.tagName === 'P' || e.target.tagName === 'H1' || e.target.tagName === 'H2' || e.target.tagName === 'H3' || e.target.tagName === 'SPAN') {
+                    // Let default selection happen if they try
+                    // But maybe we just let them drag by clicking the background
+                }
+
+                e.preventDefault(); // Prevents touch scrolling while dragging
+
+                var clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                var clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+                pos3 = clientX;
+                pos4 = clientY;
+
+                // Initialize explicitly computed styles if they are missing
+                var rect = elmnt.getBoundingClientRect();
+                var parentRect = elmnt.parentElement.getBoundingClientRect();
+
+                elmnt.style.right = 'auto';
+                elmnt.style.bottom = 'auto';
+                elmnt.style.transform = 'none';
+                elmnt.style.left = (rect.left - parentRect.left) + 'px';
+                elmnt.style.top = (rect.top - parentRect.top) + 'px';
+                elmnt.style.margin = '0';
+
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
+                document.addEventListener('touchend', closeDragElement);
+                document.addEventListener('touchmove', elementDrag, {passive: false});
+
+                // Bring to front
+                elmnt.style.zIndex = (parseInt(window.getComputedStyle(elmnt).zIndex) || 1000) + 1;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                var clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                var clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+                pos1 = pos3 - clientX;
+                pos2 = pos4 - clientY;
+                pos3 = clientX;
+                pos4 = clientY;
+
+                // Calculate new positions
+                var newTop = elmnt.offsetTop - pos2;
+                var newLeft = elmnt.offsetLeft - pos1;
+
+                elmnt.style.top = newTop + "px";
+                elmnt.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
+                document.removeEventListener('touchend', closeDragElement);
+                document.removeEventListener('touchmove', elementDrag);
+            }
+        }
+
+        // Apply drag functionality to UI overlays
+        makeDraggable(document.getElementById('sivo-title-container'));
+        makeDraggable(document.getElementById('sivo-attribution'));
+        makeDraggable(document.getElementById('sivo-search-container'));
+        makeDraggable(document.getElementById('layer-legend'));
+        makeDraggable(document.getElementById('sivo-watermark-container'));
+        makeDraggable(document.getElementById('tour-container'));
+        makeDraggable(document.querySelector('.zoom-controls'));
+
 
         // Track zoom natively from georoam events since getOption() might not update on scroll
         myChart.on('georoam', function(params) {
