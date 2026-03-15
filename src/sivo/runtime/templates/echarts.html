@@ -3968,45 +3968,45 @@
 
                 var bboxPixel = null; // {x, y, w, h}
 
-                // ECharts natively parses SVGs and scales their logical coordinates (geo._rect) to [100, 100] by default.
-                // Raw Python bounding box coordinates (like [150, 150] from an 800x600 viewBox) will plot way off screen.
-                // To fix this geometry alignment perfectly on all aspect ratios, we retrieve the exact parsed SVG shape
-                // directly from ECharts' coordinateSystem and find its true internal logical box, then convert THAT to pixels.
                 try {
                     var model = myChart.getModel().getSeriesByIndex(0);
                     var geo = model.coordinateSystem;
                     if (geo && geo.regions) {
                         var region = geo.regions.find(r => r.name === id);
                         if (region && region._elOnlyForCalculate) {
-                            var rect = region._elOnlyForCalculate.getBoundingRect();
+                            var zrender_el = region._elOnlyForCalculate;
+                            var bBox = zrender_el.getBoundingRect();
 
-                            var t = region._elOnlyForCalculate.transform; // [a, b, c, d, tx, ty]
-                            if (t) {
-                                // Translate the top-left corner
-                                var screenX = t[0] * rect.x + t[2] * rect.y + t[4];
-                                var screenY = t[1] * rect.x + t[3] * rect.y + t[5];
+                            // get global bounding rect directly using the element's built-in global transform function
+                            var tl = zrender_el.transformCoordToGlobal(bBox.x, bBox.y);
+                            var br = zrender_el.transformCoordToGlobal(bBox.x + bBox.width, bBox.y + bBox.height);
 
-                                var scaleX = Math.sqrt(t[0] * t[0] + t[1] * t[1]);
-                                var scaleY = Math.sqrt(t[2] * t[2] + t[3] * t[3]);
-
-                                bboxPixel = {
-                                    x: screenX,
-                                    y: screenY,
-                                    w: rect.width * scaleX,
-                                    h: rect.height * scaleY
-                                };
-                            } else {
-                                bboxPixel = {
-                                    x: rect.x,
-                                    y: rect.y,
-                                    w: rect.width,
-                                    h: rect.height
-                                };
-                            }
+                            bboxPixel = {
+                                x: Math.min(tl[0], br[0]),
+                                y: Math.min(tl[1], br[1]),
+                                w: Math.abs(br[0] - tl[0]),
+                                h: Math.abs(br[1] - tl[1])
+                            };
                         }
                     }
                 } catch (e) {
                     bboxPixel = null;
+                }
+
+                // Fallback to python bbox coordinates mapping if ZRender fails
+                if (!bboxPixel && overlayObj.data.bbox) {
+                    var bbox = overlayObj.data.bbox; // [xmin, ymin, xmax, ymax]
+                    var tl = myChart.convertToPixel({seriesIndex: 0}, [bbox[0], bbox[1]]);
+                    var br = myChart.convertToPixel({seriesIndex: 0}, [bbox[2], bbox[3]]);
+
+                    if (tl && br) {
+                        bboxPixel = {
+                            x: tl[0],
+                            y: tl[1],
+                            w: br[0] - tl[0],
+                            h: br[1] - tl[1]
+                        };
+                    }
                 }
 
                 if (bboxPixel) {
