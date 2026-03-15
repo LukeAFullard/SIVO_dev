@@ -2569,6 +2569,13 @@
                 }],
                 geo: option.geo ? [{ zoom: currentZoom }] : undefined
             });
+            // Update overlays once ECharts animation has begun/settled
+            setTimeout(function() {
+                updateOverlaysPosition();
+                syncOverlayTransform();
+                updateMinimapViewport();
+            }, 100);
+            setTimeout(updateOverlaysPosition, 500); // safety catch post-animation
         }
 
         function zoomOut() {
@@ -2587,6 +2594,12 @@
                 }],
                 geo: option.geo ? [{ zoom: currentZoom }] : undefined
             });
+            setTimeout(function() {
+                updateOverlaysPosition();
+                syncOverlayTransform();
+                updateMinimapViewport();
+            }, 100);
+            setTimeout(updateOverlaysPosition, 500); // safety catch post-animation
         }
 
         function resetZoom() {
@@ -2599,6 +2612,12 @@
                 }],
                 geo: option.geo ? [{ zoom: 1, center: null }] : undefined
             });
+            setTimeout(function() {
+                updateOverlaysPosition();
+                syncOverlayTransform();
+                updateMinimapViewport();
+            }, 100);
+            setTimeout(updateOverlaysPosition, 500); // safety catch post-animation
         }
 
         // Setup Shadow DOM for info-content
