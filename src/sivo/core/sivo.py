@@ -324,6 +324,65 @@ class Sivo:
             odometer_format=odometer_format
         )
 
+    def apply_template_style(self, style_name: str):
+        """
+        Applies a pre-defined set of global styles and themes to the infographic.
+        Available styles: 'dark_mode', 'minimalist', 'cyberpunk', 'glassmorphism', 'neon'.
+        This method will inject specific background colors, update the ECharts theme,
+        and optionally inject global SVG filters or CSS for the runtime.
+        """
+        style_name = style_name.lower()
+
+        # We can dynamically inject CSS into the runtime via custom_css later,
+        # but here we set standard ProjectConfig properties and inject global SVG definitions.
+
+        if style_name == "dark_mode":
+            self.infographic.theme = "dark"
+            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#121212", "id": "sivo_bg_layer"})
+
+        elif style_name == "minimalist":
+            self.infographic.theme = "light"
+            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#ffffff", "id": "sivo_bg_layer"})
+
+        elif style_name == "cyberpunk":
+            self.infographic.theme = "dark"
+            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#0a0a0c", "id": "sivo_bg_layer"})
+            # Inject a global CRT scanline filter pattern
+            scanline_pattern = {
+                "id": "crtScanline",
+                "width": "4",
+                "height": "4",
+                "patternUnits": "userSpaceOnUse"
+            }
+            self.add_shape("pattern", scanline_pattern)
+            # Add line to pattern
+            self.add_shape("line", {"x1": "0", "y1": "0", "x2": "4", "y2": "0", "stroke": "rgba(0, 255, 204, 0.1)", "stroke-width": "1"})
+            # Apply pattern over background
+            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "url(#crtScanline)", "id": "sivo_scanline_layer", "pointer-events": "none"})
+
+        elif style_name == "glassmorphism":
+            self.infographic.theme = "light"
+            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#f1f5f9", "id": "sivo_bg_layer"})
+            # Add blur filter to defs
+            self.add_shape("filter", {"id": "glassBlur", "x": "-20%", "y": "-20%", "width": "140%", "height": "140%"})
+            self.add_shape("feGaussianBlur", {"stdDeviation": "10", "result": "blur"})
+            self.add_shape("feColorMatrix", {"type": "matrix", "values": "1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7", "in": "blur"})
+
+        elif style_name == "neon":
+            self.infographic.theme = "dark"
+            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#050505", "id": "sivo_bg_layer"})
+            # Add neon glow filter
+            self.add_shape("filter", {"id": "neonGlow", "x": "-50%", "y": "-50%", "width": "200%", "height": "200%"})
+            self.add_shape("feGaussianBlur", {"in": "SourceGraphic", "stdDeviation": "5", "result": "blur1"})
+            self.add_shape("feGaussianBlur", {"in": "SourceGraphic", "stdDeviation": "10", "result": "blur2"})
+            self.add_shape("feMerge", {})
+            self.add_shape("feMergeNode", {"in": "blur1"})
+            self.add_shape("feMergeNode", {"in": "blur2"})
+            self.add_shape("feMergeNode", {"in": "SourceGraphic"})
+
+        else:
+            raise ValueError(f"Unknown template style: '{style_name}'. Supported styles: dark_mode, minimalist, cyberpunk, glassmorphism, neon.")
+
     def add_graphic(self, graphic_element: dict):
         """
         Adds an ECharts graphic element (image, text, shape) directly to the map overlay.
