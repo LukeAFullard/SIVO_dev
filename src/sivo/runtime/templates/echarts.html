@@ -3966,12 +3966,12 @@
                 var coord = overlayObj.data.coord; // [x, y] in SVG map coordinates
                 var offset = overlayObj.data.offset; // [x, y] pixel offset
 
-                var pixel = null;
+                var bboxPixel = null; // {x, y, w, h}
 
                 // ECharts natively parses SVGs and scales their logical coordinates (geo._rect) to [100, 100] by default.
                 // Raw Python bounding box coordinates (like [150, 150] from an 800x600 viewBox) will plot way off screen.
                 // To fix this geometry alignment perfectly on all aspect ratios, we retrieve the exact parsed SVG shape
-                // directly from ECharts' coordinateSystem and find its true internal logical center, then convert THAT to pixels.
+                // directly from ECharts' coordinateSystem and find its true internal logical box, then convert THAT to pixels.
                 try {
                     var model = myChart.getModel().getSeriesByIndex(0);
                     var geo = model.coordinateSystem;
@@ -3979,64 +3979,65 @@
                         var region = geo.regions.find(r => r.name === id);
                         if (region && region._elOnlyForCalculate) {
                             var rect = region._elOnlyForCalculate.getBoundingRect();
-                            var cx = rect.x + rect.width / 2;
-                            var cy = rect.y + rect.height / 2;
 
-                            // ECharts `convertToPixel` often fails on normalized SVG viewBox geo layouts.
-                            // However, ECharts ZRender stores the exact mathematical affine transform mapping
-                            // the raw SVG geometry path directly to the live screen pixels.
                             var t = region._elOnlyForCalculate.transform; // [a, b, c, d, tx, ty]
                             if (t) {
-                                var screenX = t[0] * cx + t[2] * cy + t[4];
-                                var screenY = t[1] * cx + t[3] * cy + t[5];
-                                pixel = [screenX, screenY];
+                                // Translate the top-left corner
+                                var screenX = t[0] * rect.x + t[2] * rect.y + t[4];
+                                var screenY = t[1] * rect.x + t[3] * rect.y + t[5];
 
-                                // Scale width and height explicitly based on the active viewport affine transform matrix.
-                                // An affine scaling matrix generally holds uniform scale on X (t[0]) and Y (t[3]) for SVGs.
                                 var scaleX = Math.sqrt(t[0] * t[0] + t[1] * t[1]);
                                 var scaleY = Math.sqrt(t[2] * t[2] + t[3] * t[3]);
-                                overlayObj.dom.style.width = (rect.width * scaleX) + 'px';
-                                overlayObj.dom.style.height = (rect.height * scaleY) + 'px';
+
+                                bboxPixel = {
+                                    x: screenX,
+                                    y: screenY,
+                                    w: rect.width * scaleX,
+                                    h: rect.height * scaleY
+                                };
                             } else {
-                                // If there's no transform matrix, it's drawn at 1:1 scale natively
-                                pixel = [cx, cy];
-                                overlayObj.dom.style.width = rect.width + 'px';
-                                overlayObj.dom.style.height = rect.height + 'px';
+                                bboxPixel = {
+                                    x: rect.x,
+                                    y: rect.y,
+                                    w: rect.width,
+                                    h: rect.height
+                                };
                             }
                         }
                     }
                 } catch (e) {
-                    pixel = null;
+                    bboxPixel = null;
                 }
 
-                // Fallback to raw Python coordinates if region not found natively
-                if (!pixel) {
-                    pixel = myChart.convertToPixel({seriesIndex: 0}, coord);
-                }
+                if (bboxPixel) {
+                    overlayObj.dom.style.left = (bboxPixel.x + offset[0]) + 'px';
+                    overlayObj.dom.style.top = (bboxPixel.y + offset[1]) + 'px';
+                    overlayObj.dom.style.width = bboxPixel.w + 'px';
+                    overlayObj.dom.style.height = bboxPixel.h + 'px';
 
-                if (pixel) {
-                    overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
-                    overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
-
-                    // Ensure the overlay itself centers properly on its anchor point.
-                    // Now that width and height explicitly match the bounding box, we do not rely on scale() transforms
-                    // for responsive zooming, as we natively map the exact pixel boundary box continuously in georoam events.
-                    var baseTransform = 'translate(-50%, -50%)';
+                    // Center within the precise bounding box without transform translation hacks
+                    overlayObj.dom.style.transform = 'none';
 
                     if (overlayObj.data.scale_with_zoom) {
-                        // The user set scale_with_zoom. However, we are actively setting width/height directly in screen pixels now.
-                        // We apply base centering, but skip the transform: scale() because it will double-apply the scaling.
-                        overlayObj.dom.style.transform = baseTransform;
-                    } else {
-                        // If they don't want it to scale dynamically, we still force centering.
-                        overlayObj.dom.style.transform = baseTransform;
+                        // Not needed usually, but keeping for compatibility if someone expects a scale transform
                     }
 
                     overlayObj.dom.style.display = 'flex'; // Use flex to allow internal content to center
                     overlayObj.dom.style.alignItems = 'center';
                     overlayObj.dom.style.justifyContent = 'center';
                 } else {
-                    overlayObj.dom.style.display = 'none';
+                    // Fallback to center-point logic if bounding box could not be determined
+                    var pixel = myChart.convertToPixel({seriesIndex: 0}, coord);
+                    if (pixel) {
+                        overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
+                        overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
+                        overlayObj.dom.style.transform = 'translate(-50%, -50%)';
+                        overlayObj.dom.style.display = 'flex';
+                        overlayObj.dom.style.alignItems = 'center';
+                        overlayObj.dom.style.justifyContent = 'center';
+                    } else {
+                        overlayObj.dom.style.display = 'none';
+                    }
                 }
             }
         }

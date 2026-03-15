@@ -7,34 +7,34 @@ dashboard = Sivo.from_template("dashboard")
 # --- Overlays on Dashboard ---
 # Header overlay
 header_html = """
-<div style="text-align: center; width: 1120px;">
-    <h1 style="margin: 0; color: #333; font-family: sans-serif; font-size: 32px; padding-top: 20px;">Global Sales Overview 2024</h1>
-    <p style="margin: 5px 0 0 0; color: #666; font-family: sans-serif; font-size: 16px;">Interactive Business Intelligence Dashboard</p>
+<div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; padding: 5%; container-type: inline-size;">
+    <h1 style="margin: 0; color: #333; font-family: sans-serif; font-size: clamp(10px, 3cqw, 32px);">Global Sales Overview 2024</h1>
+    <p style="margin: 5px 0 0 0; color: #666; font-family: sans-serif; font-size: clamp(6px, 1.5cqw, 16px);">Interactive Business Intelligence Dashboard</p>
 </div>
 """
 dashboard.add_overlay("header_area", header_html)
 
 # Key Metrics overlays
 metric1_html = """
-<div style="text-align: center; width: 350px;">
-    <h3 style="margin: 0; color: #888; font-family: sans-serif; font-size: 18px; padding-top: 30px;">Total Revenue</h3>
-    <p style="margin: 10px 0 0 0; color: #2ecc71; font-family: sans-serif; font-size: 48px; font-weight: bold;">$12.5M</p>
+<div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; padding: 5%; container-type: inline-size;">
+    <h3 style="margin: 0; color: #888; font-family: sans-serif; font-size: clamp(8px, 5cqw, 18px);">Total Revenue</h3>
+    <p style="margin: 5px 0 0 0; color: #2ecc71; font-family: sans-serif; font-size: clamp(16px, 12cqw, 48px); font-weight: bold;">$12.5M</p>
 </div>
 """
 dashboard.add_overlay("metric_1", metric1_html)
 
 metric2_html = """
-<div style="text-align: center; width: 350px;">
-    <h3 style="margin: 0; color: #888; font-family: sans-serif; font-size: 18px; padding-top: 30px;">Active Users</h3>
-    <p style="margin: 10px 0 0 0; color: #3498db; font-family: sans-serif; font-size: 48px; font-weight: bold;">84,290</p>
+<div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; padding: 5%; container-type: inline-size;">
+    <h3 style="margin: 0; color: #888; font-family: sans-serif; font-size: clamp(8px, 5cqw, 18px);">Active Users</h3>
+    <p style="margin: 5px 0 0 0; color: #3498db; font-family: sans-serif; font-size: clamp(16px, 12cqw, 48px); font-weight: bold;">84,290</p>
 </div>
 """
 dashboard.add_overlay("metric_2", metric2_html)
 
 metric3_html = """
-<div style="text-align: center; width: 350px;">
-    <h3 style="margin: 0; color: #888; font-family: sans-serif; font-size: 18px; padding-top: 30px;">Growth Rate</h3>
-    <p style="margin: 10px 0 0 0; color: #e74c3c; font-family: sans-serif; font-size: 48px; font-weight: bold;">+14%</p>
+<div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; padding: 5%; container-type: inline-size;">
+    <h3 style="margin: 0; color: #888; font-family: sans-serif; font-size: clamp(8px, 5cqw, 18px);">Growth Rate</h3>
+    <p style="margin: 5px 0 0 0; color: #e74c3c; font-family: sans-serif; font-size: clamp(16px, 12cqw, 48px); font-weight: bold;">+14%</p>
 </div>
 """
 dashboard.add_overlay("metric_3", metric3_html)
@@ -93,9 +93,9 @@ print("Generated dashboard_infographic.html")
 timeline = Sivo.from_template("timeline")
 
 header_html2 = """
-<div style="text-align: center; width: 900px;">
-    <h1 style="margin: 0; color: #1e293b; font-family: sans-serif; font-size: 32px; padding-top: 30px;">Project Milestone History</h1>
-    <p style="margin: 5px 0 0 0; color: #64748b; font-family: sans-serif; font-size: 16px;">Key events over the last two years</p>
+<div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; padding: 5%; container-type: inline-size;">
+    <h1 style="margin: 0; color: #1e293b; font-family: sans-serif; font-size: clamp(12px, 3.5cqw, 32px);">Project Milestone History</h1>
+    <p style="margin: 5px 0 0 0; color: #64748b; font-family: sans-serif; font-size: clamp(8px, 1.5cqw, 16px);">Key events over the last two years</p>
 </div>
 """
 timeline.add_overlay("header_area", header_html2)
@@ -103,10 +103,10 @@ timeline.add_overlay("header_area", header_html2)
 # Add text overlays to timeline nodes
 for i, date in enumerate(["Q1 2023", "Q3 2023", "Q1 2024", "Q4 2024"], 1):
     html = f"""
-    <div style="text-align: center; width: 350px; padding: 20px;">
-        <h3 style="margin: 0; color: #3b82f6; font-family: sans-serif;">{date}</h3>
-        <p style="color: #475569; font-family: sans-serif; font-size: 14px;">Milestone {i}: Project Phase {i} Launch</p>
-        <button style="margin-top: 10px; padding: 5px 15px; border: none; background: #e2e8f0; border-radius: 4px; cursor: pointer;">View Details</button>
+    <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; box-sizing: border-box; padding: 10%; container-type: inline-size;">
+        <h3 style="margin: 0; color: #3b82f6; font-family: sans-serif; font-size: clamp(12px, 5cqw, 20px);">{date}</h3>
+        <p style="margin: 5px 0 10px 0; color: #475569; font-family: sans-serif; font-size: clamp(8px, 3.5cqw, 14px);">Milestone {i}: Project Phase {i} Launch</p>
+        <button style="padding: 5px 15px; border: none; background: #e2e8f0; border-radius: 4px; cursor: pointer; font-size: clamp(8px, 3cqw, 14px);">View Details</button>
     </div>
     """
     timeline.add_overlay(f"node_{i}_card", html)
