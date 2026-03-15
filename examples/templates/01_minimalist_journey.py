@@ -9,7 +9,7 @@ def run():
 
     app = Sivo.from_svg(
         template_path,
-        disable_zoom_controls=True,
+        disable_zoom_controls=False,
         lock_canvas=True,
         theme="light"
     )
@@ -25,7 +25,7 @@ def run():
     # Binding to the proper large bounding box (node-1-card), not a tiny single text line
     # Using pure cqw/cqh or % for fluid scaling, preventing overflow on small bounds.
     markdown_html = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw;'>
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw;'>
         <h4 style='margin: 0 0 4cqh 0; color: #3b82f6; font-size: 10cqw; text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
         <p style='margin: 0; color: #64748b; font-size: 8cqw; line-height: 1.5;'>
             Launch targeted ads across <br><b>social media</b> and major <br>search engines.
@@ -38,15 +38,46 @@ def run():
         markdown_html
     )
 
-    # Bar chart overlay bound to node-2-card (binding to a small single line text node creates a tiny chart)
-    app.map_bar_chart(
-        element_id="node-2-card",
-        title="Traffic Sources",
-        categories=["Ad Spend", "Organic", "Referral"],
-        data=[500, 200, 100],
-        panel_position="right",
-        tooltip="Click to view breakdown",
-        color="#3b82f6"
+    # Node 2 - ECharts Bar Chart directly in overlay
+    app.fill_template_zone("node-2-step-placeholder", "2. Acquisition", font_size=20, font_weight="600", color="#1e293b", align="left")
+
+    chart_html = """
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 4cqw;'>
+        <div style='width: 100%; height: 100%; display: flex; flex-direction: column;'>
+            <h4 style='margin: 0 0 2cqh 0; color: #1e293b; font-size: 8cqw;'>Traffic Sources</h4>
+            <div style='flex: 1; position: relative;'>
+                <div style='position: absolute; bottom: 0; left: 0; width: 100%; height: 80%; display: flex; align-items: flex-end; justify-content: space-around; padding: 0 2cqw;'>
+                    <div style='width: 25%; height: 100%; background: #3b82f6; border-radius: 4px 4px 0 0;'></div>
+                    <div style='width: 25%; height: 40%; background: #60a5fa; border-radius: 4px 4px 0 0;'></div>
+                    <div style='width: 25%; height: 20%; background: #93c5fd; border-radius: 4px 4px 0 0;'></div>
+                </div>
+            </div>
+            <div style='display: flex; justify-content: space-around; margin-top: 2cqh; font-size: 5cqw; color: #64748b;'>
+                <span>Ads</span><span>Org</span><span>Ref</span>
+            </div>
+        </div>
+    </div>
+    """
+
+    app.add_overlay(
+        "node-2-card",
+        chart_html
+    )
+
+    # Node 3
+    app.fill_template_zone("node-3-step-placeholder", "3. Conversion", font_size=20, font_weight="600", color="#1e293b", align="left")
+
+    conversion_html = """
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw; align-items: center; text-align: center;'>
+        <h4 style='margin: 0; color: #64748b; font-size: 8cqw; text-transform: uppercase;'>Conversion Rate</h4>
+        <p style='margin: 2cqh 0 0 0; color: #10b981; font-size: 24cqw; font-weight: 800;'>
+            4.2%
+        </p>
+    </div>
+    """
+    app.add_overlay(
+        "node-3-card",
+        conversion_html
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "01_minimalist_journey.html")

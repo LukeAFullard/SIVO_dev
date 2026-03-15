@@ -9,45 +9,50 @@ def run():
 
     app = Sivo.from_svg(
         template_path,
-        disable_zoom_controls=True,
+        disable_zoom_controls=False,
         lock_canvas=True,
         theme="light"
     )
 
     header_md = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4cqw; font-family: -apple-system, sans-serif; text-align: center;'>
-        <h1 style='margin: 0 0 2cqh 0; color: #0f172a; font-size: 6cqw;'>Company History</h1>
-        <p style='margin: 0; color: #64748b; font-size: 3cqw;'>A detailed look at our <strong>journey</strong> from the start to present day.</p>
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2cqw; font-family: -apple-system, sans-serif; text-align: center;'>
+        <h1 style='margin: 0 0 1cqh 0; color: #0f172a; font-size: 3cqw;'>Company History</h1>
+        <p style='margin: 0; color: #64748b; font-size: 1.5cqw;'>A detailed look at our <strong>journey</strong> from the start to present day.</p>
     </div>
     """
     app.add_overlay("header_area", header_md)
 
-    # Iframe overlay
+    # Image overlay
     app.add_overlay(
         "node_1_card",
-        "<div style='width: 100%; height: 100%; box-sizing: border-box; padding: 2cqw;'><iframe width='100%' height='100%' src='https://example.com' frameborder='0' style='border-radius: 1cqw; border: 1px solid #e2e8f0;'></iframe></div>"
+        "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 2cqw;'><img src='https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=400&q=80' style='width: 100%; height: 100%; object-fit: cover; border-radius: 1cqw;'/></div>"
     )
 
-    # Line chart overlay
+    # Line chart overlay - make title smaller and hide axes to fit the small card better
     app.map_line_chart(
         element_id="node_2_card",
-        title="Revenue Growth",
+        title="Revenue",
         categories=["2020", "2021", "2022"],
         data=[100, 200, 400],
         color="#10b981",
         smooth=True,
-        tooltip="Revenue in millions"
+        tooltip="Revenue in millions",
+        title_size=12,
+        extra_options={"xAxis": {"show": False}, "yAxis": {"show": False}, "grid": {"top": 30, "bottom": 10, "left": 10, "right": 10}}
     )
 
     node_3_md = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; padding: 5cqw; font-family: sans-serif; display: flex; flex-direction: column; justify-content: center;'>
-        <h3 style='margin: 0 0 2cqh 0; color: #3b82f6; font-size: 8cqw;'>Product Launch</h3>
-        <p style='margin: 0; color: #475569; font-size: 5cqw; line-height: 1.5;'>
-            Version 2.0 was officially released, achieving <strong>10k active users</strong> in the first month.
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 5cqw; font-family: sans-serif; display: flex; flex-direction: column; justify-content: center;'>
+        <h3 style='margin: 0 0 2cqh 0; color: #3b82f6; font-size: 6cqw;'>Product Launch</h3>
+        <p style='margin: 0; color: #475569; font-size: 4cqw; line-height: 1.5;'>
+            Version 2.0 was officially released, achieving <strong>10k active users</strong>.
         </p>
     </div>
     """
     app.add_overlay("node_3_card", node_3_md)
+
+    app.add_overlay("node_4_card", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 5cqw; font-family: sans-serif; display: flex; flex-direction: column; justify-content: center;'><h3 style='margin: 0 0 2cqh 0; color: #f59e0b; font-size: 6cqw;'>Global Expansion</h3><p style='margin: 0; color: #475569; font-size: 4cqw; line-height: 1.5;'>Opened offices in London and Tokyo, expanding our team.</p></div>")
+    app.add_overlay("node_5_card", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 5cqw; font-family: sans-serif; display: flex; flex-direction: column; justify-content: center;'><h3 style='margin: 0 0 2cqh 0; color: #10b981; font-size: 6cqw;'>Series C Funding</h3><p style='margin: 0; color: #475569; font-size: 4cqw; line-height: 1.5;'>Raised <strong>$50M</strong> to accelerate AI-driven product development.</p></div>")
 
     output_path = os.path.join(os.path.dirname(__file__), "05_timeline.html")
     app.to_html(output_path)
