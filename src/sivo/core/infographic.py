@@ -864,6 +864,7 @@ class Infographic:
         self.overlays[element_id] = {
             "html": html,
             "coord": [center_x, center_y],
+            "bbox": bbox,
             "offset": [offset_x, offset_y],
             "scale_with_zoom": scale_with_zoom
         }

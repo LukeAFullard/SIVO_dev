@@ -43,15 +43,14 @@ def run():
     )
 
     md_html = """
-    <div style='background: rgba(30,41,59,0.8); border: 1px solid #334155; border-radius: 8px; padding: 12px; color: #f1f5f9; font-family: sans-serif; backdrop-filter: blur(8px); width: 240px;'>
-        <h4 style='margin: 0 0 8px 0; color: #38bdf8;'>Analysis</h4>
-        <p style='margin: 0; font-size: 13px; line-height: 1.4;'>System identified <strong>3 anomalies</strong> in the Q2 predictive cycle. Recommend manual override.</p>
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; display: flex; flex-direction: column; justify-content: center; background: rgba(30,41,59,0.8); border: 1px solid #334155; border-radius: 2cqw; padding: 4cqw; color: #f1f5f9; font-family: sans-serif; backdrop-filter: blur(8px);'>
+        <h4 style='margin: 0 0 2cqh 0; color: #38bdf8; font-size: clamp(12px, 6cqw, 24px);'>Analysis</h4>
+        <p style='margin: 0; font-size: clamp(10px, 4.5cqw, 20px); line-height: 1.4;'>System identified <strong>3 anomalies</strong> in the Q2 predictive cycle. Recommend manual override.</p>
     </div>
     """
     app.add_overlay(
         "predictive-chart-zone",
-        md_html,
-        offset_y=-100
+        md_html
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "03_modern_dashboard.html")

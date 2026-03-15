@@ -23,9 +23,9 @@ def run():
 
     # Text overlay formatted professionally using Markdown-like content
     markdown_html = """
-    <div style='font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 200px;'>
-        <h4 style='margin: 0 0 8px 0; color: #3b82f6; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
-        <p style='margin: 0; color: #64748b; font-size: 13px; line-height: 1.5;'>
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 5cqw;'>
+        <h4 style='margin: 0 0 4cqh 0; color: #3b82f6; font-size: clamp(10px, 8cqw, 24px); text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
+        <p style='margin: 0; color: #64748b; font-size: clamp(10px, 7cqw, 20px); line-height: 1.5;'>
             Launch targeted ads across <b>social media</b> and major search engines.
         </p>
     </div>
@@ -33,9 +33,7 @@ def run():
 
     app.add_overlay(
         "node-1-desc-1-placeholder",
-        markdown_html,
-        offset_y=30,
-        offset_x=20
+        markdown_html
     )
 
     # Bar chart overlay bound to node-2-step-placeholder

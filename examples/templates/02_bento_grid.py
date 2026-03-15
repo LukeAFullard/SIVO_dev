@@ -35,27 +35,25 @@ def run():
 
     # Add a markdown overlay inside the first card (x=680, width=460)
     md_html = """
-    <div style='background: white; padding: 24px; border-radius: 12px; font-family: sans-serif;'>
-        <h3 style='margin:0 0 12px 0; color: #1e293b;'>System Status</h3>
-        <p style='margin:0; color: #64748b; font-size: 14px;'>All primary servers are operating at <strong>99.99%</strong> uptime.</p>
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; display: flex; flex-direction: column; justify-content: center; background: white; padding: 5cqw; border-radius: 2cqw; font-family: sans-serif;'>
+        <h3 style='margin:0 0 3cqh 0; color: #1e293b; font-size: clamp(14px, 6cqw, 32px);'>System Status</h3>
+        <p style='margin:0; color: #64748b; font-size: clamp(10px, 4cqw, 24px);'>All primary servers are operating at <strong>99.99%</strong> uptime.</p>
     </div>
     """
     app.add_overlay(
         "rect-users",
-        md_html,
-        offset_y=20
+        md_html
     )
 
     # Add an image overlay to the second card
     image_html = """
-    <div style='padding: 20px;'>
-        <img src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80' alt='Data Center' style='border-radius: 12px; width: 100%; height: 140px; object-fit: cover; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);' />
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; padding: 4cqw;'>
+        <img src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80' alt='Data Center' style='border-radius: 2cqw; width: 100%; height: 100%; object-fit: cover; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);' />
     </div>
     """
     app.add_overlay(
         "rect-conversion",
-        image_html,
-        offset_y=0
+        image_html
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "02_bento_grid.html")
