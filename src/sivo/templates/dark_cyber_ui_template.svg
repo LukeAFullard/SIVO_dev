@@ -22,14 +22,14 @@
   <!-- Top Navigation / Header -->
   <g id="neon-header">
     <rect class="neon-card" x="40" y="40" width="1120" height="80" />
-    <text class="neon-text-title" x="80" y="85">SYS.OVERVIEW // CYBER UI</text>
+    <text id="text_sys_overview_cyber_ui" class="neon-text-title" x="80" y="85"></text>
     <line class="accent-line" x1="40" y1="120" x2="1160" y2="120" />
   </g>
 
   <!-- Left Sidebar (Stats) -->
   <g id="neon-sidebar">
     <rect class="neon-card-alt" x="40" y="160" width="300" height="600" />
-    <text class="neon-text-sub" x="60" y="200" style="fill: #ff00ff;">> DIAGNOSTICS</text>
+    <text id="text_diagnostics" class="neon-text-sub" x="60" y="200" style="fill: #ff00ff;"></text>
     <line class="accent-line-alt" x1="60" y1="210" x2="300" y2="210" />
     <rect id="neon-sidebar-data" fill="transparent" x="60" y="230" width="260" height="500" />
   </g>
@@ -37,7 +37,7 @@
   <!-- Main Central Radar/Map Area -->
   <g id="neon-main-view">
     <rect class="neon-card" x="380" y="160" width="780" height="400" />
-    <text class="neon-text-sub" x="400" y="200">> PRIMARY NODE</text>
+    <text id="text_primary_node" class="neon-text-sub" x="400" y="200"></text>
     <line class="accent-line" x1="400" y1="210" x2="1120" y2="210" />
     <!-- Center reticle decoration -->
     <circle cx="770" cy="360" r="120" fill="none" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="4 4"/>
@@ -47,7 +47,7 @@
   <!-- Bottom Data Terminal -->
   <g id="neon-terminal">
     <rect class="neon-card" x="380" y="600" width="780" height="160" />
-    <text class="neon-text-sub" x="400" y="640">> LOG OUTPUT</text>
+    <text id="text_log_output" class="neon-text-sub" x="400" y="640"></text>
     <line class="accent-line" x1="400" y1="650" x2="1120" y2="650" />
     <rect id="neon-terminal-data" fill="transparent" x="400" y="660" width="740" height="80" />
   </g>

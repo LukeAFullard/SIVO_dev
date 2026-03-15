@@ -14,8 +14,8 @@
 
     <rect width="1200" height="800" class="bg" />
 
-    <text x="80" y="80" class="header">Customer Journey Map</text>
-    <text x="80" y="110" class="text-desc" font-size="16">Tracking user experience from awareness to advocacy.</text>
+    <text id="text_customer_journey_map" x="80" y="80" class="header"></text>
+    <text id="text_tracking_user_experience_from_awareness_to_advocacy" x="80" y="110" class="text-desc" font-size="16"></text>
 
     <!-- The S-Curve Path -->
     <path class="path-line" d="M 150 250 L 900 250 C 1000 250, 1000 450, 900 450 L 300 450 C 200 450, 200 650, 300 650 L 1050 650" />

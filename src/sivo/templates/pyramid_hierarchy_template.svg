@@ -22,29 +22,29 @@
     <!-- Top Tier -->
     <g id="tier-1">
       <polygon class="pyramid-tier tier-1" points="250,50 150,200 350,200" />
-      <text class="tier-text" x="250" y="160">Tier 1</text>
+      <text id="text_tier_1" class="tier-text" x="250" y="160"></text>
     </g>
     <!-- Second Tier -->
     <g id="tier-2">
       <polygon class="pyramid-tier tier-2" points="150,200 50,350 450,350 350,200" />
-      <text class="tier-text" x="250" y="300">Tier 2</text>
+      <text id="text_tier_2" class="tier-text" x="250" y="300"></text>
     </g>
     <!-- Third Tier -->
     <g id="tier-3">
       <polygon class="pyramid-tier tier-3" points="50,350 -50,500 550,500 450,350" />
-      <text class="tier-text" x="250" y="440">Tier 3</text>
+      <text id="text_tier_3" class="tier-text" x="250" y="440"></text>
     </g>
     <!-- Base Tier -->
     <g id="tier-4">
       <polygon class="pyramid-tier tier-4" points="-50,500 -150,650 650,650 550,500" />
-      <text class="tier-text" x="250" y="590">Tier 4 (Base)</text>
+      <text id="text_tier_4_base" class="tier-text" x="250" y="590"></text>
     </g>
   </g>
 
   <!-- Context / Information Panel (Right Side) -->
   <g id="info-panel">
     <rect class="info-panel" x="720" y="100" width="430" height="600" />
-    <text class="panel-title" x="740" y="160">Hierarchy Details</text>
+    <text id="text_hierarchy_details" class="panel-title" x="740" y="160"></text>
     <rect id="info-panel-data" fill="transparent" x="740" y="200" width="370" height="460" />
   </g>
 

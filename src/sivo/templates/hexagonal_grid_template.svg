@@ -20,50 +20,50 @@
   <!-- Row 1 -->
   <g id="hex-node-1" transform="translate(400, 200)">
     <use href="#hex" class="hex-shape" />
-    <text class="hex-text-title" y="0">Data 1</text>
+    <text id="text_data_1" class="hex-text-title" y="0"></text>
     <circle cx="0" cy="0" r="70" fill="transparent" id="hex-1-data"/>
   </g>
   <g id="hex-node-2" transform="translate(600, 200)">
     <use href="#hex" class="hex-shape" />
-    <text class="hex-text-title" y="0">Data 2</text>
+    <text id="text_data_2" class="hex-text-title" y="0"></text>
     <circle cx="0" cy="0" r="70" fill="transparent" id="hex-2-data"/>
   </g>
 
   <!-- Row 2 -->
   <g id="hex-node-3" transform="translate(300, 350)">
     <use href="#hex" class="hex-shape" />
-    <text class="hex-text-title" y="0">Data 3</text>
+    <text id="text_data_3" class="hex-text-title" y="0"></text>
     <circle cx="0" cy="0" r="70" fill="transparent" id="hex-3-data"/>
   </g>
 
   <g id="hex-center-node" transform="translate(500, 350)">
     <use href="#hex" class="hex-center" />
-    <text class="hex-text-center" y="0">CORE</text>
+    <text id="text_core" class="hex-text-center" y="0"></text>
     <circle cx="0" cy="0" r="70" fill="transparent" id="hex-core-data"/>
   </g>
 
   <g id="hex-node-4" transform="translate(700, 350)">
     <use href="#hex" class="hex-shape" />
-    <text class="hex-text-title" y="0">Data 4</text>
+    <text id="text_data_4" class="hex-text-title" y="0"></text>
     <circle cx="0" cy="0" r="70" fill="transparent" id="hex-4-data"/>
   </g>
 
   <!-- Row 3 -->
   <g id="hex-node-5" transform="translate(400, 500)">
     <use href="#hex" class="hex-shape" />
-    <text class="hex-text-title" y="0">Data 5</text>
+    <text id="text_data_5" class="hex-text-title" y="0"></text>
     <circle cx="0" cy="0" r="70" fill="transparent" id="hex-5-data"/>
   </g>
   <g id="hex-node-6" transform="translate(600, 500)">
     <use href="#hex" class="hex-shape" />
-    <text class="hex-text-title" y="0">Data 6</text>
+    <text id="text_data_6" class="hex-text-title" y="0"></text>
     <circle cx="0" cy="0" r="70" fill="transparent" id="hex-6-data"/>
   </g>
 
   <!-- Right Details Panel -->
   <g id="details-panel">
     <rect class="side-panel" x="850" y="100" width="300" height="600" />
-    <text class="hex-text-title" x="1000" y="150" style="text-anchor: middle;">Node Details</text>
+    <text id="text_node_details" class="hex-text-title" x="1000" y="150" style="text-anchor: middle;"></text>
     <rect id="details-panel-data" fill="transparent" x="880" y="180" width="240" height="490" />
   </g>
 

@@ -14,8 +14,8 @@
   <rect class="bg" width="800" height="2400" />
 
   <!-- Top Header Area -->
-  <text class="header-title" x="400" y="120">The Journey</text>
-  <text class="header-sub" x="400" y="160">A vertical scrollytelling experience</text>
+  <text id="text_the_journey" class="header-title" x="400" y="120"></text>
+  <text id="text_a_vertical_scrollytelling_experience" class="header-sub" x="400" y="160"></text>
 
   <!-- Central Winding Path connecting all elements -->
   <!-- Starts center, goes right, curves left, curves right -->
@@ -31,7 +31,7 @@
   <!-- Section 1 (Top Center) -->
   <g id="scroll-section-1">
     <rect class="section-card" x="100" y="250" width="600" height="250" />
-    <text class="section-title" x="140" y="310">1. Origins</text>
+    <text id="text_1_origins" class="section-title" x="140" y="310"></text>
     <rect id="scroll-sec-1-data" fill="transparent" x="140" y="340" width="520" height="130" />
     <circle class="section-marker" cx="400" cy="250" r="16" />
   </g>
@@ -39,7 +39,7 @@
   <!-- Section 2 (Middle Right) -->
   <g id="scroll-section-2">
     <rect class="section-card" x="100" y="800" width="400" height="250" />
-    <text class="section-title" x="140" y="860">2. Development</text>
+    <text id="text_2_development" class="section-title" x="140" y="860"></text>
     <rect id="scroll-sec-2-data" fill="transparent" x="140" y="890" width="320" height="130" />
     <circle class="section-marker" cx="600" cy="800" r="16" />
   </g>
@@ -47,7 +47,7 @@
   <!-- Section 3 (Middle Left) -->
   <g id="scroll-section-3">
     <rect class="section-card" x="300" y="1400" width="400" height="250" />
-    <text class="section-title" x="340" y="1460">3. Growth</text>
+    <text id="text_3_growth" class="section-title" x="340" y="1460"></text>
     <rect id="scroll-sec-3-data" fill="transparent" x="340" y="1490" width="320" height="130" />
     <circle class="section-marker" cx="200" cy="1400" r="16" />
   </g>
@@ -55,7 +55,7 @@
   <!-- Section 4 (Bottom Center) -->
   <g id="scroll-section-4">
     <rect class="section-card" x="100" y="1950" width="600" height="250" />
-    <text class="section-title" x="140" y="2010">4. Future</text>
+    <text id="text_4_future" class="section-title" x="140" y="2010"></text>
     <rect id="scroll-sec-4-data" fill="transparent" x="140" y="2040" width="520" height="130" />
     <circle class="section-marker" cx="400" cy="1950" r="16" />
   </g>

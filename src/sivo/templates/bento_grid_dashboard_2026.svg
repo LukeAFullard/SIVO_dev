@@ -23,8 +23,8 @@
     <rect width="1200" height="800" class="bg" />
 
     <!-- Header -->
-    <text x="60" y="80" class="title">Performance Overview</text>
-    <text x="60" y="110" class="label" fill="#94a3b8">Q3 2026 Analytics Dashboard</text>
+    <text id="text_performance_overview" x="60" y="80" class="title"></text>
+    <text id="text_q3_2026_analytics_dashboard" x="60" y="110" class="label" fill="#94a3b8"></text>
 
     <!-- Bento Grid Structure -->
 

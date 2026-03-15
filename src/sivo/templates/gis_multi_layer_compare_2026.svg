@@ -12,8 +12,8 @@
 
     <rect width="1440" height="900" class="bg" />
 
-    <text x="60" y="80" class="title">Comparative Geospatial Analysis</text>
-    <text x="60" y="110" class="subtitle">Evaluate differences between distinct temporal or scenario-based maps.</text>
+    <text id="text_comparative_geospatial_analysis" x="60" y="80" class="title"></text>
+    <text id="text_evaluate_differences_between_distinct_temporal_or_scenario_based_maps" x="60" y="110" class="subtitle"></text>
 
     <!-- Top Left Controls/Filters -->
     <g id="controls-top">
@@ -25,7 +25,7 @@
     <!-- Left Map View (e.g., Year 2020 or Scenario A) -->
     <g id="map-view-a">
         <rect x="60" y="240" width="640" height="600" class="card" />
-        <text x="90" y="290" class="title" font-size="20">Baseline Scenario (T-0)</text>
+        <text id="text_baseline_scenario_t_0" x="90" y="290" class="title" font-size="20"></text>
         <!-- Map Canvas Placeholder -->
         <rect id="map-canvas-a" x="90" y="320" width="580" height="490" class="map-pane" />
     </g>
@@ -33,13 +33,13 @@
     <!-- Center VS Indicator -->
     <g id="vs-indicator">
         <rect x="696" y="500" width="48" height="48" class="vs-badge" />
-        <text x="720" y="530" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">VS</text>
+        <text id="text_vs" x="720" y="530" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle"></text>
     </g>
 
     <!-- Right Map View (e.g., Year 2026 or Scenario B) -->
     <g id="map-view-b">
         <rect x="740" y="240" width="640" height="600" class="card" />
-        <text x="770" y="290" class="title" font-size="20">Predictive Model (T+1)</text>
+        <text id="text_predictive_model_t_1" x="770" y="290" class="title" font-size="20"></text>
         <!-- Map Canvas Placeholder -->
         <rect id="map-canvas-b" x="770" y="320" width="580" height="490" class="map-pane" />
     </g>
