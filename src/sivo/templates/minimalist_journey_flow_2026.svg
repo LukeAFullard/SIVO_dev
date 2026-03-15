@@ -31,7 +31,7 @@
     </g>
 
     <!-- Connecting Path (Dashed Line) -->
-    <path class="line-path" d="M 160 400 L 380 400 Q 420 400 420 440 L 420 560 Q 420 600 460 600 L 680 600 Q 720 600 720 560 L 720 280 Q 720 240 760 240 L 1040 240" />
+    <path class="line-path" fill="none" d="M 160 400 L 380 400 Q 420 400 420 440 L 420 560 Q 420 600 460 600 L 680 600 Q 720 600 720 560 L 720 280 Q 720 240 760 240 L 1040 240" />
 
     <!-- Active Path Highlight (Solid Line overlaying the dashed path) -->
     <path d="M 160 400 L 380 400 Q 420 400 420 440 L 420 480" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" fill="none" />

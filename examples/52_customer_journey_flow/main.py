@@ -22,9 +22,9 @@ def build_journey_flow():
     app.fill_template_zone("header-title-placeholder", "Customer Acquisition Flow", font_size=36, font_weight="800", color="#0f172a")
 
     # Node 1
-    app.fill_template_zone("node-1-step-placeholder", "1. Awareness", font_size=20, font_weight="600", color="#1e293b", align="center")
-    app.fill_template_zone("node-1-desc-1-placeholder", "Social media campaigns", font_size=14, font_weight="400", color="#64748b", align="center")
-    app.fill_template_zone("node-1-desc-2-placeholder", "and targeted ads.", font_size=14, font_weight="400", color="#64748b", align="center")
+    app.fill_template_zone("node-1-step-placeholder", "1. Awareness", font_size=20, font_weight="600", color="#1e293b", align="left")
+    app.fill_template_zone("node-1-desc-1-placeholder", "Social media campaigns", font_size=14, font_weight="400", color="#64748b", align="left")
+    app.fill_template_zone("node-1-desc-2-placeholder", "and targeted ads.", font_size=14, font_weight="400", color="#64748b", align="left")
 
     # Node 2
     app.fill_template_zone("node-2-step-placeholder", "2. Consideration", font_size=20, font_weight="600", color="#1e293b", align="left")
@@ -32,9 +32,9 @@ def build_journey_flow():
     app.fill_template_zone("node-2-desc-2-placeholder", "and product reviews.", font_size=14, font_weight="400", color="#64748b", align="left")
 
     # Node 3
-    app.fill_template_zone("node-3-step-placeholder", "3. Conversion", font_size=20, font_weight="600", color="#1e293b", align="center")
-    app.fill_template_zone("node-3-desc-1-placeholder", "Checkout flow completion", font_size=14, font_weight="400", color="#64748b", align="center")
-    app.fill_template_zone("node-3-desc-2-placeholder", "and payment capture.", font_size=14, font_weight="400", color="#64748b", align="center")
+    app.fill_template_zone("node-3-step-placeholder", "3. Conversion", font_size=20, font_weight="600", color="#1e293b", align="left")
+    app.fill_template_zone("node-3-desc-1-placeholder", "Checkout flow completion", font_size=14, font_weight="400", color="#64748b", align="left")
+    app.fill_template_zone("node-3-desc-2-placeholder", "and payment capture.", font_size=14, font_weight="400", color="#64748b", align="left")
 
     # Node 4
     app.fill_template_zone("node-4-step-placeholder", "4. Delivery", font_size=20, font_weight="600", color="#1e293b", align="left")
@@ -42,9 +42,9 @@ def build_journey_flow():
     app.fill_template_zone("node-4-desc-2-placeholder", "shipping tracking.", font_size=14, font_weight="400", color="#64748b", align="left")
 
     # Node 5
-    app.fill_template_zone("node-5-step-placeholder", "5. Loyalty", font_size=20, font_weight="600", color="#1e293b", align="center")
-    app.fill_template_zone("node-5-desc-1-placeholder", "Post-purchase follow-up", font_size=14, font_weight="400", color="#64748b", align="center")
-    app.fill_template_zone("node-5-desc-2-placeholder", "and subscription.", font_size=14, font_weight="400", color="#64748b", align="center")
+    app.fill_template_zone("node-5-step-placeholder", "5. Loyalty", font_size=20, font_weight="600", color="#1e293b", align="left")
+    app.fill_template_zone("node-5-desc-1-placeholder", "Post-purchase follow-up", font_size=14, font_weight="400", color="#64748b", align="left")
+    app.fill_template_zone("node-5-desc-2-placeholder", "and subscription.", font_size=14, font_weight="400", color="#64748b", align="left")
 
     # Interactive Map Funnel
     funnel_data = [
