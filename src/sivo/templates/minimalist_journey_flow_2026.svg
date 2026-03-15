@@ -77,9 +77,9 @@
         <rect x="600" y="160" width="240" height="180" class="card-hover" />
         <circle cx="720" cy="280" r="16" class="node-circle" />
 
-        <rect id="node-4-step-placeholder" x="740" y="225" width="90" height="20" class="placeholder-text-step" />
-        <rect id="node-4-desc-1-placeholder" x="740" y="255" width="160" height="12" class="placeholder-text-desc" />
-        <rect id="node-4-desc-2-placeholder" x="740" y="275" width="130" height="12" class="placeholder-text-desc" />
+        <rect id="node-4-step-placeholder" x="620" y="215" width="90" height="20" class="placeholder-text-step" />
+        <rect id="node-4-desc-1-placeholder" x="620" y="245" width="160" height="12" class="placeholder-text-desc" />
+        <rect id="node-4-desc-2-placeholder" x="620" y="265" width="130" height="12" class="placeholder-text-desc" />
     </g>
 
     <!-- Node 5: Advocacy (Upcoming) -->
@@ -87,9 +87,9 @@
         <rect x="940" y="120" width="200" height="200" class="card-hover" />
         <circle cx="1040" cy="240" r="16" class="node-circle" />
 
-        <rect id="node-5-step-placeholder" x="980" y="155" width="80" height="20" class="placeholder-text-step" />
-        <rect id="node-5-desc-1-placeholder" x="980" y="185" width="140" height="12" class="placeholder-text-desc" />
-        <rect id="node-5-desc-2-placeholder" x="980" y="205" width="110" height="12" class="placeholder-text-desc" />
+        <rect id="node-5-step-placeholder" x="960" y="175" width="80" height="20" class="placeholder-text-step" />
+        <rect id="node-5-desc-1-placeholder" x="960" y="205" width="140" height="12" class="placeholder-text-desc" />
+        <rect id="node-5-desc-2-placeholder" x="960" y="225" width="110" height="12" class="placeholder-text-desc" />
     </g>
 
 </svg>
