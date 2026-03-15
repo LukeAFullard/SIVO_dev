@@ -5,13 +5,12 @@
             .timeline-track { fill: none; stroke: #e5e7eb; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
             .timeline-progress { fill: none; stroke: url(#softGradient); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
 
-            /* Neumorphic / Soft UI Card */
+            /* Neumorphic / Soft UI Card base */
             .soft-card {
                 fill: #f3f4f6;
                 rx: 24;
                 stroke: #ffffff;
                 stroke-width: 1;
-                filter: drop-shadow(10px 10px 20px rgba(166, 171, 189, 0.4)) drop-shadow(-10px -10px 20px rgba(255, 255, 255, 0.8));
             }
             .soft-card-hover {
                 fill: transparent;
@@ -20,21 +19,40 @@
             }
             .soft-card-hover:hover { cursor: pointer; fill: rgba(255, 255, 255, 0.2); }
 
-            .text-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 32px; font-weight: 800; fill: #1f2937; letter-spacing: -1px; text-anchor: middle; }
-            .text-subtitle { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #6b7280; text-transform: uppercase; letter-spacing: 2px; text-anchor: middle; }
-
-            .milestone-year { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 24px; font-weight: 800; fill: #374151; }
-            .milestone-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 600; fill: #4b5563; }
-            .milestone-desc { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 400; fill: #9ca3af; line-height: 1.5; }
+            .placeholder-text-title { fill: #d1d5db; rx: 8; }
+            .placeholder-text-subtitle { fill: #9ca3af; rx: 4; }
+            .placeholder-milestone-year { fill: #cbd5e1; rx: 8; }
+            .placeholder-milestone-title { fill: #d1d5db; rx: 6; }
+            .placeholder-milestone-desc { fill: #e5e7eb; rx: 4; }
 
             .node-dot { fill: #f3f4f6; stroke: #3b82f6; stroke-width: 6; }
-            .node-dot-active { fill: #3b82f6; stroke: #ffffff; stroke-width: 6; filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.3)); }
+            .node-dot-active { fill: #3b82f6; stroke: #ffffff; stroke-width: 6; filter: url(#activeNodeGlow); }
         </style>
 
         <linearGradient id="softGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stop-color="#3b82f6" />
             <stop offset="100%" stop-color="#8b5cf6" />
         </linearGradient>
+
+        <!-- Native SVG Filter for Neumorphism (Soft UI) instead of CSS drop-shadow -->
+        <!-- This resolves rendering issues in standard SVG viewers -->
+        <filter id="neumorphicShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <!-- Light shadow (Top Left) -->
+            <feDropShadow dx="-10" dy="-10" stdDeviation="15" flood-color="#ffffff" flood-opacity="0.8" result="light" />
+            <!-- Dark shadow (Bottom Right) -->
+            <feDropShadow dx="10" dy="10" stdDeviation="15" flood-color="#a6abbd" flood-opacity="0.4" result="dark" />
+            <!-- Merge them with the original graphic -->
+            <feMerge>
+                <feMergeNode in="light" />
+                <feMergeNode in="dark" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+
+        <!-- Active node glow filter -->
+        <filter id="activeNodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#3b82f6" flood-opacity="0.3" />
+        </filter>
     </defs>
 
     <!-- Base Canvas -->
@@ -42,8 +60,9 @@
 
     <!-- Header Centered -->
     <g id="header-group" transform="translate(600, 80)">
-        <text x="0" y="0" class="text-subtitle">Project Roadmap</text>
-        <text x="0" y="40" class="text-title">Strategic Timeline 2026</text>
+        <!-- Center aligned placeholders using transform or explicit coordinates -->
+        <rect id="header-subtitle-placeholder" x="-100" y="-10" width="200" height="14" class="placeholder-text-subtitle" />
+        <rect id="header-title-placeholder" x="-200" y="10" width="400" height="36" class="placeholder-text-title" />
     </g>
 
     <!-- Winding Timeline Track (S-Curve) -->
@@ -55,14 +74,14 @@
 
     <!-- Node 1: Top Left -->
     <g id="milestone-1-initiation">
-        <!-- Soft UI Card background -->
-        <rect x="150" y="100" width="220" height="100" class="soft-card" />
+        <!-- Soft UI Card background with native filter -->
+        <rect x="150" y="100" width="220" height="100" class="soft-card" filter="url(#neumorphicShadow)" />
         <!-- Transparent hover overlay for SIVO interactions -->
         <rect x="150" y="100" width="220" height="100" class="soft-card-hover" />
 
-        <text x="170" y="135" class="milestone-year">Q1</text>
-        <text x="170" y="160" class="milestone-title">Project Initiation</text>
-        <text x="170" y="180" class="milestone-desc">Core team assembled.</text>
+        <rect id="node-1-year-placeholder" x="170" y="120" width="40" height="20" class="placeholder-milestone-year" />
+        <rect id="node-1-title-placeholder" x="170" y="150" width="140" height="14" class="placeholder-milestone-title" />
+        <rect id="node-1-desc-placeholder" x="170" y="170" width="180" height="10" class="placeholder-milestone-desc" />
 
         <!-- Timeline node directly below the card -->
         <circle cx="260" cy="240" r="12" class="node-dot-active" />
@@ -71,12 +90,12 @@
 
     <!-- Node 2: Top Middle -->
     <g id="milestone-2-design">
-        <rect x="490" y="100" width="220" height="100" class="soft-card" />
+        <rect x="490" y="100" width="220" height="100" class="soft-card" filter="url(#neumorphicShadow)" />
         <rect x="490" y="100" width="220" height="100" class="soft-card-hover" />
 
-        <text x="510" y="135" class="milestone-year">Q2</text>
-        <text x="510" y="160" class="milestone-title">UX/UI Design Phase</text>
-        <text x="510" y="180" class="milestone-desc">Prototyping & testing.</text>
+        <rect id="node-2-year-placeholder" x="510" y="120" width="40" height="20" class="placeholder-milestone-year" />
+        <rect id="node-2-title-placeholder" x="510" y="150" width="160" height="14" class="placeholder-milestone-title" />
+        <rect id="node-2-desc-placeholder" x="510" y="170" width="150" height="10" class="placeholder-milestone-desc" />
 
         <circle cx="600" cy="240" r="12" class="node-dot-active" />
         <line x1="600" y1="200" x2="600" y2="228" stroke="#cbd5e1" stroke-width="2" />
@@ -84,12 +103,12 @@
 
     <!-- Node 3: Top Right -->
     <g id="milestone-3-development">
-        <rect x="830" y="100" width="220" height="100" class="soft-card" />
+        <rect x="830" y="100" width="220" height="100" class="soft-card" filter="url(#neumorphicShadow)" />
         <rect x="830" y="100" width="220" height="100" class="soft-card-hover" />
 
-        <text x="850" y="135" class="milestone-year" style="fill: #8b5cf6;">Q3</text>
-        <text x="850" y="160" class="milestone-title">Core Development</text>
-        <text x="850" y="180" class="milestone-desc">Backend infrastructure.</text>
+        <rect id="node-3-year-placeholder" x="850" y="120" width="40" height="20" class="placeholder-milestone-year" style="fill: #8b5cf6; opacity: 0.3;" />
+        <rect id="node-3-title-placeholder" x="850" y="150" width="150" height="14" class="placeholder-milestone-title" />
+        <rect id="node-3-desc-placeholder" x="850" y="170" width="170" height="10" class="placeholder-milestone-desc" />
 
         <circle cx="940" cy="240" r="12" class="node-dot-active" />
         <line x1="940" y1="200" x2="940" y2="228" stroke="#cbd5e1" stroke-width="2" />
@@ -98,12 +117,12 @@
     <!-- Node 4: Middle Row (Centered) - Current Status -->
     <g id="milestone-4-beta">
         <!-- Offset layout for bottom track connection -->
-        <rect x="490" y="540" width="220" height="100" class="soft-card" />
+        <rect x="490" y="540" width="220" height="100" class="soft-card" filter="url(#neumorphicShadow)" />
         <rect x="490" y="540" width="220" height="100" class="soft-card-hover" />
 
-        <text x="510" y="575" class="milestone-year">Q4</text>
-        <text x="510" y="600" class="milestone-title">Beta Release</text>
-        <text x="510" y="620" class="milestone-desc">Early access rollout.</text>
+        <rect id="node-4-year-placeholder" x="510" y="560" width="40" height="20" class="placeholder-milestone-year" />
+        <rect id="node-4-title-placeholder" x="510" y="590" width="130" height="14" class="placeholder-milestone-title" />
+        <rect id="node-4-desc-placeholder" x="510" y="610" width="160" height="10" class="placeholder-milestone-desc" />
 
         <!-- Large current active pulse dot -->
         <circle cx="600" cy="500" r="24" fill="rgba(139, 92, 246, 0.2)" />
@@ -113,12 +132,12 @@
 
     <!-- Node 5: Bottom Left (Future) -->
     <g id="milestone-5-launch">
-        <rect x="150" y="610" width="220" height="100" class="soft-card" />
+        <rect x="150" y="610" width="220" height="100" class="soft-card" filter="url(#neumorphicShadow)" />
         <rect x="150" y="610" width="220" height="100" class="soft-card-hover" />
 
-        <text x="170" y="645" class="milestone-year" style="fill: #9ca3af;">2027</text>
-        <text x="170" y="670" class="milestone-title">Official Launch 1.0</text>
-        <text x="170" y="690" class="milestone-desc">Global marketing push.</text>
+        <rect id="node-5-year-placeholder" x="170" y="630" width="50" height="20" class="placeholder-milestone-year" style="opacity: 0.5;" />
+        <rect id="node-5-title-placeholder" x="170" y="660" width="150" height="14" class="placeholder-milestone-title" />
+        <rect id="node-5-desc-placeholder" x="170" y="680" width="180" height="10" class="placeholder-milestone-desc" />
 
         <circle cx="260" cy="750" r="12" class="node-dot" />
         <line x1="260" y1="710" x2="260" y2="738" stroke="#cbd5e1" stroke-width="2" />
@@ -126,12 +145,12 @@
 
     <!-- Node 6: Bottom Right (Future) -->
     <g id="milestone-6-scale">
-        <rect x="830" y="610" width="220" height="100" class="soft-card" />
+        <rect x="830" y="610" width="220" height="100" class="soft-card" filter="url(#neumorphicShadow)" />
         <rect x="830" y="610" width="220" height="100" class="soft-card-hover" />
 
-        <text x="850" y="645" class="milestone-year" style="fill: #9ca3af;">2028</text>
-        <text x="850" y="670" class="milestone-title">Scaling & Growth</text>
-        <text x="850" y="690" class="milestone-desc">Market expansion.</text>
+        <rect id="node-6-year-placeholder" x="850" y="630" width="50" height="20" class="placeholder-milestone-year" style="opacity: 0.5;" />
+        <rect id="node-6-title-placeholder" x="850" y="660" width="140" height="14" class="placeholder-milestone-title" />
+        <rect id="node-6-desc-placeholder" x="850" y="680" width="160" height="10" class="placeholder-milestone-desc" />
 
         <circle cx="940" cy="750" r="12" class="node-dot" />
         <line x1="940" y1="710" x2="940" y2="738" stroke="#cbd5e1" stroke-width="2" />

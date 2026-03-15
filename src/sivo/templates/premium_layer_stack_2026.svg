@@ -16,11 +16,10 @@
                 transition: transform 0.3s ease;
             }
 
-            .text-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 800; fill: #0f172a; letter-spacing: -1px; }
-            .text-subtitle { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #64748b; text-transform: uppercase; letter-spacing: 2px; }
-
-            .layer-label { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 24px; font-weight: 700; fill: #1e293b; }
-            .layer-desc { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 400; fill: #64748b; line-height: 1.5; }
+            .placeholder-text-title { fill: #e2e8f0; rx: 8; }
+            .placeholder-text-subtitle { fill: #cbd5e1; rx: 4; }
+            .placeholder-layer-label { fill: #cbd5e1; rx: 6; }
+            .placeholder-layer-desc { fill: #f1f5f9; rx: 4; }
 
             .connecting-line { stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 4 6; fill: none; }
 
@@ -36,8 +35,8 @@
 
     <!-- Title Section -->
     <g id="header-group" transform="translate(60, 80)">
-        <text x="0" y="0" class="text-subtitle">Architecture Blueprint</text>
-        <text x="0" y="45" class="text-title">Stack Drill-Down 2026</text>
+        <rect id="header-subtitle-placeholder" x="0" y="0" width="180" height="14" class="placeholder-text-subtitle" />
+        <rect id="header-title-placeholder" x="0" y="25" width="340" height="36" class="placeholder-text-title" />
     </g>
 
     <!-- Isometric Layer Stack (Center/Right) -->
@@ -52,12 +51,13 @@
         <rect x="520" y="520" width="60" height="20" fill="#e2e8f0" transform="skewX(-45) skewY(20)" opacity="0.5" />
         <rect x="620" y="480" width="100" height="20" fill="#e2e8f0" transform="skewX(-45) skewY(20)" opacity="0.5" />
 
-        <!-- Label Line & Text (Left) -->
+        <!-- Label Line & Text Placeholders (Left) -->
         <path d="M 300 560 L 220 560" class="connecting-line" />
         <circle cx="300" cy="560" r="8" class="indicator-dot" />
 
-        <text x="200" y="555" class="layer-label" text-anchor="end">Data Tier</text>
-        <text x="200" y="580" class="layer-desc" text-anchor="end">Core database and storage.</text>
+        <rect id="layer-3-label-placeholder" x="80" y="535" width="120" height="24" class="placeholder-layer-label" />
+        <rect id="layer-3-desc-1-placeholder" x="40" y="565" width="160" height="12" class="placeholder-layer-desc" />
+        <rect id="layer-3-desc-2-placeholder" x="60" y="585" width="140" height="12" class="placeholder-layer-desc" />
     </g>
 
     <!-- Middle Layer (Business Logic) -->
@@ -68,12 +68,13 @@
         <path d="M 400 600 L 800 440" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4" />
         <path d="M 600 600 L 800 520" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4" />
 
-        <!-- Label Line & Text (Right) -->
+        <!-- Label Line & Text Placeholders (Right) -->
         <path d="M 900 520 L 980 520" class="connecting-line" />
         <circle cx="900" cy="520" r="8" class="indicator-dot" />
 
-        <text x="1000" y="515" class="layer-label" text-anchor="start">Logic Tier</text>
-        <text x="1000" y="540" class="layer-desc" text-anchor="start">Microservices and APIs.</text>
+        <rect id="layer-2-label-placeholder" x="1000" y="495" width="140" height="24" class="placeholder-layer-label" />
+        <rect id="layer-2-desc-1-placeholder" x="1000" y="525" width="160" height="12" class="placeholder-layer-desc" />
+        <rect id="layer-2-desc-2-placeholder" x="1000" y="545" width="120" height="12" class="placeholder-layer-desc" />
     </g>
 
     <!-- Top Layer (Presentation / UI) -->
@@ -86,12 +87,13 @@
         <rect x="660" y="460" width="60" height="60" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" transform="skewX(-45) skewY(20)" filter="url(#softShadow)" />
         <rect x="500" y="420" width="120" height="30" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" transform="skewX(-45) skewY(20)" filter="url(#softShadow)" />
 
-        <!-- Label Line & Text (Left) -->
+        <!-- Label Line & Text Placeholders (Left) -->
         <path d="M 300 560 L 220 560" class="connecting-line" />
         <circle cx="300" cy="560" r="8" class="indicator-dot" />
 
-        <text x="200" y="555" class="layer-label" text-anchor="end" fill="#3b82f6">Presentation</text>
-        <text x="200" y="580" class="layer-desc" text-anchor="end">Client-side rendering layer.</text>
+        <rect id="layer-1-label-placeholder" x="60" y="535" width="140" height="24" class="placeholder-layer-label" style="fill: #3b82f6; opacity: 0.2;" />
+        <rect id="layer-1-desc-1-placeholder" x="20" y="565" width="180" height="12" class="placeholder-layer-desc" />
+        <rect id="layer-1-desc-2-placeholder" x="40" y="585" width="160" height="12" class="placeholder-layer-desc" />
     </g>
 
     <!-- Depth Connector Lines to show relationship between stacks -->
