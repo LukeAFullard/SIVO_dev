@@ -26,7 +26,7 @@
     <rect width="1200" height="800" class="bg" />
 
     <!-- Title -->
-    <text x="600" y="80" class="text-main" font-size="36" fill="#0f172a">Continuous Integration Flow</text>
+    <text id="text_continuous_integration_flow" x="600" y="80" class="text-main" font-size="36" fill="#0f172a"></text>
 
     <!-- Outer Decorative Ring -->
     <circle cx="600" cy="450" r="300" class="ring" />

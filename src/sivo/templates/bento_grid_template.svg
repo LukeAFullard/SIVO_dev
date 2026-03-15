@@ -22,7 +22,7 @@
   <!-- Main Hero/Title Bento (Top Left) -->
   <g id="bento-hero">
     <rect class="bento-card" x="40" y="40" width="740" height="240" />
-    <text class="placeholder-title" x="80" y="100">Hero Insight Section</text>
+    <text id="text_hero_insight_section" class="placeholder-title" x="80" y="100"></text>
     <line class="card-header-line" x1="80" y1="120" x2="740" y2="120" />
     <!-- Empty space for SIVO graphic or data text binding -->
     <rect id="bento-hero-data" fill="transparent" x="80" y="140" width="660" height="100" />
@@ -31,21 +31,21 @@
   <!-- Highlight Metric (Top Right) -->
   <g id="bento-metric-1">
     <rect class="bento-card" x="820" y="40" width="340" height="240" />
-    <text class="placeholder-title" x="860" y="100">Key Metric</text>
+    <text id="text_key_metric" class="placeholder-title" x="860" y="100"></text>
     <rect id="bento-metric-1-data" fill="transparent" x="860" y="120" width="260" height="100" />
   </g>
 
   <!-- Tall Vertical Sidebar (Bottom Left) -->
   <g id="bento-sidebar">
     <rect class="bento-card" x="40" y="320" width="340" height="440" />
-    <text class="placeholder-title" x="80" y="380">Demographics</text>
+    <text id="text_demographics" class="placeholder-title" x="80" y="380"></text>
     <rect id="bento-sidebar-data" fill="transparent" x="80" y="400" width="260" height="320" />
   </g>
 
   <!-- Large Central Data Area (Bottom Middle) -->
   <g id="bento-main-chart">
     <rect class="bento-card" x="420" y="320" width="740" height="440" />
-    <text class="placeholder-title" x="460" y="380">Primary Visualization</text>
+    <text id="text_primary_visualization" class="placeholder-title" x="460" y="380"></text>
     <rect id="bento-main-chart-data" fill="transparent" x="460" y="400" width="660" height="320" />
   </g>
 

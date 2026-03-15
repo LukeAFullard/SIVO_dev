@@ -22,27 +22,27 @@
   <!-- Left Main Card -->
   <g id="glass-card-1">
     <rect class="glass-card" x="60" y="80" width="400" height="640" />
-    <text class="card-title" x="110" y="140">Profile Analysis</text>
+    <text id="text_profile_analysis" class="card-title" x="110" y="140"></text>
     <rect id="glass-card-1-data" fill="transparent" x="110" y="170" width="300" height="500" />
   </g>
 
   <!-- Top Right Card -->
   <g id="glass-card-2">
     <rect class="glass-card" x="500" y="80" width="640" height="300" />
-    <text class="card-title" x="550" y="140">Performance Overview</text>
+    <text id="text_performance_overview" class="card-title" x="550" y="140"></text>
     <rect id="glass-card-2-data" fill="transparent" x="550" y="170" width="540" height="180" />
   </g>
 
   <!-- Bottom Right Cards (Split) -->
   <g id="glass-card-3">
     <rect class="glass-card" x="500" y="420" width="300" height="300" />
-    <text class="card-title" x="540" y="480">Engagement</text>
+    <text id="text_engagement" class="card-title" x="540" y="480"></text>
     <rect id="glass-card-3-data" fill="transparent" x="540" y="510" width="220" height="180" />
   </g>
 
   <g id="glass-card-4">
     <rect class="glass-card" x="840" y="420" width="300" height="300" />
-    <text class="card-title" x="880" y="480">Growth</text>
+    <text id="text_growth" class="card-title" x="880" y="480"></text>
     <rect id="glass-card-4-data" fill="transparent" x="880" y="510" width="220" height="180" />
   </g>
 

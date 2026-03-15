@@ -24,7 +24,7 @@
   <!-- Main Hero Card -->
   <g id="neu-hero">
     <rect class="neu-card" x="60" y="60" width="600" height="300" />
-    <text class="neu-title" x="110" y="130">Overview Analytics</text>
+    <text id="text_overview_analytics" class="neu-title" x="110" y="130"></text>
     <!-- Placeholder data zone disguised as an inset well -->
     <rect class="neu-inset" x="100" y="160" width="520" height="160" />
     <rect id="neu-hero-data" fill="transparent" x="100" y="160" width="520" height="160" />
@@ -33,20 +33,20 @@
   <!-- Right Side Stat Blocks -->
   <g id="neu-stat-1">
     <rect class="neu-card" x="720" y="60" width="420" height="130" />
-    <text class="neu-title" x="760" y="110">Revenue</text>
+    <text id="text_revenue" class="neu-title" x="760" y="110"></text>
     <rect id="neu-stat-1-data" fill="transparent" x="880" y="70" width="240" height="110" />
   </g>
 
   <g id="neu-stat-2">
     <rect class="neu-card" x="720" y="230" width="420" height="130" />
-    <text class="neu-title" x="760" y="280">Growth</text>
+    <text id="text_growth" class="neu-title" x="760" y="280"></text>
     <rect id="neu-stat-2-data" fill="transparent" x="880" y="240" width="240" height="110" />
   </g>
 
   <!-- Bottom Wide Chart -->
   <g id="neu-chart">
     <rect class="neu-card" x="60" y="420" width="1080" height="320" />
-    <text class="neu-title" x="110" y="480">Yearly Performance Trend</text>
+    <text id="text_yearly_performance_trend" class="neu-title" x="110" y="480"></text>
     <rect class="neu-inset" x="100" y="520" width="1000" height="190" />
     <rect id="neu-chart-data" fill="transparent" x="100" y="520" width="1000" height="190" />
   </g>

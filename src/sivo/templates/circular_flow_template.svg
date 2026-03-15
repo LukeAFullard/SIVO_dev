@@ -28,7 +28,7 @@
   <!-- Central Hub -->
   <g id="hub-center">
     <circle class="center-circle" cx="600" cy="400" r="100" />
-    <text class="center-text" x="600" y="410">CORE</text>
+    <text id="text_core" class="center-text" x="600" y="410"></text>
   </g>
 
   <!-- Connectors -->
@@ -40,28 +40,28 @@
   <!-- Node: Top -->
   <g id="node-top">
     <rect class="node-card" x="480" y="60" width="240" height="120" />
-    <text class="node-title" x="500" y="95">Phase 1</text>
+    <text id="text_phase_1" class="node-title" x="500" y="95"></text>
     <rect id="node-top-data" fill="transparent" x="500" y="105" width="200" height="60" />
   </g>
 
   <!-- Node: Right -->
   <g id="node-right">
     <rect class="node-card" x="880" y="340" width="240" height="120" />
-    <text class="node-title" x="900" y="375">Phase 2</text>
+    <text id="text_phase_2" class="node-title" x="900" y="375"></text>
     <rect id="node-right-data" fill="transparent" x="900" y="385" width="200" height="60" />
   </g>
 
   <!-- Node: Bottom -->
   <g id="node-bottom">
     <rect class="node-card" x="480" y="620" width="240" height="120" />
-    <text class="node-title" x="500" y="655">Phase 3</text>
+    <text id="text_phase_3" class="node-title" x="500" y="655"></text>
     <rect id="node-bottom-data" fill="transparent" x="500" y="665" width="200" height="60" />
   </g>
 
   <!-- Node: Left -->
   <g id="node-left">
     <rect class="node-card" x="80" y="340" width="240" height="120" />
-    <text class="node-title" x="100" y="375">Phase 4</text>
+    <text id="text_phase_4" class="node-title" x="100" y="375"></text>
     <rect id="node-left-data" fill="transparent" x="100" y="385" width="200" height="60" />
   </g>
 

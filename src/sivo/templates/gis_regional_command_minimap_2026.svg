@@ -19,8 +19,8 @@
     <!-- Command Center Header (Floating Top Left) -->
     <g id="command-header">
         <rect x="80" y="80" width="480" height="120" class="ui-card" fill-opacity="0.9" />
-        <text x="110" y="130" class="headline">Regional Command Center</text>
-        <text x="110" y="160" class="meta">Live Operational Map. Last updated: Just now.</text>
+        <text id="text_regional_command_center" x="110" y="130" class="headline"></text>
+        <text id="text_live_operational_map_last_updated_just_now" x="110" y="160" class="meta"></text>
         <circle cx="110" cy="115" r="6" class="indicator-dot">
             <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite" />
         </circle>

@@ -21,8 +21,8 @@
 
     <rect width="1200" height="800" class="bg" />
 
-    <text x="80" y="80" class="header-text">Data and Analytics Overview</text>
-    <text x="80" y="110" class="sub-text">A high-level look at performance metrics for 2026.</text>
+    <text id="text_data_and_analytics_overview" x="80" y="80" class="header-text"></text>
+    <text id="text_a_high_level_look_at_performance_metrics_for_2026" x="80" y="110" class="sub-text"></text>
 
     <!-- Top Stats Row -->
     <g id="stat-1">

@@ -17,8 +17,8 @@
     <!-- Left Side: Interactive Map/GIS Layer -->
     <g id="map-section">
         <rect x="40" y="40" width="820" height="820" class="panel" />
-        <text x="80" y="100" class="header-text" font-size="24">Geospatial Distribution</text>
-        <text x="80" y="130" class="sub-text">Interact with regions to view specific data points.</text>
+        <text id="text_geospatial_distribution" x="80" y="100" class="header-text" font-size="24"></text>
+        <text id="text_interact_with_regions_to_view_specific_data_points" x="80" y="130" class="sub-text"></text>
 
         <!-- Primary Map Container (for SIVO map action) -->
         <rect id="map-primary" x="80" y="160" width="740" height="660" class="map-container" />
@@ -27,8 +27,8 @@
     <!-- Right Side: Analytical Dashboard -->
     <g id="analytics-section">
         <rect x="880" y="40" width="520" height="820" class="panel" />
-        <text x="920" y="100" class="header-text">Regional Analytics</text>
-        <text x="920" y="130" class="sub-text">Selected Region: Aggregate Statistics</text>
+        <text id="text_regional_analytics" x="920" y="100" class="header-text"></text>
+        <text id="text_selected_region_aggregate_statistics" x="920" y="130" class="sub-text"></text>
 
         <!-- KPI Grid (Bento Style) -->
         <g id="kpi-1">

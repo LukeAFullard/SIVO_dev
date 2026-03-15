@@ -19,14 +19,14 @@
     <g id="glass-search-header">
         <rect x="420" y="60" width="600" height="64" class="search-bar" />
         <!-- Placeholder for search input text / SIVO search action -->
-        <text x="460" y="98" class="sub-text">Search regions, coordinates, or assets...</text>
+        <text id="text_search_regions_coordinates_or_assets" x="460" y="98" class="sub-text"></text>
     </g>
 
     <!-- Glassmorphic Main Data Panel (Floating Left) -->
     <g id="glass-panel-data">
         <rect x="60" y="160" width="380" height="660" class="glass-panel" />
-        <text x="100" y="220" class="headline" font-size="28">Live Analysis</text>
-        <text x="100" y="250" class="sub-text">Interact with the map to drill down.</text>
+        <text id="text_live_analysis" x="100" y="220" class="headline" font-size="28"></text>
+        <text id="text_interact_with_the_map_to_drill_down" x="100" y="250" class="sub-text"></text>
 
         <!-- List or Chart Placeholder -->
         <rect x="100" y="290" width="300" height="200" fill="#f8fafc" rx="12" opacity="0.8" />
@@ -36,7 +36,7 @@
     <!-- Glassmorphic Map Legend/Filter (Floating Right Bottom) -->
     <g id="glass-panel-legend">
         <rect x="1080" y="560" width="280" height="260" class="glass-panel" />
-        <text x="1110" y="610" class="headline" font-size="20">Map Legend and Filters</text>
+        <text id="text_map_legend_and_filters" x="1110" y="610" class="headline" font-size="20"></text>
         <!-- Filter Checkbox Placeholders -->
         <rect x="1110" y="640" width="24" height="24" rx="4" fill="#3b82f6" />
         <rect x="1110" y="680" width="24" height="24" rx="4" fill="#10b981" />

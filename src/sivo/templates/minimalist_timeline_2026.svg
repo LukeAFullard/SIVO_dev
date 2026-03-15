@@ -20,8 +20,8 @@
     <rect width="1200" height="800" class="bg" />
 
     <!-- Title Area -->
-    <text x="100" y="80" class="text-title" font-size="36">Product Roadmap 2026</text>
-    <text x="100" y="110" class="text-body">A strategic overview of upcoming milestones and key deliverables.</text>
+    <text id="text_product_roadmap_2026" x="100" y="80" class="text-title" font-size="36"></text>
+    <text id="text_a_strategic_overview_of_upcoming_milestones_and_key_deliverables" x="100" y="110" class="text-body"></text>
 
     <!-- Main Timeline Line -->
     <path class="line" d="M 200 200 L 200 700" />
