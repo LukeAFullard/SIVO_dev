@@ -328,57 +328,82 @@ class Sivo:
         """
         Applies a pre-defined set of global styles and themes to the infographic.
         Available styles: 'dark_mode', 'minimalist', 'cyberpunk', 'glassmorphism', 'neon'.
-        This method will inject specific background colors, update the ECharts theme,
-        and optionally inject global SVG filters or CSS for the runtime.
+        This method will dynamically inject CSS <style> overrides into the SVG
+        to alter the background, cards, lines, and text colors directly.
         """
         style_name = style_name.lower()
 
-        # We can dynamically inject CSS into the runtime via custom_css later,
-        # but here we set standard ProjectConfig properties and inject global SVG definitions.
-
         if style_name == "dark_mode":
             self.infographic.theme = "dark"
-            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#121212", "id": "sivo_bg_layer"})
+            css = '''
+                .bg { fill: #0f172a !important; }
+                .bento-card, .soft-card { fill: #1e293b !important; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)) !important; stroke: #334155 !important; }
+                .glass-panel { fill: rgba(30, 41, 59, 0.7) !important; stroke: rgba(148, 163, 184, 0.2) !important; }
+                .card-header-line, .connecting-line { stroke: #334155 !important; }
+                .placeholder-title { fill: #f8fafc !important; }
+                .placeholder-text, .placeholder-text-subtitle { fill: #94a3b8 !important; }
+                .placeholder-text-title, .placeholder-text-large { fill: #cbd5e1 !important; }
+                .node-circle { fill: #1e293b !important; stroke: #3b82f6 !important; }
+            '''
+            self.add_shape("style", {"text_content": css})
 
         elif style_name == "minimalist":
             self.infographic.theme = "light"
-            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#ffffff", "id": "sivo_bg_layer"})
+            css = '''
+                .bg { fill: #ffffff !important; }
+                .bento-card, .soft-card { fill: #ffffff !important; filter: none !important; stroke: #e2e8f0 !important; stroke-width: 1px !important; }
+                .glass-panel { fill: #ffffff !important; stroke: #e2e8f0 !important; filter: none !important; }
+                .card-header-line, .connecting-line { stroke: #e2e8f0 !important; }
+                .placeholder-title { fill: #0f172a !important; font-weight: 500 !important; }
+                .placeholder-text, .placeholder-text-subtitle { fill: #64748b !important; }
+                .placeholder-text-title, .placeholder-text-large { fill: #cbd5e1 !important; }
+                .node-circle { fill: #ffffff !important; stroke: #0f172a !important; }
+                .node-circle-active { fill: #0f172a !important; stroke: #ffffff !important; }
+            '''
+            self.add_shape("style", {"text_content": css})
 
         elif style_name == "cyberpunk":
             self.infographic.theme = "dark"
-            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#0a0a0c", "id": "sivo_bg_layer"})
-            # Inject a global CRT scanline filter pattern
-            scanline_pattern = {
-                "id": "crtScanline",
-                "width": "4",
-                "height": "4",
-                "patternUnits": "userSpaceOnUse"
-            }
-            self.add_shape("pattern", scanline_pattern)
-            # Add line to pattern
-            self.add_shape("line", {"x1": "0", "y1": "0", "x2": "4", "y2": "0", "stroke": "rgba(0, 255, 204, 0.1)", "stroke-width": "1"})
-            # Apply pattern over background
-            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "url(#crtScanline)", "id": "sivo_scanline_layer", "pointer-events": "none"})
+            css = '''
+                .bg { fill: #0a0a0c !important; }
+                .bento-card, .soft-card { fill: #111116 !important; filter: drop-shadow(0 0 8px rgba(0,255,204,0.2)) !important; stroke: #00ffcc !important; stroke-width: 1.5px !important; rx: 0 !important; ry: 0 !important; }
+                .glass-panel { fill: rgba(10,10,12,0.8) !important; stroke: #ff00ff !important; filter: drop-shadow(0 0 10px rgba(255,0,255,0.3)) !important; rx: 0 !important; ry: 0 !important; }
+                .card-header-line, .connecting-line { stroke: #00ffcc !important; }
+                .placeholder-title { fill: #ffffff !important; font-family: monospace, system-ui !important; letter-spacing: 2px !important; }
+                .placeholder-text, .placeholder-text-subtitle { fill: #ff00ff !important; font-family: monospace, system-ui !important; }
+                .placeholder-text-title, .placeholder-text-large { fill: #00ffcc !important; }
+                .node-circle { fill: #111116 !important; stroke: #00ffcc !important; rx: 0 !important; ry: 0 !important; }
+                .node-circle-active { fill: #ff00ff !important; stroke: #111116 !important; filter: drop-shadow(0 0 8px #ff00ff) !important; rx: 0 !important; ry: 0 !important; }
+            '''
+            self.add_shape("style", {"text_content": css})
 
         elif style_name == "glassmorphism":
             self.infographic.theme = "light"
-            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#f1f5f9", "id": "sivo_bg_layer"})
-            # Add blur filter to defs
-            self.add_shape("filter", {"id": "glassBlur", "x": "-20%", "y": "-20%", "width": "140%", "height": "140%"})
-            self.add_shape("feGaussianBlur", {"stdDeviation": "10", "result": "blur"})
-            self.add_shape("feColorMatrix", {"type": "matrix", "values": "1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7", "in": "blur"})
+            css = '''
+                .bg { fill: #f8fafc !important; }
+                .bento-card, .soft-card, .glass-panel { fill: rgba(255, 255, 255, 0.4) !important; stroke: rgba(255, 255, 255, 0.8) !important; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.05)) !important; backdrop-filter: blur(12px) !important; }
+                .card-header-line, .connecting-line { stroke: rgba(148, 163, 184, 0.5) !important; }
+                .placeholder-title { fill: #1e293b !important; }
+                .placeholder-text, .placeholder-text-subtitle { fill: #64748b !important; }
+                .placeholder-text-title, .placeholder-text-large { fill: rgba(203, 213, 225, 0.8) !important; }
+                .node-circle { fill: rgba(255,255,255,0.5) !important; stroke: #3b82f6 !important; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.05)) !important; }
+            '''
+            self.add_shape("style", {"text_content": css})
 
         elif style_name == "neon":
             self.infographic.theme = "dark"
-            self.add_shape("rect", {"width": "100%", "height": "100%", "fill": "#050505", "id": "sivo_bg_layer"})
-            # Add neon glow filter
-            self.add_shape("filter", {"id": "neonGlow", "x": "-50%", "y": "-50%", "width": "200%", "height": "200%"})
-            self.add_shape("feGaussianBlur", {"in": "SourceGraphic", "stdDeviation": "5", "result": "blur1"})
-            self.add_shape("feGaussianBlur", {"in": "SourceGraphic", "stdDeviation": "10", "result": "blur2"})
-            self.add_shape("feMerge", {})
-            self.add_shape("feMergeNode", {"in": "blur1"})
-            self.add_shape("feMergeNode", {"in": "blur2"})
-            self.add_shape("feMergeNode", {"in": "SourceGraphic"})
+            css = '''
+                .bg { fill: #050505 !important; }
+                .bento-card, .soft-card { fill: #0a0a0a !important; filter: drop-shadow(0 0 15px rgba(255,0,255,0.4)) !important; stroke: #ff00ff !important; stroke-width: 2px !important; }
+                .glass-panel { fill: rgba(5,5,5,0.8) !important; stroke: #00ffff !important; filter: drop-shadow(0 0 15px rgba(0,255,255,0.4)) !important; }
+                .card-header-line, .connecting-line { stroke: #00ffff !important; stroke-width: 3px !important; filter: drop-shadow(0 0 5px rgba(0,255,255,0.8)) !important; }
+                .placeholder-title { fill: #ffffff !important; font-weight: 900 !important; letter-spacing: 1px !important; filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)) !important; }
+                .placeholder-text, .placeholder-text-subtitle { fill: #ff00ff !important; }
+                .placeholder-text-title, .placeholder-text-large { fill: rgba(255,0,255,0.3) !important; stroke: #ff00ff !important; stroke-width: 1px !important; }
+                .node-circle { fill: #0a0a0a !important; stroke: #00ffff !important; filter: drop-shadow(0 0 10px #00ffff) !important; }
+                .node-circle-active { fill: #ff00ff !important; stroke: #ffffff !important; filter: drop-shadow(0 0 15px #ff00ff) !important; }
+            '''
+            self.add_shape("style", {"text_content": css})
 
         else:
             raise ValueError(f"Unknown template style: '{style_name}'. Supported styles: dark_mode, minimalist, cyberpunk, glassmorphism, neon.")
