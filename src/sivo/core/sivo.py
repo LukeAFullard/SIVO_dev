@@ -1513,78 +1513,110 @@ class Sivo:
             align: 'left', 'center', or 'right' alignment relative to the placeholder.
             vertical_align: 'top', 'middle', or 'bottom' alignment relative to the placeholder.
         """
+        import lxml.etree as etree
+
+        ns = "http://www.w3.org/2000/svg"
+        if None in self.infographic.parser.root.nsmap:
+            ns = self.infographic.parser.root.nsmap[None]
+        qname = f"{{{ns}}}text"
+
         # Find the bounding box of the target placeholder
         bbox = None
+        target_node = None
+        for node in self.infographic.parser.root.iter():
+            if node.get("id") == element_id or node.get("name") == element_id:
+                target_node = node
+                break
+
+        if target_node is None:
+            print(f"Warning: Could not find template zone '{element_id}'. Skipping fill.")
+            return
+
         for elem in self.infographic.parser.process_elements():
             if elem['id'] == element_id or elem['name'] == element_id:
                 bbox = elem.get('bbox')
                 break
 
         if not bbox:
-            print(f"Warning: Could not find template zone '{element_id}'. Skipping fill.")
-            return
+            # Fallback for text nodes or groups without parsed bounding boxes
+            try:
+                x = float(target_node.get("x", 0))
+                y = float(target_node.get("y", 0))
+            except (ValueError, TypeError):
+                x, y = 0, 0
+            text_anchor = target_node.get("text-anchor", "start")
 
-        min_x, min_y, max_x, max_y = bbox
-        width = max_x - min_x
-        height = max_y - min_y
+            # Simple override alignment if passed explicitly
+            if align == "center": text_anchor = "middle"
+            elif align == "right": text_anchor = "end"
+            elif align == "left": text_anchor = "start"
 
-        # Calculate horizontal position based on alignment
-        text_anchor = "start"
-        if align == "center":
-            x = min_x + (width / 2)
-            text_anchor = "middle"
-        elif align == "right":
-            x = max_x
-            text_anchor = "end"
-        else: # left
-            x = min_x
+        else:
+            min_x, min_y, max_x, max_y = bbox
+            width = max_x - min_x
+            height = max_y - min_y
 
-        # Calculate vertical position based on alignment (SVG text is positioned by baseline)
-        if vertical_align == "top":
-            y = min_y + font_size
-        elif vertical_align == "bottom":
-            y = max_y
-        else: # middle
-            # Rough approximation to center the text baseline vertically in the box
-            y = min_y + (height / 2) + (font_size / 3)
+            # Calculate horizontal position based on alignment
+            text_anchor = "start"
+            if align == "center":
+                x = min_x + (width / 2)
+                text_anchor = "middle"
+            elif align == "right":
+                x = max_x
+                text_anchor = "end"
+            else: # left
+                x = min_x
 
-        import lxml.etree as etree
-
-        # Hide the original placeholder shape and inject the text node exactly in the same DOM location
-        # This ensures the text inherits any <g transform="..."> translation matrices naturally.
-        ns = "http://www.w3.org/2000/svg"
-        if None in self.infographic.parser.root.nsmap:
-            ns = self.infographic.parser.root.nsmap[None]
-
-        qname = f"{{{ns}}}text"
+            # Calculate vertical position based on alignment (SVG text is positioned by baseline)
+            if vertical_align == "top":
+                y = min_y + font_size
+            elif vertical_align == "bottom":
+                y = max_y
+            else: # middle
+                # Rough approximation to center the text baseline vertically in the box
+                y = min_y + (height / 2) + (font_size / 3)
 
         for node in self.infographic.parser.root.iter():
             if node.get("id") == element_id or node.get("name") == element_id:
-                # 1. Hide placeholder
-                node.set("opacity", "0")
-                node.set("pointer-events", "none")
-
-                # 2. Construct text element
-                text_elem = etree.Element(qname)
-                text_elem.set("x", str(x))
-                text_elem.set("y", str(y))
-                text_elem.set("fill", color)
-                text_elem.set("font-size", f"{font_size}px")
-                text_elem.set("font-family", font_family)
-                text_elem.set("font-weight", font_weight)
-                text_elem.set("text-anchor", text_anchor)
-                text_elem.set("class", "sivo-template-text")
-                text_elem.text = text
-
-                # 3. Append as an immediate sibling to inherit exact transform logic
-                parent = node.getparent()
-                if parent is not None:
-                    # Insert right after the placeholder
-                    idx = parent.index(node)
-                    parent.insert(idx + 1, text_elem)
+                # Determine if the target is already a <text> element
+                tag = node.tag.split("}")[-1] if "}" in node.tag else node.tag
+                if tag == "text":
+                    # Directly inject into the existing text element to preserve styles
+                    # but override position and text properties
+                    node.set("x", str(x))
+                    node.set("y", str(y))
+                    node.set("fill", color)
+                    node.set("font-size", f"{font_size}px")
+                    node.set("font-family", font_family)
+                    node.set("font-weight", font_weight)
+                    node.set("text-anchor", text_anchor)
+                    node.text = text
                 else:
-                    # Fallback to root
-                    self.infographic.parser.root.append(text_elem)
+                    # 1. Hide placeholder shape
+                    node.set("opacity", "0")
+                    node.set("pointer-events", "none")
+
+                    # 2. Construct text element
+                    text_elem = etree.Element(qname)
+                    text_elem.set("x", str(x))
+                    text_elem.set("y", str(y))
+                    text_elem.set("fill", color)
+                    text_elem.set("font-size", f"{font_size}px")
+                    text_elem.set("font-family", font_family)
+                    text_elem.set("font-weight", font_weight)
+                    text_elem.set("text-anchor", text_anchor)
+                    text_elem.set("class", "sivo-template-text")
+                    text_elem.text = text
+
+                    # 3. Append as an immediate sibling to inherit exact transform logic
+                    parent = node.getparent()
+                    if parent is not None:
+                        # Insert right after the placeholder
+                        idx = parent.index(node)
+                        parent.insert(idx + 1, text_elem)
+                    else:
+                        # Fallback to root
+                        self.infographic.parser.root.append(text_elem)
 
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""

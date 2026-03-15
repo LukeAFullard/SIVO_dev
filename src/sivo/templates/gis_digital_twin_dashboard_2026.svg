@@ -48,7 +48,7 @@
 
         <!-- Chart Area -->
         <g id="chart-predictive">
-            <rect x="70" y="600" width="280" height="230" class="data-box" />
+            <rect id="predictive-chart-zone" x="70" y="600" width="280" height="230" class="data-box" />
         </g>
     </g>
 

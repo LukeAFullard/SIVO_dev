@@ -8,36 +8,22 @@ def run():
         "src", "sivo", "templates", "bento_grid_dashboard_2026.svg"
     )
 
-    with open(template_path, 'r') as f:
-        svg_content = f.read()
-
-    # We will just create a new temporary SVG file with rect ids that match exactly the positions of the cards
-    # Looking at the original: <rect x="680" y="160" width="460" height="180" class="card" />
-    svg_content = svg_content.replace('<rect x="680" y="160" width="460" height="180" class="card" />', '<rect id="rect-users" x="680" y="160" width="460" height="180" class="card" />')
-    svg_content = svg_content.replace('<rect x="680" y="360" width="460" height="180" class="card" />', '<rect id="rect-conversion" x="680" y="360" width="460" height="180" class="card" />')
-
-    # For text, replace the empty <text> tag with a placeholder rect
-    svg_content = svg_content.replace('<text id="text_performance_overview" x="60" y="80" class="title"></text>', '<rect id="text_performance_overview" x="60" y="50" width="300" height="40" fill="transparent" />')
-
-    temp_path = os.path.join(os.path.dirname(__file__), "temp_bento.svg")
-    with open(temp_path, "w") as f:
-        f.write(svg_content)
-
+    # SIVO natively supports text placeholders and adding shapes without text/file replacement hacks
     app = Sivo.from_svg(
-        temp_path,
+        template_path,
         disable_zoom_controls=True,
         lock_canvas=True,
         theme="light"
     )
 
-    # Use fill_template_zone on the rect placeholder
+    # Inject into the existing <text id="text_performance_overview"> natively
     app.fill_template_zone("text_performance_overview", "Global Performance", font_size=28, font_weight="800", color="#0f172a")
 
-    # Add a markdown overlay inside the first card (x=680, width=460)
+    # Add a markdown overlay inside the first card (x=680, width=460) using pure CQW
     md_html = """
     <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; display: flex; flex-direction: column; justify-content: center; background: white; padding: 5cqw; border-radius: 2cqw; font-family: sans-serif;'>
-        <h3 style='margin:0 0 3cqh 0; color: #1e293b; font-size: clamp(14px, 6cqw, 32px);'>System Status</h3>
-        <p style='margin:0; color: #64748b; font-size: clamp(10px, 4cqw, 24px);'>All primary servers are operating at <strong>99.99%</strong> uptime.</p>
+        <h3 style='margin:0 0 3cqh 0; color: #1e293b; font-size: 6cqw;'>System Status</h3>
+        <p style='margin:0; color: #64748b; font-size: 4cqw;'>All primary servers are operating at <strong>99.99%</strong> uptime.</p>
     </div>
     """
     app.add_overlay(
@@ -58,9 +44,6 @@ def run():
 
     output_path = os.path.join(os.path.dirname(__file__), "02_bento_grid.html")
     app.to_html(output_path)
-
-    # Cleanup temp
-    os.remove(temp_path)
     print(f"Generated: {output_path}")
 
 if __name__ == "__main__":

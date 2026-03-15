@@ -39,7 +39,7 @@
     <!-- Node 1: Discovery (Completed) -->
     <g id="node-1-discovery">
         <!-- Interaction Box -->
-        <rect x="100" y="240" width="220" height="240" class="card-hover" />
+        <rect id="node-1-card" x="100" y="240" width="220" height="240" class="card-hover" />
 
         <!-- Text Placeholders -->
         <rect id="node-1-step-placeholder" x="120" y="295" width="80" height="20" class="placeholder-text-step" />
@@ -53,7 +53,7 @@
 
     <!-- Node 2: Engagement (Active) -->
     <g id="node-2-engagement">
-        <rect x="300" y="420" width="240" height="180" class="card-hover" />
+        <rect id="node-2-card" x="300" y="420" width="240" height="180" class="card-hover" />
         <circle cx="420" cy="480" r="20" class="node-circle-active" filter="url(#shadow)" />
         <circle cx="420" cy="480" r="6" fill="#ffffff" />
 
@@ -64,7 +64,7 @@
 
     <!-- Node 3: Conversion (Upcoming) -->
     <g id="node-3-conversion">
-        <rect x="620" y="620" width="240" height="160" class="card-hover" />
+        <rect id="node-3-card" x="620" y="620" width="240" height="160" class="card-hover" />
         <circle cx="680" cy="600" r="16" class="node-circle" />
 
         <rect id="node-3-step-placeholder" x="640" y="645" width="120" height="20" class="placeholder-text-step" />
