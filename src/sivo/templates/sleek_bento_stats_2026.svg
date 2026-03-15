@@ -10,17 +10,16 @@
             .accent-blue { fill: url(#coolBlueGrad); opacity: 0.05; rx: 32; }
             .accent-purple { fill: url(#coolPurpleGrad); opacity: 0.05; rx: 32; }
 
-            .text-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 700; fill: #0f172a; letter-spacing: -1px; }
-            .text-subtitle { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 500; fill: #64748b; text-transform: uppercase; letter-spacing: 2px; }
-
-            .metric-value { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 64px; font-weight: 800; fill: #0f172a; letter-spacing: -2px; }
-            .metric-label { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 18px; font-weight: 600; fill: #475569; }
+            .placeholder-text-title { fill: #e2e8f0; rx: 8; }
+            .placeholder-text-subtitle { fill: #cbd5e1; rx: 4; }
+            .placeholder-text-large { fill: #e2e8f0; rx: 12; }
+            .placeholder-text-small { fill: #f1f5f9; rx: 4; }
 
             .trend-pill { fill: #dcfce7; rx: 12; }
-            .trend-text { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 700; fill: #166534; }
+            .trend-text-placeholder { fill: #bbf7d0; rx: 4; }
 
             .icon-bg { fill: #f1f5f9; rx: 16; }
-            .icon-stroke { stroke: #3b82f6; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+            .icon-placeholder { fill: #cbd5e1; rx: 8; }
         </style>
 
         <linearGradient id="coolBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -39,8 +38,8 @@
 
     <!-- Header Section -->
     <g id="header-group">
-        <text x="60" y="80" class="text-subtitle">Q4 Performance Overview</text>
-        <text x="60" y="125" class="text-title">Analytics Dashboard 2026</text>
+        <rect id="header-subtitle-placeholder" x="60" y="65" width="200" height="16" class="placeholder-text-subtitle" />
+        <rect id="header-title-placeholder" x="60" y="95" width="400" height="40" class="placeholder-text-title" />
     </g>
 
     <!-- Bento Grid Structure -->
@@ -51,17 +50,19 @@
         <rect x="60" y="180" width="520" height="380" class="accent-blue" />
 
         <!-- Icon Placeholder -->
-        <rect x="100" y="220" width="64" height="64" class="icon-bg" />
-        <path d="M120 260 L128 248 L136 256 L148 240" class="icon-stroke" />
-        <path d="M148 240 L148 248 M148 240 L140 240" class="icon-stroke" />
+        <g id="hero-icon-zone">
+            <rect x="100" y="220" width="64" height="64" class="icon-bg" />
+            <rect x="116" y="236" width="32" height="32" class="icon-placeholder" />
+        </g>
 
-        <text x="100" y="340" class="metric-label">Total Revenue</text>
-        <text x="100" y="410" class="metric-value">$4.2M</text>
+        <!-- Text Placeholders -->
+        <rect id="hero-label-placeholder" x="100" y="320" width="140" height="20" class="placeholder-text-subtitle" />
+        <rect id="hero-value-placeholder" x="100" y="360" width="240" height="64" class="placeholder-text-large" />
 
-        <!-- Trend Indicator -->
+        <!-- Trend Indicator Placeholder -->
         <g id="trend-hero" transform="translate(100, 440)">
             <rect width="80" height="32" class="trend-pill" />
-            <text x="40" y="21" class="trend-text" text-anchor="middle">+14.5%</text>
+            <rect id="hero-trend-text-placeholder" x="20" y="12" width="40" height="8" class="trend-text-placeholder" />
         </g>
     </g>
 
@@ -69,12 +70,13 @@
     <g id="bento-top-right">
         <rect x="610" y="180" width="530" height="180" class="bento-card" />
 
-        <rect x="650" y="220" width="48" height="48" class="icon-bg" />
-        <circle cx="674" cy="244" r="10" class="icon-stroke" />
-        <path d="M674 254 C666 254 660 260 660 268 L688 268 C688 260 682 254 674 254 Z" class="icon-stroke" />
+        <g id="top-right-icon-zone">
+            <rect x="650" y="220" width="48" height="48" class="icon-bg" />
+            <rect x="662" y="232" width="24" height="24" class="icon-placeholder" />
+        </g>
 
-        <text x="720" y="245" class="metric-label">Active Users</text>
-        <text x="720" y="310" class="metric-value" style="font-size: 48px;">124.5K</text>
+        <rect id="top-right-label-placeholder" x="720" y="230" width="120" height="18" class="placeholder-text-subtitle" />
+        <rect id="top-right-value-placeholder" x="720" y="265" width="180" height="48" class="placeholder-text-large" />
     </g>
 
     <!-- 3. Middle Right Card (Medium) -->
@@ -82,34 +84,34 @@
         <rect x="610" y="380" width="530" height="180" class="bento-card" />
         <rect x="610" y="380" width="530" height="180" class="accent-purple" />
 
-        <text x="650" y="440" class="metric-label">Conversion Rate</text>
-        <text x="650" y="510" class="metric-value" style="font-size: 48px;">8.4%</text>
+        <rect id="mid-right-label-placeholder" x="650" y="425" width="160" height="18" class="placeholder-text-subtitle" />
+        <rect id="mid-right-value-placeholder" x="650" y="465" width="140" height="48" class="placeholder-text-large" />
 
-        <!-- Trend Indicator -->
+        <!-- Trend Indicator Placeholder -->
         <g id="trend-mid" transform="translate(810, 473)">
             <rect width="70" height="32" class="trend-pill" />
-            <text x="35" y="21" class="trend-text" text-anchor="middle">+2.1%</text>
+            <rect id="mid-trend-text-placeholder" x="15" y="12" width="40" height="8" class="trend-text-placeholder" />
         </g>
     </g>
 
     <!-- 4. Bottom Left Card (Small) -->
     <g id="bento-bottom-left">
         <rect x="60" y="590" width="340" height="150" class="bento-card" />
-        <text x="100" y="640" class="metric-label" style="font-size: 16px;">Bounce Rate</text>
-        <text x="100" y="695" class="metric-value" style="font-size: 36px;">24.2%</text>
+        <rect id="bottom-left-label-placeholder" x="100" y="625" width="100" height="16" class="placeholder-text-subtitle" />
+        <rect id="bottom-left-value-placeholder" x="100" y="660" width="120" height="36" class="placeholder-text-large" />
     </g>
 
     <!-- 5. Bottom Center Card (Small) -->
     <g id="bento-bottom-center">
         <rect x="420" y="590" width="340" height="150" class="bento-card" />
-        <text x="460" y="640" class="metric-label" style="font-size: 16px;">Avg. Session</text>
-        <text x="460" y="695" class="metric-value" style="font-size: 36px;">4m 12s</text>
+        <rect id="bottom-center-label-placeholder" x="460" y="625" width="110" height="16" class="placeholder-text-subtitle" />
+        <rect id="bottom-center-value-placeholder" x="460" y="660" width="140" height="36" class="placeholder-text-large" />
     </g>
 
     <!-- 6. Bottom Right Card (Small) -->
     <g id="bento-bottom-right">
         <rect x="780" y="590" width="360" height="150" class="bento-card" />
-        <text x="820" y="640" class="metric-label" style="font-size: 16px;">Customer Satisfaction</text>
-        <text x="820" y="695" class="metric-value" style="font-size: 36px;">98/100</text>
+        <rect id="bottom-right-label-placeholder" x="820" y="625" width="150" height="16" class="placeholder-text-subtitle" />
+        <rect id="bottom-right-value-placeholder" x="820" y="660" width="100" height="36" class="placeholder-text-large" />
     </g>
 </svg>

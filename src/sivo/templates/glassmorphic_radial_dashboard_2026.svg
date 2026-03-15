@@ -12,11 +12,10 @@
             .center-ring { fill: none; stroke: url(#gradientRing); stroke-width: 8; stroke-linecap: round; }
             .dashed-ring { fill: none; stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 6 12; opacity: 0.5; }
 
-            .text-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 36px; font-weight: 800; fill: #0f172a; text-anchor: middle; }
-            .text-subtitle { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #64748b; text-transform: uppercase; letter-spacing: 2px; text-anchor: middle; }
-
-            .card-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 18px; font-weight: 700; fill: #1e293b; }
-            .card-value { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 800; fill: #3b82f6; letter-spacing: -1px; }
+            .placeholder-text-title { fill: #cbd5e1; rx: 8; }
+            .placeholder-text-subtitle { fill: #94a3b8; rx: 4; opacity: 0.5; }
+            .placeholder-text-card-title { fill: #cbd5e1; rx: 6; }
+            .placeholder-text-card-value { fill: #94a3b8; rx: 8; }
 
             .connecting-line { stroke: #cbd5e1; stroke-width: 2; fill: none; }
         </style>
@@ -60,42 +59,42 @@
         <!-- Progress Ring Overlay -->
         <circle cx="600" cy="400" r="120" class="center-ring" stroke-dasharray="750" stroke-dashoffset="150" transform="rotate(-90 600 400)" />
 
-        <text x="600" y="380" class="text-subtitle">System Health</text>
-        <text x="600" y="430" class="text-title" style="font-size: 64px;">86%</text>
+        <rect id="center-subtitle-placeholder" x="540" y="370" width="120" height="14" class="placeholder-text-subtitle" />
+        <rect id="center-value-placeholder" x="500" y="400" width="200" height="60" class="placeholder-text-title" style="fill: #3b82f6; opacity: 0.1;" />
     </g>
 
     <!-- Top Left Glass Card -->
     <g id="glass-card-1">
         <rect x="120" y="150" width="280" height="140" class="glass-panel" />
-        <text x="160" y="200" class="card-title">Network Latency</text>
-        <text x="160" y="250" class="card-value">24ms</text>
+        <rect id="card-1-title-placeholder" x="160" y="185" width="140" height="18" class="placeholder-text-card-title" />
+        <rect id="card-1-value-placeholder" x="160" y="220" width="180" height="40" class="placeholder-text-card-value" style="fill: #3b82f6; opacity: 0.2;" />
     </g>
 
     <!-- Top Right Glass Card -->
     <g id="glass-card-2">
         <rect x="800" y="150" width="280" height="140" class="glass-panel" />
-        <text x="840" y="200" class="card-title">Active Queries</text>
-        <text x="840" y="250" class="card-value" style="fill: #8b5cf6;">1.2M</text>
+        <rect id="card-2-title-placeholder" x="840" y="185" width="130" height="18" class="placeholder-text-card-title" />
+        <rect id="card-2-value-placeholder" x="840" y="220" width="160" height="40" class="placeholder-text-card-value" style="fill: #8b5cf6; opacity: 0.2;" />
     </g>
 
     <!-- Bottom Left Glass Card -->
     <g id="glass-card-3">
         <rect x="120" y="550" width="280" height="140" class="glass-panel" />
-        <text x="160" y="600" class="card-title">Server Load</text>
-        <text x="160" y="650" class="card-value" style="fill: #ec4899;">42%</text>
+        <rect id="card-3-title-placeholder" x="160" y="585" width="120" height="18" class="placeholder-text-card-title" />
+        <rect id="card-3-value-placeholder" x="160" y="620" width="140" height="40" class="placeholder-text-card-value" style="fill: #ec4899; opacity: 0.2;" />
     </g>
 
     <!-- Bottom Right Glass Card -->
     <g id="glass-card-4">
         <rect x="800" y="550" width="280" height="140" class="glass-panel" />
-        <text x="840" y="600" class="card-title">Uptime SLA</text>
-        <text x="840" y="650" class="card-value" style="fill: #10b981;">99.9%</text>
+        <rect id="card-4-title-placeholder" x="840" y="585" width="150" height="18" class="placeholder-text-card-title" />
+        <rect id="card-4-value-placeholder" x="840" y="620" width="170" height="40" class="placeholder-text-card-value" style="fill: #10b981; opacity: 0.2;" />
     </g>
 
     <!-- Header Overlay -->
     <g id="header-text">
-        <text x="600" y="80" class="text-subtitle" style="font-size: 16px;">Global Infrastructure Map</text>
-        <text x="600" y="125" class="text-title">Command Center</text>
+        <rect id="header-subtitle-top-placeholder" x="500" y="65" width="200" height="16" class="placeholder-text-subtitle" />
+        <rect id="header-title-top-placeholder" x="450" y="95" width="300" height="36" class="placeholder-text-title" />
     </g>
 
 </svg>
