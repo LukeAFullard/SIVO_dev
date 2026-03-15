@@ -21,35 +21,35 @@ def build_climate_dashboard():
     app.apply_template_style("glassmorphism")
 
     # ---------------------------------------------------------
-    # 3. Add Custom Text Overlays to replace "Blank Zone" SVGs
+    # 3. Add Custom Native SVG Text to "Blank Zone" placehders
     # ---------------------------------------------------------
 
-    # Using scale_with_zoom=True forces ECharts to render the div natively matching the zoom level.
-    # The font-size is specified relative to the 1200x800 viewBox pixel space. We adjust standard positioning by adding offsets.
+    # We use the new `fill_template_zone` which natively injects `<text>` into the SVG node hierarchy.
+    # This completely eliminates HTML DOM scaling overlaps on mobile devices and renders flawlessly natively.
 
     # Header
-    app.add_overlay("header-subtitle-top-placeholder", "<div style='color: #64748b; font-family: -apple-system, sans-serif; font-weight: 600; letter-spacing: 2px; font-size: 14px; white-space: nowrap;'>UN ENVIRONMENTAL PROGRAM</div>", scale_with_zoom=True, offset_y=-5)
-    app.add_overlay("header-title-top-placeholder", "<div style='color: #0f172a; font-family: -apple-system, sans-serif; font-weight: 800; font-size: 38px; white-space: nowrap;'>Climate Action 2026</div>", scale_with_zoom=True, offset_y=10)
+    app.fill_template_zone("header-subtitle-top-placeholder", "UN ENVIRONMENTAL PROGRAM", font_size=14, font_weight="600", color="#64748b")
+    app.fill_template_zone("header-title-top-placeholder", "Climate Action 2026", font_size=38, font_weight="800", color="#0f172a")
 
     # Center Hub (Earth Health Index)
-    app.add_overlay("center-subtitle-placeholder", "<div style='color: #64748b; font-family: -apple-system, sans-serif; font-weight: bold; font-size: 14px; text-align: center; white-space: nowrap;'>Global Target Limit</div>", scale_with_zoom=True, offset_y=-5)
-    app.add_overlay("center-value-placeholder", "<div style='color: #ef4444; font-family: -apple-system, sans-serif; font-weight: 800; font-size: 60px;'>1.5°C</div>", scale_with_zoom=True, offset_y=20)
+    app.fill_template_zone("center-subtitle-placeholder", "Global Target Limit", font_size=14, font_weight="bold", color="#64748b", align="center")
+    app.fill_template_zone("center-value-placeholder", "1.5°C", font_size=60, font_weight="800", color="#ef4444", align="center")
 
     # Card 1 (Top Left) - CO2 Levels
-    app.add_overlay("card-1-title-placeholder", "<div style='color: #1e293b; font-family: -apple-system, sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap;'>Global CO2 Levels</div>", scale_with_zoom=True, offset_y=0)
-    app.add_overlay("card-1-value-placeholder", "<div style='color: #3b82f6; font-family: -apple-system, sans-serif; font-weight: 800; font-size: 32px; white-space: nowrap;'>421 ppm</div>", scale_with_zoom=True, offset_y=30)
+    app.fill_template_zone("card-1-title-placeholder", "Global CO2 Levels", font_size=18, font_weight="700", color="#1e293b")
+    app.fill_template_zone("card-1-value-placeholder", "421 ppm", font_size=32, font_weight="800", color="#3b82f6")
 
     # Card 2 (Top Right) - Sea Level Rise
-    app.add_overlay("card-2-title-placeholder", "<div style='color: #1e293b; font-family: -apple-system, sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap;'>Sea Level Rise</div>", scale_with_zoom=True, offset_y=0)
-    app.add_overlay("card-2-value-placeholder", "<div style='color: #8b5cf6; font-family: -apple-system, sans-serif; font-weight: 800; font-size: 32px; white-space: nowrap;'>+3.4 mm/yr</div>", scale_with_zoom=True, offset_y=30)
+    app.fill_template_zone("card-2-title-placeholder", "Sea Level Rise", font_size=18, font_weight="700", color="#1e293b")
+    app.fill_template_zone("card-2-value-placeholder", "+3.4 mm/yr", font_size=32, font_weight="800", color="#8b5cf6")
 
     # Card 3 (Bottom Left) - Global Temp Anomaly
-    app.add_overlay("card-3-title-placeholder", "<div style='color: #1e293b; font-family: -apple-system, sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap;'>Temp Anomaly</div>", scale_with_zoom=True, offset_y=0)
-    app.add_overlay("card-3-value-placeholder", "<div style='color: #ec4899; font-family: -apple-system, sans-serif; font-weight: 800; font-size: 32px; white-space: nowrap;'>+1.1°C</div>", scale_with_zoom=True, offset_y=30)
+    app.fill_template_zone("card-3-title-placeholder", "Temp Anomaly", font_size=18, font_weight="700", color="#1e293b")
+    app.fill_template_zone("card-3-value-placeholder", "+1.1°C", font_size=32, font_weight="800", color="#ec4899")
 
     # Card 4 (Bottom Right) - Arctic Ice Minimum
-    app.add_overlay("card-4-title-placeholder", "<div style='color: #1e293b; font-family: -apple-system, sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap;'>Arctic Ice Extent</div>", scale_with_zoom=True, offset_y=0)
-    app.add_overlay("card-4-value-placeholder", "<div style='color: #10b981; font-family: -apple-system, sans-serif; font-weight: 800; font-size: 32px; white-space: nowrap;'>-12.6%</div>", scale_with_zoom=True, offset_y=30)
+    app.fill_template_zone("card-4-title-placeholder", "Arctic Ice Extent", font_size=18, font_weight="700", color="#1e293b")
+    app.fill_template_zone("card-4-value-placeholder", "-12.6%", font_size=32, font_weight="800", color="#10b981")
 
     # ---------------------------------------------------------
     # 4. Map Interactive Tooltips and Charts to the Glass Cards

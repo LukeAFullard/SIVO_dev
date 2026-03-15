@@ -1497,6 +1497,76 @@ class Sivo:
         """
         self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity, flow_effect, effect_symbol, effect_size)
 
+    def fill_template_zone(self, element_id: str, text: str, font_size: int = 24, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
+        """
+        Replaces a placeholder SVG element (like a <rect>) with native, perfectly-scaled SVG text.
+        This ensures text scales naturally with the viewBox on all devices (mobile/desktop)
+        without relying on floating HTML overlays.
+
+        Args:
+            element_id: The ID of the placeholder shape.
+            text: The text string to inject.
+            font_size: The font size in SVG units.
+            font_weight: The font weight (e.g., 'bold', '700').
+            font_family: The font family.
+            color: The fill color of the text.
+            align: 'left', 'center', or 'right' alignment relative to the placeholder.
+            vertical_align: 'top', 'middle', or 'bottom' alignment relative to the placeholder.
+        """
+        # Find the bounding box of the target placeholder
+        bbox = None
+        for elem in self.infographic.parser.process_elements():
+            if elem['id'] == element_id or elem['name'] == element_id:
+                bbox = elem.get('bbox')
+                break
+
+        if not bbox:
+            print(f"Warning: Could not find template zone '{element_id}'. Skipping fill.")
+            return
+
+        min_x, min_y, max_x, max_y = bbox
+        width = max_x - min_x
+        height = max_y - min_y
+
+        # Calculate horizontal position based on alignment
+        text_anchor = "start"
+        if align == "center":
+            x = min_x + (width / 2)
+            text_anchor = "middle"
+        elif align == "right":
+            x = max_x
+            text_anchor = "end"
+        else: # left
+            x = min_x
+
+        # Calculate vertical position based on alignment (SVG text is positioned by baseline)
+        if vertical_align == "top":
+            y = min_y + font_size
+        elif vertical_align == "bottom":
+            y = max_y
+        else: # middle
+            # Rough approximation to center the text baseline vertically in the box
+            y = min_y + (height / 2) + (font_size / 3)
+
+        # Hide the original placeholder shape so it doesn't render behind the text
+        for node in self.infographic.parser.root.iter():
+            if node.get("id") == element_id or node.get("name") == element_id:
+                node.set("opacity", "0")
+                node.set("pointer-events", "none")
+
+        # Inject the native SVG <text> node
+        self.add_shape("text", {
+            "x": str(x),
+            "y": str(y),
+            "fill": color,
+            "font-size": f"{font_size}px",
+            "font-family": font_family,
+            "font-weight": font_weight,
+            "text-anchor": text_anchor,
+            "text_content": text,
+            "class": "sivo-template-text"
+        })
+
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
         self.infographic.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
