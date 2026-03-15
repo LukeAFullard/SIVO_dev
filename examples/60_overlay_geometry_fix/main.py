@@ -31,20 +31,23 @@ app = Sivo.from_svg(
     theme="light"
 )
 
-# Add custom HTML overlays to perfectly anchor to the SVG shapes
-# Using standard HTML elements. The JS runtime applies translate(-50%, -50%) to ensure true centering.
+# Add custom HTML overlays to perfectly anchor and SCALE to the SVG shapes.
+# The JS runtime now applies exact width/height from the ECharts affine matrix, so 100% width fits the box perfectly.
 
-# 1. Text Overlay
-text_html = '<div style="background: white; color: #1e293b; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-family: sans-serif; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); white-space: nowrap;">✨ Hello SIVO!</div>'
+# 1. Responsive Text Box Overlay
+# It spans the full width of the box.
+text_html = '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); border-radius: 12px;"><span style="color: #ffffff; font-weight: 800; font-family: sans-serif; font-size: 18px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">BOX 1</span></div>'
 app.add_overlay("box-1", text_html, scale_with_zoom=True)
 
 # 2. Figure/Image Overlay
-figure_html = '<div style="background: white; padding: 4px; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center;"><img src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=100&auto=format&fit=crop" width="80" height="80" style="border-radius: 8px;" /><span style="font-family: sans-serif; font-size: 10px; margin-top: 4px; color: #64748b;">Figure 1</span></div>'
+# Scales exactly inside the bounding box.
+figure_html = '<div style="width: 100%; height: 100%; padding: 4px; box-sizing: border-box; border-radius: 12px; display: flex; flex-direction: column; align-items: center;"><img src="https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=100&auto=format&fit=crop" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 10px 15px rgba(0,0,0,0.3);" /></div>'
 app.add_overlay("box-2", figure_html, scale_with_zoom=True)
 
-# 3. Simple Marker Overlay
-marker_html = '<div style="width: 48px; height: 48px; background: #0f172a; border: 4px solid white; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">X</div>'
-app.add_overlay("box-3", marker_html, scale_with_zoom=True)
+# 3. Formatted Content Overlay
+# Utilizing the flexible box dimensions to flow text
+content_html = '<div style="width: 100%; height: 100%; padding: 12px; box-sizing: border-box; background: rgba(15, 23, 42, 0.8); border-radius: 12px; color: white; display: flex; flex-direction: column; justify-content: space-between;"><span style="font-weight: 900; font-family: sans-serif; font-size: 24px;">$42M</span><span style="font-family: sans-serif; font-size: 12px; color: #94a3b8;">Revenue Q3</span></div>'
+app.add_overlay("box-3", content_html, scale_with_zoom=True)
 
 # Generate the output HTML
 output_html = "examples/60_overlay_geometry_fix/index.html"

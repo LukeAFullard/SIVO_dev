@@ -3971,9 +3971,18 @@
                                 var screenX = t[0] * cx + t[2] * cy + t[4];
                                 var screenY = t[1] * cx + t[3] * cy + t[5];
                                 pixel = [screenX, screenY];
+
+                                // Scale width and height explicitly based on the active viewport affine transform matrix.
+                                // An affine scaling matrix generally holds uniform scale on X (t[0]) and Y (t[3]) for SVGs.
+                                var scaleX = Math.sqrt(t[0] * t[0] + t[1] * t[1]);
+                                var scaleY = Math.sqrt(t[2] * t[2] + t[3] * t[3]);
+                                overlayObj.dom.style.width = (rect.width * scaleX) + 'px';
+                                overlayObj.dom.style.height = (rect.height * scaleY) + 'px';
                             } else {
                                 // If there's no transform matrix, it's drawn at 1:1 scale natively
                                 pixel = [cx, cy];
+                                overlayObj.dom.style.width = rect.width + 'px';
+                                overlayObj.dom.style.height = rect.height + 'px';
                             }
                         }
                     }
@@ -3990,19 +3999,23 @@
                     overlayObj.dom.style.left = (pixel[0] + offset[0]) + 'px';
                     overlayObj.dom.style.top = (pixel[1] + offset[1]) + 'px';
 
-                    // Ensure the overlay itself centers properly on its anchor point
-                    // by forcing a base translation of -50%, -50% unless overridden by internal HTML style
+                    // Ensure the overlay itself centers properly on its anchor point.
+                    // Now that width and height explicitly match the bounding box, we do not rely on scale() transforms
+                    // for responsive zooming, as we natively map the exact pixel boundary box continuously in georoam events.
                     var baseTransform = 'translate(-50%, -50%)';
 
                     if (overlayObj.data.scale_with_zoom) {
-                        // Use a transform to scale the overlay, preserving origin at anchor
-                        overlayObj.dom.style.transformOrigin = 'center center';
-                        overlayObj.dom.style.transform = baseTransform + ' scale(' + zoomLevel + ')';
+                        // The user set scale_with_zoom. However, we are actively setting width/height directly in screen pixels now.
+                        // We apply base centering, but skip the transform: scale() because it will double-apply the scaling.
+                        overlayObj.dom.style.transform = baseTransform;
                     } else {
+                        // If they don't want it to scale dynamically, we still force centering.
                         overlayObj.dom.style.transform = baseTransform;
                     }
 
-                    overlayObj.dom.style.display = 'block';
+                    overlayObj.dom.style.display = 'flex'; // Use flex to allow internal content to center
+                    overlayObj.dom.style.alignItems = 'center';
+                    overlayObj.dom.style.justifyContent = 'center';
                 } else {
                     overlayObj.dom.style.display = 'none';
                 }
