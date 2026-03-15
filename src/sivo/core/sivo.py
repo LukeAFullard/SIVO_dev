@@ -328,85 +328,129 @@ class Sivo:
         """
         Applies a pre-defined set of global styles and themes to the infographic.
         Available styles: 'dark_mode', 'minimalist', 'cyberpunk', 'glassmorphism', 'neon'.
-        This method will dynamically inject CSS <style> overrides into the SVG
-        to alter the background, cards, lines, and text colors directly.
+        This method will iterate through the SVG DOM and inject inline styles directly onto
+        the nodes based on their class names, ensuring 100% compatibility with ECharts ZRender.
         """
         style_name = style_name.lower()
 
+        # Define style mappings for various classes based on the selected theme
+        style_map = {}
+
         if style_name == "dark_mode":
             self.infographic.theme = "dark"
-            css = '''
-                .bg { fill: #0f172a !important; }
-                .bento-card, .soft-card { fill: #1e293b !important; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)) !important; stroke: #334155 !important; }
-                .glass-panel { fill: rgba(30, 41, 59, 0.7) !important; stroke: rgba(148, 163, 184, 0.2) !important; }
-                .card-header-line, .connecting-line { stroke: #334155 !important; }
-                .placeholder-title { fill: #f8fafc !important; }
-                .placeholder-text, .placeholder-text-subtitle { fill: #94a3b8 !important; }
-                .placeholder-text-title, .placeholder-text-large { fill: #cbd5e1 !important; }
-                .node-circle { fill: #1e293b !important; stroke: #3b82f6 !important; }
-            '''
-            self.add_shape("style", {"text_content": css})
+            style_map = {
+                "bg": {"fill": "#0f172a"},
+                "bento-card": {"fill": "#1e293b", "stroke": "#334155"},
+                "soft-card": {"fill": "#1e293b", "stroke": "#334155"},
+                "glass-panel": {"fill": "rgba(30, 41, 59, 0.7)", "stroke": "rgba(148, 163, 184, 0.2)"},
+                "card-header-line": {"stroke": "#334155"},
+                "connecting-line": {"stroke": "#334155"},
+                "placeholder-title": {"fill": "#f8fafc"},
+                "placeholder-text-title": {"fill": "#f8fafc"},
+                "placeholder-text": {"fill": "#94a3b8"},
+                "placeholder-text-subtitle": {"fill": "#94a3b8"},
+                "placeholder-text-large": {"fill": "#cbd5e1"},
+                "placeholder-text-card-title": {"fill": "#cbd5e1"},
+                "placeholder-text-card-value": {"fill": "#94a3b8"},
+                "node-circle": {"fill": "#1e293b", "stroke": "#3b82f6"}
+            }
 
         elif style_name == "minimalist":
             self.infographic.theme = "light"
-            css = '''
-                .bg { fill: #ffffff !important; }
-                .bento-card, .soft-card { fill: #ffffff !important; filter: none !important; stroke: #e2e8f0 !important; stroke-width: 1px !important; }
-                .glass-panel { fill: #ffffff !important; stroke: #e2e8f0 !important; filter: none !important; }
-                .card-header-line, .connecting-line { stroke: #e2e8f0 !important; }
-                .placeholder-title { fill: #0f172a !important; font-weight: 500 !important; }
-                .placeholder-text, .placeholder-text-subtitle { fill: #64748b !important; }
-                .placeholder-text-title, .placeholder-text-large { fill: #cbd5e1 !important; }
-                .node-circle { fill: #ffffff !important; stroke: #0f172a !important; }
-                .node-circle-active { fill: #0f172a !important; stroke: #ffffff !important; }
-            '''
-            self.add_shape("style", {"text_content": css})
+            style_map = {
+                "bg": {"fill": "#ffffff"},
+                "bento-card": {"fill": "#ffffff", "stroke": "#e2e8f0", "stroke-width": "1px", "filter": "none"},
+                "soft-card": {"fill": "#ffffff", "stroke": "#e2e8f0", "stroke-width": "1px", "filter": "none"},
+                "glass-panel": {"fill": "#ffffff", "stroke": "#e2e8f0", "filter": "none"},
+                "card-header-line": {"stroke": "#e2e8f0"},
+                "connecting-line": {"stroke": "#e2e8f0"},
+                "placeholder-title": {"fill": "#0f172a", "font-weight": "500"},
+                "placeholder-text-title": {"fill": "#0f172a", "font-weight": "500"},
+                "placeholder-text": {"fill": "#64748b"},
+                "placeholder-text-subtitle": {"fill": "#64748b"},
+                "placeholder-text-large": {"fill": "#cbd5e1"},
+                "placeholder-text-card-title": {"fill": "#cbd5e1"},
+                "placeholder-text-card-value": {"fill": "#94a3b8"},
+                "node-circle": {"fill": "#ffffff", "stroke": "#0f172a"},
+                "node-circle-active": {"fill": "#0f172a", "stroke": "#ffffff"}
+            }
 
         elif style_name == "cyberpunk":
             self.infographic.theme = "dark"
-            css = '''
-                .bg { fill: #0a0a0c !important; }
-                .bento-card, .soft-card { fill: #111116 !important; filter: drop-shadow(0 0 8px rgba(0,255,204,0.2)) !important; stroke: #00ffcc !important; stroke-width: 1.5px !important; rx: 0 !important; ry: 0 !important; }
-                .glass-panel { fill: rgba(10,10,12,0.8) !important; stroke: #ff00ff !important; filter: drop-shadow(0 0 10px rgba(255,0,255,0.3)) !important; rx: 0 !important; ry: 0 !important; }
-                .card-header-line, .connecting-line { stroke: #00ffcc !important; }
-                .placeholder-title { fill: #ffffff !important; font-family: monospace, system-ui !important; letter-spacing: 2px !important; }
-                .placeholder-text, .placeholder-text-subtitle { fill: #ff00ff !important; font-family: monospace, system-ui !important; }
-                .placeholder-text-title, .placeholder-text-large { fill: #00ffcc !important; }
-                .node-circle { fill: #111116 !important; stroke: #00ffcc !important; rx: 0 !important; ry: 0 !important; }
-                .node-circle-active { fill: #ff00ff !important; stroke: #111116 !important; filter: drop-shadow(0 0 8px #ff00ff) !important; rx: 0 !important; ry: 0 !important; }
-            '''
-            self.add_shape("style", {"text_content": css})
+            style_map = {
+                "bg": {"fill": "#0a0a0c"},
+                "bento-card": {"fill": "#111116", "stroke": "#00ffcc", "stroke-width": "1.5px", "rx": "0", "ry": "0"},
+                "soft-card": {"fill": "#111116", "stroke": "#00ffcc", "stroke-width": "1.5px", "rx": "0", "ry": "0"},
+                "glass-panel": {"fill": "rgba(10,10,12,0.8)", "stroke": "#ff00ff", "rx": "0", "ry": "0"},
+                "card-header-line": {"stroke": "#00ffcc"},
+                "connecting-line": {"stroke": "#00ffcc"},
+                "placeholder-title": {"fill": "#ffffff"},
+                "placeholder-text-title": {"fill": "#ffffff"},
+                "placeholder-text": {"fill": "#ff00ff"},
+                "placeholder-text-subtitle": {"fill": "#ff00ff"},
+                "placeholder-text-large": {"fill": "#00ffcc"},
+                "placeholder-text-card-title": {"fill": "#00ffcc"},
+                "placeholder-text-card-value": {"fill": "#ff00ff"},
+                "node-circle": {"fill": "#111116", "stroke": "#00ffcc", "rx": "0", "ry": "0"},
+                "node-circle-active": {"fill": "#ff00ff", "stroke": "#111116", "rx": "0", "ry": "0"}
+            }
 
         elif style_name == "glassmorphism":
             self.infographic.theme = "light"
-            css = '''
-                .bg { fill: #f8fafc !important; }
-                .bento-card, .soft-card, .glass-panel { fill: rgba(255, 255, 255, 0.4) !important; stroke: rgba(255, 255, 255, 0.8) !important; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.05)) !important; backdrop-filter: blur(12px) !important; }
-                .card-header-line, .connecting-line { stroke: rgba(148, 163, 184, 0.5) !important; }
-                .placeholder-title { fill: #1e293b !important; }
-                .placeholder-text, .placeholder-text-subtitle { fill: #64748b !important; }
-                .placeholder-text-title, .placeholder-text-large { fill: rgba(203, 213, 225, 0.8) !important; }
-                .node-circle { fill: rgba(255,255,255,0.5) !important; stroke: #3b82f6 !important; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.05)) !important; }
-            '''
-            self.add_shape("style", {"text_content": css})
+            style_map = {
+                "bg": {"fill": "#f8fafc"},
+                "bento-card": {"fill": "rgba(255, 255, 255, 0.4)", "stroke": "rgba(255, 255, 255, 0.8)"},
+                "soft-card": {"fill": "rgba(255, 255, 255, 0.4)", "stroke": "rgba(255, 255, 255, 0.8)"},
+                "glass-panel": {"fill": "rgba(255, 255, 255, 0.4)", "stroke": "rgba(255, 255, 255, 0.8)"},
+                "card-header-line": {"stroke": "rgba(148, 163, 184, 0.5)"},
+                "connecting-line": {"stroke": "rgba(148, 163, 184, 0.5)"},
+                "placeholder-title": {"fill": "rgba(30,41,59,0.5)"},
+                "placeholder-text-title": {"fill": "rgba(30,41,59,0.5)"},
+                "placeholder-text": {"fill": "rgba(100,116,139,0.3)"},
+                "placeholder-text-subtitle": {"fill": "rgba(100,116,139,0.3)"},
+                "placeholder-text-large": {"fill": "rgba(203, 213, 225, 0.5)"},
+                "placeholder-text-card-title": {"fill": "rgba(203, 213, 225, 0.5)"},
+                "placeholder-text-card-value": {"fill": "rgba(148, 163, 184, 0.3)"},
+                "node-circle": {"fill": "rgba(255,255,255,0.5)", "stroke": "#3b82f6"}
+            }
 
         elif style_name == "neon":
             self.infographic.theme = "dark"
-            css = '''
-                .bg { fill: #050505 !important; }
-                .bento-card, .soft-card { fill: #0a0a0a !important; filter: drop-shadow(0 0 15px rgba(255,0,255,0.4)) !important; stroke: #ff00ff !important; stroke-width: 2px !important; }
-                .glass-panel { fill: rgba(5,5,5,0.8) !important; stroke: #00ffff !important; filter: drop-shadow(0 0 15px rgba(0,255,255,0.4)) !important; }
-                .card-header-line, .connecting-line { stroke: #00ffff !important; stroke-width: 3px !important; filter: drop-shadow(0 0 5px rgba(0,255,255,0.8)) !important; }
-                .placeholder-title { fill: #ffffff !important; font-weight: 900 !important; letter-spacing: 1px !important; filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)) !important; }
-                .placeholder-text, .placeholder-text-subtitle { fill: #ff00ff !important; }
-                .placeholder-text-title, .placeholder-text-large { fill: rgba(255,0,255,0.3) !important; stroke: #ff00ff !important; stroke-width: 1px !important; }
-                .node-circle { fill: #0a0a0a !important; stroke: #00ffff !important; filter: drop-shadow(0 0 10px #00ffff) !important; }
-                .node-circle-active { fill: #ff00ff !important; stroke: #ffffff !important; filter: drop-shadow(0 0 15px #ff00ff) !important; }
-            '''
-            self.add_shape("style", {"text_content": css})
+            style_map = {
+                "bg": {"fill": "#050505"},
+                "bento-card": {"fill": "#0a0a0a", "stroke": "#ff00ff", "stroke-width": "2px"},
+                "soft-card": {"fill": "#0a0a0a", "stroke": "#ff00ff", "stroke-width": "2px"},
+                "glass-panel": {"fill": "rgba(5,5,5,0.8)", "stroke": "#00ffff"},
+                "card-header-line": {"stroke": "#00ffff", "stroke-width": "3px"},
+                "connecting-line": {"stroke": "#00ffff", "stroke-width": "3px"},
+                "placeholder-title": {"fill": "#ffffff", "font-weight": "900"},
+                "placeholder-text-title": {"fill": "#ffffff", "font-weight": "900"},
+                "placeholder-text": {"fill": "#ff00ff"},
+                "placeholder-text-subtitle": {"fill": "#ff00ff"},
+                "placeholder-text-large": {"fill": "rgba(255,0,255,0.3)", "stroke": "#ff00ff", "stroke-width": "1px"},
+                "placeholder-text-card-title": {"fill": "rgba(255,0,255,0.3)", "stroke": "#ff00ff", "stroke-width": "1px"},
+                "placeholder-text-card-value": {"fill": "rgba(0,255,255,0.3)", "stroke": "#00ffff", "stroke-width": "1px"},
+                "node-circle": {"fill": "#0a0a0a", "stroke": "#00ffff"},
+                "node-circle-active": {"fill": "#ff00ff", "stroke": "#ffffff"}
+            }
 
         else:
             raise ValueError(f"Unknown template style: '{style_name}'. Supported styles: dark_mode, minimalist, cyberpunk, glassmorphism, neon.")
+
+        # Directly mutate the SVG DOM to ensure ECharts parses these properties flawlessly natively
+        for elem in self.infographic.parser.root.iter():
+            cls_attr = elem.get("class")
+            if cls_attr:
+                classes = cls_attr.split()
+                for c in classes:
+                    if c in style_map:
+                        # Apply new styles directly to inline attributes
+                        for k, v in style_map[c].items():
+                            # Note: ECharts strongly prefers native attributes over inline style="fill:..."
+                            if k == "style":
+                                elem.set("style", v)
+                            else:
+                                elem.set(k, v)
 
     def add_graphic(self, graphic_element: dict):
         """
@@ -1452,6 +1496,76 @@ class Sivo:
         Draws a visual connection line between the centers of two SVG elements.
         """
         self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity, flow_effect, effect_symbol, effect_size)
+
+    def fill_template_zone(self, element_id: str, text: str, font_size: int = 24, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
+        """
+        Replaces a placeholder SVG element (like a <rect>) with native, perfectly-scaled SVG text.
+        This ensures text scales naturally with the viewBox on all devices (mobile/desktop)
+        without relying on floating HTML overlays.
+
+        Args:
+            element_id: The ID of the placeholder shape.
+            text: The text string to inject.
+            font_size: The font size in SVG units.
+            font_weight: The font weight (e.g., 'bold', '700').
+            font_family: The font family.
+            color: The fill color of the text.
+            align: 'left', 'center', or 'right' alignment relative to the placeholder.
+            vertical_align: 'top', 'middle', or 'bottom' alignment relative to the placeholder.
+        """
+        # Find the bounding box of the target placeholder
+        bbox = None
+        for elem in self.infographic.parser.process_elements():
+            if elem['id'] == element_id or elem['name'] == element_id:
+                bbox = elem.get('bbox')
+                break
+
+        if not bbox:
+            print(f"Warning: Could not find template zone '{element_id}'. Skipping fill.")
+            return
+
+        min_x, min_y, max_x, max_y = bbox
+        width = max_x - min_x
+        height = max_y - min_y
+
+        # Calculate horizontal position based on alignment
+        text_anchor = "start"
+        if align == "center":
+            x = min_x + (width / 2)
+            text_anchor = "middle"
+        elif align == "right":
+            x = max_x
+            text_anchor = "end"
+        else: # left
+            x = min_x
+
+        # Calculate vertical position based on alignment (SVG text is positioned by baseline)
+        if vertical_align == "top":
+            y = min_y + font_size
+        elif vertical_align == "bottom":
+            y = max_y
+        else: # middle
+            # Rough approximation to center the text baseline vertically in the box
+            y = min_y + (height / 2) + (font_size / 3)
+
+        # Hide the original placeholder shape so it doesn't render behind the text
+        for node in self.infographic.parser.root.iter():
+            if node.get("id") == element_id or node.get("name") == element_id:
+                node.set("opacity", "0")
+                node.set("pointer-events", "none")
+
+        # Inject the native SVG <text> node
+        self.add_shape("text", {
+            "x": str(x),
+            "y": str(y),
+            "fill": color,
+            "font-size": f"{font_size}px",
+            "font-family": font_family,
+            "font-weight": font_weight,
+            "text-anchor": text_anchor,
+            "text_content": text,
+            "class": "sivo-template-text"
+        })
 
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
