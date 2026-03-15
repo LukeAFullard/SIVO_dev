@@ -219,6 +219,9 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "ambient_effect": view_obj.get("ambient_effect", None),
             "bounding_coords": view_obj.get("bounding_coords", None),
             "graphic": view_obj.get("graphic", None),
+            "background_image_url": view_obj.get("background_image_url", None),
+            "background_image_opacity": view_obj.get("background_image_opacity", 1.0),
+            "background_image_grayscale": view_obj.get("background_image_grayscale", False),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:
