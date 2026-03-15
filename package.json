@@ -15,5 +15,22 @@
   },
   "devDependencies": {
     "esbuild": "^0.20.0"
-  }
+  },
+  "main": "test_lottie_mobile.js",
+  "directories": {
+    "example": "examples",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LukeAFullard/SIVO_dev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LukeAFullard/SIVO_dev/issues"
+  },
+  "homepage": "https://github.com/LukeAFullard/SIVO_dev#readme"
 }
