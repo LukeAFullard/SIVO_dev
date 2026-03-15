@@ -1548,24 +1548,43 @@ class Sivo:
             # Rough approximation to center the text baseline vertically in the box
             y = min_y + (height / 2) + (font_size / 3)
 
-        # Hide the original placeholder shape so it doesn't render behind the text
+        import lxml.etree as etree
+
+        # Hide the original placeholder shape and inject the text node exactly in the same DOM location
+        # This ensures the text inherits any <g transform="..."> translation matrices naturally.
+        ns = "http://www.w3.org/2000/svg"
+        if None in self.infographic.parser.root.nsmap:
+            ns = self.infographic.parser.root.nsmap[None]
+
+        qname = f"{{{ns}}}text"
+
         for node in self.infographic.parser.root.iter():
             if node.get("id") == element_id or node.get("name") == element_id:
+                # 1. Hide placeholder
                 node.set("opacity", "0")
                 node.set("pointer-events", "none")
 
-        # Inject the native SVG <text> node
-        self.add_shape("text", {
-            "x": str(x),
-            "y": str(y),
-            "fill": color,
-            "font-size": f"{font_size}px",
-            "font-family": font_family,
-            "font-weight": font_weight,
-            "text-anchor": text_anchor,
-            "text_content": text,
-            "class": "sivo-template-text"
-        })
+                # 2. Construct text element
+                text_elem = etree.Element(qname)
+                text_elem.set("x", str(x))
+                text_elem.set("y", str(y))
+                text_elem.set("fill", color)
+                text_elem.set("font-size", f"{font_size}px")
+                text_elem.set("font-family", font_family)
+                text_elem.set("font-weight", font_weight)
+                text_elem.set("text-anchor", text_anchor)
+                text_elem.set("class", "sivo-template-text")
+                text_elem.text = text
+
+                # 3. Append as an immediate sibling to inherit exact transform logic
+                parent = node.getparent()
+                if parent is not None:
+                    # Insert right after the placeholder
+                    idx = parent.index(node)
+                    parent.insert(idx + 1, text_elem)
+                else:
+                    # Fallback to root
+                    self.infographic.parser.root.append(text_elem)
 
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
