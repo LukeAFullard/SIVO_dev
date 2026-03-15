@@ -22,23 +22,25 @@ def run():
     app.fill_template_zone("node-1-step-placeholder", "1. Awareness", font_size=20, font_weight="600", color="#1e293b", align="left")
 
     # Text overlay formatted professionally using Markdown-like content
+    # Binding to the proper large bounding box (node-1-card), not a tiny single text line
+    # Using pure cqw/cqh or % for fluid scaling, preventing overflow on small bounds.
     markdown_html = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 5cqw;'>
-        <h4 style='margin: 0 0 4cqh 0; color: #3b82f6; font-size: clamp(10px, 8cqw, 24px); text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
-        <p style='margin: 0; color: #64748b; font-size: clamp(10px, 7cqw, 20px); line-height: 1.5;'>
-            Launch targeted ads across <b>social media</b> and major search engines.
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: inline-size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw;'>
+        <h4 style='margin: 0 0 4cqh 0; color: #3b82f6; font-size: 10cqw; text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
+        <p style='margin: 0; color: #64748b; font-size: 8cqw; line-height: 1.5;'>
+            Launch targeted ads across <br><b>social media</b> and major <br>search engines.
         </p>
     </div>
     """
 
     app.add_overlay(
-        "node-1-desc-1-placeholder",
+        "node-1-card",
         markdown_html
     )
 
-    # Bar chart overlay bound to node-2-step-placeholder
+    # Bar chart overlay bound to node-2-card (binding to a small single line text node creates a tiny chart)
     app.map_bar_chart(
-        element_id="node-2-step-placeholder",
+        element_id="node-2-card",
         title="Traffic Sources",
         categories=["Ad Spend", "Organic", "Referral"],
         data=[500, 200, 100],

@@ -6,6 +6,7 @@
     "build": "esbuild src/sivo/runtime/templates/sivo_bundle.js --bundle --minify --outfile=dist/sivo.min.js"
   },
   "dependencies": {
+    "@playwright/test": "^1.58.2",
     "dompurify": "^3.0.6",
     "echarts": "^5.6.0",
     "jsdom": "^28.1.0",

@@ -3430,6 +3430,7 @@
                     if (!start) start = timestamp;
                     var progress = timestamp - start;
                     myChart.resize();
+                    updateOverlaysPosition(); // Keep overlays aligned during transition
 
                     if (initCharts && progress > 50 && sivoChartsToInit.length > 0) {
                         // Initialize nested charts once the panel starts rendering
@@ -3653,6 +3654,7 @@
                 if (!start) start = timestamp;
                 var progress = timestamp - start;
                 myChart.resize();
+                updateOverlaysPosition(); // Keep overlays aligned during transition
                 if (progress < 350) {
                     window.requestAnimationFrame(step);
                 }
