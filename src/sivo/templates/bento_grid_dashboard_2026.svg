@@ -46,15 +46,15 @@
     </g>
 
     <!-- Bottom Row Cards -->
-    <g id="card-engagement">
-        <rect x="60" y="560" width="350" height="180" class="card" />
+    <g id="card-engagement-group">
+        <rect id="card-engagement" x="60" y="560" width="350" height="180" class="card" />
     </g>
 
-    <g id="card-bounce">
-        <rect x="430" y="560" width="350" height="180" class="card" />
+    <g id="card-bounce-group">
+        <rect id="card-bounce" x="430" y="560" width="350" height="180" class="card" />
     </g>
 
-    <g id="card-satisfaction">
-        <rect x="800" y="560" width="340" height="180" class="card" />
+    <g id="card-satisfaction-group">
+        <rect id="card-satisfaction" x="800" y="560" width="340" height="180" class="card" />
     </g>
 </svg>

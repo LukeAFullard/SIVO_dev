@@ -32,18 +32,18 @@
         <text id="text_live_telemetry_from_deployed_assets" x="70" y="215" class="sub-text"></text>
 
         <!-- Metric Box 1 -->
-        <g id="metric-iot-1">
-            <rect x="70" y="240" width="280" height="100" class="data-box" />
+        <g id="metric-iot-1-group">
+            <rect id="metric-iot-1" x="70" y="240" width="280" height="100" class="data-box" />
         </g>
 
         <!-- Metric Box 2 -->
-        <g id="metric-iot-2">
-            <rect x="70" y="360" width="280" height="100" class="data-box" />
+        <g id="metric-iot-2-group">
+            <rect id="metric-iot-2" x="70" y="360" width="280" height="100" class="data-box" />
         </g>
 
         <!-- Metric Box 3 -->
-        <g id="metric-iot-3">
-            <rect x="70" y="480" width="280" height="100" class="data-box" />
+        <g id="metric-iot-3-group">
+            <rect id="metric-iot-3" x="70" y="480" width="280" height="100" class="data-box" />
         </g>
 
         <!-- Chart Area -->
