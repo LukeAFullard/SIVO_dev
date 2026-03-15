@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #ffffff; }
+            .layer-base {
+                fill: rgba(248, 250, 252, 0.9);
+                stroke: #cbd5e1;
+                stroke-width: 2;
+                stroke-linejoin: round;
+            }
+            .layer-hover {
+                fill: rgba(59, 130, 246, 0.05);
+                stroke: #3b82f6;
+                stroke-width: 3;
+                filter: drop-shadow(0 20px 30px rgba(59, 130, 246, 0.15));
+                transition: transform 0.3s ease;
+            }
+
+            .text-title { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 800; fill: #0f172a; letter-spacing: -1px; }
+            .text-subtitle { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #64748b; text-transform: uppercase; letter-spacing: 2px; }
+
+            .layer-label { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; font-size: 24px; font-weight: 700; fill: #1e293b; }
+            .layer-desc { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 400; fill: #64748b; line-height: 1.5; }
+
+            .connecting-line { stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 4 6; fill: none; }
+
+            .indicator-dot { fill: #3b82f6; stroke: #ffffff; stroke-width: 4; }
+        </style>
+
+        <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0" dy="15" stdDeviation="20" flood-opacity="0.08" />
+        </filter>
+    </defs>
+
+    <rect width="1200" height="800" class="bg" />
+
+    <!-- Title Section -->
+    <g id="header-group" transform="translate(60, 80)">
+        <text x="0" y="0" class="text-subtitle">Architecture Blueprint</text>
+        <text x="0" y="45" class="text-title">Stack Drill-Down 2026</text>
+    </g>
+
+    <!-- Isometric Layer Stack (Center/Right) -->
+    <!-- The math creates a pseudo-3D isometric diamond stack -->
+
+    <!-- Base Layer (Data Infrastructure) -->
+    <g id="layer-3-data">
+        <path d="M 500 680 L 900 520 L 700 400 L 300 560 Z" class="layer-base" filter="url(#softShadow)" />
+        <path d="M 500 680 L 900 520 L 700 400 L 300 560 Z" fill="transparent" class="interactive-zone" />
+
+        <!-- Surface Details -->
+        <rect x="520" y="520" width="60" height="20" fill="#e2e8f0" transform="skewX(-45) skewY(20)" opacity="0.5" />
+        <rect x="620" y="480" width="100" height="20" fill="#e2e8f0" transform="skewX(-45) skewY(20)" opacity="0.5" />
+
+        <!-- Label Line & Text (Left) -->
+        <path d="M 300 560 L 220 560" class="connecting-line" />
+        <circle cx="300" cy="560" r="8" class="indicator-dot" />
+
+        <text x="200" y="555" class="layer-label" text-anchor="end">Data Tier</text>
+        <text x="200" y="580" class="layer-desc" text-anchor="end">Core database and storage.</text>
+    </g>
+
+    <!-- Middle Layer (Business Logic) -->
+    <g id="layer-2-logic" transform="translate(0, -120)">
+        <path d="M 500 680 L 900 520 L 700 400 L 300 560 Z" class="layer-base" filter="url(#softShadow)" />
+
+        <!-- Decorative grid to imply logic/services -->
+        <path d="M 400 600 L 800 440" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4" />
+        <path d="M 600 600 L 800 520" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4" />
+
+        <!-- Label Line & Text (Right) -->
+        <path d="M 900 520 L 980 520" class="connecting-line" />
+        <circle cx="900" cy="520" r="8" class="indicator-dot" />
+
+        <text x="1000" y="515" class="layer-label" text-anchor="start">Logic Tier</text>
+        <text x="1000" y="540" class="layer-desc" text-anchor="start">Microservices and APIs.</text>
+    </g>
+
+    <!-- Top Layer (Presentation / UI) -->
+    <g id="layer-1-ui" transform="translate(0, -260)">
+        <!-- Emphasized Layer via layer-hover class defaults to simulate active state -->
+        <path d="M 500 680 L 900 520 L 700 400 L 300 560 Z" class="layer-hover" />
+
+        <!-- Floating UI Cards -->
+        <rect x="520" y="520" width="80" height="40" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" transform="skewX(-45) skewY(20)" filter="url(#softShadow)" />
+        <rect x="660" y="460" width="60" height="60" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" transform="skewX(-45) skewY(20)" filter="url(#softShadow)" />
+        <rect x="500" y="420" width="120" height="30" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" transform="skewX(-45) skewY(20)" filter="url(#softShadow)" />
+
+        <!-- Label Line & Text (Left) -->
+        <path d="M 300 560 L 220 560" class="connecting-line" />
+        <circle cx="300" cy="560" r="8" class="indicator-dot" />
+
+        <text x="200" y="555" class="layer-label" text-anchor="end" fill="#3b82f6">Presentation</text>
+        <text x="200" y="580" class="layer-desc" text-anchor="end">Client-side rendering layer.</text>
+    </g>
+
+    <!-- Depth Connector Lines to show relationship between stacks -->
+    <path d="M 300 560 L 300 300" class="connecting-line" opacity="0.3" />
+    <path d="M 900 520 L 900 260" class="connecting-line" opacity="0.3" />
+    <path d="M 500 680 L 500 420" class="connecting-line" opacity="0.3" />
+    <path d="M 700 400 L 700 140" class="connecting-line" opacity="0.3" />
+
+</svg>
