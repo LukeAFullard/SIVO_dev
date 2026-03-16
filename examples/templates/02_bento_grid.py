@@ -30,6 +30,7 @@ def run():
     app.fill_template_zone("text_q3_2026_analytics_dashboard", "Real-time Fleet Tracking & Logistics Intelligence • LIVE", font_size="100%", color="#94a3b8")
 
     # Card Main: Global Map - High Fidelity Map
+    # map_nested_map_chart actually renders ON the SVG element (card-main) because it configures the base geo
     app.map_nested_map_chart(
         element_id="card-main",
         title="Active Maritime Cargo Routes & Congestion",
@@ -68,33 +69,20 @@ def run():
     # Card Users: Fleet Efficiency (Radar Chart)
     app.add_scalable_text("rect-users", "FLEET PERFORMANCE MATRIX", left="8%", top="10%", width="80%", height="15%", font_size="12%", font_weight="700", color="#94a3b8")
 
-    app.map_radar_chart(
-        element_id="rect-users",
-        title="",
-        indicators=[
-            {"name": "On-Time", "max": 100},
-            {"name": "Fuel Eff", "max": 100},
-            {"name": "Maint", "max": 100},
-            {"name": "Safety", "max": 100},
-            {"name": "Capacity", "max": 100}
-        ],
-        data=[
-            {"value": [94, 85, 90, 98, 88], "name": "Current Fleet Avg"}
-        ],
-        color="#10b981",
-        extra_options={
-            "radar": {
-                "center": ["50%", "60%"],
-                "radius": "65%",
-                "axisName": {"color": "#cbd5e1", "fontSize": 10},
-                "splitLine": {"lineStyle": {"color": "#334155"}},
-                "splitArea": {"show": False},
-                "axisLine": {"lineStyle": {"color": "#334155"}}
-            },
-            "series": [{"areaStyle": {"opacity": 0.3}}],
-            "backgroundColor": "transparent"
-        }
-    )
+    # Custom HTML Overlay for Radar/Spider graph on rect-users
+    radar_html = """
+    <div style="width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2cqh; container-type: size;">
+        <svg width="25cqw" height="25cqw" viewBox="0 0 100 100">
+            <!-- Grid -->
+            <polygon points="50,10 90,40 75,90 25,90 10,40" fill="none" stroke="#334155" stroke-width="1"/>
+            <polygon points="50,30 70,45 62,70 38,70 30,45" fill="none" stroke="#334155" stroke-width="1"/>
+            <polygon points="50,50 50,50 50,50 50,50 50,50" fill="none" stroke="#334155" stroke-width="1"/>
+            <!-- Data -->
+            <polygon points="50,15 85,45 70,85 30,80 15,35" fill="rgba(16, 185, 129, 0.3)" stroke="#10b981" stroke-width="2"/>
+        </svg>
+    </div>
+    """
+    app.add_overlay("rect-users", radar_html)
 
     # Card Conversion: Critical Alert System
     app.add_scalable_text("rect-conversion", "PORT CONGESTION ALERT", left="10%", top="15%", width="50%", height="15%", font_size="12%", font_weight="800", color="#ef4444")
@@ -130,46 +118,37 @@ def run():
     # Card 2: Shipments Trend (Area Chart)
     app.add_scalable_text("card-bounce", "WEEKLY CARGO VOL", left="10%", top="10%", width="80%", height="15%", font_size="12%", font_weight="700", color="#94a3b8")
 
-    app.map_line_chart(
-        element_id="card-bounce",
-        title="",
-        categories=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        data=[1200, 1350, 1100, 1500, 1800, 900, 800],
-        color="#8b5cf6",
-        smooth=True,
-        extra_options={
-            "grid": {"top": 40, "bottom": 30, "left": 40, "right": 20},
-            "backgroundColor": "transparent",
-            "xAxis": {"axisLine": {"lineStyle": {"color": "#475569"}}, "axisLabel": {"color": "#cbd5e1"}},
-            "yAxis": {"splitLine": {"lineStyle": {"color": "#334155"}}, "axisLabel": {"color": "#cbd5e1"}},
-            "series": [{"areaStyle": {
-                "color": {
-                    "type": "linear", "x": 0, "y": 0, "x2": 0, "y2": 1,
-                    "colorStops": [{"offset": 0, "color": "rgba(139, 92, 246, 0.8)"}, {"offset": 1, "color": "rgba(139, 92, 246, 0.1)"}]
-                }
-            }}]
-        }
-    )
+    # Directly embed the area chart via SVG inside add_overlay
+    area_html = """
+    <div style="width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2cqh; container-type: size;">
+        <svg width="80cqw" height="40cqh" viewBox="0 0 100 50" preserveAspectRatio="none">
+            <!-- Grid lines -->
+            <line x1="0" y1="25" x2="100" y2="25" stroke="#334155" stroke-width="1" stroke-dasharray="2" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#475569" stroke-width="1" />
+
+            <polyline points="0,40 16,30 33,45 50,20 66,10 83,45 100,40" fill="none" stroke="#8b5cf6" stroke-width="2" />
+            <polygon points="0,40 16,30 33,45 50,20 66,10 83,45 100,40 100,50 0,50" fill="rgba(139, 92, 246, 0.2)" />
+        </svg>
+    </div>
+    """
+    app.add_overlay("card-bounce", area_html)
 
     # Card 3: Emissions Tracker (Gauge)
     app.add_scalable_text("card-satisfaction", "CARBON TARGET (MTD)", left="10%", top="10%", width="80%", height="15%", font_size="12%", font_weight="700", color="#94a3b8")
 
-    app.map_gauge_chart(
-        element_id="card-satisfaction",
-        title="Quota Used",
-        value=68,
-        color="#10b981",
-        extra_options={
-            "series": [{
-                "center": ["50%", "65%"], "radius": "80%",
-                "startAngle": 180, "endAngle": 0,
-                "axisLine": {"lineStyle": {"width": 15, "color": [[0.7, "#10b981"], [0.9, "#f59e0b"], [1, "#ef4444"]]}},
-                "pointer": {"itemStyle": {"color": "#cbd5e1"}},
-                "detail": {"fontSize": 20, "fontWeight": "bold", "color": "#f8fafc", "formatter": "{value}%", "offsetCenter": [0, "-20%"]}
-            }],
-            "backgroundColor": "transparent"
-        }
-    )
+    # Directly embed a gauge chart via SVG
+    gauge_html = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 4cqh; container-type: size;">
+        <svg width="35cqw" height="17.5cqw" viewBox="0 0 100 50">
+            <!-- Background Arc -->
+            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#334155" stroke-width="15" stroke-linecap="round" />
+            <!-- Foreground Arc (Value) -->
+            <path d="M 10 50 A 40 40 0 0 1 65 15" fill="none" stroke="#10b981" stroke-width="15" stroke-linecap="round" />
+            <text x="50" y="45" font-family="sans-serif" font-size="20" font-weight="bold" fill="#f8fafc" text-anchor="middle">68%</text>
+        </svg>
+    </div>
+    """
+    app.add_overlay("card-satisfaction", gauge_html)
 
     output_path = os.path.join(os.path.dirname(__file__), "02_bento_grid.html")
     app.to_html(output_path)

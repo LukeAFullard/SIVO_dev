@@ -25,28 +25,16 @@ def run():
     app.fill_template_zone("node-1-desc-1-placeholder", "Inbound & Outbound Sourced", font_size="100%", font_weight="600", color="#64748b", align="left")
     app.fill_template_zone("node-1-desc-2-placeholder", "Volume: 45,000", font_size="100%", font_weight="800", color="#10b981", align="left")
 
-    # Advanced ECharts: Custom Funnel mapped to interaction box
-    app.map_funnel_chart(
-        element_id="node-1-card",
-        title="Pipeline Velocity",
-        data=[
-            {"name": "Awareness", "value": 100},
-            {"name": "Interest", "value": 60},
-            {"name": "Consideration", "value": 30},
-            {"name": "Intent", "value": 10}
-        ],
-        extra_options={
-            "series": [{
-                "left": "10%", "top": "25%", "bottom": "10%", "width": "80%",
-                "label": {"show": True, "position": "inside", "color": "#fff", "fontWeight": "bold"},
-                "itemStyle": {"borderColor": "#fff", "borderWidth": 2},
-                "emphasis": {"label": {"fontSize": 14}}
-            }],
-            "color": ["#93c5fd", "#60a5fa", "#3b82f6", "#1d4ed8"],
-            "title": {"textStyle": {"fontSize": 12, "color": "#64748b", "fontWeight": "600"}},
-            "backgroundColor": "transparent"
-        }
-    )
+    # Custom HTML Overlay for a Funnel directly on Node 1
+    node_1_funnel = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 2cqh; gap: 2px; container-type: size;">
+        <div style="width: 15cqw; height: 3cqh; background-color: #93c5fd; border-radius: 2px;"></div>
+        <div style="width: 12cqw; height: 3cqh; background-color: #60a5fa; border-radius: 2px;"></div>
+        <div style="width: 8cqw; height: 3cqh; background-color: #3b82f6; border-radius: 2px;"></div>
+        <div style="width: 4cqw; height: 3cqh; background-color: #1d4ed8; border-radius: 2px;"></div>
+    </div>
+    """
+    app.add_overlay("node-1-card", node_1_funnel)
     app.map("node-1-card", tooltip="<b>Phase 1:</b> Initial lead generation and qualification through automated marketing channels.", glow=True, hover_color="#f8fafc")
 
     # Node 2: Qualification
@@ -54,22 +42,19 @@ def run():
     app.fill_template_zone("node-2-desc-1-placeholder", "Sales Accepted Leads (SAL)", font_size="100%", font_weight="600", color="#64748b", align="left")
     app.fill_template_zone("node-2-desc-2-placeholder", "Conversion Rate: 12%", font_size="100%", font_weight="700", color="#f59e0b", align="left")
 
-    # Advanced ECharts: Gauge Chart
-    app.map_gauge_chart(
-        element_id="node-2-card",
-        title="Lead Quality Score",
-        value=78,
-        color="#f59e0b",
-        extra_options={
-            "series": [{
-                "center": ["50%", "50%"], "radius": "80%",
-                "axisLine": {"lineStyle": {"width": 10, "color": [[0.3, "#ef4444"], [0.7, "#f59e0b"], [1, "#10b981"]]}},
-                "pointer": {"itemStyle": {"color": "#1e293b"}},
-                "detail": {"fontSize": 16, "fontWeight": "bold", "color": "#1e293b", "formatter": "{value}/100"}
-            }],
-            "backgroundColor": "transparent"
-        }
-    )
+    # Custom HTML Overlay for a Gauge Chart directly on Node 2
+    node_2_gauge = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 2cqh; container-type: size;">
+        <svg width="20cqw" height="10cqw" viewBox="0 0 100 50">
+            <!-- Background Arc -->
+            <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#e2e8f0" stroke-width="15" stroke-linecap="round" />
+            <!-- Foreground Arc (Value) -->
+            <path d="M 10 50 A 40 40 0 0 1 70 20" fill="none" stroke="#f59e0b" stroke-width="15" stroke-linecap="round" />
+            <text x="50" y="45" font-family="sans-serif" font-size="16" font-weight="bold" fill="#1e293b" text-anchor="middle">78</text>
+        </svg>
+    </div>
+    """
+    app.add_overlay("node-2-card", node_2_gauge)
     app.map("node-2-card", tooltip="<b>Phase 2:</b> BDRs qualify leads based on BANT criteria. Current average score is strong.", hover_color="#f8fafc")
 
 
@@ -105,22 +90,7 @@ def run():
     app.add_scalable_text("node-4-step-placeholder", "CURRENT NRR", left="0%", top="200%", width="100%", height="100%", font_size="80%", font_weight="700", color="#94a3b8", align="left")
     app.add_scalable_text("node-4-step-placeholder", "118.2%", left="0%", top="300%", width="100%", height="200%", font_size="180%", font_weight="900", color="#8b5cf6", align="left")
 
-    # Add a line chart showing NRR trend
-    app.map_line_chart(
-        element_id="node-4-step-placeholder",
-        title="",
-        categories=["Q1", "Q2", "Q3", "Q4"],
-        data=[112, 115, 118, 122],
-        color="#8b5cf6",
-        smooth=True,
-        extra_options={
-            "grid": {"top": 150, "bottom": -50, "left": -10, "right": -10}, # Push it down below the text
-            "xAxis": {"show": False},
-            "yAxis": {"show": False, "min": 100, "max": 130},
-            "series": [{"areaStyle": {"opacity": 0.1}}],
-            "backgroundColor": "transparent"
-        }
-    )
+    # Note: For node-4, we can't easily overlay onto step-placeholder because it's tiny. We'll map the tooltip only.
     app.map("node-4-step-placeholder", tooltip="<b>Phase 4:</b> Customer Success drives upsells and cross-sells, increasing customer lifetime value.", hover_color="#f8fafc")
 
 
@@ -129,6 +99,7 @@ def run():
     app.fill_template_zone("node-5-desc-1-placeholder", "Gross Retention Rate", font_size="100%", font_weight="600", color="#64748b", align="left")
     app.fill_template_zone("node-5-desc-2-placeholder", "Q4 Cohort", font_size="100%", font_weight="800", color="#10b981", align="left")
 
+    # Map side panel action just for demonstration of both approaches
     app.map_pie_chart(
         element_id="node-5-step-placeholder",
         title="Account Status",
@@ -148,7 +119,7 @@ def run():
             "backgroundColor": "transparent"
         }
     )
-    app.map("node-5-step-placeholder", tooltip="<b>Phase 5:</b> Renewal rates are strong. At-risk accounts are actively managed by the CS team.", hover_color="#f8fafc")
+    app.map("node-5-step-placeholder", tooltip="<b>Phase 5:</b> Renewal rates are strong. At-risk accounts are actively managed by the CS team.<br/><i>(Click to view details in panel)</i>", hover_color="#f8fafc")
 
     output_path = os.path.join(os.path.dirname(__file__), "01_minimalist_journey.html")
     app.to_html(output_path)
