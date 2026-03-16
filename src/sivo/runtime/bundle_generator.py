@@ -145,6 +145,13 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             if theme.get('border_width') is not None:
                 item_style['borderWidth'] = theme['border_width']
 
+            transparent_lines = theme.get('transparent_lines')
+            if transparent_lines is None:
+                transparent_lines = view_obj.get("transparent_template_lines", False)
+
+            if transparent_lines:
+                item_style['borderColor'] = 'transparent'
+
             if theme.get('animation'):
                 data_item['animation_class'] = theme.get('animation')
 

@@ -186,6 +186,7 @@ class ThemeOverride(BaseModel):
     fill_pattern: Optional[dict] = None
     border_width: Optional[float] = None
     border_color: Optional[str] = None
+    transparent_lines: Optional[bool] = None
     glow: Optional[bool] = None
     animation: Optional[str] = None
     morph_to_path: Optional[str] = None
