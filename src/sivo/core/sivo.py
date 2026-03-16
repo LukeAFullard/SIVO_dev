@@ -1674,6 +1674,9 @@ class Sivo:
                 except ValueError:
                     parsed_font_size = 24.0
 
+            lines = [str(text)]
+            start_y = y
+            line_height = parsed_font_size * 1.2
         else:
             min_x, min_y, max_x, max_y = bbox
             width = max_x - min_x
@@ -1702,14 +1705,36 @@ class Sivo:
             else: # left
                 x = min_x
 
-            # Calculate vertical position based on alignment (SVG text is positioned by baseline)
+            # Text wrapping logic
+            words = str(text).split()
+            lines = []
+            current_line = []
+            max_chars = int(width / (0.6 * parsed_font_size)) if parsed_font_size > 0 else len(str(text))
+            if max_chars < 1: max_chars = 1
+
+            for word in words:
+                if len(" ".join(current_line + [word])) <= max_chars:
+                    current_line.append(word)
+                else:
+                    if current_line:
+                        lines.append(" ".join(current_line))
+                        current_line = [word]
+                    else:
+                        lines.append(word)
+                        current_line = []
+            if current_line:
+                lines.append(" ".join(current_line))
+
+            # Calculate vertical position based on alignment and total text height
+            line_height = parsed_font_size * 1.2
+            total_text_height = len(lines) * line_height
+
             if vertical_align == "top":
-                y = min_y + parsed_font_size
+                start_y = min_y + parsed_font_size
             elif vertical_align == "bottom":
-                y = max_y
+                start_y = max_y - total_text_height + parsed_font_size
             else: # middle
-                # Rough approximation to center the text baseline vertically in the box
-                y = min_y + (height / 2) + (parsed_font_size / 3)
+                start_y = min_y + (height / 2) - (total_text_height / 2) + parsed_font_size
 
         for node in self.infographic.parser.root.iter():
             if node.get("id") == element_id or node.get("name") == element_id:
@@ -1719,13 +1744,26 @@ class Sivo:
                     # Directly inject into the existing text element to preserve styles
                     # but override position and text properties
                     node.set("x", str(x))
-                    node.set("y", str(y))
+                    node.set("y", str(start_y))
                     node.set("fill", color)
                     node.set("font-size", f"{parsed_font_size}px")
                     node.set("font-family", font_family)
                     node.set("font-weight", font_weight)
                     node.set("text-anchor", text_anchor)
-                    node.text = text
+
+                    # Clear existing text and children
+                    node.text = ""
+                    for child in list(node):
+                        node.remove(child)
+
+                    # Create tspans for each line
+                    tspan_qname = f"{{{ns}}}tspan"
+                    for i, line_text in enumerate(lines):
+                        tspan = etree.Element(tspan_qname)
+                        tspan.set("x", str(x))
+                        tspan.set("y", str(start_y + i * line_height))
+                        tspan.text = line_text
+                        node.append(tspan)
                 else:
                     # 1. Hide placeholder shape
                     node.set("opacity", "0")
@@ -1734,14 +1772,22 @@ class Sivo:
                     # 2. Construct text element
                     text_elem = etree.Element(qname)
                     text_elem.set("x", str(x))
-                    text_elem.set("y", str(y))
+                    text_elem.set("y", str(start_y))
                     text_elem.set("fill", color)
                     text_elem.set("font-size", f"{parsed_font_size}px")
                     text_elem.set("font-family", font_family)
                     text_elem.set("font-weight", font_weight)
                     text_elem.set("text-anchor", text_anchor)
                     text_elem.set("class", "sivo-template-text")
-                    text_elem.text = text
+
+                    # Create tspans for each line
+                    tspan_qname = f"{{{ns}}}tspan"
+                    for i, line_text in enumerate(lines):
+                        tspan = etree.Element(tspan_qname)
+                        tspan.set("x", str(x))
+                        tspan.set("y", str(start_y + i * line_height))
+                        tspan.text = line_text
+                        text_elem.append(tspan)
 
                     # 3. Append as an immediate sibling to inherit exact transform logic
                     parent = node.getparent()

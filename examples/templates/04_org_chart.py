@@ -16,7 +16,7 @@ def run():
     )
 
     # Use native text replacement without overwriting SVG logic
-    app.fill_template_zone("text_hierarchy_details", "Hierarchy Details", font_size=28, font_weight="800", color="#0f172a")
+    app.fill_template_zone("text_hierarchy_details", "Hierarchy Details", font_size="100%", font_weight="800", color="#f8fafc")
 
     md_html = """
     <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center; flex-direction: column;'>
@@ -30,40 +30,59 @@ def run():
         md_html
     )
 
-    app.add_overlay(
+    app.add_scalable_text(
         "poly-tier-2",
-        "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center;'><span style='color: white; font-family: sans-serif; font-size: 10cqw; font-weight: 700;'>Executives</span></div>"
+        "Executives",
+        font_size="25%",
+        color="white",
+        font_weight="700",
+        align="center",
+        vertical_align="middle"
     )
 
-    app.add_overlay(
+    app.add_scalable_text(
         "poly-tier-3",
-        "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center;'><span style='color: white; font-family: sans-serif; font-size: 8cqw; font-weight: 700;'>Middle Management</span></div>"
+        "Middle Management",
+        font_size="20%",
+        color="white",
+        font_weight="700",
+        align="center",
+        vertical_align="middle"
     )
 
-    app.add_overlay(
+    app.add_scalable_text(
         "poly-tier-4",
-        "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center;'><span style='color: white; font-family: sans-serif; font-size: 8cqw; font-weight: 700;'>Operations & Staff</span></div>"
+        "Operations & Staff",
+        font_size="20%",
+        color="white",
+        font_weight="700",
+        align="center",
+        vertical_align="middle"
     )
 
-    markdown_side = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 5cqw; display: flex; flex-direction: column; justify-content: center;'>
-        <h1 style='color: #1e293b; margin: 0 0 2cqh 0; font-size: 10cqw;'>Corporate Structure</h1>
-        <p style='color: #475569; font-size: 6cqw; line-height: 1.6; margin: 0 0 2cqh 0;'>
-            The pyramid visualizes the <strong>decision-making hierarchy</strong> within the organization.
-            The executive tier makes strategic calls, while management handles execution.
-        </p>
-        <ul style='color: #64748b; font-size: 6cqw; line-height: 1.8; margin: 0; padding-left: 5cqw;'>
-            <li><b>Tier 1:</b> Executive Board</li>
-            <li><b>Tier 2:</b> Management</li>
-            <li><b>Tier 3:</b> Team Leads</li>
-            <li><b>Tier 4:</b> Operations</li>
-        </ul>
-    </div>
-    """
-
-    app.add_overlay(
+    app.add_scalable_text(
         "info-panel-data",
-        markdown_side
+        "Corporate Structure",
+        left="5%", top="5%", width="90%", height="10%",
+        font_size="10%",
+        font_weight="800",
+        color="#1e293b"
+    )
+
+    app.add_scalable_text(
+        "info-panel-data",
+        "The pyramid visualizes the decision-making hierarchy within the organization. The executive tier makes strategic calls, while management handles execution.",
+        left="5%", top="20%", width="90%", height="40%",
+        font_size="4%",
+        color="#475569"
+    )
+
+    app.add_scalable_text(
+        "info-panel-data",
+        "• Tier 1: Executive Board\n• Tier 2: Management\n• Tier 3: Team Leads\n• Tier 4: Operations",
+        left="5%", top="60%", width="90%", height="35%",
+        font_size="4%",
+        color="#64748b"
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "04_org_chart.html")

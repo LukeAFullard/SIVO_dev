@@ -15,14 +15,19 @@ def run():
     )
 
     # Fill native empty text node directly
-    app.fill_template_zone("text_global_operations_digital_twin", "Global Operations Digital Twin", font_size=24, font_weight="700", color="#f8fafc")
-    app.fill_template_zone("text_real_time_sensor_feeds", "Real-Time Sensor Feeds", font_size=18, font_weight="600", color="#ffffff")
-    app.fill_template_zone("text_system_alerts", "System Alerts", font_size=18, font_weight="600", color="#ffffff")
+    app.fill_template_zone("text_global_operations_digital_twin", "Global Operations Digital Twin", font_size="100%", font_weight="700", color="#f8fafc")
+    app.fill_template_zone("text_real_time_sensor_feeds", "Real-Time Sensor Feeds", font_size="100%", font_weight="600", color="#ffffff")
+    app.fill_template_zone("text_system_alerts", "System Alerts", font_size="100%", font_weight="600", color="#ffffff")
 
-    # Add overlays to metrics
-    app.add_overlay("metric-iot-1", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:24cqh; text-transform: uppercase; letter-spacing: 1px;'>Power Output</span><span style='color:#10b981; font-size:48cqh; font-weight:bold; margin-top: 1cqh;'>1.21 GW</span></div>")
-    app.add_overlay("metric-iot-2", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:24cqh; text-transform: uppercase; letter-spacing: 1px;'>Core Temp</span><span style='color:#f59e0b; font-size:48cqh; font-weight:bold; margin-top: 1cqh;'>82°C</span></div>")
-    app.add_overlay("metric-iot-3", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:24cqh; text-transform: uppercase; letter-spacing: 1px;'>Efficiency</span><span style='color:#3b82f6; font-size:48cqh; font-weight:bold; margin-top: 1cqh;'>94.5%</span></div>")
+    # Add overlays to metrics using scalable text instead of HTML
+    app.add_scalable_text("metric-iot-1", "Power Output", left="5%", top="20%", width="90%", height="30%", font_size="20%", font_weight="normal", color="#94a3b8", align="left")
+    app.add_scalable_text("metric-iot-1", "1.21 GW", left="5%", top="50%", width="90%", height="40%", font_size="40%", font_weight="bold", color="#10b981", align="left")
+
+    app.add_scalable_text("metric-iot-2", "Core Temp", left="5%", top="20%", width="90%", height="30%", font_size="20%", font_weight="normal", color="#94a3b8", align="left")
+    app.add_scalable_text("metric-iot-2", "82°C", left="5%", top="50%", width="90%", height="40%", font_size="40%", font_weight="bold", color="#f59e0b", align="left")
+
+    app.add_scalable_text("metric-iot-3", "Efficiency", left="5%", top="20%", width="90%", height="30%", font_size="20%", font_weight="normal", color="#94a3b8", align="left")
+    app.add_scalable_text("metric-iot-3", "94.5%", left="5%", top="50%", width="90%", height="40%", font_size="40%", font_weight="bold", color="#3b82f6", align="left")
 
     # Change to a heatmap to make the dashboard look cooler
     app.map_heatmap_chart(
