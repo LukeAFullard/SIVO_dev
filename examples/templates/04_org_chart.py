@@ -20,8 +20,8 @@ def run():
 
     md_html = """
     <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center; flex-direction: column;'>
-        <img src='https://i.pravatar.cc/100' alt='CEO' style='border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); width: 25cqw; height: 25cqw; object-fit: cover; margin-bottom: 2cqh;'/>
-        <span style='color: white; font-family: sans-serif; font-size: 8cqw; font-weight: 700;'>CEO</span>
+        <img src='https://i.pravatar.cc/100' alt='CEO' style='border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); width: 35cqw; height: 35cqw; object-fit: cover; margin-bottom: 2cqh;'/>
+        <span style='color: white; font-family: sans-serif; font-size: 16cqw; font-weight: 700;'>CEO</span>
     </div>
     """
 
@@ -32,7 +32,7 @@ def run():
 
     app.add_overlay(
         "poly-tier-2",
-        "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center;'><span style='color: white; font-family: sans-serif; font-size: 8cqw; font-weight: 700;'>Executives</span></div>"
+        "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center;'><span style='color: white; font-family: sans-serif; font-size: 10cqw; font-weight: 700;'>Executives</span></div>"
     )
 
     app.add_overlay(
@@ -47,12 +47,12 @@ def run():
 
     markdown_side = """
     <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 5cqw; display: flex; flex-direction: column; justify-content: center;'>
-        <h1 style='color: #1e293b; margin: 0 0 2cqh 0; font-size: 8cqw;'>Corporate Structure</h1>
-        <p style='color: #475569; font-size: 4.5cqw; line-height: 1.6; margin: 0 0 2cqh 0;'>
+        <h1 style='color: #1e293b; margin: 0 0 2cqh 0; font-size: 10cqw;'>Corporate Structure</h1>
+        <p style='color: #475569; font-size: 6cqw; line-height: 1.6; margin: 0 0 2cqh 0;'>
             The pyramid visualizes the <strong>decision-making hierarchy</strong> within the organization.
             The executive tier makes strategic calls, while management handles execution.
         </p>
-        <ul style='color: #64748b; font-size: 4.5cqw; line-height: 1.8; margin: 0; padding-left: 5cqw;'>
+        <ul style='color: #64748b; font-size: 6cqw; line-height: 1.8; margin: 0; padding-left: 5cqw;'>
             <li><b>Tier 1:</b> Executive Board</li>
             <li><b>Tier 2:</b> Management</li>
             <li><b>Tier 3:</b> Team Leads</li>

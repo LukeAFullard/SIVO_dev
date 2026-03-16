@@ -1513,7 +1513,110 @@ class Sivo:
         """
         self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity, flow_effect, effect_symbol, effect_size)
 
-    def fill_template_zone(self, element_id: str, text: str, font_size: int = 24, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
+    def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
+        """
+        Automatically generates a perfectly scaled, native SVG progress bar relative to the bounding box
+        of a target element.
+
+        Args:
+            element_id: The ID or name of the target SVG element (e.g., a card or region) to anchor to.
+            progress: The progress value as a float (0.0 to 1.0) or percentage string (e.g., "75%").
+            left: The left offset relative to the bounding box (e.g., "10%" or "10").
+            top: The top offset relative to the bounding box (e.g., "10%" or "10").
+            width: The total width of the progress bar relative to the bounding box (e.g., "80%" or "80").
+            height: The height of the progress bar relative to the bounding box (e.g., "10%" or "10").
+            bg_color: The color of the background track.
+            fill_color: The color of the active progress fill.
+            rx: The border radius of the progress bar (in absolute pixels).
+        """
+        self.infographic.add_scalable_progress_bar(element_id, progress, left, top, width, height, bg_color, fill_color, rx)
+
+    def add_image_overlay(self, element_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0px", box_shadow: str = "none", offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
+        """
+        A helper method to easily embed responsive images within an SVG element's bounding box without writing custom HTML.
+
+        Args:
+            element_id: The ID of the target SVG element.
+            image_url: The URL or path to the image.
+            object_fit: The CSS object-fit property (e.g., 'cover', 'contain', 'fill'). Default 'cover'.
+            border_radius: The CSS border-radius for the image. Default '0px'.
+            box_shadow: The CSS box-shadow for the image. Default 'none'.
+            offset_x: Pixel offset from the center X.
+            offset_y: Pixel offset from the center Y.
+            scale_with_zoom: Whether the overlay scales with ECharts zooming.
+        """
+        self.infographic.add_image_overlay(element_id, image_url, object_fit, border_radius, box_shadow, offset_x, offset_y, scale_with_zoom)
+
+    def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
+        """
+        Automatically generates a perfectly scaled, native SVG text element relative to the bounding box
+        of a target element, eliminating the need to manually compute absolute x, y, and font sizes.
+
+        Args:
+            target_id: The ID or name of the target SVG element (e.g., a card or region) to anchor to.
+            text: The text string to inject.
+            left: The left offset relative to the bounding box (e.g., "10%" or "10").
+            top: The top offset relative to the bounding box (e.g., "10%" or "10").
+            width: The width of the text container relative to the bounding box (e.g., "80%" or "80").
+            height: The height of the text container relative to the bounding box (e.g., "20%" or "20").
+            font_size: The font size relative to the bounding box height (e.g., "10%") or absolute pixels (e.g., "16").
+            font_weight: The font weight (e.g., "normal", "bold", "800").
+            font_family: The font family.
+            color: The text color.
+            align: Horizontal alignment ('left', 'center', 'right').
+            vertical_align: Vertical alignment ('top', 'middle', 'bottom').
+        """
+        import uuid
+
+        target_elem = self.infographic._element_lookup.get(target_id)
+        if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
+            raise ValueError(f"Cannot add scalable text: Element '{target_id}' not found or has no bounding box.")
+
+        bbox = target_elem['bbox']
+        bbox_min_x, bbox_min_y, bbox_max_x, bbox_max_y = bbox
+        bbox_width = bbox_max_x - bbox_min_x
+        bbox_height = bbox_max_y - bbox_min_y
+
+        def _parse_val(val_str, relative_to):
+            if isinstance(val_str, (int, float)):
+                return float(val_str)
+            val_str = str(val_str)
+            if val_str.endswith('%'):
+                return (float(val_str[:-1]) / 100.0) * relative_to
+            return float(val_str)
+
+        abs_left = bbox_min_x + _parse_val(left, bbox_width)
+        abs_top = bbox_min_y + _parse_val(top, bbox_height)
+        abs_width = _parse_val(width, bbox_width)
+        abs_height = _parse_val(height, bbox_height)
+
+        # If font_size is a string ending with %, calculate it against the target's height.
+        # Otherwise treat it as a raw number.
+        abs_font_size = _parse_val(font_size, bbox_height)
+
+        placeholder_id = f"sivo-native-text-{uuid.uuid4().hex[:8]}"
+
+        self.add_shape("rect", {
+            "id": placeholder_id,
+            "x": str(abs_left),
+            "y": str(abs_top),
+            "width": str(abs_width),
+            "height": str(abs_height),
+            "fill": "none"
+        })
+
+        self.fill_template_zone(
+            element_id=placeholder_id,
+            text=text,
+            font_size=abs_font_size,
+            font_weight=font_weight,
+            font_family=font_family,
+            color=color,
+            align=align,
+            vertical_align=vertical_align
+        )
+
+    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
         """
         Replaces a placeholder SVG element (like a <rect>) with native, perfectly-scaled SVG text.
         This ensures text scales naturally with the viewBox on all devices (mobile/desktop)
@@ -1522,7 +1625,7 @@ class Sivo:
         Args:
             element_id: The ID of the placeholder shape.
             text: The text string to inject.
-            font_size: The font size in SVG units.
+            font_size: The font size in SVG units or percentage string relative to bounding box height.
             font_weight: The font weight (e.g., 'bold', '700').
             font_family: The font family.
             color: The fill color of the text.
@@ -1553,6 +1656,8 @@ class Sivo:
                 bbox = elem.get('bbox')
                 break
 
+        parsed_font_size = font_size
+
         if not bbox:
             # Fallback for text nodes or groups without parsed bounding boxes
             try:
@@ -1567,10 +1672,40 @@ class Sivo:
             elif align == "right": text_anchor = "end"
             elif align == "left": text_anchor = "start"
 
+            # Parse font size if string. Without a bounding box, a percentage like "100%"
+            # has nothing to scale against. Let's default to a sane baseline (e.g., 24.0)
+            # or try to extract the original font-size if it's replacing an existing text node.
+            if isinstance(parsed_font_size, str) and parsed_font_size.endswith('%'):
+                try:
+                    # Attempt to read existing font-size attribute
+                    existing_fs = target_node.get("font-size", "24px").replace("px", "").replace("pt", "")
+                    base_fs = float(existing_fs)
+                    pct = float(parsed_font_size[:-1]) / 100.0
+                    parsed_font_size = base_fs * pct
+                except ValueError:
+                    parsed_font_size = 24.0
+            else:
+                try:
+                    parsed_font_size = float(parsed_font_size)
+                except ValueError:
+                    parsed_font_size = 24.0
+
         else:
             min_x, min_y, max_x, max_y = bbox
             width = max_x - min_x
             height = max_y - min_y
+
+            # Parse font size with relative scaling if percentage
+            if isinstance(parsed_font_size, str) and parsed_font_size.endswith('%'):
+                try:
+                    parsed_font_size = (float(parsed_font_size[:-1]) / 100.0) * height
+                except ValueError:
+                    parsed_font_size = 24.0
+            else:
+                try:
+                    parsed_font_size = float(parsed_font_size)
+                except ValueError:
+                    parsed_font_size = 24.0
 
             # Calculate horizontal position based on alignment
             text_anchor = "start"
@@ -1585,12 +1720,12 @@ class Sivo:
 
             # Calculate vertical position based on alignment (SVG text is positioned by baseline)
             if vertical_align == "top":
-                y = min_y + font_size
+                y = min_y + parsed_font_size
             elif vertical_align == "bottom":
                 y = max_y
             else: # middle
                 # Rough approximation to center the text baseline vertically in the box
-                y = min_y + (height / 2) + (font_size / 3)
+                y = min_y + (height / 2) + (parsed_font_size / 3)
 
         for node in self.infographic.parser.root.iter():
             if node.get("id") == element_id or node.get("name") == element_id:
@@ -1602,7 +1737,7 @@ class Sivo:
                     node.set("x", str(x))
                     node.set("y", str(y))
                     node.set("fill", color)
-                    node.set("font-size", f"{font_size}px")
+                    node.set("font-size", f"{parsed_font_size}px")
                     node.set("font-family", font_family)
                     node.set("font-weight", font_weight)
                     node.set("text-anchor", text_anchor)
@@ -1617,7 +1752,7 @@ class Sivo:
                     text_elem.set("x", str(x))
                     text_elem.set("y", str(y))
                     text_elem.set("fill", color)
-                    text_elem.set("font-size", f"{font_size}px")
+                    text_elem.set("font-size", f"{parsed_font_size}px")
                     text_elem.set("font-family", font_family)
                     text_elem.set("font-weight", font_weight)
                     text_elem.set("text-anchor", text_anchor)

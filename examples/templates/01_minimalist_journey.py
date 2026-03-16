@@ -26,8 +26,8 @@ def run():
     # Using pure cqw/cqh or % for fluid scaling, preventing overflow on small bounds.
     markdown_html = """
     <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw;'>
-        <h4 style='margin: 0 0 4cqh 0; color: #3b82f6; font-size: 10cqw; text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
-        <p style='margin: 0; color: #64748b; font-size: 8cqw; line-height: 1.5;'>
+        <h4 style='margin: 0 0 4cqh 0; color: #3b82f6; font-size: 14cqw; text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
+        <p style='margin: 0; color: #64748b; font-size: 10cqw; line-height: 1.5;'>
             Launch targeted ads across <br><b>social media</b> and major <br>search engines.
         </p>
     </div>
@@ -44,7 +44,7 @@ def run():
     chart_html = """
     <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 4cqw;'>
         <div style='width: 100%; height: 100%; display: flex; flex-direction: column;'>
-            <h4 style='margin: 0 0 2cqh 0; color: #1e293b; font-size: 8cqw;'>Traffic Sources</h4>
+            <h4 style='margin: 0 0 2cqh 0; color: #1e293b; font-size: 12cqw;'>Traffic Sources</h4>
             <div style='flex: 1; position: relative;'>
                 <div style='position: absolute; bottom: 0; left: 0; width: 100%; height: 80%; display: flex; align-items: flex-end; justify-content: space-around; padding: 0 2cqw;'>
                     <div style='width: 25%; height: 100%; background: #3b82f6; border-radius: 4px 4px 0 0;'></div>
@@ -52,7 +52,7 @@ def run():
                     <div style='width: 25%; height: 20%; background: #93c5fd; border-radius: 4px 4px 0 0;'></div>
                 </div>
             </div>
-            <div style='display: flex; justify-content: space-around; margin-top: 2cqh; font-size: 5cqw; color: #64748b;'>
+            <div style='display: flex; justify-content: space-around; margin-top: 2cqh; font-size: 8cqw; color: #64748b;'>
                 <span>Ads</span><span>Org</span><span>Ref</span>
             </div>
         </div>
@@ -69,8 +69,8 @@ def run():
 
     conversion_html = """
     <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw; align-items: center; text-align: center;'>
-        <h4 style='margin: 0; color: #64748b; font-size: 8cqw; text-transform: uppercase;'>Conversion Rate</h4>
-        <p style='margin: 2cqh 0 0 0; color: #10b981; font-size: 24cqw; font-weight: 800;'>
+        <h4 style='margin: 0; color: #64748b; font-size: 12cqw; text-transform: uppercase;'>Conversion Rate</h4>
+        <p style='margin: 2cqh 0 0 0; color: #10b981; font-size: 36cqw; font-weight: 800;'>
             4.2%
         </p>
     </div>

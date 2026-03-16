@@ -20,29 +20,24 @@ def run():
     app.fill_template_zone("text_system_alerts", "System Alerts", font_size=18, font_weight="600", color="#ffffff")
 
     # Add overlays to metrics
-    app.add_overlay("metric-iot-1", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:12cqh;'>Power Output</span><span style='color:#10b981; font-size:24cqh; font-weight:bold;'>1.21 GW</span></div>")
-    app.add_overlay("metric-iot-2", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:12cqh;'>Core Temp</span><span style='color:#f59e0b; font-size:24cqh; font-weight:bold;'>82°C</span></div>")
-    app.add_overlay("metric-iot-3", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:12cqh;'>Efficiency</span><span style='color:#3b82f6; font-size:24cqh; font-weight:bold;'>94.5%</span></div>")
+    app.add_overlay("metric-iot-1", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:24cqh; text-transform: uppercase; letter-spacing: 1px;'>Power Output</span><span style='color:#10b981; font-size:48cqh; font-weight:bold; margin-top: 1cqh;'>1.21 GW</span></div>")
+    app.add_overlay("metric-iot-2", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:24cqh; text-transform: uppercase; letter-spacing: 1px;'>Core Temp</span><span style='color:#f59e0b; font-size:48cqh; font-weight:bold; margin-top: 1cqh;'>82°C</span></div>")
+    app.add_overlay("metric-iot-3", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 4cqw; display: flex; flex-direction: column; justify-content: center;'><span style='color:#94a3b8; font-size:24cqh; text-transform: uppercase; letter-spacing: 1px;'>Efficiency</span><span style='color:#3b82f6; font-size:48cqh; font-weight:bold; margin-top: 1cqh;'>94.5%</span></div>")
 
-    app.map_line_chart(
+    # Change to a heatmap to make the dashboard look cooler
+    app.map_heatmap_chart(
         element_id="predictive-chart-zone",
         title="Predictive Metrics",
-        categories=["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        data=[120, 132, 101, 134, 90, 230],
-        panel_position="right",
-        tooltip="Predictive data over time"
-    )
-
-    # Scalable Markdown
-    md_html = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; flex-direction: column; justify-content: center; background: rgba(30,41,59,0.8); border: 1px solid #334155; border-radius: 2cqw; padding: 4cqw; color: #f1f5f9; font-family: sans-serif; backdrop-filter: blur(8px);'>
-        <h4 style='margin: 0 0 2cqh 0; color: #38bdf8; font-size: 8cqw;'>Analysis</h4>
-        <p style='margin: 0; font-size: 6cqw; line-height: 1.4;'>System identified <strong>3 anomalies</strong> in the Q2 predictive cycle. Recommend manual override.</p>
-    </div>
-    """
-    app.add_overlay(
-        "predictive-chart-zone",
-        md_html
+        x_categories=["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        y_categories=["Alpha", "Beta", "Gamma"],
+        data=[[0,0,10], [0,1,20], [0,2,30], [1,0,40], [1,1,50], [1,2,60], [2,0,70], [2,1,80], [2,2,90], [3,0,100], [3,1,110], [3,2,120], [4,0,130], [4,1,140], [4,2,150], [5,0,160], [5,1,170], [5,2,180]],
+        color=["#0f172a", "#3b82f6", "#38bdf8"],
+        title_color="#ffffff",
+        axis_color="#94a3b8",
+        extra_options={
+            "grid": {"top": 40, "bottom": 30, "left": 50, "right": 20},
+            "visualMap": {"show": False}
+        }
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "03_modern_dashboard.html")
