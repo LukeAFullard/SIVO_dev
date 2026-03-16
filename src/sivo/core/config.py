@@ -350,3 +350,19 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, applies a grayscale filter to the background image."
     )
+    svg_background_image_url: Optional[str] = Field(
+        default=None,
+        description="Optional URL to an image to render inside the SVG canvas itself (pans/zooms with the map)."
+    )
+    svg_background_image_opacity: float = Field(
+        default=1.0,
+        description="Opacity of the SVG background image (0.0 to 1.0)."
+    )
+    svg_background_image_grayscale: bool = Field(
+        default=False,
+        description="If True, applies a grayscale filter to the SVG background image."
+    )
+    svg_background_image_insert_after: Optional[str] = Field(
+        default=None,
+        description="Optional SVG Element ID to insert the background image after. Useful if the SVG has a solid background rect."
+    )
