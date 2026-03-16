@@ -1273,6 +1273,7 @@
                         },
                         data: echartsData,
                         zlevel: 1,
+                        zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 800, // Smooth transition on data/style changes and zoom
                         animationEasingUpdate: 'cubicInOut'
                     }
@@ -1290,6 +1291,7 @@
                     option.geo = {
                         map: mapName,
                         roam: view.lock_canvas ? false : true,
+                        zoom: view.starting_zoom || 1.0,
                         itemStyle: {
                             color: 'transparent',
                             borderColor: 'transparent'
@@ -1429,6 +1431,7 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
+                            zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
                         };
@@ -1488,6 +1491,7 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
+                            zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
                         };
@@ -1651,6 +1655,7 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
+                            zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
                         };
@@ -2450,7 +2455,7 @@
             }
 
             // Reset zoom tracking
-            currentZoom = 1;
+            currentZoom = view.starting_zoom || 1.0;
             currentCenter = null;
 
             // Re-initialize overlays for this view
