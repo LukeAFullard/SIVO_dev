@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -51,6 +51,7 @@ class Infographic:
         self.svg_background_image_opacity = svg_background_image_opacity
         self.svg_background_image_grayscale = svg_background_image_grayscale
         self.svg_background_image_insert_after = svg_background_image_insert_after
+        self.transparent_template_lines = transparent_template_lines
         if self.svg_background_image_url:
             self._inject_svg_background_image()
 
@@ -141,6 +142,7 @@ class Infographic:
         infographic.svg_background_image_opacity = getattr(cfg, "svg_background_image_opacity", 1.0)
         infographic.svg_background_image_grayscale = getattr(cfg, "svg_background_image_grayscale", False)
         infographic.svg_background_image_insert_after = getattr(cfg, "svg_background_image_insert_after", None)
+        infographic.transparent_template_lines = getattr(cfg, "transparent_template_lines", False)
         if infographic.svg_background_image_url:
             infographic._inject_svg_background_image()
 
@@ -213,6 +215,7 @@ class Infographic:
                     fill_pattern=elem_config.fill_pattern,
                     border_width=elem_config.border_width,
                     border_color=elem_config.border_color,
+                    transparent_lines=elem_config.transparent_lines,
                     glow=elem_config.glow,
                     morph_to_path=elem_config.morph_to_path,
                     morph_duration_ms=elem_config.morph_duration_ms,
@@ -375,6 +378,7 @@ class Infographic:
         fill_pattern: Optional[dict] = None,
         border_width: Optional[float] = None,
         border_color: Optional[str] = None,
+        transparent_lines: Optional[bool] = None,
         glow: Optional[bool] = None,
         animation: Optional[str] = None,
         morph_to_path: Optional[str] = None,
@@ -547,6 +551,9 @@ class Infographic:
 
         if border_color:
             mapping.theme.border_color = border_color
+
+        if transparent_lines is not None:
+            mapping.theme.transparent_lines = transparent_lines
 
         if glow is not None:
             mapping.theme.glow = glow
@@ -1135,7 +1142,8 @@ class Infographic:
             "svg_background_image_url": self.svg_background_image_url,
             "svg_background_image_opacity": self.svg_background_image_opacity,
             "svg_background_image_grayscale": self.svg_background_image_grayscale,
-            "svg_background_image_insert_after": self.svg_background_image_insert_after
+            "svg_background_image_insert_after": self.svg_background_image_insert_after,
+            "transparent_template_lines": self.transparent_template_lines
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()

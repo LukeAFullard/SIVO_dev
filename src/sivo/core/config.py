@@ -43,6 +43,7 @@ class ElementConfig(BaseModel):
     fill_pattern: Optional[Dict[str, Any]] = None
     border_width: Optional[float] = None
     border_color: Optional[str] = None
+    transparent_lines: Optional[bool] = None
     glow: Optional[bool] = None
     morph_to_path: Optional[str] = None
     morph_duration_ms: Optional[int] = 1000
@@ -365,4 +366,8 @@ class ProjectConfig(BaseModel):
     svg_background_image_insert_after: Optional[str] = Field(
         default=None,
         description="Optional SVG Element ID to insert the background image after. Useful if the SVG has a solid background rect."
+    )
+    transparent_template_lines: bool = Field(
+        default=False,
+        description="If True, hides the strokes/borders of all mapped SVG elements in the template."
     )
