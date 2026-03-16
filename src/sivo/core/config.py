@@ -199,6 +199,10 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, prevents the user from zooming out further than the initial zoom level (1.0)."
     )
+    starting_zoom: float = Field(
+        default=1.0,
+        description="The initial zoom magnification level of the map."
+    )
     enable_a11y: bool = Field(
         default=False,
         description="If True, automatically generates accessibility actions (A11yAction) for interactive elements."
