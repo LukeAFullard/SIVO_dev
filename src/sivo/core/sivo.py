@@ -1600,7 +1600,7 @@ class Sivo:
             vertical_align=vertical_align
         )
 
-    def fill_template_zone(self, element_id: str, text: str, font_size: float = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
+    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
         """
         Replaces a placeholder SVG element (like a <rect>) with native, perfectly-scaled SVG text.
         This ensures text scales naturally with the viewBox on all devices (mobile/desktop)
@@ -1609,7 +1609,7 @@ class Sivo:
         Args:
             element_id: The ID of the placeholder shape.
             text: The text string to inject.
-            font_size: The font size in SVG units.
+            font_size: The font size in SVG units or percentage string relative to bounding box height.
             font_weight: The font weight (e.g., 'bold', '700').
             font_family: The font family.
             color: The fill color of the text.
@@ -1640,6 +1640,8 @@ class Sivo:
                 bbox = elem.get('bbox')
                 break
 
+        parsed_font_size = font_size
+
         if not bbox:
             # Fallback for text nodes or groups without parsed bounding boxes
             try:
@@ -1654,10 +1656,40 @@ class Sivo:
             elif align == "right": text_anchor = "end"
             elif align == "left": text_anchor = "start"
 
+            # Parse font size if string. Without a bounding box, a percentage like "100%"
+            # has nothing to scale against. Let's default to a sane baseline (e.g., 24.0)
+            # or try to extract the original font-size if it's replacing an existing text node.
+            if isinstance(parsed_font_size, str) and parsed_font_size.endswith('%'):
+                try:
+                    # Attempt to read existing font-size attribute
+                    existing_fs = target_node.get("font-size", "24px").replace("px", "").replace("pt", "")
+                    base_fs = float(existing_fs)
+                    pct = float(parsed_font_size[:-1]) / 100.0
+                    parsed_font_size = base_fs * pct
+                except ValueError:
+                    parsed_font_size = 24.0
+            else:
+                try:
+                    parsed_font_size = float(parsed_font_size)
+                except ValueError:
+                    parsed_font_size = 24.0
+
         else:
             min_x, min_y, max_x, max_y = bbox
             width = max_x - min_x
             height = max_y - min_y
+
+            # Parse font size with relative scaling if percentage
+            if isinstance(parsed_font_size, str) and parsed_font_size.endswith('%'):
+                try:
+                    parsed_font_size = (float(parsed_font_size[:-1]) / 100.0) * height
+                except ValueError:
+                    parsed_font_size = 24.0
+            else:
+                try:
+                    parsed_font_size = float(parsed_font_size)
+                except ValueError:
+                    parsed_font_size = 24.0
 
             # Calculate horizontal position based on alignment
             text_anchor = "start"
@@ -1672,12 +1704,12 @@ class Sivo:
 
             # Calculate vertical position based on alignment (SVG text is positioned by baseline)
             if vertical_align == "top":
-                y = min_y + font_size
+                y = min_y + parsed_font_size
             elif vertical_align == "bottom":
                 y = max_y
             else: # middle
                 # Rough approximation to center the text baseline vertically in the box
-                y = min_y + (height / 2) + (font_size / 3)
+                y = min_y + (height / 2) + (parsed_font_size / 3)
 
         for node in self.infographic.parser.root.iter():
             if node.get("id") == element_id or node.get("name") == element_id:
@@ -1689,7 +1721,7 @@ class Sivo:
                     node.set("x", str(x))
                     node.set("y", str(y))
                     node.set("fill", color)
-                    node.set("font-size", f"{font_size}px")
+                    node.set("font-size", f"{parsed_font_size}px")
                     node.set("font-family", font_family)
                     node.set("font-weight", font_weight)
                     node.set("text-anchor", text_anchor)
@@ -1704,7 +1736,7 @@ class Sivo:
                     text_elem.set("x", str(x))
                     text_elem.set("y", str(y))
                     text_elem.set("fill", color)
-                    text_elem.set("font-size", f"{font_size}px")
+                    text_elem.set("font-size", f"{parsed_font_size}px")
                     text_elem.set("font-family", font_family)
                     text_elem.set("font-weight", font_weight)
                     text_elem.set("text-anchor", text_anchor)

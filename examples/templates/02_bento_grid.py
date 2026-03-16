@@ -17,7 +17,7 @@ def run():
     )
 
     # Inject into the existing <text id="text_performance_overview"> natively
-    app.fill_template_zone("text_performance_overview", "Global Performance", font_size=28, font_weight="800", color="#0f172a")
+    app.fill_template_zone("text_performance_overview", "Global Performance", font_size="100%", font_weight="800", color="#f8fafc")
 
     # Add native SVG elements to the first card (System Status) instead of HTML overlay
     # This ensures perfect fluid scaling at all zoom levels using the new add_scalable_text helper
