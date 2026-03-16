@@ -14,18 +14,22 @@ def run():
         theme="light"
     )
 
-    header_md = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2cqw; font-family: -apple-system, sans-serif; text-align: center;'>
-        <h1 style='margin: 0 0 1cqh 0; color: #0f172a; font-size: 6cqw;'>Company History</h1>
-        <p style='margin: 0; color: #64748b; font-size: 3cqw;'>A detailed look at our <strong>journey</strong> from the start to present day.</p>
-    </div>
-    """
-    app.add_overlay("header_area", header_md)
+    app.add_scalable_text(
+        "header_area",
+        "COMPANY HISTORY",
+        left="0%", top="30%", width="100%", height="20%", font_size="25%", font_weight="800", color="#0f172a", align="center"
+    )
+    app.add_scalable_text(
+        "header_area",
+        "A detailed look at our journey from the start to present day.",
+        left="0%", top="60%", width="100%", height="20%", font_size="15%", color="#64748b", align="center"
+    )
 
-    # Image overlay
-    app.add_overlay(
+    # Image overlay using the new add_image_overlay helper
+    app.add_image_overlay(
         "node_1_card",
-        "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 2cqw;'><img src='https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=400&q=80' style='width: 100%; height: 100%; object-fit: cover; border-radius: 1cqw;'/></div>"
+        image_url="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=400&q=80",
+        border_radius="1cqw"
     )
 
     # Line chart overlay - make title larger and hide axes to fit the small card better
@@ -41,18 +45,38 @@ def run():
         extra_options={"xAxis": {"show": False}, "yAxis": {"show": False}, "grid": {"top": 30, "bottom": 10, "left": 10, "right": 10}}
     )
 
-    node_3_md = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 5cqw; font-family: sans-serif; display: flex; flex-direction: column; justify-content: center;'>
-        <h3 style='margin: 0 0 2cqh 0; color: #3b82f6; font-size: 8cqw;'>Product Launch</h3>
-        <p style='margin: 0; color: #475569; font-size: 5cqw; line-height: 1.5;'>
-            Version 2.0 was officially released, achieving <strong>10k active users</strong>.
-        </p>
-    </div>
-    """
-    app.add_overlay("node_3_card", node_3_md)
+    app.add_scalable_text(
+        "node_3_card",
+        "Product Launch",
+        left="10%", top="20%", width="80%", height="20%", font_size="20%", font_weight="800", color="#3b82f6"
+    )
+    app.add_scalable_text(
+        "node_3_card",
+        "Version 2.0 was officially released, achieving 10k active users.",
+        left="10%", top="50%", width="80%", height="40%", font_size="14%", color="#475569"
+    )
 
-    app.add_overlay("node_4_card", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 5cqw; font-family: sans-serif; display: flex; flex-direction: column; justify-content: center;'><h3 style='margin: 0 0 2cqh 0; color: #f59e0b; font-size: 8cqw;'>Global Expansion</h3><p style='margin: 0; color: #475569; font-size: 5cqw; line-height: 1.5;'>Opened offices in London and Tokyo.</p></div>")
-    app.add_overlay("node_5_card", "<div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 5cqw; font-family: sans-serif; display: flex; flex-direction: column; justify-content: center;'><h3 style='margin: 0 0 2cqh 0; color: #10b981; font-size: 8cqw;'>Series C Funding</h3><p style='margin: 0; color: #475569; font-size: 5cqw; line-height: 1.5;'>Raised <strong>$50M</strong>.</p></div>")
+    app.add_scalable_text(
+        "node_4_card",
+        "Global Expansion",
+        left="10%", top="20%", width="80%", height="20%", font_size="20%", font_weight="800", color="#f59e0b"
+    )
+    app.add_scalable_text(
+        "node_4_card",
+        "Opened offices in London and Tokyo.",
+        left="10%", top="50%", width="80%", height="40%", font_size="14%", color="#475569"
+    )
+
+    app.add_scalable_text(
+        "node_5_card",
+        "Series C Funding",
+        left="10%", top="20%", width="80%", height="20%", font_size="20%", font_weight="800", color="#10b981"
+    )
+    app.add_scalable_text(
+        "node_5_card",
+        "Raised $50M to scale operations.",
+        left="10%", top="50%", width="80%", height="40%", font_size="14%", color="#475569"
+    )
 
     output_path = os.path.join(os.path.dirname(__file__), "05_timeline.html")
     app.to_html(output_path)

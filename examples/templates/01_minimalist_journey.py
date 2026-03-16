@@ -15,70 +15,42 @@ def run():
     )
 
     # Header
-    app.fill_template_zone("header-subtitle-placeholder", "E-Commerce Pipeline", font_size=14, color="#94a3b8")
-    app.fill_template_zone("header-title-placeholder", "Customer Acquisition Flow", font_size=36, font_weight="800", color="#0f172a")
+    app.fill_template_zone("header-subtitle-placeholder", "E-Commerce Pipeline", font_size="100%", color="#94a3b8")
+    app.fill_template_zone("header-title-placeholder", "Customer Acquisition Flow", font_size="100%", font_weight="800", color="#f8fafc")
 
     # Node 1
-    app.fill_template_zone("node-1-step-placeholder", "1. Awareness", font_size=20, font_weight="600", color="#1e293b", align="left")
+    app.fill_template_zone("node-1-step-placeholder", "1. Awareness", font_size="80%", font_weight="600", color="#1e293b", align="left")
 
-    # Text overlay formatted professionally using Markdown-like content
-    # Binding to the proper large bounding box (node-1-card), not a tiny single text line
-    # Using pure cqw/cqh or % for fluid scaling, preventing overflow on small bounds.
-    markdown_html = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw;'>
-        <h4 style='margin: 0 0 4cqh 0; color: #3b82f6; font-size: 14cqw; text-transform: uppercase; letter-spacing: 0.5px;'>Strategy</h4>
-        <p style='margin: 0; color: #64748b; font-size: 10cqw; line-height: 1.5;'>
-            Launch targeted ads across <br><b>social media</b> and major <br>search engines.
-        </p>
-    </div>
-    """
-
-    app.add_overlay(
+    # Text injected natively using the upgraded auto-wrapping add_scalable_text
+    app.add_scalable_text(
         "node-1-card",
-        markdown_html
+        text="STRATEGY",
+        left="10%", top="35%", width="80%", height="20%", font_size="14%", font_weight="800", color="#3b82f6"
+    )
+    app.add_scalable_text(
+        "node-1-card",
+        text="Launch targeted ads across social media and major search engines.",
+        left="10%", top="55%", width="80%", height="50%", font_size="10%", font_weight="normal", color="#64748b"
     )
 
-    # Node 2 - ECharts Bar Chart directly in overlay
-    app.fill_template_zone("node-2-step-placeholder", "2. Acquisition", font_size=20, font_weight="600", color="#1e293b", align="left")
+    # Node 2 - Native ECharts Bar Chart
+    app.fill_template_zone("node-2-step-placeholder", "2. Acquisition", font_size="80%", font_weight="600", color="#1e293b", align="left")
 
-    chart_html = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 4cqw;'>
-        <div style='width: 100%; height: 100%; display: flex; flex-direction: column;'>
-            <h4 style='margin: 0 0 2cqh 0; color: #1e293b; font-size: 12cqw;'>Traffic Sources</h4>
-            <div style='flex: 1; position: relative;'>
-                <div style='position: absolute; bottom: 0; left: 0; width: 100%; height: 80%; display: flex; align-items: flex-end; justify-content: space-around; padding: 0 2cqw;'>
-                    <div style='width: 25%; height: 100%; background: #3b82f6; border-radius: 4px 4px 0 0;'></div>
-                    <div style='width: 25%; height: 40%; background: #60a5fa; border-radius: 4px 4px 0 0;'></div>
-                    <div style='width: 25%; height: 20%; background: #93c5fd; border-radius: 4px 4px 0 0;'></div>
-                </div>
-            </div>
-            <div style='display: flex; justify-content: space-around; margin-top: 2cqh; font-size: 8cqw; color: #64748b;'>
-                <span>Ads</span><span>Org</span><span>Ref</span>
-            </div>
-        </div>
-    </div>
-    """
-
-    app.add_overlay(
-        "node-2-card",
-        chart_html
+    app.map_bar_chart(
+        element_id="node-2-card",
+        title="Traffic Sources",
+        categories=["Ads", "Org", "Ref"],
+        data=[100, 40, 20],
+        color="#3b82f6",
+        title_size=20,
+        extra_options={"grid": {"top": 40, "bottom": 20, "left": 30, "right": 20}}
     )
 
-    # Node 3
-    app.fill_template_zone("node-3-step-placeholder", "3. Conversion", font_size=20, font_weight="600", color="#1e293b", align="left")
+    # Node 3 - Native Scalable Text
+    app.fill_template_zone("node-3-step-placeholder", "3. Conversion", font_size="80%", font_weight="600", color="#1e293b", align="left")
 
-    conversion_html = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 8cqw; align-items: center; text-align: center;'>
-        <h4 style='margin: 0; color: #64748b; font-size: 12cqw; text-transform: uppercase;'>Conversion Rate</h4>
-        <p style='margin: 2cqh 0 0 0; color: #10b981; font-size: 36cqw; font-weight: 800;'>
-            4.2%
-        </p>
-    </div>
-    """
-    app.add_overlay(
-        "node-3-card",
-        conversion_html
-    )
+    app.add_scalable_text("node-3-card", "CONVERSION RATE", left="0%", top="30%", width="100%", height="20%", font_size="12%", font_weight="700", color="#64748b", align="center")
+    app.add_scalable_text("node-3-card", "4.2%", left="0%", top="60%", width="100%", height="40%", font_size="35%", font_weight="800", color="#10b981", align="center")
 
     output_path = os.path.join(os.path.dirname(__file__), "01_minimalist_journey.html")
     app.to_html(output_path)
