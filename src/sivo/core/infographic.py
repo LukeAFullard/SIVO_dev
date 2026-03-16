@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -47,6 +47,13 @@ class Infographic:
         self.background_image_url = background_image_url
         self.background_image_opacity = background_image_opacity
         self.background_image_grayscale = background_image_grayscale
+        self.svg_background_image_url = svg_background_image_url
+        self.svg_background_image_opacity = svg_background_image_opacity
+        self.svg_background_image_grayscale = svg_background_image_grayscale
+        self.svg_background_image_insert_after = svg_background_image_insert_after
+        if self.svg_background_image_url:
+            self._inject_svg_background_image()
+
         self.data_binding: Optional[DataBindingConfig] = None
         self.timeline_binding: Optional[TimelineBindingConfig] = None
         self.api_binding: Optional[dict] = None
@@ -130,6 +137,13 @@ class Infographic:
         infographic.background_image_url = getattr(cfg, "background_image_url", None)
         infographic.background_image_opacity = getattr(cfg, "background_image_opacity", 1.0)
         infographic.background_image_grayscale = getattr(cfg, "background_image_grayscale", False)
+        infographic.svg_background_image_url = getattr(cfg, "svg_background_image_url", None)
+        infographic.svg_background_image_opacity = getattr(cfg, "svg_background_image_opacity", 1.0)
+        infographic.svg_background_image_grayscale = getattr(cfg, "svg_background_image_grayscale", False)
+        infographic.svg_background_image_insert_after = getattr(cfg, "svg_background_image_insert_after", None)
+        if infographic.svg_background_image_url:
+            infographic._inject_svg_background_image()
+
         infographic.data_binding = getattr(cfg, "data_binding", None)
         infographic.timeline_binding = getattr(cfg, "timeline_binding", None)
         infographic.api_binding = getattr(cfg, "api_binding", None)
@@ -215,6 +229,96 @@ class Infographic:
                 print(f"Warning mapping {element_id}: {e}")
 
         return infographic
+
+    def _inject_svg_background_image(self):
+        """Injects an <image> tag into the parsed SVG."""
+        import lxml.etree as ET
+
+        try:
+            root = self.parser.root
+
+            ns = "http://www.w3.org/2000/svg"
+            # Get namespace if exists
+            if root.tag.startswith('{'):
+                ns = root.tag.split('}')[0][1:]
+
+            # Remove existing background image if any
+            existing_img = root.find(f'.//{{{ns}}}image[@id="sivo-svg-bg-image"]')
+            if existing_img is None:
+                # Try without namespace for safety
+                existing_img = root.find('.//image[@id="sivo-svg-bg-image"]')
+
+            if existing_img is not None:
+                # We need to find its parent to remove it
+                for parent in root.iter():
+                    if existing_img in list(parent):
+                        parent.remove(existing_img)
+                        break
+
+            # Handle grayscale filter
+            if self.svg_background_image_grayscale:
+                defs = root.find(f'{{{ns}}}defs')
+                if defs is None:
+                    defs = ET.Element(f"{{{ns}}}defs")
+                    root.insert(0, defs)
+
+                # Create a grayscale filter if it doesn't exist
+                filter_id = "sivo-grayscale-filter"
+                existing_filter = defs.find(f'.//{{{ns}}}filter[@id="{filter_id}"]')
+                if existing_filter is None:
+                    filter_tag = ET.SubElement(defs, f"{{{ns}}}filter", id=filter_id)
+                    ET.SubElement(filter_tag, f"{{{ns}}}feColorMatrix", type="matrix", values="0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0")
+
+            # Calculate dimensions
+            view_box = root.get('viewBox')
+            width = root.get('width', '100%')
+            height = root.get('height', '100%')
+
+            if view_box:
+                parts = view_box.split()
+                if len(parts) == 4:
+                    width = parts[2]
+                    height = parts[3]
+
+            img_tag = ET.Element(f"{{{ns}}}image")
+            img_tag.set('id', 'sivo-svg-bg-image')
+            img_tag.set('href', self.svg_background_image_url)
+            # Add SVG 1.1 namespace fallback
+            img_tag.set('{http://www.w3.org/1999/xlink}href', self.svg_background_image_url)
+            img_tag.set('width', str(width))
+            img_tag.set('height', str(height))
+            img_tag.set('x', '0')
+            img_tag.set('y', '0')
+            img_tag.set('preserveAspectRatio', 'none')
+            img_tag.set('opacity', str(self.svg_background_image_opacity))
+
+            if self.svg_background_image_grayscale:
+                img_tag.set('filter', 'url(#sivo-grayscale-filter)')
+
+            # Find the best place to insert it
+            inserted = False
+            if self.svg_background_image_insert_after:
+                # Try to find the target element
+                target = root.find(f'.//*[@id="{self.svg_background_image_insert_after}"]')
+                if target is not None:
+                    # We need to find its parent to insert as a sibling
+                    for parent in root.iter():
+                        if target in list(parent):
+                            idx = list(parent).index(target)
+                            parent.insert(idx + 1, img_tag)
+                            inserted = True
+                            break
+
+            if not inserted:
+                # Fallback to absolute root, after defs if exists, else 0
+                insert_idx = 0
+                if root.find(f'{{{ns}}}defs') is not None:
+                    insert_idx = list(root).index(root.find(f'{{{ns}}}defs')) + 1
+
+                root.insert(insert_idx, img_tag)
+
+        except Exception as e:
+            print(f"Warning: Failed to inject SVG background image: {e}")
 
     def map(
         self,
@@ -929,7 +1033,11 @@ class Infographic:
             "graphic": self.graphic,
             "background_image_url": self.background_image_url,
             "background_image_opacity": self.background_image_opacity,
-            "background_image_grayscale": self.background_image_grayscale
+            "background_image_grayscale": self.background_image_grayscale,
+            "svg_background_image_url": self.svg_background_image_url,
+            "svg_background_image_opacity": self.svg_background_image_opacity,
+            "svg_background_image_grayscale": self.svg_background_image_grayscale,
+            "svg_background_image_insert_after": self.svg_background_image_insert_after
         }
         if self.data_binding:
             view_data["data_binding"] = self.data_binding.model_dump()
