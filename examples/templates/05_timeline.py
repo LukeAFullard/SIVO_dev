@@ -1,5 +1,6 @@
 from sivo import Sivo
 import os
+import lxml.etree as etree
 
 def run():
     template_path = os.path.join(
@@ -14,69 +15,53 @@ def run():
         theme="light"
     )
 
-    app.add_scalable_text(
-        "header_area",
-        "COMPANY HISTORY",
-        left="0%", top="30%", width="100%", height="20%", font_size="25%", font_weight="800", color="#0f172a", align="center"
-    )
-    app.add_scalable_text(
-        "header_area",
-        "A detailed look at our journey from the start to present day.",
-        left="0%", top="60%", width="100%", height="20%", font_size="15%", color="#64748b", align="center"
-    )
+    # Header - Make it clear it's a financial/startup journey
+    app.add_scalable_text("header_area", "Startup Funding Journey", left="5%", top="20%", width="90%", height="40%", font_size="35%", font_weight="900", color="#0f172a", align="left")
+    app.add_scalable_text("header_area", "From Pre-Seed to Series C Valuation Growth", left="5%", top="60%", width="90%", height="20%", font_size="15%", font_weight="600", color="#64748b", align="left")
 
-    # Image overlay using the new add_image_overlay helper
-    app.add_image_overlay(
-        "node_1_card",
-        image_url="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=400&q=80",
-        border_radius="1cqw"
-    )
+    # Node 1: Pre-Seed
+    app.add_scalable_text("node_1_card", "2020: PRE-SEED ($500K)", left="5%", top="10%", width="90%", height="25%", font_size="15%", font_weight="800", color="#3b82f6")
+    app.add_scalable_text("node_1_card", "Initial product development, core team assembly, and beta launch.", left="5%", top="40%", width="90%", height="30%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
+    app.add_scalable_text("node_1_card", "VALUATION: $2.5M", left="5%", top="75%", width="90%", height="15%", font_size="12%", font_weight="700", color="#64748b")
 
-    # Line chart overlay - make title larger and hide axes to fit the small card better
+    # Node 2: Seed
+    app.add_scalable_text("node_2_card", "2021: SEED ($2.5M)", left="5%", top="10%", width="90%", height="25%", font_size="15%", font_weight="800", color="#8b5cf6")
+    app.add_scalable_text("node_2_card", "Product-market fit achieved. First 1,000 paying customers acquired.", left="5%", top="40%", width="90%", height="30%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
+    app.add_scalable_text("node_2_card", "VALUATION: $15M", left="5%", top="75%", width="90%", height="15%", font_size="12%", font_weight="700", color="#64748b")
+
+    # Node 3: Series A (The big expansion)
+    app.add_scalable_text("node_3_card", "2022: SERIES A ($12M)", left="5%", top="10%", width="90%", height="20%", font_size="15%", font_weight="800", color="#10b981")
+    app.add_scalable_text("node_3_card", "Scaling GTM motion, international expansion.", left="5%", top="35%", width="90%", height="15%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
+
+    # Map a line chart here to show ARR growth leading to Series A
     app.map_line_chart(
-        element_id="node_2_card",
-        title="Revenue",
-        categories=["2020", "2021", "2022"],
-        data=[100, 200, 400],
+        element_id="node_3_card",
+        title="",
+        categories=["Q1", "Q2", "Q3", "Q4"],
+        data=[100, 300, 600, 1200],
         color="#10b981",
         smooth=True,
-        tooltip="Revenue in millions",
-        title_size=24,
-        extra_options={"xAxis": {"show": False}, "yAxis": {"show": False}, "grid": {"top": 30, "bottom": 10, "left": 10, "right": 10}}
+        extra_options={
+            "grid": {"top": 60, "bottom": 30, "left": 40, "right": 20},
+            "backgroundColor": "transparent"
+        }
     )
 
-    app.add_scalable_text(
-        "node_3_card",
-        "Product Launch",
-        left="10%", top="20%", width="80%", height="20%", font_size="20%", font_weight="800", color="#3b82f6"
-    )
-    app.add_scalable_text(
-        "node_3_card",
-        "Version 2.0 was officially released, achieving 10k active users.",
-        left="10%", top="50%", width="80%", height="40%", font_size="14%", color="#475569"
-    )
+    # Node 4: Series B
+    app.add_scalable_text("node_4_card", "2024: SERIES B ($35M)", left="5%", top="10%", width="90%", height="25%", font_size="15%", font_weight="800", color="#f59e0b")
+    app.add_scalable_text("node_4_card", "Acquisition of main competitor and launch of new product suite.", left="5%", top="40%", width="90%", height="30%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
 
-    app.add_scalable_text(
-        "node_4_card",
-        "Global Expansion",
-        left="10%", top="20%", width="80%", height="20%", font_size="20%", font_weight="800", color="#f59e0b"
-    )
-    app.add_scalable_text(
-        "node_4_card",
-        "Opened offices in London and Tokyo.",
-        left="10%", top="50%", width="80%", height="40%", font_size="14%", color="#475569"
-    )
+    # Show user growth progress bar
+    app.add_scalable_text("node_4_card", "USER BASE GROWTH (1M TARGET)", left="5%", top="75%", width="50%", height="15%", font_size="8%", font_weight="700", color="#64748b")
+    app.add_scalable_progress_bar("node_4_card", progress="85%", left="55%", top="80%", width="40%", height="5%", rx="4", bg_color="#e2e8f0", fill_color="#f59e0b")
 
-    app.add_scalable_text(
-        "node_5_card",
-        "Series C Funding",
-        left="10%", top="20%", width="80%", height="20%", font_size="20%", font_weight="800", color="#10b981"
-    )
-    app.add_scalable_text(
-        "node_5_card",
-        "Raised $50M to scale operations.",
-        left="10%", top="50%", width="80%", height="40%", font_size="14%", color="#475569"
-    )
+    # Node 5: Series C (Current)
+    app.add_scalable_text("node_5_card", "2026: SERIES C ($100M)", left="5%", top="10%", width="90%", height="25%", font_size="15%", font_weight="800", color="#ef4444")
+    app.add_scalable_text("node_5_card", "Pre-IPO preparations, achieving profitability, and global dominance.", left="5%", top="40%", width="90%", height="30%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
+
+    app.add_scalable_text("node_5_card", "CURRENT VALUATION", left="5%", top="75%", width="50%", height="15%", font_size="10%", font_weight="700", color="#64748b")
+    app.add_scalable_text("node_5_card", "$1.2B", left="55%", top="70%", width="40%", height="25%", font_size="25%", font_weight="900", color="#ef4444")
+
 
     output_path = os.path.join(os.path.dirname(__file__), "05_timeline.html")
     app.to_html(output_path)

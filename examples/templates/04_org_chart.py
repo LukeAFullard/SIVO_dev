@@ -15,74 +15,46 @@ def run():
         theme="light"
     )
 
-    # Use native text replacement without overwriting SVG logic
-    app.fill_template_zone("text_hierarchy_details", "Hierarchy Details", font_size="100%", font_weight="800", color="#f8fafc")
+    # Narrative: Tech Unicorn Leadership Structure
+    app.fill_template_zone("text_hierarchy_details", "Tech Unicorn Hierarchy", font_size="100%", font_weight="800", color="#0f172a")
 
-    md_html = """
-    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center; flex-direction: column;'>
-        <img src='https://i.pravatar.cc/100' alt='CEO' style='border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); width: 35cqw; height: 35cqw; object-fit: cover; margin-bottom: 2cqh;'/>
-        <span style='color: white; font-family: sans-serif; font-size: 16cqw; font-weight: 700;'>CEO</span>
+    # Tier 1 - CEO
+    ceo_html = """
+    <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; display: flex; align-items: center; justify-content: center; flex-direction: column; padding-top: 10cqh;'>
+        <img src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80' alt='CEO' style='border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); width: 25cqw; height: 25cqw; object-fit: cover; margin-bottom: 2cqh;'/>
+        <span style='color: white; font-family: sans-serif; font-size: 8cqw; font-weight: 800;'>Elena Rostova</span>
+        <span style='color: #e2e8f0; font-family: sans-serif; font-size: 6cqw; font-weight: 600;'>CEO & Founder</span>
     </div>
     """
+    app.add_overlay("poly-tier-1", ceo_html)
 
-    app.add_overlay(
-        "poly-tier-1",
-        md_html
-    )
+    # Tier 2 - C-Suite
+    app.add_scalable_text("poly-tier-2", "C-Suite & EVP", font_size="15%", color="white", font_weight="800", align="center", vertical_align="middle")
+    app.add_scalable_text("poly-tier-2", "CTO, CFO, COO", font_size="10%", color="#e2e8f0", font_weight="600", align="center", top="60%")
 
-    app.add_scalable_text(
-        "poly-tier-2",
-        "Executives",
-        font_size="25%",
-        color="white",
-        font_weight="700",
-        align="center",
-        vertical_align="middle"
-    )
+    # Tier 3 - Management
+    app.add_scalable_text("poly-tier-3", "VP & Directors", font_size="12%", color="white", font_weight="800", align="center", vertical_align="middle")
+    app.add_scalable_text("poly-tier-3", "Engineering, Product, Marketing", font_size="8%", color="#e2e8f0", font_weight="600", align="center", top="60%")
 
-    app.add_scalable_text(
-        "poly-tier-3",
-        "Middle Management",
-        font_size="20%",
-        color="white",
-        font_weight="700",
-        align="center",
-        vertical_align="middle"
-    )
+    # Tier 4 - Individual Contributors
+    app.add_scalable_text("poly-tier-4", "Execution Teams (ICs)", font_size="10%", color="white", font_weight="800", align="center", vertical_align="middle")
+    app.add_scalable_text("poly-tier-4", "1,200+ Global Employees driving innovation and daily operations", font_size="6%", color="#e2e8f0", font_weight="600", align="center", top="60%")
 
-    app.add_scalable_text(
-        "poly-tier-4",
-        "Operations & Staff",
-        font_size="20%",
-        color="white",
-        font_weight="700",
-        align="center",
-        vertical_align="middle"
-    )
 
-    app.add_scalable_text(
-        "info-panel-data",
-        "Corporate Structure",
-        left="5%", top="5%", width="90%", height="10%",
-        font_size="10%",
-        font_weight="800",
-        color="#1e293b"
-    )
+    # Info Panel Side Content
+    app.add_scalable_text("info-panel-data", "Workforce Distribution", left="0%", top="0%", width="100%", height="10%", font_size="25%", font_weight="800", color="#1e293b")
 
-    app.add_scalable_text(
-        "info-panel-data",
-        "The pyramid visualizes the decision-making hierarchy within the organization. The executive tier makes strategic calls, while management handles execution.",
-        left="5%", top="20%", width="90%", height="40%",
-        font_size="4%",
-        color="#475569"
-    )
-
-    app.add_scalable_text(
-        "info-panel-data",
-        "• Tier 1: Executive Board\n• Tier 2: Management\n• Tier 3: Team Leads\n• Tier 4: Operations",
-        left="5%", top="60%", width="90%", height="35%",
-        font_size="4%",
-        color="#64748b"
+    # Let's replace the bullet points with a bar chart showing department sizes
+    app.map_bar_chart(
+        element_id="info-panel-data",
+        title="",
+        categories=["Eng", "Sales", "Prod", "Mktg", "HR"],
+        data=[650, 300, 150, 80, 20],
+        color="#3b82f6",
+        extra_options={
+            "grid": {"top": 60, "bottom": 30, "left": 40, "right": 20},
+            "backgroundColor": "transparent"
+        }
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "04_org_chart.html")
