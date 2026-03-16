@@ -846,6 +846,104 @@ class Infographic:
             "effect_size": effect_size
         })
 
+    def add_image_overlay(self, element_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0px", box_shadow: str = "none", offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
+        """
+        A helper method to easily embed responsive images within an SVG element's bounding box without writing custom HTML.
+
+        Args:
+            element_id: The ID of the target SVG element.
+            image_url: The URL or path to the image.
+            object_fit: The CSS object-fit property (e.g., 'cover', 'contain', 'fill'). Default 'cover'.
+            border_radius: The CSS border-radius for the image. Default '0px'.
+            box_shadow: The CSS box-shadow for the image. Default 'none'.
+            offset_x: Pixel offset from the center X.
+            offset_y: Pixel offset from the center Y.
+            scale_with_zoom: Whether the overlay scales with ECharts zooming.
+        """
+        html = f"""
+        <div style='width: 100%; height: 100%; box-sizing: border-box; container-type: size; padding: 0;'>
+            <img src='{image_url}' alt='Image Overlay' style='width: 100%; height: 100%; object-fit: {object_fit}; border-radius: {border_radius}; box-shadow: {box_shadow}; pointer-events: none;' />
+        </div>
+        """
+        self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
+
+    def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
+        """
+        Automatically generates a perfectly scaled, native SVG progress bar relative to the bounding box
+        of a target element.
+
+        Args:
+            element_id: The ID or name of the target SVG element (e.g., a card or region) to anchor to.
+            progress: The progress value as a float (0.0 to 1.0) or percentage string (e.g., "75%").
+            left: The left offset relative to the bounding box (e.g., "10%" or "10").
+            top: The top offset relative to the bounding box (e.g., "10%" or "10").
+            width: The total width of the progress bar relative to the bounding box (e.g., "80%" or "80").
+            height: The height of the progress bar relative to the bounding box (e.g., "10%" or "10").
+            bg_color: The color of the background track.
+            fill_color: The color of the active progress fill.
+            rx: The border radius of the progress bar (in absolute pixels).
+        """
+        import uuid
+
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
+            raise ValueError(f"Cannot add scalable progress bar: Element '{element_id}' not found or has no bounding box.")
+
+        bbox = target_elem['bbox']
+        bbox_min_x, bbox_min_y, bbox_max_x, bbox_max_y = bbox
+        bbox_width = bbox_max_x - bbox_min_x
+        bbox_height = bbox_max_y - bbox_min_y
+
+        def _parse_val(val_str, relative_to):
+            if isinstance(val_str, (int, float)):
+                return float(val_str)
+            if val_str.endswith('%'):
+                return (float(val_str[:-1]) / 100.0) * relative_to
+            return float(val_str)
+
+        def _parse_progress(val):
+            if isinstance(val, (int, float)):
+                # Assume 0-1 range if float, or 0-100 if int
+                if val > 1.0 and isinstance(val, float) or isinstance(val, int):
+                    return float(val) / 100.0
+                return float(val)
+            if isinstance(val, str) and val.endswith('%'):
+                return float(val[:-1]) / 100.0
+            return float(val)
+
+        abs_left = bbox_min_x + _parse_val(str(left), bbox_width)
+        abs_top = bbox_min_y + _parse_val(str(top), bbox_height)
+        abs_width = _parse_val(str(width), bbox_width)
+        abs_height = _parse_val(str(height), bbox_height)
+
+        parsed_progress = max(0.0, min(1.0, _parse_progress(progress)))
+        fill_width = abs_width * parsed_progress
+
+        base_id = f"sivo-progressbar-{uuid.uuid4().hex[:8]}"
+
+        # Background track
+        self.add_shape("rect", {
+            "id": f"{base_id}-bg",
+            "x": str(abs_left),
+            "y": str(abs_top),
+            "width": str(abs_width),
+            "height": str(abs_height),
+            "rx": str(rx),
+            "fill": bg_color
+        })
+
+        # Foreground fill
+        if fill_width > 0:
+            self.add_shape("rect", {
+                "id": f"{base_id}-fill",
+                "x": str(abs_left),
+                "y": str(abs_top),
+                "width": str(fill_width),
+                "height": str(abs_height),
+                "rx": str(rx),
+                "fill": fill_color
+            })
+
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """
         Adds a custom HTML overlay positioned over a specific SVG element's center coordinate.
