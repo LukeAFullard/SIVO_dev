@@ -12,79 +12,164 @@ def run():
         template_path,
         disable_zoom_controls=False,
         lock_canvas=True,
-        theme="light"
+        theme="dark", # Premium dark mode
+        ambient_effect="stars"
     )
 
-    # Header
-    app.fill_template_zone("text_performance_overview", "FinTech Global Command Center", font_size="100%", font_weight="900", color="#0f172a")
-    app.fill_template_zone("text_q3_2026_analytics_dashboard", "Real-time Transactions & Market Overview • Q3 2026", font_size="100%", color="#64748b")
+    # Change background to dark manually if theme doesn't hit everything
+    # Map to classes isn't standard, we'll assume the theme="dark" is enough, or map to nothing
+    app.map("card-main", color="#1e293b", border_color="#334155", border_width=1)
+    app.map("rect-users", color="#1e293b", border_color="#334155", border_width=1)
+    app.map("rect-conversion", color="#1e293b", border_color="#334155", border_width=1)
+    app.map("card-engagement", color="#1e293b", border_color="#334155", border_width=1)
+    app.map("card-bounce", color="#1e293b", border_color="#334155", border_width=1)
+    app.map("card-satisfaction", color="#1e293b", border_color="#334155", border_width=1)
 
-    # Card Main: Global Map
+    # Header
+    app.fill_template_zone("text_performance_overview", "Global Supply Chain Command Center", font_size="100%", font_weight="900", color="#f8fafc")
+    app.fill_template_zone("text_q3_2026_analytics_dashboard", "Real-time Fleet Tracking & Logistics Intelligence • LIVE", font_size="100%", color="#94a3b8")
+
+    # Card Main: Global Map - High Fidelity Map
     app.map_nested_map_chart(
         element_id="card-main",
-        title="Active Trading Volumes",
+        title="Active Maritime Cargo Routes & Congestion",
         map_name="world",
         map_data="world",
         data=[
             {"name": "United States", "value": 1500},
-            {"name": "United Kingdom", "value": 800},
-            {"name": "China", "value": 1200},
-            {"name": "Germany", "value": 600},
-            {"name": "India", "value": 900},
-            {"name": "Brazil", "value": 400}
+            {"name": "China", "value": 3400},
+            {"name": "Germany", "value": 1100},
+            {"name": "Brazil", "value": 800},
+            {"name": "Australia", "value": 1400},
+            {"name": "South Africa", "value": 600},
+            {"name": "India", "value": 2100}
         ],
         min_val=0,
-        max_val=1500,
-        title_size=24,
-        title_color="#0f172a",
-        extra_options={"visualMap": {"show": False}, "backgroundColor": "transparent"}
+        max_val=4000,
+        title_size=18,
+        title_color="#f8fafc",
+        color=["#0ea5e9", "#2563eb", "#3b82f6", "#1d4ed8", "#1e40af", "#1e3a8a"], # Deep sea blues
+        extra_options={
+            "backgroundColor": "transparent",
+            "geo": {
+                "itemStyle": {
+                    "areaColor": "#334155",
+                    "borderColor": "#475569"
+                },
+                "emphasis": {
+                    "itemStyle": {
+                        "areaColor": "#64748b"
+                    }
+                }
+            }
+        }
     )
 
-    # Card Users: System Status & Infrastructure
-    app.add_scalable_text("rect-users", "INFRASTRUCTURE", left="8%", top="15%", width="80%", height="15%", font_size="12%", font_weight="700", color="#64748b")
-    app.add_scalable_text("rect-users", "Primary node latency across all global trading APIs remains stable.", left="8%", top="35%", width="80%", height="25%", font_size="8%", color="#475569", auto_shrink=True)
+    # Card Users: Fleet Efficiency (Radar Chart)
+    app.add_scalable_text("rect-users", "FLEET PERFORMANCE MATRIX", left="8%", top="10%", width="80%", height="15%", font_size="12%", font_weight="700", color="#94a3b8")
 
-    app.add_scalable_text("rect-users", "UPTIME", left="8%", top="65%", width="20%", height="10%", font_size="10%", font_weight="700", color="#64748b")
-    app.add_scalable_text("rect-users", "99.999%", left="8%", top="75%", width="30%", height="20%", font_size="18%", font_weight="800", color="#10b981")
-
-    app.add_scalable_progress_bar("rect-users", progress="99.9%", left="40%", top="75%", width="50%", height="5%", rx="6", bg_color="#e2e8f0", fill_color="#10b981")
-
-    # Card Conversion: Key Personnel or Market News
-    # Add a shadow overlay text on the image
-    app.add_scalable_text("rect-conversion", "MARKET ALERT", left="10%", top="20%", width="50%", height="15%", font_size="12%", font_weight="800", color="#ef4444")
-    app.add_scalable_text("rect-conversion", "Crypto volatility spike detected in Asian markets. Automated hedging protocols active.", left="10%", top="45%", width="80%", height="40%", font_size="10%", font_weight="600", color="#0f172a", auto_shrink=True)
-
-    # Bottom Cards: Engagement, Bounce, Satisfaction -> Revenue, Trades, Alerts
-    # Card 1: Revenue
-    app.add_scalable_text("card-engagement", "DAILY REVENUE", left="10%", top="20%", width="80%", height="15%", font_size="12%", font_weight="700", color="#64748b")
-    app.add_scalable_text("card-engagement", "$2.4M", left="10%", top="45%", width="80%", height="35%", font_size="35%", font_weight="900", color="#3b82f6")
-    app.add_scalable_text("card-engagement", "▲ 12.5% vs yesterday", left="10%", top="80%", width="80%", height="10%", font_size="8%", font_weight="600", color="#10b981")
-
-    # Card 2: Trades
-    app.add_scalable_text("card-bounce", "ACTIVE TRADES", left="10%", top="20%", width="80%", height="15%", font_size="12%", font_weight="700", color="#64748b")
-
-    # Add a small line chart here instead of just text
-    app.map_line_chart(
-        element_id="card-bounce",
+    app.map_radar_chart(
+        element_id="rect-users",
         title="",
-        categories=["08:00", "09:00", "10:00", "11:00", "12:00"],
-        data=[120, 300, 250, 400, 380],
-        color="#8b5cf6",
-        smooth=True,
+        indicators=[
+            {"name": "On-Time", "max": 100},
+            {"name": "Fuel Eff", "max": 100},
+            {"name": "Maint", "max": 100},
+            {"name": "Safety", "max": 100},
+            {"name": "Capacity", "max": 100}
+        ],
+        data=[
+            {"value": [94, 85, 90, 98, 88], "name": "Current Fleet Avg"}
+        ],
+        color="#10b981",
         extra_options={
-            "xAxis": {"show": False},
-            "yAxis": {"show": False},
-            "grid": {"top": 40, "bottom": 30, "left": 10, "right": 10},
+            "radar": {
+                "center": ["50%", "60%"],
+                "radius": "65%",
+                "axisName": {"color": "#cbd5e1", "fontSize": 10},
+                "splitLine": {"lineStyle": {"color": "#334155"}},
+                "splitArea": {"show": False},
+                "axisLine": {"lineStyle": {"color": "#334155"}}
+            },
+            "series": [{"areaStyle": {"opacity": 0.3}}],
             "backgroundColor": "transparent"
         }
     )
-    app.add_scalable_text("card-bounce", "342K/hr", left="10%", top="75%", width="80%", height="15%", font_size="15%", font_weight="800", color="#0f172a")
 
-    # Card 3: Alert Level
-    app.add_scalable_text("card-satisfaction", "SYSTEM THREAT LEVEL", left="10%", top="20%", width="80%", height="15%", font_size="12%", font_weight="700", color="#64748b")
-    app.add_scalable_text("card-satisfaction", "LOW", left="10%", top="45%", width="80%", height="35%", font_size="35%", font_weight="900", color="#10b981")
-    app.add_scalable_text("card-satisfaction", "No active DDoS patterns.", left="10%", top="80%", width="80%", height="10%", font_size="8%", font_weight="600", color="#64748b")
+    # Card Conversion: Critical Alert System
+    app.add_scalable_text("rect-conversion", "PORT CONGESTION ALERT", left="10%", top="15%", width="50%", height="15%", font_size="12%", font_weight="800", color="#ef4444")
+    app.add_scalable_text("rect-conversion", "Severe delays at Port of Long Beach. Average wait time increased to 8.4 days. AI rerouting protocols active.", left="10%", top="35%", width="50%", height="40%", font_size="10%", font_weight="600", color="#e2e8f0", auto_shrink=True)
 
+    # Custom HTML Overlay for a glowing alert status
+    alert_html = """
+    <div style='width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 10%; box-sizing: border-box; container-type: size;'>
+        <div style='display: flex; flex-direction: column; align-items: center;'>
+            <div style='width: 15cqh; height: 15cqh; background-color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: pulse 2s infinite;'>
+                <span style='color: white; font-family: sans-serif; font-size: 8cqh; font-weight: bold;'>!</span>
+            </div>
+            <span style='color: #ef4444; font-family: sans-serif; font-size: 5cqh; font-weight: bold; margin-top: 1cqh; letter-spacing: 1px;'>CRITICAL</span>
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+                    70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+                    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+                }
+            </style>
+        </div>
+    </div>
+    """
+    app.add_overlay("rect-conversion", alert_html)
+
+
+    # Bottom Cards
+    # Card 1: Revenue / Freight Value
+    app.add_scalable_text("card-engagement", "IN-TRANSIT VALUE", left="10%", top="20%", width="80%", height="15%", font_size="12%", font_weight="700", color="#94a3b8")
+    app.add_scalable_text("card-engagement", "$4.2B", left="10%", top="40%", width="80%", height="35%", font_size="40%", font_weight="900", color="#3b82f6")
+    app.add_scalable_text("card-engagement", "▲ +3.2% vs last week", left="10%", top="75%", width="80%", height="10%", font_size="8%", font_weight="600", color="#10b981")
+
+    # Card 2: Shipments Trend (Area Chart)
+    app.add_scalable_text("card-bounce", "WEEKLY CARGO VOL", left="10%", top="10%", width="80%", height="15%", font_size="12%", font_weight="700", color="#94a3b8")
+
+    app.map_line_chart(
+        element_id="card-bounce",
+        title="",
+        categories=["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        data=[1200, 1350, 1100, 1500, 1800, 900, 800],
+        color="#8b5cf6",
+        smooth=True,
+        extra_options={
+            "grid": {"top": 40, "bottom": 30, "left": 40, "right": 20},
+            "backgroundColor": "transparent",
+            "xAxis": {"axisLine": {"lineStyle": {"color": "#475569"}}, "axisLabel": {"color": "#cbd5e1"}},
+            "yAxis": {"splitLine": {"lineStyle": {"color": "#334155"}}, "axisLabel": {"color": "#cbd5e1"}},
+            "series": [{"areaStyle": {
+                "color": {
+                    "type": "linear", "x": 0, "y": 0, "x2": 0, "y2": 1,
+                    "colorStops": [{"offset": 0, "color": "rgba(139, 92, 246, 0.8)"}, {"offset": 1, "color": "rgba(139, 92, 246, 0.1)"}]
+                }
+            }}]
+        }
+    )
+
+    # Card 3: Emissions Tracker (Gauge)
+    app.add_scalable_text("card-satisfaction", "CARBON TARGET (MTD)", left="10%", top="10%", width="80%", height="15%", font_size="12%", font_weight="700", color="#94a3b8")
+
+    app.map_gauge_chart(
+        element_id="card-satisfaction",
+        title="Quota Used",
+        value=68,
+        color="#10b981",
+        extra_options={
+            "series": [{
+                "center": ["50%", "65%"], "radius": "80%",
+                "startAngle": 180, "endAngle": 0,
+                "axisLine": {"lineStyle": {"width": 15, "color": [[0.7, "#10b981"], [0.9, "#f59e0b"], [1, "#ef4444"]]}},
+                "pointer": {"itemStyle": {"color": "#cbd5e1"}},
+                "detail": {"fontSize": 20, "fontWeight": "bold", "color": "#f8fafc", "formatter": "{value}%", "offsetCenter": [0, "-20%"]}
+            }],
+            "backgroundColor": "transparent"
+        }
+    )
 
     output_path = os.path.join(os.path.dirname(__file__), "02_bento_grid.html")
     app.to_html(output_path)
