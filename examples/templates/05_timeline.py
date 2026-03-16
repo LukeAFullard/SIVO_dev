@@ -24,73 +24,75 @@ def run():
     app.add_scalable_text("node_1_card", "2021: PRE-CLINICAL", left="5%", top="5%", width="90%", height="20%", font_size="15%", font_weight="800", color="#3b82f6")
     app.add_scalable_text("node_1_card", "In vitro/vivo testing. Pharmacodynamics established.", left="5%", top="25%", width="90%", height="20%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
 
-    # Add a small pie chart for resource allocation
-    app.map_pie_chart(
-        element_id="node_1_card",
-        title="",
-        data=[
-            {"name": "R&D", "value": 70},
-            {"name": "Legal", "value": 20},
-            {"name": "Admin", "value": 10}
-        ],
-        extra_options={
-            "series": [{"radius": ["30%", "60%"], "center": ["50%", "75%"], "label": {"show": False}}],
-            "color": ["#3b82f6", "#93c5fd", "#e0f2fe"],
-            "backgroundColor": "transparent",
-            "tooltip": {"trigger": "item"}
-        }
-    )
+    # Custom HTML Overlay for a Pie Chart directly on Node 1
+    node_1_pie = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 2cqh; container-type: size;">
+        <svg width="25cqw" height="25cqw" viewBox="0 0 32 32">
+            <!-- R&D 70% -->
+            <circle r="16" cx="16" cy="16" fill="#3b82f6" stroke-width="32" stroke-dasharray="70 100" />
+            <!-- Legal 20% -->
+            <circle r="16" cx="16" cy="16" fill="#93c5fd" stroke-width="32" stroke-dasharray="20 100" stroke-dashoffset="-70" />
+            <!-- Admin 10% -->
+            <circle r="16" cx="16" cy="16" fill="#e0f2fe" stroke-width="32" stroke-dasharray="10 100" stroke-dashoffset="-90" />
+            <!-- Inner hole for donut -->
+            <circle r="8" cx="16" cy="16" fill="#ffffff" />
+        </svg>
+    </div>
+    """
+    app.add_overlay("node_1_card", node_1_pie)
     app.map("node_1_card", hover_color="#eff6ff", glow=True)
 
     # Node 2: Phase 1
     app.add_scalable_text("node_2_card", "2022: PHASE I", left="5%", top="5%", width="90%", height="20%", font_size="15%", font_weight="800", color="#8b5cf6")
     app.add_scalable_text("node_2_card", "Safety and dose escalation in 50 subjects.", left="5%", top="25%", width="90%", height="20%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
 
-    # Add a bar chart for dose tolerance
-    app.map_bar_chart(
-        element_id="node_2_card",
-        title="",
-        categories=["10mg", "25mg", "50mg"],
-        data=[100, 95, 80],
-        color="#8b5cf6",
-        extra_options={
-            "grid": {"top": "50%", "bottom": "15%", "left": "15%", "right": "15%"},
-            "xAxis": {"axisLabel": {"fontSize": 8}},
-            "yAxis": {"show": False},
-            "backgroundColor": "transparent"
-        }
-    )
+    # Custom HTML Overlay for a Bar Chart directly on Node 2
+    node_2_bars = """
+    <div style="width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center; gap: 4cqw; padding-bottom: 2cqh; container-type: size;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 6cqw; height: 18cqh; background-color: #8b5cf6; border-radius: 2px 2px 0 0;"></div>
+            <span style="font-size: 5cqw; color: #64748b; font-family: sans-serif; margin-top: 2px;">10mg</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 6cqw; height: 17cqh; background-color: #a78bfa; border-radius: 2px 2px 0 0;"></div>
+            <span style="font-size: 5cqw; color: #64748b; font-family: sans-serif; margin-top: 2px;">25mg</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 6cqw; height: 12cqh; background-color: #c4b5fd; border-radius: 2px 2px 0 0;"></div>
+            <span style="font-size: 5cqw; color: #64748b; font-family: sans-serif; margin-top: 2px;">50mg</span>
+        </div>
+    </div>
+    """
+    app.add_overlay("node_2_card", node_2_bars)
     app.map("node_2_card", hover_color="#faf5ff", glow=True)
 
     # Node 3: Phase 2 (Efficacy)
-    app.add_scalable_text("node_3_card", "2023-2024: PHASE II", left="5%", top="10%", width="90%", height="20%", font_size="15%", font_weight="800", color="#10b981")
-    app.add_scalable_text("node_3_card", "Efficacy in 300 patients vs standard care.", left="5%", top="35%", width="90%", height="15%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
+    app.add_scalable_text("node_3_card", "2023-2024: PHASE II", left="5%", top="5%", width="90%", height="20%", font_size="15%", font_weight="800", color="#10b981")
+    app.add_scalable_text("node_3_card", "Efficacy in 300 patients vs standard care.", left="5%", top="25%", width="90%", height="15%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
+
+    # Custom HTML Overlay for a Line Chart directly on Node 3
+    node_3_lines = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 2cqh; container-type: size;">
+        <svg width="60cqw" height="25cqh" viewBox="0 0 100 50" preserveAspectRatio="none">
+            <!-- Grid lines -->
+            <line x1="0" y1="25" x2="100" y2="25" stroke="#e2e8f0" stroke-width="1" />
+            <!-- XYZ-123 (Negative trend) -->
+            <polyline points="0,25 25,35 50,45 75,50 100,55" fill="none" stroke="#10b981" stroke-width="3" />
+            <!-- Control -->
+            <polyline points="0,25 25,28 50,30 75,32 100,35" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4" />
+        </svg>
+    </div>
+    """
+    app.add_overlay("node_3_card", node_3_lines)
     app.map("node_3_card", hover_color="#f0fdf4", glow=True)
 
-    # Line chart showing tumor reduction (negative value line chart)
-    app.map_line_chart(
-        element_id="node_3_card",
-        title="Mean Tumor Volume Change (%)",
-        categories=["Wk 0", "Wk 4", "Wk 8", "Wk 12", "Wk 16"],
-        data=[
-            {"name": "XYZ-123", "type": "line", "data": [0, -15, -35, -52, -68], "itemStyle": {"color": "#10b981"}, "smooth": True, "lineStyle": {"width": 3}},
-            {"name": "Control", "type": "line", "data": [0, -5, -8, -10, -12], "itemStyle": {"color": "#94a3b8"}, "smooth": True, "lineStyle": {"type": "dashed"}}
-        ],
-        extra_options={
-            "grid": {"top": 80, "bottom": 30, "left": 50, "right": 20},
-            "legend": {"show": True, "top": 25, "textStyle": {"fontSize": 10}},
-            "backgroundColor": "transparent",
-            "title": {"textStyle": {"fontSize": 12, "color": "#1e293b"}},
-            "tooltip": {"trigger": "axis"}
-        }
-    )
 
     # Node 4: Phase 3
     app.add_scalable_text("node_4_card", "2025: PHASE III", left="5%", top="10%", width="90%", height="25%", font_size="15%", font_weight="800", color="#f59e0b")
     app.add_scalable_text("node_4_card", "Global multi-center trials (3,500 patients).", left="5%", top="40%", width="90%", height="30%", font_size="10%", font_weight="500", color="#475569", auto_shrink=True)
     app.map("node_4_card", hover_color="#fffbeb", glow=True)
 
-    # Enrollment progress bar
+    # Enrollment progress bar directly via native SVG helper
     app.add_scalable_text("node_4_card", "ENROLLMENT PROGRESS", left="5%", top="75%", width="50%", height="15%", font_size="10%", font_weight="700", color="#64748b")
     app.add_scalable_progress_bar("node_4_card", progress="100%", left="55%", top="80%", width="40%", height="5%", rx="4", bg_color="#e2e8f0", fill_color="#f59e0b")
 

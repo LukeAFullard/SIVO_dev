@@ -26,22 +26,23 @@ def run():
     app.add_scalable_text("metric_1", "Metric Tons (YTD)", left="10%", top="75%", width="80%", height="10%", font_size="10%", font_weight="600", color="#94a3b8")
 
     # Metric 2: Renewables Mix (Stacked Bar)
-    app.map_bar_chart(
-        element_id="metric_2",
-        title="Energy Mix by Region (%)",
-        categories=["NA", "EMEA", "APAC", "LATAM"],
-        data=[
-            {"name": "Solar", "type": "bar", "stack": "total", "data": [40, 50, 30, 60], "itemStyle": {"color": "#fbbf24"}, "emphasis": {"focus": "series"}},
-            {"name": "Wind", "type": "bar", "stack": "total", "data": [35, 40, 20, 25], "itemStyle": {"color": "#60a5fa"}, "emphasis": {"focus": "series"}},
-            {"name": "Fossil", "type": "bar", "stack": "total", "data": [25, 10, 50, 15], "itemStyle": {"color": "#94a3b8"}, "emphasis": {"focus": "series"}}
-        ],
-        extra_options={
-            "grid": {"top": 40, "bottom": 30, "left": 40, "right": 20},
-            "legend": {"show": True, "bottom": 0, "textStyle": {"fontSize": 10}},
-            "backgroundColor": "transparent",
-            "tooltip": {"trigger": "axis", "axisPointer": {"type": "shadow"}}
-        }
-    )
+    # Using add_overlay to put the chart directly on metric_2
+    metric_2_stacked_bar = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 2cqh; container-type: size;">
+        <span style="font-family: sans-serif; font-size: 8cqh; font-weight: 700; color: #64748b; margin-bottom: 2cqh;">Energy Mix (%)</span>
+        <div style="width: 80cqw; height: 15cqh; display: flex; border-radius: 4px; overflow: hidden; margin-bottom: 1cqh;">
+            <div style="width: 40%; background-color: #fbbf24;" title="Solar: 40%"></div>
+            <div style="width: 35%; background-color: #60a5fa;" title="Wind: 35%"></div>
+            <div style="width: 25%; background-color: #94a3b8;" title="Fossil: 25%"></div>
+        </div>
+        <div style="display: flex; gap: 4cqw; font-family: sans-serif; font-size: 6cqh; color: #64748b;">
+            <span style="display: flex; align-items: center; gap: 1cqw;"><span style="width: 2cqw; height: 2cqw; background: #fbbf24;"></span> Solar</span>
+            <span style="display: flex; align-items: center; gap: 1cqw;"><span style="width: 2cqw; height: 2cqw; background: #60a5fa;"></span> Wind</span>
+            <span style="display: flex; align-items: center; gap: 1cqw;"><span style="width: 2cqw; height: 2cqw; background: #94a3b8;"></span> Fossil</span>
+        </div>
+    </div>
+    """
+    app.add_overlay("metric_2", metric_2_stacked_bar)
 
     # Metric 3: ESG Score
     app.add_scalable_text("metric_3", "MSCI ESG RATING", left="10%", top="20%", width="80%", height="15%", font_size="12%", font_weight="700", color="#64748b")
@@ -64,11 +65,6 @@ def run():
         }
     )
 
-    # We use a custom dictionary to map values to coordinates for the dot density
-    # (Since these countries aren't distinct SVG regions in this dashboard template's base SVG,
-    #  but rather handled via ECharts nested geo, we'll configure a scatter series directly).
-    # It requires lat/lon coords.
-
     cities = [
         {"name": "New York", "value": [ -74, 40.7, 120]},
         {"name": "London", "value": [ -0.1, 51.5, 80]},
@@ -85,7 +81,7 @@ def run():
             "type": "scatter",
             "coordinateSystem": "geo",
             "data": cities,
-            "symbolSize": 15, # Would ideally use a function (val[2]/10), but static is safer here
+            "symbolSize": 15,
             "itemStyle": {
                 "color": "rgba(239, 68, 68, 0.6)",
                 "shadowBlur": 10,
@@ -95,7 +91,6 @@ def run():
                 "formatter": "{b}: {c}kt CO2e"
             }
         }, {
-            # Adding an effect scatter for the highest emitters
             "name": "High Emissions",
             "type": "effectScatter",
             "coordinateSystem": "geo",
@@ -108,51 +103,59 @@ def run():
     })
 
     # Sidebar Area Top: Waste Diversion Rate
-    app.map_pie_chart(
-        element_id="sidebar_area_top",
-        title="Global Waste Diversion",
-        data=[
-            {"name": "Recycled", "value": 58},
-            {"name": "Composted", "value": 14},
-            {"name": "Landfill", "value": 28}
-        ],
-        extra_options={
-            "series": [{
-                "radius": ["50%", "70%"],
-                "avoidLabelOverlap": False,
-                "itemStyle": {"borderRadius": 5, "borderColor": "#fff", "borderWidth": 2},
-                "label": {"show": False, "position": "center"},
-                "emphasis": {
-                    "label": {"show": True, "fontSize": 14, "fontWeight": "bold"}
-                }
-            }],
-            "color": ["#3b82f6", "#10b981", "#94a3b8"],
-            "title": {"textStyle": {"fontSize": 16, "color": "#334155"}},
-            "backgroundColor": "transparent",
-            "legend": {"show": True, "orient": "vertical", "left": "left"}
-        }
-    )
+    # Embedded Donut Chart via SVG directly
+    donut_html = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; container-type: size;">
+        <span style="font-family: sans-serif; font-size: 8cqh; font-weight: 700; color: #1e293b; margin-bottom: 2cqh;">Global Waste Diversion</span>
+        <svg width="40cqw" height="40cqw" viewBox="0 0 32 32">
+            <!-- Recycled 58% -->
+            <circle r="16" cx="16" cy="16" fill="#3b82f6" stroke-width="32" stroke-dasharray="58 100" />
+            <!-- Composted 14% -->
+            <circle r="16" cx="16" cy="16" fill="#10b981" stroke-width="32" stroke-dasharray="14 100" stroke-dashoffset="-58" />
+            <!-- Landfill 28% -->
+            <circle r="16" cx="16" cy="16" fill="#94a3b8" stroke-width="32" stroke-dasharray="28 100" stroke-dashoffset="-72" />
+            <!-- Inner hole for donut -->
+            <circle r="8" cx="16" cy="16" fill="#ffffff" />
+        </svg>
+        <div style="display: flex; gap: 4cqw; font-family: sans-serif; font-size: 6cqh; color: #64748b; margin-top: 2cqh;">
+            <span style="display: flex; align-items: center; gap: 1cqw;"><span style="width: 2cqw; height: 2cqw; background: #3b82f6;"></span> Recycled</span>
+            <span style="display: flex; align-items: center; gap: 1cqw;"><span style="width: 2cqw; height: 2cqw; background: #10b981;"></span> Composted</span>
+        </div>
+    </div>
+    """
+    app.infographic.overlays["anchor_sidebar_top"] = {
+        "html": donut_html,
+        "coord": [810 + 350/2, 340 + 200/2],
+        "bbox": [810, 340, 810+350, 340+200],
+        "offset": [0, 0],
+        "scale_with_zoom": False
+    }
 
     # Sidebar Area Bottom: Water Usage Trend
-    app.map_line_chart(
-        element_id="sidebar_area_bottom",
-        title="Water Consumption (M Gallons)",
-        categories=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
-        data=[
-            {"name": "2025", "type": "line", "data": [45, 42, 48, 50, 55, 60, 62, 58, 50], "itemStyle": {"color": "#94a3b8"}, "lineStyle": {"type": "dashed", "width": 2}},
-            {"name": "2026", "type": "line", "data": [40, 38, 42, 45, 48, 52, 50, 48, 42], "itemStyle": {"color": "#0ea5e9"}, "areaStyle": {"opacity": 0.2}, "lineStyle": {"width": 3}}
-        ],
-        color="#0ea5e9",
-        smooth=True,
-        title_size=16,
-        title_color="#1e293b",
-        extra_options={
-            "grid": {"top": 50, "bottom": 30, "left": 40, "right": 20},
-            "backgroundColor": "transparent",
-            "legend": {"show": True, "top": 20, "right": 0, "textStyle": {"fontSize": 10}},
-            "tooltip": {"trigger": "axis"}
-        }
-    )
+    # Embedded Multi-series Line Chart via SVG
+    line_html = """
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 4cqh; container-type: size;">
+        <span style="font-family: sans-serif; font-size: 8cqh; font-weight: 700; color: #1e293b; align-self: flex-start; margin-left: 10cqw;">Water Consumption (M Gal)</span>
+        <svg width="80cqw" height="40cqh" viewBox="0 0 100 50" preserveAspectRatio="none">
+            <!-- Grid lines -->
+            <line x1="0" y1="25" x2="100" y2="25" stroke="#e2e8f0" stroke-width="1" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#cbd5e1" stroke-width="1" />
+
+            <!-- 2025 (Dashed) -->
+            <polyline points="0,30 25,28 50,20 75,18 100,25" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4" />
+            <!-- 2026 (Solid with Area) -->
+            <polyline points="0,35 25,38 50,30 75,25 100,38" fill="none" stroke="#0ea5e9" stroke-width="3" />
+            <polygon points="0,35 25,38 50,30 75,25 100,38 100,50 0,50" fill="rgba(14, 165, 233, 0.2)" />
+        </svg>
+    </div>
+    """
+    app.infographic.overlays["anchor_sidebar_bottom"] = {
+        "html": line_html,
+        "coord": [810 + 350/2, 560 + 200/2],
+        "bbox": [810, 560, 810+350, 560+200],
+        "offset": [0, 0],
+        "scale_with_zoom": False
+    }
 
     output_path = os.path.join(os.path.dirname(__file__), "03_modern_dashboard.html")
     app.to_html(output_path)
