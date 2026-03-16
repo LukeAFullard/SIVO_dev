@@ -25,12 +25,12 @@ def run():
     app.add_scalable_text(
         "node-1-card",
         text="STRATEGY",
-        left="10%", top="35%", width="80%", height="20%", font_size="14%", font_weight="800", color="#3b82f6"
+        left="10%", top="45%", width="80%", height="15%", font_size="14%", font_weight="800", color="#3b82f6", auto_shrink=True
     )
     app.add_scalable_text(
         "node-1-card",
         text="Launch targeted ads across social media and major search engines.",
-        left="10%", top="55%", width="80%", height="50%", font_size="10%", font_weight="normal", color="#64748b"
+        left="10%", top="65%", width="80%", height="30%", font_size="10%", font_weight="normal", color="#64748b", auto_shrink=True
     )
 
     # Node 2 - Native ECharts Bar Chart

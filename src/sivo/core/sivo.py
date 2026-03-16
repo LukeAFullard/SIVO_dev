@@ -1567,7 +1567,7 @@ class Sivo:
         """
         self.infographic.add_image_overlay(element_id, image_url, object_fit, border_radius, box_shadow, offset_x, offset_y, scale_with_zoom)
 
-    def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
+    def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True):
         """
         Automatically generates a perfectly scaled, native SVG text element relative to the bounding box
         of a target element, eliminating the need to manually compute absolute x, y, and font sizes.
@@ -1585,6 +1585,7 @@ class Sivo:
             color: The text color.
             align: Horizontal alignment ('left', 'center', 'right').
             vertical_align: Vertical alignment ('top', 'middle', 'bottom').
+            auto_shrink: Whether to automatically reduce font size if the wrapped text overflows the bottom of the bounding box.
         """
         import uuid
 
@@ -1633,10 +1634,11 @@ class Sivo:
             font_family=font_family,
             color=color,
             align=align,
-            vertical_align=vertical_align
+            vertical_align=vertical_align,
+            auto_shrink=auto_shrink
         )
 
-    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle"):
+    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True):
         """
         Replaces a placeholder SVG element (like a <rect>) with native, perfectly-scaled SVG text.
         This ensures text scales naturally with the viewBox on all devices (mobile/desktop)
@@ -1741,30 +1743,55 @@ class Sivo:
             else: # left
                 x = min_x
 
-            # Text wrapping logic
+            # Text wrapping logic with auto-shrink
             words = str(text).split()
             lines = []
-            current_line = []
-            max_chars = int(width / (0.6 * parsed_font_size)) if parsed_font_size > 0 else len(str(text))
-            if max_chars < 1: max_chars = 1
+            total_text_height = 0
+            line_height = 0
 
-            for word in words:
-                if len(" ".join(current_line + [word])) <= max_chars:
-                    current_line.append(word)
-                else:
-                    if current_line:
-                        lines.append(" ".join(current_line))
-                        current_line = [word]
-                    else:
+            # Try progressively smaller font sizes until it fits the height, or hits a minimum
+            min_font_size = 8.0 # Minimum legible fallback
+
+            while True:
+                lines = []
+                current_line = []
+                max_chars = int(width / (0.6 * parsed_font_size)) if parsed_font_size > 0 else len(str(text))
+                if max_chars < 1: max_chars = 1
+
+                for word in words:
+                    # If a single word is longer than max_chars, it's going to be tricky.
+                    # We'll just append it to its own line.
+                    if len(word) > max_chars:
+                        if current_line:
+                            lines.append(" ".join(current_line))
+                            current_line = []
                         lines.append(word)
-                        current_line = []
-            if current_line:
-                lines.append(" ".join(current_line))
+                    elif len(" ".join(current_line + [word])) <= max_chars:
+                        current_line.append(word)
+                    else:
+                        if current_line:
+                            lines.append(" ".join(current_line))
+                            current_line = [word]
+                        else:
+                            lines.append(word)
+                            current_line = []
+
+                if current_line:
+                    lines.append(" ".join(current_line))
+
+                line_height = parsed_font_size * 1.2
+                total_text_height = len(lines) * line_height
+
+                # Break early if we shouldn't shrink, or if text fits, or if font is too small
+                if not auto_shrink or total_text_height <= height or parsed_font_size <= min_font_size:
+                    break
+
+                # Decrease font size by 5% and retry
+                parsed_font_size *= 0.95
+                if parsed_font_size < min_font_size:
+                    parsed_font_size = min_font_size
 
             # Calculate vertical position based on alignment and total text height
-            line_height = parsed_font_size * 1.2
-            total_text_height = len(lines) * line_height
-
             if vertical_align == "top":
                 start_y = min_y + parsed_font_size
             elif vertical_align == "bottom":
