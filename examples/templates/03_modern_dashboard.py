@@ -1,47 +1,98 @@
 from sivo import Sivo
 import os
+import lxml.etree as etree
 
 def run():
     template_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "gis_digital_twin_dashboard_2026.svg"
+        "src", "sivo", "templates", "dashboard_template.svg"
     )
 
     app = Sivo.from_svg(
         template_path,
         disable_zoom_controls=False,
         lock_canvas=True,
-        theme="dark"
+        theme="light"
     )
 
-    # Fill native empty text node directly
-    app.fill_template_zone("text_global_operations_digital_twin", "Global Operations Digital Twin", font_size="100%", font_weight="700", color="#f8fafc")
-    app.fill_template_zone("text_real_time_sensor_feeds", "Real-Time Sensor Feeds", font_size="100%", font_weight="600", color="#ffffff")
-    app.fill_template_zone("text_system_alerts", "System Alerts", font_size="100%", font_weight="600", color="#ffffff")
+    # Header
+    app.add_scalable_text("header_area", "Corporate Sustainability & ESG Dashboard", left="2%", top="20%", width="96%", height="40%", font_size="35%", font_weight="900", color="#0f172a", align="left")
+    app.add_scalable_text("header_area", "Global Energy Consumption, Emissions, & Policy Targets • FY2026", left="2%", top="60%", width="96%", height="20%", font_size="15%", font_weight="600", color="#64748b", align="left")
 
-    # Add overlays to metrics using scalable text instead of HTML
-    app.add_scalable_text("metric-iot-1", "Power Output", left="5%", top="20%", width="90%", height="30%", font_size="20%", font_weight="normal", color="#94a3b8", align="left")
-    app.add_scalable_text("metric-iot-1", "1.21 GW", left="5%", top="50%", width="90%", height="40%", font_size="40%", font_weight="bold", color="#10b981", align="left")
+    # Metric 1: Key Metric (Total Reduction)
+    app.add_scalable_text("metric_1", "CARBON OFFSET", left="10%", top="20%", width="80%", height="15%", font_size="12%", font_weight="700", color="#64748b")
+    app.add_scalable_text("metric_1", "1.2M", left="10%", top="45%", width="80%", height="35%", font_size="35%", font_weight="900", color="#10b981")
+    app.add_scalable_text("metric_1", "Tons CO2e Offset YTD", left="10%", top="80%", width="80%", height="10%", font_size="8%", font_weight="600", color="#94a3b8")
 
-    app.add_scalable_text("metric-iot-2", "Core Temp", left="5%", top="20%", width="90%", height="30%", font_size="20%", font_weight="normal", color="#94a3b8", align="left")
-    app.add_scalable_text("metric-iot-2", "82°C", left="5%", top="50%", width="90%", height="40%", font_size="40%", font_weight="bold", color="#f59e0b", align="left")
+    # Metric 2: Renewables Share
+    app.map_bar_chart(
+        element_id="metric_2",
+        title="Renewables Share",
+        categories=["Solar", "Wind", "Hydro", "Nuclear", "Other"],
+        data=[45, 30, 15, 8, 2],
+        color="#3b82f6",
+        title_size=16,
+        title_color="#334155",
+        extra_options={"grid": {"top": 40, "bottom": 30, "left": 40, "right": 20}, "backgroundColor": "transparent"}
+    )
 
-    app.add_scalable_text("metric-iot-3", "Efficiency", left="5%", top="20%", width="90%", height="30%", font_size="20%", font_weight="normal", color="#94a3b8", align="left")
-    app.add_scalable_text("metric-iot-3", "94.5%", left="5%", top="50%", width="90%", height="40%", font_size="40%", font_weight="bold", color="#3b82f6", align="left")
+    # Metric 3: ESG Score
+    app.add_scalable_text("metric_3", "ESG RATING (MSCI)", left="10%", top="20%", width="80%", height="15%", font_size="12%", font_weight="700", color="#64748b")
+    app.add_scalable_text("metric_3", "AAA", left="10%", top="45%", width="80%", height="35%", font_size="35%", font_weight="900", color="#8b5cf6")
+    app.add_scalable_progress_bar("metric_3", progress="95%", left="10%", top="85%", width="80%", height="5%", rx="4", bg_color="#e2e8f0", fill_color="#8b5cf6")
 
-    # Change to a heatmap to make the dashboard look cooler
-    app.map_heatmap_chart(
-        element_id="predictive-chart-zone",
-        title="Predictive Metrics",
-        x_categories=["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        y_categories=["Alpha", "Beta", "Gamma"],
-        data=[[0,0,10], [0,1,20], [0,2,30], [1,0,40], [1,1,50], [1,2,60], [2,0,70], [2,1,80], [2,2,90], [3,0,100], [3,1,110], [3,2,120], [4,0,130], [4,1,140], [4,2,150], [5,0,160], [5,1,170], [5,2,180]],
-        color=["#0f172a", "#3b82f6", "#38bdf8"],
-        title_color="#ffffff",
-        axis_color="#94a3b8",
+    # Main Chart Area: Main Center Map
+    app.map_nested_map_chart(
+        element_id="main_chart_area",
+        title="Global CO2 Emissions (Metric Tons per Capita)",
+        map_name="world",
+        map_data="world",
+        data=[
+            {"name": "United States", "value": 14.5},
+            {"name": "China", "value": 8.1},
+            {"name": "Germany", "value": 7.8},
+            {"name": "India", "value": 1.9},
+            {"name": "Brazil", "value": 2.2},
+            {"name": "United Kingdom", "value": 5.2}
+        ],
+        min_val=0,
+        max_val=15,
+        title_size=20,
+        title_color="#1e293b",
+        color=["#f87171", "#fb923c", "#fcd34d", "#34d399", "#10b981"], # Gradient from high (red) to low (green) emissions
+        extra_options={"backgroundColor": "transparent"}
+    )
+
+    # Sidebar Area Top: Policy Compliance
+    app.map_pie_chart(
+        element_id="sidebar_area_top",
+        title="Facility Compliance",
+        data=[
+            {"name": "Compliant", "value": 82},
+            {"name": "In Review", "value": 12},
+            {"name": "At Risk", "value": 6}
+        ],
         extra_options={
-            "grid": {"top": 40, "bottom": 30, "left": 50, "right": 20},
-            "visualMap": {"show": False}
+            "series": [{"radius": ["40%", "70%"]}],
+            "color": ["#10b981", "#f59e0b", "#ef4444"],
+            "title": {"textStyle": {"fontSize": 16, "color": "#334155"}},
+            "backgroundColor": "transparent"
+        }
+    )
+
+    # Sidebar Area Bottom: Energy Consumption Trend
+    app.map_line_chart(
+        element_id="sidebar_area_bottom",
+        title="Energy vs. Pathway",
+        categories=["2021", "2022", "2023", "2024", "2025", "2026"],
+        data=[4500, 4300, 4100, 3950, 3800, 3650],
+        color="#f59e0b",
+        smooth=True,
+        title_size=18,
+        title_color="#1e293b",
+        extra_options={
+            "grid": {"top": 50, "bottom": 30, "left": 50, "right": 30},
+            "backgroundColor": "transparent"
         }
     )
 
