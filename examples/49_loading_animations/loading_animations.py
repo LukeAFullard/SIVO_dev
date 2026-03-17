@@ -87,6 +87,18 @@ def main():
             loading={"trigger": "click", "duration_ms": 3000, "style": "breathe", "text": "Calibrating...",
                      "completion_html": "<h2 style='margin:0; color:#38bdf8;'>Ready</h2>"})
 
+    app.map("card-liquid", tooltip="Liquid Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "liquid", "text": "Filling...",
+                     "completion_html": "<h2 style='margin:0; color:#3b82f6;'>Full</h2>"})
+
+    app.map("card-flip", tooltip="Flip Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "flip", "text": "Flipping...",
+                     "completion_html": "<h2 style='margin:0; color:#f59e0b;'>Heads</h2>"})
+
+    app.map("card-blocks", tooltip="Blocks Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "blocks", "text": "Building...",
+                     "completion_html": "<h2 style='margin:0; color:#8b5cf6;'>Built</h2>"})
+
     # Map an "on load" animation
     app.map("card-onload", tooltip="This triggers as soon as the map loads",
             loading={"trigger": "load", "duration_ms": 4000, "style": "typewriter", "text": "Welcome to SIVO...",
