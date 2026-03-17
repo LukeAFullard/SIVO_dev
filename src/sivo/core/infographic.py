@@ -460,7 +460,7 @@ class Infographic:
             mapping.actions.append(DrillDownAction(target_svg=drill_to, transition=drill_transition))
 
         if drill_through:
-            mapping.actions.append(DrillThroughAction(url=drill_through))
+            mapping.actions.append(DrillThroughAction(url=drill_through, transition=drill_transition))
 
         if explode_to:
             mapping.actions.append(ExplodeAction(target_svg=explode_to, duration_ms=explode_duration_ms))
