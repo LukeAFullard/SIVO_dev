@@ -183,7 +183,7 @@ class LoadingAction(BaseAction):
     trigger: Literal["load", "click"] = Field(default="click", description="When to trigger the loading animation")
     duration_ms: int = Field(default=2000, description="Duration of the loading animation in milliseconds")
     text: str = Field(default="Loading...", description="Text to display during loading")
-    style: Literal["spinner", "pulse", "typewriter", "shimmer", "glitch", "matrix", "bouncing_dots", "ripple", "radar"] = Field(default="spinner", description="Visual style of the loading animation")
+    style: Literal["spinner", "pulse", "typewriter", "shimmer", "glitch", "matrix", "bouncing_dots", "ripple", "radar", "neon", "typing_indicator", "progress_bar", "heartbeat"] = Field(default="spinner", description="Visual style of the loading animation")
     completion_html: Optional[str] = Field(default=None, description="HTML content to display permanently in the overlay after loading completes")
     completion_color: Optional[str] = Field(default=None, description="Color to apply to the SVG element after loading completes")
     panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
