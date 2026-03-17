@@ -225,6 +225,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "enable_data_download": view_obj.get("enable_data_download", False),
             "enable_drawing_tools": view_obj.get("enable_drawing_tools", False),
             "ambient_effect": view_obj.get("ambient_effect", None),
+            "ambient_speed": view_obj.get("ambient_speed", 1.0),
             "bounding_coords": view_obj.get("bounding_coords", None),
             "graphic": view_obj.get("graphic", None),
             "background_image_url": view_obj.get("background_image_url", None),
