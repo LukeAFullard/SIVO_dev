@@ -333,7 +333,11 @@ class ProjectConfig(BaseModel):
     )
     ambient_effect: Optional[str] = Field(
         default=None,
-        description="Optional full-screen ambient effect overlay. Options: 'snow', 'rain', 'particles', 'fireflies', 'summer', 'winter', 'spring', 'fall'."
+        description="Optional full-screen ambient effect overlay. Options: 'snow', 'rain', 'particles', 'fireflies', 'summer', 'winter', 'spring', 'fall', 'wind', 'water', 'plants', 'tree'."
+    )
+    ambient_speed: float = Field(
+        default=1.0,
+        description="Optional speed multiplier for the ambient effect."
     )
     bounding_coords: Optional[List[List[float]]] = Field(
         default=None,

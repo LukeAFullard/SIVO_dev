@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, ambient_speed: float = 1.0, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -43,6 +43,7 @@ class Infographic:
         self.enable_data_download = enable_data_download
         self.enable_drawing_tools = enable_drawing_tools
         self.ambient_effect = ambient_effect
+        self.ambient_speed = ambient_speed
         self.bounding_coords = bounding_coords
         self.graphic = graphic
         self.background_image_url = background_image_url
@@ -135,6 +136,7 @@ class Infographic:
         infographic.enable_data_download = getattr(cfg, "enable_data_download", False)
         infographic.enable_drawing_tools = getattr(cfg, "enable_drawing_tools", False)
         infographic.ambient_effect = getattr(cfg, "ambient_effect", None)
+        infographic.ambient_speed = getattr(cfg, "ambient_speed", 1.0)
         infographic.bounding_coords = getattr(cfg, "bounding_coords", None)
         infographic.graphic = getattr(cfg, "graphic", None)
         infographic.background_image_url = getattr(cfg, "background_image_url", None)
@@ -1137,6 +1139,7 @@ class Infographic:
             "enable_data_download": self.enable_data_download,
             "enable_drawing_tools": self.enable_drawing_tools,
             "ambient_effect": self.ambient_effect,
+            "ambient_speed": self.ambient_speed,
             "bounding_coords": self.bounding_coords,
             "graphic": self.graphic,
             "background_image_url": self.background_image_url,
