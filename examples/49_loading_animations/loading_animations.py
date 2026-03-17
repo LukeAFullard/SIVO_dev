@@ -79,6 +79,14 @@ def main():
             loading={"trigger": "click", "duration_ms": 3000, "style": "slot_machine", "text": "Calculating...",
                      "completion_html": "<h2 style='margin:0; color:#eab308;'>777</h2>"})
 
+    app.map("card-orbit", tooltip="Orbit Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "orbit", "text": "Connecting...",
+                     "completion_html": "<h2 style='margin:0; color:#10b981;'>Synced</h2>"})
+
+    app.map("card-breathe", tooltip="Breathe Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "breathe", "text": "Calibrating...",
+                     "completion_html": "<h2 style='margin:0; color:#38bdf8;'>Ready</h2>"})
+
     # Map an "on load" animation
     app.map("card-onload", tooltip="This triggers as soon as the map loads",
             loading={"trigger": "load", "duration_ms": 4000, "style": "typewriter", "text": "Welcome to SIVO...",
