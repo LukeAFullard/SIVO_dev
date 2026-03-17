@@ -75,6 +75,10 @@ def main():
             loading={"trigger": "click", "duration_ms": 3000, "style": "heartbeat", "text": "Monitoring...",
                      "completion_html": "<h2 style='margin:0; color:#ef4444;'>Stable</h2>"})
 
+    app.map("card-slot", tooltip="Slot Machine Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "slot_machine", "text": "Calculating...",
+                     "completion_html": "<h2 style='margin:0; color:#eab308;'>777</h2>"})
+
     # Map an "on load" animation
     app.map("card-onload", tooltip="This triggers as soon as the map loads",
             loading={"trigger": "load", "duration_ms": 4000, "style": "typewriter", "text": "Welcome to SIVO...",
