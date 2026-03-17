@@ -1117,7 +1117,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\u003crect width=\"800\" height=\"600\" fill=\"#000033\"/\u003e\u003c/svg\u003e", "echarts_data": [], "actions_manifest": {}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Ambient Water Effect", "subtitle": "With speed multiplier 0.5", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": "water", "ambient_speed": 0.5, "bounding_coords": null, "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n  \u003cdefs\u003e\n    \u003clinearGradient id=\"skyNight\" x1=\"0%\" y1=\"0%\" x2=\"0%\" y2=\"100%\"\u003e\n      \u003cstop offset=\"0%\" stop-color=\"#000022\"/\u003e\n      \u003cstop offset=\"100%\" stop-color=\"#1A1A40\"/\u003e\n    \u003c/linearGradient\u003e\n    \u003clinearGradient id=\"waterGrad\" x1=\"0%\" y1=\"0%\" x2=\"0%\" y2=\"100%\"\u003e\n      \u003cstop offset=\"0%\" stop-color=\"#003366\"/\u003e\n      \u003cstop offset=\"100%\" stop-color=\"#001133\"/\u003e\n    \u003c/linearGradient\u003e\n    \u003cradialGradient id=\"moonGlow\" cx=\"50%\" cy=\"50%\" r=\"50%\"\u003e\n      \u003cstop offset=\"0%\" stop-color=\"#FFFFFF\" stop-opacity=\"0.8\"/\u003e\n      \u003cstop offset=\"100%\" stop-color=\"#FFFFFF\" stop-opacity=\"0\"/\u003e\n    \u003c/radialGradient\u003e\n  \u003c/defs\u003e\n\n  \u003c!-- Night Sky --\u003e\n  \u003crect width=\"800\" height=\"300\" fill=\"url(#skyNight)\"/\u003e\n  \n  \u003c!-- Moon --\u003e\n  \u003ccircle cx=\"150\" cy=\"100\" r=\"80\" fill=\"url(#moonGlow)\"/\u003e\n  \u003ccircle cx=\"150\" cy=\"100\" r=\"40\" fill=\"#F0F8FF\"/\u003e\n  \n  \u003c!-- Stars --\u003e\n  \u003ccircle cx=\"300\" cy=\"50\" r=\"2\" fill=\"#FFFFFF\" opacity=\"0.6\"/\u003e\n  \u003ccircle cx=\"500\" cy=\"150\" r=\"1.5\" fill=\"#FFFFFF\" opacity=\"0.8\"/\u003e\n  \u003ccircle cx=\"700\" cy=\"80\" r=\"2.5\" fill=\"#FFFFFF\" opacity=\"0.5\"/\u003e\n  \u003ccircle cx=\"450\" cy=\"220\" r=\"1\" fill=\"#FFFFFF\" opacity=\"0.4\"/\u003e\n  \u003ccircle cx=\"600\" cy=\"30\" r=\"2\" fill=\"#FFFFFF\" opacity=\"0.7\"/\u003e\n\n  \u003c!-- Water Surface --\u003e\n  \u003crect x=\"0\" y=\"300\" width=\"800\" height=\"300\" fill=\"url(#waterGrad)\"/\u003e\n  \n  \u003c!-- Moon Reflection --\u003e\n  \u003crect x=\"110\" y=\"300\" width=\"80\" height=\"150\" fill=\"url(#moonGlow)\" opacity=\"0.2\"/\u003e\n  \u003cpath d=\"M120,320 L180,320 M130,340 L170,340 M115,360 L185,360 M125,380 L175,380 M135,400 L165,400\" stroke=\"#FFFFFF\" stroke-width=\"2\" opacity=\"0.3\"/\u003e\n\u003c/svg\u003e", "echarts_data": [], "actions_manifest": {}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Ambient Water Effect", "subtitle": "With speed multiplier 0.5 (Night River)", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": "water", "ambient_speed": 0.5, "bounding_coords": null, "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {}}};
         var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
@@ -3880,11 +3880,18 @@
                             ambientCtx.globalAlpha = 1.0;
                         }
                     } else if (type === 'water') {
-                        ambientCtx.fillStyle = p.color;
+                        ambientCtx.strokeStyle = p.color;
                         ambientCtx.globalAlpha = p.opacity;
-                        // Draw a wave-like ellipse
-                        ambientCtx.ellipse(p.x, p.y, p.r * 3, p.r, 0, 0, Math.PI * 2);
+                        ambientCtx.lineWidth = p.r * 1.5;
+                        // Draw a longer continuous wave segment to look more like a river
+                        ambientCtx.beginPath();
+                        ambientCtx.moveTo(p.x, p.y);
+                        ambientCtx.quadraticCurveTo(p.x + p.r * 15, p.y - p.r * 8, p.x + p.r * 30, p.y);
+                        ambientCtx.quadraticCurveTo(p.x + p.r * 45, p.y + p.r * 8, p.x + p.r * 60, p.y);
+                        ambientCtx.quadraticCurveTo(p.x + p.r * 75, p.y - p.r * 8, p.x + p.r * 90, p.y);
+                        ambientCtx.stroke();
                         ambientCtx.globalAlpha = 1.0;
+                        continue; // skip the default fill below since we stroked
                     } else if (type === 'plants' || type === 'tree') {
                         ambientCtx.fillStyle = p.color;
                         ambientCtx.globalAlpha = Math.min(1.0, p.life / 50.0) * p.opacity;
