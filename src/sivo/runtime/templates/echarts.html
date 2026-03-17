@@ -3885,11 +3885,18 @@
                             ambientCtx.globalAlpha = 1.0;
                         }
                     } else if (type === 'water') {
-                        ambientCtx.fillStyle = p.color;
+                        ambientCtx.strokeStyle = p.color;
                         ambientCtx.globalAlpha = p.opacity;
-                        // Draw a wave-like ellipse
-                        ambientCtx.ellipse(p.x, p.y, p.r * 3, p.r, 0, 0, Math.PI * 2);
+                        ambientCtx.lineWidth = p.r * 1.5;
+                        // Draw a longer continuous wave segment to look more like a river
+                        ambientCtx.beginPath();
+                        ambientCtx.moveTo(p.x, p.y);
+                        ambientCtx.quadraticCurveTo(p.x + p.r * 15, p.y - p.r * 8, p.x + p.r * 30, p.y);
+                        ambientCtx.quadraticCurveTo(p.x + p.r * 45, p.y + p.r * 8, p.x + p.r * 60, p.y);
+                        ambientCtx.quadraticCurveTo(p.x + p.r * 75, p.y - p.r * 8, p.x + p.r * 90, p.y);
+                        ambientCtx.stroke();
                         ambientCtx.globalAlpha = 1.0;
+                        continue; // skip the default fill below since we stroked
                     } else if (type === 'plants' || type === 'tree') {
                         ambientCtx.fillStyle = p.color;
                         ambientCtx.globalAlpha = Math.min(1.0, p.life / 50.0) * p.opacity;
