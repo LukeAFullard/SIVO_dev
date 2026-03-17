@@ -207,6 +207,68 @@
             transform: scale(1);
         }
 
+        /* Slide Left Transition */
+        .sivo-view-transition-slide-left-out {
+            opacity: 0 !important;
+            transform: translateX(-100%);
+        }
+        .sivo-view-transition-slide-left-in {
+            opacity: 1 !important;
+            transform: translateX(0);
+        }
+
+        /* Slide Right Transition */
+        .sivo-view-transition-slide-right-out {
+            opacity: 0 !important;
+            transform: translateX(100%);
+        }
+        .sivo-view-transition-slide-right-in {
+            opacity: 1 !important;
+            transform: translateX(0);
+        }
+
+        /* Slide Up Transition */
+        .sivo-view-transition-slide-up-out {
+            opacity: 0 !important;
+            transform: translateY(-100%);
+        }
+        .sivo-view-transition-slide-up-in {
+            opacity: 1 !important;
+            transform: translateY(0);
+        }
+
+        /* Slide Down Transition */
+        .sivo-view-transition-slide-down-out {
+            opacity: 0 !important;
+            transform: translateY(100%);
+        }
+        .sivo-view-transition-slide-down-in {
+            opacity: 1 !important;
+            transform: translateY(0);
+        }
+
+        /* Flip Transition */
+        .sivo-view-transition-flip-out {
+            opacity: 0 !important;
+            transform: perspective(1000px) rotateY(-90deg);
+        }
+        .sivo-view-transition-flip-in {
+            opacity: 1 !important;
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        /* Page Turn Transition */
+        .sivo-view-transition-page-turn-out {
+            opacity: 0 !important;
+            transform-origin: left center;
+            transform: perspective(1500px) rotateY(-90deg);
+        }
+        .sivo-view-transition-page-turn-in {
+            opacity: 1 !important;
+            transform-origin: left center;
+            transform: perspective(1500px) rotateY(0deg);
+        }
+
         #sivo-title-container {
             position: absolute;
             top: 20px;
@@ -2450,22 +2512,47 @@
             a11yContainer.appendChild(nav);
         }
 
-        function renderView(viewId, isBackNavigation) {
+        // A global variable to hold the currently requested transition name
+        var nextTransition = null;
+
+        function renderView(viewId, isBackNavigation, customTransition) {
             if (viewId !== "compare_mode" && !viewsData[viewId]) {
                 console.error("View not found:", viewId);
                 return;
             }
 
+            // Determine which transition to use.
+            // `customTransition` overrides `nextTransition`.
+            var transitionClassBase = customTransition || nextTransition || 'sivo-view-transition';
+            // Clear it out for the next potential view render
+            nextTransition = null;
+
+            // Optional: for back navigation we could reverse the animation (e.g. slide-right instead of slide-left)
+            // But let's just stick to the normal class behavior for simplicity unless we want more complex state.
+
             // Apply transition out if not the first load
             var isFirstLoad = (!currentViewId || currentViewId === viewId) && !isBackNavigation;
+
+            // Clean up any old transition classes before applying new ones
+            var possibleTransitions = [
+                'sivo-view-transition', 'sivo-view-transition-slide-left',
+                'sivo-view-transition-slide-right', 'sivo-view-transition-slide-up',
+                'sivo-view-transition-slide-down', 'sivo-view-transition-flip',
+                'sivo-view-transition-page-turn'
+            ];
+
+            possibleTransitions.forEach(function(t) {
+                chartDom.classList.remove(t + '-in');
+                chartDom.classList.remove(t + '-out');
+            });
+
             if (!isFirstLoad) {
-                chartDom.classList.remove('sivo-view-transition-in');
-                chartDom.classList.add('sivo-view-transition-out');
+                chartDom.classList.add(transitionClassBase + '-out');
 
                 // Overlay also transitions
                 var overlayContainer = document.getElementById('sivo-native-overlay-svg-container');
                 if (overlayContainer) {
-                    overlayContainer.style.transition = 'opacity 0.5s ease-in-out';
+                    overlayContainer.style.transition = 'all 0.5s ease-in-out';
                     overlayContainer.style.opacity = '0';
                 }
             }
@@ -2922,8 +3009,8 @@
 
             // Trigger transition in
             setTimeout(function() {
-                chartDom.classList.remove('sivo-view-transition-out');
-                chartDom.classList.add('sivo-view-transition-in');
+                chartDom.classList.remove(transitionClassBase + '-out');
+                chartDom.classList.add(transitionClassBase + '-in');
                 var overlayContainer = document.getElementById('sivo-native-overlay-svg-container');
                 if (overlayContainer) {
                     overlayContainer.style.opacity = '1';
@@ -3225,6 +3312,11 @@
                             console.warn("Target SVG for explosion not found in viewsData: " + action.target_svg);
                         }
                     } else if (action.action_type === 'drilldown') {
+                        // Handle custom transition if defined
+                        if (action.transition) {
+                            nextTransition = 'sivo-view-transition-' + action.transition;
+                        }
+
                         // Check if it's an internal multi-view drill down
                         if (viewsData[action.target_svg]) {
                             console.log('Switching view to:', action.target_svg);
