@@ -44,10 +44,14 @@ def create_example():
     app.apply_categorical_map(
         data_map=category_map,
         color_palette=palette,
-        show_legend=True
+        show_legend=True,
+        legend_draggable=True,
+        item_opacity=0.8,
+        border_color="#0f172a",
+        border_width=1.5
     )
 
-    html_output = "examples/70_categorical_map.html"
+    html_output = "examples/70_categorical_map/categorical_map.html"
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 

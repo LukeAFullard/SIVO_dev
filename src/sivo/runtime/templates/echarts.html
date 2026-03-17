@@ -1903,18 +1903,85 @@
                         renderItem: function (params, api) {
                             var val = api.value(2);
                             var ratio = (val - minValSpike) / rangeSpike;
-                            var height = ratio * spikeMap.max_height;
-                            var baseHalf = spikeMap.base_width / 2;
+                            if (ratio === 0 && rangeSpike > 0) ratio = 0.05; // Ensure min value has a small spike
+                            if (rangeSpike === 0) ratio = 1.0;
+
                             var coord = api.coord([api.value(0), api.value(1)]);
+
+                            // For geographic coordinates in echarts, api.coord transforms the logical coordinate to pixels
+                            // However, we want to specify base_width and max_height in pixels directly for screen rendering
+                            // rather than logical map coordinates to ensure they are visible.
+                            // But we should scale them based on the current zoom level of the geo component to keep them pinned.
+                            var zoom = 1;
+                            if (api.coordinateSystem && api.coordinateSystem.getZoom) {
+                                zoom = api.coordinateSystem.getZoom();
+                            }
+
+                            // Sivo handles unprojected SVG where the actual bounding box of the SVG provides the scale.
+                            // If ECharts hasn't projected the map cleanly, we need to apply height and base_width
+                            // proportional to the view size or directly in pixels.
+
+                            // ECharts custom coordinateSystem returns values via api.coord
+                            if (!coord || isNaN(coord[0]) || isNaN(coord[1])) return;
+
+                            // Calculate physical coordinates using the coordinate system mapping
+                            // This ensures the spike scales naturally with the map zoom and projection
+                            // We construct the logical points and then map each to physical pixels.
+
+                            // logical coordinates
+                            var logCx = api.value(0);
+                            var logCy = api.value(1);
+
+                            // Try basic coordinate translation
+                            var ptCenter = api.coord([logCx, logCy]);
+                            if (!ptCenter || isNaN(ptCenter[0]) || isNaN(ptCenter[1])) return;
+
+                            // Scale via pixel width/height directly since api.coord behaves inconsistently
+                            // across native geo vs unprojected custom SVGs.
+                            var zoom = 1;
+                            if (api.coordinateSystem && api.coordinateSystem.getZoom) {
+                                zoom = api.coordinateSystem.getZoom();
+                            }
+
+                            // fallback for missing projection mapping size
+                            var ptTop = api.coord([logCx, logCy - ratio * spikeMap.max_height]);
+                            var ptLeft = api.coord([logCx - (spikeMap.base_width/2), logCy]);
+                            var ptRight = api.coord([logCx + (spikeMap.base_width/2), logCy]);
+
+                            // check if coords worked properly
+                            if (ptTop && !isNaN(ptTop[1]) && Math.abs(ptCenter[1] - ptTop[1]) > 5) {
+                                return {
+                                    type: 'polygon',
+                                    z2: 100,
+                                    shape: {
+                                        points: [
+                                            ptCenter,
+                                            ptLeft,
+                                            ptTop,
+                                            ptRight
+                                        ]
+                                    },
+                                    style: api.style({
+                                        fill: api.visual('color') || spikeMap.color,
+                                        stroke: '#fff',
+                                        lineWidth: 0.5
+                                    })
+                                }
+                            }
+
+                            // Ultimate fallback: static pixel size
+                            var pxH = ratio * spikeMap.max_height * zoom;
+                            var pxW = (spikeMap.base_width / 2) * zoom;
 
                             return {
                                 type: 'polygon',
+                                z2: 100, // force on top
                                 shape: {
                                     points: [
-                                        [coord[0], coord[1]], // center bottom
-                                        [coord[0] - baseHalf, coord[1]], // left bottom
-                                        [coord[0], coord[1] - height], // peak
-                                        [coord[0] + baseHalf, coord[1]] // right bottom
+                                        [ptCenter[0], ptCenter[1]],
+                                        [ptCenter[0] - pxW, ptCenter[1]],
+                                        [ptCenter[0], ptCenter[1] - pxH],
+                                        [ptCenter[0] + pxW, ptCenter[1]]
                                     ]
                                 },
                                 style: api.style({
@@ -4302,8 +4369,44 @@
                 for (const [id, overlay] of Object.entries(overlaysData)) {
                     var el = document.createElement('div');
                     el.style.position = 'absolute';
-                    el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
+                    if (overlay.z_index) el.style.zIndex = overlay.z_index;
+
+                    // Don't override pointerEvents if the HTML explicitly sets it (like the legend)
+                    if (overlay.html && overlay.html.indexOf('pointer-events:') === -1) {
+                        el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
+                    }
                     el.innerHTML = overlay.html;
+
+                    // If it has draggable flag, we enable native drag API on the wrapper
+                    if (overlay.draggable) {
+                        el.style.pointerEvents = 'auto';
+                        el.draggable = true;
+                        el.style.cursor = 'grab';
+
+                        el.addEventListener('dragstart', function(e) {
+                            e.dataTransfer.setData('text/plain', null);
+                            // Store initial offsets
+                            var rect = el.getBoundingClientRect();
+                            el.dataset.offsetX = e.clientX - rect.left;
+                            el.dataset.offsetY = e.clientY - rect.top;
+                            el.style.opacity = '0.5';
+                        });
+
+                        el.addEventListener('dragend', function(e) {
+                            el.style.opacity = '1.0';
+
+                            // Calculate position relative to container
+                            var containerRect = overlaysContainer.getBoundingClientRect();
+                            var newLeft = e.clientX - containerRect.left - parseFloat(el.dataset.offsetX);
+                            var newTop = e.clientY - containerRect.top - parseFloat(el.dataset.offsetY);
+
+                            el.style.left = newLeft + 'px';
+                            el.style.top = newTop + 'px';
+                            el.style.bottom = 'auto';
+                            el.style.right = 'auto';
+                        });
+                    }
+
                     overlaysContainer.appendChild(el);
                     overlayElements[id] = { dom: el, data: overlay };
                 }

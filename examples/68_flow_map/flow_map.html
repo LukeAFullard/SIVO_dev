@@ -1506,7 +1506,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0.0 0.0 20.0 20.0\"\u003e\n  \u003cg transform=\"matrix(1, 0, 0, -1, 0, 20.0)\"\u003e\n    \u003cg id=\"Zone1\" name=\"Northwest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,0.0 L 0.0,10.0 L 10.0,10.0 L 10.0,0.0 L 0.0,0.0 z\" id=\"Zone1_0\" name=\"Northwest\"/\u003e\u003c/g\u003e\n\u003cg id=\"Zone2\" name=\"Northeast\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,0.0 L 10.0,10.0 L 20.0,10.0 L 20.0,0.0 L 10.0,0.0 z\" id=\"Zone2_0\" name=\"Northeast\"/\u003e\u003c/g\u003e\n\u003cg id=\"Zone3\" name=\"Southwest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,10.0 L 0.0,20.0 L 10.0,20.0 L 10.0,10.0 L 0.0,10.0 z\" id=\"Zone3_0\" name=\"Southwest\"/\u003e\u003c/g\u003e\n\u003cg id=\"Zone4\" name=\"Southeast\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,10.0 L 10.0,20.0 L 20.0,20.0 L 20.0,10.0 L 10.0,10.0 z\" id=\"Zone4_0\" name=\"Southeast\"/\u003e\u003c/g\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "Northwest", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}, {"name": "Northeast", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}, {"name": "Southwest", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}, {"name": "Southeast", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}], "actions_manifest": {}, "overlays": {}, "connections": [], "disable_panel": true, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Spike Map Demo", "subtitle": "COVID-19 Case Density Representation", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": [[0.0, 0.0], [20.0, 20.0]], "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"Northwest": {"id": "Zone1_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Northeast": {"id": "Zone2_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Southwest": {"id": "Zone3_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Southeast": {"id": "Zone4_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0.0 0.0 20.0 20.0\"\u003e\n  \u003cg transform=\"matrix(1, 0, 0, -1, 0, 20.0)\"\u003e\n    \u003cg id=\"Hub1\" name=\"Seattle\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,0.0 L 0.0,10.0 L 10.0,10.0 L 10.0,0.0 L 0.0,0.0 z\" id=\"Hub1_0\" name=\"Seattle\"/\u003e\u003c/g\u003e\n\u003cg id=\"Hub2\" name=\"Denver\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,0.0 L 10.0,10.0 L 20.0,10.0 L 20.0,0.0 L 10.0,0.0 z\" id=\"Hub2_0\" name=\"Denver\"/\u003e\u003c/g\u003e\n\u003cg id=\"Hub3\" name=\"Chicago\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,10.0 L 0.0,20.0 L 10.0,20.0 L 10.0,10.0 L 0.0,10.0 z\" id=\"Hub3_0\" name=\"Chicago\"/\u003e\u003c/g\u003e\n\u003cg id=\"Hub4\" name=\"New York\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,10.0 L 10.0,20.0 L 20.0,20.0 L 20.0,10.0 L 10.0,10.0 z\" id=\"Hub4_0\" name=\"New York\"/\u003e\u003c/g\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "Seattle", "value": 1, "itemStyle": {"areaColor": "#1e293b"}}, {"name": "Denver", "value": 1, "itemStyle": {"areaColor": "#1e293b"}}, {"name": "Chicago", "value": 1, "itemStyle": {"areaColor": "#1e293b"}}, {"name": "New York", "value": 1, "itemStyle": {"areaColor": "#1e293b"}}, {"name": "Hub1", "value": 1}, {"name": "Hub2", "value": 1}, {"name": "Hub3", "value": 1}, {"name": "Hub4", "value": 1}], "actions_manifest": {}, "overlays": {}, "connections": [{"source_id": "Hub1", "target_id": "Hub4", "coords": [[5.0, 5.0], [15.0, 15.0]], "label": "SEA-JFK", "color": "#38bdf8", "width": 6.0, "animation_speed": 2.0, "type": "solid", "opacity": 0.6, "flow_effect": true, "effect_symbol": "arrow", "effect_size": 5.0}, {"source_id": "Hub1", "target_id": "Hub2", "coords": [[5.0, 5.0], [15.0, 5.0]], "label": "", "color": "#38bdf8", "width": 2.3043478260869565, "animation_speed": 2.0, "type": "solid", "opacity": 0.6, "flow_effect": true, "effect_symbol": "arrow", "effect_size": 5.0}, {"source_id": "Hub4", "target_id": "Hub3", "coords": [[15.0, 15.0], [5.0, 15.0]], "label": "JFK-ORD", "color": "#fbbf24", "width": 5.130434782608695, "animation_speed": 2.0, "type": "solid", "opacity": 0.6, "flow_effect": true, "effect_symbol": "arrow", "effect_size": 5.0}, {"source_id": "Hub3", "target_id": "Hub2", "coords": [[5.0, 15.0], [15.0, 5.0]], "label": "", "color": "#fbbf24", "width": 1.0, "animation_speed": 2.0, "type": "solid", "opacity": 0.6, "flow_effect": true, "effect_symbol": "arrow", "effect_size": 5.0}, {"source_id": "Hub2", "target_id": "Hub1", "coords": [[15.0, 5.0], [5.0, 5.0]], "label": "", "color": "#a3e635", "width": 1.6521739130434783, "animation_speed": 2.0, "type": "solid", "opacity": 0.6, "flow_effect": true, "effect_symbol": "arrow", "effect_size": 5.0}], "disable_panel": true, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "dark", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Flow Map Demo", "subtitle": "Domestic Flight Volume Simulation", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": [[0.0, 0.0], [20.0, 20.0]], "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"Seattle": {"id": "Hub1_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#1e293b", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Denver": {"id": "Hub2_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#1e293b", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Chicago": {"id": "Hub3_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#1e293b", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "New York": {"id": "Hub4_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#1e293b", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Hub1": {"id": "Hub1", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Hub2": {"id": "Hub2", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Hub3": {"id": "Hub3", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Hub4": {"id": "Hub4", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}, "proportional_symbols": {"data": {"Hub1": {"value": 1, "coord": [5.0, 5.0], "color": "#38bdf8"}, "Hub2": {"value": 1, "coord": [15.0, 5.0], "color": "#a3e635"}, "Hub3": {"value": 1, "coord": [5.0, 15.0], "color": "#fbbf24"}, "Hub4": {"value": 1, "coord": [15.0, 15.0], "color": "#fbbf24"}}, "min_size": 12.0, "max_size": 12.0, "color": "rgba(255, 0, 0, 0.6)", "is_pulse": true}}};
         var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
@@ -1898,18 +1898,85 @@
                         renderItem: function (params, api) {
                             var val = api.value(2);
                             var ratio = (val - minValSpike) / rangeSpike;
-                            var height = ratio * spikeMap.max_height;
-                            var baseHalf = spikeMap.base_width / 2;
+                            if (ratio === 0 && rangeSpike > 0) ratio = 0.05; // Ensure min value has a small spike
+                            if (rangeSpike === 0) ratio = 1.0;
+
                             var coord = api.coord([api.value(0), api.value(1)]);
+
+                            // For geographic coordinates in echarts, api.coord transforms the logical coordinate to pixels
+                            // However, we want to specify base_width and max_height in pixels directly for screen rendering
+                            // rather than logical map coordinates to ensure they are visible.
+                            // But we should scale them based on the current zoom level of the geo component to keep them pinned.
+                            var zoom = 1;
+                            if (api.coordinateSystem && api.coordinateSystem.getZoom) {
+                                zoom = api.coordinateSystem.getZoom();
+                            }
+
+                            // Sivo handles unprojected SVG where the actual bounding box of the SVG provides the scale.
+                            // If ECharts hasn't projected the map cleanly, we need to apply height and base_width
+                            // proportional to the view size or directly in pixels.
+
+                            // ECharts custom coordinateSystem returns values via api.coord
+                            if (!coord || isNaN(coord[0]) || isNaN(coord[1])) return;
+
+                            // Calculate physical coordinates using the coordinate system mapping
+                            // This ensures the spike scales naturally with the map zoom and projection
+                            // We construct the logical points and then map each to physical pixels.
+
+                            // logical coordinates
+                            var logCx = api.value(0);
+                            var logCy = api.value(1);
+
+                            // Try basic coordinate translation
+                            var ptCenter = api.coord([logCx, logCy]);
+                            if (!ptCenter || isNaN(ptCenter[0]) || isNaN(ptCenter[1])) return;
+
+                            // Scale via pixel width/height directly since api.coord behaves inconsistently
+                            // across native geo vs unprojected custom SVGs.
+                            var zoom = 1;
+                            if (api.coordinateSystem && api.coordinateSystem.getZoom) {
+                                zoom = api.coordinateSystem.getZoom();
+                            }
+
+                            // fallback for missing projection mapping size
+                            var ptTop = api.coord([logCx, logCy - ratio * spikeMap.max_height]);
+                            var ptLeft = api.coord([logCx - (spikeMap.base_width/2), logCy]);
+                            var ptRight = api.coord([logCx + (spikeMap.base_width/2), logCy]);
+
+                            // check if coords worked properly
+                            if (ptTop && !isNaN(ptTop[1]) && Math.abs(ptCenter[1] - ptTop[1]) > 5) {
+                                return {
+                                    type: 'polygon',
+                                    z2: 100,
+                                    shape: {
+                                        points: [
+                                            ptCenter,
+                                            ptLeft,
+                                            ptTop,
+                                            ptRight
+                                        ]
+                                    },
+                                    style: api.style({
+                                        fill: api.visual('color') || spikeMap.color,
+                                        stroke: '#fff',
+                                        lineWidth: 0.5
+                                    })
+                                }
+                            }
+
+                            // Ultimate fallback: static pixel size
+                            var pxH = ratio * spikeMap.max_height * zoom;
+                            var pxW = (spikeMap.base_width / 2) * zoom;
 
                             return {
                                 type: 'polygon',
+                                z2: 100, // force on top
                                 shape: {
                                     points: [
-                                        [coord[0], coord[1]], // center bottom
-                                        [coord[0] - baseHalf, coord[1]], // left bottom
-                                        [coord[0], coord[1] - height], // peak
-                                        [coord[0] + baseHalf, coord[1]] // right bottom
+                                        [ptCenter[0], ptCenter[1]],
+                                        [ptCenter[0] - pxW, ptCenter[1]],
+                                        [ptCenter[0], ptCenter[1] - pxH],
+                                        [ptCenter[0] + pxW, ptCenter[1]]
                                     ]
                                 },
                                 style: api.style({
@@ -4297,8 +4364,44 @@
                 for (const [id, overlay] of Object.entries(overlaysData)) {
                     var el = document.createElement('div');
                     el.style.position = 'absolute';
-                    el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
+                    if (overlay.z_index) el.style.zIndex = overlay.z_index;
+
+                    // Don't override pointerEvents if the HTML explicitly sets it (like the legend)
+                    if (overlay.html && overlay.html.indexOf('pointer-events:') === -1) {
+                        el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
+                    }
                     el.innerHTML = overlay.html;
+
+                    // If it has draggable flag, we enable native drag API on the wrapper
+                    if (overlay.draggable) {
+                        el.style.pointerEvents = 'auto';
+                        el.draggable = true;
+                        el.style.cursor = 'grab';
+
+                        el.addEventListener('dragstart', function(e) {
+                            e.dataTransfer.setData('text/plain', null);
+                            // Store initial offsets
+                            var rect = el.getBoundingClientRect();
+                            el.dataset.offsetX = e.clientX - rect.left;
+                            el.dataset.offsetY = e.clientY - rect.top;
+                            el.style.opacity = '0.5';
+                        });
+
+                        el.addEventListener('dragend', function(e) {
+                            el.style.opacity = '1.0';
+
+                            // Calculate position relative to container
+                            var containerRect = overlaysContainer.getBoundingClientRect();
+                            var newLeft = e.clientX - containerRect.left - parseFloat(el.dataset.offsetX);
+                            var newTop = e.clientY - containerRect.top - parseFloat(el.dataset.offsetY);
+
+                            el.style.left = newLeft + 'px';
+                            el.style.top = newTop + 'px';
+                            el.style.bottom = 'auto';
+                            el.style.right = 'auto';
+                        });
+                    }
+
                     overlaysContainer.appendChild(el);
                     overlayElements[id] = { dom: el, data: overlay };
                 }

@@ -31,13 +31,23 @@ def create_example():
     # Base styling
     app.apply_choropleth({k: 1 for k in data['id']}, min_color="#f0f0f0", max_color="#f0f0f0", show_legend=False)
 
-    spike_data = {row['id']: row['cases'] for idx, row in gdf.iterrows()}
+    # Pass explicit centroid coordinates because GeoDataFrame wrapper groups (<g>)
+    # don't inherently calculate bounding boxes in the basic SVGParser.
+    spike_data = {
+        row['id']: {
+            "value": row['cases'],
+            "coord": [row.geometry.centroid.x, row.geometry.centroid.y]
+        }
+        for idx, row in gdf.iterrows()
+    }
 
     print("Applying Spike Map...")
-    # Map proportional heights and constant width
-    app.apply_spike_map(spike_data, max_height=8.0, base_width=1.5, color="rgba(220, 38, 38, 0.8)")
+    # Map proportional heights and constant width.
+    # For Unprojected GeoDataFrames, Echarts api.coord will translate log_coords perfectly to physical pixels,
+    # but pixel offsets are required for drawing custom shapes properly, so max_height should be large enough (e.g. 100-200px)
+    app.apply_spike_map(spike_data, max_height=100.0, base_width=20.0, color="rgba(220, 38, 38, 0.8)")
 
-    html_output = "examples/67_spike_map.html"
+    html_output = "examples/67_spike_map/spike_map.html"
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 

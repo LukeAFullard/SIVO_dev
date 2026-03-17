@@ -44,7 +44,7 @@ def create_example():
         show_legend=True
     )
 
-    html_output = "examples/69_value_by_alpha.html"
+    html_output = "examples/69_value_by_alpha/value_by_alpha.html"
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 
