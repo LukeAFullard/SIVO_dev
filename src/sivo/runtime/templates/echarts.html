@@ -1147,8 +1147,9 @@
         }
 
         @keyframes sivo-progress {
-            0% { width: 0%; }
-            100% { width: 100%; }
+            0% { width: 0%; left: 0%; right: 100%; }
+            50% { left: 25%; right: 0%; width: 75%; }
+            100% { right: 0%; left: 100%; width: 0%; }
         }
         .sivo-anim-progress-bar {
             width: 80%;
@@ -1157,13 +1158,14 @@
             border-radius: 5px;
             overflow: hidden;
             position: relative;
+            display: block;
         }
         .sivo-anim-progress-bar::after {
             content: '';
             position: absolute;
             top: 0; left: 0; bottom: 0;
             background: #3b82f6;
-            animation: sivo-progress 2s ease-in-out infinite;
+            animation: sivo-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
         @keyframes sivo-heartbeat {
@@ -1177,6 +1179,40 @@
             color: #ef4444;
             font-size: 2em;
             animation: sivo-heartbeat 1.5s infinite;
+        }
+
+        @keyframes sivo-slot-spin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-90%); }
+        }
+        .sivo-anim-slot-machine {
+            height: 40px;
+            overflow: hidden;
+            display: inline-flex;
+            font-family: monospace;
+            font-size: 2em;
+            font-weight: bold;
+            color: #eab308;
+            background: #1e293b;
+            padding: 0 10px;
+            border-radius: 4px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            line-height: 40px;
+        }
+        .sivo-anim-slot-reel {
+            display: flex;
+            flex-direction: column;
+            animation: sivo-slot-spin 0.5s linear infinite;
+        }
+        .sivo-anim-slot-reel span {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sivo-anim-slot-machine-wrapper {
+            display: flex;
+            gap: 5px;
         }
     </style>
 </head>
@@ -5716,6 +5752,19 @@ function tourNext() {
                 loadingHtml = `<div class="sivo-anim-progress-bar"></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
             } else if (style === 'heartbeat') {
                 loadingHtml = `<div class="sivo-anim-heartbeat">♥</div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
+            } else if (style === 'slot_machine') {
+                var reelHtml = '<div class="sivo-anim-slot-reel">';
+                for(var i=0; i<10; i++) reelHtml += `<span>${Math.floor(Math.random() * 10)}</span>`;
+                reelHtml += '</div>';
+
+                loadingHtml = `
+                    <div class="sivo-anim-slot-machine-wrapper">
+                        <div class="sivo-anim-slot-machine">${reelHtml}</div>
+                        <div class="sivo-anim-slot-machine" style="animation-delay: 0.1s;">${reelHtml.replace('sivo-anim-slot-reel', 'sivo-anim-slot-reel" style="animation-delay: -0.2s')}</div>
+                        <div class="sivo-anim-slot-machine" style="animation-delay: 0.2s;">${reelHtml.replace('sivo-anim-slot-reel', 'sivo-anim-slot-reel" style="animation-delay: -0.4s')}</div>
+                    </div>
+                    <div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>
+                `;
             }
 
             // Register temporary overlay
