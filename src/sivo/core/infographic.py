@@ -64,6 +64,7 @@ class Infographic:
         self.layer_toggles: Optional[list] = None
         self.scratchoff: Optional[dict] = None
         self.proportional_symbols: Optional[dict] = None
+        self.spike_map: Optional[dict] = None
         self.hexbin: Optional[dict] = None
         self.dot_density: Optional[dict] = None
 
@@ -891,6 +892,90 @@ class Infographic:
             is_pulse=is_pulse
         ).model_dump()
 
+    def apply_spike_map(self, data_map: Dict[str, float], max_height: float = 100.0, base_width: float = 10.0, color: str = "rgba(255, 0, 0, 0.8)"):
+        """
+        Creates a spike map by calculating the center of each mapped element and passing the parameters to the frontend.
+        """
+        from .config import SpikeMapConfig
+
+        processed_data = {}
+        for elem_id, val in data_map.items():
+            center = self.get_element_center(elem_id)
+            if center:
+                coord = center
+            else:
+                if isinstance(val, dict) and "coord" in val:
+                    coord = val["coord"]
+                else:
+                    coord = None
+
+            if coord:
+                if isinstance(val, dict):
+                    processed_data[elem_id] = {
+                        "value": val.get("value", 0),
+                        "coord": coord,
+                        "color": val.get("color")
+                    }
+                else:
+                    processed_data[elem_id] = {
+                        "value": val,
+                        "coord": coord
+                    }
+
+                if elem_id not in self.mappings:
+                    self.mappings[elem_id] = InteractionMapping(id=elem_id)
+                    self._element_lookup[elem_id] = {"id": elem_id, "name": elem_id, "tag": "virtual_spike"}
+
+        self.spike_map = SpikeMapConfig(
+            data=processed_data,
+            max_height=max_height,
+            base_width=base_width,
+            color=color
+        ).model_dump()
+
+    def apply_flow_map(self, data_list: list[dict], min_width: float = 1.0, max_width: float = 5.0, color: str = "rgba(255, 51, 51, 0.6)", flow_effect: bool = True, effect_symbol: str = "arrow", effect_size: float = 5.0, animation_speed: float = 3.0):
+        """
+        Takes a list of origin-destination dictionaries and uses add_connection to draw flow lines.
+        data_list format: [{"origin": "id1", "destination": "id2", "value": 100, "color": "#f00", "label": "Text"}, ...]
+        """
+        if not data_list:
+            return
+
+        values = [d.get("value", 1) for d in data_list]
+        min_val = min(values)
+        max_val = max(values)
+        range_val = max_val - min_val if max_val > min_val else 1.0
+
+        for item in data_list:
+            origin = item.get("origin")
+            destination = item.get("destination")
+            if not origin or not destination:
+                continue
+
+            val = item.get("value", 1)
+            ratio = (val - min_val) / range_val
+            width = min_width + (max_width - min_width) * ratio
+
+            item_color = item.get("color", color)
+            label = item.get("label", "")
+
+            try:
+                self.add_connection(
+                    source_id=origin,
+                    target_id=destination,
+                    label=label,
+                    color=item_color,
+                    width=width,
+                    animation_speed=animation_speed,
+                    flow_effect=flow_effect,
+                    effect_symbol=effect_symbol,
+                    effect_size=effect_size,
+                    type="solid",
+                    opacity=0.6
+                )
+            except ValueError:
+                pass # Skip if origin/destination doesn't exist
+
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
         Generates a choropleth map by interpolating colors based on a numeric data mapping.
@@ -944,6 +1029,126 @@ class Infographic:
                 "html": legend_html,
                 "fixed": True,
                 "position": "bottom-left"
+            }
+
+    def apply_value_by_alpha(self, base_data_map: Dict[str, float], alpha_data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", min_alpha: float = 0.2, max_alpha: float = 1.0, show_legend: bool = True):
+        """
+        Generates a Value-by-Alpha choropleth map where the base color is determined by one variable,
+        and the transparency (alpha) is determined by a second absolute variable.
+        """
+        if not base_data_map or not alpha_data_map:
+            return
+
+        min_val = min(base_data_map.values())
+        max_val = max(base_data_map.values())
+        range_val = max_val - min_val if max_val > min_val else 1.0
+
+        min_alpha_val = min(alpha_data_map.values())
+        max_alpha_val = max(alpha_data_map.values())
+        range_alpha_val = max_alpha_val - min_alpha_val if max_alpha_val > min_alpha_val else 1.0
+
+        def hex_to_rgb(h):
+            h = h.lstrip('#')
+            if len(h) == 3:
+                h = ''.join([c*2 for c in h])
+            return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
+        min_rgb = hex_to_rgb(min_color)
+        max_rgb = hex_to_rgb(max_color)
+
+        for elem_id, value in base_data_map.items():
+            alpha_val = alpha_data_map.get(elem_id)
+            if alpha_val is None:
+                continue
+
+            # Base color interpolation
+            ratio = (value - min_val) / range_val
+            r = min_rgb[0] + (max_rgb[0] - min_rgb[0]) * ratio
+            g = min_rgb[1] + (max_rgb[1] - min_rgb[1]) * ratio
+            b = min_rgb[2] + (max_rgb[2] - min_rgb[2]) * ratio
+
+            # Alpha interpolation
+            alpha_ratio = (alpha_val - min_alpha_val) / range_alpha_val
+            a = min_alpha + (max_alpha - min_alpha) * alpha_ratio
+
+            color_rgba = f"rgba({int(r)}, {int(g)}, {int(b)}, {a:.2f})"
+
+            try:
+                self.map(elem_id, color=color_rgba)
+            except ValueError:
+                pass
+
+        if show_legend:
+            legend_html = f"""
+            <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: sans-serif; font-size: 12px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); user-select: none; z-index: 100; pointer-events: none;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <strong style="color: #334155; font-size: 11px; text-transform: uppercase;">Value (Color)</strong>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #64748b;">{min_val:.1f}</span>
+                        <div style="width: 120px; height: 12px; background: linear-gradient(to right, {min_color}, {max_color}); border-radius: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);"></div>
+                        <span style="color: #64748b;">{max_val:.1f}</span>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <strong style="color: #334155; font-size: 11px; text-transform: uppercase;">Density (Opacity)</strong>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #64748b;">{min_alpha_val:.1f}</span>
+                        <div style="width: 120px; height: 12px; background: linear-gradient(to right, rgba(100,100,100,{min_alpha}), rgba(100,100,100,{max_alpha})); border-radius: 4px; border: 1px solid #e2e8f0;"></div>
+                        <span style="color: #64748b;">{max_alpha_val:.1f}</span>
+                    </div>
+                </div>
+            </div>
+            """
+            self.overlays["sivo_value_by_alpha_legend"] = {
+                "html": legend_html,
+                "fixed": True,
+                "position": "bottom-left"
+            }
+
+    def apply_categorical_map(self, data_map: Dict[str, str], color_palette: Dict[str, str] = None, show_legend: bool = True):
+        """
+        Generates a categorical map mapping discrete categories to specific colors.
+        color_palette is a dict like {"Forest": "#228B22", "Water": "#1E90FF"}.
+        If color_palette is missing, generates default colors.
+        """
+        if not data_map:
+            return
+
+        unique_categories = list(set(data_map.values()))
+
+        if not color_palette:
+            default_colors = ["#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe"]
+            color_palette = {cat: default_colors[i % len(default_colors)] for i, cat in enumerate(unique_categories)}
+
+        for elem_id, category in data_map.items():
+            color = color_palette.get(category, "#cccccc")
+            try:
+                self.map(elem_id, color=color)
+            except ValueError:
+                pass
+
+        if show_legend:
+            legend_items_html = ""
+            for cat, col in color_palette.items():
+                legend_items_html += f"""
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 14px; height: 14px; background-color: {col}; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1);"></div>
+                        <span style="color: #475569; font-size: 12px;">{cat}</span>
+                    </div>
+                """
+
+            legend_html = f"""
+            <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: sans-serif; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); user-select: none; z-index: 100; pointer-events: none;">
+                <strong style="color: #334155; font-size: 11px; text-transform: uppercase; margin-bottom: 4px;">Legend</strong>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px;">
+                    {legend_items_html}
+                </div>
+            </div>
+            """
+            self.overlays["sivo_categorical_legend"] = {
+                "html": legend_html,
+                "fixed": True,
+                "position": "bottom-right"
             }
 
     def add_connection(self, source_id: str, target_id: str, label: str = "", color: str = "#ff3333", width: float = 2.0, animation_speed: float = 3.0, type: str = 'solid', opacity: float = 0.6, flow_effect: bool = False, effect_symbol: str = "circle", effect_size: float = 3.0):

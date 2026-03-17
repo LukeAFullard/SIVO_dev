@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include echarts-stat -->
@@ -29,7 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -1511,8 +1506,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0.0 0.0 20.0 20.0\"\u003e\n  \u003cg transform=\"matrix(1, 0, 0, -1, 0, 20.0)\"\u003e\n    \u003cg id=\"A\" name=\"County A\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,0.0 L 0.0,10.0 L 10.0,10.0 L 10.0,0.0 L 0.0,0.0 z\" id=\"A_0\" name=\"County A\"/\u003e\u003c/g\u003e\n\u003cg id=\"B\" name=\"County B\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,0.0 L 10.0,10.0 L 20.0,10.0 L 20.0,0.0 L 10.0,0.0 z\" id=\"B_0\" name=\"County B\"/\u003e\u003c/g\u003e\n\u003cg id=\"C\" name=\"County C\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,10.0 L 0.0,20.0 L 10.0,20.0 L 10.0,10.0 L 0.0,10.0 z\" id=\"C_0\" name=\"County C\"/\u003e\u003c/g\u003e\n\u003cg id=\"D\" name=\"County D\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,10.0 L 10.0,20.0 L 20.0,20.0 L 20.0,10.0 L 10.0,10.0 z\" id=\"D_0\" name=\"County D\"/\u003e\u003c/g\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "County A", "value": 1, "itemStyle": {"areaColor": "rgba(239, 202, 202, 0.23)"}}, {"name": "County B", "value": 1, "itemStyle": {"areaColor": "rgba(127, 29, 29, 1.00)"}}, {"name": "County C", "value": 1, "itemStyle": {"areaColor": "rgba(216, 168, 168, 0.35)"}}, {"name": "County D", "value": 1, "itemStyle": {"areaColor": "rgba(254, 226, 226, 0.20)"}}], "actions_manifest": {}, "overlays": {"sivo_value_by_alpha_legend": {"html": "\n            \u003cdiv style=\"background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: sans-serif; font-size: 12px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); user-select: none; z-index: 100; pointer-events: none;\"\u003e\n                \u003cdiv style=\"display: flex; flex-direction: column; gap: 4px;\"\u003e\n                    \u003cstrong style=\"color: #334155; font-size: 11px; text-transform: uppercase;\"\u003eValue (Color)\u003c/strong\u003e\n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cspan style=\"color: #64748b;\"\u003e35000.0\u003c/span\u003e\n                        \u003cdiv style=\"width: 120px; height: 12px; background: linear-gradient(to right, #fee2e2, #7f1d1d); border-radius: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #64748b;\"\u003e120000.0\u003c/span\u003e\n                    \u003c/div\u003e\n                \u003c/div\u003e\n                \u003cdiv style=\"display: flex; flex-direction: column; gap: 4px;\"\u003e\n                    \u003cstrong style=\"color: #334155; font-size: 11px; text-transform: uppercase;\"\u003eDensity (Opacity)\u003c/strong\u003e\n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cspan style=\"color: #64748b;\"\u003e100.0\u003c/span\u003e\n                        \u003cdiv style=\"width: 120px; height: 12px; background: linear-gradient(to right, rgba(100,100,100,0.2), rgba(100,100,100,1.0)); border-radius: 4px; border: 1px solid #e2e8f0;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #64748b;\"\u003e10000.0\u003c/span\u003e\n                    \u003c/div\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e\n            ", "fixed": true, "position": "bottom-left"}}, "connections": [], "disable_panel": true, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Value-by-Alpha Map Demo", "subtitle": "Income Level vs Population Density", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": [[0.0, 0.0], [20.0, 20.0]], "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"County A": {"id": "A_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(239, 202, 202, 0.23)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "County B": {"id": "B_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(127, 29, 29, 1.00)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "County C": {"id": "C_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(216, 168, 168, 0.35)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "County D": {"id": "D_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(254, 226, 226, 0.20)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -5992,8 +5987,8 @@ function tourNext() {
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>
