@@ -187,6 +187,7 @@ class Infographic:
                     url=elem_config.url,
                     drill_to=elem_config.drill_to,
                     drill_through=getattr(elem_config, 'drill_through', None),
+                    drill_transition=getattr(elem_config, 'drill_transition', None),
                     callback_event=elem_config.callback_event,
                     callback_payload=elem_config.callback_payload,
                     hover_callback_event=elem_config.hover_callback_event,
@@ -337,6 +338,7 @@ class Infographic:
         url: Optional[str] = None,
         drill_to: Optional[str] = None,
         drill_through: Optional[str] = None,
+        drill_transition: Optional[str] = None,
         explode_to: Optional[str] = None,
         explode_duration_ms: int = 1000,
         footnote: Optional[str] = None,
@@ -455,10 +457,10 @@ class Infographic:
             mapping.actions.append(URLAction(url=url))
 
         if drill_to:
-            mapping.actions.append(DrillDownAction(target_svg=drill_to))
+            mapping.actions.append(DrillDownAction(target_svg=drill_to, transition=drill_transition))
 
         if drill_through:
-            mapping.actions.append(DrillThroughAction(url=drill_through))
+            mapping.actions.append(DrillThroughAction(url=drill_through, transition=drill_transition))
 
         if explode_to:
             mapping.actions.append(ExplodeAction(target_svg=explode_to, duration_ms=explode_duration_ms))

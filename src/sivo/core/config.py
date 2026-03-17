@@ -11,6 +11,7 @@ class ElementConfig(BaseModel):
     url: Optional[str] = None
     drill_to: Optional[str] = None
     drill_through: Optional[str] = None
+    drill_transition: Optional[str] = None
     callback_event: Optional[str] = None
     callback_payload: Optional[Dict[str, Any]] = None
     hover_callback_event: Optional[str] = None

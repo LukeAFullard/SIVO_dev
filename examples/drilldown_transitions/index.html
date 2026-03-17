@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include echarts-stat -->
@@ -29,7 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -1511,8 +1506,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"view1": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n        \u003crect width=\"800\" height=\"600\" fill=\"#e0f2fe\"/\u003e\n        \u003ctext x=\"400\" y=\"200\" font-family=\"sans-serif\" font-size=\"48\" font-weight=\"bold\" fill=\"#0369a1\" text-anchor=\"middle\"\u003eView 1: Overview\u003c/text\u003e\n        \n        \u003cg id=\"btn_next_1\" cursor=\"pointer\" name=\"btn_next_1\"\u003e\n            \u003crect x=\"300\" y=\"300\" width=\"200\" height=\"60\" rx=\"8\" fill=\"#0ea5e9\"/\u003e\n            \u003ctext x=\"400\" y=\"338\" font-family=\"sans-serif\" font-size=\"24\" fill=\"white\" text-anchor=\"middle\"\u003eGo to View 2 (Flip)\u003c/text\u003e\n        \u003c/g\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "btn_next_1", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#0284c7"}}}], "actions_manifest": {"btn_next_1": [{"action_type": "drilldown", "target_svg": "view2", "transition": "flip"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"btn_next_1": {"id": "btn_next_1", "actions": [{"action_type": "drilldown", "target_svg": "view2", "transition": "flip"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#0284c7", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "view2": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n        \u003crect width=\"800\" height=\"600\" fill=\"#dcfce7\"/\u003e\n        \u003ctext x=\"400\" y=\"200\" font-family=\"sans-serif\" font-size=\"48\" font-weight=\"bold\" fill=\"#15803d\" text-anchor=\"middle\"\u003eView 2: Details\u003c/text\u003e\n        \n        \u003cg id=\"btn_next_2\" cursor=\"pointer\" name=\"btn_next_2\"\u003e\n            \u003crect x=\"420\" y=\"300\" width=\"220\" height=\"60\" rx=\"8\" fill=\"#16a34a\"/\u003e\n            \u003ctext x=\"530\" y=\"338\" font-family=\"sans-serif\" font-size=\"20\" fill=\"white\" text-anchor=\"middle\"\u003eView 3 (Page Turn)\u003c/text\u003e\n        \u003c/g\u003e\n        \n        \u003cg id=\"btn_back_2\" cursor=\"pointer\" name=\"btn_back_2\"\u003e\n            \u003crect x=\"160\" y=\"300\" width=\"220\" height=\"60\" rx=\"8\" fill=\"#16a34a\"/\u003e\n            \u003ctext x=\"270\" y=\"338\" font-family=\"sans-serif\" font-size=\"20\" fill=\"white\" text-anchor=\"middle\"\u003eBack to 1 (Slide)\u003c/text\u003e\n        \u003c/g\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "btn_next_2", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#15803d"}}}, {"name": "btn_back_2", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#15803d"}}}], "actions_manifest": {"btn_next_2": [{"action_type": "drilldown", "target_svg": "view3", "transition": "page-turn"}], "btn_back_2": [{"action_type": "drilldown", "target_svg": "view1", "transition": "slide-right"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"btn_next_2": {"id": "btn_next_2", "actions": [{"action_type": "drilldown", "target_svg": "view3", "transition": "page-turn"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#15803d", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "btn_back_2": {"id": "btn_back_2", "actions": [{"action_type": "drilldown", "target_svg": "view1", "transition": "slide-right"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#15803d", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "view3": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n        \u003crect width=\"800\" height=\"600\" fill=\"#f3e8ff\"/\u003e\n        \u003ctext x=\"400\" y=\"200\" font-family=\"sans-serif\" font-size=\"48\" font-weight=\"bold\" fill=\"#7e22ce\" text-anchor=\"middle\"\u003eView 3: Deep Dive\u003c/text\u003e\n        \n        \u003cg id=\"btn_home_3\" cursor=\"pointer\" name=\"btn_home_3\"\u003e\n            \u003crect x=\"300\" y=\"300\" width=\"200\" height=\"60\" rx=\"8\" fill=\"#9333ea\"/\u003e\n            \u003ctext x=\"400\" y=\"338\" font-family=\"sans-serif\" font-size=\"24\" fill=\"white\" text-anchor=\"middle\"\u003eHome (Slide Up)\u003c/text\u003e\n        \u003c/g\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "btn_home_3", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#7e22ce"}}}], "actions_manifest": {"btn_home_3": [{"action_type": "drilldown", "target_svg": "view1", "transition": "slide-up"}]}, "overlays": {}, "connections": [], "disable_panel": false, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"btn_home_3": {"id": "btn_home_3", "actions": [{"action_type": "drilldown", "target_svg": "view1", "transition": "slide-up"}], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": "#7e22ce", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "view1";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -3292,23 +3287,7 @@
                         if (action.target === '_blank') {
                             window.open(action.url, '_blank');
                         } else {
-                            if (action.transition) {
-                                var transitionClassBase = 'sivo-view-transition-' + action.transition;
-                                chartDom.classList.add(transitionClassBase + '-out');
-
-                                var overlayContainer = document.getElementById('sivo-native-overlay-svg-container');
-                                if (overlayContainer) {
-                                    overlayContainer.style.transition = 'all 0.5s ease-in-out';
-                                    overlayContainer.style.opacity = '0';
-                                }
-
-                                setTimeout(function() {
-                                    var separator = action.url.indexOf('?') !== -1 ? '&' : '?';
-                                    window.location.href = action.url + separator + 'sivo_transition_in=' + action.transition;
-                                }, 500);
-                            } else {
-                                window.location.href = action.url;
-                            }
+                            window.location.href = action.url;
                         }
                     } else if (action.action_type === 'explode') {
                         console.log('Exploding view to:', action.target_svg);
@@ -5352,42 +5331,6 @@ function tourNext() {
             document.body.removeChild(link);
         }
 
-        // Check for transition parameter in URL
-        var urlParams = new URLSearchParams(window.location.search);
-        var initialTransition = urlParams.get('sivo_transition_in');
-
-        if (initialTransition) {
-            // Apply the -in class immediately before rendering,
-            // by setting nextTransition, so renderView uses it.
-            // However, to make it animate, we need to first start from the -out state,
-            // render the view, and then transition to -in.
-
-            // Temporarily disable CSS transitions so we can snap to the -out state
-            chartDom.style.transition = 'none';
-            var tClassBase = 'sivo-view-transition-' + initialTransition;
-            chartDom.classList.add(tClassBase + '-out');
-
-            // Force a reflow
-            void chartDom.offsetWidth;
-
-            // Restore transition
-            chartDom.style.transition = '';
-
-            // Set the transition for renderView to use
-            nextTransition = tClassBase;
-
-            // Clean up the URL parameter without reloading the page
-            if (window.history && window.history.replaceState) {
-                var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                var remainingParams = new URLSearchParams(window.location.search);
-                remainingParams.delete('sivo_transition_in');
-                if (remainingParams.toString()) {
-                    cleanUrl += '?' + remainingParams.toString();
-                }
-                window.history.replaceState({path: cleanUrl}, '', cleanUrl);
-            }
-        }
-
         // Initialize the first view
         renderView(currentViewId, false);
 
@@ -5922,8 +5865,8 @@ function tourNext() {
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

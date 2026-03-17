@@ -28,11 +28,13 @@ class URLAction(BaseAction):
 class DrillDownAction(BaseAction):
     action_type: Literal["drilldown"] = "drilldown"
     target_svg: str = Field(description="Registered view_id from SivoProject OR path to an external secondary SVG file")
+    transition: Optional[str] = Field(default=None, description="Optional transition animation name (e.g., 'fade', 'slide-left', 'slide-right', 'page-turn')")
 
 class DrillThroughAction(BaseAction):
     action_type: Literal["drill_through"] = "drill_through"
     url: str = Field(description="URL to a deeply detailed sub-dashboard or external page to navigate to")
     target: Literal["_blank", "_self"] = Field(default="_self")
+    transition: Optional[str] = Field(default=None, description="Optional transition animation name (e.g., 'fade', 'slide-left', 'slide-right', 'page-turn')")
 
 class CallbackAction(BaseAction):
     action_type: Literal["callback"] = "callback"
