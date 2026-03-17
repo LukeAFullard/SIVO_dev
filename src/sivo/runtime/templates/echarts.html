@@ -1124,6 +1124,60 @@
             background: white;
             z-index: 1;
         }
+
+        @keyframes sivo-neon {
+            0%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #0fa, 0 0 40px #0fa, 0 0 80px #0fa; }
+            50% { text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #0fa, 0 0 20px #0fa, 0 0 40px #0fa; }
+        }
+        .sivo-anim-neon {
+            font-size: 1.5em;
+            color: #fff;
+            animation: sivo-neon 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes sivo-typing {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+        }
+        .sivo-anim-typing::after {
+            content: '';
+            animation: sivo-typing 1.5s infinite steps(4, end);
+        }
+
+        @keyframes sivo-progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .sivo-anim-progress-bar {
+            width: 80%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .sivo-anim-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            background: #3b82f6;
+            animation: sivo-progress 2s ease-in-out infinite;
+        }
+
+        @keyframes sivo-heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+        .sivo-anim-heartbeat {
+            color: #ef4444;
+            font-size: 2em;
+            animation: sivo-heartbeat 1.5s infinite;
+        }
     </style>
 </head>
 <body>
@@ -5653,6 +5707,15 @@ function tourNext() {
                 loadingHtml = `<div class="sivo-anim-ripple"><div></div><div></div></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
             } else if (style === 'radar') {
                 loadingHtml = `<div class="sivo-anim-radar"></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
+            } else if (style === 'neon') {
+                loadingHtml = `<div class="sivo-anim-neon" style="font-family: sans-serif; font-weight: bold;">${text}</div>`;
+                bgStyle += ' background: rgba(0, 0, 0, 0.9);';
+            } else if (style === 'typing_indicator') {
+                loadingHtml = `<div style="font-weight: bold; color: #333; font-size: 1.2em;">${text}<span class="sivo-anim-typing"></span></div>`;
+            } else if (style === 'progress_bar') {
+                loadingHtml = `<div class="sivo-anim-progress-bar"></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
+            } else if (style === 'heartbeat') {
+                loadingHtml = `<div class="sivo-anim-heartbeat">♥</div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
             }
 
             // Register temporary overlay

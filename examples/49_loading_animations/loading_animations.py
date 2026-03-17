@@ -59,6 +59,22 @@ def main():
             loading={"trigger": "click", "duration_ms": 3000, "style": "radar", "text": "Scanning...",
                      "completion_html": "<h2 style='margin:0; color:#8b5cf6;'>Clear</h2>"})
 
+    app.map("card-neon", tooltip="Neon Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "neon", "text": "Powering Up...",
+                     "completion_html": "<h2 style='margin:0; color:#d946ef;'>Online</h2>"})
+
+    app.map("card-typing", tooltip="Typing Indicator",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "typing_indicator", "text": "Jane is typing",
+                     "completion_html": "<h2 style='margin:0; color:#f97316;'>Hello!</h2>"})
+
+    app.map("card-progress", tooltip="Progress Bar",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "progress_bar", "text": "Downloading...",
+                     "completion_html": "<h2 style='margin:0; color:#3b82f6;'>Complete</h2>"})
+
+    app.map("card-heartbeat", tooltip="Heartbeat Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "heartbeat", "text": "Monitoring...",
+                     "completion_html": "<h2 style='margin:0; color:#ef4444;'>Stable</h2>"})
+
     # Map an "on load" animation
     app.map("card-onload", tooltip="This triggers as soon as the map loads",
             loading={"trigger": "load", "duration_ms": 4000, "style": "typewriter", "text": "Welcome to SIVO...",
