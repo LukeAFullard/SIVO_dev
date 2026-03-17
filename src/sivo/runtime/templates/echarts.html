@@ -1214,6 +1214,53 @@
             display: flex;
             gap: 5px;
         }
+
+        @keyframes sivo-orbit {
+            0% { transform: rotate(0deg) translateX(30px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
+        }
+        .sivo-anim-orbit-container {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sivo-anim-orbit-core {
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            border-radius: 50%;
+        }
+        .sivo-anim-orbit-satellite {
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            position: absolute;
+            animation: sivo-orbit 2s linear infinite;
+        }
+        .sivo-anim-orbit-satellite:nth-child(2) {
+            animation-delay: -1s;
+            background: #f59e0b;
+        }
+        .sivo-anim-orbit-satellite:nth-child(3) {
+            animation-delay: -0.5s;
+            background: #8b5cf6;
+        }
+
+        @keyframes sivo-breathe {
+            0%, 100% { transform: scale(1); opacity: 0.5; filter: blur(2px); }
+            50% { transform: scale(1.5); opacity: 1; filter: blur(0px); }
+        }
+        .sivo-anim-breathe {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #38bdf8 0%, transparent 70%);
+            border-radius: 50%;
+            animation: sivo-breathe 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
@@ -5765,6 +5812,18 @@ function tourNext() {
                     </div>
                     <div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>
                 `;
+            } else if (style === 'orbit') {
+                loadingHtml = `
+                    <div class="sivo-anim-orbit-container">
+                        <div class="sivo-anim-orbit-core"></div>
+                        <div class="sivo-anim-orbit-satellite"></div>
+                        <div class="sivo-anim-orbit-satellite"></div>
+                        <div class="sivo-anim-orbit-satellite"></div>
+                    </div>
+                    <div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>
+                `;
+            } else if (style === 'breathe') {
+                loadingHtml = `<div class="sivo-anim-breathe"></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
             }
 
             // Register temporary overlay
