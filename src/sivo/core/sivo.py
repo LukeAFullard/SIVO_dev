@@ -77,14 +77,19 @@ class Sivo:
         return cls(info, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, panel_height=panel_height, disable_resizer=disable_resizer, disable_tooltips=disable_tooltips, disable_zoom_controls=disable_zoom_controls, lock_zoom_out=lock_zoom_out, starting_zoom=starting_zoom, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, enable_drawing_tools=enable_drawing_tools, ambient_effect=ambient_effect, bounding_coords=bounding_coords, graphic=graphic, background_image_url=background_image_url, background_image_opacity=background_image_opacity, background_image_grayscale=background_image_grayscale, svg_background_image_url=svg_background_image_url, svg_background_image_opacity=svg_background_image_opacity, svg_background_image_grayscale=svg_background_image_grayscale, svg_background_image_insert_after=svg_background_image_insert_after, transparent_template_lines=transparent_template_lines)
 
     @classmethod
-    def from_geodataframe(cls, gdf: Any, id_col: str, name_col: Optional[str] = None, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False) -> "Sivo":
+    def from_geodataframe(cls, gdf: Any, id_col: str, name_col: Optional[str] = None, simplify_tolerance: Optional[float] = None, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False) -> "Sivo":
         """
         Initializes a Sivo instance directly from a geopandas GeoDataFrame.
         Automatically converts geometries to SVG paths, assigns IDs and Names,
         and sets bounding coordinates for native geographical projection mapping.
+        If `simplify_tolerance` is provided, it simplifies the geometries.
         """
         if name_col is None:
             name_col = id_col
+
+        if simplify_tolerance is not None:
+            gdf = gdf.copy()
+            gdf.geometry = gdf.geometry.simplify(simplify_tolerance)
 
         svg_parts = []
         minx, miny, maxx, maxy = gdf.total_bounds
@@ -1985,6 +1990,17 @@ class Sivo:
             custom_css=custom_css,
             custom_js=custom_js
         )
+
+    def to_svg(self, output_path: Optional[str] = None) -> str:
+        """
+        Returns the processed SVG as a string.
+        Optionally saves it directly to a file if output_path is provided.
+        """
+        svg_str = self.infographic.parser.to_string()
+        if output_path:
+            with open(output_path, "w", encoding="utf-8") as f:
+                f.write(svg_str)
+        return svg_str
 
     def to_html_compare(self, other_sivo: 'Sivo', output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """

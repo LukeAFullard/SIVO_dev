@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.0 0.0 4.0 2.8">
+  <g transform="matrix(1, 0, 0, -1, 0, 2.8)">
+    <g id="region_1" name="West Sector"><path fill-rule="evenodd" d="M 0.0,0.0 L 2.0,0.0 L 2.0,2.0 L 0.0,2.0 L 0.0,0.0 z" id="region_1_0" name="West Sector"/></g>
+<g id="region_2" name="East Sector"><path fill-rule="evenodd" d="M 2.0,0.0 L 4.0,0.0 L 4.0,2.0 L 2.0,2.0 L 2.0,0.0 z" id="region_2_0" name="East Sector"/></g>
+<g id="region_3" name="North Sector"><path fill-rule="evenodd" d="M 0.0,2.0 L 1.0,2.8 L 2.0,2.0 L 0.0,2.0 z" id="region_3_0" name="North Sector"/></g>
+  </g>
+</svg>
