@@ -47,6 +47,18 @@ def main():
             loading={"trigger": "click", "duration_ms": 3000, "style": "matrix", "text": "01001100...",
                      "completion_html": "<h2 style='margin:0; color:#14b8a6;'>Neo</h2><span style='font-size:12px; color:#64748b;'>Found</span>"})
 
+    app.map("card-bouncing-dots", tooltip="Bouncing Dots",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "bouncing_dots", "text": "Saving...",
+                     "completion_html": "<h2 style='margin:0; color:#38bdf8;'>Done</h2>"})
+
+    app.map("card-ripple", tooltip="Ripple Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "ripple", "text": "Pinging...",
+                     "completion_html": "<h2 style='margin:0; color:#10b981;'>Alive</h2>"})
+
+    app.map("card-radar", tooltip="Radar Effect",
+            loading={"trigger": "click", "duration_ms": 3000, "style": "radar", "text": "Scanning...",
+                     "completion_html": "<h2 style='margin:0; color:#8b5cf6;'>Clear</h2>"})
+
     # Map an "on load" animation
     app.map("card-onload", tooltip="This triggers as soon as the map loads",
             loading={"trigger": "load", "duration_ms": 4000, "style": "typewriter", "text": "Welcome to SIVO...",
