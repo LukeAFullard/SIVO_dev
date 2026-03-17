@@ -1005,6 +1005,125 @@
         .sivo-anim-fade {
             animation: sivo-fade 2s infinite ease-in-out;
         }
+
+        /* Loading Animation Styles */
+        @keyframes sivo-shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        .sivo-anim-shimmer {
+            animation: sivo-shimmer 2s infinite linear;
+            background: linear-gradient(to right, #f6f7f8 4%, #edeef1 25%, #f6f7f8 36%);
+            background-size: 1000px 100%;
+        }
+        @keyframes sivo-typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes sivo-blink {
+            50% { border-color: transparent; }
+        }
+        .sivo-anim-typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: .15em solid #38bdf8;
+            animation: sivo-typewriter 2s steps(40, end), sivo-blink .5s step-end infinite;
+        }
+        @keyframes sivo-glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        .sivo-anim-glitch {
+            animation: sivo-glitch 0.2s infinite;
+        }
+        @keyframes sivo-matrix {
+            0% { background-position: 0% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        .sivo-anim-matrix {
+            background: linear-gradient(to bottom, #0f0, #000);
+            background-size: 100% 1000%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: sivo-matrix 2s linear infinite;
+        }
+        @keyframes sivo-bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        .sivo-anim-bounce {
+            width: 12px;
+            height: 12px;
+            background-color: #38bdf8;
+            border-radius: 100%;
+            display: inline-block;
+            animation: sivo-bounce 1.4s infinite ease-in-out both;
+        }
+        .sivo-anim-bounce1 { animation-delay: -0.32s; }
+        .sivo-anim-bounce2 { animation-delay: -0.16s; }
+
+        @keyframes sivo-ripple {
+            0% { top: 36px; left: 36px; width: 0; height: 0; opacity: 0; }
+            4.9% { top: 36px; left: 36px; width: 0; height: 0; opacity: 0; }
+            5% { top: 36px; left: 36px; width: 0; height: 0; opacity: 1; }
+            100% { top: 0px; left: 0px; width: 72px; height: 72px; opacity: 0; }
+        }
+        .sivo-anim-ripple {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .sivo-anim-ripple div {
+            position: absolute;
+            border: 4px solid #10b981;
+            opacity: 1;
+            border-radius: 50%;
+            animation: sivo-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+        .sivo-anim-ripple div:nth-child(2) {
+            animation-delay: -0.5s;
+        }
+
+        @keyframes sivo-radar {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .sivo-anim-radar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sivo-anim-radar::before {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 1) 0%, transparent 100%);
+            transform-origin: bottom right;
+            animation: sivo-radar 2s linear infinite;
+        }
+        .sivo-anim-radar::after {
+            content: '';
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: white;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
@@ -2566,7 +2685,7 @@
                 setTimeout(applyNativeSvgManipulations, 100);
             }
 
-            // Handle elements marked to open by default
+            // Handle elements marked to open by default and loading actions
             echartsData.forEach(function(item) {
                 if (item.open_by_default) {
                     setTimeout(() => {
@@ -2577,6 +2696,19 @@
                         // trigger click to open panel or specific action automatically
                         myChart.trigger('click', { componentType: 'series', name: item.name });
                     }, 500); // Wait a half second for the map to finish rendering
+                }
+
+                // Evaluate on-load loading animations
+                var elementData = actionsManifest[item.name];
+                var elementActions = elementData ? (elementData.actions || elementData) : null;
+                if (elementActions) {
+                    elementActions.forEach(function(action) {
+                        if (action.action_type === 'loading' && action.trigger === 'load') {
+                            setTimeout(() => {
+                                triggerLoadingAnimation(item.name, action);
+                            }, 50); // slight delay to ensure position
+                        }
+                    });
                 }
             });
 
@@ -3320,6 +3452,8 @@
                             </div>
                         </div>`;
                         htmlContent += progressHtml;
+                    } else if (action.action_type === 'loading' && action.trigger === 'click') {
+                        triggerLoadingAnimation(name, action);
                     } else if (action.action_type === 'zoom') {
                         var zoomOption = {
                             series: [{
@@ -4041,6 +4175,7 @@
             var zoomLevel = currentZoom;
 
             for (const [id, overlayObj] of Object.entries(overlayElements)) {
+                var targetId = overlayObj.data.targetId || id;
                 if (overlayObj.data.fixed) {
                     // Fixed positioned overlays (like legends)
                     overlayObj.dom.style.position = 'absolute';
@@ -4061,7 +4196,7 @@
                     var model = myChart.getModel().getSeriesByIndex(0);
                     var geo = model.coordinateSystem;
                     if (geo && geo.regions) {
-                        var region = geo.regions.find(r => r.name === id);
+                        var region = geo.regions.find(r => r.name === targetId);
                         if (region && region._elOnlyForCalculate) {
                             var zrender_el = region._elOnlyForCalculate;
                             var bBox = zrender_el.getBoundingRect();
@@ -5484,6 +5619,83 @@ function tourNext() {
         }
 
         if (sivoGalleryCloseBtn) sivoGalleryCloseBtn.addEventListener('click', closeSivoGalleryModal);
+
+        // Implement loading animation triggering
+        function triggerLoadingAnimation(elementId, action) {
+            // Check if loading overlay already exists
+            var existingOverlay = document.getElementById('sivo-loading-overlay-' + elementId);
+            if (existingOverlay) return;
+
+            var style = action.style || 'spinner';
+            var text = action.text || 'Loading...';
+            var duration = action.duration_ms || 2000;
+
+            var loadingHtml = '';
+            var bgStyle = 'background: rgba(255, 255, 255, 0.8); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; box-sizing: border-box;';
+
+            if (style === 'spinner') {
+                loadingHtml = `<div class="sivo-spinner"></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
+            } else if (style === 'pulse') {
+                loadingHtml = `<div class="sivo-anim-pulse" style="font-weight: bold; color: #38bdf8; font-size: 1.2em;">${text}</div>`;
+            } else if (style === 'typewriter') {
+                loadingHtml = `<div class="sivo-anim-typewriter" style="font-family: monospace; font-weight: bold; color: #333;">${text}</div>`;
+            } else if (style === 'shimmer') {
+                loadingHtml = `<div class="sivo-anim-shimmer" style="width: 80%; height: 20px; border-radius: 4px;"></div>`;
+            } else if (style === 'glitch') {
+                loadingHtml = `<div class="sivo-anim-glitch" style="font-weight: 900; color: #ff00ff; font-size: 1.2em; text-transform: uppercase;">${text}</div>`;
+                bgStyle += ' background: rgba(0, 0, 0, 0.8);';
+            } else if (style === 'matrix') {
+                loadingHtml = `<div class="sivo-anim-matrix" style="font-family: monospace; font-weight: bold; font-size: 1.2em;">${text}</div>`;
+                bgStyle += ' background: rgba(0, 0, 0, 0.9);';
+            } else if (style === 'bouncing_dots') {
+                loadingHtml = `<div><div class="sivo-anim-bounce sivo-anim-bounce1"></div><div class="sivo-anim-bounce sivo-anim-bounce2"></div><div class="sivo-anim-bounce"></div></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
+            } else if (style === 'ripple') {
+                loadingHtml = `<div class="sivo-anim-ripple"><div></div><div></div></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
+            } else if (style === 'radar') {
+                loadingHtml = `<div class="sivo-anim-radar"></div><div style="margin-top: 8px; font-weight: bold; color: #333;">${text}</div>`;
+            }
+
+            // Register temporary overlay
+            overlaysData[elementId + '_loading'] = {
+                html: `<div id="sivo-loading-overlay-${elementId}" style="${bgStyle}">${loadingHtml}</div>`,
+                targetId: elementId,
+                offset: [0, 0],
+                scale_with_zoom: true
+            };
+
+            // Initialize the overlay DOM
+            initOverlays();
+            updateOverlaysPosition();
+
+            // Handle completion after duration
+            setTimeout(() => {
+                if (action.completion_html) {
+                    var completionBgStyle = 'background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px); border-radius: 8px; border: 1px solid #e2e8f0; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; box-sizing: border-box; box-shadow: 0 4px 6px rgba(0,0,0,0.1);';
+                    overlaysData[elementId + '_loading'].html = `<div id="sivo-loading-overlay-${elementId}" style="${completionBgStyle}">${action.completion_html}</div>`;
+                } else {
+                    delete overlaysData[elementId + '_loading'];
+                }
+
+                if (action.completion_color) {
+                    var currentOption = myChart.getOption();
+                    var seriesData = currentOption.series[0].data;
+                    var updated = false;
+                    for (var i = 0; i < seriesData.length; i++) {
+                        if (seriesData[i].name === elementId) {
+                            if (!seriesData[i].itemStyle) seriesData[i].itemStyle = {};
+                            seriesData[i].itemStyle.areaColor = action.completion_color;
+                            updated = true;
+                        }
+                    }
+                    if (updated) {
+                        myChart.setOption({ series: [{ data: seriesData }] });
+                    }
+                }
+
+                initOverlays();
+                updateOverlaysPosition();
+            }, duration);
+        }
 
         // Helper to update gallery image
         function sivoUpdateGallery(src, dotEl) {

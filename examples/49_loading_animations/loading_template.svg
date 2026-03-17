@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <!-- Background -->
+  <rect width="800" height="800" fill="#f8fafc" />
+
+  <text x="400" y="50" font-family="sans-serif" font-size="24" font-weight="bold" fill="#0f172a" text-anchor="middle">Loading Animations Example</text>
+  <text x="400" y="80" font-family="sans-serif" font-size="16" fill="#64748b" text-anchor="middle">Click the cards to trigger loading animations</text>
+
+  <!-- Spinner Card -->
+  <g id="card-spinner" transform="translate(100, 120)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#3b82f6" text-anchor="middle">Spinner</text>
+  </g>
+
+  <!-- Pulse Card -->
+  <g id="card-pulse" transform="translate(325, 120)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#10b981" text-anchor="middle">Pulse</text>
+  </g>
+
+  <!-- Typewriter Card -->
+  <g id="card-typewriter" transform="translate(550, 120)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#8b5cf6" text-anchor="middle">Typewriter</text>
+  </g>
+
+  <!-- Shimmer Card -->
+  <g id="card-shimmer" transform="translate(100, 320)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#f59e0b" text-anchor="middle">Shimmer</text>
+  </g>
+
+  <!-- Glitch Card -->
+  <g id="card-glitch" transform="translate(325, 320)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#ef4444" text-anchor="middle">Glitch</text>
+  </g>
+
+  <!-- Matrix Card -->
+  <g id="card-matrix" transform="translate(550, 320)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#14b8a6" text-anchor="middle">Matrix</text>
+  </g>
+
+  <!-- Bouncing Dots Card -->
+  <g id="card-bouncing-dots" transform="translate(100, 500)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#38bdf8" text-anchor="middle">Bouncing Dots</text>
+  </g>
+
+  <!-- Ripple Card -->
+  <g id="card-ripple" transform="translate(325, 500)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#10b981" text-anchor="middle">Ripple</text>
+  </g>
+
+  <!-- Radar Card -->
+  <g id="card-radar" transform="translate(550, 500)">
+    <rect width="150" height="150" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="80" font-family="sans-serif" font-size="16" font-weight="bold" fill="#8b5cf6" text-anchor="middle">Radar</text>
+  </g>
+
+  <!-- On Load Card -->
+  <g id="card-onload" transform="translate(325, 680)">
+    <rect width="150" height="60" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" class="bento-card" />
+    <text x="75" y="35" font-family="sans-serif" font-size="14" font-weight="bold" fill="#0f172a" text-anchor="middle">I load on start!</text>
+  </g>
+</svg>

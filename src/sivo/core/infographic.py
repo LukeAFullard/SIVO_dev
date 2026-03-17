@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union, List
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction
+from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction, LoadingAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -204,6 +204,7 @@ class Infographic:
                     compare=getattr(elem_config, 'compare', None),
                     progress_bar=getattr(elem_config, 'progress_bar', None),
                     confetti=getattr(elem_config, 'confetti', None),
+                    loading=getattr(elem_config, 'loading', None),
                     echarts_option=getattr(elem_config, 'echarts_option', None),
                     context_menu=getattr(elem_config, 'context_menu', None),
                     panel_position=elem_config.panel_position,
@@ -364,6 +365,7 @@ class Infographic:
         compare: Optional[dict] = None,
         progress_bar: Optional[dict] = None,
         confetti: Optional[dict] = None,
+        loading: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
         map_name: Optional[str] = None,
@@ -529,6 +531,17 @@ class Infographic:
 
         if confetti:
             mapping.actions.append(ConfettiAction(particle_count=confetti.get('particle_count', 100), spread=confetti.get('spread', 70)))
+
+        if loading:
+            mapping.actions.append(LoadingAction(
+                trigger=loading.get('trigger', 'click'),
+                duration_ms=loading.get('duration_ms', 2000),
+                text=loading.get('text', 'Loading...'),
+                style=loading.get('style', 'spinner'),
+                completion_html=loading.get('completion_html'),
+                completion_color=loading.get('completion_color'),
+                panel_position=panel_position or self.default_panel_position
+            ))
 
         if replit:
             mapping.actions.append(ReplitAction(repl_url=replit, panel_position=panel_position or self.default_panel_position))

@@ -28,6 +28,7 @@ class ElementConfig(BaseModel):
     compare: Optional[Dict[str, str]] = None
     progress_bar: Optional[Dict[str, Any]] = None
     confetti: Optional[Dict[str, int]] = None
+    loading: Optional[Dict[str, Any]] = None
     echarts_option: Optional[Dict[str, Any]] = None
     map_name: Optional[str] = None
     map_data: Optional[Union[str, dict]] = None
