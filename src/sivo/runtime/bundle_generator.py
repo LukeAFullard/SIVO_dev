@@ -78,6 +78,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
                 if hasattr(action, 'provider') and "provider" not in act_dict: act_dict["provider"] = action.provider
                 if hasattr(action, 'option') and "option" not in act_dict: act_dict["option"] = action.option
                 if hasattr(action, 'height') and "height" not in act_dict: act_dict["height"] = action.height
+                if hasattr(action, 'completion_html') and "completion_html" not in act_dict: act_dict["completion_html"] = action.completion_html
+                if hasattr(action, 'completion_color') and "completion_color" not in act_dict: act_dict["completion_color"] = action.completion_color
                 if hasattr(action, 'center') and "center" not in act_dict: act_dict["center"] = action.center
                 if hasattr(action, 'zoom_level') and "zoom_level" not in act_dict: act_dict["zoom_level"] = action.zoom_level
                 if hasattr(action, 'panel_position') and "panel_position" not in act_dict: act_dict["panel_position"] = action.panel_position

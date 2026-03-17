@@ -178,6 +178,15 @@ class ConfettiAction(BaseAction):
     particle_count: int = Field(default=100, description="Number of confetti particles")
     spread: int = Field(default=70, description="Spread of the confetti burst in degrees")
 
+class LoadingAction(BaseAction):
+    action_type: Literal["loading"] = "loading"
+    trigger: Literal["load", "click"] = Field(default="click", description="When to trigger the loading animation")
+    duration_ms: int = Field(default=2000, description="Duration of the loading animation in milliseconds")
+    text: str = Field(default="Loading...", description="Text to display during loading")
+    style: Literal["spinner", "pulse", "typewriter", "shimmer", "glitch", "matrix"] = Field(default="spinner", description="Visual style of the loading animation")
+    completion_html: Optional[str] = Field(default=None, description="HTML content to display permanently in the overlay after loading completes")
+    completion_color: Optional[str] = Field(default=None, description="Color to apply to the SVG element after loading completes")
+    panel_position: Literal["right", "left", "bottom", "top"] = Field(default="right", description="Position of the info panel")
 
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
@@ -202,7 +211,7 @@ class ThemeOverride(BaseModel):
     odometer_duration_ms: Optional[int] = 2000
     odometer_format: Optional[str] = None
 
-ActionType = Annotated[Union[ExplodeAction, ConfettiAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, FootnoteAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[ExplodeAction, ConfettiAction, LoadingAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, FootnoteAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str
