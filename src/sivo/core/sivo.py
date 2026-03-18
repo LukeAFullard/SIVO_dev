@@ -1556,12 +1556,12 @@ class Sivo:
         """
         self.infographic.apply_choropleth(data_map, min_color, max_color, show_legend)
 
-    def apply_value_by_alpha(self, base_data_map: Dict[str, float], alpha_data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", min_alpha: float = 0.2, max_alpha: float = 1.0, show_legend: bool = True):
+    def apply_value_by_alpha(self, base_data_map: Dict[str, float], alpha_data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", min_alpha: float = 0.2, max_alpha: float = 1.0, show_legend: bool = True, legend_draggable: bool = True):
         """
         Generates a Value-by-Alpha choropleth map where the base color is determined by one variable,
         and the transparency (alpha) is determined by a second absolute variable (e.g., population density).
         """
-        self.infographic.apply_value_by_alpha(base_data_map, alpha_data_map, min_color, max_color, min_alpha, max_alpha, show_legend)
+        self.infographic.apply_value_by_alpha(base_data_map, alpha_data_map, min_color, max_color, min_alpha, max_alpha, show_legend, legend_draggable)
 
     def apply_categorical_map(self, data_map: Dict[str, str], color_palette: Dict[str, str] = None, show_legend: bool = True, legend_draggable: bool = True, item_opacity: float = 1.0, border_color: str = "rgba(0,0,0,0.1)", border_width: float = 0.5):
         """

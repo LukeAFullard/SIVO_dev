@@ -1033,7 +1033,7 @@ class Infographic:
                 "position": "bottom-left"
             }
 
-    def apply_value_by_alpha(self, base_data_map: Dict[str, float], alpha_data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", min_alpha: float = 0.2, max_alpha: float = 1.0, show_legend: bool = True):
+    def apply_value_by_alpha(self, base_data_map: Dict[str, float], alpha_data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", min_alpha: float = 0.2, max_alpha: float = 1.0, show_legend: bool = True, legend_draggable: bool = True):
         """
         Generates a Value-by-Alpha choropleth map where the base color is determined by one variable,
         and the transparency (alpha) is determined by a second absolute variable.
@@ -1081,8 +1081,11 @@ class Infographic:
                 pass
 
         if show_legend:
+            pointer_events = "auto" if legend_draggable else "none"
+            cursor = "grab" if legend_draggable else "default"
+
             legend_html = f"""
-            <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: sans-serif; font-size: 12px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); user-select: none; z-index: 100; pointer-events: none;">
+            <div style="background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: sans-serif; font-size: 12px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); user-select: none; z-index: 100; pointer-events: {pointer_events}; cursor: {cursor};">
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <strong style="color: #334155; font-size: 11px; text-transform: uppercase;">Value (Color)</strong>
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -1104,7 +1107,9 @@ class Infographic:
             self.overlays["sivo_value_by_alpha_legend"] = {
                 "html": legend_html,
                 "fixed": True,
-                "position": "bottom-left"
+                "position": "bottom-left",
+                "draggable": legend_draggable,
+                "z_index": 100
             }
 
     def apply_categorical_map(self, data_map: Dict[str, str], color_palette: Dict[str, str] = None, show_legend: bool = True, legend_draggable: bool = True, item_opacity: float = 1.0, border_color: str = "rgba(0,0,0,0.1)", border_width: float = 0.5):
