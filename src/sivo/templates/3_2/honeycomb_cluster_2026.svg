@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #f9fafb; }
+            .hex { fill: #ffffff; stroke: #e5e7eb; stroke-width: 2; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+            .hex-active { fill: url(#hexGrad); stroke: #8b5cf6; stroke-width: 3; filter: drop-shadow(0 8px 16px rgba(139,92,246,0.2)); }
+            .metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 800; fill: #111827; }
+            .metric-light { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 800; fill: #ffffff; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #6b7280; text-transform: uppercase; letter-spacing: 2px; }
+            .label-light { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #ddd6fe; text-transform: uppercase; letter-spacing: 2px; }
+            .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 32px; font-weight: 800; fill: #111827; }
+            .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 500; fill: #6b7280; }
+        </style>
+        <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8b5cf6" />
+            <stop offset="100%" stop-color="#6366f1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect id="background" width="1200" height="800" class="bg" />
+
+    <!-- Header Section -->
+    <text id="dash_title" x="60" y="80" class="title"></text>
+    <text id="dash_subtitle" x="60" y="110" class="subtitle"></text>
+
+    <!-- Honeycomb Cluster (Centered roughly at x=600, y=450) -->
+    <!-- Hexagon Path Function: M x,y-R L x+w,y-R/2 L x+w,y+R/2 L x,y+R L x-w,y+R/2 L x-w,y-R/2 Z  (w = sqrt(3)/2 * R) -->
+    <!-- R = 120, W = 104 -->
+
+    <g id="cluster" transform="translate(600, 450)">
+
+        <!-- Center Hexagon (Active) -->
+        <g id="hex_center">
+            <path id="bg_hex_c" class="hex-active" d="M 0,-120 L 104,-60 L 104,60 L 0,120 L -104,60 L -104,-60 Z" />
+            <text id="label_hex_c" x="0" y="-10" class="label-light" text-anchor="middle"></text>
+            <text id="val_hex_c" x="0" y="40" class="metric-light" text-anchor="middle"></text>
+        </g>
+
+        <!-- Top Left Hexagon -->
+        <!-- Center at x = -104, y = -180 -->
+        <g id="hex_tl">
+            <path id="bg_hex_tl" class="hex" d="M -104,-300 L 0,-240 L 0,-120 L -104,-60 L -208,-120 L -208,-240 Z" />
+            <text id="label_hex_tl" x="-104" y="-190" class="label" text-anchor="middle"></text>
+            <text id="val_hex_tl" x="-104" y="-140" class="metric" text-anchor="middle"></text>
+        </g>
+
+        <!-- Top Right Hexagon -->
+        <!-- Center at x = 104, y = -180 -->
+        <g id="hex_tr">
+            <path id="bg_hex_tr" class="hex" d="M 104,-300 L 208,-240 L 208,-120 L 104,-60 L 0,-120 L 0,-240 Z" />
+            <text id="label_hex_tr" x="104" y="-190" class="label" text-anchor="middle"></text>
+            <text id="val_hex_tr" x="104" y="-140" class="metric" text-anchor="middle"></text>
+        </g>
+
+        <!-- Left Hexagon -->
+        <!-- Center at x = -208, y = 0 -->
+        <g id="hex_l">
+            <path id="bg_hex_l" class="hex" d="M -208,-120 L -104,-60 L -104,60 L -208,120 L -312,60 L -312,-60 Z" />
+            <text id="label_hex_l" x="-208" y="-10" class="label" text-anchor="middle"></text>
+            <text id="val_hex_l" x="-208" y="40" class="metric" text-anchor="middle"></text>
+        </g>
+
+        <!-- Right Hexagon -->
+        <!-- Center at x = 208, y = 0 -->
+        <g id="hex_r">
+            <path id="bg_hex_r" class="hex" d="M 208,-120 L 312,-60 L 312,60 L 208,120 L 104,60 L 104,-60 Z" />
+            <text id="label_hex_r" x="208" y="-10" class="label" text-anchor="middle"></text>
+            <text id="val_hex_r" x="208" y="40" class="metric" text-anchor="middle"></text>
+        </g>
+
+        <!-- Bottom Left Hexagon -->
+        <!-- Center at x = -104, y = 180 -->
+        <g id="hex_bl">
+            <path id="bg_hex_bl" class="hex" d="M -104,60 L 0,120 L 0,240 L -104,300 L -208,240 L -208,120 Z" />
+            <text id="label_hex_bl" x="-104" y="170" class="label" text-anchor="middle"></text>
+            <text id="val_hex_bl" x="-104" y="220" class="metric" text-anchor="middle"></text>
+        </g>
+
+        <!-- Bottom Right Hexagon -->
+        <!-- Center at x = 104, y = 180 -->
+        <g id="hex_br">
+            <path id="bg_hex_br" class="hex" d="M 104,60 L 208,120 L 208,240 L 104,300 L 0,240 L 0,120 Z" />
+            <text id="label_hex_br" x="104" y="170" class="label" text-anchor="middle"></text>
+            <text id="val_hex_br" x="104" y="220" class="metric" text-anchor="middle"></text>
+        </g>
+
+    </g>
+
+</svg>

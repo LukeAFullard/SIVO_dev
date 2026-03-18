@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #000000; } /* Pitch Black */
+            .ring { fill: none; stroke: #334155; stroke-width: 1; stroke-dasharray: 4 4; }
+            .ring-solid { fill: none; stroke: #475569; stroke-width: 1; }
+            .neon-ring { fill: none; stroke: #10b981; stroke-width: 4; filter: drop-shadow(0 0 12px rgba(16,185,129,0.8)); }
+            .neon-node { fill: #10b981; filter: drop-shadow(0 0 10px rgba(16,185,129,1)); }
+            .card { fill: #1e293b; rx: 16; stroke: #334155; stroke-width: 1; }
+            .metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 32px; font-weight: 800; fill: #ffffff; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #94a3b8; text-transform: uppercase; letter-spacing: 2px; }
+            .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 36px; font-weight: 700; fill: #ffffff; letter-spacing: -1px; }
+            .center-metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 64px; font-weight: 900; fill: #10b981; }
+        </style>
+    </defs>
+
+    <!-- Base Background -->
+    <rect id="background" width="1000" height="1000" class="bg" />
+
+    <!-- Ambient Glow Center -->
+    <circle cx="500" cy="500" r="200" fill="#10b981" opacity="0.1" filter="blur(60px)" />
+
+    <!-- Concentric Rings (Radar Grid) -->
+    <!-- Base Rings -->
+    <circle cx="500" cy="500" r="350" class="ring" />
+    <circle cx="500" cy="500" r="250" class="ring" />
+    <circle cx="500" cy="500" r="150" class="ring-solid" />
+
+    <!-- Crosshairs -->
+    <path class="ring-solid" d="M 150 500 L 850 500" stroke-opacity="0.5" />
+    <path class="ring-solid" d="M 500 150 L 500 850" stroke-opacity="0.5" />
+
+    <!-- Header -->
+    <text id="dash_title" x="60" y="80" class="title"></text>
+    <text id="dash_subtitle" x="60" y="110" class="label"></text>
+
+    <!-- Center Data Point -->
+    <g id="center_node">
+        <circle id="bg_center" cx="500" cy="500" r="60" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+        <text id="val_center" x="500" y="520" class="center-metric" text-anchor="middle"></text>
+        <text id="label_center" x="500" y="450" class="label" text-anchor="middle" fill="#10b981"></text>
+    </g>
+
+    <!-- Radar Segment Paths (Active Highlight) -->
+    <path id="active_radar_arc" d="M 500 500 L 747 253 A 350 350 0 0 1 850 500 Z" fill="#10b981" fill-opacity="0.1" stroke="none" />
+    <path class="neon-ring" d="M 747 253 A 350 350 0 0 1 850 500" />
+
+    <!-- Orbiting Nodes & Data Cards -->
+
+    <!-- Top Node -->
+    <g id="node_top">
+        <circle id="dot_t" cx="500" cy="150" r="8" class="neon-node" />
+        <rect id="bg_t" x="520" y="90" width="200" height="90" class="card" />
+        <text id="label_t" x="540" y="130" class="label"></text>
+        <text id="val_t" x="540" y="165" class="metric"></text>
+    </g>
+
+    <!-- Right Node -->
+    <g id="node_right">
+        <circle id="dot_r" cx="850" cy="500" r="12" class="neon-node" />
+        <rect id="bg_r" x="630" y="530" width="200" height="90" class="card" />
+        <text id="label_r" x="650" y="570" class="label"></text>
+        <text id="val_r" x="650" y="605" class="metric"></text>
+    </g>
+
+    <!-- Bottom Node -->
+    <g id="node_bottom">
+        <circle id="dot_b" cx="500" cy="750" r="8" fill="#cbd5e1" stroke="#334155" stroke-width="2" />
+        <rect id="bg_b" x="280" y="770" width="200" height="90" class="card" />
+        <text id="label_b" x="300" y="810" class="label"></text>
+        <text id="val_b" x="300" y="845" class="metric"></text>
+    </g>
+
+    <!-- Left Node -->
+    <g id="node_left">
+        <circle id="dot_l" cx="250" cy="500" r="8" fill="#cbd5e1" stroke="#334155" stroke-width="2" />
+        <rect id="bg_l" x="190" y="380" width="200" height="90" class="card" />
+        <text id="label_l" x="210" y="420" class="label"></text>
+        <text id="val_l" x="210" y="455" class="metric"></text>
+    </g>
+
+</svg>

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #ffffff; } /* Clean White Space */
+            .tier { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 2; filter: drop-shadow(0 20px 25px rgba(0,0,0,0.05)); }
+            .tier-gradient { fill: url(#pyrGrad); opacity: 0.1; }
+            .tier-line { fill: none; stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 6 6; }
+
+            /* Typography */
+            .metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 56px; font-weight: 800; fill: #0f172a; }
+            .metric-light { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 56px; font-weight: 800; fill: #ffffff; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 600; fill: #64748b; text-transform: uppercase; letter-spacing: 2px; }
+            .label-light { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 600; fill: #e0e7ff; text-transform: uppercase; letter-spacing: 2px; }
+            .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 40px; font-weight: 700; fill: #0f172a; letter-spacing: -1px; }
+
+            /* Connected Info Cards */
+            .card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; rx: 12; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.02)); }
+        </style>
+
+        <linearGradient id="pyrGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#4f46e5" />
+            <stop offset="100%" stop-color="#3b82f6" />
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect id="background" width="1200" height="900" class="bg" />
+
+    <!-- Header Section -->
+    <text id="dash_title" x="60" y="80" class="title"></text>
+    <text id="dash_subtitle" x="60" y="120" class="label"></text>
+
+    <!-- Center Pyramid Layout (X center at 450) -->
+
+    <!-- Base Tier (Tier 3) -->
+    <!-- Triangle Base: M 150 750 L 750 750 L 450 200 Z -->
+    <g id="tier_3">
+        <!-- Base Shape (Bottom trapezoid slice) -->
+        <path id="bg_t3" class="tier" d="M 150 750 L 750 750 L 650 550 L 250 550 Z" />
+        <path class="tier-gradient" d="M 150 750 L 750 750 L 650 550 L 250 550 Z" />
+
+        <!-- Center Text -->
+        <text id="label_t3" x="450" y="630" class="label" text-anchor="middle"></text>
+        <text id="val_t3" x="450" y="700" class="metric" text-anchor="middle"></text>
+
+        <!-- Connecting Line to Side Card -->
+        <path class="tier-line" d="M 680 650 L 800 650" />
+
+        <!-- Info Card -->
+        <rect id="card_t3" x="800" y="600" width="300" height="100" class="card" />
+        <text id="info_label_t3" x="840" y="640" class="label"></text>
+        <text id="info_val_t3" x="840" y="680" class="metric" font-size="32px"></text>
+    </g>
+
+    <!-- Middle Tier (Tier 2) -->
+    <g id="tier_2">
+        <path id="bg_t2" class="tier" d="M 270 530 L 630 530 L 530 350 L 370 350 Z" />
+        <path class="tier-gradient" d="M 270 530 L 630 530 L 530 350 L 370 350 Z" />
+
+        <text id="label_t2" x="450" y="420" class="label" text-anchor="middle"></text>
+        <text id="val_t2" x="450" y="490" class="metric" text-anchor="middle"></text>
+
+        <!-- Connecting Line -->
+        <path class="tier-line" d="M 580 440 L 800 440" />
+
+        <!-- Info Card -->
+        <rect id="card_t2" x="800" y="390" width="300" height="100" class="card" />
+        <text id="info_label_t2" x="840" y="430" class="label"></text>
+        <text id="info_val_t2" x="840" y="470" class="metric" font-size="32px"></text>
+    </g>
+
+    <!-- Apex Tier (Tier 1) -->
+    <g id="tier_1">
+        <!-- Apex Highlight Triangle -->
+        <path id="bg_t1" d="M 390 330 L 510 330 L 450 200 Z" fill="url(#pyrGrad)" filter="drop-shadow(0 15px 20px rgba(79,70,229,0.3))" />
+
+        <text id="label_t1" x="450" y="270" class="label-light" text-anchor="middle"></text>
+        <text id="val_t1" x="450" y="320" class="metric-light" font-size="40px" text-anchor="middle"></text>
+
+        <!-- Connecting Line -->
+        <path class="tier-line" d="M 500 280 L 800 280" />
+
+        <!-- Info Card -->
+        <rect id="card_t1" x="800" y="230" width="300" height="100" class="card" />
+        <text id="info_label_t1" x="840" y="270" class="label"></text>
+        <text id="info_val_t1" x="840" y="310" class="metric" font-size="32px"></text>
+    </g>
+
+</svg>

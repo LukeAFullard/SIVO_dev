@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #0f172a; } /* Deep Dark Blue Base */
+            /* Gradient Orbs for Glassmorphism background effect */
+            .orb-1 { fill: url(#gradOrb1); opacity: 0.15; filter: blur(100px); }
+            .orb-2 { fill: url(#gradOrb2); opacity: 0.15; filter: blur(100px); }
+
+            /* Glassmorphic Panel Styles */
+            .glass-panel { fill: #ffffff; fill-opacity: 0.05; stroke: #ffffff; stroke-width: 1; stroke-opacity: 0.1; rx: 32; backdrop-filter: blur(20px); filter: drop-shadow(0 25px 35px rgba(0,0,0,0.4)); }
+            .glass-header { fill: #ffffff; fill-opacity: 0.1; rx: 16; }
+
+            /* Text Styles */
+            .metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 80px; font-weight: 700; fill: #ffffff; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 600; fill: #94a3b8; text-transform: uppercase; letter-spacing: 2px; }
+            .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 48px; font-weight: 700; fill: #ffffff; letter-spacing: -1px; }
+            .subtitle { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 18px; font-weight: 400; fill: #cbd5e1; }
+            .vs-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 24px; font-weight: 800; fill: #ffffff; }
+
+            /* Data Bars */
+            .bar-bg { fill: #ffffff; fill-opacity: 0.1; rx: 8; }
+            .bar-a { fill: #38bdf8; rx: 8; }
+            .bar-b { fill: #f43f5e; rx: 8; }
+
+            /* Mini Line Graphs */
+            .line-a { fill: none; stroke: #38bdf8; stroke-width: 4; stroke-linecap: round; filter: drop-shadow(0 4px 6px rgba(56,189,248,0.3)); }
+            .line-b { fill: none; stroke: #f43f5e; stroke-width: 4; stroke-linecap: round; filter: drop-shadow(0 4px 6px rgba(244,63,94,0.3)); }
+        </style>
+
+        <radialGradient id="gradOrb1" cx="30%" cy="30%" r="50%">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+        </radialGradient>
+
+        <radialGradient id="gradOrb2" cx="70%" cy="70%" r="50%">
+            <stop offset="0%" stop-color="#f43f5e" />
+            <stop offset="100%" stop-color="#f43f5e" stop-opacity="0" />
+        </radialGradient>
+    </defs>
+
+    <!-- Base Background -->
+    <rect id="background" width="1600" height="1000" class="bg" />
+
+    <!-- Ambient Glassmorphic Orbs -->
+    <circle cx="400" cy="400" r="400" class="orb-1" />
+    <circle cx="1200" cy="600" r="400" class="orb-2" />
+
+    <!-- Header Section -->
+    <text id="dash_title" x="100" y="100" class="title"></text>
+    <text id="dash_subtitle" x="100" y="140" class="subtitle"></text>
+
+    <!-- Side-by-Side Comparison Container -->
+
+    <!-- PANEL A (Left Side) -->
+    <g id="panel_a">
+        <rect id="bg_panel_a" x="100" y="200" width="650" height="700" class="glass-panel" />
+
+        <!-- Header A -->
+        <rect x="140" y="240" width="570" height="80" class="glass-header" />
+        <circle cx="180" cy="280" r="16" fill="#38bdf8" />
+        <text id="title_panel_a" x="220" y="288" class="title" font-size="28px"></text>
+
+        <!-- Primary Metric A -->
+        <text id="label_metric_a" x="140" y="400" class="label"></text>
+        <text id="val_metric_a" x="140" y="480" class="metric"></text>
+
+        <!-- Secondary Data Bar A -->
+        <text id="label_bar_a" x="140" y="580" class="label"></text>
+        <rect id="bg_bar_a" x="140" y="610" width="570" height="16" class="bar-bg" />
+        <rect id="val_bar_a_rect" x="140" y="610" width="300" height="16" class="bar-a" />
+        <text id="val_bar_a" x="710" y="600" class="label" fill="#ffffff" text-anchor="end"></text>
+
+        <!-- Mini Chart A -->
+        <text id="label_chart_a" x="140" y="700" class="label"></text>
+        <path d="M 140 820 Q 240 760 340 780 T 540 740 T 710 770" class="line-a" />
+        <circle cx="710" cy="770" r="6" fill="#38bdf8" />
+    </g>
+
+    <!-- VS Divider Symbol -->
+    <g id="vs_divider">
+        <circle cx="800" cy="550" r="32" fill="#1e293b" stroke="#ffffff" stroke-opacity="0.2" stroke-width="2" />
+        <text id="vs_label" x="800" y="558" class="vs-text" text-anchor="middle">VS</text>
+    </g>
+
+    <!-- PANEL B (Right Side) -->
+    <g id="panel_b">
+        <rect id="bg_panel_b" x="850" y="200" width="650" height="700" class="glass-panel" />
+
+        <!-- Header B -->
+        <rect x="890" y="240" width="570" height="80" class="glass-header" />
+        <circle cx="930" cy="280" r="16" fill="#f43f5e" />
+        <text id="title_panel_b" x="970" y="288" class="title" font-size="28px"></text>
+
+        <!-- Primary Metric B -->
+        <text id="label_metric_b" x="890" y="400" class="label"></text>
+        <text id="val_metric_b" x="890" y="480" class="metric"></text>
+
+        <!-- Secondary Data Bar B -->
+        <text id="label_bar_b" x="890" y="580" class="label"></text>
+        <rect id="bg_bar_b" x="890" y="610" width="570" height="16" class="bar-bg" />
+        <rect id="val_bar_b_rect" x="890" y="610" width="450" height="16" class="bar-b" />
+        <text id="val_bar_b" x="1460" y="600" class="label" fill="#ffffff" text-anchor="end"></text>
+
+        <!-- Mini Chart B -->
+        <text id="label_chart_b" x="890" y="700" class="label"></text>
+        <path d="M 890 800 Q 990 840 1090 780 T 1290 820 T 1460 740" class="line-b" />
+        <circle cx="1460" cy="740" r="6" fill="#f43f5e" />
+    </g>
+
+</svg>
