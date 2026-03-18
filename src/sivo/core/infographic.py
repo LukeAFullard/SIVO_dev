@@ -1329,6 +1329,86 @@ class Infographic:
         target_node.set("fill-opacity", "0")
         target_node.set("stroke-opacity", "0")
 
+    def clip_html_to_shape(self, element_id: str, html: str, pointer_events: str = "auto", offset_x: float = 0.0, offset_y: float = 0.0):
+        """
+        Clips raw HTML (such as an iframe or a Folium map) directly to the exact shape of a target SVG element.
+        It creates a perfectly-sized HTML overlay that uses the exact SVG path as a CSS mask.
+
+        Args:
+            element_id: The ID or name of the target SVG element.
+            html: The HTML string to inject.
+            pointer_events: CSS pointer-events (e.g., 'auto' to allow interaction, 'none' to pass clicks to SVG).
+            offset_x: Additional X offset for the HTML position (in pixels relative to bounding box).
+            offset_y: Additional Y offset for the HTML position (in pixels relative to bounding box).
+        """
+        import lxml.etree as etree
+        import copy
+        import urllib.parse
+
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
+            raise ValueError(f"Cannot clip HTML to shape: Element '{element_id}' not found or has no bounding box.")
+
+        bbox = target_elem['bbox']
+        bbox_min_x, bbox_min_y, bbox_max_x, bbox_max_y = bbox
+        bbox_width = bbox_max_x - bbox_min_x
+        bbox_height = bbox_max_y - bbox_min_y
+
+        root = self.parser.root
+
+        target_node = None
+        for node in root.iter():
+            if node.get("id") == element_id or node.get("name") == element_id:
+                target_node = node
+                break
+
+        if target_node is None:
+            raise ValueError(f"Could not find XML node for element '{element_id}'.")
+
+        # 1. Create the inline SVG mask
+        cloned_shape = copy.deepcopy(target_node)
+
+        # Strip interactive/rendering IDs to avoid duplicate DOM issues
+        if "id" in cloned_shape.attrib: del cloned_shape.attrib["id"]
+        if "name" in cloned_shape.attrib: del cloned_shape.attrib["name"]
+        if "class" in cloned_shape.attrib: del cloned_shape.attrib["class"]
+
+        # Force the mask shape to be completely solid black (100% opaque for the mask)
+        cloned_shape.set("fill", "black")
+        cloned_shape.set("stroke", "none")
+        cloned_shape.set("opacity", "1")
+        cloned_shape.set("fill-opacity", "1")
+
+        # Convert the single node back to an XML string
+        shape_str = etree.tostring(cloned_shape, encoding="unicode")
+
+        # Wrap it in a minimalistic SVG container with the exact viewBox of the bounding box
+        svg_mask = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{bbox_min_x} {bbox_min_y} {bbox_width} {bbox_height}">{shape_str}</svg>'
+
+        # URI encode the SVG string for the CSS url()
+        encoded_mask = urllib.parse.quote(svg_mask)
+        mask_url = f"data:image/svg+xml;utf8,{encoded_mask}"
+
+        # 3. Build the HTML overlay
+        html_wrapper = f"""
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: {pointer_events};
+                    mask-image: url('{mask_url}'); -webkit-mask-image: url('{mask_url}');
+                    mask-size: 100% 100%; -webkit-mask-size: 100% 100%;
+                    mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat;
+                    mask-position: center; -webkit-mask-position: center;">
+            {html}
+        </div>
+        """
+
+        # 4. Inject the overlay exactly over the element's bounding box
+        self.add_overlay(element_id, html_wrapper, offset_x, offset_y, scale_with_zoom=True)
+
+        # 5. Make the original SVG shape transparent in ECharts, so the HTML isn't hidden by the default fill color
+        target_node.set("fill", "transparent")
+        target_node.set("stroke", "transparent")
+        target_node.set("fill-opacity", "0")
+        target_node.set("stroke-opacity", "0")
+
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """
         Automatically generates a perfectly scaled, native SVG progress bar relative to the bounding box

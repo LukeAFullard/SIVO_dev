@@ -1610,6 +1610,20 @@ class Sivo:
         """
         self.infographic.add_image_overlay(element_id, image_url, object_fit, border_radius, box_shadow, offset_x, offset_y, scale_with_zoom)
 
+    def clip_html_to_shape(self, element_id: str, html: str, pointer_events: str = "auto", offset_x: float = 0.0, offset_y: float = 0.0):
+        """
+        Clips raw HTML (such as an iframe or a Folium map) directly to the exact shape of a target SVG element.
+        It creates a perfectly-sized HTML overlay that uses the exact SVG path as a CSS mask.
+
+        Args:
+            element_id: The ID or name of the target SVG element.
+            html: The HTML string to inject.
+            pointer_events: CSS pointer-events (e.g., 'auto' to allow interaction, 'none' to pass clicks to SVG).
+            offset_x: Additional X offset for the HTML position (in pixels relative to bounding box).
+            offset_y: Additional Y offset for the HTML position (in pixels relative to bounding box).
+        """
+        self.infographic.clip_html_to_shape(element_id, html, pointer_events, offset_x, offset_y)
+
     def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0):
         """
         Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
