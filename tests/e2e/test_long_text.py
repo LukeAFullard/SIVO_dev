@@ -6,7 +6,7 @@ def test_long_text_autoshrink():
     # Setup test file
     template_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "minimalist_journey_flow_2026.svg"
+        "src", "sivo", "templates", "3_2", "minimalist_journey_flow_2026.svg"
     )
 
     app = Sivo.from_svg(
