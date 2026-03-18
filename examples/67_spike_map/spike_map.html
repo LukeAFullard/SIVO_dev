@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <!-- Include echarts-stat -->
@@ -29,7 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
+
 
     <style>
         body {
@@ -1511,8 +1506,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0.0 0.0 20.0 20.0\"\u003e\n  \u003cg transform=\"matrix(1, 0, 0, -1, 0, 20.0)\"\u003e\n    \u003cg id=\"Zone1\" name=\"Northwest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,0.0 L 0.0,10.0 L 10.0,10.0 L 10.0,0.0 L 0.0,0.0 z\" id=\"Zone1_0\" name=\"Northwest\"/\u003e\u003c/g\u003e\n\u003cg id=\"Zone2\" name=\"Northeast\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,0.0 L 10.0,10.0 L 20.0,10.0 L 20.0,0.0 L 10.0,0.0 z\" id=\"Zone2_0\" name=\"Northeast\"/\u003e\u003c/g\u003e\n\u003cg id=\"Zone3\" name=\"Southwest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,10.0 L 0.0,20.0 L 10.0,20.0 L 10.0,10.0 L 0.0,10.0 z\" id=\"Zone3_0\" name=\"Southwest\"/\u003e\u003c/g\u003e\n\u003cg id=\"Zone4\" name=\"Southeast\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,10.0 L 10.0,20.0 L 20.0,20.0 L 20.0,10.0 L 10.0,10.0 z\" id=\"Zone4_0\" name=\"Southeast\"/\u003e\u003c/g\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "Northwest", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}, {"name": "Northeast", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}, {"name": "Southwest", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}, {"name": "Southeast", "value": 1, "itemStyle": {"areaColor": "#f0f0f0"}}, {"name": "Zone1", "value": 1}, {"name": "Zone2", "value": 1}, {"name": "Zone3", "value": 1}, {"name": "Zone4", "value": 1}], "actions_manifest": {}, "overlays": {}, "connections": [], "disable_panel": true, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Spike Map Demo", "subtitle": "COVID-19 Case Density Representation", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": [[0.0, 0.0], [20.0, 20.0]], "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"Northwest": {"id": "Zone1_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Northeast": {"id": "Zone2_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Southwest": {"id": "Zone3_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Southeast": {"id": "Zone4_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "#f0f0f0", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Zone1": {"id": "Zone1", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Zone2": {"id": "Zone2", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Zone3": {"id": "Zone3", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Zone4": {"id": "Zone4", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -1943,33 +1938,6 @@
                                 zoom = api.coordinateSystem.getZoom();
                             }
 
-                            // fallback for missing projection mapping size
-                            var ptTop = api.coord([logCx, logCy - ratio * spikeMap.max_height]);
-                            var ptLeft = api.coord([logCx - (spikeMap.base_width/2), logCy]);
-                            var ptRight = api.coord([logCx + (spikeMap.base_width/2), logCy]);
-
-                            // check if coords worked properly
-                            if (ptTop && !isNaN(ptTop[1]) && Math.abs(ptCenter[1] - ptTop[1]) > 5) {
-                                return {
-                                    type: 'polygon',
-                                    z2: 100,
-                                    shape: {
-                                        points: [
-                                            ptCenter,
-                                            ptLeft,
-                                            ptTop,
-                                            ptRight
-                                        ]
-                                    },
-                                    style: api.style({
-                                        fill: api.visual('color') || spikeMap.color,
-                                        stroke: '#fff',
-                                        lineWidth: 0.5
-                                    })
-                                }
-                            }
-
-                            // Ultimate fallback: static pixel size
                             var pxH = ratio * spikeMap.max_height * zoom;
                             var pxW = (spikeMap.base_width / 2) * zoom;
 
@@ -4369,44 +4337,8 @@
                 for (const [id, overlay] of Object.entries(overlaysData)) {
                     var el = document.createElement('div');
                     el.style.position = 'absolute';
-                    if (overlay.z_index) el.style.zIndex = overlay.z_index;
-
-                    // Don't override pointerEvents if the HTML explicitly sets it (like the legend)
-                    if (overlay.html && overlay.html.indexOf('pointer-events:') === -1) {
-                        el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
-                    }
+                    el.style.pointerEvents = 'auto'; // allow interacting with the overlay itself
                     el.innerHTML = overlay.html;
-
-                    // If it has draggable flag, we enable native drag API on the wrapper
-                    if (overlay.draggable) {
-                        el.style.pointerEvents = 'auto';
-                        el.draggable = true;
-                        el.style.cursor = 'grab';
-
-                        el.addEventListener('dragstart', function(e) {
-                            e.dataTransfer.setData('text/plain', null);
-                            // Store initial offsets
-                            var rect = el.getBoundingClientRect();
-                            el.dataset.offsetX = e.clientX - rect.left;
-                            el.dataset.offsetY = e.clientY - rect.top;
-                            el.style.opacity = '0.5';
-                        });
-
-                        el.addEventListener('dragend', function(e) {
-                            el.style.opacity = '1.0';
-
-                            // Calculate position relative to container
-                            var containerRect = overlaysContainer.getBoundingClientRect();
-                            var newLeft = e.clientX - containerRect.left - parseFloat(el.dataset.offsetX);
-                            var newTop = e.clientY - containerRect.top - parseFloat(el.dataset.offsetY);
-
-                            el.style.left = newLeft + 'px';
-                            el.style.top = newTop + 'px';
-                            el.style.bottom = 'auto';
-                            el.style.right = 'auto';
-                        });
-                    }
-
                     overlaysContainer.appendChild(el);
                     overlayElements[id] = { dom: el, data: overlay };
                 }
@@ -6095,8 +6027,8 @@ function tourNext() {
     </script>
 
     <!-- Custom injected assets placeholder -->
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

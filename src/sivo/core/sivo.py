@@ -590,6 +590,19 @@ class Sivo:
         """
         self.infographic.apply_proportional_symbols(data_map, min_size, max_size, color, is_pulse=is_pulse)
 
+    def apply_spike_map(self, data_map: Dict[str, float], max_height: float = 100.0, base_width: float = 10.0, color: str = "rgba(255, 0, 0, 0.8)"):
+        """
+        Creates a spike map overlay where the height of a triangular spike from the region's center is proportional to the value.
+        """
+        self.infographic.apply_spike_map(data_map, max_height, base_width, color)
+
+    def apply_flow_map(self, data_list: list[dict], min_width: float = 1.0, max_width: float = 5.0, color: str = "rgba(255, 51, 51, 0.6)", flow_effect: bool = True, effect_symbol: str = "arrow", effect_size: float = 5.0, animation_speed: float = 3.0):
+        """
+        Creates a flow map by drawing scaled arrows/lines between origins and destinations.
+        data_list format: [{"origin": "id1", "destination": "id2", "value": 100, "source_coord": [x,y], "target_coord": [x,y]}, ...]
+        """
+        self.infographic.apply_flow_map(data_list, min_width, max_width, color, flow_effect, effect_symbol, effect_size, animation_speed)
+
 
 
 
@@ -1543,11 +1556,25 @@ class Sivo:
         """
         self.infographic.apply_choropleth(data_map, min_color, max_color, show_legend)
 
-    def add_connection(self, source_id: str, target_id: str, label: str = "", color: str = "#ff3333", width: float = 2.0, animation_speed: float = 3.0, type: str = "solid", opacity: float = 0.6, flow_effect: bool = False, effect_symbol: str = "circle", effect_size: float = 3.0):
+    def apply_value_by_alpha(self, base_data_map: Dict[str, float], alpha_data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", min_alpha: float = 0.2, max_alpha: float = 1.0, show_legend: bool = True):
+        """
+        Generates a Value-by-Alpha choropleth map where the base color is determined by one variable,
+        and the transparency (alpha) is determined by a second absolute variable (e.g., population density).
+        """
+        self.infographic.apply_value_by_alpha(base_data_map, alpha_data_map, min_color, max_color, min_alpha, max_alpha, show_legend)
+
+    def apply_categorical_map(self, data_map: Dict[str, str], color_palette: Dict[str, str] = None, show_legend: bool = True, legend_draggable: bool = True, item_opacity: float = 1.0, border_color: str = "rgba(0,0,0,0.1)", border_width: float = 0.5):
+        """
+        Generates a categorical map mapping discrete categories (strings) to specific colors.
+        """
+        self.infographic.apply_categorical_map(data_map, color_palette, show_legend, legend_draggable, item_opacity, border_color, border_width)
+
+    def add_connection(self, source_id: str, target_id: str, label: str = "", color: str = "#ff3333", width: float = 2.0, animation_speed: float = 3.0, type: str = "solid", opacity: float = 0.6, flow_effect: bool = False, effect_symbol: str = "circle", effect_size: float = 3.0, source_coord: list[float] = None, target_coord: list[float] = None):
         """
         Draws a visual connection line between the centers of two SVG elements.
+        Optionally override the coordinates using source_coord and target_coord.
         """
-        self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity, flow_effect, effect_symbol, effect_size)
+        self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity, flow_effect, effect_symbol, effect_size, source_coord, target_coord)
 
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """
@@ -1971,6 +1998,8 @@ class Sivo:
             view_data["scratchoff"] = self.infographic.scratchoff
         if hasattr(self.infographic, "proportional_symbols") and self.infographic.proportional_symbols:
             view_data["proportional_symbols"] = self.infographic.proportional_symbols
+        if hasattr(self.infographic, "spike_map") and self.infographic.spike_map:
+            view_data["spike_map"] = self.infographic.spike_map
         if hasattr(self.infographic, "hexbin") and self.infographic.hexbin:
             view_data["hexbin"] = self.infographic.hexbin
         if hasattr(self.infographic, "dot_density") and self.infographic.dot_density:

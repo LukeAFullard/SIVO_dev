@@ -160,6 +160,13 @@ class ProportionalSymbolConfig(BaseModel):
     color: str = Field(default="rgba(255, 0, 0, 0.6)", description="Color of the symbols")
     is_pulse: bool = Field(default=False, description="If True, renders the symbols as animated, rippling markers.")
 
+class SpikeMapConfig(BaseModel):
+    """Configuration for a spike map."""
+    data: Dict[str, Dict[str, Any]] = Field(description="Mapping of Element IDs to dicts containing 'value' and 'coord'.")
+    max_height: float = Field(default=100.0, description="Maximum spike height")
+    base_width: float = Field(default=10.0, description="Width of the spike base")
+    color: str = Field(default="rgba(255, 0, 0, 0.8)", description="Color of the spikes")
+
 class LayerToggleConfig(BaseModel):
     """Configuration for an interactive layer toggle legend."""
     label: str = Field(description="Display label for the legend item")
@@ -260,6 +267,10 @@ class ProjectConfig(BaseModel):
     proportional_symbols: Optional[ProportionalSymbolConfig] = Field(
         default=None,
         description="Optional configuration for proportional symbol overlays."
+    )
+    spike_map: Optional[SpikeMapConfig] = Field(
+        default=None,
+        description="Optional configuration for a spike map overlay."
     )
     hexbin: Optional[HexbinConfig] = Field(
         default=None,
