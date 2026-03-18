@@ -1237,7 +1237,7 @@ class Infographic:
         """
         self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
 
-    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0):
+    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0):
         """
         Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
         It creates a perfectly-sized HTML overlay that uses the exact SVG path as a CSS mask. This guarantees pixel-perfect clipping that seamlessly scales during pan/zoom in the ECharts canvas.
@@ -1249,8 +1249,10 @@ class Infographic:
             rotate: Rotation angle in degrees (default 0.0).
             opacity: Opacity of the image (0.0 to 1.0).
             preserve_aspect_ratio: SVG preserveAspectRatio attribute equivalent (default "xMidYMid slice" maps to object-fit: cover).
-            offset_x: Additional X offset for the image position (in pixels relative to bounding box).
-            offset_y: Additional Y offset for the image position (in pixels relative to bounding box).
+            offset_x: Additional X offset for the mask position over the canvas.
+            offset_y: Additional Y offset for the mask position over the canvas.
+            translate_x: Panning X offset for the image inside the clipped region (in pixels).
+            translate_y: Panning Y offset for the image inside the clipped region (in pixels).
         """
         import lxml.etree as etree
         import copy
@@ -1315,19 +1317,18 @@ class Infographic:
                     mask-size: 100% 100%; -webkit-mask-size: 100% 100%;
                     mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat;
                     mask-position: center; -webkit-mask-position: center;">
-            <img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; transform: scale({scale}) rotate({rotate}deg); opacity: {opacity};" />
+            <img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; transform: translate({translate_x}px, {translate_y}px) scale({scale}) rotate({rotate}deg); opacity: {opacity};" />
         </div>
         """
 
         # 4. Inject the overlay exactly over the element's bounding box
         self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom=True)
 
-        # 5. Make the original SVG shape transparent in ECharts, so the image isn't hidden by the default fill color
-        # It remains fully interactive for tooltips!
-        target_node.set("fill", "transparent")
-        target_node.set("stroke", "transparent")
-        target_node.set("fill-opacity", "0")
-        target_node.set("stroke-opacity", "0")
+        # 5. We deliberately DO NOT make the original SVG shape transparent here!
+        # Keeping its original fill allows ECharts to natively cast 'glow' (shadowBlur)
+        # around the bounding box, which will perfectly bleed out from underneath this HTML overlay.
+        # If the user wants the image to tint on 'hover_color', they should set `opacity < 1.0`
+        # so the underlying ECharts shape's color change can be seen blending through the image.
 
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """
