@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #f8fafc; }
+            .grid-line { stroke: #e2e8f0; stroke-width: 1; }
+            .grid-line-thick { stroke: #0f172a; stroke-width: 3; }
+            .card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1; rx: 0; ry: 0; }
+            .card-dark { fill: #0f172a; stroke: none; rx: 0; ry: 0; }
+            .text-display { fill: #0f172a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 80px; font-weight: 700; letter-spacing: -2px; }
+            .text-h1 { fill: #0f172a; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 40px; font-weight: 700; letter-spacing: -1px; }
+            .text-h2 { fill: #475569; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 500; }
+            .text-body { fill: #64748b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.5; }
+            .text-inverse { fill: #ffffff; }
+            .accent { fill: #ef4444; }
+        </style>
+    </defs>
+
+    <rect class="bg" width="1000" height="1000" />
+
+    <!-- Core Grid Framework -->
+    <g id="grid-framework">
+        <!-- Vertical grid lines -->
+        <path class="grid-line" d="M100 0 L100 1000" />
+        <path class="grid-line" d="M300 0 L300 1000" />
+        <path class="grid-line" d="M500 0 L500 1000" />
+        <path class="grid-line" d="M700 0 L700 1000" />
+        <path class="grid-line" d="M900 0 L900 1000" />
+        <!-- Horizontal grid lines -->
+        <path class="grid-line" d="M0 100 L1000 100" />
+        <path class="grid-line" d="M0 300 L1000 300" />
+        <path class="grid-line" d="M0 500 L1000 500" />
+        <path class="grid-line" d="M0 700 L1000 700" />
+        <path class="grid-line" d="M0 900 L1000 900" />
+        <!-- Structural dividers -->
+        <path class="grid-line-thick" d="M100 100 L900 100" />
+        <path class="grid-line-thick" d="M100 900 L900 900" />
+        <path class="grid-line-thick" d="M100 100 L100 900" />
+        <path class="grid-line-thick" d="M900 100 L900 900" />
+        <path class="grid-line-thick" d="M500 100 L500 900" />
+        <path class="grid-line-thick" d="M100 500 L900 500" />
+    </g>
+
+    <!-- Structural Nodes / Accents -->
+    <rect class="accent" x="100" y="100" width="20" height="20" />
+    <rect class="accent" x="500" y="500" width="20" height="20" />
+    <rect class="accent" x="900" y="900" width="20" height="20" transform="translate(-20, -20)" />
+
+    <!-- Main Content Area -->
+    <g id="content">
+        <!-- Header Section (Top Left) -->
+        <g id="header-group">
+            <text id="header-main" class="text-display" x="120" y="200"></text>
+            <text id="header-sub" class="text-h2" x="120" y="240"></text>
+            <rect id="header-desc-container" class="card" x="120" y="280" width="360" height="200" fill="transparent" stroke="none" />
+            <text id="header-desc" class="text-body" x="120" y="300"></text>
+        </g>
+
+        <!-- KPI Block (Top Right) -->
+        <g id="kpi-group">
+            <rect id="kpi-bg" class="card-dark" x="500" y="100" width="400" height="400" />
+            <text id="kpi-metric" class="text-display text-inverse" x="540" y="250"></text>
+            <text id="kpi-label" class="text-h2 text-inverse" x="540" y="300"></text>
+            <text id="kpi-trend" class="text-body text-inverse" x="540" y="340"></text>
+        </g>
+
+        <!-- Data Chart / Visual Placeholder (Bottom Left) -->
+        <g id="chart-group">
+            <rect id="chart-bg" class="card" x="120" y="520" width="360" height="360" />
+            <text id="chart-title" class="text-h2" x="140" y="560"></text>
+            <!-- Minimalist bar chart placeholder -->
+            <rect id="bar-1" fill="#0f172a" x="160" y="600" width="40" height="240" />
+            <rect id="bar-2" fill="#475569" x="220" y="700" width="40" height="140" />
+            <rect id="bar-3" fill="#94a3b8" x="280" y="650" width="40" height="190" />
+            <rect id="bar-4" fill="#cbd5e1" x="340" y="780" width="40" height="60" />
+            <path class="grid-line" d="M140 840 L460 840" />
+            <text id="chart-caption" class="text-body" x="140" y="870"></text>
+        </g>
+
+        <!-- Secondary Stats List (Bottom Right) -->
+        <g id="stats-group">
+            <rect id="stats-bg" class="card" x="520" y="520" width="360" height="360" fill="transparent" stroke="none" />
+
+            <text id="stat-1-title" class="text-h2" x="540" y="560"></text>
+            <text id="stat-1-val" class="text-h1" x="540" y="610"></text>
+            <path class="grid-line" d="M520 640 L880 640" />
+
+            <text id="stat-2-title" class="text-h2" x="540" y="690"></text>
+            <text id="stat-2-val" class="text-h1" x="540" y="740"></text>
+            <path class="grid-line" d="M520 770 L880 770" />
+
+            <text id="stat-3-title" class="text-h2" x="540" y="820"></text>
+            <text id="stat-3-val" class="text-h1" x="540" y="870"></text>
+        </g>
+    </g>
+</svg>
