@@ -1,0 +1,16 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#f8fafc"/>
+
+  <text x="400" y="50" font-family="sans-serif" font-size="24" font-weight="bold" fill="#0f172a" text-anchor="middle">SIVO + Folium Integration</text>
+  <text x="400" y="80" font-family="sans-serif" font-size="14" fill="#64748b" text-anchor="middle">Embedding an interactive geographic map clipped to an SVG path</text>
+
+  <!-- Left Side: Generic Information or other SVG elements -->
+  <rect id="info_card" x="40" y="120" width="340" height="440" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="60" y="160" font-family="sans-serif" font-size="20" font-weight="bold" fill="#334155">Location Details</text>
+
+  <rect id="dynamic_text_zone" x="60" y="180" width="300" height="360" fill="none"/>
+
+  <!-- Right Side: The Anchor shape for the Folium Map (A star shape) -->
+  <path id="map_anchor" d="M 590 120 L 640 270 L 790 270 L 670 360 L 710 510 L 590 420 L 470 510 L 510 360 L 390 270 L 540 270 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="590" y="340" font-family="sans-serif" font-size="16" fill="#94a3b8" text-anchor="middle">Map Placeholder</text>
+</svg>
