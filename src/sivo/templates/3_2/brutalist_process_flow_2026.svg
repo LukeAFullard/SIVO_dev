@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #f3f4f6; }
+            .card { fill: #ffffff; stroke: #111827; stroke-width: 4px; rx: 0; filter: drop-shadow(8px 8px 0px rgba(17,24,39,1)); }
+            .card-offset { fill: #fca5a5; rx: 0; mix-blend-mode: multiply; }
+            .line { fill: none; stroke: #111827; stroke-width: 6px; stroke-dasharray: 12, 12; }
+            .metric { font-family: 'Courier New', Courier, monospace; font-size: 56px; font-weight: 800; fill: #111827; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 700; fill: #374151; text-transform: uppercase; letter-spacing: 2px; }
+            .title { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 900; fill: #111827; letter-spacing: -1px; }
+            .accent { fill: #10b981; }
+        </style>
+    </defs>
+
+    <!-- Background -->
+    <rect id="background" width="1200" height="800" class="bg" />
+
+    <!-- Header -->
+    <text id="main_title" x="60" y="100" class="title">GLITCH &amp; FLOW / 2026</text>
+    <rect id="title_underline" x="60" y="120" width="400" height="8" class="accent" />
+
+    <!-- Connecting Lines -->
+    <path id="flow_line_1" class="line" d="M 320 300 L 600 300" />
+    <path id="flow_line_2" class="line" d="M 880 300 L 1050 300 V 550 L 880 550" />
+    <path id="flow_line_3" class="line" d="M 600 550 L 320 550" />
+
+    <!-- Node 1 -->
+    <g id="node_1">
+        <!-- Glitch Offset -->
+        <rect id="node_1_glitch" x="70" y="210" width="260" height="180" class="card-offset" />
+        <rect id="node_1_bg" x="60" y="200" width="260" height="180" class="card" />
+        <text id="node_1_label" x="90" y="250" class="label">PHASE 01</text>
+        <text id="node_1_metric" x="90" y="320" class="metric">RAW</text>
+    </g>
+
+    <!-- Node 2 -->
+    <g id="node_2">
+        <rect id="node_2_glitch" x="630" y="210" width="260" height="180" fill="#93c5fd" style="mix-blend-mode: multiply;" />
+        <rect id="node_2_bg" x="620" y="200" width="260" height="180" class="card" />
+        <text id="node_2_label" x="650" y="250" class="label">PHASE 02</text>
+        <text id="node_2_metric" x="650" y="320" class="metric">DATA</text>
+    </g>
+
+    <!-- Node 3 -->
+    <g id="node_3">
+        <rect id="node_3_glitch" x="630" y="460" width="260" height="180" fill="#fcd34d" style="mix-blend-mode: multiply;" />
+        <rect id="node_3_bg" x="620" y="450" width="260" height="180" class="card" />
+        <text id="node_3_label" x="650" y="500" class="label">PHASE 03</text>
+        <text id="node_3_metric" x="650" y="570" class="metric">SYNC</text>
+    </g>
+
+    <!-- Node 4 -->
+    <g id="node_4">
+        <rect id="node_4_glitch" x="70" y="460" width="260" height="180" fill="#c4b5fd" style="mix-blend-mode: multiply;" />
+        <rect id="node_4_bg" x="60" y="450" width="260" height="180" class="card" />
+        <text id="node_4_label" x="90" y="500" class="label">PHASE 04</text>
+        <text id="node_4_metric" x="90" y="570" class="metric">LIVE</text>
+    </g>
+
+    <!-- Decorative Elements -->
+    <circle cx="1100" cy="100" r="40" fill="none" stroke="#111827" stroke-width="4" />
+    <circle cx="1100" cy="100" r="10" fill="#ef4444" />
+    <rect x="60" y="700" width="1080" height="40" fill="#111827" />
+    <text x="80" y="726" class="label" fill="#ffffff" style="font-size: 14px;">SYSTEM STATUS: NOMINAL // GLITCH AESTHETIC INTEGRATED</text>
+</svg>
