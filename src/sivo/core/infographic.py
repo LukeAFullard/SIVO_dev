@@ -1237,6 +1237,98 @@ class Infographic:
         """
         self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom)
 
+    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0):
+        """
+        Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
+        It creates a perfectly-sized HTML overlay that uses the exact SVG path as a CSS mask. This guarantees pixel-perfect clipping that seamlessly scales during pan/zoom in the ECharts canvas.
+
+        Args:
+            element_id: The ID or name of the target SVG element.
+            image_url: The URL or path to the image.
+            scale: Scale multiplier for the image (default 1.0).
+            rotate: Rotation angle in degrees (default 0.0).
+            opacity: Opacity of the image (0.0 to 1.0).
+            preserve_aspect_ratio: SVG preserveAspectRatio attribute equivalent (default "xMidYMid slice" maps to object-fit: cover).
+            offset_x: Additional X offset for the image position (in pixels relative to bounding box).
+            offset_y: Additional Y offset for the image position (in pixels relative to bounding box).
+        """
+        import lxml.etree as etree
+        import copy
+        import urllib.parse
+
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
+            raise ValueError(f"Cannot clip image to shape: Element '{element_id}' not found or has no bounding box.")
+
+        bbox = target_elem['bbox']
+        bbox_min_x, bbox_min_y, bbox_max_x, bbox_max_y = bbox
+        bbox_width = bbox_max_x - bbox_min_x
+        bbox_height = bbox_max_y - bbox_min_y
+
+        root = self.parser.root
+
+        target_node = None
+        for node in root.iter():
+            if node.get("id") == element_id or node.get("name") == element_id:
+                target_node = node
+                break
+
+        if target_node is None:
+            raise ValueError(f"Could not find XML node for element '{element_id}'.")
+
+        # 1. Create the inline SVG mask
+        cloned_shape = copy.deepcopy(target_node)
+
+        # Strip interactive/rendering IDs to avoid duplicate DOM issues
+        if "id" in cloned_shape.attrib: del cloned_shape.attrib["id"]
+        if "name" in cloned_shape.attrib: del cloned_shape.attrib["name"]
+        if "class" in cloned_shape.attrib: del cloned_shape.attrib["class"]
+
+        # Force the mask shape to be completely solid black (100% opaque for the mask)
+        cloned_shape.set("fill", "black")
+        cloned_shape.set("stroke", "none")
+        cloned_shape.set("opacity", "1")
+        cloned_shape.set("fill-opacity", "1")
+
+        # Convert the single node back to an XML string
+        shape_str = etree.tostring(cloned_shape, encoding="unicode")
+
+        # Wrap it in a minimalistic SVG container with the exact viewBox of the bounding box
+        svg_mask = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{bbox_min_x} {bbox_min_y} {bbox_width} {bbox_height}">{shape_str}</svg>'
+
+        # URI encode the SVG string for the CSS url()
+        encoded_mask = urllib.parse.quote(svg_mask)
+        mask_url = f"data:image/svg+xml;utf8,{encoded_mask}"
+
+        # 2. Map SVG preserveAspectRatio to CSS object-fit
+        object_fit = "cover"
+        if "meet" in preserve_aspect_ratio:
+            object_fit = "contain"
+        elif preserve_aspect_ratio == "none":
+            object_fit = "fill"
+
+        # 3. Build the HTML overlay
+        # We set pointer-events: none so that the underlying ECharts SVG shape continues to capture all mouse events (tooltips, drilldowns, etc)
+        html = f"""
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none;
+                    mask-image: url('{mask_url}'); -webkit-mask-image: url('{mask_url}');
+                    mask-size: 100% 100%; -webkit-mask-size: 100% 100%;
+                    mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat;
+                    mask-position: center; -webkit-mask-position: center;">
+            <img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; transform: scale({scale}) rotate({rotate}deg); opacity: {opacity};" />
+        </div>
+        """
+
+        # 4. Inject the overlay exactly over the element's bounding box
+        self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom=True)
+
+        # 5. Make the original SVG shape transparent in ECharts, so the image isn't hidden by the default fill color
+        # It remains fully interactive for tooltips!
+        target_node.set("fill", "transparent")
+        target_node.set("stroke", "transparent")
+        target_node.set("fill-opacity", "0")
+        target_node.set("stroke-opacity", "0")
+
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """
         Automatically generates a perfectly scaled, native SVG progress bar relative to the bounding box
