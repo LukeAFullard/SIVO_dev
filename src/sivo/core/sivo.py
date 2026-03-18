@@ -1610,7 +1610,7 @@ class Sivo:
         """
         self.infographic.add_image_overlay(element_id, image_url, object_fit, border_radius, box_shadow, offset_x, offset_y, scale_with_zoom)
 
-    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0):
+    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0):
         """
         Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
         The image perfectly scales and pans natively with the ECharts vector renderer.
@@ -1622,10 +1622,12 @@ class Sivo:
             rotate: Rotation angle in degrees (default 0.0).
             opacity: Opacity of the image (0.0 to 1.0).
             preserve_aspect_ratio: SVG preserveAspectRatio attribute (default "xMidYMid slice" for cover).
-            offset_x: Additional X offset for the image position.
-            offset_y: Additional Y offset for the image position.
+            offset_x: Additional X offset for the mask position over the canvas.
+            offset_y: Additional Y offset for the mask position over the canvas.
+            translate_x: Panning X offset for the image inside the clipped region (in pixels).
+            translate_y: Panning Y offset for the image inside the clipped region (in pixels).
         """
-        self.infographic.clip_image_to_shape(element_id, image_url, scale, rotate, opacity, preserve_aspect_ratio, offset_x, offset_y)
+        self.infographic.clip_image_to_shape(element_id, image_url, scale, rotate, opacity, preserve_aspect_ratio, offset_x, offset_y, translate_x, translate_y)
 
     def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True):
         """

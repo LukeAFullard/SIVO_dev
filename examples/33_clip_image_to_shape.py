@@ -31,12 +31,14 @@ app.map(
     hover_color="rgba(0, 0, 0, 0.2)" # Add a dark tint on hover
 )
 
-# 3. Clip an image to the rectangle with scaling and rotation
+# 3. Clip an image to the rectangle with scaling, rotation, and translation panning
 app.clip_image_to_shape(
     element_id="my_rect",
     image_url="https://images.unsplash.com/photo-1557683316-973673baf926",
     scale=1.5,
     rotate=15, # Rotate 15 degrees
+    translate_x=-30, # Pan the image 30 pixels left within the clipped region
+    translate_y=20,  # Pan the image 20 pixels down within the clipped region
     opacity=0.8
 )
 
