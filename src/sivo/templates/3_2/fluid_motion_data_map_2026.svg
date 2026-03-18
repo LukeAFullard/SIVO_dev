@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #111827; } /* Deep Dark Blue/Black */
+            .card { fill: #1f2937; rx: 40; filter: drop-shadow(0 20px 25px rgba(0,0,0,0.5)); }
+            .card-gradient { fill: url(#fluidGrad); rx: 40; opacity: 0.1; }
+            .metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 72px; font-weight: 900; fill: #ffffff; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; font-weight: 500; fill: #9ca3af; letter-spacing: 1px; }
+            .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 48px; font-weight: 800; fill: #ffffff; letter-spacing: -1px; }
+            .glow-path { fill: none; stroke: url(#fluidGrad); stroke-width: 6; stroke-linecap: round; filter: drop-shadow(0 0 12px rgba(139,92,246,0.6)); }
+            .node { fill: #ffffff; filter: drop-shadow(0 0 8px rgba(255,255,255,0.8)); }
+        </style>
+        <linearGradient id="fluidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8b5cf6" /> <!-- Purple -->
+            <stop offset="50%" stop-color="#ec4899" /> <!-- Pink -->
+            <stop offset="100%" stop-color="#f43f5e" /> <!-- Rose -->
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect id="background" width="1200" height="800" class="bg" />
+
+    <!-- Ambient Glow / Fluid Background Effects -->
+    <circle cx="200" cy="200" r="300" fill="url(#fluidGrad)" opacity="0.1" filter="blur(60px)" />
+    <circle cx="1000" cy="600" r="400" fill="#3b82f6" opacity="0.1" filter="blur(80px)" />
+
+    <!-- Header Section -->
+    <text id="dash_title" x="60" y="100" class="title">Fluid Analytics System</text>
+    <text id="dash_subtitle" x="60" y="140" class="label">LIVE MOTION &amp; DATA FLOW PIPELINE</text>
+
+    <!-- Main Dynamic Flow Layout -->
+
+    <!-- Dynamic Curves (Motion Graphic Simulation) -->
+    <path id="motion_path_1" class="glow-path" d="M 60 400 C 300 100, 500 700, 800 400 S 1000 200, 1140 300" />
+    <path id="motion_path_2" d="M 60 500 C 400 300, 600 600, 900 500 S 1100 400, 1140 600" fill="none" stroke="#ec4899" stroke-width="2" stroke-dasharray="8 8" opacity="0.5" />
+
+    <!-- Data Nodes -->
+    <g id="node_ingress">
+        <circle cx="250" cy="310" r="16" class="node" />
+        <circle cx="250" cy="310" r="32" fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" />
+        <rect id="bg_ingress" x="150" y="360" width="200" height="120" class="card" rx="24" />
+        <text id="label_ingress" x="250" y="410" class="label" text-anchor="middle">Data Ingress</text>
+        <text id="val_ingress" x="250" y="460" class="metric" font-size="36px" text-anchor="middle">1.2B</text>
+    </g>
+
+    <g id="node_processing">
+        <circle cx="650" cy="550" r="24" class="node" />
+        <circle cx="650" cy="550" r="48" fill="none" stroke="#ec4899" stroke-width="2" opacity="0.5" />
+        <rect id="bg_processing" x="530" y="620" width="240" height="140" class="card" rx="24" />
+        <rect x="530" y="620" width="240" height="140" class="card-gradient" rx="24" />
+        <text id="label_processing" x="650" y="670" class="label" text-anchor="middle">Processing Latency</text>
+        <text id="val_processing" x="650" y="730" class="metric" font-size="48px" text-anchor="middle">14ms</text>
+    </g>
+
+    <g id="node_egress">
+        <circle cx="950" cy="350" r="20" class="node" />
+        <circle cx="950" cy="350" r="40" fill="none" stroke="#f43f5e" stroke-width="2" opacity="0.5" />
+        <rect id="bg_egress" x="830" y="160" width="240" height="140" class="card" rx="24" />
+        <text id="label_egress" x="950" y="210" class="label" text-anchor="middle">Active Clients</text>
+        <text id="val_egress" x="950" y="270" class="metric" font-size="48px" text-anchor="middle">94K</text>
+    </g>
+
+    <!-- Mini KPI Banner (Top Right) -->
+    <g id="kpi_banner">
+        <rect id="bg_kpi" x="880" y="40" width="260" height="80" class="card" rx="40" />
+        <circle cx="920" cy="80" r="8" fill="#10b981" filter="drop-shadow(0 0 6px #10b981)" />
+        <text id="label_kpi" x="940" y="85" class="label" fill="#ffffff">System Healthy</text>
+    </g>
+</svg>

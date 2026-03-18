@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #fdfbf7; } /* Warm earthy neutral */
+            .card { fill: #ffffff; rx: 32; filter: drop-shadow(0 8px 16px rgba(101,111,92,0.06)); }
+            .metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 64px; font-weight: 500; fill: #2d372c; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #656f5c; text-transform: uppercase; letter-spacing: 2px; }
+            .title { font-family: 'Georgia', serif; font-size: 40px; font-weight: 400; fill: #1c251b; font-style: italic; }
+            .organic-shape { fill: #e5ecd8; mix-blend-mode: multiply; }
+            .line { fill: none; stroke: #8ca381; stroke-width: 2; stroke-dasharray: 4, 8; }
+        </style>
+        <radialGradient id="ecoGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b6cda7" stop-opacity="0.2" />
+            <stop offset="100%" stop-color="#b6cda7" stop-opacity="0" />
+        </radialGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect id="background" width="1200" height="800" class="bg" />
+
+    <!-- Organic Decorative Elements (Background Layer) -->
+    <path id="bg_blob_1" d="M 1100 100 Q 1200 250 1050 400 T 800 200 Z" class="organic-shape" />
+    <path id="bg_blob_2" d="M -50 600 Q 100 800 300 700 T 150 450 Z" class="organic-shape" />
+
+    <!-- Header Section -->
+    <text id="dash_title" x="80" y="100" class="title">Sustainability Report 2026</text>
+    <text id="dash_subtitle" x="80" y="130" class="label">CARBON OFFSET &amp; ECO METRICS</text>
+
+    <!-- Flow Diagram / Journey -->
+
+    <!-- Central Flow Line -->
+    <path id="journey_path" class="line" d="M 260 400 Q 600 200 940 400" />
+    <path id="journey_path_2" class="line" d="M 260 400 Q 600 600 940 400" />
+
+    <!-- Node 1 -->
+    <g id="node_emissions">
+        <circle id="bg_n1" cx="260" cy="400" r="140" class="card" />
+        <circle cx="260" cy="400" r="140" fill="url(#ecoGlow)" />
+        <text id="label_n1" x="260" y="380" class="label" text-anchor="middle">Emissions</text>
+        <text id="val_n1" x="260" y="440" class="metric" text-anchor="middle">2.4T</text>
+    </g>
+
+    <!-- Node 2 (Top) -->
+    <g id="node_renewables">
+        <circle id="bg_n2" cx="600" cy="240" r="110" class="card" />
+        <text id="label_n2" x="600" y="225" class="label" text-anchor="middle">Renewable</text>
+        <text id="val_n2" x="600" y="275" class="metric" font-size="48px" text-anchor="middle">85%</text>
+    </g>
+
+    <!-- Node 3 (Bottom) -->
+    <g id="node_waste">
+        <circle id="bg_n3" cx="600" cy="560" r="110" class="card" />
+        <text id="label_n3" x="600" y="545" class="label" text-anchor="middle">Recycled</text>
+        <text id="val_n3" x="600" y="595" class="metric" font-size="48px" text-anchor="middle">92%</text>
+    </g>
+
+    <!-- Node 4 (Target) -->
+    <g id="node_net_zero">
+        <circle id="bg_n4" cx="940" cy="400" r="140" class="card" />
+        <circle cx="940" cy="400" r="120" fill="none" stroke="#8ca381" stroke-width="1" />
+        <text id="label_n4" x="940" y="380" class="label" text-anchor="middle">Net Zero</text>
+        <text id="val_n4" x="940" y="440" class="metric" text-anchor="middle">2030</text>
+    </g>
+
+    <!-- Footer Stats / Small Bento -->
+    <g id="footer_bento">
+        <rect id="bg_f1" x="80" y="680" width="320" height="80" class="card" rx="16" />
+        <text id="label_f1" x="110" y="725" class="label">Trees Planted</text>
+        <text id="val_f1" x="300" y="730" class="metric" font-size="32px" text-anchor="end">12,450</text>
+    </g>
+
+    <g id="footer_bento_2">
+        <rect id="bg_f2" x="440" y="680" width="320" height="80" class="card" rx="16" />
+        <text id="label_f2" x="470" y="725" class="label">Water Saved</text>
+        <text id="val_f2" x="660" y="730" class="metric" font-size="32px" text-anchor="end">1.2M L</text>
+    </g>
+
+    <g id="footer_bento_3">
+        <rect id="bg_f3" x="800" y="680" width="320" height="80" class="card" rx="16" />
+        <text id="label_f3" x="830" y="725" class="label">Energy Drop</text>
+        <text id="val_f3" x="1020" y="730" class="metric" font-size="32px" text-anchor="end">-15%</text>
+    </g>
+</svg>
