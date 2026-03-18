@@ -64,7 +64,9 @@ app.map(
 )
 
 # 5. Export the result to an HTML file
-output_path = "examples/33_clip_image_to_shape.html"
+import os
+output_dir = os.path.dirname(os.path.abspath(__file__))
+output_path = os.path.join(output_dir, "clip_image_to_shape.html")
 app.to_html(output_path)
 
 print(f"Successfully generated {output_path}")
