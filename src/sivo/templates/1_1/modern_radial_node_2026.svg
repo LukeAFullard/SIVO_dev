@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #fafafa; }
+            .card { fill: #ffffff; stroke: #e5e5e5; stroke-width: 1; rx: 16; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.02)); }
+            .node { fill: #ffffff; stroke: #2563eb; stroke-width: 3; filter: drop-shadow(0 4px 12px rgba(37,99,235,0.15)); }
+            .line { fill: none; stroke: #cbd5e1; stroke-width: 2; stroke-dasharray: 6 6; }
+            .metric { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 36px; font-weight: 700; fill: #0f172a; }
+            .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; fill: #64748b; text-transform: uppercase; letter-spacing: 1.5px; }
+            .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 32px; font-weight: 800; fill: #0f172a; }
+            .center-node { fill: #2563eb; }
+            .center-metric { fill: #ffffff; font-size: 48px; font-weight: 800; }
+            .center-label { fill: #dbeafe; font-size: 16px; text-transform: uppercase; font-weight: 600; letter-spacing: 2px; }
+        </style>
+    </defs>
+
+    <!-- Background -->
+    <rect id="background" width="1000" height="1000" class="bg" />
+
+    <!-- Header Section -->
+    <text id="dash_title" x="500" y="80" class="title" text-anchor="middle"></text>
+    <text id="dash_subtitle" x="500" y="110" class="label" text-anchor="middle"></text>
+
+    <!-- Radial Connections -->
+    <!-- Center to Top -->
+    <path id="conn_n1" class="line" d="M 500 500 L 500 240" />
+    <!-- Center to Top Right -->
+    <path id="conn_n2" class="line" d="M 500 500 L 760 350" />
+    <!-- Center to Bottom Right -->
+    <path id="conn_n3" class="line" d="M 500 500 L 760 650" />
+    <!-- Center to Bottom -->
+    <path id="conn_n4" class="line" d="M 500 500 L 500 760" />
+    <!-- Center to Bottom Left -->
+    <path id="conn_n5" class="line" d="M 500 500 L 240 650" />
+    <!-- Center to Top Left -->
+    <path id="conn_n6" class="line" d="M 500 500 L 240 350" />
+
+    <!-- Central Hub -->
+    <g id="hub_center">
+        <circle id="bg_hub" cx="500" cy="500" r="100" class="center-node" />
+        <circle cx="500" cy="500" r="115" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3" />
+        <text id="label_hub" x="500" y="480" class="center-label" text-anchor="middle"></text>
+        <text id="val_hub" x="500" y="530" class="center-metric" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"></text>
+    </g>
+
+    <!-- Spoke Node 1 (Top) -->
+    <g id="node_1">
+        <rect id="bg_n1" x="380" y="150" width="240" height="90" class="card" />
+        <circle id="dot_n1" cx="500" cy="240" r="12" class="node" />
+        <text id="label_n1" x="500" y="180" class="label" text-anchor="middle"></text>
+        <text id="val_n1" x="500" y="220" class="metric" text-anchor="middle"></text>
+    </g>
+
+    <!-- Spoke Node 2 (Top Right) -->
+    <g id="node_2">
+        <rect id="bg_n2" x="700" y="260" width="240" height="90" class="card" />
+        <circle id="dot_n2" cx="760" cy="350" r="12" class="node" />
+        <text id="label_n2" x="820" y="290" class="label" text-anchor="middle"></text>
+        <text id="val_n2" x="820" y="330" class="metric" text-anchor="middle"></text>
+    </g>
+
+    <!-- Spoke Node 3 (Bottom Right) -->
+    <g id="node_3">
+        <rect id="bg_n3" x="700" y="650" width="240" height="90" class="card" />
+        <circle id="dot_n3" cx="760" cy="650" r="12" class="node" />
+        <text id="label_n3" x="820" y="680" class="label" text-anchor="middle"></text>
+        <text id="val_n3" x="820" y="720" class="metric" text-anchor="middle"></text>
+    </g>
+
+    <!-- Spoke Node 4 (Bottom) -->
+    <g id="node_4">
+        <rect id="bg_n4" x="380" y="760" width="240" height="90" class="card" />
+        <circle id="dot_n4" cx="500" cy="760" r="12" class="node" />
+        <text id="label_n4" x="500" y="790" class="label" text-anchor="middle"></text>
+        <text id="val_n4" x="500" y="830" class="metric" text-anchor="middle"></text>
+    </g>
+
+    <!-- Spoke Node 5 (Bottom Left) -->
+    <g id="node_5">
+        <rect id="bg_n5" x="60" y="650" width="240" height="90" class="card" />
+        <circle id="dot_n5" cx="240" cy="650" r="12" class="node" />
+        <text id="label_n5" x="180" y="680" class="label" text-anchor="middle"></text>
+        <text id="val_n5" x="180" y="720" class="metric" text-anchor="middle"></text>
+    </g>
+
+    <!-- Spoke Node 6 (Top Left) -->
+    <g id="node_6">
+        <rect id="bg_n6" x="60" y="260" width="240" height="90" class="card" />
+        <circle id="dot_n6" cx="240" cy="350" r="12" class="node" />
+        <text id="label_n6" x="180" y="290" class="label" text-anchor="middle"></text>
+        <text id="val_n6" x="180" y="330" class="metric" text-anchor="middle"></text>
+    </g>
+
+</svg>
