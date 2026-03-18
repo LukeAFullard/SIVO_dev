@@ -25,8 +25,8 @@
     <circle cx="1000" cy="600" r="400" fill="#3b82f6" opacity="0.1" filter="blur(80px)" />
 
     <!-- Header Section -->
-    <text id="dash_title" x="60" y="100" class="title">Fluid Analytics System</text>
-    <text id="dash_subtitle" x="60" y="140" class="label">LIVE MOTION &amp; DATA FLOW PIPELINE</text>
+    <text id="dash_title" x="60" y="100" class="title"></text>
+    <text id="dash_subtitle" x="60" y="140" class="label"></text>
 
     <!-- Main Dynamic Flow Layout -->
 
@@ -39,8 +39,8 @@
         <circle cx="250" cy="310" r="16" class="node" />
         <circle cx="250" cy="310" r="32" fill="none" stroke="#8b5cf6" stroke-width="2" opacity="0.5" />
         <rect id="bg_ingress" x="150" y="360" width="200" height="120" class="card" rx="24" />
-        <text id="label_ingress" x="250" y="410" class="label" text-anchor="middle">Data Ingress</text>
-        <text id="val_ingress" x="250" y="460" class="metric" font-size="36px" text-anchor="middle">1.2B</text>
+        <text id="label_ingress" x="250" y="410" class="label" text-anchor="middle"></text>
+        <text id="val_ingress" x="250" y="460" class="metric" font-size="36px" text-anchor="middle"></text>
     </g>
 
     <g id="node_processing">
@@ -48,22 +48,22 @@
         <circle cx="650" cy="550" r="48" fill="none" stroke="#ec4899" stroke-width="2" opacity="0.5" />
         <rect id="bg_processing" x="530" y="620" width="240" height="140" class="card" rx="24" />
         <rect x="530" y="620" width="240" height="140" class="card-gradient" rx="24" />
-        <text id="label_processing" x="650" y="670" class="label" text-anchor="middle">Processing Latency</text>
-        <text id="val_processing" x="650" y="730" class="metric" font-size="48px" text-anchor="middle">14ms</text>
+        <text id="label_processing" x="650" y="670" class="label" text-anchor="middle"></text>
+        <text id="val_processing" x="650" y="730" class="metric" font-size="48px" text-anchor="middle"></text>
     </g>
 
     <g id="node_egress">
         <circle cx="950" cy="350" r="20" class="node" />
         <circle cx="950" cy="350" r="40" fill="none" stroke="#f43f5e" stroke-width="2" opacity="0.5" />
         <rect id="bg_egress" x="830" y="160" width="240" height="140" class="card" rx="24" />
-        <text id="label_egress" x="950" y="210" class="label" text-anchor="middle">Active Clients</text>
-        <text id="val_egress" x="950" y="270" class="metric" font-size="48px" text-anchor="middle">94K</text>
+        <text id="label_egress" x="950" y="210" class="label" text-anchor="middle"></text>
+        <text id="val_egress" x="950" y="270" class="metric" font-size="48px" text-anchor="middle"></text>
     </g>
 
     <!-- Mini KPI Banner (Top Right) -->
     <g id="kpi_banner">
         <rect id="bg_kpi" x="880" y="40" width="260" height="80" class="card" rx="40" />
         <circle cx="920" cy="80" r="8" fill="#10b981" filter="drop-shadow(0 0 6px #10b981)" />
-        <text id="label_kpi" x="940" y="85" class="label" fill="#ffffff">System Healthy</text>
+        <text id="label_kpi" x="940" y="85" class="label" fill="#ffffff"></text>
     </g>
 </svg>
