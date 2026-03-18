@@ -1,0 +1,54 @@
+<svg width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #f0f4f8; }
+      .line { stroke: #cbd5e1; stroke-width: 4; stroke-dasharray: 8 8; }
+      .node { fill: #ffffff; stroke: #3b82f6; stroke-width: 4; rx: 20; ry: 20; }
+      .large-node { fill: #ffffff; stroke: #3b82f6; stroke-width: 6; rx: 80; ry: 80; }
+      .card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 2; rx: 8; ry: 8; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1000" height="1000" />
+
+  <!-- Central large node on the left -->
+  <circle id="large_node_dot" class="large-node" cx="200" cy="500" r="120" />
+
+  <!-- Lines from large node to nodes on the right -->
+  <!-- Line 1 -->
+  <line class="line" x1="320" y1="500" x2="550" y2="100.0" />
+  <!-- Line 2 -->
+  <line class="line" x1="320" y1="500" x2="550" y2="233.33333333333334" />
+  <!-- Line 3 -->
+  <line class="line" x1="320" y1="500" x2="550" y2="366.6666666666667" />
+  <!-- Line 4 -->
+  <line class="line" x1="320" y1="500" x2="550" y2="500.0" />
+  <!-- Line 5 -->
+  <line class="line" x1="320" y1="500" x2="550" y2="633.3333333333334" />
+  <!-- Line 6 -->
+  <line class="line" x1="320" y1="500" x2="550" y2="766.6666666666667" />
+  <!-- Line 7 -->
+  <line class="line" x1="320" y1="500" x2="550" y2="900.0" />
+
+  <!-- Node 1 -->
+  <circle id="node_1_dot" class="node" cx="550" cy="100.0" r="20" />
+  <rect id="node_1_card" class="card" x="600" y="43.33333333333333" width="350" height="113.33333333333334" />
+  <!-- Node 2 -->
+  <circle id="node_2_dot" class="node" cx="550" cy="233.33333333333334" r="20" />
+  <rect id="node_2_card" class="card" x="600" y="176.66666666666669" width="350" height="113.33333333333334" />
+  <!-- Node 3 -->
+  <circle id="node_3_dot" class="node" cx="550" cy="366.6666666666667" r="20" />
+  <rect id="node_3_card" class="card" x="600" y="310.0" width="350" height="113.33333333333334" />
+  <!-- Node 4 -->
+  <circle id="node_4_dot" class="node" cx="550" cy="500.0" r="20" />
+  <rect id="node_4_card" class="card" x="600" y="443.3333333333333" width="350" height="113.33333333333334" />
+  <!-- Node 5 -->
+  <circle id="node_5_dot" class="node" cx="550" cy="633.3333333333334" r="20" />
+  <rect id="node_5_card" class="card" x="600" y="576.6666666666667" width="350" height="113.33333333333334" />
+  <!-- Node 6 -->
+  <circle id="node_6_dot" class="node" cx="550" cy="766.6666666666667" r="20" />
+  <rect id="node_6_card" class="card" x="600" y="710.0000000000001" width="350" height="113.33333333333334" />
+  <!-- Node 7 -->
+  <circle id="node_7_dot" class="node" cx="550" cy="900.0" r="20" />
+  <rect id="node_7_card" class="card" x="600" y="843.3333333333334" width="350" height="113.33333333333334" />
+</svg>
