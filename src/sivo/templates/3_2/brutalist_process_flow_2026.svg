@@ -16,7 +16,7 @@
     <rect id="background" width="1200" height="800" class="bg" />
 
     <!-- Header -->
-    <text id="main_title" x="60" y="100" class="title">GLITCH &amp; FLOW / 2026</text>
+    <text id="main_title" x="60" y="100" class="title"></text>
     <rect id="title_underline" x="60" y="120" width="400" height="8" class="accent" />
 
     <!-- Connecting Lines -->
@@ -29,37 +29,37 @@
         <!-- Glitch Offset -->
         <rect id="node_1_glitch" x="70" y="210" width="260" height="180" class="card-offset" />
         <rect id="node_1_bg" x="60" y="200" width="260" height="180" class="card" />
-        <text id="node_1_label" x="90" y="250" class="label">PHASE 01</text>
-        <text id="node_1_metric" x="90" y="320" class="metric">RAW</text>
+        <text id="node_1_label" x="90" y="250" class="label"></text>
+        <text id="node_1_metric" x="90" y="320" class="metric"></text>
     </g>
 
     <!-- Node 2 -->
     <g id="node_2">
         <rect id="node_2_glitch" x="630" y="210" width="260" height="180" fill="#93c5fd" style="mix-blend-mode: multiply;" />
         <rect id="node_2_bg" x="620" y="200" width="260" height="180" class="card" />
-        <text id="node_2_label" x="650" y="250" class="label">PHASE 02</text>
-        <text id="node_2_metric" x="650" y="320" class="metric">DATA</text>
+        <text id="node_2_label" x="650" y="250" class="label"></text>
+        <text id="node_2_metric" x="650" y="320" class="metric"></text>
     </g>
 
     <!-- Node 3 -->
     <g id="node_3">
         <rect id="node_3_glitch" x="630" y="460" width="260" height="180" fill="#fcd34d" style="mix-blend-mode: multiply;" />
         <rect id="node_3_bg" x="620" y="450" width="260" height="180" class="card" />
-        <text id="node_3_label" x="650" y="500" class="label">PHASE 03</text>
-        <text id="node_3_metric" x="650" y="570" class="metric">SYNC</text>
+        <text id="node_3_label" x="650" y="500" class="label"></text>
+        <text id="node_3_metric" x="650" y="570" class="metric"></text>
     </g>
 
     <!-- Node 4 -->
     <g id="node_4">
         <rect id="node_4_glitch" x="70" y="460" width="260" height="180" fill="#c4b5fd" style="mix-blend-mode: multiply;" />
         <rect id="node_4_bg" x="60" y="450" width="260" height="180" class="card" />
-        <text id="node_4_label" x="90" y="500" class="label">PHASE 04</text>
-        <text id="node_4_metric" x="90" y="570" class="metric">LIVE</text>
+        <text id="node_4_label" x="90" y="500" class="label"></text>
+        <text id="node_4_metric" x="90" y="570" class="metric"></text>
     </g>
 
     <!-- Decorative Elements -->
     <circle cx="1100" cy="100" r="40" fill="none" stroke="#111827" stroke-width="4" />
     <circle cx="1100" cy="100" r="10" fill="#ef4444" />
     <rect x="60" y="700" width="1080" height="40" fill="#111827" />
-    <text x="80" y="726" class="label" fill="#ffffff" style="font-size: 14px;">SYSTEM STATUS: NOMINAL // GLITCH AESTHETIC INTEGRATED</text>
+    <text id="system_status" x="80" y="726" class="label" fill="#ffffff" style="font-size: 14px;"></text>
 </svg>

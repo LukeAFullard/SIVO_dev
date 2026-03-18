@@ -24,17 +24,17 @@
     <path id="grid_v_2" class="divider" d="M 770 140 L 770 480" />
 
     <!-- Header Section -->
-    <text id="dash_title" x="60" y="80" class="title">Corporate Performance Index</text>
-    <text id="dash_subtitle" x="60" y="110" class="subtitle">FY 2026 Executive Summary / Q3 Overview</text>
+    <text id="dash_title" x="60" y="80" class="title"></text>
+    <text id="dash_subtitle" x="60" y="110" class="subtitle"></text>
     <rect id="header_dot" x="1132" y="70" width="8" height="8" class="accent" rx="4" />
-    <text x="1090" y="80" class="label" text-anchor="end">LIVE</text>
+    <text id="live_status" x="1090" y="80" class="label" text-anchor="end"></text>
 
     <!-- Top Row Metrics (Ultra Minimal) -->
 
     <!-- Metric 1 -->
     <g id="metric_1">
-        <text id="label_m1" x="60" y="200" class="label">Gross Margin</text>
-        <text id="val_m1" x="60" y="320" class="metric">68.4%</text>
+        <text id="label_m1" x="60" y="200" class="label"></text>
+        <text id="val_m1" x="60" y="320" class="metric"></text>
         <!-- Sparkline -->
         <path d="M 60 380 L 120 360 L 180 390 L 240 330 L 300 370 L 340 310" fill="none" stroke="#111827" stroke-width="2" />
         <circle cx="340" cy="310" r="4" fill="#111827" />
@@ -42,51 +42,51 @@
 
     <!-- Metric 2 -->
     <g id="metric_2">
-        <text id="label_m2" x="440" y="200" class="label">Operating Profit</text>
-        <text id="val_m2" x="440" y="320" class="metric">$4.2M</text>
+        <text id="label_m2" x="440" y="200" class="label"></text>
+        <text id="val_m2" x="440" y="320" class="metric"></text>
         <!-- Progress Bar -->
         <rect x="440" y="360" width="280" height="8" class="bar-bg" />
         <rect x="440" y="360" width="210" height="8" class="bar" />
-        <text x="440" y="400" class="subtitle">+12% YoY</text>
+        <text id="subtitle_m2" x="440" y="400" class="subtitle"></text>
     </g>
 
     <!-- Metric 3 -->
     <g id="metric_3">
-        <text id="label_m3" x="810" y="200" class="label">Customer CAC</text>
-        <text id="val_m3" x="810" y="320" class="metric">$142</text>
+        <text id="label_m3" x="810" y="200" class="label"></text>
+        <text id="val_m3" x="810" y="320" class="metric"></text>
         <rect x="810" y="360" width="280" height="8" class="bar-bg" />
         <rect x="810" y="360" width="90" height="8" fill="#3b82f6" rx="4" />
-        <text x="810" y="400" class="subtitle">-8% Optimization</text>
+        <text id="subtitle_m3" x="810" y="400" class="subtitle"></text>
     </g>
 
     <!-- Bottom Row (Clean Bar Chart / Breakdown) -->
 
     <g id="bottom_section">
-        <text id="label_breakdown" x="60" y="550" class="label">Regional Distribution (Top 5)</text>
+        <text id="label_breakdown" x="60" y="550" class="label"></text>
 
         <!-- Bar 1 -->
-        <text id="label_b1" x="60" y="610" class="subtitle" font-weight="500" fill="#111827">North America</text>
+        <text id="label_b1" x="60" y="610" class="subtitle" font-weight="500" fill="#111827"></text>
         <rect id="bg_b1" x="220" y="595" width="800" height="20" class="bar-bg" />
         <rect id="val_b1_rect" x="220" y="595" width="600" height="20" class="bar" />
-        <text id="val_b1" x="1050" y="610" class="subtitle" fill="#111827">75%</text>
+        <text id="val_b1" x="1050" y="610" class="subtitle" fill="#111827"></text>
 
         <!-- Bar 2 -->
-        <text id="label_b2" x="60" y="650" class="subtitle" font-weight="500" fill="#111827">EMEA</text>
+        <text id="label_b2" x="60" y="650" class="subtitle" font-weight="500" fill="#111827"></text>
         <rect id="bg_b2" x="220" y="635" width="800" height="20" class="bar-bg" />
         <rect id="val_b2_rect" x="220" y="635" width="360" height="20" class="bar" fill="#4b5563" />
-        <text id="val_b2" x="1050" y="650" class="subtitle" fill="#111827">45%</text>
+        <text id="val_b2" x="1050" y="650" class="subtitle" fill="#111827"></text>
 
         <!-- Bar 3 -->
-        <text id="label_b3" x="60" y="690" class="subtitle" font-weight="500" fill="#111827">APAC</text>
+        <text id="label_b3" x="60" y="690" class="subtitle" font-weight="500" fill="#111827"></text>
         <rect id="bg_b3" x="220" y="675" width="800" height="20" class="bar-bg" />
         <rect id="val_b3_rect" x="220" y="675" width="240" height="20" class="bar" fill="#9ca3af" />
-        <text id="val_b3" x="1050" y="690" class="subtitle" fill="#111827">30%</text>
+        <text id="val_b3" x="1050" y="690" class="subtitle" fill="#111827"></text>
 
         <!-- Bar 4 -->
-        <text id="label_b4" x="60" y="730" class="subtitle" font-weight="500" fill="#111827">LATAM</text>
+        <text id="label_b4" x="60" y="730" class="subtitle" font-weight="500" fill="#111827"></text>
         <rect id="bg_b4" x="220" y="715" width="800" height="20" class="bar-bg" />
         <rect id="val_b4_rect" x="220" y="715" width="120" height="20" class="bar" fill="#d1d5db" />
-        <text id="val_b4" x="1050" y="730" class="subtitle" fill="#111827">15%</text>
+        <text id="val_b4" x="1050" y="730" class="subtitle" fill="#111827"></text>
     </g>
 
 </svg>
