@@ -146,6 +146,7 @@ class ZoomAction(BaseAction):
     action_type: Literal["zoom"] = "zoom"
     center: list[float] = Field(description="The [x, y] center coordinate of the element to zoom to")
     zoom_level: float = Field(default=2.0, description="The ECharts zoom magnification level")
+    duration_ms: int = Field(default=500, description="The duration of the zoom animation in milliseconds")
 
 class A11yAction(BaseAction):
     action_type: Literal["a11y"] = "a11y"

@@ -39,6 +39,7 @@ class ElementConfig(BaseModel):
     open_by_default: bool = False
     zoom_on_click: bool = False
     zoom_level: float = 2.0
+    zoom_duration_ms: int = 500
     draggable: bool = False
     color: Optional[str] = None
     hover_color: Optional[str] = None
