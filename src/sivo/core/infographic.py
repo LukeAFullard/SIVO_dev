@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -20,6 +20,7 @@ class Infographic:
         self.disable_panel = disable_panel
         self.panel_width = panel_width
         self.panel_height = panel_height
+        self.panel_css = panel_css
         self.disable_resizer = disable_resizer
         self.disable_tooltips = disable_tooltips
         self.disable_zoom_controls = disable_zoom_controls
@@ -112,6 +113,7 @@ class Infographic:
         infographic.disable_panel = getattr(cfg, "disable_panel", False)
         infographic.panel_width = getattr(cfg, "panel_width", None)
         infographic.panel_height = getattr(cfg, "panel_height", None)
+        infographic.panel_css = getattr(cfg, "panel_css", None)
         infographic.disable_resizer = getattr(cfg, "disable_resizer", False)
         infographic.disable_tooltips = getattr(cfg, "disable_tooltips", False)
         infographic.disable_zoom_controls = getattr(cfg, "disable_zoom_controls", False)
@@ -375,6 +377,7 @@ class Infographic:
         map_data: Optional[Union[str, dict]] = None,
         context_menu: Optional[list[dict]] = None,
         panel_position: Optional[str] = None,
+        panel_css: Optional[str] = None,
         open_by_default: bool = False,
         zoom_on_click: bool = False,
         zoom_level: float = 2.0,
@@ -410,6 +413,8 @@ class Infographic:
 
         elem_name = target_elem['name']
         mapping = self.mappings[elem_name]
+
+        mapping.panel_css = panel_css
 
         # Handle Accessibility (A11y) Actions
         if aria_label or role or tabindex or self.enable_a11y:

@@ -35,6 +35,7 @@ class ElementConfig(BaseModel):
     map_data: Optional[Union[str, dict]] = None
     context_menu: Optional[List[Dict[str, Any]]] = None
     panel_position: Optional[str] = None
+    panel_css: Optional[str] = None
     open_by_default: bool = False
     zoom_on_click: bool = False
     zoom_level: float = 2.0
@@ -191,6 +192,10 @@ class ProjectConfig(BaseModel):
     panel_height: Optional[str] = Field(
         default=None,
         description="Optional explicit height for the info panel (used on mobile or when positioned top/bottom)."
+    )
+    panel_css: Optional[str] = Field(
+        default=None,
+        description="Optional global CSS string to style the info panel."
     )
     disable_resizer: bool = Field(
         default=False,
