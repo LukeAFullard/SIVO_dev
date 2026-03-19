@@ -381,6 +381,7 @@ class Infographic:
         open_by_default: bool = False,
         zoom_on_click: bool = False,
         zoom_level: float = 2.0,
+        zoom_duration_ms: int = 500,
         draggable: bool = False,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
@@ -450,7 +451,7 @@ class Infographic:
         if zoom_on_click:
             center = self.get_element_center(element_id)
             if center:
-                mapping.actions.append(ZoomAction(center=center, zoom_level=zoom_level))
+                mapping.actions.append(ZoomAction(center=center, zoom_level=zoom_level, duration_ms=zoom_duration_ms))
 
         if html or tooltip:
             mapping.actions.append(TooltipAction(
