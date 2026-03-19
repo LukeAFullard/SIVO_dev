@@ -213,6 +213,10 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, prevents the user from zooming out further than the initial zoom level (1.0)."
     )
+    layout_size: Optional[str] = Field(
+        default=None,
+        description="Dynamic layout size percentage (e.g., \"90%\") to maximize map coverage."
+    )
     starting_zoom: float = Field(
         default=1.0,
         description="The initial zoom magnification level of the map."
