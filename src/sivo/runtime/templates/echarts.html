@@ -697,6 +697,52 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             box-sizing: border-box;
         }
+        #info-panel.pos-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 90%;
+            z-index: 1050;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sivo-overlay-roll-in {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(-15deg) translateY(10%);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) translateY(0);
+            }
+        }
+
+        @keyframes sivo-overlay-roll-out {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(-15deg) translateY(10%);
+            }
+        }
+
+        #info-panel.pos-overlay.active {
+            animation: sivo-overlay-roll-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        #info-panel.pos-overlay.closing {
+            animation: sivo-overlay-roll-out 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         /* Responsive Layout Overrides */
         .mobile-handle {
@@ -762,7 +808,7 @@
                 height: 25px !important;
                 font-size: 14px !important;
             }
-            #info-panel.active {
+            #info-panel.active:not(.pos-overlay) {
                 width: 100% !important;
                 height: 45vh !important; /* Give fixed part of the screen to info panel */
                 flex: none !important;
@@ -770,6 +816,9 @@
                 border: none !important;
                 border-top: 1px solid #ddd !important;
                 box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
+            }
+            #info-panel.pos-overlay.active {
+                /* Let the overlay dictate its own dimensions on mobile via JS/CSS */
             }
             .sivo-resizer {
                 display: none !important;
@@ -4049,6 +4098,9 @@
                 }
 
                 infoPanel.className = 'active'; // reset classes but keep active
+                infoPanel.style.animation = 'none'; // Clear any lingering animation states
+                infoPanel.offsetHeight; // Trigger reflow to restart animation if needed
+                infoPanel.style.animation = ''; // Re-enable CSS animations
                 var resizer = document.getElementById('sivo-resizer');
                 resizer.className = 'sivo-resizer active';
 
@@ -4065,6 +4117,10 @@
                     document.body.style.flexDirection = 'column-reverse';
                     infoPanel.classList.add('pos-top');
                     resizer.classList.add('resizer-vertical');
+                } else if (position === 'overlay') {
+                    document.body.style.flexDirection = 'row';
+                    infoPanel.classList.add('pos-overlay');
+                    resizer.classList.remove('active'); // No resizer in overlay mode
                 } else {
                     // default right
                     document.body.style.flexDirection = 'row';
@@ -4079,36 +4135,49 @@
                 infoPanel.style.height = '';
                 infoPanel.style.flexBasis = '';
 
-                if (isMobile) {
-                    // Mobile is forced to column layout (top/bottom).
-                    // Prefer panel_height if set, else fallback to panel_width for backwards compatibility.
+                if (position === 'overlay') {
+                    // Overlay gets explicit dimensions if specified, else CSS handles it (90%/90%)
+                    if (window.sivoPanelWidth) {
+                        infoPanel.style.width = window.sivoPanelWidth;
+                        infoPanel.style.setProperty('width', window.sivoPanelWidth, 'important');
+                    }
                     if (window.sivoPanelHeight) {
                         infoPanel.style.height = window.sivoPanelHeight;
-                    } else if (window.sivoPanelWidth) {
-                        infoPanel.style.height = window.sivoPanelWidth;
+                        infoPanel.style.setProperty('height', window.sivoPanelHeight, 'important');
                     }
+                    resizer.style.display = 'none';
                 } else {
-                    // Desktop
-                    if (position === 'left' || position === 'right') {
-                        if (window.sivoPanelWidth) {
-                            infoPanel.style.width = window.sivoPanelWidth;
-                            infoPanel.style.flexBasis = window.sivoPanelWidth;
-                        }
-                    } else {
-                        // Desktop Top/Bottom
+                    if (isMobile) {
+                        // Mobile is forced to column layout (top/bottom).
+                        // Prefer panel_height if set, else fallback to panel_width for backwards compatibility.
                         if (window.sivoPanelHeight) {
                             infoPanel.style.height = window.sivoPanelHeight;
                         } else if (window.sivoPanelWidth) {
-                            // Fallback logic
                             infoPanel.style.height = window.sivoPanelWidth;
                         }
+                    } else {
+                        // Desktop
+                        if (position === 'left' || position === 'right') {
+                            if (window.sivoPanelWidth) {
+                                infoPanel.style.width = window.sivoPanelWidth;
+                                infoPanel.style.flexBasis = window.sivoPanelWidth;
+                            }
+                        } else {
+                            // Desktop Top/Bottom
+                            if (window.sivoPanelHeight) {
+                                infoPanel.style.height = window.sivoPanelHeight;
+                            } else if (window.sivoPanelWidth) {
+                                // Fallback logic
+                                infoPanel.style.height = window.sivoPanelWidth;
+                            }
+                        }
                     }
-                }
 
-                if (window.sivoDisableResizer) {
-                    resizer.style.display = 'none';
-                } else {
-                    resizer.style.display = '';
+                    if (window.sivoDisableResizer) {
+                        resizer.style.display = 'none';
+                    } else {
+                        resizer.style.display = '';
+                    }
                 }
 
                 // Smoothly resize ECharts during CSS transition
@@ -4333,30 +4402,45 @@
             clearFadeUnselected();
 
             var infoPanel = document.getElementById('info-panel');
-            infoPanel.className = '';
-            infoPanel.classList.add('pos-right'); // reset to default
-            infoPanel.style.width = '';
-            infoPanel.style.height = '';
-            var resizer = document.getElementById('sivo-resizer');
-            if (resizer) resizer.className = 'sivo-resizer';
-            document.body.style.flexDirection = 'row';
 
-            // Clear dynamic css
-            var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
-            if (dynamicStyleEl) dynamicStyleEl.innerHTML = '';
+            // If we are closing the overlay, apply the closing animation class
+            if (infoPanel.classList.contains('pos-overlay')) {
+                infoPanel.classList.remove('active');
+                infoPanel.classList.add('closing');
 
-            // Smoothly resize ECharts during CSS transition
-            let start = null;
-            function step(timestamp) {
-                if (!start) start = timestamp;
-                var progress = timestamp - start;
-                myChart.resize();
-                updateOverlaysPosition(); // Keep overlays aligned during transition
-                if (progress < 350) {
-                    window.requestAnimationFrame(step);
-                }
+                // Wait for the animation to finish before resetting styles
+                setTimeout(finalizeClose, 300);
+            } else {
+                finalizeClose();
             }
-            window.requestAnimationFrame(step);
+
+            function finalizeClose() {
+                infoPanel.className = '';
+                infoPanel.classList.add('pos-right'); // reset to default
+                infoPanel.style.width = '';
+                infoPanel.style.height = '';
+                infoPanel.style.transform = '';
+                var resizer = document.getElementById('sivo-resizer');
+                if (resizer) resizer.className = 'sivo-resizer';
+                document.body.style.flexDirection = 'row';
+
+                // Clear dynamic css
+                var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
+                if (dynamicStyleEl) dynamicStyleEl.innerHTML = '';
+
+                // Smoothly resize ECharts during CSS transition
+                let start = null;
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    var progress = timestamp - start;
+                    myChart.resize();
+                    updateOverlaysPosition(); // Keep overlays aligned during transition
+                    if (progress < 350) {
+                        window.requestAnimationFrame(step);
+                    }
+                }
+                window.requestAnimationFrame(step);
+            }
         }
 
         // --- Resizer Logic ---
