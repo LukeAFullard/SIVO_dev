@@ -1,0 +1,31 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #f0f4f8; }
+      .line { stroke: #cbd5e1; stroke-width: 4; stroke-dasharray: 8 8; }
+      .node { fill: #ffffff; stroke: #3b82f6; stroke-width: 4; rx: 20; ry: 20; }
+      .small-node { fill: #ffffff; stroke: #3b82f6; stroke-width: 6; rx: 40; ry: 40; }
+      .card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 2; rx: 8; ry: 8; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1200" height="800" />
+
+  <!-- Small node top left (half diameter of large-node which was r=120) -->
+  <circle id="small_node_dot" class="small-node" cx="120" cy="120" r="60" />
+
+  <!-- Two buttons below the small node -->
+  <rect id="button_1" class="card" x="60" y="240" width="220" height="60" />
+  <rect id="button_2" class="card" x="320" y="240" width="220" height="60" />
+
+  <!-- Grid of 4 large square cards below the buttons -->
+  <rect id="card_1" class="card" x="60" y="340" width="220" height="190" />
+  <rect id="card_2" class="card" x="320" y="340" width="220" height="190" />
+
+  <rect id="card_3" class="card" x="60" y="560" width="220" height="190" />
+  <rect id="card_4" class="card" x="320" y="560" width="220" height="190" />
+
+  <!-- Right area taking up the whole height for text -->
+  <rect id="text_area" class="card" x="600" y="80" width="540" height="660" />
+
+</svg>
