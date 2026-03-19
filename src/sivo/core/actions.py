@@ -220,5 +220,7 @@ class InteractionMapping(BaseModel):
     actions: list[ActionType] = Field(default_factory=list)
     context_menu: Optional[list[dict]] = Field(default=None, description="List of dicts defining context menu items: [{'label': 'Action', 'event': 'my_event'}]")
     open_by_default: bool = False
+    panel_position: Optional[str] = None
+    panel_css: Optional[str] = None
     draggable: bool = False
     theme: ThemeOverride = Field(default_factory=ThemeOverride)
