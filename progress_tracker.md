@@ -13,33 +13,33 @@
 - [x] 20_api_fetch
 
 ## advanced
-- [ ] 10_document_and_map_embed
-- [ ] 15_echarts_action
-- [ ] 16_building_drilldown
-- [ ] 16_zoom_on_click
-- [ ] 19_markdown_info
-- [ ] 26_drawing_api
-- [ ] 28_morphing_filters
-- [ ] 29_masking_clipping
-- [ ] 29_minimap_export
-- [ ] 30_affine_transformations
-- [ ] 30_layer_toggles
-- [ ] 31_draggable_elements
-- [ ] 31_drawing_and_flow
-- [ ] 39_bounding_coords
-- [ ] 41_nested_maps
-- [ ] 46_timeline_playback_ui
-- [ ] 49_datazoom
-- [ ] 49_footnotes
-- [ ] 49_loading_animations
-- [ ] 50_exploded_view
-- [ ] 53_cloud_architecture_stack
-- [ ] 53_echarts_graphic
-- [ ] 60_overlay_geometry_fix
-- [ ] drilldown_transitions
-- [ ] drillthrough_transitions
-- [ ] mobile_pinch_zoom
-- [ ] mobile_tiny_text
+- [x] 10_document_and_map_embed
+- [x] 15_echarts_action
+- [x] 16_building_drilldown
+- [x] 16_zoom_on_click
+- [x] 19_markdown_info
+- [x] 26_drawing_api
+- [x] 28_morphing_filters
+- [x] 29_masking_clipping
+- [x] 29_minimap_export
+- [x] 30_affine_transformations
+- [x] 30_layer_toggles
+- [x] 31_draggable_elements
+- [x] 31_drawing_and_flow
+- [x] 39_bounding_coords
+- [x] 41_nested_maps
+- [x] 46_timeline_playback_ui
+- [x] 49_datazoom
+- [x] 49_footnotes
+- [x] 49_loading_animations
+- [x] 50_exploded_view
+- [x] 53_cloud_architecture_stack
+- [x] 53_echarts_graphic
+- [x] 60_overlay_geometry_fix
+- [x] drilldown_transitions
+- [x] drillthrough_transitions
+- [x] mobile_pinch_zoom
+- [x] mobile_tiny_text
 
 ## streamlit
 - [ ] 10_streamlit_callbacks
