@@ -4,14 +4,14 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 
 from sivo import Sivo
 
-svg_content = """<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-    <rect id="background" width="500" height="500" fill="#f0f0f0" stroke="#cccccc" stroke-width="5" />
-    <circle id="center_dot" cx="250" cy="250" r="50" fill="#ff5722" />
-    <text x="250" y="350" font-family="Arial" font-size="24" text-anchor="middle" fill="#333333">
-        SIVO Layout Size Example
+svg_content = """<svg viewBox="0 0 200 500" xmlns="http://www.w3.org/2000/svg">
+    <rect id="background" width="200" height="500" fill="#f0f0f0" stroke="#cccccc" stroke-width="5" />
+    <circle id="center_dot" cx="100" cy="250" r="30" fill="#ff5722" />
+    <text x="100" y="350" font-family="Arial" font-size="14" text-anchor="middle" fill="#333333">
+        SIVO Layout Size
     </text>
-    <text x="250" y="380" font-family="Arial" font-size="16" text-anchor="middle" fill="#666666">
-        This shape scales to 99% of the container size automatically!
+    <text x="100" y="380" font-family="Arial" font-size="10" text-anchor="middle" fill="#666666">
+        Scales to 99% automatically!
     </text>
 </svg>"""
 
@@ -31,7 +31,7 @@ app.map(
 )
 
 # Render to an HTML file
-output_path = "layout_demo.html"
+output_path = os.path.join(os.path.dirname(__file__), "layout_demo.html")
 with open(output_path, "w") as f:
     f.write(app.to_html())
 
