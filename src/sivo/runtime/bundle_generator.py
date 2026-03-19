@@ -231,6 +231,12 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "ambient_speed": view_obj.get("ambient_speed", 1.0),
             "bounding_coords": view_obj.get("bounding_coords", None),
             "graphic": view_obj.get("graphic", None),
+
+            "border_image_url": view_obj.get("border_image_url", None),
+            "border_image_position": view_obj.get("border_image_position", "all"),
+            "border_image_width": view_obj.get("border_image_width", "10%"),
+            "border_image_opacity": view_obj.get("border_image_opacity", 1.0),
+            "border_image_grayscale": view_obj.get("border_image_grayscale", False),
             "background_image_url": view_obj.get("background_image_url", None),
             "background_image_opacity": view_obj.get("background_image_opacity", 1.0),
             "background_image_grayscale": view_obj.get("background_image_grayscale", False),

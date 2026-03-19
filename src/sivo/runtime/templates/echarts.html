@@ -48,6 +48,7 @@
             top: 0; left: 0;
             overflow: hidden;
         }
+
         #sivo-background-image {
             position: absolute;
             top: 0;
@@ -55,10 +56,19 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            z-index: -2;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-border-image {
+            position: absolute;
+            object-fit: cover;
             z-index: -1;
             display: none;
             pointer-events: none;
         }
+
         #chart-wrapper {
             position: relative;
             flex: 1;
@@ -1402,6 +1412,7 @@
         <div id="scrollytelling-container"></div>
         <div id="chart-wrapper">
             <img id="sivo-background-image" src="" alt="Background" />
+            <img id="sivo-border-image" src="" alt="Border" />
             <div id="a11y-container" class="sr-only"></div>
             <div id="sivo-watermark-container"></div>
             <div id="sivo-context-menu"></div>
@@ -2718,6 +2729,56 @@
                 bgImage.style.display = 'none';
                 bgImage.src = '';
             }
+
+            // Handle Border Image
+            var borderImage = document.getElementById('sivo-border-image');
+            if (view.border_image_url) {
+                borderImage.src = view.border_image_url;
+                borderImage.style.opacity = view.border_image_opacity !== undefined ? view.border_image_opacity : 1.0;
+                borderImage.style.filter = view.border_image_grayscale ? 'grayscale(100%)' : 'none';
+
+                // Reset styles
+                borderImage.style.top = 'auto';
+                borderImage.style.bottom = 'auto';
+                borderImage.style.left = 'auto';
+                borderImage.style.right = 'auto';
+
+                var w = view.border_image_width || '10%';
+                var pos = view.border_image_position || 'all';
+
+                if (pos === 'left') {
+                    borderImage.style.top = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = w;
+                    borderImage.style.height = '100%';
+                } else if (pos === 'right') {
+                    borderImage.style.top = '0';
+                    borderImage.style.right = '0';
+                    borderImage.style.width = w;
+                    borderImage.style.height = '100%';
+                } else if (pos === 'top') {
+                    borderImage.style.top = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = '100%';
+                    borderImage.style.height = w;
+                } else if (pos === 'bottom') {
+                    borderImage.style.bottom = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = '100%';
+                    borderImage.style.height = w;
+                } else {
+                    borderImage.style.top = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = '100%';
+                    borderImage.style.height = '100%';
+                }
+
+                borderImage.style.display = 'block';
+            } else {
+                borderImage.style.display = 'none';
+                borderImage.src = '';
+            }
+
 
             // Extract view-specific active data
             echartsData = view.echarts_data;
