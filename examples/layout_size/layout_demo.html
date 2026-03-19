@@ -1642,6 +1642,54 @@
         var currentZoom = 1;
         var currentCenter = null;
 
+
+                function calculateDynamicLayoutSize(view, chartDomElement) {
+            if (!view || !view.layout_size || !view.svg_string) return view ? view.layout_size : undefined;
+
+            var sizeStr = String(view.layout_size);
+            var isPercent = sizeStr.endsWith('%');
+            if (!isPercent) return view.layout_size;
+
+            var pct = parseFloat(sizeStr.replace('%', '')) / 100.0;
+            if (isNaN(pct)) return view.layout_size;
+
+            var svgW, svgH;
+            var viewBoxMatch = view.svg_string.match(/viewBox=["']\s*[-\d.]+\s+[-\d.]+\s+([-\d.]+)\s+([-\d.]+)["']/);
+            if (viewBoxMatch) {
+                svgW = parseFloat(viewBoxMatch[1]);
+                svgH = parseFloat(viewBoxMatch[2]);
+            } else {
+                // Try width and height attributes
+                var wMatch = view.svg_string.match(/<svg[^>]+width=["']([-\d.]+)["']/);
+                var hMatch = view.svg_string.match(/<svg[^>]+height=["']([-\d.]+)["']/);
+                if (wMatch && hMatch) {
+                    svgW = parseFloat(wMatch[1]);
+                    svgH = parseFloat(hMatch[1]);
+                }
+            }
+            if (!svgW || !svgH) return view.layout_size; // fallback
+
+            var mapRatio = svgW / svgH;
+
+            var rect = chartDomElement.getBoundingClientRect();
+            var containerW = rect.width;
+            var containerH = rect.height;
+            if (!containerW || !containerH) return view.layout_size;
+
+            var containerRatio = containerW / containerH;
+
+            // mapRatio > containerRatio means map is constrained by width.
+            // else constrained by height.
+            var targetMaxDim;
+            if (mapRatio > containerRatio) {
+                targetMaxDim = (svgW >= svgH) ? (containerW * pct) : ((containerW * pct) / mapRatio);
+            } else {
+                targetMaxDim = (svgH >= svgW) ? (containerH * pct) : ((containerH * pct) * mapRatio);
+            }
+
+            return targetMaxDim;
+        }
+
         function getBaseOption(mapName) {
             var view = viewsData[mapName] || viewsData[currentViewId] || {};
             var option = {
@@ -1718,7 +1766,7 @@
                         data: echartsData,
                         zlevel: 1,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: calculateDynamicLayoutSize(view, chartDom),
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 800, // Smooth transition on data/style changes and zoom
                         animationEasingUpdate: 'cubicInOut'
@@ -1738,7 +1786,7 @@
                         map: mapName,
                         roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: calculateDynamicLayoutSize(view, chartDom),
                         zoom: view.starting_zoom || 1.0,
                         itemStyle: {
                             color: 'transparent',
@@ -1880,7 +1928,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: calculateDynamicLayoutSize(view, chartDom),
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -1946,7 +1994,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: calculateDynamicLayoutSize(view, chartDom),
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -2081,7 +2129,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: calculateDynamicLayoutSize(view, chartDom),
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -2247,7 +2295,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: calculateDynamicLayoutSize(view, chartDom),
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
