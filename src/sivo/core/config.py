@@ -365,6 +365,27 @@ class ProjectConfig(BaseModel):
         default=None,
         description="Optional list of Apache ECharts graphic components (images, text, shapes) to overlay."
     )
+
+    border_image_url: Optional[str] = Field(
+        default=None,
+        description="Optional URL to an image to render as a border."
+    )
+    border_image_position: str = Field(
+        default="all",
+        description="Position of the border image ('left', 'right', 'top', 'bottom', 'all')."
+    )
+    border_image_width: str = Field(
+        default="10%",
+        description="Width/thickness of the border image."
+    )
+    border_image_opacity: float = Field(
+        default=1.0,
+        description="Opacity of the border image (0.0 to 1.0)."
+    )
+    border_image_grayscale: bool = Field(
+        default=False,
+        description="If True, applies a grayscale filter to the border image."
+    )
     background_image_url: Optional[str] = Field(
         default=None,
         description="Optional URL to an image to render as the background behind the SVG."
