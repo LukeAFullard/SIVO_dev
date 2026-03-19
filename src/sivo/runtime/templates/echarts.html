@@ -1705,6 +1705,68 @@
         var currentZoom = 1;
         var currentCenter = null;
 
+        function calculateLayoutSize(view, domElement) {
+            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
+                return view ? view.layout_size : undefined;
+            }
+
+            if (!domElement) return view.layout_size;
+
+            var containerWidth = domElement.clientWidth;
+            var containerHeight = domElement.clientHeight;
+
+            if (containerWidth <= 0 || containerHeight <= 0) {
+                return view.layout_size;
+            }
+
+            var fraction = parseFloat(view.layout_size.replace('%', '')) / 100.0;
+
+            var svgW = 1000;
+            var svgH = 1000;
+
+            if (view.svg_string) {
+                var viewBoxMatch = view.svg_string.match(/viewBox\s*=\s*['"]([^'"]+)['"]/i);
+                if (viewBoxMatch) {
+                    var parts = viewBoxMatch[1].trim().split(/[\s,]+/);
+                    if (parts.length >= 4) {
+                        svgW = parseFloat(parts[2]);
+                        svgH = parseFloat(parts[3]);
+                    }
+                } else {
+                    var wMatch = view.svg_string.match(/width\s*=\s*['"]([^'"]+)['"]/i);
+                    var hMatch = view.svg_string.match(/height\s*=\s*['"]([^'"]+)['"]/i);
+                    if (wMatch && hMatch) {
+                        var wVal = parseFloat(wMatch[1]);
+                        var hVal = parseFloat(hMatch[1]);
+                        if (!isNaN(wVal) && !isNaN(hVal)) {
+                            svgW = wVal;
+                            svgH = hVal;
+                        }
+                    }
+                }
+            }
+
+            if (svgW <= 0 || svgH <= 0) {
+                return view.layout_size;
+            }
+
+            var containerRatio = containerWidth / containerHeight;
+            var svgRatio = svgW / svgH;
+
+            var targetMaxPx;
+
+            if (containerRatio < svgRatio) {
+                var scale = (containerWidth * fraction) / svgW;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            } else {
+                var scale = (containerHeight * fraction) / svgH;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            }
+
+            return Math.round(targetMaxPx) + 'px';
+        }
+
+
         function getBaseOption(mapName) {
             var view = viewsData[mapName] || viewsData[currentViewId] || {};
             var option = {
@@ -1781,7 +1843,7 @@
                         data: echartsData,
                         zlevel: 1,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 800, // Smooth transition on data/style changes and zoom
                         animationEasingUpdate: 'cubicInOut'
@@ -1801,7 +1863,7 @@
                         map: mapName,
                         roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
                         itemStyle: {
                             color: 'transparent',
@@ -1943,7 +2005,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -2009,7 +2071,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -2144,7 +2206,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -2310,7 +2372,7 @@
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? view.layout_size : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -4276,6 +4338,7 @@
                 function step(timestamp) {
                     if (!start) start = timestamp;
                     var progress = timestamp - start;
+                    updateChartLayoutSizes();
                     myChart.resize();
                     updateOverlaysPosition(); // Keep overlays aligned during transition
 
@@ -4524,6 +4587,7 @@
                 function step(timestamp) {
                     if (!start) start = timestamp;
                     var progress = timestamp - start;
+                    updateChartLayoutSizes();
                     myChart.resize();
                     updateOverlaysPosition(); // Keep overlays aligned during transition
                     if (progress < 350) {
@@ -6024,8 +6088,37 @@ function tourNext() {
             updateMinimapViewport();
         });
 
+
+        function updateChartLayoutSizes() {
+            var actualViewId = (currentViewId === "compare_mode") ? "compare_left" : currentViewId;
+            var view = viewsData[actualViewId];
+            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) return;
+
+            var newSize = calculateLayoutSize(view, chartDom);
+            var opt = { series: [{ layoutSize: newSize }] };
+            var currentOpt = myChart.getOption();
+
+            if (currentOpt && currentOpt.geo && currentOpt.geo.length > 0) {
+                opt.geo = [{ layoutSize: newSize }];
+            }
+
+            myChart.setOption(opt, false);
+
+            if (myChartCompareRight) {
+                var viewRight = viewsData["compare_right"] || view;
+                var newSizeRight = calculateLayoutSize(viewRight, document.getElementById('chart-container-compare-right'));
+                var optRight = { series: [{ layoutSize: newSizeRight }] };
+                var currentOptRight = myChartCompareRight.getOption();
+                if (currentOptRight && currentOptRight.geo && currentOptRight.geo.length > 0) {
+                    optRight.geo = [{ layoutSize: newSizeRight }];
+                }
+                myChartCompareRight.setOption(optRight, false);
+            }
+        }
+
         // Handle window resize
         window.addEventListener('resize', function() {
+            updateChartLayoutSizes();
             myChart.resize();
             if (myChartCompareRight) myChartCompareRight.resize();
             updateOverlaysPosition();
