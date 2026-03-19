@@ -1722,6 +1722,8 @@
                         },
                         data: echartsData,
                         zlevel: 1,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? view.layout_size : undefined,
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 800, // Smooth transition on data/style changes and zoom
                         animationEasingUpdate: 'cubicInOut'
@@ -1740,6 +1742,8 @@
                     option.geo = {
                         map: mapName,
                         roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? view.layout_size : undefined,
                         zoom: view.starting_zoom || 1.0,
                         itemStyle: {
                             color: 'transparent',
@@ -1880,6 +1884,8 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? view.layout_size : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -1944,6 +1950,8 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? view.layout_size : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -2077,6 +2085,8 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? view.layout_size : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
@@ -2241,6 +2251,8 @@
                         option.geo = {
                             map: mapName,
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? view.layout_size : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: { color: 'transparent', borderColor: 'transparent' },
                             zlevel: 0
