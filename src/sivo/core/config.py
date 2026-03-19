@@ -34,7 +34,7 @@ class ElementConfig(BaseModel):
     map_name: Optional[str] = None
     map_data: Optional[Union[str, dict]] = None
     context_menu: Optional[List[Dict[str, Any]]] = None
-    panel_position: Optional[str] = None
+    panel_position: Optional[str] = Field(default=None, description="Position of the info panel ('right', 'left', 'top', 'bottom', 'overlay').")
     panel_css: Optional[str] = None
     open_by_default: bool = False
     zoom_on_click: bool = False
@@ -179,7 +179,7 @@ class ProjectConfig(BaseModel):
     svg_file: str = Field(description="Path to the source SVG file.")
     default_panel_position: str = Field(
         default="right",
-        description="Global default position for the info panel ('right', 'left', 'top', 'bottom')."
+        description="Global default position for the info panel ('right', 'left', 'top', 'bottom', 'overlay')."
     )
     disable_panel: bool = Field(
         default=False,
