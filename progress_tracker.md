@@ -108,25 +108,25 @@
 - [x] pictorial_bar_different
 
 ## styling
-- [ ] 27_gradients_patterns
-- [ ] 32_professional_styling
-- [ ] 33_ambient_effects
-- [ ] 33_clip_image_to_shape
-- [ ] 33_fade_unselected
-- [ ] 33_scratchoff
-- [ ] 34_professional_polish
-- [ ] 36_progress_bar
-- [ ] 38_pulse_confetti_transitions
-- [ ] 48_seasonal_ambient_effects
-- [ ] 48_uncertainty_bands
-- [ ] 49_ambient_effects
-- [ ] 49_template_styles
-- [ ] 61_background_image
-- [ ] 62_svg_background_image
-- [ ] 71_custom_sidebar_styling
-- [ ] border_image
-- [ ] layout_size
-- [ ] overlay_sidebar
+- [x] 27_gradients_patterns
+- [x] 32_professional_styling
+- [x] 33_ambient_effects
+- [x] 33_clip_image_to_shape
+- [x] 33_fade_unselected
+- [x] 33_scratchoff
+- [x] 34_professional_polish
+- [x] 36_progress_bar
+- [x] 38_pulse_confetti_transitions
+- [x] 48_seasonal_ambient_effects
+- [x] 48_uncertainty_bands
+- [x] 49_ambient_effects
+- [x] 49_template_styles
+- [x] 61_background_image
+- [x] 62_svg_background_image
+- [x] 71_custom_sidebar_styling
+- [x] border_image
+- [x] layout_size
+- [x] overlay_sidebar
 
 ## templates
 - [ ] templates
