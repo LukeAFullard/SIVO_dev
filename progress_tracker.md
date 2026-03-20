@@ -43,10 +43,10 @@
 
 ## streamlit
 - [x] 10_streamlit_callbacks
-- [ ] 11_streamlit_hover
-- [ ] 12_dynamic_colors
-- [ ] 13_streamlit_zoom
-- [ ] 14_comprehensive_dashboard
+- [x] 11_streamlit_hover
+- [x] 12_dynamic_colors
+- [x] 13_streamlit_zoom
+- [x] 14_comprehensive_dashboard
 
 ## maps
 - [ ] 08_choropleth
