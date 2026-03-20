@@ -49,20 +49,20 @@
 - [x] 14_comprehensive_dashboard
 
 ## maps
-- [ ] 08_choropleth
-- [ ] 31_hexbin_map
-- [ ] 31_proportional_symbols
-- [ ] 32_dot_density_map
-- [ ] 32_map_compare_slider
-- [ ] 42_geospatial_sidebar
-- [ ] 43_custom_geospatial_sidebar
-- [ ] 47_geodataframe_integration
-- [ ] 63_geodataframe_to_svg
-- [ ] 67_spike_map
-- [ ] 68_flow_map
-- [ ] 69_value_by_alpha
-- [ ] 70_categorical_map
-- [ ] folium_overlay
+- [x] 08_choropleth
+- [x] 31_hexbin_map
+- [x] 31_proportional_symbols
+- [x] 32_dot_density_map
+- [x] 32_map_compare_slider
+- [x] 42_geospatial_sidebar
+- [x] 43_custom_geospatial_sidebar
+- [x] 47_geodataframe_integration
+- [x] 63_geodataframe_to_svg
+- [x] 67_spike_map
+- [x] 68_flow_map
+- [x] 69_value_by_alpha
+- [x] 70_categorical_map
+- [x] folium_overlay
 
 ## infographics
 - [ ] 26_scrollytelling
