@@ -84,16 +84,16 @@
 - [x] 65_wood_burner_drilldown
 
 ## media
-- [ ] 15_youtube_overlay
-- [ ] 17_image_gallery
-- [ ] 18_audio_playback
-- [ ] 21_forms
-- [ ] 22_analytics_and_data
-- [ ] 23_forms_and_ecommerce
-- [ ] 24_rich_media_and_bi
-- [ ] 25_new_integrations
-- [ ] 35_lottie_animation
-- [ ] 9_social_embeds
+- [x] 15_youtube_overlay
+- [x] 17_image_gallery
+- [x] 18_audio_playback
+- [x] 21_forms
+- [x] 22_analytics_and_data
+- [x] 23_forms_and_ecommerce
+- [x] 24_rich_media_and_bi
+- [x] 25_new_integrations
+- [x] 35_lottie_animation
+- [x] 9_social_embeds
 
 ## charts
 - [x] 26_bar_race_embed
