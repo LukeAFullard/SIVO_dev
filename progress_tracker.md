@@ -132,19 +132,19 @@
 - [ ] templates
 
 ## uncategorized
-- [ ] 28_odometers
-- [ ] 32_compare_slider
-- [ ] auto_project.json
-- [ ] drill_through.py
-- [ ] drill_through_example.html
-- [ ] drilldown_poc.py
-- [ ] example_infographic.py
-- [ ] floor1.svg
-- [ ] live_api.py
-- [ ] live_api_example.html
-- [ ] metadata.json
-- [ ] poc.py
-- [ ] project.json
-- [ ] sample.svg
-- [ ] streamlit_app.py
-- [ ] test_sivo_config.py
+- [x] 28_odometers
+- [x] 32_compare_slider
+- [x] auto_project.json
+- [x] drill_through.py
+- [x] drill_through_example.html
+- [x] drilldown_poc.py
+- [x] example_infographic.py
+- [x] floor1.svg
+- [x] live_api.py
+- [x] live_api_example.html
+- [x] metadata.json
+- [x] poc.py
+- [x] project.json
+- [x] sample.svg
+- [x] streamlit_app.py
+- [x] test_sivo_config.py
