@@ -65,23 +65,23 @@
 - [ ] folium_overlay
 
 ## infographics
-- [ ] 26_scrollytelling
-- [ ] 27_guided_tour
-- [ ] 34_tour_audio
-- [ ] 37_scrollytelling_audio
-- [ ] 45_tour_pdf
-- [ ] 50_climate_change_infographic
-- [ ] 51_saas_metrics_dashboard
-- [ ] 52_customer_journey_flow
-- [ ] 54_media_infographic
-- [ ] 55_interactive_poster
-- [ ] 56_news_infographic_election
-- [ ] 57_news_infographic_breaking
-- [ ] 58_news_infographic_economy
-- [ ] 59_infographic_templates
-- [ ] 63_wood_burner
-- [ ] 64_modern_wood_burner
-- [ ] 65_wood_burner_drilldown
+- [x] 26_scrollytelling
+- [x] 27_guided_tour
+- [x] 34_tour_audio
+- [x] 37_scrollytelling_audio
+- [x] 45_tour_pdf
+- [x] 50_climate_change_infographic
+- [x] 51_saas_metrics_dashboard
+- [x] 52_customer_journey_flow
+- [x] 54_media_infographic
+- [x] 55_interactive_poster
+- [x] 56_news_infographic_election
+- [x] 57_news_infographic_breaking
+- [x] 58_news_infographic_economy
+- [x] 59_infographic_templates
+- [x] 63_wood_burner
+- [x] 64_modern_wood_burner
+- [x] 65_wood_burner_drilldown
 
 ## media
 - [ ] 15_youtube_overlay
