@@ -42,7 +42,7 @@
 - [x] mobile_tiny_text
 
 ## streamlit
-- [ ] 10_streamlit_callbacks
+- [x] 10_streamlit_callbacks
 - [ ] 11_streamlit_hover
 - [ ] 12_dynamic_colors
 - [ ] 13_streamlit_zoom
