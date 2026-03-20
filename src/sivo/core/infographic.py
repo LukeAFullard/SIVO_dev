@@ -1328,7 +1328,7 @@ class Infographic:
         self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom=True)
 
 
-    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0):
+    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0, use_html_overlay: bool = True):
         """
         Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
         It creates a perfectly-sized HTML overlay that uses the exact SVG path as a CSS mask. This guarantees pixel-perfect clipping that seamlessly scales during pan/zoom in the ECharts canvas.
@@ -1344,10 +1344,12 @@ class Infographic:
             offset_y: Additional Y offset for the mask position over the canvas.
             translate_x: Panning X offset for the image inside the clipped region (in pixels).
             translate_y: Panning Y offset for the image inside the clipped region (in pixels).
+            use_html_overlay: Whether to use an HTML mask overlay (True) or a native SVG `<image>` bounding box injection (False). Use False for microscopic shapes that zoom extremely.
         """
         import lxml.etree as etree
         import copy
         import urllib.parse
+        import uuid
 
         target_elem = self._element_lookup.get(element_id)
         if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
@@ -1357,6 +1359,20 @@ class Infographic:
         bbox_min_x, bbox_min_y, bbox_max_x, bbox_max_y = bbox
         bbox_width = bbox_max_x - bbox_min_x
         bbox_height = bbox_max_y - bbox_min_y
+
+        if not use_html_overlay:
+            base_id = f"sivo-native-clipped-img-{uuid.uuid4().hex[:8]}"
+            self.add_shape("image", {
+                "id": base_id,
+                "href": image_url,
+                "x": str(bbox_min_x),
+                "y": str(bbox_min_y),
+                "width": str(bbox_width),
+                "height": str(bbox_height),
+                "preserveAspectRatio": preserve_aspect_ratio,
+                "opacity": str(opacity)
+            })
+            return
 
         root = self.parser.root
 
