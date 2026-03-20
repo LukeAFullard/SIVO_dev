@@ -4,7 +4,7 @@ from sivo import Sivo
 def main():
     svg_path = os.path.join(os.path.dirname(__file__), "sample.svg")
 
-    sivo_app = Sivo.from_svg(svg_path)
+    sivo_app = Sivo.from_svg(svg_path, layout_size="99%")
 
     sivo_app.map(
         element_id="sun",

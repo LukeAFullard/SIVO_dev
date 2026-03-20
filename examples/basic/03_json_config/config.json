@@ -1,5 +1,6 @@
 {
   "svg_file": "sample.svg",
+  "layout_size": "99%",
   "mappings": {
     "sun": {
       "tooltip": "The Sun configured via JSON",

@@ -6,7 +6,7 @@ def main():
     # 1. Initialize multiple independent SVG views
     # View 1: Main Map
     map_path = os.path.join(os.path.dirname(__file__), "sample.svg")
-    map_view = Sivo.from_svg(map_path)
+    map_view = Sivo.from_svg(map_path, layout_size="99%")
 
     # Map the house drill-down directly to a view ID ("floor_view")
     map_view.map(
@@ -20,7 +20,7 @@ def main():
 
     # View 2: Floor Plan
     floor_path = os.path.join(os.path.dirname(__file__), "floor1.svg")
-    floor_view = Sivo.from_svg(floor_path)
+    floor_view = Sivo.from_svg(floor_path, layout_size="99%")
 
     floor_view.map(
         element_id="room101",

@@ -4,7 +4,7 @@ from sivo import Sivo
 def main():
     svg_path = os.path.join(os.path.dirname(__file__), "sample.svg")
 
-    sivo_app = Sivo.from_svg(svg_path)
+    sivo_app = Sivo.from_svg(svg_path, layout_size="99%")
 
     # Click the shape to dynamically fetch data and display it in the side panel
     sivo_app.map(

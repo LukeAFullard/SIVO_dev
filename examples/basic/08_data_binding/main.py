@@ -5,7 +5,7 @@ def main():
     svg_path = os.path.join(os.path.dirname(__file__), "sample.svg")
 
     # 1. Initialize SIVO with the base SVG
-    sivo_app = Sivo.from_svg(svg_path)
+    sivo_app = Sivo.from_svg(svg_path, layout_size="99%")
 
     # 2. Provide a dataset mapping SVG IDs to numeric values
     data = {
