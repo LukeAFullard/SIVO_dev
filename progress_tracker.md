@@ -96,16 +96,16 @@
 - [ ] 9_social_embeds
 
 ## charts
-- [ ] 26_bar_race_embed
-- [ ] 31_calendar_wordcloud
-- [ ] 31_chart_helpers
-- [ ] 40_new_2d_charts
-- [ ] 44_more_echarts
-- [ ] 47_advanced_charts
-- [ ] 51_trendlines
-- [ ] 52_exaggerated_trendlines
-- [ ] pictorial_bar
-- [ ] pictorial_bar_different
+- [x] 26_bar_race_embed
+- [x] 31_calendar_wordcloud
+- [x] 31_chart_helpers
+- [x] 40_new_2d_charts
+- [x] 44_more_echarts
+- [x] 47_advanced_charts
+- [x] 51_trendlines
+- [x] 52_exaggerated_trendlines
+- [x] pictorial_bar
+- [x] pictorial_bar_different
 
 ## styling
 - [ ] 27_gradients_patterns
