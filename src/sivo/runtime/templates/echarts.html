@@ -2844,6 +2844,9 @@
         // A global variable to hold the currently requested transition name
         var nextTransition = null;
 
+        var presentationOrder = [];
+        var currentPresentationIndex = -1;
+
         function renderView(viewId, isBackNavigation, customTransition) {
             if (viewId !== "compare_mode" && !viewsData[viewId]) {
                 console.error("View not found:", viewId);
@@ -3348,6 +3351,10 @@
             // Initialize Controls (Fullscreen, Share, Download)
             initControls(view);
 
+            // Setup Presentation Keyboard Mode
+            presentationOrder = view.presentation_order || [];
+            currentPresentationIndex = -1;
+
             // Handle Zoom Controls
             var zoomControlsContainer = document.querySelector('.zoom-controls');
             if (zoomControlsContainer) {
@@ -3630,6 +3637,13 @@
         window.sivoCurrentPanelElement = null;
 
         window.triggerElementClick = function(name) {
+            if (presentationOrder && presentationOrder.length > 0) {
+                var idx = presentationOrder.indexOf(name);
+                if (idx !== -1) {
+                    currentPresentationIndex = idx;
+                }
+            }
+
             var infoPanel = document.getElementById('info-panel');
 
             applyFadeUnselected(name);
@@ -4599,6 +4613,32 @@
                             }]
                         });
                     }
+                }
+            }
+        });
+
+        // Presentation mode keyboard listener
+        document.addEventListener('keydown', function(e) {
+            if (!presentationOrder || presentationOrder.length === 0) return;
+            // Ignore if user is typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                if (currentPresentationIndex < presentationOrder.length - 1) {
+                    currentPresentationIndex++;
+                    var elementId = presentationOrder[currentPresentationIndex];
+                    var params = { componentType: 'series', name: elementId };
+                    myChart.trigger('click', params);
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                if (currentPresentationIndex > 0) {
+                    currentPresentationIndex--;
+                    var elementId = presentationOrder[currentPresentationIndex];
+                    var params = { componentType: 'series', name: elementId };
+                    myChart.trigger('click', params);
+                } else if (currentPresentationIndex === 0) {
+                     currentPresentationIndex = -1;
+                     closePanel();
                 }
             }
         });
