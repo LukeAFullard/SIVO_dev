@@ -569,6 +569,21 @@ class Sivo:
             self.infographic.graphic = []
         self.infographic.graphic.append(graphic_element)
 
+
+    def embed_svg(self, element_id: str, filepath_or_string: str, is_file: bool = False, preserve_aspect_ratio: bool = True, keep_target: bool = False):
+        """
+        Embeds an external SVG graphic directly into the bounding box of a specific element in the main SVG canvas.
+        The embedded SVG's paths and shapes will be injected into the main SVG structure and become fully interactive natively.
+
+        Args:
+            element_id: The ID or name of the target shape to embed the SVG into.
+            filepath_or_string: The file path to the SVG or the raw SVG string content.
+            is_file: Whether filepath_or_string is a file path (True) or raw string (False).
+            preserve_aspect_ratio: Whether to uniformly scale the embedded SVG to fit within the target bounding box (True), or stretch it to fill the exact dimensions (False).
+            keep_target: Whether to keep the target bounding box element visible in the background (True) or remove it (False).
+        """
+        self.infographic.embed_svg(element_id, filepath_or_string, is_file, preserve_aspect_ratio, keep_target)
+
     def add_shape(self, tag: str, attributes: Dict[str, str]):
         """
         Programmatically adds a simple vector shape to the SVG directly from Python.
