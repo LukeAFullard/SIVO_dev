@@ -4,6 +4,14 @@ SIVO is a powerful Python framework designed to transform static SVG graphics in
 
 SIVO acts as the bridge between vector design tools and interactive web data visualization. It supports integration with **Streamlit** for live operational dashboards, and can export standalone interactive HTML bundles.
 
+## Future Work / Roadmap
+* **Presentation Mode Enhancements:**
+  * **Auto-Play:** A configuration (`presentation_autoplay_ms`) to automatically advance slides at a set interval.
+  * **Progress Indicator:** A visual pagination or step tracker overlay (`Slide X of Y` or dot navigation).
+  * **Laser Pointer Tool:** A drawing tool variant that leaves a glowing trail that fades over time.
+  * **Speaker Notes:** Dedicated side-channel (e.g., dual-monitor console or popup) to render notes tied to the current presentation element.
+  * **Overview Step:** A keyboard shortcut (`Escape` or `Home`) to break out of the presentation sequence, zoom fully out to the map view, and allow jumping back into the sequence.
+
 ## Features
 *   **Zero-JavaScript Setup**: Define interactions purely in Python or via declarative JSON configurations.
 *   **Streamlit Integration**: A native V2 Custom Component is provided for seamless embedding and bidirectional data flow in Streamlit applications.
