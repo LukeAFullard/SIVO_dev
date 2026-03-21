@@ -230,6 +230,10 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, automatically generates accessibility actions (A11yAction) for interactive elements."
     )
+    presentation_order: Optional[List[str]] = Field(
+        default=None,
+        description="A list of Element IDs defining the order for keyboard presentation navigation (left/right arrow keys)."
+    )
     render_mode: str = Field(
         default="canvas",
         description="Rendering mode: 'canvas' (default ECharts) or 'svg' (enables native SVG features like morphing and filters)."
