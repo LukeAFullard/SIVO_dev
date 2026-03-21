@@ -4159,6 +4159,58 @@
                         var startCenter = (opt && opt.series && opt.series[0] && opt.series[0].center) ? opt.series[0].center : [500, 500];
                         var targetCenter = action.center;
 
+                        // If target_bbox is provided, dynamically calculate targetZoom
+                        if (action.target_bbox) {
+                            var bboxMinX = action.target_bbox[0];
+                            var bboxMinY = action.target_bbox[1];
+                            var bboxMaxX = action.target_bbox[2];
+                            var bboxMaxY = action.target_bbox[3];
+                            var bboxWidth = bboxMaxX - bboxMinX;
+                            var bboxHeight = bboxMaxY - bboxMinY;
+
+                            var cw = myChart.getWidth();
+                            var ch = myChart.getHeight();
+
+                            // ECharts map series layout logic: The map is scaled to fit the container.
+                            // The initial zoom factor (currentZ = 1.0) maps the `boundingCoords` or full viewBox to the viewport.
+                            // ECharts handles the viewport aspect ratio fit. We only need the ratio of the whole canvas area to our shape area.
+                            // The easiest way is to use the coordinate system bounding rect.
+                            var geoModel = myChart.getModel().getSeriesByIndex(0);
+                            if (geoModel && geoModel.coordinateSystem && geoModel.coordinateSystem.getBoundingRect) {
+                                var rect = geoModel.coordinateSystem.getBoundingRect();
+                                var fullWidth = rect.width;
+                                var fullHeight = rect.height;
+
+                                var scaleX = fullWidth / bboxWidth;
+                                var scaleY = fullHeight / bboxHeight;
+
+                                var sizeRatioStr = action.zoom_to_size || "90%";
+                                var sizeRatio = parseFloat(sizeRatioStr.replace('%', '')) / 100.0;
+
+                                // The new zoom level is the ratio of full viewBox to the target bbox, multiplied by the screen padding ratio.
+                                targetZoom = Math.min(scaleX, scaleY) * sizeRatio;
+
+                                // In some cases, we need to respect the viewport's aspect ratio relative to the shape's.
+                                // If the screen is very tall, and the shape is very wide, the limiting factor changes.
+                                var cw = myChart.getWidth();
+                                var ch = myChart.getHeight();
+                                var screenAspect = cw / ch;
+                                var shapeAspect = bboxWidth / bboxHeight;
+                                var fullAspect = fullWidth / fullHeight;
+
+                                // ECharts fits `fullRect` into `viewport`.
+                                // Let's compute how many pixels the shape would take at zoom=1.
+                                var fitScale = Math.min(cw / fullWidth, ch / fullHeight);
+                                var shapeWAtZ1 = bboxWidth * fitScale;
+                                var shapeHAtZ1 = bboxHeight * fitScale;
+
+                                var screenScaleX = cw / shapeWAtZ1;
+                                var screenScaleY = ch / shapeHAtZ1;
+
+                                targetZoom = Math.min(screenScaleX, screenScaleY) * sizeRatio;
+                            }
+                        }
+
                         var startTime = performance.now();
                         var duration = action.duration_ms || 500;
 

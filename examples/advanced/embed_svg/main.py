@@ -49,23 +49,16 @@ def main():
         html="<p>This is the outer SVG canvas.</p>"
     )
 
-    # Calculate the center of the inner embedded SVG so we can zoom to it
-    # We can either zoom to target_zone or one of the inner IDs. Let's use inner_bg which fills it
-    inner_center = app.infographic.get_element_center("inner_bg")
-
-    # Map the button to trigger a mathematical zoom tween to the inner center
-    # 150.0 zoom level is required to see the 5x5 pixel target cleanly per the user's latest request
+    # Map the button to dynamically zoom into the "inner_bg" bounding box, fitting it to 99% of the viewport.
     app.map(
         "button",
         tooltip="Click to Zoom",
         html="<p>Navigating visually into the microscopic embedded SVG.</p>",
         hover_color="#2563eb",
-        zoom_level=150.0,
-        zoom_on_click=False  # We use explicit action below to target the specific coordinate instead of centering on the button
+        zoom_to="inner_bg",
+        zoom_to_size="99%",
+        zoom_duration_ms=1500
     )
-
-    from sivo.core.actions import ZoomAction
-    app.infographic.mappings["button"].actions.append(ZoomAction(center=inner_center, zoom_level=150.0, duration_ms=1500))
 
     # 4. Map interactivity directly to the embedded inner SVG elements!
     # Because Sivo parsed and injected them natively, their IDs work seamlessly.
@@ -82,8 +75,8 @@ def main():
         html="<p>Red hexagon from inner.svg</p>",
         color="#f87171",
         hover_color="#dc2626",
-        zoom_on_click=True,
-        zoom_level=200.0
+        zoom_to="inner_shape_1",
+        zoom_to_size="50%"
     )
 
     app.map(
