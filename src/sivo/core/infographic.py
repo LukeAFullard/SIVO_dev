@@ -382,6 +382,8 @@ class Infographic:
         zoom_on_click: bool = False,
         zoom_level: float = 2.0,
         zoom_duration_ms: int = 500,
+        zoom_to: Optional[str] = None,
+        zoom_to_size: str = "90%",
         draggable: bool = False,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
@@ -448,10 +450,13 @@ class Infographic:
         if draggable:
             mapping.draggable = True
 
-        if zoom_on_click:
-            center = self.get_element_center(element_id)
+        if zoom_on_click or zoom_to:
+            target_id = zoom_to if zoom_to else element_id
+            center = self.get_element_center(target_id)
             if center:
-                mapping.actions.append(ZoomAction(center=center, zoom_level=zoom_level, duration_ms=zoom_duration_ms))
+                target_elem = self._element_lookup.get(target_id)
+                target_bbox = target_elem.get('bbox') if target_elem else None
+                mapping.actions.append(ZoomAction(center=center, zoom_level=zoom_level, duration_ms=zoom_duration_ms, target_bbox=target_bbox, zoom_to_size=zoom_to_size))
 
         if html or tooltip:
             mapping.actions.append(TooltipAction(
@@ -616,6 +621,130 @@ class Infographic:
             mapping.theme.odometer_value = odometer_value
             mapping.theme.odometer_duration_ms = odometer_duration_ms
             mapping.theme.odometer_format = odometer_format
+
+
+    def embed_svg(self, element_id: str, filepath_or_string: str, is_file: bool = False, preserve_aspect_ratio: bool = True, keep_target: bool = False):
+        import lxml.etree as etree
+
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
+            raise ValueError(f"Cannot embed SVG: Element '{element_id}' not found or has no bounding box.")
+
+        bbox = target_elem['bbox']
+        target_x, target_y = bbox[0], bbox[1]
+        target_w = bbox[2] - bbox[0]
+        target_h = bbox[3] - bbox[1]
+
+        from ..svg.parser import SVGParser
+        inner_parser = SVGParser(filepath_or_string, is_file=is_file)
+
+        inner_vb = inner_parser.get_viewbox()
+        if inner_vb:
+            parts = list(map(float, inner_vb.split()))
+            inner_x, inner_y = parts[0], parts[1]
+            inner_w, inner_h = parts[2], parts[3]
+        else:
+            try:
+                inner_w = float(inner_parser.root.get("width", "100").replace("px", "").replace("%", ""))
+                inner_h = float(inner_parser.root.get("height", "100").replace("px", "").replace("%", ""))
+                inner_x, inner_y = 0.0, 0.0
+            except ValueError:
+                inner_x, inner_y, inner_w, inner_h = 0.0, 0.0, 100.0, 100.0
+
+        if inner_w == 0 or inner_h == 0:
+            raise ValueError("Embedded SVG has 0 width or height.")
+
+        scale_x = target_w / inner_w
+        scale_y = target_h / inner_h
+
+        if preserve_aspect_ratio:
+            scale = min(scale_x, scale_y)
+            scale_x = scale
+            scale_y = scale
+            offset_x = (target_w - (inner_w * scale)) / 2.0
+            offset_y = (target_h - (inner_h * scale)) / 2.0
+            translate_x = target_x + offset_x - (inner_x * scale)
+            translate_y = target_y + offset_y - (inner_y * scale)
+        else:
+            translate_x = target_x - (inner_x * scale_x)
+            translate_y = target_y - (inner_y * scale_y)
+
+        # Process inner elements and compute their new transformed bounding boxes BEFORE moving them
+        inner_elements = inner_parser.process_elements()
+        for elem in inner_elements:
+            if 'bbox' in elem and elem['bbox']:
+                min_x, min_y, max_x, max_y = elem['bbox']
+
+                # Apply transform matrix: scale then translate
+                new_min_x = min_x * scale_x + translate_x
+                new_min_y = min_y * scale_y + translate_y
+                new_max_x = max_x * scale_x + translate_x
+                new_max_y = max_y * scale_y + translate_y
+
+                # Handle negative scales just in case max/min are flipped
+                elem['bbox'] = [
+                    min(new_min_x, new_max_x),
+                    min(new_min_y, new_max_y),
+                    max(new_min_x, new_max_x),
+                    max(new_min_y, new_max_y)
+                ]
+
+            # Register in elements list
+            self.elements.append(elem)
+
+            # Register in element lookup
+            self._element_lookup[elem['id']] = elem
+            self._element_lookup[elem['name']] = elem
+
+            # Initialize mapping
+            if elem['name'] not in self.mappings:
+                from .actions import InteractionMapping
+                self.mappings[elem['name']] = InteractionMapping(id=elem['id'])
+
+        ns = self.parser.root.nsmap.get(None, "http://www.w3.org/2000/svg")
+        g_wrapper = etree.Element(f"{{{ns}}}g")
+
+        transform_str = f"translate({translate_x}, {translate_y})"
+        if scale_x != 1.0 or scale_y != 1.0:
+            if scale_x == scale_y:
+                transform_str += f" scale({scale_x})"
+            else:
+                transform_str += f" scale({scale_x}, {scale_y})"
+
+        g_wrapper.set("transform", transform_str)
+
+        # Move children to wrapper
+        for child in list(inner_parser.root):
+            tag_name = child.tag.split("}")[-1] if "}" in child.tag else child.tag
+            if tag_name in ["defs", "metadata", "title", "desc"]:
+                continue
+            g_wrapper.append(child)
+
+        target_node = None
+        for node in self.parser.root.iter():
+            if node.get("id") == element_id or node.get("name") == element_id:
+                target_node = node
+                break
+
+        if target_node is None:
+            raise ValueError(f"Could not find XML node for element '{element_id}'.")
+
+        parent = target_node.getparent()
+        if parent is not None:
+            idx = parent.index(target_node)
+            parent.insert(idx + 1, g_wrapper)
+            if not keep_target:
+                # Hide it
+                target_node.set("opacity", "0")
+                target_node.set("pointer-events", "none")
+                target_node.set("fill", "transparent")
+                target_node.set("stroke", "transparent")
+        else:
+            self.parser.root.append(g_wrapper)
+            if not keep_target:
+                target_node.set("opacity", "0")
+                target_node.set("pointer-events", "none")
+
 
     def add_shape(self, tag: str, attributes: Dict[str, str]):
         """

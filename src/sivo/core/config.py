@@ -40,6 +40,8 @@ class ElementConfig(BaseModel):
     zoom_on_click: bool = False
     zoom_level: float = 2.0
     zoom_duration_ms: int = 500
+    zoom_to: Optional[str] = None
+    zoom_to_size: str = "90%"
     draggable: bool = False
     color: Optional[str] = None
     hover_color: Optional[str] = None
@@ -135,6 +137,7 @@ class ScrollytellingStepConfig(BaseModel):
     """Configuration for a single scrollytelling step."""
     content: str = Field(description="HTML content for the step text")
     zoom_to: Optional[str] = Field(default=None, description="Element ID to zoom to")
+    zoom_to_size: str = Field(default="90%", description="The percentage of the viewport the target bounding box should fill")
     zoom_level: float = Field(default=2.0, description="Zoom level")
     colors: Optional[Dict[str, str]] = Field(default=None, description="Mapping of Element IDs to colors")
     show_tooltips: Optional[List[str]] = Field(default=None, description="List of Element IDs to show tooltips for")
@@ -144,6 +147,7 @@ class TourStepConfig(BaseModel):
     """Configuration for a single guided tour step."""
     content: str = Field(description="HTML content for the tour step tooltip/modal")
     zoom_to: Optional[str] = Field(default=None, description="Element ID to zoom to")
+    zoom_to_size: str = Field(default="90%", description="The percentage of the viewport the target bounding box should fill")
     zoom_level: float = Field(default=2.0, description="Zoom level")
     show_tooltips: Optional[List[str]] = Field(default=None, description="List of Element IDs to show tooltips for")
     audio_url: Optional[str] = Field(default=None, description="Optional audio file URL to play automatically when this step is reached")
