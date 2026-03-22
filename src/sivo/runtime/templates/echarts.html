@@ -1585,8 +1585,9 @@
         // Implement ECharts Mobile Pinch-to-Zoom Sensitivity Fix
         // ECharts hardcodes pinch zoom scale delta to 1.1 or 1/1.1 regardless of finger movement distance.
         // This causes extreme over-sensitivity on mobile devices. We intercept the 'roam' dispatchAction
-        // and replace the hardcoded scale with the true pinchScale provided by ZRender.
-        var _sivoLastPinchScale = null;
+        // and replace the hardcoded scale with the true relative scale computed from ZRender's pinchScale.
+        var _sivoLastAbsolutePinchScale = null;
+        var _sivoPinchDeltaScale = null;
         var _sivoPinchTimeout = null;
 
         // Apply Global Theme
@@ -1643,19 +1644,35 @@
             var zr = chartInstance.getZr();
             if (!zr) return;
 
-            // 1. Capture the raw pinch scale from ZRender
+            // 1. Capture the raw absolute pinch scale from ZRender and compute the delta
             zr.on('pinch', function (e) {
                 if (e && e.pinchScale) {
-                    _sivoLastPinchScale = e.pinchScale;
+                    if (_sivoLastAbsolutePinchScale === null) {
+                        _sivoPinchDeltaScale = e.pinchScale; // First event
+                    } else {
+                        // Compute delta for this frame relative to last frame
+                        _sivoPinchDeltaScale = e.pinchScale / _sivoLastAbsolutePinchScale;
+                    }
+                    _sivoLastAbsolutePinchScale = e.pinchScale;
+
                     if (_sivoPinchTimeout) clearTimeout(_sivoPinchTimeout);
-                    _sivoPinchTimeout = setTimeout(function() { _sivoLastPinchScale = null; }, 50);
+                    _sivoPinchTimeout = setTimeout(function() {
+                        _sivoLastAbsolutePinchScale = null;
+                        _sivoPinchDeltaScale = null;
+                    }, 50);
                 }
+            });
+
+            // Reset start scale at end of gesture
+            zr.on('pinchend', function(e) {
+                _sivoLastAbsolutePinchScale = null;
+                _sivoPinchDeltaScale = null;
             });
 
             // 2. Intercept the dispatchAction that triggers the map zoom
             var origDispatchAction = chartInstance.dispatchAction;
             chartInstance.dispatchAction = function (payload) {
-                if (payload && payload.type === 'roam' && payload.zoom != null && _sivoLastPinchScale != null) {
+                if (payload && payload.type === 'roam' && payload.zoom != null && _sivoPinchDeltaScale != null) {
                     // ECharts hardcodes zoom to 1.1 (in) or 1/1.1 (out) during pinch
                     var hardcodedZoomIn = 1.1;
                     var hardcodedZoomOut = 1 / 1.1;
@@ -1664,19 +1681,11 @@
                     if (Math.abs(payload.zoom - hardcodedZoomIn) < 0.001 ||
                         Math.abs(payload.zoom - hardcodedZoomOut) < 0.001) {
 
-                        // Use the true relative scale delta from ZRender
-                        // ZRender's pinchScale is relative to the *start* of the pinch gesture,
-                        // while ECharts expects a delta multiplier from the *current* frame.
-                        // However, ECharts fires 'roam' continuously. To prevent exponential scaling,
-                        // we must calculate the delta ourselves based on the previous frame.
+                        // Replace ECharts hardcoded delta with our dynamically calculated delta
+                        payload.zoom = _sivoPinchDeltaScale;
 
-                        // If Echarts expects a delta, and e.pinchScale is absolute from start:
-                        // Wait, `e.pinchScale` in ZRender IS the delta from the last event, not absolute!
-                        // Let's pass it directly.
-                        payload.zoom = _sivoLastPinchScale;
-
-                        // Prevent reusing the same scale if ECharts fires multiple roams per frame
-                        _sivoLastPinchScale = null;
+                        // Prevent reusing the same delta if ECharts fires multiple roams per frame
+                        _sivoPinchDeltaScale = null;
                     }
                 }
                 return origDispatchAction.apply(this, arguments);
@@ -1845,7 +1854,7 @@
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
-                        animationDurationUpdate: 800, // Smooth transition on data/style changes and zoom
+                        animationDurationUpdate: 0, // Disable tweening delay for native feel during manual pan/zoom
                         animationEasingUpdate: 'cubicInOut'
                     }
                 ]
@@ -1865,6 +1874,7 @@
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
+                        animationDurationUpdate: 0,
                         itemStyle: {
                             color: 'transparent',
                             borderColor: 'transparent'
