@@ -334,6 +334,18 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, enables a lasso/box selection tool to select multiple SVG elements at once."
     )
+    enable_geocoder: bool = Field(
+        default=False,
+        description="If True, renders a geocoder search bar that allows users to search for real-world addresses and zoom to their coordinates on the map."
+    )
+    geocode_provider: str = Field(
+        default="nominatim",
+        description="The geocode provider to use. Defaults to 'nominatim'."
+    )
+    geocode_api_key: Optional[str] = Field(
+        default=None,
+        description="Optional API key for the geocode provider."
+    )
     title: Optional[str] = Field(
         default=None,
         description="Main title to display at the top of the infographic."
