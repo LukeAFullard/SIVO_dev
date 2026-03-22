@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -34,6 +34,9 @@ class Infographic:
         self.fade_unselected = fade_unselected
         self.theme = theme
         self.enable_search = enable_search
+        self.enable_geocoder = enable_geocoder
+        self.geocode_provider = geocode_provider
+        self.geocode_api_key = geocode_api_key
         self.watermark = watermark
         self.enable_brush_selection = enable_brush_selection
         self.title = title
@@ -128,6 +131,9 @@ class Infographic:
         infographic.fade_unselected = getattr(cfg, "fade_unselected", False)
         infographic.theme = getattr(cfg, "theme", "light")
         infographic.enable_search = getattr(cfg, "enable_search", False)
+        infographic.enable_geocoder = getattr(cfg, "enable_geocoder", False)
+        infographic.geocode_provider = getattr(cfg, "geocode_provider", "nominatim")
+        infographic.geocode_api_key = getattr(cfg, "geocode_api_key", None)
         infographic.watermark = getattr(cfg, "watermark", None)
         infographic.enable_brush_selection = getattr(cfg, "enable_brush_selection", False)
         infographic.title = getattr(cfg, "title", None)
@@ -1712,6 +1718,9 @@ class Infographic:
             "fade_unselected": self.fade_unselected,
             "theme": self.theme,
             "enable_search": self.enable_search,
+            "enable_geocoder": self.enable_geocoder,
+            "geocode_provider": self.geocode_provider,
+            "geocode_api_key": self.geocode_api_key,
             "watermark": self.watermark,
             "enable_brush_selection": self.enable_brush_selection,
             "title": self.title,
