@@ -40,7 +40,8 @@ def main():
 
     # 2. Embed the inner SVG directly into the 'target_zone'
     # We set preserve_aspect_ratio=True to uniformly scale the circle without stretching
-    app.embed_svg("target_zone", inner_svg, is_file=False, preserve_aspect_ratio=True, keep_target=False)
+    # We also apply scale_multiplier=2.0 so the embedded SVG is embedded at twice the size of the target_zone.
+    app.embed_svg("target_zone", inner_svg, is_file=False, preserve_aspect_ratio=True, keep_target=False, scale_multiplier=2.0)
 
     # 3. Map interactivity on the main SVG elements
     app.map(

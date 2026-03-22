@@ -623,7 +623,7 @@ class Infographic:
             mapping.theme.odometer_format = odometer_format
 
 
-    def embed_svg(self, element_id: str, filepath_or_string: str, is_file: bool = False, preserve_aspect_ratio: bool = True, keep_target: bool = False):
+    def embed_svg(self, element_id: str, filepath_or_string: str, is_file: bool = False, preserve_aspect_ratio: bool = True, keep_target: bool = False, scale_multiplier: float = 1.0):
         import lxml.etree as etree
 
         target_elem = self._element_lookup.get(element_id)
@@ -654,8 +654,8 @@ class Infographic:
         if inner_w == 0 or inner_h == 0:
             raise ValueError("Embedded SVG has 0 width or height.")
 
-        scale_x = target_w / inner_w
-        scale_y = target_h / inner_h
+        scale_x = (target_w / inner_w) * scale_multiplier
+        scale_y = (target_h / inner_h) * scale_multiplier
 
         if preserve_aspect_ratio:
             scale = min(scale_x, scale_y)
@@ -666,8 +666,10 @@ class Infographic:
             translate_x = target_x + offset_x - (inner_x * scale)
             translate_y = target_y + offset_y - (inner_y * scale)
         else:
-            translate_x = target_x - (inner_x * scale_x)
-            translate_y = target_y - (inner_y * scale_y)
+            offset_x = (target_w - (inner_w * scale_x)) / 2.0
+            offset_y = (target_h - (inner_h * scale_y)) / 2.0
+            translate_x = target_x + offset_x - (inner_x * scale_x)
+            translate_y = target_y + offset_y - (inner_y * scale_y)
 
         # Process inner elements and compute their new transformed bounding boxes BEFORE moving them
         inner_elements = inner_parser.process_elements()
@@ -715,6 +717,9 @@ class Infographic:
 
         # Move children to wrapper
         for child in list(inner_parser.root):
+            if not isinstance(child.tag, str):
+                g_wrapper.append(child)
+                continue
             tag_name = child.tag.split("}")[-1] if "}" in child.tag else child.tag
             if tag_name in ["defs", "metadata", "title", "desc"]:
                 continue
