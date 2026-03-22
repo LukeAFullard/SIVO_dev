@@ -226,6 +226,14 @@ class ProjectConfig(BaseModel):
         default=1.0,
         description="The initial zoom magnification level of the map."
     )
+    initial_zoom_to: Optional[str] = Field(
+        default=None,
+        description="Element ID to dynamically calculate starting zoom and center."
+    )
+    initial_zoom_to_size: str = Field(
+        default="90%",
+        description="The percentage of the viewport the target bounding box should fill initially."
+    )
     enable_a11y: bool = Field(
         default=False,
         description="If True, automatically generates accessibility actions (A11yAction) for interactive elements."

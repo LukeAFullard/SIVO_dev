@@ -3248,9 +3248,49 @@
                 myChart.setOption(baseOpt, true);
             }
 
+            // Initial View Zoom target logic
+            if (view.initial_target_bbox && view.initial_target_center) {
+                var bboxMinX = view.initial_target_bbox[0];
+                var bboxMinY = view.initial_target_bbox[1];
+                var bboxMaxX = view.initial_target_bbox[2];
+                var bboxMaxY = view.initial_target_bbox[3];
+                var bboxWidth = bboxMaxX - bboxMinX;
+                var bboxHeight = bboxMaxY - bboxMinY;
+
+                var geoModel = myChart.getModel().getSeriesByIndex(0);
+                if (geoModel && geoModel.coordinateSystem && geoModel.coordinateSystem.getBoundingRect) {
+                    var rect = geoModel.coordinateSystem.getBoundingRect();
+                    var fullWidth = rect.width;
+                    var fullHeight = rect.height;
+
+                    var scaleX = fullWidth / bboxWidth;
+                    var scaleY = fullHeight / bboxHeight;
+
+                    var sizeRatioStr = view.initial_zoom_to_size || "90%";
+                    var sizeRatio = parseFloat(sizeRatioStr.replace('%', '')) / 100.0;
+
+                    var targetZoom = Math.min(scaleX, scaleY) * sizeRatio;
+
+                    var cw = myChart.getWidth();
+                    var ch = myChart.getHeight();
+                    var fitScale = Math.min(cw / fullWidth, ch / fullHeight);
+                    var shapeWAtZ1 = bboxWidth * fitScale;
+                    var shapeHAtZ1 = bboxHeight * fitScale;
+
+                    var screenScaleX = cw / shapeWAtZ1;
+                    var screenScaleY = ch / shapeHAtZ1;
+
+                    targetZoom = Math.min(screenScaleX, screenScaleY) * sizeRatio;
+
+                    // We can directly mutate the option immediately after setOption since ECharts handles updates
+                    myChart.setOption({ series: [{ center: view.initial_target_center, zoom: targetZoom }] });
+                    view.starting_zoom = targetZoom;
+                }
+            }
+
             // Reset zoom tracking
             currentZoom = view.starting_zoom || 1.0;
-            currentCenter = null;
+            currentCenter = view.initial_target_center || null;
 
             // Re-initialize overlays for this view
             initOverlays();

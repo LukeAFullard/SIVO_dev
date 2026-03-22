@@ -266,6 +266,11 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
         if "dot_density" in view_obj:
             view_dict["dot_density"] = view_obj["dot_density"]
 
+        if "initial_target_bbox" in view_obj:
+            view_dict["initial_target_bbox"] = view_obj["initial_target_bbox"]
+            view_dict["initial_target_center"] = view_obj["initial_target_center"]
+            view_dict["initial_zoom_to_size"] = view_obj.get("initial_zoom_to_size", "90%")
+
         formatted_views[view_id] = view_dict
 
     # Check for locally bundled JS
