@@ -214,6 +214,10 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, hides the built-in map zoom controls (+/-) and home button."
     )
+    lock_scroll_bounds: bool = Field(
+        default=True,
+        description="If True, prevents panning the map outside its initial bounding box."
+    )
     lock_zoom_out: bool = Field(
         default=True,
         description="If True, prevents the user from zooming out further than the initial zoom level (1.0)."
