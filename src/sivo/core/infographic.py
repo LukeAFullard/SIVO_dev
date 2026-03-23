@@ -57,6 +57,8 @@ class Infographic:
         self.svg_background_image_grayscale = svg_background_image_grayscale
         self.svg_background_image_insert_after = svg_background_image_insert_after
         self.transparent_template_lines = transparent_template_lines
+        self.layout_size = None
+        self.presentation_order = None
         if self.svg_background_image_url:
             self._inject_svg_background_image()
 

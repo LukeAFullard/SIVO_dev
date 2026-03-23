@@ -1,0 +1,30 @@
+<svg width="1000" height="1750" viewBox="0 0 1000 1750" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 2; rx: 30; ry: 30; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.05)); }
+      .header-text { font-family: -apple-system, sans-serif; font-size: 64px; font-weight: 800; fill: #0f172a; }
+      .sub-text { font-family: -apple-system, sans-serif; font-size: 32px; font-weight: 500; fill: #64748b; }
+      .placeholder { fill: transparent; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1000" height="1750" />
+
+  <!-- Header -->
+  <text x="60" y="140" class="header-text">Mobile View (4:7)</text>
+  <text x="60" y="200" class="sub-text">Optimized for vertical scrolling</text>
+
+  <!-- Large Hero Card -->
+  <rect id="mobile-hero-card" class="card" x="40" y="260" width="920" height="600" />
+  <rect id="mobile-hero-text-zone" class="placeholder" x="80" y="300" width="840" height="520" />
+
+  <!-- Two Column Cards -->
+  <rect id="mobile-half-card-left" class="card" x="40" y="900" width="440" height="400" />
+  <rect id="mobile-half-card-right" class="card" x="520" y="900" width="440" height="400" />
+
+  <!-- Bottom Full Card -->
+  <rect id="mobile-bottom-card" class="card" x="40" y="1340" width="920" height="340" />
+  <rect id="mobile-bottom-text-zone" class="placeholder" x="80" y="1380" width="840" height="260" />
+
+</svg>

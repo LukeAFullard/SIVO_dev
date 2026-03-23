@@ -24,11 +24,7 @@ class SivoProject:
 
         views_data = {}
         for view_id, app in self.views.items():
-            views_data[view_id] = {
-                "svg_string": app.infographic.parser.to_string(),
-                "mappings": app.get_manifest()["objects"], # we only need the dict of objects
-                "overlays": app.infographic.overlays
-            }
+            views_data[view_id] = app._get_view_data()
 
         return generate_echarts_html(
             views_data=views_data,

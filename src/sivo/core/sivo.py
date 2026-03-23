@@ -1788,7 +1788,8 @@ class Sivo:
             "y": str(abs_top),
             "width": str(abs_width),
             "height": str(abs_height),
-            "fill": "none"
+            "fill": "none",
+            "silent": "true"
         })
 
         self.fill_template_zone(
@@ -1978,6 +1979,8 @@ class Sivo:
                     node.set("font-family", font_family)
                     node.set("font-weight", font_weight)
                     node.set("text-anchor", text_anchor)
+                    node.set("pointer-events", "none")
+                    node.set("silent", "true")
 
                     # Clear existing text and children
                     node.text = ""
@@ -2007,6 +2010,8 @@ class Sivo:
                     text_elem.set("font-weight", font_weight)
                     text_elem.set("text-anchor", text_anchor)
                     text_elem.set("class", "sivo-template-text")
+                    text_elem.set("pointer-events", "none")
+                    text_elem.set("silent", "true")
 
                     # Create tspans for each line
                     tspan_qname = f"{{{ns}}}tspan"
