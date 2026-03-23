@@ -3764,7 +3764,8 @@
             var elementActions = elementData ? (elementData.actions || elementData) : null;
             var htmlContent = '';
             var hasInteraction = false;
-            var panelPosition = 'right'; // Default
+            var view = viewsData[currentViewId];
+            var panelPosition = view ? (view.default_panel_position || 'right') : 'right'; // Default
             var socialIframes = []; // Store secure iframes to append after DOMPurify
             var sivoChartsToInit = [];
 
