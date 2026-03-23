@@ -1771,20 +1771,89 @@
             // 2. Intercept the dispatchAction that triggers the map zoom
             var origDispatchAction = chartInstance.dispatchAction;
             chartInstance.dispatchAction = function (payload) {
-                if (payload && payload.type === 'roam' && payload.zoom != null && _sivoPinchDeltaScale != null) {
-                    // ECharts hardcodes zoom to 1.1 (in) or 1/1.1 (out) during pinch
-                    var hardcodedZoomIn = 1.1;
-                    var hardcodedZoomOut = 1 / 1.1;
+                if (payload && payload.type === 'roam') {
+                    if (payload.zoom != null && _sivoPinchDeltaScale != null) {
+                        var hardcodedZoomIn = 1.1;
+                        var hardcodedZoomOut = 1 / 1.1;
 
-                    // If it matches the hardcoded values (with tiny float tolerance), override it
-                    if (Math.abs(payload.zoom - hardcodedZoomIn) < 0.001 ||
-                        Math.abs(payload.zoom - hardcodedZoomOut) < 0.001) {
+                        if (Math.abs(payload.zoom - hardcodedZoomIn) < 0.001 ||
+                            Math.abs(payload.zoom - hardcodedZoomOut) < 0.001) {
 
-                        // Replace ECharts hardcoded delta with our dynamically calculated delta
-                        payload.zoom = _sivoPinchDeltaScale;
+                            payload.zoom = _sivoPinchDeltaScale;
+                            _sivoPinchDeltaScale = null;
+                        }
+                    }
 
-                        // Prevent reusing the same delta if ECharts fires multiple roams per frame
-                        _sivoPinchDeltaScale = null;
+                    if (typeof lockScrollBounds !== 'undefined' && lockScrollBounds && (payload.dx || payload.dy)) {
+                        var opt = chartInstance.getOption();
+                        if (opt && opt.series && opt.series.length > 0) {
+                            var currentZ = currentZoom;
+
+                            // If at base zoom, entirely block panning
+                            if (currentZ <= 1.05) {
+                                payload.dx = 0;
+                                payload.dy = 0;
+                            } else {
+                                // Dynamic boundary clamping to prevent map from leaving the canvas viewport
+                                var model = chartInstance.getModel().getSeriesByIndex(0);
+                                if (model && model.coordinateSystem && model.coordinateSystem.getBoundingRect) {
+                                    var geo = model.coordinateSystem;
+                                    var rect = geo.getBoundingRect();
+                                    var matrix = geo.getTransform();
+                                    var zr = chartInstance.getZr();
+
+                                    if (matrix && zr) {
+                                        var m = matrix;
+                                        // Calculate current screen coordinates of map bounding box
+                                        var pt1X = rect.x * m[0] + rect.y * m[2] + m[4];
+                                        var pt1Y = rect.x * m[1] + rect.y * m[3] + m[5];
+                                        var pt2X = (rect.x + rect.width) * m[0] + (rect.y + rect.height) * m[2] + m[4];
+                                        var pt2Y = (rect.x + rect.width) * m[1] + (rect.y + rect.height) * m[3] + m[5];
+                                        var tlX = Math.min(pt1X, pt2X);
+                                        var brX = Math.max(pt1X, pt2X);
+                                        var tlY = Math.min(pt1Y, pt2Y);
+                                        var brY = Math.max(pt1Y, pt2Y);
+
+                                        var cw = zr.getWidth();
+                                        var ch = zr.getHeight();
+
+                                        var dx = payload.dx || 0;
+                                        var dy = payload.dy || 0;
+
+                                        // Next frame coordinates after proposed pan
+                                        var nextTlX = tlX + dx;
+                                        var nextTlY = tlY + dy;
+                                        var nextBrX = brX + dx;
+                                        var nextBrY = brY + dy;
+
+                                        // If map is wider than canvas
+                                        if (brX - tlX >= cw) {
+                                            // Clamp right drag (panning left side into view)
+                                            if (nextTlX > 0) dx -= nextTlX;
+                                            // Clamp left drag (panning right side into view)
+                                            else if (nextBrX < cw) dx += (cw - nextBrX);
+                                        } else {
+                                            // If map is narrower than canvas, keep it centered or bounded
+                                            // ECharts automatically centers it on load. If they pan, we restrict it from leaving the screen entirely.
+                                            // A simple approach is just locking the center coordinate or reverting entirely.
+                                            // Let's just lock panning if it's narrower.
+                                            dx = 0;
+                                        }
+
+                                        // If map is taller than canvas
+                                        if (brY - tlY >= ch) {
+                                            if (nextTlY > 0) dy -= nextTlY;
+                                            else if (nextBrY < ch) dy += (ch - nextBrY);
+                                        } else {
+                                            dy = 0;
+                                        }
+
+                                        payload.dx = dx;
+                                        payload.dy = dy;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 return origDispatchAction.apply(this, arguments);
@@ -1801,6 +1870,7 @@
         var overlaysData = {};
         var connectionsData = [];
         var lockZoomOut = false;
+        var lockScrollBounds = true;
         var fadeUnselected = false;
         var dataBinding = null;
         var timelineBinding = null;
@@ -3079,6 +3149,7 @@
             overlaysData = view.overlays;
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
+            lockScrollBounds = view.lock_scroll_bounds !== undefined ? view.lock_scroll_bounds : true;
             fadeUnselected = view.fade_unselected || false;
             enableBrushSelection = view.enable_brush_selection || false;
             dataBinding = view.data_binding || null;

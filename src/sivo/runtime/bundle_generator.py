@@ -210,6 +210,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "disable_resizer": view_obj.get("disable_resizer", False),
             "disable_tooltips": view_obj.get("disable_tooltips", False),
             "disable_zoom_controls": view_obj.get("disable_zoom_controls", False),
+            "lock_scroll_bounds": view_obj.get("lock_scroll_bounds", True),
             "presentation_order": view_obj.get("presentation_order", None),
             "lock_zoom_out": view_obj.get("lock_zoom_out", False),
             "layout_size": view_obj.get("layout_size", None),

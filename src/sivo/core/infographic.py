@@ -9,7 +9,7 @@ from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBin
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "right", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_scroll_bounds: bool = True, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False):
         self.parser = parser
         self.elements = self.parser.process_elements()
         self.mappings: Dict[str, InteractionMapping] = {}
@@ -24,6 +24,7 @@ class Infographic:
         self.disable_resizer = disable_resizer
         self.disable_tooltips = disable_tooltips
         self.disable_zoom_controls = disable_zoom_controls
+        self.lock_scroll_bounds = lock_scroll_bounds
         self.lock_zoom_out = lock_zoom_out
         self.starting_zoom = starting_zoom
         self.lock_canvas = lock_canvas
@@ -122,6 +123,7 @@ class Infographic:
         infographic.disable_resizer = getattr(cfg, "disable_resizer", False)
         infographic.disable_tooltips = getattr(cfg, "disable_tooltips", False)
         infographic.disable_zoom_controls = getattr(cfg, "disable_zoom_controls", False)
+        infographic.lock_scroll_bounds = getattr(cfg, "lock_scroll_bounds", True)
         infographic.lock_zoom_out = getattr(cfg, "lock_zoom_out", False)
         infographic.starting_zoom = getattr(cfg, "starting_zoom", 1.0)
 
@@ -1716,6 +1718,7 @@ class Infographic:
             "disable_resizer": self.disable_resizer,
             "disable_tooltips": self.disable_tooltips,
             "disable_zoom_controls": self.disable_zoom_controls,
+            "lock_scroll_bounds": self.lock_scroll_bounds,
             "lock_zoom_out": self.lock_zoom_out,
             "starting_zoom": self.starting_zoom,
             "render_mode": self.render_mode,
