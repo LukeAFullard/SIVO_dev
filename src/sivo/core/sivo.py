@@ -1782,15 +1782,18 @@ class Sivo:
 
         placeholder_id = f"sivo-native-text-{uuid.uuid4().hex[:8]}"
 
-        self.add_shape("rect", {
+        shape_opts = {
             "id": placeholder_id,
             "x": str(abs_left),
             "y": str(abs_top),
             "width": str(abs_width),
             "height": str(abs_height),
             "fill": "none",
+            "pointer-events": "none",
             "silent": "true"
-        })
+        }
+
+        self.add_shape("rect", shape_opts)
 
         self.fill_template_zone(
             element_id=placeholder_id,
@@ -1999,6 +2002,7 @@ class Sivo:
                     # 1. Hide placeholder shape
                     node.set("opacity", "0")
                     node.set("pointer-events", "none")
+                    node.set("silent", "true")
 
                     # 2. Construct text element
                     text_elem = etree.Element(qname)

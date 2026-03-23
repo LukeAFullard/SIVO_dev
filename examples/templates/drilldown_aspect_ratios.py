@@ -7,29 +7,29 @@ def run():
     home_app = Sivo.from_svg(
         os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-            "src", "sivo", "templates", "1_1", "large_node_to_3_nodes.svg"
+            "src", "sivo", "templates", "1_1", "large_node_to_4_nodes.svg"
         ),
         layout_size="98%",
         disable_zoom_controls=False,
     )
 
     # Customize 1:1 Home View
-    home_app.add_scalable_text("header_area", "SIVO Layout Test: 1:1 Aspect Ratio (Home)", left="0%", top="0%", width="100%", height="100%", align="center", font_size="50%", font_weight="bold", color="#1e293b")
+    # Note: large_node_to_4_nodes.svg doesn't have a 'header_area' ID natively, so we'll just map the start node and 4 cards
 
-    home_app.add_scalable_text("large_node_dot", "START", left="-100%", top="-100%", width="300%", height="300%", align="center", font_size="50%", font_weight="bold", color="#1e293b")
+    home_app.add_scalable_text("large_node_dot", "SIVO\nLayout\nTest", left="-100%", top="-100%", width="300%", height="300%", align="center", font_size="30%", font_weight="bold", color="#1e293b")
 
     # Add text to cards for nodes. Due to `pointer-events: none` on the text, it will not block drilldown.
     home_app.add_scalable_text("node_1_card", "Click to Drilldown:\n3:2 Aspect Ratio", left="0%", top="0%", width="100%", height="100%", align="center", font_size="30%", color="#1e293b")
     home_app.add_scalable_text("node_2_card", "Click to Drilldown:\n4:3 Aspect Ratio", left="0%", top="0%", width="100%", height="100%", align="center", font_size="30%", color="#1e293b")
     home_app.add_scalable_text("node_3_card", "Click to Drilldown:\n16:10 Aspect Ratio", left="0%", top="0%", width="100%", height="100%", align="center", font_size="30%", color="#1e293b")
+    home_app.add_scalable_text("node_4_card", "Click to Drilldown:\n4:7 Mobile Layout", left="0%", top="0%", width="100%", height="100%", align="center", font_size="30%", color="#1e293b")
 
-    # Add a 4th drilldown route to our new 4:7 Mobile template, mapped directly to the start node
-    home_app.map("large_node_dot", drill_to="view_4_7", tooltip="Drilldown to a 4:7 Mobile layout.", hover_color="#93c5fd", glow=True)
 
     # Map directly to the original cards without needing new overlapping shapes.
     home_app.map("node_1_card", drill_to="view_3_2", tooltip="Drilldown to a 3:2 layout.", hover_color="rgba(0,0,0,0.05)", glow=True)
     home_app.map("node_2_card", drill_to="view_4_3", tooltip="Drilldown to a 4:3 layout.", hover_color="rgba(0,0,0,0.05)", glow=True)
     home_app.map("node_3_card", drill_to="view_16_10", tooltip="Drilldown to a 16:10 layout.", hover_color="rgba(0,0,0,0.05)", glow=True)
+    home_app.map("node_4_card", drill_to="view_4_7", tooltip="Drilldown to a 4:7 Mobile layout.", hover_color="rgba(0,0,0,0.05)", glow=True)
 
     # 2. 3:2 Aspect Ratio View
     app_3_2 = Sivo.from_svg(
