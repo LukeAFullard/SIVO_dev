@@ -1732,7 +1732,7 @@ class Sivo:
             image_url = self.fetch_image_base64(image_url)
         self.infographic.clip_image_to_shape(element_id, image_url, scale, rotate, opacity, preserve_aspect_ratio, offset_x, offset_y, translate_x, translate_y, use_html_overlay)
 
-    def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True):
+    def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True, interactive: bool = False):
         """
         Automatically generates a perfectly scaled, native SVG text element relative to the bounding box
         of a target element, eliminating the need to manually compute absolute x, y, and font sizes.
@@ -1751,6 +1751,7 @@ class Sivo:
             align: Horizontal alignment ('left', 'center', 'right').
             vertical_align: Vertical alignment ('top', 'middle', 'bottom').
             auto_shrink: Whether to automatically reduce font size if the wrapped text overflows the bottom of the bounding box.
+            interactive: Whether the injected text itself should be interactive in ECharts. If False, the ID is stripped from the DOM to prevent hit-testing occlusion.
         """
         import uuid
 
@@ -1804,10 +1805,11 @@ class Sivo:
             color=color,
             align=align,
             vertical_align=vertical_align,
-            auto_shrink=auto_shrink
+            auto_shrink=auto_shrink,
+            interactive=interactive
         )
 
-    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True):
+    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True, interactive: bool = False):
         """
         Replaces a placeholder SVG element (like a <rect>) with native, perfectly-scaled SVG text.
         This ensures text scales naturally with the viewBox on all devices (mobile/desktop)
@@ -1822,6 +1824,7 @@ class Sivo:
             color: The fill color of the text.
             align: 'left', 'center', or 'right' alignment relative to the placeholder.
             vertical_align: 'top', 'middle', or 'bottom' alignment relative to the placeholder.
+            interactive: Whether the injected text itself should be interactive in ECharts. If False, the ID is stripped from the DOM to prevent hit-testing occlusion.
         """
         import lxml.etree as etree
 
@@ -1996,6 +1999,8 @@ class Sivo:
                         tspan = etree.Element(tspan_qname)
                         tspan.set("x", str(x))
                         tspan.set("y", str(start_y + i * line_height))
+                        tspan.set("pointer-events", "none")
+                        tspan.set("silent", "true")
                         tspan.text = line_text
                         node.append(tspan)
                 else:
@@ -2023,6 +2028,8 @@ class Sivo:
                         tspan = etree.Element(tspan_qname)
                         tspan.set("x", str(x))
                         tspan.set("y", str(start_y + i * line_height))
+                        tspan.set("pointer-events", "none")
+                        tspan.set("silent", "true")
                         tspan.text = line_text
                         text_elem.append(tspan)
 
@@ -2035,6 +2042,18 @@ class Sivo:
                     else:
                         # Fallback to root
                         self.infographic.parser.root.append(text_elem)
+
+        if not interactive:
+            # Remove from mappings so it does not become an interactive ECharts region
+            self.infographic.mappings.pop(element_id, None)
+
+            # Remove the generated ID from the underlying SVG node so ECharts ignores it entirely for hit-testing
+            for node in self.infographic.parser.root.iter():
+                if node.get("id") == element_id or node.get("name") == element_id:
+                    if "id" in node.attrib:
+                        del node.attrib["id"]
+                    if "name" in node.attrib:
+                        del node.attrib["name"]
 
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""
@@ -2073,6 +2092,7 @@ class Sivo:
             "overlays": self.infographic.overlays,
             "connections": self.infographic.connections,
             "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False),
+            "default_panel_position": getattr(self.infographic, "default_panel_position", "right"),
             "disable_panel": getattr(self.infographic, "disable_panel", False),
             "panel_width": getattr(self.infographic, "panel_width", None),
             "panel_height": getattr(self.infographic, "panel_height", None),

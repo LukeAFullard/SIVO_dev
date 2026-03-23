@@ -9,8 +9,12 @@ def run():
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
             "src", "sivo", "templates", "1_1", "large_node_to_4_nodes.svg"
         ),
-        layout_size="98%",
+        layout_size="95%",
         disable_zoom_controls=False,
+        lock_zoom_out=True,
+        default_panel_position="overlay",
+        panel_width="90%",
+        panel_height="90%",
     )
 
     # Customize 1:1 Home View
@@ -37,7 +41,11 @@ def run():
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
             "src", "sivo", "templates", "3_2", "bento_grid_template.svg"
         ),
-        layout_size="98%"
+        layout_size="95%",
+        lock_zoom_out=True,
+        default_panel_position="overlay",
+        panel_width="90%",
+        panel_height="90%",
     )
     app_3_2.fill_template_zone("text_hero_insight_section", "3:2 Aspect Ratio Layout - Click to return")
     # For <g> elements like bento-hero, we still map directly to an explicit inner rect for ECharts compatibility
@@ -58,7 +66,11 @@ def run():
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
             "src", "sivo", "templates", "4_3", "sleek_bento_grid_2026.svg"
         ),
-        layout_size="98%"
+        layout_size="95%",
+        lock_zoom_out=True,
+        default_panel_position="overlay",
+        panel_width="90%",
+        panel_height="90%",
     )
     app_4_3.fill_template_zone("dash_title", "4:3 Aspect Ratio Layout")
     app_4_3.fill_template_zone("dash_subtitle", "Click background to return home")
@@ -71,7 +83,11 @@ def run():
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
             "src", "sivo", "templates", "16_10", "gis_digital_twin_dashboard_2026.svg"
         ),
-        layout_size="98%"
+        layout_size="95%",
+        lock_zoom_out=True,
+        default_panel_position="overlay",
+        panel_width="90%",
+        panel_height="90%",
     )
     app_16_10.fill_template_zone("text_global_operations_digital_twin", "16:10 Aspect Ratio Layout", color="#ffffff")
     app_16_10.fill_template_zone("text_live_telemetry_from_deployed_assets", "Click map area to return home", color="#94a3b8")
@@ -83,7 +99,11 @@ def run():
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
             "src", "sivo", "templates", "4_7", "mobile_app_dashboard_2026.svg"
         ),
-        layout_size="98%"
+        layout_size="95%",
+        lock_zoom_out=True,
+        default_panel_position="overlay",
+        panel_width="90%",
+        panel_height="90%",
     )
     app_4_7.fill_template_zone("mobile-hero-text-zone", "Tap Here to Go Home", font_size="50%", color="#64748b", align="center")
     # The text has pointer-events: none, so clicks pass down to the card

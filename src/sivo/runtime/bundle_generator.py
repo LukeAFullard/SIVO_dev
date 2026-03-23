@@ -203,6 +203,7 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             "actions_manifest": actions_manifest,
             "overlays": view_obj["overlays"],
             "connections": view_obj.get("connections", []),
+            "default_panel_position": view_obj.get("default_panel_position", "right"),
             "disable_panel": view_obj.get("disable_panel", False),
             "panel_width": view_obj.get("panel_width", None),
             "panel_height": view_obj.get("panel_height", None),
