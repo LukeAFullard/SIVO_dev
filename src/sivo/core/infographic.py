@@ -57,6 +57,8 @@ class Infographic:
         self.svg_background_image_grayscale = svg_background_image_grayscale
         self.svg_background_image_insert_after = svg_background_image_insert_after
         self.transparent_template_lines = transparent_template_lines
+        self.layout_size = None
+        self.presentation_order = None
         if self.svg_background_image_url:
             self._inject_svg_background_image()
 
@@ -1502,7 +1504,8 @@ class Infographic:
 
         if not use_html_overlay:
             base_id = f"sivo-native-clipped-img-{uuid.uuid4().hex[:8]}"
-            self.add_shape("image", {
+
+            shape_opts = {
                 "id": base_id,
                 "href": image_url,
                 "x": str(bbox_min_x),
@@ -1510,8 +1513,12 @@ class Infographic:
                 "width": str(bbox_width),
                 "height": str(bbox_height),
                 "preserveAspectRatio": preserve_aspect_ratio,
-                "opacity": str(opacity)
-            })
+                "opacity": str(opacity),
+                "pointer-events": "none",
+                "silent": "true"
+            }
+
+            self.add_shape("image", shape_opts)
             return
 
         root = self.parser.root
