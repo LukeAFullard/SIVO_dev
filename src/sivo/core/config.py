@@ -183,7 +183,7 @@ class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
     default_panel_position: str = Field(
-        default="right",
+        default="overlay",
         description="Global default position for the info panel ('right', 'left', 'top', 'bottom', 'overlay')."
     )
     disable_panel: bool = Field(
@@ -191,11 +191,11 @@ class ProjectConfig(BaseModel):
         description="If True, completely suppresses the info panel from opening."
     )
     panel_width: Optional[str] = Field(
-        default=None,
+        default="90%",
         description="Optional explicit width for the info panel as a percentage or valid CSS unit (e.g., '50%', '30vw')."
     )
     panel_height: Optional[str] = Field(
-        default=None,
+        default="90%",
         description="Optional explicit height for the info panel (used on mobile or when positioned top/bottom)."
     )
     panel_css: Optional[str] = Field(
@@ -215,11 +215,11 @@ class ProjectConfig(BaseModel):
         description="If True, hides the built-in map zoom controls (+/-) and home button."
     )
     lock_zoom_out: bool = Field(
-        default=False,
+        default=True,
         description="If True, prevents the user from zooming out further than the initial zoom level (1.0)."
     )
     layout_size: Optional[str] = Field(
-        default=None,
+        default="95%",
         description="Dynamic layout size percentage (e.g., \"90%\") to maximize map coverage."
     )
     starting_zoom: float = Field(
