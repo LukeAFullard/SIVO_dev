@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Operations Dashboard</title>
+
+    <!-- Include ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --primary-color: #3b82f6;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            color: #0f172a;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Map gets 2/3 space, side panel 1/3 */
+            gap: 1.5rem;
+            padding: 1.5rem;
+            flex: 1;
+            /* Remove overflow: hidden so body can scroll if needed */
+        }
+
+        .sivo-card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 400px; /* Base height for all blocks */
+        }
+
+        .html-card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sivo-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .card-content {
+            padding: 1rem 1.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .sivo-card {
+                min-height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Executive Operations Dashboard</h1>
+    </header>
+
+    <div class="dashboard-container" id="dashboard-container">
+
+
+            <div class="sivo-card" id="card-regional_map">
+                <div class="card-header">Regional_map</div>
+                <div class="sivo-container" id="container-regional_map"></div>
+            </div>
+
+
+
+            <div class="html-card sivo-details-panel" id="card-region_details" data-block-id="region_details">
+                <div class="card-header">Region Details</div>
+                <div class="card-content sivo-details-content" id="container-region_details">
+                    <p class="placeholder-text" style="color: #64748b;">Select a region on the map to view rich media details.</p>
+                </div>
+            </div>
+
+
+
+            <div class="html-card sivo-metrics-panel" id="card-region_metrics" data-block-id="region_metrics">
+                <div class="card-header">Key Metrics</div>
+                <div class="card-content sivo-metrics-content" id="container-region_metrics">
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                            <strong>Revenue:</strong>
+                            <span class="metric-value" data-metric-key="revenue" style="font-weight: bold; color: var(--primary-color);">---</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                            <strong>Users:</strong>
+                            <span class="metric-value" data-metric-key="users" style="font-weight: bold; color: var(--primary-color);">---</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                            <strong>Status:</strong>
+                            <span class="metric-value" data-metric-key="status" style="font-weight: bold; color: var(--primary-color);">---</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="sivo-card" id="card-quarterly_chart">
+                <div class="card-header">Quarterly_chart</div>
+                <div class="sivo-container" id="container-quarterly_chart"></div>
+            </div>
+
+
+    </div>
+
+    <!-- SIVO Data Injection -->
+    <script>
+        // SIVO passes `views_data` directly to this template
+        const viewsData = {"regional_map": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n    \u003crect id=\"bg\" width=\"800\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n    \u003cpath id=\"region_north\" d=\"M 100 100 L 700 100 L 700 300 L 100 300 Z\" fill=\"#cbd5e1\" stroke=\"#fff\" stroke-width=\"2\" name=\"region_north\"/\u003e\n    \u003cpath id=\"region_south\" d=\"M 100 300 L 700 300 L 700 500 L 100 500 Z\" fill=\"#94a3b8\" stroke=\"#fff\" stroke-width=\"2\" name=\"region_south\"/\u003e\n    \u003ctext x=\"350\" y=\"200\" font-family=\"sans-serif\" font-size=\"24\" fill=\"#333\" pointer-events=\"none\"\u003eNorth Region\u003c/text\u003e\n    \u003ctext x=\"350\" y=\"400\" font-family=\"sans-serif\" font-size=\"24\" fill=\"#333\" pointer-events=\"none\"\u003eSouth Region\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "region_north", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#3b82f6"}}}, {"name": "region_south", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#ef4444"}}}], "actions_manifest": {"region_north": [{"action_type": "tooltip", "content": "\n\u003cdiv style=\"font-family: sans-serif;\"\u003e\n    \u003ch4 style=\"color: #3b82f6; margin-top: 0;\"\u003eOperations: Stable\u003c/h4\u003e\n    \u003cp\u003eThe Northern facilities are currently operating at peak efficiency.\u003c/p\u003e\n    \u003cimg src=\"https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format\u0026fit=crop\u0026w=400\u0026q=80\" \n         alt=\"Office Building\" \n         style=\"width: 100%; border-radius: 8px; margin-top: 10px;\" /\u003e\n\u003c/div\u003e\n", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select_region", "payload": {"revenue": "$1.2M", "users": "45,000", "status": "Stable"}}], "region_south": [{"action_type": "tooltip", "content": "\n\u003cdiv style=\"font-family: sans-serif;\"\u003e\n    \u003ch4 style=\"color: #ef4444; margin-top: 0;\"\u003eOperations: Delayed\u003c/h4\u003e\n    \u003cp\u003eSevere weather has impacted supply chain logistics in the Southern sector.\u003c/p\u003e\n    \u003c!-- Example of embedding a YouTube video or an iframe --\u003e\n    \u003ciframe width=\"100%\" height=\"200\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen style=\"border-radius: 8px; margin-top: 10px;\"\u003e\u003c/iframe\u003e\n\u003c/div\u003e\n", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select_region", "payload": {"revenue": "$0.8M", "users": "32,000", "status": "Delayed"}}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "region_north": {"id": "region_north", "actions": [{"action_type": "tooltip", "content": "\n\u003cdiv style=\"font-family: sans-serif;\"\u003e\n    \u003ch4 style=\"color: #3b82f6; margin-top: 0;\"\u003eOperations: Stable\u003c/h4\u003e\n    \u003cp\u003eThe Northern facilities are currently operating at peak efficiency.\u003c/p\u003e\n    \u003cimg src=\"https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format\u0026fit=crop\u0026w=400\u0026q=80\" \n         alt=\"Office Building\" \n         style=\"width: 100%; border-radius: 8px; margin-top: 10px;\" /\u003e\n\u003c/div\u003e\n", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select_region", "payload": {"revenue": "$1.2M", "users": "45,000", "status": "Stable"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#3b82f6", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "region_south": {"id": "region_south", "actions": [{"action_type": "tooltip", "content": "\n\u003cdiv style=\"font-family: sans-serif;\"\u003e\n    \u003ch4 style=\"color: #ef4444; margin-top: 0;\"\u003eOperations: Delayed\u003c/h4\u003e\n    \u003cp\u003eSevere weather has impacted supply chain logistics in the Southern sector.\u003c/p\u003e\n    \u003c!-- Example of embedding a YouTube video or an iframe --\u003e\n    \u003ciframe width=\"100%\" height=\"200\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen style=\"border-radius: 8px; margin-top: 10px;\"\u003e\u003c/iframe\u003e\n\u003c/div\u003e\n", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select_region", "payload": {"revenue": "$0.8M", "users": "32,000", "status": "Delayed"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#ef4444", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "quarterly_chart": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\"\u003e\n    \u003crect width=\"400\" height=\"400\" fill=\"#ffffff\"/\u003e\n    \u003ctext x=\"200\" y=\"40\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#333\"\u003eQuarterly Performance\u003c/text\u003e\n    \u003c!-- A simple bar chart representation --\u003e\n    \u003crect id=\"bar1\" x=\"50\" y=\"200\" width=\"80\" height=\"150\" fill=\"#3b82f6\" name=\"bar1\"/\u003e\n    \u003crect id=\"bar2\" x=\"160\" y=\"100\" width=\"80\" height=\"250\" fill=\"#10b981\" name=\"bar2\"/\u003e\n    \u003crect id=\"bar3\" x=\"270\" y=\"250\" width=\"80\" height=\"100\" fill=\"#ef4444\" name=\"bar3\"/\u003e\n    \u003ctext x=\"90\" y=\"380\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eQ1\u003c/text\u003e\n    \u003ctext x=\"200\" y=\"380\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eQ2\u003c/text\u003e\n    \u003ctext x=\"310\" y=\"380\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eQ3\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "bar1", "value": 1, "tooltip": "Q1 Revenue: $400,000"}, {"name": "bar2", "value": 1, "tooltip": "Q2 Revenue: $850,000"}, {"name": "bar3", "value": 1, "tooltip": "Q3 Revenue: $250,000"}], "actions_manifest": {"bar1": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ1 Revenue: $400,000\u003c/h3\u003e", "title": "Q1 Revenue: $400,000", "panel_position": "overlay"}], "bar2": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ2 Revenue: $850,000\u003c/h3\u003e", "title": "Q2 Revenue: $850,000", "panel_position": "overlay"}], "bar3": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ3 Revenue: $250,000\u003c/h3\u003e", "title": "Q3 Revenue: $250,000", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bar1": {"id": "bar1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ1 Revenue: $400,000\u003c/h3\u003e", "title": "Q1 Revenue: $400,000", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "bar2": {"id": "bar2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ2 Revenue: $850,000\u003c/h3\u003e", "title": "Q2 Revenue: $850,000", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "bar3": {"id": "bar3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ3 Revenue: $250,000\u003c/h3\u003e", "title": "Q3 Revenue: $250,000", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        const activeCharts = {};
+
+        // Initialize all blocks independently
+        Object.keys(viewsData).forEach(blockId => {
+            const viewData = viewsData[blockId];
+            const dom = document.getElementById('container-' + blockId);
+
+            if (dom) {
+                const chart = echarts.init(dom, null, { renderer: viewData.render_mode || 'canvas' });
+                activeCharts[blockId] = chart;
+
+                // Register the SVG map unique to this block
+                echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
+
+                const option = {
+                    tooltip: { trigger: 'item' },
+                    geo: {
+                        map: 'sivoMap_' + blockId,
+                        roam: true,
+                        layoutSize: '95%',
+                        itemStyle: {
+                            areaColor: 'transparent',
+                            borderColor: '#ffffff',
+                            borderWidth: 1
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#cbd5e1'
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'map',
+                        map: 'sivoMap_' + blockId,
+                        geoIndex: 0,
+                        data: viewData.echarts_data
+                    }]
+                };
+
+                chart.setOption(option);
+            }
+        });
+
+        // Handle Window Resize for all blocks
+        window.addEventListener('resize', () => {
+            Object.values(activeCharts).forEach(chart => {
+                chart.resize();
+            });
+        });
+
+        // Automatic cross-block communication setup
+        const detailsPanels = document.querySelectorAll('.sivo-details-panel');
+        const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
+
+        Object.keys(activeCharts).forEach(chartId => {
+            const chart = activeCharts[chartId];
+            chart.on('click', function(params) {
+                if(!params.name) return;
+
+                const viewData = viewsData[chartId];
+                const elementActions = viewData.actions_manifest[params.name];
+
+                let tooltipContent = null;
+                let payloadData = null;
+
+                if (elementActions && elementActions.length > 0) {
+                    const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
+                    if (tooltipAction && tooltipAction.content) {
+                        tooltipContent = tooltipAction.content;
+                    }
+
+                    const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
+                    if (payloadAction && payloadAction.payload) {
+                        payloadData = payloadAction.payload;
+                    }
+                }
+
+                // Update Details Panels
+                detailsPanels.forEach(panel => {
+                    const container = panel.querySelector('.sivo-details-content');
+                    if (tooltipContent) {
+                        container.innerHTML = `<h3>${params.name}</h3>${tooltipContent}`;
+                    } else {
+                        container.innerHTML = `<h3>${params.name}</h3><p>No additional details mapped.</p>`;
+                    }
+                });
+
+                // Update Metrics Panels
+                metricsPanels.forEach(panel => {
+                    const valueSpans = panel.querySelectorAll('.metric-value');
+                    valueSpans.forEach(span => {
+                        const key = span.getAttribute('data-metric-key');
+                        if (payloadData && payloadData[key] !== undefined) {
+                            span.innerText = payloadData[key];
+                        } else {
+                            span.innerText = '---';
+                        }
+                    });
+                });
+            });
+        });
+
+        // Inject Custom JS if provided
+
+    </script>
+</body>
+</html>
