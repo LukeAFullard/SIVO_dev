@@ -79,7 +79,34 @@ sivo_app.apply_choropleth({"buildingA": 100, "floor1": 50}, min_color="#ffffff",
 sivo_app.to_html("interactive_map.html")
 ```
 
-### 2. Streamlit Integration
+### 2. Responsive CSS Grid Dashboards (No-Code)
+SIVO supports building responsive dashboards with multiple SVG blocks and dynamically generated data panels without writing custom HTML or JS. It uses CSS Grid to natively stack blocks on mobile devices.
+
+```python
+from sivo import Sivo, SivoDashboard
+
+sivo_map = Sivo.from_svg("campus_map.svg")
+sivo_map.map(
+    "buildingA",
+    html="<p>This is the main facility.</p><img src='building.jpg'>",
+    callback_payload={"revenue": "$1.2M", "status": "Active"}
+)
+
+dashboard = SivoDashboard(title="Campus Overview")
+
+# 1. Add the interactive map
+dashboard.add_sivo_block("map", sivo_map)
+
+# 2. Add a pre-built Details Panel (automatically renders the `html` content of clicked elements)
+dashboard.add_details_panel("details", title="Building Details")
+
+# 3. Add a pre-built Metrics Panel (automatically renders keys from `callback_payload`)
+dashboard.add_metrics_panel("metrics", title="Live Data", metrics=["revenue", "status"])
+
+dashboard.to_html("dashboard.html")
+```
+
+### 3. Streamlit Integration
 Render your interactive SVGs directly inside your Streamlit apps and receive callback data.
 
 ```python
