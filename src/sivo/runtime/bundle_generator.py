@@ -3,15 +3,8 @@ import json
 from typing import Dict, Optional
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
-    template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-    env = Environment(
-        loader=FileSystemLoader(template_dir),
-        autoescape=select_autoescape(['html', 'xml'])
-    )
-    template = env.get_template('echarts.html')
-
-    # Re-structure the views data to format echarts Data and actionsManifest directly for the JS side
+def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
+    """Re-structure the views data to format echarts Data and actionsManifest directly for the JS side."""
     formatted_views = {}
 
     for view_id, view_obj in views_data.items():
@@ -273,6 +266,18 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             view_dict["dot_density"] = view_obj["dot_density"]
 
         formatted_views[view_id] = view_dict
+
+    return formatted_views
+
+def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
+    template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+    env = Environment(
+        loader=FileSystemLoader(template_dir),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    template = env.get_template('echarts.html')
+
+    formatted_views = format_views_data(views_data)
 
     # Check for locally bundled JS
     build_js = False
