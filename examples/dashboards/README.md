@@ -4,11 +4,19 @@ This folder contains examples demonstrating how to use the `SivoDashboard` featu
 
 `SivoDashboard` allows you to create responsive, multi-block dashboards using CSS Grid. Instead of being constrained to a single monolithic SVG canvas, you can arrange multiple interactive maps, charts, and dynamically generated data panels side-by-side.
 
+## Examples
+
+*   `dashboard_blocks_example`: A comprehensive layout demonstrating "No-Code" interaction panels (Metrics & Details) updating via ECharts clicks.
+*   `multi_sivo_blocks`: A pure dashboard focused exclusively on arranging multiple independent interactive SVG canvases (a map, a topology diagram, and a line chart) side-by-side using the CSS grid.
+*   `advanced_choropleth`: A complex dashboard combining SIVO's advanced `apply_choropleth` (data-driven color maps) features natively within a CSS grid layout.
+*   `rich_media_integration`: An example of integrating standalone third-party rich media embeds (e.g. Typeform, Google Forms, Calendly) alongside an interactive SVG map using `SivoDashboard`'s raw `add_html_block()`.
+
 ## Key Features Demonstrated
 
 - **Multi-Block Layouts**: How to initialize a dashboard and add multiple standard `Sivo` blocks (`dashboard.add_sivo_block()`).
 - **No-Code Interactivity**: How to natively wire up ECharts click interactions to side-panels using Python mappings (`dashboard.add_details_panel()` and `dashboard.add_metrics_panel()`).
 - **Rich Media Support**: How to pass standard HTML (including `<img>` and `<iframe>` tags) into a mapping's `html` argument so it renders dynamically in a pre-built Details panel.
+- **Advanced Integrations**: How to combine dashboards with SIVO's advanced data-binding features (Choropleths) and third-party widgets.
 
 ## Snippet Highlight
 

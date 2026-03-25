@@ -1,7 +1,6 @@
 import os
 from sivo import Sivo, SivoDashboard
 
-os.makedirs("output", exist_ok=True)
 
 # --- 1. Create a Primary Sivo Map Block ---
 map_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
@@ -93,7 +92,7 @@ dashboard.add_sivo_block("quarterly_chart", sivo_chart)
 
 
 # Export to a single HTML file
-output_file = "output/dashboard_blocks_example.html"
+output_file = os.path.join(os.path.dirname(__file__), "output.html")
 dashboard.to_html(output_file)
 
 print(f"Successfully generated responsive no-code dashboard: {output_file}")
