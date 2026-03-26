@@ -58,17 +58,17 @@ def main():
 
     # --- 4. Assemble the Dashboard ---
     # We combine all three SIVO SVGs into a single responsive layout.
-    # We will use raw HTML blocks to add structure or separators if desired,
-    # but primarily focus on the SVG blocks.
+    # We define a 2-column grid and use `col_span` to control the layout.
 
-    dashboard = SivoDashboard(title="Systems Command Center")
+    dashboard = SivoDashboard(title="Systems Command Center", columns=2)
 
     # Add blocks in the order we want them to flow in the grid.
-    # The default CSS Grid template will handle placing them side-by-side on desktop
-    # and stacking them vertically on mobile.
-    dashboard.add_sivo_block("global_map", sivo_map)
-    dashboard.add_sivo_block("topology", sivo_topo)
-    dashboard.add_sivo_block("latency_metrics", sivo_metrics)
+    # The global map will span both columns (full width at the top)
+    dashboard.add_sivo_block("global_map", sivo_map, col_span=2)
+
+    # The topology and metrics will each take up 1 column (side-by-side below the map)
+    dashboard.add_sivo_block("topology", sivo_topo, col_span=1)
+    dashboard.add_sivo_block("latency_metrics", sivo_metrics, col_span=1)
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")
