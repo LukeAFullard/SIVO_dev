@@ -41,6 +41,7 @@ sivo_map.map(
     "region_north",
     hover_color="#3b82f6",
     html=north_html_content,
+    panel_position="none", # "none" means it only updates the in-grid panels.
     callback_event="select_region",
     callback_payload={"revenue": "$1.2M", "users": "45,000", "status": "Stable"}
 )
@@ -49,6 +50,7 @@ sivo_map.map(
     "region_south",
     hover_color="#ef4444",
     html=south_html_content,
+    panel_position="right", # "right" overrides the grid panel, sliding out a global sidebar instead (OR behavior).
     callback_event="select_region",
     callback_payload={"revenue": "$0.8M", "users": "32,000", "status": "Delayed"}
 )
