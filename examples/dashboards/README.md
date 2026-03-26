@@ -10,7 +10,16 @@ This folder contains examples demonstrating how to use the `SivoDashboard` featu
 *   `multi_sivo_blocks`: A pure dashboard focused exclusively on arranging multiple independent interactive SVG canvases (a map, a topology diagram, and a line chart) side-by-side using the CSS grid.
 *   `advanced_choropleth`: A complex dashboard combining SIVO's advanced `apply_choropleth` (data-driven color maps) features natively within a CSS grid layout.
 *   `rich_media_integration`: An example of integrating standalone third-party rich media embeds (e.g. Typeform, Google Forms, Calendly) alongside an interactive SVG map using `SivoDashboard`'s raw `add_html_block()`.
-*   `svg_template_dashboard`: An example of using `Sivo.from_template()` to load a pre-built wireframe SVG dashboard (instead of an HTML grid), mapping interactivity directly to its internal boxes and panels.
+*   `template_sidebar_left`: An example of the dynamic `sidebar_left` HTML template layout, demonstrating assigning blocks to the 'sidebar' slot vs the 'main' slot.
+*   `template_hero_top`: An example of the dynamic `hero_top` HTML template layout, demonstrating assigning a map to the full-width 'hero' slot and multiple charts below it in the 'main' slot.
+*   `svg_template_dashboard`: An example of using `Sivo.from_template()` to load a pre-built wireframe SVG dashboard, mapping interactivity directly to its internal boxes and panels instead of using CSS Grid.
+
+## Two Types of Dashboard Templates
+
+SIVO provides two distinct ways to build dashboards, both demonstrated in this directory:
+
+1. **HTML Layout Templates (e.g., `sidebar_left`, `hero_top`)**: These use `SivoDashboard` and CSS Grid to arrange multiple independent SIVO canvases. They automatically reshape and stack vertically on mobile devices, making them ideal for modern reactive web design.
+2. **SVG Wireframe Templates (e.g., `svg_template_dashboard`)**: These are static, pre-drawn vector files loaded via `Sivo.from_template()`. They maintain their exact fixed layout (e.g. 16:9) across all devices. These are ideal for highly stylized "control room" displays or enterprise presentations where maintaining absolute positioning is critical.
 
 ## Key Features Demonstrated
 
