@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+    <defs>
+        <filter id="quadShadow" x="-5%" y="-5%" width="110%" height="110%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.05" />
+        </filter>
+    </defs>
+    <rect width="1000" height="1000" fill="#f8fafc" />
+
+    <text x="500" y="50" font-family="-apple-system, sans-serif" font-size="32" font-weight="700" fill="#1e293b" text-anchor="middle">Four Quadrant Overview</text>
+
+    <!-- Quadrant 1 (Top Left) -->
+    <rect id="quadrant_1" x="40" y="80" width="440" height="420" rx="16" fill="#ffffff" filter="url(#quadShadow)" stroke="#e2e8f0" />
+    <text x="260" y="290" font-family="-apple-system, sans-serif" font-size="20" fill="#94a3b8" text-anchor="middle" pointer-events="none">Top Left Region</text>
+
+    <!-- Quadrant 2 (Top Right) -->
+    <rect id="quadrant_2" x="520" y="80" width="440" height="420" rx="16" fill="#ffffff" filter="url(#quadShadow)" stroke="#e2e8f0" />
+    <text x="740" y="290" font-family="-apple-system, sans-serif" font-size="20" fill="#94a3b8" text-anchor="middle" pointer-events="none">Top Right Region</text>
+
+    <!-- Quadrant 3 (Bottom Left) -->
+    <rect id="quadrant_3" x="40" y="540" width="440" height="420" rx="16" fill="#ffffff" filter="url(#quadShadow)" stroke="#e2e8f0" />
+    <text x="260" y="750" font-family="-apple-system, sans-serif" font-size="20" fill="#94a3b8" text-anchor="middle" pointer-events="none">Bottom Left Region</text>
+
+    <!-- Quadrant 4 (Bottom Right) -->
+    <rect id="quadrant_4" x="520" y="540" width="440" height="420" rx="16" fill="#ffffff" filter="url(#quadShadow)" stroke="#e2e8f0" />
+    <text x="740" y="750" font-family="-apple-system, sans-serif" font-size="20" fill="#94a3b8" text-anchor="middle" pointer-events="none">Bottom Right Region</text>
+</svg>
