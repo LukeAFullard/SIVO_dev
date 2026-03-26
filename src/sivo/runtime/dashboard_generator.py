@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .bundle_generator import format_views_data
 
-def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
+def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
     template_dir = os.path.join(os.path.dirname(__file__), 'templates')
     env = Environment(
         loader=FileSystemLoader(template_dir),
@@ -23,6 +23,7 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
         details_panels=details_panels,
         metrics_panels=metrics_panels,
         title=title,
+        columns=columns,
         custom_js=custom_js
     )
 

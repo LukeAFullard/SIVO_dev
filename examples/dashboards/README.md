@@ -10,6 +10,7 @@ This folder contains examples demonstrating how to use the `SivoDashboard` featu
 *   `multi_sivo_blocks`: A pure dashboard focused exclusively on arranging multiple independent interactive SVG canvases (a map, a topology diagram, and a line chart) side-by-side using the CSS grid.
 *   `advanced_choropleth`: A complex dashboard combining SIVO's advanced `apply_choropleth` (data-driven color maps) features natively within a CSS grid layout.
 *   `rich_media_integration`: An example of integrating standalone third-party rich media embeds (e.g. Typeform, Google Forms, Calendly) alongside an interactive SVG map using `SivoDashboard`'s raw `add_html_block()`.
+*   `svg_template_dashboard`: An example of using `Sivo.from_template()` to load a pre-built wireframe SVG dashboard (instead of an HTML grid), mapping interactivity directly to its internal boxes and panels.
 
 ## Key Features Demonstrated
 

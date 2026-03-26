@@ -7,25 +7,26 @@ class SivoDashboard:
     Manages a multi-block responsive dashboard layout (using CSS Grid/Flexbox)
     instead of a monolithic single SVG. Maps specific Sivo instances to layout blocks.
     """
-    def __init__(self, title: str = "Dashboard"):
+    def __init__(self, title: str = "Dashboard", columns: int = 3):
         self.title = title
+        self.columns = columns
         self.blocks: Dict[str, Sivo] = {}
         self.html_blocks: Dict[str, str] = {}
         self.details_panels: Dict[str, Dict] = {}
         self.metrics_panels: Dict[str, Dict] = {}
         self.layout_order: List[Dict[str, str]] = []
 
-    def add_sivo_block(self, block_id: str, sivo_app: Sivo):
+    def add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1):
         """Adds a Sivo instance to a specific block in the dashboard layout."""
         self.blocks[block_id] = sivo_app
-        self.layout_order.append({"type": "sivo", "id": block_id})
+        self.layout_order.append({"type": "sivo", "id": block_id, "col_span": col_span})
 
-    def add_html_block(self, block_id: str, html_content: str):
+    def add_html_block(self, block_id: str, html_content: str, col_span: int = 1):
         """Adds raw HTML content to a specific block in the dashboard layout. Useful for custom headers/footers."""
         self.html_blocks[block_id] = html_content
-        self.layout_order.append({"type": "html", "id": block_id})
+        self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span})
 
-    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details."):
+    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the clicked element's `html` (tooltip content) mapping.
@@ -34,9 +35,9 @@ class SivoDashboard:
             "title": title,
             "placeholder": placeholder
         }
-        self.layout_order.append({"type": "details", "id": block_id})
+        self.layout_order.append({"type": "details", "id": block_id, "col_span": col_span})
 
-    def add_metrics_panel(self, block_id: str, title: str = "Metrics", metrics: List[str] = None):
+    def add_metrics_panel(self, block_id: str, title: str = "Metrics", metrics: List[str] = None, col_span: int = 1):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the specified keys from the clicked element's `callback_payload` mapping.
@@ -47,7 +48,7 @@ class SivoDashboard:
             "title": title,
             "metrics": metrics
         }
-        self.layout_order.append({"type": "metrics", "id": block_id})
+        self.layout_order.append({"type": "metrics", "id": block_id, "col_span": col_span})
 
     def to_html(self, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
@@ -69,6 +70,7 @@ class SivoDashboard:
             metrics_panels=self.metrics_panels,
             layout_order=self.layout_order,
             title=self.title,
+            columns=self.columns,
             output_path=output_path,
             custom_js=custom_js
         )

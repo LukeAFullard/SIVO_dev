@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+    <defs>
+        <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.05" />
+        </filter>
+        <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1e293b"/>
+            <stop offset="100%" stop-color="#334155"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Background -->
+    <rect width="1600" height="900" fill="#f1f5f9" />
+
+    <!-- Header -->
+    <rect x="0" y="0" width="1600" height="80" fill="url(#headerGrad)" />
+    <text id="dashboard_title" x="40" y="50" font-family="-apple-system, sans-serif" font-size="28" font-weight="600" fill="#ffffff" pointer-events="none">Global Command Center</text>
+
+    <!-- Main Content Area -->
+    <rect id="main_panel" x="40" y="120" width="1100" height="740" rx="16" fill="#ffffff" filter="url(#shadow)" stroke="#e2e8f0" stroke-width="1" />
+    <text x="590" y="490" font-family="-apple-system, sans-serif" font-size="24" fill="#94a3b8" text-anchor="middle" pointer-events="none">Main Visualization Area</text>
+
+    <!-- Sidebar Right -->
+    <!-- Metric Box 1 -->
+    <rect id="metric_box_1" x="1180" y="120" width="380" height="220" rx="16" fill="#ffffff" filter="url(#shadow)" stroke="#e2e8f0" stroke-width="1" />
+    <text id="metric_title_1" x="1210" y="160" font-family="-apple-system, sans-serif" font-size="18" font-weight="600" fill="#64748b" pointer-events="none">Metric 1</text>
+    <text id="metric_value_1" x="1210" y="240" font-family="-apple-system, sans-serif" font-size="48" font-weight="700" fill="#3b82f6" pointer-events="none">--</text>
+
+    <!-- Metric Box 2 -->
+    <rect id="metric_box_2" x="1180" y="380" width="380" height="220" rx="16" fill="#ffffff" filter="url(#shadow)" stroke="#e2e8f0" stroke-width="1" />
+    <text id="metric_title_2" x="1210" y="420" font-family="-apple-system, sans-serif" font-size="18" font-weight="600" fill="#64748b" pointer-events="none">Metric 2</text>
+    <text id="metric_value_2" x="1210" y="500" font-family="-apple-system, sans-serif" font-size="48" font-weight="700" fill="#10b981" pointer-events="none">--</text>
+
+    <!-- Metric Box 3 -->
+    <rect id="metric_box_3" x="1180" y="640" width="380" height="220" rx="16" fill="#ffffff" filter="url(#shadow)" stroke="#e2e8f0" stroke-width="1" />
+    <text id="metric_title_3" x="1210" y="680" font-family="-apple-system, sans-serif" font-size="18" font-weight="600" fill="#64748b" pointer-events="none">Metric 3</text>
+    <text id="metric_value_3" x="1210" y="760" font-family="-apple-system, sans-serif" font-size="48" font-weight="700" fill="#f59e0b" pointer-events="none">--</text>
+</svg>
