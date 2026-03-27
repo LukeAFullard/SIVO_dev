@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <!-- Include ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --primary-color: #3b82f6;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            color: #0f172a;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden; /* Prevent body scroll, let panels scroll */
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 350px;
+            min-width: 350px;
+            background-color: #f1f5f9;
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            z-index: 2;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat({{ columns }}, 1fr);
+            gap: 1.5rem;
+            align-content: start;
+        }
+
+        .sivo-card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 400px; /* Base height for all blocks */
+        }
+
+        .html-card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sivo-container {
+            flex: 1 1 0;
+            min-height: 0;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .sivo-native-overlay-svg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .card-content {
+            padding: 1rem 1.5rem;
+        }
+
+        /* Sliding Sidebar Implementation for specific blocks */
+        #sivo-sliding-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 400px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            box-shadow: -4px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease-in-out;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sivo-sliding-sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .sidebar-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .sidebar-content {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .dashboard-container {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            .sidebar {
+                width: auto;
+                min-width: auto;
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            }
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel {
+                grid-column: 1 / -1 !important;
+            }
+            .sivo-card {
+                min-height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>{{ title }}</h1>
+    </header>
+
+    <div class="dashboard-container" id="dashboard-container">
+
+        <!-- Main Content Slot -->
+        <div class="main-content" id="dashboard-main">
+            {% for block in layout_order if block.slot == "main" %}
+                {% if block.type == "sivo" %}
+                <div class="sivo-card" id="card-{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+                    <div class="card-header">{{ block.id | title }}</div>
+                    <div class="sivo-container" id="container-{{ block.id }}">
+                        <div id="chart-{{ block.id }}" style="width: 100%; height: 100%;"></div>
+                        <div id="overlay-{{ block.id }}" class="sivo-native-overlay-svg-container"></div>
+                    </div>
+                </div>
+                {% elif block.type == "html" %}
+                <div class="html-card" id="card-{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+                    <div class="card-content" id="container-{{ block.id }}">
+                        {{ html_blocks[block.id] | safe }}
+                    </div>
+                </div>
+                {% elif block.type == "details" %}
+                <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+                    <div class="card-header">{{ details_panels[block.id].title }}</div>
+                    <div class="card-content sivo-details-content" id="container-{{ block.id }}">
+                        <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
+                    </div>
+                </div>
+                {% elif block.type == "metrics" %}
+                <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+                    <div class="card-header">{{ metrics_panels[block.id].title }}</div>
+                    <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            {% for metric in metrics_panels[block.id].metrics %}
+                            <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                                <strong>{{ metric | title }}:</strong>
+                                <span class="metric-value" data-metric-key="{{ metric }}" style="font-weight: bold; color: var(--primary-color);">---</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+<!-- Right Sidebar Slot -->
+        <div class="sidebar" id="dashboard-sidebar">
+            {% for block in layout_order if block.slot == "sidebar" %}
+                {% if block.type == "sivo" %}
+                <div class="sivo-card" id="card-{{ block.id }}" style="grid-column: span 1; min-height: 300px;">
+                    <div class="card-header">{{ block.id | title }}</div>
+                    <div class="sivo-container" id="container-{{ block.id }}">
+                        <div id="chart-{{ block.id }}" style="width: 100%; height: 100%;"></div>
+                        <div id="overlay-{{ block.id }}" class="sivo-native-overlay-svg-container"></div>
+                    </div>
+                </div>
+                {% elif block.type == "html" %}
+                <div class="html-card" id="card-{{ block.id }}">
+                    <div class="card-content" id="container-{{ block.id }}">
+                        {{ html_blocks[block.id] | safe }}
+                    </div>
+                </div>
+                {% elif block.type == "details" %}
+                <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}">
+                    <div class="card-header">{{ details_panels[block.id].title }}</div>
+                    <div class="card-content sivo-details-content" id="container-{{ block.id }}">
+                        <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
+                    </div>
+                </div>
+                {% elif block.type == "metrics" %}
+                <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}">
+                    <div class="card-header">{{ metrics_panels[block.id].title }}</div>
+                    <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            {% for metric in metrics_panels[block.id].metrics %}
+                            <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                                <strong>{{ metric | title }}:</strong>
+                                <span class="metric-value" data-metric-key="{{ metric }}" style="font-weight: bold; color: var(--primary-color);">---</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+            </div>
+
+    <!-- Global Sliding Sidebar Overlay -->
+    <div id="sivo-sliding-sidebar">
+        <div class="sidebar-header">
+            <h2 id="sidebar-title">Details</h2>
+            <button class="sidebar-close-btn" onclick="closeSidebar()" title="Close">&times;</button>
+        </div>
+        <div class="sidebar-content" id="sidebar-content">
+            <!-- Dynamic content injected here -->
+        </div>
+    </div>
+
+    <!-- SIVO Data Injection -->
+    <script>
+        // SIVO passes `views_data` directly to this template
+        const viewsData = {{ views_data | safe }};
+        const activeCharts = {};
+
+        function calculateLayoutSize(view, domElement) {
+            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
+                return view ? view.layout_size : undefined;
+            }
+            if (!domElement) return view.layout_size;
+
+            var containerWidth = domElement.clientWidth;
+            var containerHeight = domElement.clientHeight;
+
+            if (containerWidth <= 0 || containerHeight <= 0) {
+                return view.layout_size;
+            }
+
+            var fraction = parseFloat(view.layout_size.replace('%', '')) / 100.0;
+            var svgW = 1000;
+            var svgH = 1000;
+
+            if (view.svg_string) {
+                var viewBoxMatch = view.svg_string.match(/viewBox\s*=\s*['"]([^'"]+)['"]/i);
+                if (viewBoxMatch) {
+                    var parts = viewBoxMatch[1].trim().split(/[\s,]+/);
+                    if (parts.length >= 4) {
+                        svgW = parseFloat(parts[2]);
+                        svgH = parseFloat(parts[3]);
+                    }
+                } else {
+                    var wMatch = view.svg_string.match(/width\s*=\s*['"]([^'"]+)['"]/i);
+                    var hMatch = view.svg_string.match(/height\s*=\s*['"]([^'"]+)['"]/i);
+                    if (wMatch && hMatch) {
+                        var wVal = parseFloat(wMatch[1]);
+                        var hVal = parseFloat(hMatch[1]);
+                        if (!isNaN(wVal) && !isNaN(hVal)) {
+                            svgW = wVal;
+                            svgH = hVal;
+                        }
+                    }
+                }
+            }
+
+            if (svgW <= 0 || svgH <= 0) return view.layout_size;
+
+            var containerRatio = containerWidth / containerHeight;
+            var svgRatio = svgW / svgH;
+            var targetMaxPx;
+
+            if (containerRatio < svgRatio) {
+                var scale = (containerWidth * fraction) / svgW;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            } else {
+                var scale = (containerHeight * fraction) / svgH;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            }
+
+            return Math.round(targetMaxPx) + 'px';
+        }
+
+        // Initialize all blocks independently
+        Object.keys(viewsData).forEach(blockId => {
+            const viewData = viewsData[blockId];
+            const dom = document.getElementById('chart-' + blockId);
+
+            if (dom) {
+                const chart = echarts.init(dom, null, { renderer: viewData.render_mode || 'canvas' });
+                activeCharts[blockId] = chart;
+
+                // Register the SVG map unique to this block
+                echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
+
+                const option = {
+                    tooltip: { trigger: 'item' },
+                    geo: {
+                        map: 'sivoMap_' + blockId,
+                        roam: true,
+                        layoutCenter: ['50%', '50%'],
+                        layoutSize: calculateLayoutSize(viewData, dom),
+                        regions: viewData.echarts_data // Apply colors directly to SVG regions via geo
+                    },
+                    series: []
+                };
+
+                // Add visualMap for choropleths if data_binding exists
+                if (viewData.data_binding) {
+                    // For Choropleths, ECharts requires a series mapped to the geo component
+                    // to properly calculate the visualMap gradients across the shapes.
+                    option.series.push({
+                        type: 'map',
+                        map: 'sivoMap_' + blockId,
+                        geoIndex: 0,
+                        data: viewData.echarts_data
+                    });
+
+                    const db = viewData.data_binding;
+                    option.visualMap = {
+                        left: 'right',
+                        min: db.min_value,
+                        max: db.max_value,
+                        inRange: {
+                            color: [db.min_color, db.max_color]
+                        },
+                        text: [db.max_label || 'High', db.min_label || 'Low'],
+                        calculable: true,
+                        formatter: function (value) {
+                            // Basic formatting logic for dashboard visualMap
+                            if (db.legend_formatter === "currency") {
+                                return '$' + Math.round(value).toLocaleString();
+                            } else if (db.legend_formatter === "percent") {
+                                return Math.round(value) + '%';
+                            }
+                            return Math.round(value);
+                        }
+                    };
+                    if (db.legend_title) {
+                        option.title = { text: db.legend_title, left: 'right', textStyle: {fontSize: 12} };
+                    }
+                }
+
+                chart.setOption(option);
+            }
+        });
+
+        function updateChartLayoutSizes() {
+            Object.keys(activeCharts).forEach(blockId => {
+                const chart = activeCharts[blockId];
+                const viewData = viewsData[blockId];
+                const dom = document.getElementById('chart-' + blockId);
+
+                if (chart && viewData && dom) {
+                    const newSize = calculateLayoutSize(viewData, dom);
+                    chart.setOption({
+                        geo: { layoutSize: newSize, layoutCenter: ['50%', '50%'] }
+                    });
+                    chart.resize();
+                }
+            });
+        }
+
+        // Handle Window Resize for all blocks
+        window.addEventListener('resize', () => {
+            updateChartLayoutSizes();
+        });
+
+        // Automatic cross-block communication setup
+        const detailsPanels = document.querySelectorAll('.sivo-details-panel');
+        const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
+
+        Object.keys(activeCharts).forEach(chartId => {
+            const chart = activeCharts[chartId];
+            chart.on('click', function(params) {
+                if(!params.name) return;
+
+                const viewData = viewsData[chartId];
+                const elementActions = viewData.actions_manifest[params.name];
+
+                let tooltipContent = null;
+                let payloadData = null;
+
+                let panelPosition = "none";
+
+                if (elementActions && elementActions.length > 0) {
+                    // Extract desired panel position if provided in mapping
+                    const tooltipActionForPos = elementActions.find(a => a.action_type === 'tooltip');
+                    if (tooltipActionForPos && tooltipActionForPos.panel_position) {
+                        panelPosition = tooltipActionForPos.panel_position;
+                    }
+
+                    // Check for core URL/Drilldown actions (advanced interaction support)
+                    elementActions.forEach(action => {
+                        if (action.action_type === 'url' && action.url) {
+                            if (action.target === '_blank') {
+                                window.open(action.url, '_blank');
+                            } else {
+                                window.location.href = action.url;
+                            }
+                        } else if (action.action_type === 'drilldown' && action.target_svg) {
+                            // Single-page drilldowns aren't inherently supported in multi-block yet without a view manager,
+                            // but we log it to prevent silent failure.
+                            console.warn("Dashboard Drilldown triggered to:", action.target_svg);
+                        }
+                    });
+
+                    const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
+                    if (tooltipAction && tooltipAction.content) {
+                        tooltipContent = tooltipAction.content;
+                    }
+
+                    const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
+                    if (payloadAction && payloadAction.payload) {
+                        payloadData = payloadAction.payload;
+                    }
+                }
+
+                // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
+                // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
+                    document.getElementById('sidebar-title').innerText = params.name;
+                    document.getElementById('sidebar-content').innerHTML = tooltipContent;
+                    document.getElementById('sivo-sliding-sidebar').classList.add('active');
+
+                    // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
+                    detailsPanels.forEach(panel => {
+                        const container = panel.querySelector('.sivo-details-content');
+                        container.innerHTML = `<h3>${params.name}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                    });
+                } else {
+                    // Update in-grid Details Panels
+                    detailsPanels.forEach(panel => {
+                        const container = panel.querySelector('.sivo-details-content');
+                        if (tooltipContent) {
+                            container.innerHTML = `<h3>${params.name}</h3>${tooltipContent}`;
+                        } else {
+                            container.innerHTML = `<h3>${params.name}</h3><p>No additional details mapped.</p>`;
+                        }
+                    });
+                }
+
+                // Always update Metrics Panels if payload data exists
+                metricsPanels.forEach(panel => {
+                    const valueSpans = panel.querySelectorAll('.metric-value');
+                    valueSpans.forEach(span => {
+                        const key = span.getAttribute('data-metric-key');
+                        if (payloadData && payloadData[key] !== undefined) {
+                            span.innerText = payloadData[key];
+                        } else {
+                            span.innerText = '---';
+                        }
+                    });
+                });
+            });
+        });
+
+        function closeSidebar() {
+            document.getElementById('sivo-sliding-sidebar').classList.remove('active');
+        }
+
+        // Inject Custom JS if provided
+        {% if custom_js %}
+            {{ custom_js | safe }}
+        {% endif %}
+    </script>
+</body>
+</html>
