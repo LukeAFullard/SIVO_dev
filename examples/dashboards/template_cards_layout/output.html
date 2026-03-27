@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular Cards Dashboard</title>
+    <!-- Include ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --border-color: #cbd5e1;
+            --primary-color: #0f172a;
+            --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 2rem;
+            background: var(--primary-color);
+            color: white;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .sivo-card {
+            min-height: 400px;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            background-color: #f8fafc;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sivo-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .sivo-native-overlay-svg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Sliding Sidebar Implementation for specific blocks */
+        #sivo-sliding-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 400px;
+            max-width: 100vw;
+            height: 100vh;
+            background-color: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sivo-sliding-sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9fafb;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-close-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.2s;
+        }
+
+        .sidebar-close-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .sidebar-content {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Modular Cards Dashboard</h1>
+    </header>
+
+    <div class="dashboard-container" id="dashboard-container">
+
+
+            <div class="card sivo-card" id="card-geographic_overview" style="grid-column: span 2;">
+                <div class="card-header">Geographic Overview</div>
+                <div class="sivo-container" id="container-geographic_overview">
+                    <div id="chart-geographic_overview" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-geographic_overview" class="sivo-native-overlay-svg-container"></div>
+                </div>
+            </div>
+
+
+
+            <div class="card sivo-metrics-panel" id="card-key_metrics" data-block-id="key_metrics" style="grid-column: span 1;">
+                <div class="card-header">Key Performance Indicators</div>
+                <div class="card-content sivo-metrics-content" id="container-key_metrics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;">
+
+                    <div class="metric-item">
+                        <span class="metric-label">metric a</span>
+                        <span class="metric-value" data-metric-key="metric_a">---</span>
+                    </div>
+
+                    <div class="metric-item">
+                        <span class="metric-label">metric b</span>
+                        <span class="metric-value" data-metric-key="metric_b">---</span>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="card sivo-details-panel" id="card-detailed_analysis" data-block-id="detailed_analysis" style="grid-column: span 1;">
+                <div class="card-header">Sector Analysis</div>
+                <div class="card-content sivo-details-content" id="container-detailed_analysis">
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-style: italic; text-align: center;">
+                        <p>Select a sector on the map to view detailed analysis.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="card sivo-card" id="card-quick_links" style="grid-column: span 2;">
+                <div class="card-header">Quick Links</div>
+                <div class="sivo-container" id="container-quick_links">
+                    <div id="chart-quick_links" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-quick_links" class="sivo-native-overlay-svg-container"></div>
+                </div>
+            </div>
+
+
+    </div>
+
+    <!-- Global Sliding Sidebar Overlay -->
+    <div id="sivo-sliding-sidebar">
+        <div class="sidebar-header">
+            <h2 id="sidebar-title">Details</h2>
+            <button class="sidebar-close-btn" onclick="closeSidebar()" title="Close">&times;</button>
+        </div>
+        <div class="sidebar-content" id="sidebar-content">
+            <!-- Dynamic content injected here -->
+        </div>
+    </div>
+
+    <!-- SIVO Data Injection -->
+    <script>
+        const viewsData = {"geographic_overview": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\"\u003e\n    \u003cdefs\u003e\n        \u003cfilter id=\"quadShadow\" x=\"-5%\" y=\"-5%\" width=\"110%\" height=\"110%\"\u003e\n            \u003cfeDropShadow dx=\"0\" dy=\"4\" stdDeviation=\"6\" flood-color=\"#000\" flood-opacity=\"0.05\"/\u003e\n        \u003c/filter\u003e\n    \u003c/defs\u003e\n    \u003crect width=\"1000\" height=\"1000\" fill=\"#f8fafc\"/\u003e\n\n    \u003ctext x=\"500\" y=\"50\" font-family=\"-apple-system, sans-serif\" font-size=\"32\" font-weight=\"700\" fill=\"#1e293b\" text-anchor=\"middle\"\u003eFour Quadrant Overview\u003c/text\u003e\n\n    \u003c!-- Quadrant 1 (Top Left) --\u003e\n    \u003crect id=\"quadrant_1\" x=\"40\" y=\"80\" width=\"440\" height=\"420\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#quadShadow)\" stroke=\"#e2e8f0\" name=\"quadrant_1\"/\u003e\n    \u003ctext x=\"260\" y=\"290\" font-family=\"-apple-system, sans-serif\" font-size=\"20\" fill=\"#94a3b8\" text-anchor=\"middle\" pointer-events=\"none\"\u003eTop Left Region\u003c/text\u003e\n\n    \u003c!-- Quadrant 2 (Top Right) --\u003e\n    \u003crect id=\"quadrant_2\" x=\"520\" y=\"80\" width=\"440\" height=\"420\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#quadShadow)\" stroke=\"#e2e8f0\" name=\"quadrant_2\"/\u003e\n    \u003ctext x=\"740\" y=\"290\" font-family=\"-apple-system, sans-serif\" font-size=\"20\" fill=\"#94a3b8\" text-anchor=\"middle\" pointer-events=\"none\"\u003eTop Right Region\u003c/text\u003e\n\n    \u003c!-- Quadrant 3 (Bottom Left) --\u003e\n    \u003crect id=\"quadrant_3\" x=\"40\" y=\"540\" width=\"440\" height=\"420\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#quadShadow)\" stroke=\"#e2e8f0\" name=\"quadrant_3\"/\u003e\n    \u003ctext x=\"260\" y=\"750\" font-family=\"-apple-system, sans-serif\" font-size=\"20\" fill=\"#94a3b8\" text-anchor=\"middle\" pointer-events=\"none\"\u003eBottom Left Region\u003c/text\u003e\n\n    \u003c!-- Quadrant 4 (Bottom Right) --\u003e\n    \u003crect id=\"quadrant_4\" x=\"520\" y=\"540\" width=\"440\" height=\"420\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#quadShadow)\" stroke=\"#e2e8f0\" name=\"quadrant_4\"/\u003e\n    \u003ctext x=\"740\" y=\"750\" font-family=\"-apple-system, sans-serif\" font-size=\"20\" fill=\"#94a3b8\" text-anchor=\"middle\" pointer-events=\"none\"\u003eBottom Right Region\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "quadrant_1", "value": 1, "tooltip": "\u003ch3\u003eSector Alpha\u003c/h3\u003e\u003cp\u003ePerformance: Excellent\u003c/p\u003e", "itemStyle": {"areaColor": "#3b82f6"}, "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}, {"name": "quadrant_2", "value": 1}, {"name": "quadrant_3", "value": 1}, {"name": "quadrant_4", "value": 1, "tooltip": "\u003ch3\u003eSector Delta\u003c/h3\u003e\u003cp\u003ePerformance: Critical\u003c/p\u003e", "itemStyle": {"areaColor": "#ef4444"}, "emphasis": {"itemStyle": {"areaColor": "#dc2626"}}}], "actions_manifest": {"quadrant_1": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003ch3\u003eSector Alpha\u003c/h3\u003e\u003cp\u003ePerformance: Excellent\u003c/p\u003e\u003c/h3\u003e", "title": "\u003ch3\u003eSector Alpha\u003c/h3\u003e\u003cp\u003ePerformance: Excellent\u003c/p\u003e", "panel_position": "overlay"}], "quadrant_4": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003ch3\u003eSector Delta\u003c/h3\u003e\u003cp\u003ePerformance: Critical\u003c/p\u003e\u003c/h3\u003e", "title": "\u003ch3\u003eSector Delta\u003c/h3\u003e\u003cp\u003ePerformance: Critical\u003c/p\u003e", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "90%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"quadrant_1": {"id": "quadrant_1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003ch3\u003eSector Alpha\u003c/h3\u003e\u003cp\u003ePerformance: Excellent\u003c/p\u003e\u003c/h3\u003e", "title": "\u003ch3\u003eSector Alpha\u003c/h3\u003e\u003cp\u003ePerformance: Excellent\u003c/p\u003e", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#3b82f6", "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "quadrant_2": {"id": "quadrant_2", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "quadrant_3": {"id": "quadrant_3", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "quadrant_4": {"id": "quadrant_4", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003ch3\u003eSector Delta\u003c/h3\u003e\u003cp\u003ePerformance: Critical\u003c/p\u003e\u003c/h3\u003e", "title": "\u003ch3\u003eSector Delta\u003c/h3\u003e\u003cp\u003ePerformance: Critical\u003c/p\u003e", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#ef4444", "hover_color": "#dc2626", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "quick_links": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1600 900\"\u003e\n    \u003cdefs\u003e\n        \u003cfilter id=\"shadow\" x=\"-5%\" y=\"-5%\" width=\"110%\" height=\"110%\"\u003e\n            \u003cfeDropShadow dx=\"0\" dy=\"4\" stdDeviation=\"6\" flood-color=\"#000\" flood-opacity=\"0.05\"/\u003e\n        \u003c/filter\u003e\n        \u003clinearGradient id=\"headerGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"\u003e\n            \u003cstop offset=\"0%\" stop-color=\"#1e293b\"/\u003e\n            \u003cstop offset=\"100%\" stop-color=\"#334155\"/\u003e\n        \u003c/linearGradient\u003e\n    \u003c/defs\u003e\n\n    \u003c!-- Background --\u003e\n    \u003crect width=\"1600\" height=\"900\" fill=\"#f1f5f9\"/\u003e\n\n    \u003c!-- Header --\u003e\n    \u003crect x=\"0\" y=\"0\" width=\"1600\" height=\"80\" fill=\"url(#headerGrad)\"/\u003e\n    \u003ctext id=\"dashboard_title\" x=\"40\" y=\"50\" font-family=\"-apple-system, sans-serif\" font-size=\"28\" font-weight=\"600\" fill=\"#ffffff\" pointer-events=\"none\" name=\"dashboard_title\"\u003eGlobal Command Center\u003c/text\u003e\n\n    \u003c!-- Main Content Area --\u003e\n    \u003crect id=\"main_panel\" x=\"40\" y=\"120\" width=\"1100\" height=\"740\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#shadow)\" stroke=\"#e2e8f0\" stroke-width=\"1\" name=\"main_panel\"/\u003e\n    \u003ctext x=\"590\" y=\"490\" font-family=\"-apple-system, sans-serif\" font-size=\"24\" fill=\"#94a3b8\" text-anchor=\"middle\" pointer-events=\"none\"\u003eMain Visualization Area\u003c/text\u003e\n\n    \u003c!-- Sidebar Right --\u003e\n    \u003c!-- Metric Box 1 --\u003e\n    \u003crect id=\"metric_box_1\" x=\"1180\" y=\"120\" width=\"380\" height=\"220\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#shadow)\" stroke=\"#e2e8f0\" stroke-width=\"1\" name=\"metric_box_1\"/\u003e\n    \u003ctext id=\"metric_title_1\" x=\"1210\" y=\"160\" font-family=\"-apple-system, sans-serif\" font-size=\"18\" font-weight=\"600\" fill=\"#64748b\" pointer-events=\"none\" name=\"metric_title_1\"\u003eMetric 1\u003c/text\u003e\n    \u003ctext id=\"metric_value_1\" x=\"1210\" y=\"240\" font-family=\"-apple-system, sans-serif\" font-size=\"48\" font-weight=\"700\" fill=\"#3b82f6\" pointer-events=\"none\" name=\"metric_value_1\"\u003e--\u003c/text\u003e\n\n    \u003c!-- Metric Box 2 --\u003e\n    \u003crect id=\"metric_box_2\" x=\"1180\" y=\"380\" width=\"380\" height=\"220\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#shadow)\" stroke=\"#e2e8f0\" stroke-width=\"1\" name=\"metric_box_2\"/\u003e\n    \u003ctext id=\"metric_title_2\" x=\"1210\" y=\"420\" font-family=\"-apple-system, sans-serif\" font-size=\"18\" font-weight=\"600\" fill=\"#64748b\" pointer-events=\"none\" name=\"metric_title_2\"\u003eMetric 2\u003c/text\u003e\n    \u003ctext id=\"metric_value_2\" x=\"1210\" y=\"500\" font-family=\"-apple-system, sans-serif\" font-size=\"48\" font-weight=\"700\" fill=\"#10b981\" pointer-events=\"none\" name=\"metric_value_2\"\u003e--\u003c/text\u003e\n\n    \u003c!-- Metric Box 3 --\u003e\n    \u003crect id=\"metric_box_3\" x=\"1180\" y=\"640\" width=\"380\" height=\"220\" rx=\"16\" fill=\"#ffffff\" filter=\"url(#shadow)\" stroke=\"#e2e8f0\" stroke-width=\"1\" name=\"metric_box_3\"/\u003e\n    \u003ctext id=\"metric_title_3\" x=\"1210\" y=\"680\" font-family=\"-apple-system, sans-serif\" font-size=\"18\" font-weight=\"600\" fill=\"#64748b\" pointer-events=\"none\" name=\"metric_title_3\"\u003eMetric 3\u003c/text\u003e\n    \u003ctext id=\"metric_value_3\" x=\"1210\" y=\"760\" font-family=\"-apple-system, sans-serif\" font-size=\"48\" font-weight=\"700\" fill=\"#f59e0b\" pointer-events=\"none\" name=\"metric_value_3\"\u003e--\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "dashboard_title", "value": 1}, {"name": "main_panel", "value": 1}, {"name": "metric_box_1", "value": 1, "tooltip": "Quick Link", "itemStyle": {"areaColor": "#f59e0b"}, "emphasis": {"itemStyle": {"areaColor": "#d97706"}}}, {"name": "metric_title_1", "value": 1}, {"name": "metric_value_1", "value": 1}, {"name": "metric_box_2", "value": 1}, {"name": "metric_title_2", "value": 1}, {"name": "metric_value_2", "value": 1}, {"name": "metric_box_3", "value": 1}, {"name": "metric_title_3", "value": 1}, {"name": "metric_value_3", "value": 1}], "actions_manifest": {"metric_box_1": [{"action_type": "tooltip", "content": "\u003ch3\u003eQuick Link\u003c/h3\u003e", "title": "Quick Link", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "90%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"dashboard_title": {"id": "dashboard_title", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "main_panel": {"id": "main_panel", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_box_1": {"id": "metric_box_1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQuick Link\u003c/h3\u003e", "title": "Quick Link", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#f59e0b", "hover_color": "#d97706", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_title_1": {"id": "metric_title_1", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_value_1": {"id": "metric_value_1", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_box_2": {"id": "metric_box_2", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_title_2": {"id": "metric_title_2", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_value_2": {"id": "metric_value_2", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_box_3": {"id": "metric_box_3", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_title_3": {"id": "metric_title_3", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "metric_value_3": {"id": "metric_value_3", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        const activeCharts = {};
+
+        function calculateLayoutSize(view, domElement) {
+            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
+                return view ? view.layout_size : undefined;
+            }
+            if (!domElement) return view.layout_size;
+
+            var containerWidth = domElement.clientWidth;
+            var containerHeight = domElement.clientHeight;
+
+            if (containerWidth <= 0 || containerHeight <= 0) {
+                return view.layout_size;
+            }
+
+            var fraction = parseFloat(view.layout_size.replace('%', '')) / 100.0;
+            var svgW = 1000;
+            var svgH = 1000;
+
+            if (view.svg_string) {
+                var viewBoxMatch = view.svg_string.match(/viewBox\s*=\s*['"]([^'"]+)['"]/i);
+                if (viewBoxMatch) {
+                    var parts = viewBoxMatch[1].trim().split(/[\s,]+/);
+                    if (parts.length >= 4) {
+                        svgW = parseFloat(parts[2]);
+                        svgH = parseFloat(parts[3]);
+                    }
+                } else {
+                    var wMatch = view.svg_string.match(/width\s*=\s*['"]([^'"]+)['"]/i);
+                    var hMatch = view.svg_string.match(/height\s*=\s*['"]([^'"]+)['"]/i);
+                    if (wMatch && hMatch) {
+                        var wVal = parseFloat(wMatch[1]);
+                        var hVal = parseFloat(hMatch[1]);
+                        if (!isNaN(wVal) && !isNaN(hVal)) {
+                            svgW = wVal;
+                            svgH = hVal;
+                        }
+                    }
+                }
+            }
+
+            if (svgW <= 0 || svgH <= 0) return view.layout_size;
+
+            var containerRatio = containerWidth / containerHeight;
+            var svgRatio = svgW / svgH;
+            var targetMaxPx;
+
+            if (containerRatio < svgRatio) {
+                var scale = (containerWidth * fraction) / svgW;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            } else {
+                var scale = (containerHeight * fraction) / svgH;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            }
+
+            return Math.round(targetMaxPx) + 'px';
+        }
+
+        Object.keys(viewsData).forEach(blockId => {
+            const viewData = viewsData[blockId];
+            const dom = document.getElementById('chart-' + blockId);
+
+            if (dom) {
+                const chart = echarts.init(dom, null, { renderer: viewData.render_mode || 'canvas' });
+                activeCharts[blockId] = chart;
+
+                echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
+
+                const option = {
+                    tooltip: { trigger: 'item' },
+                    geo: {
+                        map: 'sivoMap_' + blockId,
+                        roam: true,
+                        layoutCenter: ['50%', '50%'],
+                        layoutSize: calculateLayoutSize(viewData, dom),
+                        regions: viewData.echarts_data
+                    },
+                    series: []
+                };
+
+                if (viewData.data_binding) {
+                    option.series.push({
+                        type: 'map',
+                        map: 'sivoMap_' + blockId,
+                        geoIndex: 0,
+                        data: viewData.echarts_data
+                    });
+
+                    const db = viewData.data_binding;
+                    option.visualMap = {
+                        left: 'right',
+                        bottom: '5%',
+                        min: db.min_value,
+                        max: db.max_value,
+                        inRange: {
+                            color: [db.min_color, db.max_color]
+                        },
+                        text: [db.max_label || 'High', db.min_label || 'Low'],
+                        calculable: true,
+                        formatter: function (value) {
+                            if (db.legend_formatter === "currency") {
+                                return '$' + Math.round(value).toLocaleString();
+                            } else if (db.legend_formatter === "percent") {
+                                return Math.round(value) + '%';
+                            }
+                            return Math.round(value);
+                        }
+                    };
+                    if (db.legend_title) {
+                        option.title = { text: db.legend_title, left: 'right', top: '10px', textStyle: {fontSize: 12, color: '#6b7280', fontWeight: 'bold', textTransform: 'uppercase'} };
+                    }
+                }
+
+                chart.setOption(option);
+            }
+        });
+
+        function updateChartLayoutSizes() {
+            Object.keys(activeCharts).forEach(blockId => {
+                const chart = activeCharts[blockId];
+                const viewData = viewsData[blockId];
+                const dom = document.getElementById('chart-' + blockId);
+
+                if (chart && viewData && dom) {
+                    const newSize = calculateLayoutSize(viewData, dom);
+                    chart.setOption({
+                        geo: { layoutSize: newSize, layoutCenter: ['50%', '50%'] }
+                    });
+                    chart.resize();
+                }
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            updateChartLayoutSizes();
+        });
+
+        const detailsPanels = document.querySelectorAll('.sivo-details-panel');
+        const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
+
+        Object.keys(activeCharts).forEach(chartId => {
+            const chart = activeCharts[chartId];
+            chart.on('click', function(params) {
+                if(!params.name) return;
+
+                const viewData = viewsData[chartId];
+                const elementActions = viewData.actions_manifest[params.name];
+
+                let tooltipContent = null;
+                let payloadData = null;
+                let panelPosition = "none";
+
+                if (elementActions && elementActions.length > 0) {
+                    const tooltipActionForPos = elementActions.find(a => a.action_type === 'tooltip');
+                    if (tooltipActionForPos && tooltipActionForPos.panel_position) {
+                        panelPosition = tooltipActionForPos.panel_position;
+                    }
+
+                    elementActions.forEach(action => {
+                        if (action.action_type === 'url' && action.url) {
+                            if (action.target === '_blank') {
+                                window.open(action.url, '_blank');
+                            } else {
+                                window.location.href = action.url;
+                            }
+                        } else if (action.action_type === 'drilldown' && action.target_svg) {
+                            console.warn("Dashboard Drilldown triggered to:", action.target_svg);
+                        }
+                    });
+
+                    const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
+                    if (tooltipAction && tooltipAction.content) {
+                        tooltipContent = tooltipAction.content;
+                    }
+
+                    const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
+                    if (payloadAction && payloadAction.payload) {
+                        payloadData = payloadAction.payload;
+                    }
+                }
+
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
+                    document.getElementById('sidebar-title').innerText = params.name;
+                    document.getElementById('sidebar-content').innerHTML = tooltipContent;
+                    document.getElementById('sivo-sliding-sidebar').classList.add('active');
+
+                    detailsPanels.forEach(panel => {
+                        const container = panel.querySelector('.sivo-details-content');
+                        container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color);">${params.name}</h3><p style="color: #94a3b8; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                    });
+                } else {
+                    detailsPanels.forEach(panel => {
+                        const container = panel.querySelector('.sivo-details-content');
+                        if (tooltipContent) {
+                            container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color);">${params.name}</h3>${tooltipContent}`;
+                        } else {
+                            container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color);">${params.name}</h3><p style="color: var(--text-muted);">No additional details mapped.</p>`;
+                        }
+                    });
+                }
+
+                metricsPanels.forEach(panel => {
+                    const valueSpans = panel.querySelectorAll('.metric-value');
+                    valueSpans.forEach(span => {
+                        const key = span.getAttribute('data-metric-key');
+                        if (payloadData && payloadData[key] !== undefined) {
+                            span.innerText = payloadData[key];
+                        } else {
+                            span.innerText = '---';
+                        }
+                    });
+                });
+            });
+        });
+
+        function closeSidebar() {
+            document.getElementById('sivo-sliding-sidebar').classList.remove('active');
+        }
+
+
+    </script>
+</body>
+</html>
