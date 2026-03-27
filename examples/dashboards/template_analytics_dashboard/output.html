@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acme Analytics</title>
+
+    <!-- Include ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --sidebar-bg: #111827;
+            --sidebar-text: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --border-color: #e5e7eb;
+            --accent-color: #3b82f6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* App-like feel, scroll inner areas */
+        }
+
+        /* Fixed Left Sidebar */
+        .app-sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .app-brand {
+            padding: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .app-nav {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .app-nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: #d1d5db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .app-nav-item:hover {
+            background-color: rgba(255,255,255,0.05);
+            color: #ffffff;
+        }
+
+        .app-nav-item.active {
+            background-color: var(--accent-color);
+            color: #ffffff;
+        }
+
+        /* Main Content Area */
+        .app-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background-color: var(--bg-color);
+        }
+
+        header {
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Stats Row (Top) */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            padding: 1.5rem 2rem 0 2rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 1.5rem 2rem 2rem 2rem;
+        }
+
+        .sivo-card, .html-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 380px;
+        }
+
+        .sivo-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .sivo-native-overlay-svg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Details & Metrics Panels */
+        .sivo-details-panel {
+            min-height: auto;
+        }
+
+        .sivo-metrics-panel {
+            min-height: auto;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Global Sliding Sidebar Overlay */
+        #sivo-sliding-sidebar {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            box-shadow: -4px 0 25px rgba(0,0,0,0.1);
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border-color);
+        }
+
+        #sivo-sliding-sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9fafb;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .sidebar-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-close-btn:hover {
+            background-color: #e5e7eb;
+        }
+
+        .sidebar-content {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-sidebar">
+        <div class="app-brand">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #3b82f6;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            Analytics
+        </div>
+        <div class="app-nav">
+            <div class="app-nav-item active">Dashboard Overview</div>
+            <div class="app-nav-item">Reports</div>
+            <div class="app-nav-item">Campaigns</div>
+            <div class="app-nav-item">Settings</div>
+        </div>
+    </div>
+
+    <div class="app-main">
+        <header>
+            <h1>Acme Analytics</h1>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">Last updated: Just now</div>
+        </header>
+
+        <!-- Stats Row Slot (top KPIs) -->
+        <div class="stats-container">
+
+
+                <div class="html-card" id="card-stat_users" style="min-height: auto;">
+                    <div class="card-content" id="container-stat_users">
+
+    <div style="display: flex; flex-direction: column; justify-content: center;">
+        <div style="font-size: 0.875rem; color: #6b7280; font-weight: 600; text-transform: uppercase;">Total Users</div>
+        <div style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0.5rem 0;">12,450</div>
+        <div style="font-size: 0.875rem; color: #10b981; font-weight: 500;">+14% from last month</div>
+    </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="html-card" id="card-stat_rev" style="min-height: auto;">
+                    <div class="card-content" id="container-stat_rev">
+
+    <div style="display: flex; flex-direction: column; justify-content: center;">
+        <div style="font-size: 0.875rem; color: #6b7280; font-weight: 600; text-transform: uppercase;">Revenue</div>
+        <div style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0.5rem 0;">$84,200</div>
+        <div style="font-size: 0.875rem; color: #10b981; font-weight: 500;">+2.5% from last month</div>
+    </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="html-card sivo-metrics-panel" id="card-live_metrics" data-block-id="live_metrics">
+                    <div class="card-content sivo-metrics-content" id="container-live_metrics" style="padding: 1.25rem;">
+                        <div style="font-size: 0.875rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem;">Active Sessions</div>
+
+                        <div style="font-size: 1.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">
+                            <span class="metric-value" data-metric-key="current_users">---</span>
+                        </div>
+                        <div style="font-size: 0.875rem; color: #10b981; display: flex; align-items: center; gap: 0.25rem;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            Live Updates
+                        </div>
+
+                    </div>
+                </div>
+
+
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-container" id="dashboard-container">
+
+
+                <div class="sivo-card" id="card-revenue_trend" style="grid-column: span 2;">
+                    <div class="card-header">
+                        Revenue Trend
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); cursor: pointer;"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                    </div>
+                    <div class="sivo-container" id="container-revenue_trend">
+                        <div id="chart-revenue_trend" style="width: 100%; height: 100%;"></div>
+                        <div id="overlay-revenue_trend" class="sivo-native-overlay-svg-container"></div>
+                    </div>
+                </div>
+
+
+
+                <div class="sivo-card" id="card-user_demographics" style="grid-column: span 1;">
+                    <div class="card-header">
+                        User Demographics
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-secondary); cursor: pointer;"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                    </div>
+                    <div class="sivo-container" id="container-user_demographics">
+                        <div id="chart-user_demographics" style="width: 100%; height: 100%;"></div>
+                        <div id="overlay-user_demographics" class="sivo-native-overlay-svg-container"></div>
+                    </div>
+                </div>
+
+
+
+                <div class="html-card sivo-details-panel" id="card-quarter_details" data-block-id="quarter_details" style="grid-column: span 2;">
+                    <div class="card-header">Quarter Breakdown</div>
+                    <div class="card-content sivo-details-content" id="container-quarter_details">
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary); font-style: italic; text-align: center;">
+                            <p>Click a bar above to see details.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="html-card sivo-metrics-panel" id="card-selected_stats" data-block-id="selected_stats" style="grid-column: span 1;">
+                    <div class="card-header">Selection Overview</div>
+                    <div class="card-content sivo-metrics-content" id="container-selected_stats">
+
+                        <div class="metric-row">
+                            <span class="metric-label">Selected Quarter</span>
+                            <span class="metric-value" data-metric-key="selected_quarter">---</span>
+                        </div>
+
+                        <div class="metric-row">
+                            <span class="metric-label">Revenue</span>
+                            <span class="metric-value" data-metric-key="revenue">---</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+        </div>
+    </div>
+
+    <!-- Global Sliding Sidebar Overlay -->
+    <div id="sivo-sliding-sidebar">
+        <div class="sidebar-header">
+            <h2 id="sidebar-title">Details</h2>
+            <button class="sidebar-close-btn" onclick="closeSidebar()" title="Close">&times;</button>
+        </div>
+        <div class="sidebar-content" id="sidebar-content">
+            <!-- Dynamic content injected here -->
+        </div>
+    </div>
+
+    <!-- SIVO Data Injection -->
+    <script>
+        const viewsData = {"revenue_trend": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"\u003e\n        \u003crect id=\"bg\" width=\"400\" height=\"300\" fill=\"#ffffff\" name=\"bg\"/\u003e\n        \u003c!-- Y-Axis --\u003e\n        \u003cline x1=\"50\" y1=\"250\" x2=\"380\" y2=\"250\" stroke=\"#e5e7eb\" stroke-width=\"2\"/\u003e\n        \u003cline x1=\"50\" y1=\"50\" x2=\"50\" y2=\"250\" stroke=\"#e5e7eb\" stroke-width=\"2\"/\u003e\n        \n        \u003c!-- Bars --\u003e\n        \u003crect id=\"bar1\" x=\"80\" y=\"150\" width=\"40\" height=\"100\" fill=\"#3b82f6\" rx=\"4\" name=\"bar1\"/\u003e\n        \u003crect id=\"bar2\" x=\"150\" y=\"100\" width=\"40\" height=\"150\" fill=\"#3b82f6\" rx=\"4\" name=\"bar2\"/\u003e\n        \u003crect id=\"bar3\" x=\"220\" y=\"50\" width=\"40\" height=\"200\" fill=\"#3b82f6\" rx=\"4\" name=\"bar3\"/\u003e\n        \u003crect id=\"bar4\" x=\"290\" y=\"180\" width=\"40\" height=\"70\" fill=\"#3b82f6\" rx=\"4\" name=\"bar4\"/\u003e\n        \n        \u003c!-- Labels --\u003e\n        \u003ctext x=\"100\" y=\"270\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#6b7280\" text-anchor=\"middle\"\u003eQ1\u003c/text\u003e\n        \u003ctext x=\"170\" y=\"270\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#6b7280\" text-anchor=\"middle\"\u003eQ2\u003c/text\u003e\n        \u003ctext x=\"240\" y=\"270\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#6b7280\" text-anchor=\"middle\"\u003eQ3\u003c/text\u003e\n        \u003ctext x=\"310\" y=\"270\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#6b7280\" text-anchor=\"middle\"\u003eQ4\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "bar1", "value": 1, "tooltip": "Q1 Revenue: $15,000", "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}, {"name": "bar2", "value": 1, "tooltip": "Q2 Revenue: $22,000", "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}, {"name": "bar3", "value": 1, "tooltip": "Q3 Revenue: $35,000", "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}, {"name": "bar4", "value": 1, "tooltip": "Q4 Revenue: $12,000", "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}], "actions_manifest": {"bar1": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ1 Revenue: $15,000\u003c/h3\u003e", "title": "Q1 Revenue: $15,000", "panel_position": "overlay"}], "bar2": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ2 Revenue: $22,000\u003c/h3\u003e", "title": "Q2 Revenue: $22,000", "panel_position": "overlay"}], "bar3": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ3 Revenue: $35,000\u003c/h3\u003e", "title": "Q3 Revenue: $35,000", "panel_position": "overlay"}], "bar4": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ4 Revenue: $12,000\u003c/h3\u003e", "title": "Q4 Revenue: $12,000", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "90%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "bar1": {"id": "bar1", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ1 Revenue: $15,000\u003c/h3\u003e", "title": "Q1 Revenue: $15,000", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "bar2": {"id": "bar2", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ2 Revenue: $22,000\u003c/h3\u003e", "title": "Q2 Revenue: $22,000", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "bar3": {"id": "bar3", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ3 Revenue: $35,000\u003c/h3\u003e", "title": "Q3 Revenue: $35,000", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "bar4": {"id": "bar4", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eQ4 Revenue: $12,000\u003c/h3\u003e", "title": "Q4 Revenue: $12,000", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "user_demographics": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 300\"\u003e\n        \u003crect id=\"bg\" width=\"300\" height=\"300\" fill=\"#ffffff\" name=\"bg\"/\u003e\n        \u003ccircle id=\"pie_base\" cx=\"150\" cy=\"150\" r=\"100\" fill=\"#e5e7eb\" name=\"pie_base\"/\u003e\n        \u003cpath id=\"pie_slice\" d=\"M150,150 L150,50 A100,100 0 0,1 250,150 Z\" fill=\"#10b981\" name=\"pie_slice\"/\u003e\n        \u003ccircle id=\"pie_center\" cx=\"150\" cy=\"150\" r=\"60\" fill=\"#ffffff\" name=\"pie_center\"/\u003e\n        \u003ctext x=\"150\" y=\"155\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" fill=\"#111827\" text-anchor=\"middle\"\u003e25%\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "pie_base", "value": 1}, {"name": "pie_slice", "value": 1, "tooltip": "New Users: 25%", "emphasis": {"itemStyle": {"areaColor": "#059669"}}}, {"name": "pie_center", "value": 1}], "actions_manifest": {"pie_slice": [{"action_type": "tooltip", "content": "\u003ch3\u003eNew Users: 25%\u003c/h3\u003e", "title": "New Users: 25%", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "90%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "pie_base": {"id": "pie_base", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "pie_slice": {"id": "pie_slice", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eNew Users: 25%\u003c/h3\u003e", "title": "New Users: 25%", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#059669", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "pie_center": {"id": "pie_center", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        const activeCharts = {};
+
+        function calculateLayoutSize(view, domElement) {
+            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
+                return view ? view.layout_size : undefined;
+            }
+            if (!domElement) return view.layout_size;
+
+            var containerWidth = domElement.clientWidth;
+            var containerHeight = domElement.clientHeight;
+            var layoutRatio = view.layout_size ? parseFloat(view.layout_size.replace('%', '')) / 100 : 0.95;
+
+            var svgWidth = view.metadata && view.metadata.viewBox ? parseFloat(view.metadata.viewBox.split(' ')[2]) : 1000;
+            var svgHeight = view.metadata && view.metadata.viewBox ? parseFloat(view.metadata.viewBox.split(' ')[3]) : 1000;
+            var svgAspect = svgWidth / svgHeight;
+            var containerAspect = containerWidth / containerHeight;
+
+            var finalSize;
+            if (containerAspect > svgAspect) {
+                finalSize = Math.floor(containerHeight * layoutRatio);
+            } else {
+                finalSize = Math.floor(containerWidth * layoutRatio);
+            }
+            return finalSize + 'px';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            for (const [blockId, viewData] of Object.entries(viewsData)) {
+                if (!document.getElementById('chart-' + blockId)) continue;
+
+                echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
+
+                const chart = echarts.init(document.getElementById('chart-' + blockId), null, { renderer: viewData.render_mode || 'canvas' });
+                activeCharts[blockId] = chart;
+
+                const dom = document.getElementById('chart-' + blockId);
+                const calcSize = calculateLayoutSize(viewData, dom);
+
+                const option = {
+                    tooltip: {},
+                    geo: {
+                        map: 'sivoMap_' + blockId,
+                        roam: true,
+                        layoutCenter: ['50%', '50%'],
+                        layoutSize: calcSize,
+                        itemStyle: { color: 'transparent' },
+                        emphasis: { itemStyle: { color: 'transparent' }, label: { show: false } },
+                        regions: viewData.echarts_data
+                    },
+                    series: []
+                };
+
+                if (viewData.data_binding) {
+                    option.series.push({
+                        type: 'map',
+                        map: 'sivoMap_' + blockId,
+                        geoIndex: 0,
+                        data: viewData.echarts_data
+                    });
+
+                    const db = viewData.data_binding;
+                    option.visualMap = {
+                        left: 'right',
+                        bottom: '5%',
+                        min: db.min_value,
+                        max: db.max_value,
+                        inRange: {
+                            color: [db.min_color, db.max_color]
+                        },
+                        text: [db.max_label || 'High', db.min_label || 'Low'],
+                        calculable: true,
+                        formatter: function (value) {
+                            if (db.legend_formatter === "currency") {
+                                return '$' + Math.round(value).toLocaleString();
+                            } else if (db.legend_formatter === "percent") {
+                                return Math.round(value) + '%';
+                            }
+                            return Math.round(value);
+                        }
+                    };
+                    if (db.legend_title) {
+                        option.title = { text: db.legend_title, left: 'right', top: '10px', textStyle: {fontSize: 12, color: '#4b5563', fontWeight: 'bold', textTransform: 'uppercase'} };
+                    }
+                }
+
+                chart.setOption(option);
+            }
+
+            // Interaction bindings
+            const detailsPanels = document.querySelectorAll('.sivo-details-panel');
+            const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
+
+            Object.keys(activeCharts).forEach(chartId => {
+                const chart = activeCharts[chartId];
+                chart.on('click', function(params) {
+                    if(!params.name) return;
+
+                    const viewData = viewsData[chartId];
+                    const elementActions = viewData.actions_manifest[params.name];
+
+                    let tooltipContent = null;
+                    let payloadData = null;
+                    let panelPosition = "none";
+
+                    if (elementActions && elementActions.length > 0) {
+                        const tooltipActionForPos = elementActions.find(a => a.action_type === 'tooltip');
+                        if (tooltipActionForPos && tooltipActionForPos.panel_position) {
+                            panelPosition = tooltipActionForPos.panel_position;
+                        }
+
+                        elementActions.forEach(action => {
+                            if (action.action_type === 'url' && action.url) {
+                                if (action.target === '_blank') {
+                                    window.open(action.url, '_blank');
+                                } else {
+                                    window.location.href = action.url;
+                                }
+                            }
+                        });
+
+                        const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
+                        if (tooltipAction && tooltipAction.content) {
+                            tooltipContent = tooltipAction.content;
+                        }
+
+                        const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
+                        if (payloadAction && payloadAction.payload) {
+                            payloadData = payloadAction.payload;
+                        }
+                    }
+
+                    if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
+                        document.getElementById('sidebar-title').innerText = params.name;
+                        document.getElementById('sidebar-content').innerHTML = tooltipContent;
+                        document.getElementById('sivo-sliding-sidebar').classList.add('active');
+                    } else {
+                        detailsPanels.forEach(panel => {
+                            const container = panel.querySelector('.sivo-details-content');
+                            if (tooltipContent) {
+                                container.innerHTML = `<h3 style="margin-top:0; color:var(--text-primary);">${params.name}</h3>${tooltipContent}`;
+                            } else {
+                                container.innerHTML = `<h3 style="margin-top:0; color:var(--text-primary);">${params.name}</h3><p style="color: var(--text-secondary);">No additional details mapped.</p>`;
+                            }
+                        });
+                    }
+
+                    metricsPanels.forEach(panel => {
+                        const valueSpans = panel.querySelectorAll('.metric-value');
+                        valueSpans.forEach(span => {
+                            const key = span.getAttribute('data-metric-key');
+                            if (payloadData && payloadData[key] !== undefined) {
+                                span.innerText = payloadData[key];
+                            } else {
+                                span.innerText = '---';
+                            }
+                        });
+                    });
+                });
+            });
+
+            // Handle resizing
+            window.addEventListener('resize', () => {
+                Object.keys(activeCharts).forEach(blockId => {
+                    const chart = activeCharts[blockId];
+                    const viewData = viewsData[blockId];
+                    const dom = document.getElementById('chart-' + blockId);
+                    if (chart && viewData && dom) {
+                        const newSize = calculateLayoutSize(viewData, dom);
+                        chart.setOption({
+                            geo: { layoutSize: newSize, layoutCenter: ['50%', '50%'] }
+                        });
+                        chart.resize();
+                    }
+                });
+            });
+        });
+
+        function closeSidebar() {
+            document.getElementById('sivo-sliding-sidebar').classList.remove('active');
+        }
+
+
+    </script>
+</body>
+</html>
