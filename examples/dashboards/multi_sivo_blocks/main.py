@@ -13,7 +13,8 @@ def main():
         <text x="600" y="260" font-family="sans-serif" font-size="18" fill="#333" pointer-events="none" text-anchor="middle">Europe</text>
         <text x="800" y="350" font-family="sans-serif" font-size="18" fill="#333" pointer-events="none" text-anchor="middle">Asia</text>
     </svg>"""
-    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Active Nodes")
+    # You can pass layout_size to any Sivo instance to control how much of the dashboard block it fills
+    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Active Nodes", layout_size="100%")
     sivo_map.map("node_na", hover_color="#2563eb", tooltip="Status: Healthy")
     sivo_map.map("node_eu", hover_color="#d97706", tooltip="Status: Degradation")
     sivo_map.map("node_as", hover_color="#059669", tooltip="Status: Healthy")
@@ -33,7 +34,8 @@ def main():
         <text x="150" y="460" font-family="sans-serif" font-size="16" fill="#333" pointer-events="none" text-anchor="middle">Primary DB</text>
         <text x="450" y="460" font-family="sans-serif" font-size="16" fill="#333" pointer-events="none" text-anchor="middle">Replica DB</text>
     </svg>"""
-    sivo_topo = Sivo.from_string(topo_svg, theme="light", title="US-East Topology")
+    # Here we restrict the topology to 80% of its block size so it doesn't touch the borders
+    sivo_topo = Sivo.from_string(topo_svg, theme="light", title="US-East Topology", layout_size="80%")
     sivo_topo.map("gateway", hover_color="#475569", tooltip="Throughput: 15k req/s")
     sivo_topo.map("db_primary", hover_color="#2563eb", tooltip="CPU: 85% | Write-Heavy")
     sivo_topo.map("db_replica", hover_color="#64748b", tooltip="CPU: 12% | Read-Only")
@@ -49,7 +51,7 @@ def main():
         <circle id="point3" cx="700" cy="150" r="10" fill="#3b82f6" />
         <circle id="point4" cx="900" cy="50" r="10" fill="#3b82f6" />
     </svg>"""
-    sivo_metrics = Sivo.from_string(metrics_svg, theme="light", title="Latency Trend (7d)")
+    sivo_metrics = Sivo.from_string(metrics_svg, theme="light", title="Latency Trend (7d)", layout_size="95%")
     sivo_metrics.map("point1", tooltip="24ms")
     sivo_metrics.map("point2", tooltip="18ms")
     sivo_metrics.map("point3", tooltip="35ms (Spike)")

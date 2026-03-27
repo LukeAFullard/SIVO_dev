@@ -13,7 +13,8 @@ def main():
         <text x="600" y="260" font-family="sans-serif" font-size="18" fill="#333" pointer-events="none" text-anchor="middle">Europe</text>
         <text x="800" y="350" font-family="sans-serif" font-size="18" fill="#333" pointer-events="none" text-anchor="middle">Asia</text>
     </svg>"""
-    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Active Nodes")
+    # Pass `layout_size` to control exactly how much of the card the SVG fills.
+    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Active Nodes", layout_size="100%")
     sivo_map.map("node_na", hover_color="#2563eb", tooltip="NA Region Details", callback_payload={"status": "Healthy", "latency": "24ms"})
     sivo_map.map("node_eu", hover_color="#d97706", tooltip="EU Region Details", callback_payload={"status": "Degraded", "latency": "180ms"})
     sivo_map.map("node_as", hover_color="#059669", tooltip="AS Region Details", callback_payload={"status": "Healthy", "latency": "45ms"})

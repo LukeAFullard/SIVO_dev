@@ -12,7 +12,8 @@ def main():
         <text x="550" y="150" font-family="sans-serif" font-size="18" fill="#fff" pointer-events="none" text-anchor="middle">EU Data Center</text>
         <text x="850" y="150" font-family="sans-serif" font-size="18" fill="#fff" pointer-events="none" text-anchor="middle">AS Data Center</text>
     </svg>"""
-    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Fleet Status")
+    # Explicitly configure `layout_size` so the SVG fills 100% of the Hero container bounds
+    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Fleet Status", layout_size="100%")
 
     sivo_map.map("node_na", hover_color="#2563eb", tooltip="Click for NA logs")
     sivo_map.map("node_eu", hover_color="#d97706", tooltip="Click for EU logs")
@@ -24,7 +25,8 @@ def main():
         <circle cx="200" cy="200" r="100" fill="#3b82f6" />
         <text x="200" y="200" font-family="sans-serif" font-size="24" fill="#fff" text-anchor="middle">99.9% Uptime</text>
     </svg>"""
-    sivo_chart = Sivo.from_string(chart_svg, theme="light")
+    # You can change `layout_size` independently for each block to create margins or focus area
+    sivo_chart = Sivo.from_string(chart_svg, theme="light", layout_size="80%")
 
 
     # --- 3. Assemble the Dashboard using 'hero_top' template ---

@@ -98,7 +98,8 @@
         }
 
         .sivo-container {
-            flex: 1;
+            flex: 1 1 0;
+            min-height: 0;
             width: 100%;
             height: 100%;
             position: relative;
@@ -382,6 +383,7 @@
                     geo: {
                         map: 'sivoMap_' + blockId,
                         roam: true,
+                        layoutCenter: ['50%', '50%'],
                         layoutSize: calculateLayoutSize(viewData, dom),
                         regions: viewData.echarts_data // Apply colors directly to SVG regions via geo
                     },
@@ -437,7 +439,7 @@
                 if (chart && viewData && dom) {
                     const newSize = calculateLayoutSize(viewData, dom);
                     chart.setOption({
-                        geo: { layoutSize: newSize }
+                        geo: { layoutSize: newSize, layoutCenter: ['50%', '50%'] }
                     });
                     chart.resize();
                 }
