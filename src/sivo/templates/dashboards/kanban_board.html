@@ -7,6 +7,7 @@
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
@@ -461,7 +462,19 @@
                         }
                     }
 
-                    if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
+
+                if (!elementActions || !elementActions.find(a => a.action_type === 'callback')) {
+                    window.parent.postMessage({
+                        type: 'sivo_click',
+                        payload: {
+                            element_id: params.name,
+                            event_name: 'click',
+                            data: {}
+                        }
+                    }, '*');
+                }
+
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                         document.getElementById('sidebar-title').innerText = params.name;
                         document.getElementById('sidebar-content').innerHTML = tooltipContent;
                         document.getElementById('sivo-sliding-sidebar').classList.add('active');

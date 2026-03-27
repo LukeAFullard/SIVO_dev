@@ -6,6 +6,7 @@
     <title>Interactive Zoom Quad Grid</title>
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg-color: #f1f5f9;
@@ -488,6 +489,45 @@
                                 }
                             }
                             requestAnimationFrame(animateZoom);
+
+                        } else if (action.action_type === 'confetti') {
+                            if (typeof confetti === 'function') {
+                                var x = 0.5, y = 0.5;
+                                if (params.event && params.event.event) {
+                                    var e = params.event.event;
+                                    var clientX = e.clientX;
+                                    var clientY = e.clientY;
+
+                                    if (clientX === undefined && e.changedTouches && e.changedTouches.length > 0) {
+                                        clientX = e.changedTouches[0].clientX;
+                                        clientY = e.changedTouches[0].clientY;
+                                    } else if (clientX === undefined && e.touches && e.touches.length > 0) {
+                                        clientX = e.touches[0].clientX;
+                                        clientY = e.touches[0].clientY;
+                                    }
+
+                                    if (clientX !== undefined && clientY !== undefined) {
+                                        x = clientX / window.innerWidth;
+                                        y = clientY / window.innerHeight;
+                                    }
+                                }
+                                confetti({
+                                    particleCount: action.particle_count || 100,
+                                    spread: action.spread || 70,
+                                    origin: { x: x, y: y },
+                                    zIndex: 10000
+                                });
+                            }
+                        } else if (action.action_type === 'callback') {
+                            console.log('Triggering callback:', action.event_name, action.payload);
+                            window.parent.postMessage({
+                                type: 'sivo_click',
+                                payload: {
+                                    element_id: params.name,
+                                    event_name: action.event_name,
+                                    data: action.payload || {}
+                                }
+                            }, '*');
                         } else if (action.action_type === 'drilldown' && action.target_svg) {
                             console.warn("Dashboard Drilldown triggered to:", action.target_svg);
                         }
