@@ -2102,6 +2102,7 @@ class Sivo:
             "disable_resizer": getattr(self.infographic, "disable_resizer", False),
             "disable_tooltips": getattr(self.infographic, "disable_tooltips", False),
             "disable_zoom_controls": getattr(self.infographic, "disable_zoom_controls", False),
+            "lock_scroll_bounds": getattr(self.infographic, "lock_scroll_bounds", True),
             "presentation_order": getattr(self.infographic, "presentation_order", None),
             "layout_size": getattr(self.infographic, "layout_size", None),
             "starting_zoom": getattr(self.infographic, "starting_zoom", 1.0),
@@ -2135,6 +2136,9 @@ class Sivo:
             "border_image_opacity": getattr(self.infographic, "border_image_opacity", 1.0),
             "border_image_grayscale": getattr(self.infographic, "border_image_grayscale", False),
             "background_image_opacity": getattr(self.infographic, "background_image_opacity", 1.0),
+            "background_image_grayscale": getattr(self.infographic, "background_image_grayscale", False),
+            "svg_background_image_url": getattr(self.infographic, "svg_background_image_url", None),
+            "svg_background_image_opacity": getattr(self.infographic, "svg_background_image_opacity", 1.0),
             "svg_background_image_grayscale": getattr(self.infographic, "svg_background_image_grayscale", False),
             "svg_background_image_insert_after": getattr(self.infographic, "svg_background_image_insert_after", None),
             "transparent_template_lines": getattr(self.infographic, "transparent_template_lines", False)

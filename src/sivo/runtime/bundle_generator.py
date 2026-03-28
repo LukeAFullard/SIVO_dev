@@ -200,6 +200,7 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             "disable_panel": view_obj.get("disable_panel", False),
             "panel_width": view_obj.get("panel_width", None),
             "panel_height": view_obj.get("panel_height", None),
+            "panel_css": view_obj.get("panel_css", None),
             "disable_resizer": view_obj.get("disable_resizer", False),
             "disable_tooltips": view_obj.get("disable_tooltips", False),
             "disable_zoom_controls": view_obj.get("disable_zoom_controls", False),
@@ -240,6 +241,11 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             "background_image_url": view_obj.get("background_image_url", None),
             "background_image_opacity": view_obj.get("background_image_opacity", 1.0),
             "background_image_grayscale": view_obj.get("background_image_grayscale", False),
+            "svg_background_image_url": view_obj.get("svg_background_image_url", None),
+            "svg_background_image_opacity": view_obj.get("svg_background_image_opacity", 1.0),
+            "svg_background_image_grayscale": view_obj.get("svg_background_image_grayscale", False),
+            "svg_background_image_insert_after": view_obj.get("svg_background_image_insert_after", None),
+            "transparent_template_lines": view_obj.get("transparent_template_lines", False),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:
