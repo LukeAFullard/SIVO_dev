@@ -13,10 +13,13 @@ def main():
     dashboard = SivoDashboard(title="System Operations", columns=4)
     dashboard.set_grid_layout(
         desktop='''
-    "main"
+    "metrics metrics metrics metrics"
+    "map map map details"
         ''',
         mobile='''
-    "main"
+    "metrics"
+    "map"
+    "details"
         '''
     )
 
@@ -24,7 +27,8 @@ def main():
     dashboard.add_metrics_panel(
         "system_metrics",
         title="Live Telemetry",
-        metrics=["cpu_load", "memory_usage", "network_io", "active_connections"]
+        metrics=["cpu_load", "memory_usage", "network_io", "active_connections"],
+        grid_area="metrics"
     )
 
     # Primary Map
@@ -59,13 +63,14 @@ def main():
         callback_payload={"cpu_load": "99%", "memory_usage": "98%", "network_io": "0.1 GB/s", "active_connections": "52"}
     )
 
-    dashboard.add_sivo_block("cluster_topology", cluster_map)
+    dashboard.add_sivo_block("cluster_topology", cluster_map, grid_area="map")
 
     # Details Panel
     dashboard.add_details_panel(
         "node_details",
         title="Cluster Logs",
-        placeholder="Select a cluster quadrant to view active logs and status."
+        placeholder="Select a cluster quadrant to view active logs and status.",
+        grid_area="details"
     )
 
 

@@ -50,8 +50,8 @@
             /* Remove overflow: hidden so body can scroll if needed */
 
             grid-template-areas:
-    "main sidebar"
-"main sidebar"
+    "main sidebar1"
+"main sidebar2"
         ;
 
         }
@@ -162,7 +162,8 @@
 
                 grid-template-areas:
     "main"
-"sidebar"
+"sidebar1"
+"sidebar2"
         ;
 
             }
@@ -203,7 +204,7 @@
 
 
 
-            <div class="html-card sivo-metrics-panel" id="card-metrics" data-block-id="metrics" style="grid-area: sidebar;">
+            <div class="html-card sivo-metrics-panel" id="card-metrics" data-block-id="metrics" style="grid-area: sidebar1;">
                 <div class="card-header">Node Metrics</div>
                 <div class="card-content sivo-metrics-content" id="container-metrics">
                     <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -229,7 +230,7 @@
 
 
 
-            <div class="html-card sivo-details-panel" id="card-details" data-block-id="details" style="grid-area: sidebar;">
+            <div class="html-card sivo-details-panel" id="card-details" data-block-id="details" style="grid-area: sidebar2;">
                 <div class="card-header">Node Details</div>
                 <div class="card-content sivo-details-content" id="container-details">
                     <p class="placeholder-text" style="color: #64748b;">Select an item to view details.</p>

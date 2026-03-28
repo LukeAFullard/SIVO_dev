@@ -14,10 +14,13 @@ def main():
     dashboard.set_grid_layout(
         desktop='''
     "left right"
+    "left_details right_details"
         ''',
         mobile='''
     "left"
-"right"
+    "left_details"
+    "right"
+    "right_details"
         '''
     )
 
@@ -39,7 +42,7 @@ def main():
         "left_details",
         title="Left View Details",
         placeholder="Select a region on the left to view details.",
-        grid_area="left"
+        grid_area="left_details"
     )
 
     # Right Map
@@ -60,7 +63,7 @@ def main():
         "right_details",
         title="Right View Details",
         placeholder="Select a region on the right to view details.",
-        grid_area="right"
+        grid_area="right_details"
     )
 
     print("Generating Split Screen Dashboard to 'output.html'...")

@@ -24,12 +24,13 @@ def main():
     dashboard = SivoDashboard(title="Sidebar Layout HTML Template Example", columns=1)
     dashboard.set_grid_layout(
         desktop='''
-    "sidebar main"
-"sidebar main"
+    "sidebar1 main"
+"sidebar2 main"
         ''',
         mobile='''
     "main"
-"sidebar"
+"sidebar1"
+"sidebar2"
         '''
     )
 
@@ -37,8 +38,8 @@ def main():
     dashboard.add_sivo_block("global_map", sivo_map, grid_area="main")
 
     # Assign interaction panels to the 'sidebar' slot
-    dashboard.add_metrics_panel("metrics", title="Node Metrics", metrics=["status", "latency"], grid_area="sidebar")
-    dashboard.add_details_panel("details", title="Node Details", grid_area="sidebar")
+    dashboard.add_metrics_panel("metrics", title="Node Metrics", metrics=["status", "latency"], grid_area="sidebar1")
+    dashboard.add_details_panel("details", title="Node Details", grid_area="sidebar2")
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")

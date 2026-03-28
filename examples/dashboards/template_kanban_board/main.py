@@ -30,19 +30,21 @@ def main():
     dashboard = SivoDashboard(title="Project Sprint Board", columns=3)
     dashboard.set_grid_layout(
         desktop='''
-    "col1 col2 col3 col4"
+    "to_do1 in_progress done review"
+    "to_do2 in_progress done review"
         ''',
         mobile='''
-    "col1"
-"col2"
-"col3"
-"col4"
+    "to_do1"
+    "to_do2"
+    "in_progress"
+    "done"
+    "review"
         '''
     )
 
     # Assign blocks to different "lanes" using the 'slot' parameter
-    dashboard.add_sivo_block("task_api", task1, grid_area="to_do")
-    dashboard.add_sivo_block("task_db", task2, grid_area="to_do")
+    dashboard.add_sivo_block("task_api", task1, grid_area="to_do1")
+    dashboard.add_sivo_block("task_db", task2, grid_area="to_do2")
 
     dashboard.add_sivo_block("task_auth", task3, grid_area="in_progress")
 

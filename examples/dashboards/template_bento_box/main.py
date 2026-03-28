@@ -15,17 +15,19 @@ def main():
     dashboard = SivoDashboard(title="Operations Overview", columns=3)
     dashboard.set_grid_layout(
         desktop='''
+    "header header header"
     "main main side1"
-"main main side2"
-"bottom1 bottom2 bottom3"
+    "main main side2"
+    "bottom1 bottom2 bottom3"
         ''',
         mobile='''
+    "header"
     "main"
-"side1"
-"side2"
-"bottom1"
-"bottom2"
-"bottom3"
+    "side1"
+    "side2"
+    "bottom1"
+    "bottom2"
+    "bottom3"
         '''
     )
 
@@ -36,7 +38,7 @@ def main():
         <p style="color: #64748b; margin-top: 10px;">Live monitoring of regional data centers and active server nodes.</p>
     </div>
     '''
-    dashboard.add_html_block("header_info", header_html)
+    dashboard.add_html_block("header_info", header_html, grid_area="header")
 
     # 3. Create a primary Map for the left side
     us_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True)
@@ -65,27 +67,29 @@ def main():
     )
 
     # Add the primary map to the dashboard, taking up 2 columns
-    dashboard.add_sivo_block("regional_map", us_map)
+    dashboard.add_sivo_block("regional_map", us_map, grid_area="main")
 
     # 4. Create a Secondary Map (e.g., a specific floorplan or detailed area)
     floorplan = Sivo.from_template('dashboards/sidebar_layout', layout_size="80%", lock_scroll_bounds=False)
     floorplan.map("main_panel", color="#10b981", tooltip="London DC: Online")
 
     # Add the secondary map, taking up 1 column
-    dashboard.add_sivo_block("eu_operations", floorplan)
+    dashboard.add_sivo_block("eu_operations", floorplan, grid_area="side1")
 
     # 5. Add a Details Panel that updates on map clicks
     dashboard.add_details_panel(
         "hub_details",
         title="Node Details",
-        placeholder="Click a state on the map to view regional hub details."
+        placeholder="Click a state on the map to view regional hub details.",
+        grid_area="bottom1"
     )
 
     # 6. Add a Metrics Panel that updates automatically via the `payload` dictionary
     dashboard.add_metrics_panel(
         "performance_metrics",
         title="Live Metrics",
-        metrics=["active_nodes", "latency", "uptime"]
+        metrics=["active_nodes", "latency", "uptime"],
+        grid_area="side2"
     )
 
     # 7. Generate the HTML Dashboard

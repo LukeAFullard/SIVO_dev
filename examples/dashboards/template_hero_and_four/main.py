@@ -38,24 +38,26 @@ def main():
     dashboard.add_metrics_panel(
         "q1_metrics",
         title="Revenue",
-        metrics=["revenue", "growth"]
+        metrics=["revenue", "growth"],
+        grid_area="box1"
     )
 
     # 2. Top Right Map
     tr_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)
     tr_map.map("quadrant_2", color="#10b981", hover_color="#059669")
-    dashboard.add_sivo_block("secondary_focus", tr_map)
+    dashboard.add_sivo_block("secondary_focus", tr_map, grid_area="box2")
 
     # 3. Bottom Left Map
     bl_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)
     bl_map.map("quadrant_3", color="#f59e0b", hover_color="#d97706")
-    dashboard.add_sivo_block("tertiary_focus", bl_map)
+    dashboard.add_sivo_block("tertiary_focus", bl_map, grid_area="box3")
 
     # 4. Bottom Right Details
     dashboard.add_details_panel(
         "q4_details",
         title="Quick Analysis",
-        placeholder="Select a region to view analysis."
+        placeholder="Select a region to view analysis.",
+        grid_area="box4"
     )
 
 

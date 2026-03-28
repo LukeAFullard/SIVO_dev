@@ -44,26 +44,28 @@ def main():
         callback_payload={"metric_a": "45%", "metric_b": "8.5s"}
     )
 
-    dashboard.add_sivo_block("geographic_overview", map_view)
+    dashboard.add_sivo_block("geographic_overview", map_view, grid_area="card1")
 
     # Card 2: Metrics Panel
     dashboard.add_metrics_panel(
         "key_metrics",
         title="Key Performance Indicators",
-        metrics=["metric_a", "metric_b"]
+        metrics=["metric_a", "metric_b"],
+        grid_area="card2"
     )
 
     # Card 3: Details Panel
     dashboard.add_details_panel(
         "detailed_analysis",
         title="Sector Analysis",
-        placeholder="Select a sector on the map to view detailed analysis."
+        placeholder="Select a sector on the map to view detailed analysis.",
+        grid_area="card3"
     )
 
     # Card 4: Secondary Map
     small_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True)
     small_map.map("metric_box_1", color="#f59e0b", hover_color="#d97706", tooltip="Quick Link")
-    dashboard.add_sivo_block("quick_links", small_map)
+    dashboard.add_sivo_block("quick_links", small_map, grid_area="card4")
 
 
     print("Generating Cards Layout Dashboard to 'output.html'...")

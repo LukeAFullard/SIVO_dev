@@ -50,8 +50,8 @@ def main():
     dashboard.add_sivo_block("fleet_map", sivo_map, grid_area="hero")
 
     # Assign secondary blocks to the 'main' grid below the hero slot
-    dashboard.add_sivo_block("chart_1", sivo_chart, grid_area="main")
-    dashboard.add_sivo_block("chart_2", sivo_chart, grid_area="main")
+    dashboard.add_sivo_block("chart_1", sivo_chart, grid_area="col1")
+    dashboard.add_sivo_block("chart_2", sivo_chart, grid_area="col2")
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")

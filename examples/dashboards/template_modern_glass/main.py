@@ -14,12 +14,14 @@ def main():
     dashboard.set_grid_layout(
         desktop='''
     "header header"
-"main sidebar"
+"main sidebar1"
+"main sidebar2"
         ''',
         mobile='''
     "header"
 "main"
-"sidebar"
+"sidebar1"
+"sidebar2"
         '''
     )
 
@@ -29,7 +31,7 @@ def main():
         <p style="color: #718096; margin-top: 5px;">Live tracking of sales regions and revenue.</p>
     </div>
     '''
-    dashboard.add_html_block("header_info", header_html)
+    dashboard.add_html_block("header_info", header_html, grid_area="header")
 
     # Primary Map
     sales_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True)
@@ -56,20 +58,22 @@ def main():
         callback_payload={"revenue": "$850K", "growth": "+24%", "active_users": "85K"}
     )
 
-    dashboard.add_sivo_block("sales_regions", sales_map)
+    dashboard.add_sivo_block("sales_regions", sales_map, grid_area="main")
 
     # Details Panel
     dashboard.add_details_panel(
         "region_details",
         title="Region Insights",
-        placeholder="Select a region on the map to view detailed insights."
+        placeholder="Select a region on the map to view detailed insights.",
+        grid_area="sidebar1"
     )
 
     # Metrics Panel
     dashboard.add_metrics_panel(
         "kpi_metrics",
         title="Key Performance Indicators",
-        metrics=["revenue", "growth", "active_users"]
+        metrics=["revenue", "growth", "active_users"],
+        grid_area="sidebar2"
     )
 
     print("Generating Modern Glass Dashboard to 'output.html'...")
