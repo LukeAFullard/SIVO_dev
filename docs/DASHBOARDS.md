@@ -1,129 +1,159 @@
-# Building Reactive Dashboards with SIVO
+# Building Dashboards with SIVO
 
-SIVO provides a powerful, Python-native way to build complex, responsive, multi-block dashboards without writing any custom HTML, CSS, or JavaScript. Instead of relying on rigid, pre-built templates, SIVO uses a **CSS Grid Builder** architecture.
+Welcome to the SIVO Dashboard guide! This tutorial will walk you through building beautiful, responsive, multi-block interactive dashboards.
 
-This allows you to define flexible grid layouts natively in Python, assign SIVO maps or custom HTML panels to those grid areas, and let SIVO generate a single, highly-optimized HTML artifact that seamlessly switches between desktop and mobile layouts.
+SIVO handles the hard parts of web development automatically. You don't need to know HTML, CSS, or JavaScript. Instead, you design your layout visually right inside your Python code using **CSS Grid Builder**.
 
-## The `SivoDashboard` Class
+---
 
-To create a dashboard, you instantiate the `SivoDashboard` class and configure its layout:
+## 🚀 Quick Start: Your First Dashboard
+
+Want to see it in action immediately? Copy and paste the complete, runnable Python script below into a file named `my_dashboard.py` and run it. It generates its own SVG map and outputs a fully functional interactive dashboard.
 
 ```python
 from sivo import Sivo, SivoDashboard
 
-# Initialize the dashboard container
-dashboard = SivoDashboard(title="My Dashboard")
+def main():
+    # ---------------------------------------------------------
+    # 1. Create an Interactive Map
+    # ---------------------------------------------------------
+    # We define a simple SVG string for demonstration.
+    # In reality, you'd usually load this with Sivo.from_svg("my_map.svg")
+    map_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+        <rect width="400" height="300" fill="#f8fafc" rx="10"/>
+        <circle id="server_alpha" cx="150" cy="150" r="40" fill="#3b82f6" />
+        <circle id="server_beta" cx="280" cy="150" r="40" fill="#10b981" />
+        <text x="150" y="210" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle">Server Alpha</text>
+        <text x="280" y="210" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle">Server Beta</text>
+    </svg>"""
+
+    # Initialize the SIVO map from the SVG string
+    my_map = Sivo.from_string(map_svg, title="Global Network")
+
+    # Add interactivity to the SVGs!
+    # Notice we pass `callback_payload`. This data is sent to the dashboard panels when clicked.
+    my_map.map("server_alpha", hover_color="#2563eb", tooltip="Alpha is under heavy load", callback_payload={"status": "Warning", "cpu": "92%", "ram": "14GB"})
+    my_map.map("server_beta", hover_color="#059669", tooltip="Beta is operating normally", callback_payload={"status": "Healthy", "cpu": "24%", "ram": "4GB"})
+
+
+    # ---------------------------------------------------------
+    # 2. Design the Dashboard Layout
+    # ---------------------------------------------------------
+    # Create the dashboard container
+    dashboard = SivoDashboard(title="Network Operations Center")
+
+    # Define the responsive Grid Layout.
+    # Just imagine this text block as drawing the layout of your screen!
+    dashboard.set_grid_layout(
+        desktop='''
+        "header header"
+        "interactive_map metrics_panel"
+        "interactive_map details_panel"
+        ''',
+        mobile='''
+        "header"
+        "interactive_map"
+        "metrics_panel"
+        "details_panel"
+        '''
+    )
+
+    # ---------------------------------------------------------
+    # 3. Add Blocks to the Grid Areas
+    # ---------------------------------------------------------
+    # Now we drop our content into the named areas we just defined above!
+
+    # 1. Header (Custom HTML)
+    header_html = "<h2 style='margin:0;'>Network Status Overview</h2><p>Live telemetry dashboard.</p>"
+    dashboard.add_html_block("my_header", header_html, grid_area="header")
+
+    # 2. The Map
+    dashboard.add_sivo_block("network_map", my_map, grid_area="interactive_map")
+
+    # 3. Metrics Panel (Automatically listens to 'callback_payload' from the map)
+    dashboard.add_metrics_panel(
+        "live_metrics",
+        title="Live Server Stats",
+        metrics=["status", "cpu", "ram"], # These must match keys in your callback_payload
+        grid_area="metrics_panel"
+    )
+
+    # 4. Details Panel (Automatically displays tooltips and HTML mapped to elements)
+    dashboard.add_details_panel(
+        "server_logs",
+        title="Server Logs",
+        placeholder="Click a server node on the map to view logs...",
+        grid_area="details_panel"
+    )
+
+
+    # ---------------------------------------------------------
+    # 4. Generate the Final HTML File
+    # ---------------------------------------------------------
+    dashboard.to_html("output.html")
+    print("Dashboard created successfully! Open 'output.html' in your browser.")
+
+if __name__ == "__main__":
+    main()
 ```
 
-### 1. Defining the Layout (`set_grid_layout`)
+Run the file:
+```bash
+python my_dashboard.py
+```
+Then double click the generated `output.html` file to open it in your web browser. Try clicking the blue and green circles!
 
-The core of the dashboard is defined using the `set_grid_layout` method. This method accepts two parameters: `desktop` and `mobile`. These are multiline strings defining [CSS grid-template-areas](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas).
+---
 
-Each distinct word represents a unique "grid area" that you will later assign a block to. Repeating a word across columns or rows makes that block span those areas.
+## 🛠️ How It Works in Detail
 
+### 1. Drawing the Grid Layout
+The magic of the `SivoDashboard` comes from the `set_grid_layout` function. You define multiline strings that represent the columns and rows of your dashboard.
+
+For example, look at this desktop layout:
 ```python
-dashboard.set_grid_layout(
-    desktop='''
-    "header header header"
-    "map map details"
-    "metrics metrics metrics"
-    ''',
+desktop='''
+"main main side"
+"bottom1 bottom2 bottom3"
+'''
+```
+This draws a grid with 2 rows and 3 columns.
+* The area named `"main"` spans across the first *two columns* of the first row.
+* The area named `"side"` occupies the last column of the first row.
+* The bottom row is split evenly into three areas: `"bottom1"`, `"bottom2"`, and `"bottom3"`.
+
+**Rules for Grids:**
+1. **Always use a perfect rectangle.** You cannot have "L" shaped areas. If `"main"` is in column 1 of row 1, it cannot be in column 2 of row 2 unless it is also in column 1 of row 2 and column 2 of row 1.
+2. **Every area needs a unique name.** Do not name two different sidebars `"sidebar"`. Name them `"sidebar1"` and `"sidebar2"`.
+3. **Always define a mobile layout.** The `mobile` parameter determines how the layout collapses on phones. Usually, you just want to stack all the areas vertically in a single column:
+    ```python
     mobile='''
-    "header"
-    "map"
-    "details"
-    "metrics"
+    "main"
+    "side"
+    "bottom1"
+    "bottom2"
+    "bottom3"
     '''
-)
-```
+    ```
 
-**Important Rules for Grid Layouts:**
-* **Unique Names:** Every distinct block must have a unique grid area name (e.g., `"map1"`, `"map2"`). If you assign two different blocks to the same `"map"` area, they will overlap each other in the browser.
-* **Rectangular Areas:** A grid area spanned across multiple rows/columns must form a perfect rectangle. You cannot create an "L" shaped area.
-* **Mobile Fallback:** The `mobile` string determines how the blocks stack on screens smaller than 768px. Typically, this is a single vertical column.
+### 2. Available Block Types
 
-### 2. Adding Blocks to the Dashboard
+Once you have your grid drawn out in text, you populate it using four methods. Notice how every method takes `grid_area="name"` to assign it to its spot!
 
-Once the grid is defined, you can populate it by adding blocks. SIVO provides four types of blocks out-of-the-box. When adding a block, you **must** pass the `grid_area` parameter matching a name you defined in `set_grid_layout`.
+* **`add_sivo_block(id, sivo_app, grid_area)`**: Inserts your interactive SIVO SVG maps. You can put as many independent SIVO maps as you want into a single dashboard.
+* **`add_html_block(id, html_string, grid_area)`**: Drops raw HTML into the grid. Useful for headers, titles, or embedding external widgets like a YouTube video iframe.
+* **`add_metrics_panel(id, title, metrics, grid_area)`**: Creates a pre-styled "No-Code" panel that listens to map clicks. The `metrics` array (e.g. `["revenue", "status"]`) tells the panel which data keys to extract from the clicked element's `callback_payload`.
+* **`add_details_panel(id, title, placeholder, grid_area)`**: Creates a pre-styled panel that listens to map clicks and renders the full HTML or text `tooltip` associated with the clicked element.
 
-#### A. Interactive SIVO Maps (`add_sivo_block`)
+### 3. Cross-Block Communication
+You do not need to write any JavaScript to make the blocks talk to each other.
 
-This is the primary way to embed your interactive SVGs into the dashboard.
-
+If you configure a SIVO map with `callback_payload`:
 ```python
-sivo_map = Sivo.from_svg('my_map.svg')
-sivo_map.map("region_1", tooltip="Region 1 Active")
-
-dashboard.add_sivo_block("main_map_id", sivo_map, grid_area="map")
+my_map.map("element_id", tooltip="My Tooltip", callback_payload={"revenue": "$100"})
 ```
+When a user clicks that element on the map:
+1. The **Details Panel** will instantly update to show `"My Tooltip"`.
+2. The **Metrics Panel** will instantly update the row labeled `revenue` to display `"$100"`.
 
-#### B. Custom HTML (`add_html_block`)
-
-You can inject static HTML anywhere in the grid. This is perfect for headers, titles, static legends, or embedding external widgets.
-
-```python
-header_html = "<h2>Global System Status</h2><p>Live telemetry data.</p>"
-dashboard.add_html_block("header_id", header_html, grid_area="header")
-```
-
-#### C. Details Panels (`add_details_panel`)
-
-A Details Panel is a pre-built, reactive "no-code" block. It automatically listens for clicks on *any* SIVO map in the dashboard. When a user clicks a mapped SVG element, this panel automatically renders that element's `html` or `tooltip` content.
-
-```python
-dashboard.add_details_panel(
-    "details_id",
-    title="Region Insights",
-    placeholder="Click a region on the map to see details...",
-    grid_area="details"
-)
-```
-
-#### D. Metrics Panels (`add_metrics_panel`)
-
-A Metrics Panel is another reactive block. It automatically listens for clicks on SIVO maps and extracts specific data keys from the clicked element's `callback_payload`.
-
-```python
-# Map an element with a data payload
-sivo_map.map("server_1", callback_payload={"cpu": "45%", "ram": "2GB"})
-
-# Create a panel that listens for 'cpu' and 'ram' keys
-dashboard.add_metrics_panel(
-    "metrics_id",
-    title="Live Telemetry",
-    metrics=["cpu", "ram"],
-    grid_area="metrics"
-)
-```
-
-### 3. Generating the Dashboard
-
-Once all blocks are assigned to their grid areas, export the dashboard to an HTML file.
-
-```python
-dashboard.to_html("my_dashboard.html")
-```
-
-## Legacy Fallback (Simple Grids)
-
-If you do not call `set_grid_layout`, SIVO will fall back to a simple, auto-flowing column layout based on the `columns` parameter passed during initialization. You can then use the `col_span` parameter on individual blocks to make them span multiple columns.
-
-*Note: This approach is less flexible than explicit CSS Grids and is primarily retained for backward compatibility.*
-
-```python
-# Create a 3-column auto-grid
-dashboard = SivoDashboard(title="Simple Grid", columns=3)
-
-# Make this map take up 2 of the 3 columns
-dashboard.add_sivo_block("map", sivo_map, col_span=2)
-# Make this panel take up 1 column
-dashboard.add_details_panel("details", col_span=1)
-```
-
-## Advanced Features Supported
-
-Because `SivoDashboard` natively wraps the core SIVO runtime, **all advanced interactive features** are fully supported inside individual dashboard blocks, including:
-* **Zoom to Element:** `sivo_map.map(..., zoom_to="target_id")`
-* **VisualMaps (Choropleths):** Apply data-driven color gradients.
-* **Drilldowns:** Seamlessly load secondary SVG views.
-* **Confetti & URL Actions:** Trigger external links or visual effects natively.
+Everything handles itself dynamically!
