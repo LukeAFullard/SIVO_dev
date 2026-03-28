@@ -20,7 +20,7 @@ def main():
     sivo_map.map("node_as", hover_color="#059669", tooltip="AS Region Details", callback_payload={"status": "Healthy", "latency": "45ms"})
 
     # --- 2. Assemble the Dashboard using 'sidebar_right' template ---
-    # By specifying `template="sidebar_right"`, SivoDashboard loads the custom layout template
+    # By specifying the CSS Grid layout, SivoDashboard builds a responsive right-sidebar view
     dashboard = SivoDashboard(title="Right Sidebar Layout HTML Template Example", columns=1)
     dashboard.set_grid_layout(
         desktop='''

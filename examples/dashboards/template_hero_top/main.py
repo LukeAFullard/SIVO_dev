@@ -30,8 +30,7 @@ def main():
 
 
     # --- 3. Assemble the Dashboard using 'hero_top' template ---
-    # By specifying `template="hero_top"`, SivoDashboard loads a custom HTML layout template
-    # that exposes a full-width 'hero' slot and a multi-column 'main' slot below it.
+    # By specifying the CSS Grid layout, SivoDashboard builds a responsive top-hero view.
     dashboard = SivoDashboard(title="Hero Top HTML Template Example", columns=2)
     dashboard.set_grid_layout(
         desktop='''
