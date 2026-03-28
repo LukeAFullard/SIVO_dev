@@ -43,35 +43,17 @@
         }
 
         .dashboard-container {
-            display: flex;
-            flex: 1;
-            overflow: hidden; /* Prevent body scroll, let panels scroll */
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar {
-            width: 350px;
-            min-width: 350px;
-            background-color: #f1f5f9;
-            border-right: 1px solid var(--border-color);
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-            z-index: 2;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(1, 1fr);
             gap: 1.5rem;
-            align-content: start;
+            padding: 1.5rem;
+            flex: 1;
+            /* Remove overflow: hidden so body can scroll if needed */
+
+            grid-template-areas:
+    "sidebar main"
+"sidebar main"
+        ;
+
         }
 
         .sivo-card {
@@ -177,22 +159,15 @@
         /* Responsive Design */
         @media (max-width: 900px) {
             .dashboard-container {
-                flex-direction: column;
-                overflow-y: auto;
+
+                grid-template-areas:
+    "main"
+"sidebar"
+        ;
+
             }
-            .sidebar {
-                width: auto;
-                min-width: auto;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            }
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel {
-                grid-column: 1 / -1 !important;
-            }
+
+
             .sivo-card {
                 min-height: 500px;
             }
@@ -207,55 +182,60 @@
 
     <div class="dashboard-container" id="dashboard-container">
 
-        <!-- Left Sidebar Slot -->
-        <div class="sidebar" id="dashboard-sidebar">
 
 
-                <div class="html-card sivo-metrics-panel" id="card-metrics" data-block-id="metrics">
-                    <div class="card-header">Node Metrics</div>
-                    <div class="card-content sivo-metrics-content" id="container-metrics">
-                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
 
-                            <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
-                                <strong>Status:</strong>
-                                <span class="metric-value" data-metric-key="status" style="font-weight: bold; color: var(--primary-color);">---</span>
-                            </div>
 
-                            <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
-                                <strong>Latency:</strong>
-                                <span class="metric-value" data-metric-key="latency" style="font-weight: bold; color: var(--primary-color);">---</span>
-                            </div>
 
+
+            <div class="sivo-card" id="card-global_map" style="grid-area: main;">
+                <div class="card-header">Global_map</div>
+                <div class="sivo-container" id="container-global_map">
+                    <div id="chart-global_map" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-global_map" class="sivo-native-overlay-svg-container"></div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="html-card sivo-metrics-panel" id="card-metrics" data-block-id="metrics" style="grid-area: sidebar;">
+                <div class="card-header">Node Metrics</div>
+                <div class="card-content sivo-metrics-content" id="container-metrics">
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                            <strong>Status:</strong>
+                            <span class="metric-value" data-metric-key="status" style="font-weight: bold; color: var(--primary-color);">---</span>
                         </div>
+
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                            <strong>Latency:</strong>
+                            <span class="metric-value" data-metric-key="latency" style="font-weight: bold; color: var(--primary-color);">---</span>
+                        </div>
+
                     </div>
                 </div>
+            </div>
 
 
 
-                <div class="html-card sivo-details-panel" id="card-details" data-block-id="details">
-                    <div class="card-header">Node Details</div>
-                    <div class="card-content sivo-details-content" id="container-details">
-                        <p class="placeholder-text" style="color: #64748b;">Select an item to view details.</p>
-                    </div>
+
+
+
+
+
+            <div class="html-card sivo-details-panel" id="card-details" data-block-id="details" style="grid-area: sidebar;">
+                <div class="card-header">Node Details</div>
+                <div class="card-content sivo-details-content" id="container-details">
+                    <p class="placeholder-text" style="color: #64748b;">Select an item to view details.</p>
                 </div>
+            </div>
 
-
-        </div>
-
-        <!-- Main Content Slot -->
-        <div class="main-content" id="dashboard-main">
-
-
-                <div class="sivo-card" id="card-global_map" style="grid-column: span 1;">
-                    <div class="card-header">Global_map</div>
-                    <div class="sivo-container" id="container-global_map">
-                        <div id="chart-global_map" style="width: 100%; height: 100%;"></div>
-                        <div id="overlay-global_map" class="sivo-native-overlay-svg-container"></div>
-                    </div>
-                </div>
-
-
-        </div>
 
     </div>
 
@@ -273,7 +253,7 @@
     <!-- SIVO Data Injection -->
     <script>
         // SIVO passes `views_data` directly to this template
-        const viewsData = {"global_map": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n        \u003crect id=\"bg\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n        \u003ccircle id=\"node_na\" cx=\"250\" cy=\"200\" r=\"60\" fill=\"#3b82f6\" name=\"node_na\"/\u003e\n        \u003ccircle id=\"node_eu\" cx=\"600\" cy=\"180\" r=\"50\" fill=\"#f59e0b\" name=\"node_eu\"/\u003e\n        \u003ccircle id=\"node_as\" cx=\"800\" cy=\"250\" r=\"70\" fill=\"#10b981\" name=\"node_as\"/\u003e\n        \n        \u003ctext x=\"250\" y=\"290\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNorth America\u003c/text\u003e\n        \u003ctext x=\"600\" y=\"260\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eEurope\u003c/text\u003e\n        \u003ctext x=\"800\" y=\"350\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eAsia\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "node_na", "value": 1, "tooltip": "NA Region Details", "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}, {"name": "node_eu", "value": 1, "tooltip": "EU Region Details", "emphasis": {"itemStyle": {"areaColor": "#d97706"}}}, {"name": "node_as", "value": 1, "tooltip": "AS Region Details", "emphasis": {"itemStyle": {"areaColor": "#059669"}}}], "actions_manifest": {"node_na": [{"action_type": "tooltip", "content": "\u003ch3\u003eNA Region Details\u003c/h3\u003e", "title": "NA Region Details", "panel_position": "overlay"}], "node_eu": [{"action_type": "tooltip", "content": "\u003ch3\u003eEU Region Details\u003c/h3\u003e", "title": "EU Region Details", "panel_position": "overlay"}], "node_as": [{"action_type": "tooltip", "content": "\u003ch3\u003eAS Region Details\u003c/h3\u003e", "title": "AS Region Details", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "100%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": "Global Active Nodes", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_na": {"id": "node_na", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eNA Region Details\u003c/h3\u003e", "title": "NA Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_eu": {"id": "node_eu", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eEU Region Details\u003c/h3\u003e", "title": "EU Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#d97706", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_as": {"id": "node_as", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eAS Region Details\u003c/h3\u003e", "title": "AS Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#059669", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        const viewsData = {"global_map": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n        \u003crect id=\"bg\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n        \u003ccircle id=\"node_na\" cx=\"250\" cy=\"200\" r=\"60\" fill=\"#3b82f6\" name=\"node_na\"/\u003e\n        \u003ccircle id=\"node_eu\" cx=\"600\" cy=\"180\" r=\"50\" fill=\"#f59e0b\" name=\"node_eu\"/\u003e\n        \u003ccircle id=\"node_as\" cx=\"800\" cy=\"250\" r=\"70\" fill=\"#10b981\" name=\"node_as\"/\u003e\n\n        \u003ctext x=\"250\" y=\"290\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNorth America\u003c/text\u003e\n        \u003ctext x=\"600\" y=\"260\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eEurope\u003c/text\u003e\n        \u003ctext x=\"800\" y=\"350\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eAsia\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "node_na", "value": 1, "tooltip": "NA Region Details", "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}, {"name": "node_eu", "value": 1, "tooltip": "EU Region Details", "emphasis": {"itemStyle": {"areaColor": "#d97706"}}}, {"name": "node_as", "value": 1, "tooltip": "AS Region Details", "emphasis": {"itemStyle": {"areaColor": "#059669"}}}], "actions_manifest": {"node_na": [{"action_type": "tooltip", "content": "\u003ch3\u003eNA Region Details\u003c/h3\u003e", "title": "NA Region Details", "panel_position": "overlay"}], "node_eu": [{"action_type": "tooltip", "content": "\u003ch3\u003eEU Region Details\u003c/h3\u003e", "title": "EU Region Details", "panel_position": "overlay"}], "node_as": [{"action_type": "tooltip", "content": "\u003ch3\u003eAS Region Details\u003c/h3\u003e", "title": "AS Region Details", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "100%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": "Global Active Nodes", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_na": {"id": "node_na", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eNA Region Details\u003c/h3\u003e", "title": "NA Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_eu": {"id": "node_eu", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eEU Region Details\u003c/h3\u003e", "title": "EU Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#d97706", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_as": {"id": "node_as", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eAS Region Details\u003c/h3\u003e", "title": "AS Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#059669", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
         const activeCharts = {};
 
         function calculateLayoutSize(view, domElement) {

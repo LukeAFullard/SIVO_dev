@@ -58,20 +58,36 @@ def main():
 
 
     # --- 3. Assemble Dashboard using 'analytics_dashboard' template ---
-    dashboard = SivoDashboard(title="Acme Analytics", template="analytics_dashboard", columns=3)
+    dashboard = SivoDashboard(title="Acme Analytics", columns=3)
+    dashboard.set_grid_layout(
+        desktop='''
+    "kpi1 kpi2 kpi3 kpi4"
+"main main side side"
+"bottom bottom bottom bottom"
+        ''',
+        mobile='''
+    "kpi1"
+"kpi2"
+"kpi3"
+"kpi4"
+"main"
+"side"
+"bottom"
+        '''
+    )
 
     # Assign stats to the 'stats' slot (rendered in the top row)
-    dashboard.add_html_block("stat_users", html_stat1, slot="stats")
-    dashboard.add_html_block("stat_rev", html_stat2, slot="stats")
-    dashboard.add_metrics_panel("live_metrics", title="Active Sessions", metrics=["current_users"], slot="stats")
+    dashboard.add_html_block("stat_users", html_stat1, grid_area="stats")
+    dashboard.add_html_block("stat_rev", html_stat2, grid_area="stats")
+    dashboard.add_metrics_panel("live_metrics", title="Active Sessions", metrics=["current_users"], grid_area="stats")
 
     # Assign charts to the 'main' grid
-    dashboard.add_sivo_block("revenue_trend", sivo_bar, slot="main", col_span=2)
-    dashboard.add_sivo_block("user_demographics", sivo_pie, slot="main", col_span=1)
+    dashboard.add_sivo_block("revenue_trend", sivo_bar, grid_area="main")
+    dashboard.add_sivo_block("user_demographics", sivo_pie, grid_area="main")
 
     # Bottom row panels
-    dashboard.add_details_panel("quarter_details", title="Quarter Breakdown", placeholder="Click a bar above to see details.", slot="main", col_span=2)
-    dashboard.add_metrics_panel("selected_stats", title="Selection Overview", metrics=["selected_quarter", "revenue"], slot="main", col_span=1)
+    dashboard.add_details_panel("quarter_details", title="Quarter Breakdown", placeholder="Click a bar above to see details.", grid_area="main")
+    dashboard.add_metrics_panel("selected_stats", title="Selection Overview", metrics=["selected_quarter", "revenue"], grid_area="main")
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")

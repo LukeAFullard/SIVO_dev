@@ -12,12 +12,26 @@ from sivo import Sivo
 from sivo.core.dashboard import SivoDashboard
 
 def main():
-    dashboard = SivoDashboard(title="Executive Summary", template="hero_and_four")
+    dashboard = SivoDashboard(title="Executive Summary")
+    dashboard.set_grid_layout(
+        desktop='''
+    "hero hero"
+"box1 box2"
+"box3 box4"
+        ''',
+        mobile='''
+    "hero"
+"box1"
+"box2"
+"box3"
+"box4"
+        '''
+    )
 
     # The Hero component
     main_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)
     main_map.map("quadrant_1", color="#3b82f6", hover_color="#2563eb", tooltip="<h3>Primary Region</h3><p>Focus Area</p>")
-    dashboard.add_sivo_block("primary_focus", main_map, slot="hero")
+    dashboard.add_sivo_block("primary_focus", main_map, grid_area="hero")
 
     # The four quad components
     # 1. Top Left Metric

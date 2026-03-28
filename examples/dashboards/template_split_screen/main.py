@@ -10,7 +10,16 @@ from sivo import Sivo
 from sivo.core.dashboard import SivoDashboard
 
 def main():
-    dashboard = SivoDashboard(title="Comparison Dashboard", columns=2, template="split_screen")
+    dashboard = SivoDashboard(title="Comparison Dashboard", columns=2)
+    dashboard.set_grid_layout(
+        desktop='''
+    "left right"
+        ''',
+        mobile='''
+    "left"
+"right"
+        '''
+    )
 
     # Left Map
     left_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)
@@ -23,14 +32,14 @@ def main():
         callback_payload={"left_metric_1": "120", "left_metric_2": "45%"}
     )
 
-    dashboard.add_sivo_block("left_view", left_map, slot="left")
+    dashboard.add_sivo_block("left_view", left_map, grid_area="left")
 
     # Left Details
     dashboard.add_details_panel(
         "left_details",
         title="Left View Details",
         placeholder="Select a region on the left to view details.",
-        slot="left"
+        grid_area="left"
     )
 
     # Right Map
@@ -44,14 +53,14 @@ def main():
         callback_payload={"right_metric_1": "85", "right_metric_2": "90%"}
     )
 
-    dashboard.add_sivo_block("right_view", right_map, slot="right")
+    dashboard.add_sivo_block("right_view", right_map, grid_area="right")
 
     # Right Details
     dashboard.add_details_panel(
         "right_details",
         title="Right View Details",
         placeholder="Select a region on the right to view details.",
-        slot="right"
+        grid_area="right"
     )
 
     print("Generating Split Screen Dashboard to 'output.html'...")

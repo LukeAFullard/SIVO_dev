@@ -11,7 +11,19 @@ from sivo import Sivo
 from sivo.core.dashboard import SivoDashboard
 
 def main():
-    dashboard = SivoDashboard(title="KPI Overview", template="quad_grid")
+    dashboard = SivoDashboard(title="KPI Overview")
+    dashboard.set_grid_layout(
+        desktop='''
+    "tl tr"
+"bl br"
+        ''',
+        mobile='''
+    "tl"
+"tr"
+"bl"
+"br"
+        '''
+    )
 
     # 1. Top Left - Map
     tl_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)

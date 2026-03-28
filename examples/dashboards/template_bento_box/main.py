@@ -12,7 +12,22 @@ from sivo.core.dashboard import SivoDashboard
 
 def main():
     # 1. Initialize empty dashboard using the bento_box template
-    dashboard = SivoDashboard(title="Operations Overview", columns=3, template="bento_box")
+    dashboard = SivoDashboard(title="Operations Overview", columns=3)
+    dashboard.set_grid_layout(
+        desktop='''
+    "main main side1"
+"main main side2"
+"bottom1 bottom2 bottom3"
+        ''',
+        mobile='''
+    "main"
+"side1"
+"side2"
+"bottom1"
+"bottom2"
+"bottom3"
+        '''
+    )
 
     # 2. Add an HTML Title/Description block spanning all columns
     header_html = '''
@@ -21,7 +36,7 @@ def main():
         <p style="color: #64748b; margin-top: 10px;">Live monitoring of regional data centers and active server nodes.</p>
     </div>
     '''
-    dashboard.add_html_block("header_info", header_html, col_span=3)
+    dashboard.add_html_block("header_info", header_html)
 
     # 3. Create a primary Map for the left side
     us_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True)
@@ -50,29 +65,27 @@ def main():
     )
 
     # Add the primary map to the dashboard, taking up 2 columns
-    dashboard.add_sivo_block("regional_map", us_map, col_span=2)
+    dashboard.add_sivo_block("regional_map", us_map)
 
     # 4. Create a Secondary Map (e.g., a specific floorplan or detailed area)
     floorplan = Sivo.from_template('dashboards/sidebar_layout', layout_size="80%", lock_scroll_bounds=False)
     floorplan.map("main_panel", color="#10b981", tooltip="London DC: Online")
 
     # Add the secondary map, taking up 1 column
-    dashboard.add_sivo_block("eu_operations", floorplan, col_span=1)
+    dashboard.add_sivo_block("eu_operations", floorplan)
 
     # 5. Add a Details Panel that updates on map clicks
     dashboard.add_details_panel(
         "hub_details",
         title="Node Details",
-        placeholder="Click a state on the map to view regional hub details.",
-        col_span=2
+        placeholder="Click a state on the map to view regional hub details."
     )
 
     # 6. Add a Metrics Panel that updates automatically via the `payload` dictionary
     dashboard.add_metrics_panel(
         "performance_metrics",
         title="Live Metrics",
-        metrics=["active_nodes", "latency", "uptime"],
-        col_span=1
+        metrics=["active_nodes", "latency", "uptime"]
     )
 
     # 7. Generate the HTML Dashboard

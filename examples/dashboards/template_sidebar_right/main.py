@@ -21,14 +21,24 @@ def main():
 
     # --- 2. Assemble the Dashboard using 'sidebar_right' template ---
     # By specifying `template="sidebar_right"`, SivoDashboard loads the custom layout template
-    dashboard = SivoDashboard(title="Right Sidebar Layout HTML Template Example", template="sidebar_right", columns=1)
+    dashboard = SivoDashboard(title="Right Sidebar Layout HTML Template Example", columns=1)
+    dashboard.set_grid_layout(
+        desktop='''
+    "main sidebar"
+"main sidebar"
+        ''',
+        mobile='''
+    "main"
+"sidebar"
+        '''
+    )
 
     # Assign the map to the 'main' content slot
-    dashboard.add_sivo_block("global_map", sivo_map, slot="main")
+    dashboard.add_sivo_block("global_map", sivo_map, grid_area="main")
 
     # Assign interaction panels to the 'sidebar' slot
-    dashboard.add_metrics_panel("metrics", title="Node Metrics", metrics=["status", "latency"], slot="sidebar")
-    dashboard.add_details_panel("details", title="Node Details", slot="sidebar")
+    dashboard.add_metrics_panel("metrics", title="Node Metrics", metrics=["status", "latency"], grid_area="sidebar")
+    dashboard.add_details_panel("details", title="Node Details", grid_area="sidebar")
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")

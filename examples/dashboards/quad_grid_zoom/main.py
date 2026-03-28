@@ -13,7 +13,19 @@ from sivo.core.dashboard import SivoDashboard
 import os
 
 def main():
-    dashboard = SivoDashboard(title="Interactive Zoom Quad Grid", template="quad_grid")
+    dashboard = SivoDashboard(title="Interactive Zoom Quad Grid")
+    dashboard.set_grid_layout(
+        desktop='''
+    "tl tr"
+"bl br"
+        ''',
+        mobile='''
+    "tl"
+"tr"
+"bl"
+"br"
+        '''
+    )
 
     # Reusable SVG string for each quadrant block
     # Each quadrant has a background square and two inner areas to click and zoom between
