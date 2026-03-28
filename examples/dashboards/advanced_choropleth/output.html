@@ -7,6 +7,7 @@
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
@@ -425,7 +426,7 @@
                         panelPosition = tooltipActionForPos.panel_position;
                     }
 
-                    // Check for core URL/Drilldown actions (advanced interaction support)
+                    // Core actions
                     elementActions.forEach(action => {
                         if (action.action_type === 'url' && action.url) {
                             if (action.target === '_blank') {
@@ -433,9 +434,101 @@
                             } else {
                                 window.location.href = action.url;
                             }
+                        } else if (action.action_type === 'zoom') {
+                            var startZoom = chart.getOption().geo[0].zoom || 1.0;
+                            var startCenter = chart.getOption().geo[0].center || ['50%', '50%'];
+
+                            var targetZoom = action.zoom_level;
+                            var targetCenter = action.center;
+
+                            if (action.target_bbox) {
+                                var bboxMinX = action.target_bbox[0];
+                                var bboxMinY = action.target_bbox[1];
+                                var bboxMaxX = action.target_bbox[2];
+                                var bboxMaxY = action.target_bbox[3];
+                                var bboxWidth = bboxMaxX - bboxMinX;
+                                var bboxHeight = bboxMaxY - bboxMinY;
+
+                                var geoModel = chart.getModel().getComponent('geo', 0);
+                                if (geoModel && geoModel.coordinateSystem && geoModel.coordinateSystem.getBoundingRect) {
+                                    var rect = geoModel.coordinateSystem.getBoundingRect();
+                                    var fullWidth = rect.width;
+                                    var fullHeight = rect.height;
+
+                                    var sizeRatioStr = action.zoom_to_size || "90%";
+                                    var sizeRatio = parseFloat(sizeRatioStr.replace('%', '')) / 100.0;
+
+                                    var cw = chart.getWidth();
+                                    var ch = chart.getHeight();
+                                    var fitScale = Math.min(cw / fullWidth, ch / fullHeight);
+
+                                    var shapeWAtZ1 = bboxWidth * fitScale;
+                                    var shapeHAtZ1 = bboxHeight * fitScale;
+
+                                    var screenScaleX = cw / shapeWAtZ1;
+                                    var screenScaleY = ch / shapeHAtZ1;
+
+                                    targetZoom = Math.min(screenScaleX, screenScaleY) * sizeRatio;
+                                }
+                            }
+
+                            var startTime = performance.now();
+                            var duration = action.duration_ms || 500;
+
+                            function animateZoom(time) {
+                                var progress = Math.min((time - startTime) / duration, 1.0);
+                                var easeProgress = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                                var currentZ = startZoom + (targetZoom - startZoom) * easeProgress;
+                                var currentCX = startCenter[0] + (targetCenter[0] - startCenter[0]) * easeProgress;
+                                var currentCY = startCenter[1] + (targetCenter[1] - startCenter[1]) * easeProgress;
+
+                                chart.setOption({ geo: [{ center: [currentCX, currentCY], zoom: currentZ }] });
+
+                                if (progress < 1.0) {
+                                    requestAnimationFrame(animateZoom);
+                                }
+                            }
+                            requestAnimationFrame(animateZoom);
+                        } else if (action.action_type === 'confetti') {
+                            if (typeof confetti === 'function') {
+                                var x = 0.5, y = 0.5;
+                                if (params.event && params.event.event) {
+                                    var e = params.event.event;
+                                    var clientX = e.clientX;
+                                    var clientY = e.clientY;
+
+                                    if (clientX === undefined && e.changedTouches && e.changedTouches.length > 0) {
+                                        clientX = e.changedTouches[0].clientX;
+                                        clientY = e.changedTouches[0].clientY;
+                                    } else if (clientX === undefined && e.touches && e.touches.length > 0) {
+                                        clientX = e.touches[0].clientX;
+                                        clientY = e.touches[0].clientY;
+                                    }
+
+                                    if (clientX !== undefined && clientY !== undefined) {
+                                        x = clientX / window.innerWidth;
+                                        y = clientY / window.innerHeight;
+                                    }
+                                }
+                                confetti({
+                                    particleCount: action.particle_count || 100,
+                                    spread: action.spread || 70,
+                                    origin: { x: x, y: y },
+                                    zIndex: 10000
+                                });
+                            }
+                        } else if (action.action_type === 'callback') {
+                            console.log('Triggering callback:', action.event_name, action.payload);
+                            window.parent.postMessage({
+                                type: 'sivo_click',
+                                payload: {
+                                    element_id: params.name,
+                                    event_name: action.event_name,
+                                    data: action.payload || {}
+                                }
+                            }, '*');
                         } else if (action.action_type === 'drilldown' && action.target_svg) {
-                            // Single-page drilldowns aren't inherently supported in multi-block yet without a view manager,
-                            // but we log it to prevent silent failure.
                             console.warn("Dashboard Drilldown triggered to:", action.target_svg);
                         }
                     });
