@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>Q3 Executive Insights</title>
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -49,11 +49,9 @@
             padding: 1.5rem;
             flex: 1;
             /* Remove overflow: hidden so body can scroll if needed */
-            {% if desktop_grid %}
-            grid-template-areas: {{ desktop_grid | safe }};
-            {% else %}
-            grid-template-columns: repeat({{ columns }}, 1fr);
-            {% endif %}
+
+            grid-template-columns: repeat(3, 1fr);
+
         }
 
         .sivo-card {
@@ -159,19 +157,17 @@
         /* Responsive Design */
         @media (max-width: 900px) {
             .dashboard-container {
-                {% if mobile_grid %}
-                grid-template-areas: {{ mobile_grid | safe }};
-                {% else %}
+
                 display: flex;
                 flex-direction: column;
-                {% endif %}
+
             }
 
-            {% if not mobile_grid %}
+
             .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel {
                 width: 100%;
             }
-            {% endif %}
+
             .sivo-card {
                 min-height: 500px;
             }
@@ -181,55 +177,71 @@
 <body>
 
     <header>
-        <h1>{{ title }}</h1>
+        <h1>Q3 Executive Insights</h1>
     </header>
 
     <div class="dashboard-container" id="dashboard-container">
-        {% for block in layout_order %}
-            {% set grid_style = '' %}
-            {% if desktop_grid and block.grid_area %}
-                {% set grid_style = 'grid-area: ' ~ block.grid_area ~ ';' %}
-            {% elif not desktop_grid and block.col_span %}
-                {% set grid_style = 'grid-column: span ' ~ block.col_span ~ ';' %}
-            {% endif %}
 
-            {% if block.type == "sivo" %}
-            <div class="sivo-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ block.id | title }}</div>
-                <div class="sivo-container" id="container-{{ block.id }}">
-                    <div id="chart-{{ block.id }}" style="width: 100%; height: 100%;"></div>
-                    <div id="overlay-{{ block.id }}" class="sivo-native-overlay-svg-container"></div>
+
+
+
+
+
+
+            <div class="sivo-card" id="card-heat_map" style="grid-column: span 1;">
+                <div class="card-header">Heat_map</div>
+                <div class="sivo-container" id="container-heat_map">
+                    <div id="chart-heat_map" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-heat_map" class="sivo-native-overlay-svg-container"></div>
                 </div>
             </div>
-            {% elif block.type == "html" %}
-            <div class="html-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-content" id="container-{{ block.id }}">
-                    {{ html_blocks[block.id] | safe }}
-                </div>
-            </div>
-            {% elif block.type == "details" %}
-            <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ details_panels[block.id].title }}</div>
-                <div class="card-content sivo-details-content" id="container-{{ block.id }}">
-                    <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
-                </div>
-            </div>
-            {% elif block.type == "metrics" %}
-            <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ metrics_panels[block.id].title }}</div>
-                <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
+
+
+
+
+
+
+
+
+            <div class="html-card sivo-metrics-panel" id="card-performance_metrics" data-block-id="performance_metrics" style="grid-column: span 1;">
+                <div class="card-header">Region Performance</div>
+                <div class="card-content sivo-metrics-content" id="container-performance_metrics">
                     <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        {% for metric in metrics_panels[block.id].metrics %}
+
                         <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
-                            <strong>{{ metric | title }}:</strong>
-                            <span class="metric-value" data-metric-key="{{ metric }}" style="font-weight: bold; color: var(--primary-color);">---</span>
+                            <strong>Revenue:</strong>
+                            <span class="metric-value" data-metric-key="revenue" style="font-weight: bold; color: var(--primary-color);">---</span>
                         </div>
-                        {% endfor %}
+
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                            <strong>Growth:</strong>
+                            <span class="metric-value" data-metric-key="growth" style="font-weight: bold; color: var(--primary-color);">---</span>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
+                            <strong>Status:</strong>
+                            <span class="metric-value" data-metric-key="status" style="font-weight: bold; color: var(--primary-color);">---</span>
+                        </div>
+
                     </div>
                 </div>
             </div>
-            {% endif %}
-        {% endfor %}
+
+
+
+
+
+
+
+
+            <div class="html-card sivo-details-panel" id="card-region_insights" data-block-id="region_insights" style="grid-column: span 1;">
+                <div class="card-header">Executive Summary</div>
+                <div class="card-content sivo-details-content" id="container-region_insights">
+                    <p class="placeholder-text" style="color: #64748b;">Click a state to view local operational notes.</p>
+                </div>
+            </div>
+
+
     </div>
 
     <!-- Global Sliding Sidebar Overlay -->
@@ -246,7 +258,7 @@
     <!-- SIVO Data Injection -->
     <script>
         // SIVO passes `views_data` directly to this template
-        const viewsData = {{ views_data | safe }};
+        const viewsData = {"heat_map": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n    \u003crect id=\"bg\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n    \u003cpath id=\"state_ca\" d=\"M 100 100 L 300 100 L 250 400 L 150 400 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_ca\"/\u003e\n    \u003cpath id=\"state_tx\" d=\"M 400 300 L 700 250 L 650 550 L 350 500 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_tx\"/\u003e\n    \u003cpath id=\"state_ny\" d=\"M 750 100 L 950 120 L 900 250 L 700 220 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_ny\"/\u003e\n\n    \u003ctext x=\"200\" y=\"250\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eCA\u003c/text\u003e\n    \u003ctext x=\"525\" y=\"400\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eTX\u003c/text\u003e\n    \u003ctext x=\"825\" y=\"175\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNY\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "state_ca", "value": 1, "itemStyle": {"areaColor": "#acb9d9"}}, {"name": "state_tx", "value": 1, "itemStyle": {"areaColor": "#eff6ff"}}, {"name": "state_ny", "value": 1, "animation_class": "pulse", "itemStyle": {"areaColor": "#1e3a8a"}}], "actions_manifest": {"state_ca": [{"action_type": "tooltip", "content": "\u003ch4\u003eCalifornia Operations\u003c/h4\u003e\u003cp\u003eSteady growth in Q3. Expanding warehouse capacity.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$1.25M", "growth": "+12%", "status": "On Track"}}], "state_tx": [{"action_type": "tooltip", "content": "\u003ch4\u003eTexas Operations\u003c/h4\u003e\u003cp\u003eSupply chain constraints identified in Houston hub.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$850K", "growth": "-3%", "status": "Action Required"}}], "state_ny": [{"action_type": "tooltip", "content": "\u003ch4\u003eNew York Operations\u003c/h4\u003e\u003cp\u003eRecord-breaking sales driven by new B2B partnerships.\u003c/p\u003e\u003cimg src='https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format\u0026fit=crop\u0026w=400\u0026q=80' style='width:100%; border-radius:8px;'/\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$2.1M", "growth": "+25%", "status": "Exceeding Targets"}}]}, "overlays": {"sivo_choropleth_legend": {"html": "\n            \u003cdiv style=\"background: rgba(255,255,255,0.9); padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: sans-serif; font-size: 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); user-select: none;\"\u003e\n                \u003cspan\u003e850000.0\u003c/span\u003e\n                \u003cdiv style=\"width: 100px; height: 15px; background: linear-gradient(to right, #eff6ff, #1e3a8a); border: 1px solid #999; border-radius: 3px;\"\u003e\u003c/div\u003e\n                \u003cspan\u003e2100000.0\u003c/span\u003e\n            \u003c/div\u003e\n            ", "fixed": true, "position": "bottom-left"}}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": "National Sales Heatmap", "subtitle": "Hover or click for region details", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "state_ca": {"id": "state_ca", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eCalifornia Operations\u003c/h4\u003e\u003cp\u003eSteady growth in Q3. Expanding warehouse capacity.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$1.25M", "growth": "+12%", "status": "On Track"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#acb9d9", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "state_tx": {"id": "state_tx", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eTexas Operations\u003c/h4\u003e\u003cp\u003eSupply chain constraints identified in Houston hub.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$850K", "growth": "-3%", "status": "Action Required"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#eff6ff", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "state_ny": {"id": "state_ny", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eNew York Operations\u003c/h4\u003e\u003cp\u003eRecord-breaking sales driven by new B2B partnerships.\u003c/p\u003e\u003cimg src='https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format\u0026fit=crop\u0026w=400\u0026q=80' style='width:100%; border-radius:8px;'/\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$2.1M", "growth": "+25%", "status": "Exceeding Targets"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#1e3a8a", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": "pulse", "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
         const activeCharts = {};
 
         function calculateLayoutSize(view, domElement) {
@@ -576,9 +588,7 @@
         }
 
         // Inject Custom JS if provided
-        {% if custom_js %}
-            {{ custom_js | safe }}
-        {% endif %}
+
     </script>
 </body>
 </html>

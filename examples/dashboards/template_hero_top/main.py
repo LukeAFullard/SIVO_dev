@@ -32,14 +32,26 @@ def main():
     # --- 3. Assemble the Dashboard using 'hero_top' template ---
     # By specifying `template="hero_top"`, SivoDashboard loads a custom HTML layout template
     # that exposes a full-width 'hero' slot and a multi-column 'main' slot below it.
-    dashboard = SivoDashboard(title="Hero Top HTML Template Example", template="hero_top", columns=2)
+    dashboard = SivoDashboard(title="Hero Top HTML Template Example", columns=2)
+    dashboard.set_grid_layout(
+        desktop='''
+    "hero hero hero"
+"col1 col2 col3"
+        ''',
+        mobile='''
+    "hero"
+"col1"
+"col2"
+"col3"
+        '''
+    )
 
     # Assign the map to the 'hero' slot to span the full width at the top
-    dashboard.add_sivo_block("fleet_map", sivo_map, slot="hero")
+    dashboard.add_sivo_block("fleet_map", sivo_map, grid_area="hero")
 
     # Assign secondary blocks to the 'main' grid below the hero slot
-    dashboard.add_sivo_block("chart_1", sivo_chart, slot="main", col_span=1)
-    dashboard.add_sivo_block("chart_2", sivo_chart, slot="main", col_span=1)
+    dashboard.add_sivo_block("chart_1", sivo_chart, grid_area="col1")
+    dashboard.add_sivo_block("chart_2", sivo_chart, grid_area="col2")
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")

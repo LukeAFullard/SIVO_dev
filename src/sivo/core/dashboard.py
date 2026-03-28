@@ -12,6 +12,8 @@ class SivoDashboard:
         Initializes the dashboard.
         :param template: The name of the HTML layout template to use (e.g., 'default', 'sidebar_left', 'hero_top').
         """
+        self.desktop_grid: Optional[str] = None
+        self.mobile_grid: Optional[str] = None
         self.title = title
         self.columns = columns
         self.template_name = template
@@ -21,17 +23,17 @@ class SivoDashboard:
         self.metrics_panels: Dict[str, Dict] = {}
         self.layout_order: List[Dict[str, str]] = []
 
-    def add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1, slot: str = "main"):
+    def add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
         """Adds a Sivo instance to a specific block/slot in the dashboard layout."""
         self.blocks[block_id] = sivo_app
-        self.layout_order.append({"type": "sivo", "id": block_id, "col_span": col_span, "slot": slot})
+        self.layout_order.append({"type": "sivo", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
 
-    def add_html_block(self, block_id: str, html_content: str, col_span: int = 1, slot: str = "main"):
+    def add_html_block(self, block_id: str, html_content: str, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
         """Adds raw HTML content to a specific block/slot in the dashboard layout."""
         self.html_blocks[block_id] = html_content
-        self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span, "slot": slot})
+        self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
 
-    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main"):
+    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the clicked element's `html` (tooltip content) mapping.
@@ -40,9 +42,9 @@ class SivoDashboard:
             "title": title,
             "placeholder": placeholder
         }
-        self.layout_order.append({"type": "details", "id": block_id, "col_span": col_span, "slot": slot})
+        self.layout_order.append({"type": "details", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
 
-    def add_metrics_panel(self, block_id: str, title: str = "Metrics", metrics: List[str] = None, col_span: int = 1, slot: str = "main"):
+    def add_metrics_panel(self, block_id: str, title: str = "Metrics", metrics: List[str] = None, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the specified keys from the clicked element's `callback_payload` mapping.
@@ -53,7 +55,17 @@ class SivoDashboard:
             "title": title,
             "metrics": metrics
         }
-        self.layout_order.append({"type": "metrics", "id": block_id, "col_span": col_span, "slot": slot})
+        self.layout_order.append({"type": "metrics", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
+
+
+    def set_grid_layout(self, desktop: str, mobile: Optional[str] = None):
+        """
+        Defines the responsive CSS Grid layout using grid-template-areas.
+        :param desktop: The CSS grid-template-areas string for desktop views.
+        :param mobile: The CSS grid-template-areas string for mobile views.
+        """
+        self.desktop_grid = desktop
+        self.mobile_grid = mobile
 
     def to_html(self, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
@@ -77,6 +89,8 @@ class SivoDashboard:
             title=self.title,
             columns=self.columns,
             template=self.template_name,
+            desktop_grid=self.desktop_grid,
+            mobile_grid=self.mobile_grid,
             output_path=output_path,
             custom_js=custom_js
         )

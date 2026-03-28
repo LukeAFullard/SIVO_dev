@@ -12,7 +12,21 @@ from sivo.core.dashboard import SivoDashboard
 
 def main():
     # 1. Initialize empty dashboard using the dark_grid template
-    dashboard = SivoDashboard(title="Global Server Status", columns=4, template="dark_grid")
+    dashboard = SivoDashboard(title="Global Server Status", columns=4)
+    dashboard.set_grid_layout(
+        desktop='''
+    "header header header"
+    "main main side"
+    "bottom1 bottom2 side"
+        ''',
+        mobile='''
+    "header"
+    "main"
+    "side"
+    "bottom1"
+    "bottom2"
+        '''
+    )
 
     # 2. Add an HTML Header
     header_html = '''
@@ -21,7 +35,7 @@ def main():
         <p style="color: #94a3b8; margin-top: 5px; font-size: 0.875rem;">System latency updates every 5s</p>
     </div>
     '''
-    dashboard.add_html_block("live_feed", header_html, col_span=4)
+    dashboard.add_html_block("live_feed", header_html, grid_area="header")
 
     # 3. Create a primary Global Map spanning 3 columns
     world_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True)
@@ -49,14 +63,14 @@ def main():
         callback_payload={"cpu_load": "85%", "active_connections": "18,900", "bandwidth": "1.2 Gbps"}
     )
 
-    dashboard.add_sivo_block("global_network", world_map, col_span=3)
+    dashboard.add_sivo_block("global_network", world_map, grid_area="main")
 
     # 4. Add a Metrics Panel on the right (1 column)
     dashboard.add_metrics_panel(
         "server_metrics",
         title="Server Telemetry",
         metrics=["cpu_load", "active_connections", "bandwidth"],
-        col_span=1
+        grid_area="side"
     )
 
     # 5. Add Details Panel
@@ -64,7 +78,7 @@ def main():
         "datacenter_logs",
         title="Node Logs",
         placeholder="Select a region on the map to view live logs.",
-        col_span=4
+        grid_area="bottom1"
     )
 
     # 6. Generate the HTML Dashboard

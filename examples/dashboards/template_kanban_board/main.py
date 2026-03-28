@@ -27,15 +27,28 @@ def main():
     task4.map("bg", hover_color="#f8fafc", tooltip="<b>T-104</b><br/>Deploy using GitHub Actions.")
 
     # Assemble Dashboard using 'kanban_board' template
-    dashboard = SivoDashboard(title="Project Sprint Board", template="kanban_board", columns=3)
+    dashboard = SivoDashboard(title="Project Sprint Board", columns=3)
+    dashboard.set_grid_layout(
+        desktop='''
+    "to_do1 in_progress done review"
+    "to_do2 in_progress done review"
+        ''',
+        mobile='''
+    "to_do1"
+    "to_do2"
+    "in_progress"
+    "done"
+    "review"
+        '''
+    )
 
     # Assign blocks to different "lanes" using the 'slot' parameter
-    dashboard.add_sivo_block("task_api", task1, slot="to_do")
-    dashboard.add_sivo_block("task_db", task2, slot="to_do")
+    dashboard.add_sivo_block("task_api", task1, grid_area="to_do1")
+    dashboard.add_sivo_block("task_db", task2, grid_area="to_do2")
 
-    dashboard.add_sivo_block("task_auth", task3, slot="in_progress")
+    dashboard.add_sivo_block("task_auth", task3, grid_area="in_progress")
 
-    dashboard.add_sivo_block("task_deploy", task4, slot="done")
+    dashboard.add_sivo_block("task_deploy", task4, grid_area="done")
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")

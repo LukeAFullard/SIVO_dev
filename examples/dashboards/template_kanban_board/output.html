@@ -7,24 +7,21 @@
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
-            --bg-color: #e2e8f0;
-            --lane-bg: #f8fafc;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #cbd5e1;
-            --primary-color: #2563eb;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --primary-color: #3b82f6;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             min-height: 100vh;
@@ -33,67 +30,61 @@
         }
 
         header {
-            padding: 1.5rem 2.5rem;
-            background: var(--card-bg);
+            background-color: var(--card-bg);
+            padding: 1.5rem 2rem;
             border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
         }
 
         h1 {
             margin: 0;
             font-size: 1.75rem;
-            font-weight: 700;
+            color: #0f172a;
         }
 
         .dashboard-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
             padding: 1.5rem;
             flex: 1;
-            overflow-x: auto;
-            align-items: start;
+            /* Remove overflow: hidden so body can scroll if needed */
+
+            grid-template-areas:
+    "to_do1 in_progress done review"
+    "to_do2 in_progress done review"
+        ;
+
         }
 
-        .kanban-lane {
-            background-color: var(--lane-bg);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            border: 1px solid var(--border-color);
-            min-width: 300px;
-        }
-
-        .lane-header {
-            font-weight: 600;
-            font-size: 1.125rem;
-            color: var(--text-color);
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .sivo-card, .html-card {
+        .sivo-card {
             background-color: var(--card-bg);
-            border-radius: 0.375rem;
+            border-radius: 0.75rem;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            min-height: 400px; /* Base height for all blocks */
         }
 
-        .sivo-card:hover, .html-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
+        .html-card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .sivo-container {
+            flex: 1 1 0;
+            min-height: 0;
             width: 100%;
-            height: 300px; /* Fixed height for kanban cards */
+            height: 100%;
             position: relative;
         }
 
@@ -109,50 +100,22 @@
         }
 
         .card-header {
-            padding: 0.75rem 1rem;
-            background-color: var(--card-bg);
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: var(--text-color);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
         }
 
         .card-content {
-            padding: 1rem;
+            padding: 1rem 1.5rem;
         }
 
-        /* Metrics Panel Styling */
-        .metric-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px dashed var(--border-color);
-        }
-
-        .metric-row:last-child {
-            border-bottom: none;
-        }
-
-        .metric-label {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .metric-value {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        /* Sidebar Implementation */
+        /* Sliding Sidebar Implementation for specific blocks */
         #sivo-sliding-sidebar {
             position: fixed;
             top: 0;
-            right: -400px;
+            right: -100%;
             width: 400px;
             height: 100vh;
             background-color: var(--card-bg);
@@ -168,18 +131,16 @@
         }
 
         .sidebar-header {
-            padding: 1.5rem;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #f8fafc;
         }
 
         .sidebar-header h2 {
             margin: 0;
             font-size: 1.25rem;
-            color: #0f172a;
         }
 
         .sidebar-close-btn {
@@ -194,10 +155,27 @@
             padding: 1.5rem;
             overflow-y: auto;
             flex: 1;
-            line-height: 1.6;
         }
 
-        /* Group blocks by their assigned 'slot' string which acts as the lane name */
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .dashboard-container {
+
+                grid-template-areas:
+    "to_do1"
+    "to_do2"
+    "in_progress"
+    "done"
+    "review"
+        ;
+
+            }
+
+
+            .sivo-card {
+                min-height: 500px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -207,7 +185,6 @@
     </header>
 
     <div class="dashboard-container" id="dashboard-container">
-        <!-- We will generate a lane for each column/slot -->
 
 
 
@@ -215,74 +192,59 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        <div class="kanban-lane" id="lane-to_do">
-            <div class="lane-header">To Do</div>
-
-
-
-                <div class="sivo-card" id="card-task_api">
-                    <div class="card-header">Task Api</div>
-                    <div class="sivo-container" id="container-task_api">
-                        <div id="chart-task_api" style="width: 100%; height: 100%;"></div>
-                        <div id="overlay-task_api" class="sivo-native-overlay-svg-container"></div>
-                    </div>
+            <div class="sivo-card" id="card-task_api" style="grid-area: to_do1;">
+                <div class="card-header">Task_api</div>
+                <div class="sivo-container" id="container-task_api">
+                    <div id="chart-task_api" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-task_api" class="sivo-native-overlay-svg-container"></div>
                 </div>
+            </div>
 
 
 
-                <div class="sivo-card" id="card-task_db">
-                    <div class="card-header">Task Db</div>
-                    <div class="sivo-container" id="container-task_db">
-                        <div id="chart-task_db" style="width: 100%; height: 100%;"></div>
-                        <div id="overlay-task_db" class="sivo-native-overlay-svg-container"></div>
-                    </div>
+
+
+
+
+
+            <div class="sivo-card" id="card-task_db" style="grid-area: to_do2;">
+                <div class="card-header">Task_db</div>
+                <div class="sivo-container" id="container-task_db">
+                    <div id="chart-task_db" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-task_db" class="sivo-native-overlay-svg-container"></div>
                 </div>
-
-
-        </div>
-
-        <div class="kanban-lane" id="lane-in_progress">
-            <div class="lane-header">In Progress</div>
+            </div>
 
 
 
-                <div class="sivo-card" id="card-task_auth">
-                    <div class="card-header">Task Auth</div>
-                    <div class="sivo-container" id="container-task_auth">
-                        <div id="chart-task_auth" style="width: 100%; height: 100%;"></div>
-                        <div id="overlay-task_auth" class="sivo-native-overlay-svg-container"></div>
-                    </div>
+
+
+
+
+
+            <div class="sivo-card" id="card-task_auth" style="grid-area: in_progress;">
+                <div class="card-header">Task_auth</div>
+                <div class="sivo-container" id="container-task_auth">
+                    <div id="chart-task_auth" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-task_auth" class="sivo-native-overlay-svg-container"></div>
                 </div>
-
-
-        </div>
-
-        <div class="kanban-lane" id="lane-done">
-            <div class="lane-header">Done</div>
+            </div>
 
 
 
-                <div class="sivo-card" id="card-task_deploy">
-                    <div class="card-header">Task Deploy</div>
-                    <div class="sivo-container" id="container-task_deploy">
-                        <div id="chart-task_deploy" style="width: 100%; height: 100%;"></div>
-                        <div id="overlay-task_deploy" class="sivo-native-overlay-svg-container"></div>
-                    </div>
+
+
+
+
+
+            <div class="sivo-card" id="card-task_deploy" style="grid-area: done;">
+                <div class="card-header">Task_deploy</div>
+                <div class="sivo-container" id="container-task_deploy">
+                    <div id="chart-task_deploy" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-task_deploy" class="sivo-native-overlay-svg-container"></div>
                 </div>
+            </div>
 
-
-        </div>
 
     </div>
 
@@ -299,6 +261,7 @@
 
     <!-- SIVO Data Injection -->
     <script>
+        // SIVO passes `views_data` directly to this template
         const viewsData = {"task_api": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 200\"\u003e\n            \u003crect id=\"bg\" width=\"300\" height=\"200\" fill=\"#ffffff\" rx=\"8\" name=\"bg\"/\u003e\n            \u003crect width=\"10\" height=\"200\" fill=\"#3b82f6\" rx=\"4\"/\u003e\n            \u003ctext x=\"30\" y=\"40\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" fill=\"#1e293b\"\u003eDesign API\u003c/text\u003e\n            \u003ctext x=\"30\" y=\"80\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#64748b\"\u003eID: T-101\u003c/text\u003e\n            \u003ccircle cx=\"260\" cy=\"160\" r=\"16\" fill=\"#e2e8f0\"/\u003e\n            \u003ctext x=\"260\" y=\"165\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#475569\" text-anchor=\"middle\"\u003eJD\u003c/text\u003e\n        \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1, "tooltip": "\u003cb\u003eT-101\u003c/b\u003e\u003cbr/\u003eDesign REST API endpoints.", "emphasis": {"itemStyle": {"areaColor": "#f8fafc"}}}], "actions_manifest": {"bg": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-101\u003c/b\u003e\u003cbr/\u003eDesign REST API endpoints.\u003c/h3\u003e", "title": "\u003cb\u003eT-101\u003c/b\u003e\u003cbr/\u003eDesign REST API endpoints.", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-101\u003c/b\u003e\u003cbr/\u003eDesign REST API endpoints.\u003c/h3\u003e", "title": "\u003cb\u003eT-101\u003c/b\u003e\u003cbr/\u003eDesign REST API endpoints.", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#f8fafc", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "task_db": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 200\"\u003e\n            \u003crect id=\"bg\" width=\"300\" height=\"200\" fill=\"#ffffff\" rx=\"8\" name=\"bg\"/\u003e\n            \u003crect width=\"10\" height=\"200\" fill=\"#3b82f6\" rx=\"4\"/\u003e\n            \u003ctext x=\"30\" y=\"40\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" fill=\"#1e293b\"\u003eSetup Database\u003c/text\u003e\n            \u003ctext x=\"30\" y=\"80\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#64748b\"\u003eID: T-102\u003c/text\u003e\n            \u003ccircle cx=\"260\" cy=\"160\" r=\"16\" fill=\"#e2e8f0\"/\u003e\n            \u003ctext x=\"260\" y=\"165\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#475569\" text-anchor=\"middle\"\u003eJD\u003c/text\u003e\n        \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1, "tooltip": "\u003cb\u003eT-102\u003c/b\u003e\u003cbr/\u003eSetup PostgreSQL schemas.", "emphasis": {"itemStyle": {"areaColor": "#f8fafc"}}}], "actions_manifest": {"bg": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-102\u003c/b\u003e\u003cbr/\u003eSetup PostgreSQL schemas.\u003c/h3\u003e", "title": "\u003cb\u003eT-102\u003c/b\u003e\u003cbr/\u003eSetup PostgreSQL schemas.", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-102\u003c/b\u003e\u003cbr/\u003eSetup PostgreSQL schemas.\u003c/h3\u003e", "title": "\u003cb\u003eT-102\u003c/b\u003e\u003cbr/\u003eSetup PostgreSQL schemas.", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#f8fafc", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "task_auth": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 200\"\u003e\n            \u003crect id=\"bg\" width=\"300\" height=\"200\" fill=\"#ffffff\" rx=\"8\" name=\"bg\"/\u003e\n            \u003crect width=\"10\" height=\"200\" fill=\"#f59e0b\" rx=\"4\"/\u003e\n            \u003ctext x=\"30\" y=\"40\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" fill=\"#1e293b\"\u003eImplement Auth\u003c/text\u003e\n            \u003ctext x=\"30\" y=\"80\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#64748b\"\u003eID: T-103\u003c/text\u003e\n            \u003ccircle cx=\"260\" cy=\"160\" r=\"16\" fill=\"#e2e8f0\"/\u003e\n            \u003ctext x=\"260\" y=\"165\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#475569\" text-anchor=\"middle\"\u003eJD\u003c/text\u003e\n        \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1, "tooltip": "\u003cb\u003eT-103\u003c/b\u003e\u003cbr/\u003eImplement OAuth2 flow.", "emphasis": {"itemStyle": {"areaColor": "#f8fafc"}}}], "actions_manifest": {"bg": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-103\u003c/b\u003e\u003cbr/\u003eImplement OAuth2 flow.\u003c/h3\u003e", "title": "\u003cb\u003eT-103\u003c/b\u003e\u003cbr/\u003eImplement OAuth2 flow.", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-103\u003c/b\u003e\u003cbr/\u003eImplement OAuth2 flow.\u003c/h3\u003e", "title": "\u003cb\u003eT-103\u003c/b\u003e\u003cbr/\u003eImplement OAuth2 flow.", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#f8fafc", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}, "task_deploy": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 200\"\u003e\n            \u003crect id=\"bg\" width=\"300\" height=\"200\" fill=\"#ffffff\" rx=\"8\" name=\"bg\"/\u003e\n            \u003crect width=\"10\" height=\"200\" fill=\"#10b981\" rx=\"4\"/\u003e\n            \u003ctext x=\"30\" y=\"40\" font-family=\"sans-serif\" font-size=\"20\" font-weight=\"bold\" fill=\"#1e293b\"\u003eDeploy to Staging\u003c/text\u003e\n            \u003ctext x=\"30\" y=\"80\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#64748b\"\u003eID: T-104\u003c/text\u003e\n            \u003ccircle cx=\"260\" cy=\"160\" r=\"16\" fill=\"#e2e8f0\"/\u003e\n            \u003ctext x=\"260\" y=\"165\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#475569\" text-anchor=\"middle\"\u003eJD\u003c/text\u003e\n        \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1, "tooltip": "\u003cb\u003eT-104\u003c/b\u003e\u003cbr/\u003eDeploy using GitHub Actions.", "emphasis": {"itemStyle": {"areaColor": "#f8fafc"}}}], "actions_manifest": {"bg": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-104\u003c/b\u003e\u003cbr/\u003eDeploy using GitHub Actions.\u003c/h3\u003e", "title": "\u003cb\u003eT-104\u003c/b\u003e\u003cbr/\u003eDeploy using GitHub Actions.", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003e\u003cb\u003eT-104\u003c/b\u003e\u003cbr/\u003eDeploy using GitHub Actions.\u003c/h3\u003e", "title": "\u003cb\u003eT-104\u003c/b\u003e\u003cbr/\u003eDeploy using GitHub Actions.", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#f8fafc", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
         const activeCharts = {};
 
@@ -310,49 +273,82 @@
 
             var containerWidth = domElement.clientWidth;
             var containerHeight = domElement.clientHeight;
-            var layoutRatio = view.layout_size ? parseFloat(view.layout_size.replace('%', '')) / 100 : 0.95;
 
-            var svgWidth = view.metadata && view.metadata.viewBox ? parseFloat(view.metadata.viewBox.split(' ')[2]) : 1000;
-            var svgHeight = view.metadata && view.metadata.viewBox ? parseFloat(view.metadata.viewBox.split(' ')[3]) : 1000;
-            var svgAspect = svgWidth / svgHeight;
-            var containerAspect = containerWidth / containerHeight;
-
-            var finalSize;
-            if (containerAspect > svgAspect) {
-                finalSize = Math.floor(containerHeight * layoutRatio);
-            } else {
-                finalSize = Math.floor(containerWidth * layoutRatio);
+            if (containerWidth <= 0 || containerHeight <= 0) {
+                return view.layout_size;
             }
-            return finalSize + 'px';
+
+            var fraction = parseFloat(view.layout_size.replace('%', '')) / 100.0;
+            var svgW = 1000;
+            var svgH = 1000;
+
+            if (view.svg_string) {
+                var viewBoxMatch = view.svg_string.match(/viewBox\s*=\s*['"]([^'"]+)['"]/i);
+                if (viewBoxMatch) {
+                    var parts = viewBoxMatch[1].trim().split(/[\s,]+/);
+                    if (parts.length >= 4) {
+                        svgW = parseFloat(parts[2]);
+                        svgH = parseFloat(parts[3]);
+                    }
+                } else {
+                    var wMatch = view.svg_string.match(/width\s*=\s*['"]([^'"]+)['"]/i);
+                    var hMatch = view.svg_string.match(/height\s*=\s*['"]([^'"]+)['"]/i);
+                    if (wMatch && hMatch) {
+                        var wVal = parseFloat(wMatch[1]);
+                        var hVal = parseFloat(hMatch[1]);
+                        if (!isNaN(wVal) && !isNaN(hVal)) {
+                            svgW = wVal;
+                            svgH = hVal;
+                        }
+                    }
+                }
+            }
+
+            if (svgW <= 0 || svgH <= 0) return view.layout_size;
+
+            var containerRatio = containerWidth / containerHeight;
+            var svgRatio = svgW / svgH;
+            var targetMaxPx;
+
+            if (containerRatio < svgRatio) {
+                var scale = (containerWidth * fraction) / svgW;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            } else {
+                var scale = (containerHeight * fraction) / svgH;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            }
+
+            return Math.round(targetMaxPx) + 'px';
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            for (const [blockId, viewData] of Object.entries(viewsData)) {
-                if (!document.getElementById('chart-' + blockId)) continue;
+        // Initialize all blocks independently
+        Object.keys(viewsData).forEach(blockId => {
+            const viewData = viewsData[blockId];
+            const dom = document.getElementById('chart-' + blockId);
 
-                echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
-
-                const chart = echarts.init(document.getElementById('chart-' + blockId), null, { renderer: viewData.render_mode || 'canvas' });
+            if (dom) {
+                const chart = echarts.init(dom, null, { renderer: viewData.render_mode || 'canvas' });
                 activeCharts[blockId] = chart;
 
-                const dom = document.getElementById('chart-' + blockId);
-                const calcSize = calculateLayoutSize(viewData, dom);
+                // Register the SVG map unique to this block
+                echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
 
                 const option = {
-                    tooltip: {},
+                    tooltip: { trigger: 'item' },
                     geo: {
                         map: 'sivoMap_' + blockId,
                         roam: true,
                         layoutCenter: ['50%', '50%'],
-                        layoutSize: calcSize,
-                        itemStyle: { color: 'transparent' },
-                        emphasis: { itemStyle: { color: 'transparent' }, label: { show: false } },
-                        regions: viewData.echarts_data
+                        layoutSize: calculateLayoutSize(viewData, dom),
+                        regions: viewData.echarts_data // Apply colors directly to SVG regions via geo
                     },
                     series: []
                 };
 
+                // Add visualMap for choropleths if data_binding exists
                 if (viewData.data_binding) {
+                    // For Choropleths, ECharts requires a series mapped to the geo component
+                    // to properly calculate the visualMap gradients across the shapes.
                     option.series.push({
                         type: 'map',
                         map: 'sivoMap_' + blockId,
@@ -363,7 +359,6 @@
                     const db = viewData.data_binding;
                     option.visualMap = {
                         left: 'right',
-                        bottom: '5%',
                         min: db.min_value,
                         max: db.max_value,
                         inRange: {
@@ -372,6 +367,7 @@
                         text: [db.max_label || 'High', db.min_label || 'Low'],
                         calculable: true,
                         formatter: function (value) {
+                            // Basic formatting logic for dashboard visualMap
                             if (db.legend_formatter === "currency") {
                                 return '$' + Math.round(value).toLocaleString();
                             } else if (db.legend_formatter === "percent") {
@@ -381,98 +377,212 @@
                         }
                     };
                     if (db.legend_title) {
-                        option.title = { text: db.legend_title, left: 'right', top: '10px', textStyle: {fontSize: 12, color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase'} };
+                        option.title = { text: db.legend_title, left: 'right', textStyle: {fontSize: 12} };
                     }
                 }
 
                 chart.setOption(option);
             }
+        });
 
-            // Interaction bindings
-            const detailsPanels = document.querySelectorAll('.sivo-details-panel');
-            const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
+        function updateChartLayoutSizes() {
+            Object.keys(activeCharts).forEach(blockId => {
+                const chart = activeCharts[blockId];
+                const viewData = viewsData[blockId];
+                const dom = document.getElementById('chart-' + blockId);
 
-            Object.keys(activeCharts).forEach(chartId => {
-                const chart = activeCharts[chartId];
-                chart.on('click', function(params) {
-                    if(!params.name) return;
+                if (chart && viewData && dom) {
+                    const newSize = calculateLayoutSize(viewData, dom);
+                    chart.setOption({
+                        geo: { layoutSize: newSize, layoutCenter: ['50%', '50%'] }
+                    });
+                    chart.resize();
+                }
+            });
+        }
 
-                    const viewData = viewsData[chartId];
-                    const elementActions = viewData.actions_manifest[params.name];
+        // Handle Window Resize for all blocks
+        window.addEventListener('resize', () => {
+            updateChartLayoutSizes();
+        });
 
-                    let tooltipContent = null;
-                    let payloadData = null;
-                    let panelPosition = "none";
+        // Automatic cross-block communication setup
+        const detailsPanels = document.querySelectorAll('.sivo-details-panel');
+        const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
 
-                    if (elementActions && elementActions.length > 0) {
-                        const tooltipActionForPos = elementActions.find(a => a.action_type === 'tooltip');
-                        if (tooltipActionForPos && tooltipActionForPos.panel_position) {
-                            panelPosition = tooltipActionForPos.panel_position;
-                        }
+        Object.keys(activeCharts).forEach(chartId => {
+            const chart = activeCharts[chartId];
+            chart.on('click', function(params) {
+                if(!params.name) return;
 
-                        elementActions.forEach(action => {
-                            if (action.action_type === 'url' && action.url) {
-                                if (action.target === '_blank') {
-                                    window.open(action.url, '_blank');
-                                } else {
-                                    window.location.href = action.url;
+                const viewData = viewsData[chartId];
+                const elementActions = viewData.actions_manifest[params.name];
+
+                let tooltipContent = null;
+                let payloadData = null;
+
+                let panelPosition = "none";
+
+                if (elementActions && elementActions.length > 0) {
+                    // Extract desired panel position if provided in mapping
+                    const tooltipActionForPos = elementActions.find(a => a.action_type === 'tooltip');
+                    if (tooltipActionForPos && tooltipActionForPos.panel_position) {
+                        panelPosition = tooltipActionForPos.panel_position;
+                    }
+
+                    // Core actions
+                    elementActions.forEach(action => {
+                        if (action.action_type === 'url' && action.url) {
+                            if (action.target === '_blank') {
+                                window.open(action.url, '_blank');
+                            } else {
+                                window.location.href = action.url;
+                            }
+                        } else if (action.action_type === 'zoom') {
+                            var startZoom = chart.getOption().geo[0].zoom || 1.0;
+                            var startCenter = chart.getOption().geo[0].center || ['50%', '50%'];
+
+                            var targetZoom = action.zoom_level;
+                            var targetCenter = action.center;
+
+                            if (action.target_bbox) {
+                                var bboxMinX = action.target_bbox[0];
+                                var bboxMinY = action.target_bbox[1];
+                                var bboxMaxX = action.target_bbox[2];
+                                var bboxMaxY = action.target_bbox[3];
+                                var bboxWidth = bboxMaxX - bboxMinX;
+                                var bboxHeight = bboxMaxY - bboxMinY;
+
+                                var geoModel = chart.getModel().getComponent('geo', 0);
+                                if (geoModel && geoModel.coordinateSystem && geoModel.coordinateSystem.getBoundingRect) {
+                                    var rect = geoModel.coordinateSystem.getBoundingRect();
+                                    var fullWidth = rect.width;
+                                    var fullHeight = rect.height;
+
+                                    var sizeRatioStr = action.zoom_to_size || "90%";
+                                    var sizeRatio = parseFloat(sizeRatioStr.replace('%', '')) / 100.0;
+
+                                    var cw = chart.getWidth();
+                                    var ch = chart.getHeight();
+                                    var fitScale = Math.min(cw / fullWidth, ch / fullHeight);
+
+                                    var shapeWAtZ1 = bboxWidth * fitScale;
+                                    var shapeHAtZ1 = bboxHeight * fitScale;
+
+                                    var screenScaleX = cw / shapeWAtZ1;
+                                    var screenScaleY = ch / shapeHAtZ1;
+
+                                    targetZoom = Math.min(screenScaleX, screenScaleY) * sizeRatio;
                                 }
                             }
-                        });
 
-                        const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
-                        if (tooltipAction && tooltipAction.content) {
-                            tooltipContent = tooltipAction.content;
-                        }
+                            var startTime = performance.now();
+                            var duration = action.duration_ms || 500;
 
-                        const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
-                        if (payloadAction && payloadAction.payload) {
-                            payloadData = payloadAction.payload;
-                        }
-                    }
+                            function animateZoom(time) {
+                                var progress = Math.min((time - startTime) / duration, 1.0);
+                                var easeProgress = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
-                    if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
-                        document.getElementById('sidebar-title').innerText = params.name;
-                        document.getElementById('sidebar-content').innerHTML = tooltipContent;
-                        document.getElementById('sivo-sliding-sidebar').classList.add('active');
-                    } else {
-                        detailsPanels.forEach(panel => {
-                            const container = panel.querySelector('.sivo-details-content');
-                            if (tooltipContent) {
-                                container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color);">${params.name}</h3>${tooltipContent}`;
-                            } else {
-                                container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color);">${params.name}</h3><p style="color: var(--text-muted);">No additional details mapped.</p>`;
+                                var currentZ = startZoom + (targetZoom - startZoom) * easeProgress;
+                                var currentCX = startCenter[0] + (targetCenter[0] - startCenter[0]) * easeProgress;
+                                var currentCY = startCenter[1] + (targetCenter[1] - startCenter[1]) * easeProgress;
+
+                                chart.setOption({ geo: [{ center: [currentCX, currentCY], zoom: currentZ }] });
+
+                                if (progress < 1.0) {
+                                    requestAnimationFrame(animateZoom);
+                                }
                             }
-                        });
-                    }
+                            requestAnimationFrame(animateZoom);
+                        } else if (action.action_type === 'confetti') {
+                            if (typeof confetti === 'function') {
+                                var x = 0.5, y = 0.5;
+                                if (params.event && params.event.event) {
+                                    var e = params.event.event;
+                                    var clientX = e.clientX;
+                                    var clientY = e.clientY;
 
-                    metricsPanels.forEach(panel => {
-                        const valueSpans = panel.querySelectorAll('.metric-value');
-                        valueSpans.forEach(span => {
-                            const key = span.getAttribute('data-metric-key');
-                            if (payloadData && payloadData[key] !== undefined) {
-                                span.innerText = payloadData[key];
-                            } else {
-                                span.innerText = '---';
+                                    if (clientX === undefined && e.changedTouches && e.changedTouches.length > 0) {
+                                        clientX = e.changedTouches[0].clientX;
+                                        clientY = e.changedTouches[0].clientY;
+                                    } else if (clientX === undefined && e.touches && e.touches.length > 0) {
+                                        clientX = e.touches[0].clientX;
+                                        clientY = e.touches[0].clientY;
+                                    }
+
+                                    if (clientX !== undefined && clientY !== undefined) {
+                                        x = clientX / window.innerWidth;
+                                        y = clientY / window.innerHeight;
+                                    }
+                                }
+                                confetti({
+                                    particleCount: action.particle_count || 100,
+                                    spread: action.spread || 70,
+                                    origin: { x: x, y: y },
+                                    zIndex: 10000
+                                });
                             }
-                        });
+                        } else if (action.action_type === 'callback') {
+                            console.log('Triggering callback:', action.event_name, action.payload);
+                            window.parent.postMessage({
+                                type: 'sivo_click',
+                                payload: {
+                                    element_id: params.name,
+                                    event_name: action.event_name,
+                                    data: action.payload || {}
+                                }
+                            }, '*');
+                        } else if (action.action_type === 'drilldown' && action.target_svg) {
+                            console.warn("Dashboard Drilldown triggered to:", action.target_svg);
+                        }
                     });
-                });
-            });
 
-            // Handle resizing
-            window.addEventListener('resize', () => {
-                Object.keys(activeCharts).forEach(blockId => {
-                    const chart = activeCharts[blockId];
-                    const viewData = viewsData[blockId];
-                    const dom = document.getElementById('chart-' + blockId);
-                    if (chart && viewData && dom) {
-                        const newSize = calculateLayoutSize(viewData, dom);
-                        chart.setOption({
-                            geo: { layoutSize: newSize, layoutCenter: ['50%', '50%'] }
-                        });
-                        chart.resize();
+                    const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
+                    if (tooltipAction && tooltipAction.content) {
+                        tooltipContent = tooltipAction.content;
                     }
+
+                    const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
+                    if (payloadAction && payloadAction.payload) {
+                        payloadData = payloadAction.payload;
+                    }
+                }
+
+                // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
+                // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
+                    document.getElementById('sidebar-title').innerText = params.name;
+                    document.getElementById('sidebar-content').innerHTML = tooltipContent;
+                    document.getElementById('sivo-sliding-sidebar').classList.add('active');
+
+                    // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
+                    detailsPanels.forEach(panel => {
+                        const container = panel.querySelector('.sivo-details-content');
+                        container.innerHTML = `<h3>${params.name}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                    });
+                } else {
+                    // Update in-grid Details Panels
+                    detailsPanels.forEach(panel => {
+                        const container = panel.querySelector('.sivo-details-content');
+                        if (tooltipContent) {
+                            container.innerHTML = `<h3>${params.name}</h3>${tooltipContent}`;
+                        } else {
+                            container.innerHTML = `<h3>${params.name}</h3><p>No additional details mapped.</p>`;
+                        }
+                    });
+                }
+
+                // Always update Metrics Panels if payload data exists
+                metricsPanels.forEach(panel => {
+                    const valueSpans = panel.querySelectorAll('.metric-value');
+                    valueSpans.forEach(span => {
+                        const key = span.getAttribute('data-metric-key');
+                        if (payloadData && payloadData[key] !== undefined) {
+                            span.innerText = payloadData[key];
+                        } else {
+                            span.innerText = '---';
+                        }
+                    });
                 });
             });
         });
@@ -481,6 +591,7 @@
             document.getElementById('sivo-sliding-sidebar').classList.remove('active');
         }
 
+        // Inject Custom JS if provided
 
     </script>
 </body>

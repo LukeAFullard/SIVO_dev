@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>Event Registration Portal</title>
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
@@ -49,11 +49,9 @@
             padding: 1.5rem;
             flex: 1;
             /* Remove overflow: hidden so body can scroll if needed */
-            {% if desktop_grid %}
-            grid-template-areas: {{ desktop_grid | safe }};
-            {% else %}
-            grid-template-columns: repeat({{ columns }}, 1fr);
-            {% endif %}
+
+            grid-template-columns: repeat(3, 1fr);
+
         }
 
         .sivo-card {
@@ -159,19 +157,17 @@
         /* Responsive Design */
         @media (max-width: 900px) {
             .dashboard-container {
-                {% if mobile_grid %}
-                grid-template-areas: {{ mobile_grid | safe }};
-                {% else %}
+
                 display: flex;
                 flex-direction: column;
-                {% endif %}
+
             }
 
-            {% if not mobile_grid %}
+
             .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel {
                 width: 100%;
             }
-            {% endif %}
+
             .sivo-card {
                 min-height: 500px;
             }
@@ -181,55 +177,63 @@
 <body>
 
     <header>
-        <h1>{{ title }}</h1>
+        <h1>Event Registration Portal</h1>
     </header>
 
     <div class="dashboard-container" id="dashboard-container">
-        {% for block in layout_order %}
-            {% set grid_style = '' %}
-            {% if desktop_grid and block.grid_area %}
-                {% set grid_style = 'grid-area: ' ~ block.grid_area ~ ';' %}
-            {% elif not desktop_grid and block.col_span %}
-                {% set grid_style = 'grid-column: span ' ~ block.col_span ~ ';' %}
-            {% endif %}
 
-            {% if block.type == "sivo" %}
-            <div class="sivo-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ block.id | title }}</div>
-                <div class="sivo-container" id="container-{{ block.id }}">
-                    <div id="chart-{{ block.id }}" style="width: 100%; height: 100%;"></div>
-                    <div id="overlay-{{ block.id }}" class="sivo-native-overlay-svg-container"></div>
+
+
+
+
+
+
+            <div class="sivo-card" id="card-event_map" style="grid-column: span 1;">
+                <div class="card-header">Event_map</div>
+                <div class="sivo-container" id="container-event_map">
+                    <div id="chart-event_map" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-event_map" class="sivo-native-overlay-svg-container"></div>
                 </div>
             </div>
-            {% elif block.type == "html" %}
-            <div class="html-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-content" id="container-{{ block.id }}">
-                    {{ html_blocks[block.id] | safe }}
+
+
+
+
+
+
+
+
+            <div class="html-card sivo-details-panel" id="card-schedule" data-block-id="schedule" style="grid-column: span 1;">
+                <div class="card-header">Event Schedule</div>
+                <div class="card-content sivo-details-content" id="container-schedule">
+                    <p class="placeholder-text" style="color: #64748b;">Click an event to view the agenda.</p>
                 </div>
             </div>
-            {% elif block.type == "details" %}
-            <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ details_panels[block.id].title }}</div>
-                <div class="card-content sivo-details-content" id="container-{{ block.id }}">
-                    <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-registration" style="grid-column: span 1;">
+                <div class="card-content" id="container-registration">
+
+<div style="height: 100%; display: flex; flex-direction: column;">
+    <h3 style="color: #1e293b; margin-top: 0;">Register Your Attendance</h3>
+    <p style="color: #64748b;">Select an event on the map to view schedule details, then fill out the form below to secure your spot.</p>
+
+    <!-- This is a placeholder for a real iframe, e.g., src="https://docs.google.com/forms/..." -->
+    <div style="flex: 1; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; min-height: 400px;">
+        <span style="color: #64748b; font-family: monospace;">[ iframe src="https://your-registration-form-url" ]</span>
+    </div>
+</div>
+
                 </div>
             </div>
-            {% elif block.type == "metrics" %}
-            <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ metrics_panels[block.id].title }}</div>
-                <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        {% for metric in metrics_panels[block.id].metrics %}
-                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
-                            <strong>{{ metric | title }}:</strong>
-                            <span class="metric-value" data-metric-key="{{ metric }}" style="font-weight: bold; color: var(--primary-color);">---</span>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        {% endfor %}
+
+
     </div>
 
     <!-- Global Sliding Sidebar Overlay -->
@@ -246,7 +250,7 @@
     <!-- SIVO Data Injection -->
     <script>
         // SIVO passes `views_data` directly to this template
-        const viewsData = {{ views_data | safe }};
+        const viewsData = {"event_map": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\"\u003e\n    \u003crect id=\"bg\" width=\"800\" height=\"600\" fill=\"#f1f5f9\" name=\"bg\"/\u003e\n    \u003ccircle id=\"event_nyc\" cx=\"200\" cy=\"300\" r=\"80\" fill=\"#3b82f6\" name=\"event_nyc\"/\u003e\n    \u003ccircle id=\"event_ldn\" cx=\"600\" cy=\"300\" r=\"80\" fill=\"#f59e0b\" name=\"event_ldn\"/\u003e\n    \u003ctext x=\"200\" y=\"420\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNew York Summit\u003c/text\u003e\n    \u003ctext x=\"600\" y=\"420\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eLondon Expo\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "event_nyc", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#2563eb", "shadowBlur": 15, "shadowColor": "#2563eb", "shadowOffsetX": 0, "shadowOffsetY": 0}}}, {"name": "event_ldn", "value": 1, "emphasis": {"itemStyle": {"areaColor": "#d97706", "shadowBlur": 15, "shadowColor": "#d97706", "shadowOffsetX": 0, "shadowOffsetY": 0}}}], "actions_manifest": {"event_nyc": [{"action_type": "tooltip", "content": "\u003ch4\u003eNew York Schedule\u003c/h4\u003e\u003cul\u003e\u003cli\u003e09:00 AM - Keynote\u003c/li\u003e\u003cli\u003e11:00 AM - AI Workshops\u003c/li\u003e\u003cli\u003e02:00 PM - Networking\u003c/li\u003e\u003c/ul\u003e", "title": null, "panel_position": "overlay"}], "event_ldn": [{"action_type": "tooltip", "content": "\u003ch4\u003eLondon Schedule\u003c/h4\u003e\u003cul\u003e\u003cli\u003e10:00 AM - Opening Ceremony\u003c/li\u003e\u003cli\u003e12:00 PM - Fintech Panel\u003c/li\u003e\u003cli\u003e03:00 PM - Happy Hour\u003c/li\u003e\u003c/ul\u003e", "title": null, "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": "Global Developer Events", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "event_nyc": {"id": "event_nyc", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eNew York Schedule\u003c/h4\u003e\u003cul\u003e\u003cli\u003e09:00 AM - Keynote\u003c/li\u003e\u003cli\u003e11:00 AM - AI Workshops\u003c/li\u003e\u003cli\u003e02:00 PM - Networking\u003c/li\u003e\u003c/ul\u003e", "title": null, "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "event_ldn": {"id": "event_ldn", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eLondon Schedule\u003c/h4\u003e\u003cul\u003e\u003cli\u003e10:00 AM - Opening Ceremony\u003c/li\u003e\u003cli\u003e12:00 PM - Fintech Panel\u003c/li\u003e\u003cli\u003e03:00 PM - Happy Hour\u003c/li\u003e\u003c/ul\u003e", "title": null, "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#d97706", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": true, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
         const activeCharts = {};
 
         function calculateLayoutSize(view, domElement) {
@@ -576,9 +580,7 @@
         }
 
         // Inject Custom JS if provided
-        {% if custom_js %}
-            {{ custom_js | safe }}
-        {% endif %}
+
     </script>
 </body>
 </html>
