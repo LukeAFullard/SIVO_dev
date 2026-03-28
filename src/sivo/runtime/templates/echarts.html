@@ -13,22 +13,38 @@
     {% else %}
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    {% if echarts_stat %}
     <!-- Include echarts-stat -->
     <script src="https://cdn.jsdelivr.net/npm/echarts-stat@1.2.0/dist/ecStat.min.js"></script>
+    {% endif %}
+    {% if echarts_wordcloud %}
     <!-- Include echarts-wordcloud -->
     <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
+    {% endif %}
+    {% if echarts_liquidfill %}
     <!-- Include echarts-liquidfill -->
     <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
+    {% endif %}
+    {% if dompurify %}
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    {% endif %}
+    {% if marked %}
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    {% endif %}
+    {% if lottie %}
     <!-- Include lottie-player for Lottie animations -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    {% endif %}
+    {% if confetti %}
     <!-- Include canvas-confetti for gamification effects -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    {% endif %}
+    {% if jspdf %}
     <!-- Include jsPDF for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    {% endif %}
     {% endif %}
 
     <style>
