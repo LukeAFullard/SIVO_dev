@@ -3,7 +3,7 @@ import json
 from typing import Dict, Optional, List
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from .bundle_generator import format_views_data
+from .bundle_generator import format_views_data, determine_dependencies
 
 def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
     import warnings
@@ -23,6 +23,7 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
 
     # We reuse the processing from bundle_generator by running `views_data` through the same structurer
     formatted_views = format_views_data(views_data)
+    deps = determine_dependencies(formatted_views)
 
     html_output = template_obj.render(
         views_data=json.dumps(formatted_views).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
@@ -34,7 +35,8 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
         columns=columns,
         desktop_grid=desktop_grid,
         mobile_grid=mobile_grid,
-        custom_js=custom_js
+        custom_js=custom_js,
+        **deps
     )
 
     if output_path:

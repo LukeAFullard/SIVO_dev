@@ -275,6 +275,32 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
 
     return formatted_views
 
+def determine_dependencies(formatted_views: Dict[str, Dict]) -> Dict[str, bool]:
+    deps = {
+        'echarts_stat': False,
+        'echarts_wordcloud': False,
+        'echarts_liquidfill': False,
+        'marked': False,
+        'lottie': False,
+        'confetti': False,
+        'jspdf': False,
+        'dompurify': True, # Keep dompurify globally required for secure HTML rendering
+    }
+
+    for view_id, view in formatted_views.items():
+        if view.get('tour') and len(view['tour']) > 0:
+            deps['jspdf'] = True
+
+        view_str = json.dumps(view)
+        if 'ecStat:regression' in view_str: deps['echarts_stat'] = True
+        if '"type": "wordCloud"' in view_str: deps['echarts_wordcloud'] = True
+        if '"type": "liquidFill"' in view_str: deps['echarts_liquidfill'] = True
+        if '"action_type": "markdown"' in view_str: deps['marked'] = True
+        if '"action_type": "lottie"' in view_str: deps['lottie'] = True
+        if '"action_type": "confetti"' in view_str: deps['confetti'] = True
+
+    return deps
+
 def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
     template_dir = os.path.join(os.path.dirname(__file__), 'templates')
     env = Environment(
@@ -284,6 +310,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
     template = env.get_template('echarts.html')
 
     formatted_views = format_views_data(views_data)
+
+    deps = determine_dependencies(formatted_views)
 
     # Check for locally bundled JS
     build_js = False
@@ -301,7 +329,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
         custom_css=custom_css,
         custom_js=custom_js,
         build_js=build_js,
-        bundled_js_content=bundled_js_content
+        bundled_js_content=bundled_js_content,
+        **deps
     )
 
     if output_path:
