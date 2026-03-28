@@ -6,6 +6,10 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from .bundle_generator import format_views_data
 
 def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
+    import warnings
+    if template != "default":
+        warnings.warn(f"Dashboard templates are deprecated. The '{template}' template parameter is ignored in favor of the modular CSS Grid Builder layout.", DeprecationWarning)
+
     # Force using standard template
     template_dir = os.path.join(os.path.dirname(__file__), 'templates')
     template_file = 'dashboard_blocks.html'
