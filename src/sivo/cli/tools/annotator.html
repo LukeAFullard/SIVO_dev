@@ -191,6 +191,10 @@
         let selectedHandleIndex = -1; // -1 means none
         let lastDragPoint = null;
 
+        // SAM Active State
+        let currentSamPoints = []; // [{x, y, label: 1 or 0}]
+        let currentSamPreview = null; // { points: [{x, y}] }
+
         let transformScale = 1.0;
         let transformPanX = 0;
         let transformPanY = 0;
@@ -268,11 +272,15 @@
                     else if (e.data.type === 'segment') {
                         if (!model || !processor || !image_embeddings) return;
                         try {
-                            const { point } = e.data;
+                            const { points, labels } = e.data;
+
+                            // Reformat arrays for processor: shape is [batch, num_points, 2]
+                            const formattedPoints = points.map(p => [p.x, p.y]);
+                            const formattedLabels = labels;
 
                             const inputs = await processor({
-                                input_points: [[[point.x, point.y]]],
-                                input_labels: [[1]],
+                                input_points: [[formattedPoints]],
+                                input_labels: [[formattedLabels]],
                                 image_embeddings: image_embeddings,
                                 original_sizes: [original_image_size],
                                 reshaped_input_sizes: [[image_embeddings.dims[2] * 16, image_embeddings.dims[3] * 16]],
@@ -349,7 +357,9 @@
             const rawPath = traceContour(maskArray, w, h);
             if (rawPath && rawPath.length > 2) {
                 const simplified = simplifyPath(rawPath, 2.0);
-                addShape('poly', null, simplified, null);
+                currentSamPreview = { points: simplified };
+            } else {
+                currentSamPreview = null;
             }
             redraw();
         }
@@ -509,7 +519,7 @@
                 toolInstructions.innerHTML = "Click any solid colored area in the image. The tool will auto-detect the edges and generate a polygon.";
             } else if (tool === 'sam') {
                 toolSamBtn.classList.add('tool-active');
-                toolInstructions.innerHTML = "Click on an object. The AI model will segment the shape automatically.";
+                toolInstructions.innerHTML = "<strong>Left Click</strong> to include. <strong>Right Click</strong> to exclude. Press <strong>Enter</strong> to complete the shape. Press <strong>Esc</strong> to cancel.";
 
                 // Lazy-load SAM Worker when tool is clicked
                 if (!samWorker) {
@@ -521,6 +531,8 @@
 
             // Reset state
             currentPath = [];
+            currentSamPoints = [];
+            currentSamPreview = null;
             isDrawing = false;
             startPoint = null;
             selectedShapeIndex = -1;
@@ -774,6 +786,9 @@
             return -1;
         }
 
+        // Prevent default context menu on canvas for right clicks
+        canvas.addEventListener('contextmenu', e => e.preventDefault());
+
         // --- Keyboard Events for Panning ---
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space' && !isSpacePressed) {
@@ -866,8 +881,19 @@
                 }, 10);
             }
             else if (currentTool === 'sam' && isSamReady && isImageEmbedded) {
+                // Ignore left/right clicks for tools other than select or specific logic, but handle SAM right clicks here
+                if (e.button === 0) {
+                    currentSamPoints.push({ x, y, label: 1 }); // Positive point
+                } else if (e.button === 2) {
+                    currentSamPoints.push({ x, y, label: 0 }); // Negative point
+                }
+
                 canvas.style.cursor = 'wait';
-                samWorker.postMessage({ type: 'segment', point: { x, y } });
+                const pList = currentSamPoints.map(p => ({x: p.x, y: p.y}));
+                const lList = currentSamPoints.map(p => p.label);
+                samWorker.postMessage({ type: 'segment', points: pList, labels: lList });
+
+                redraw();
             }
         });
 
@@ -1081,8 +1107,16 @@
                 isDrawing = false;
                 startPoint = null;
                 redraw();
-            } else if (e.key === 'Enter' && currentTool === 'poly' && currentPath.length > 2) {
-                finishPolygon();
+            } else if (e.key === 'Enter') {
+                if (currentTool === 'poly' && currentPath.length > 2) {
+                    finishPolygon();
+                } else if (currentTool === 'sam' && currentSamPreview) {
+                    // Finalize SAM Shape
+                    addShape('poly', null, [...currentSamPreview.points], null);
+                    currentSamPoints = [];
+                    currentSamPreview = null;
+                    redraw();
+                }
             }
 
             // Undo / Redo Shortcuts
@@ -1294,6 +1328,35 @@
                 ctx.ellipse(cx, cy, rx, ry, 0, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.stroke();
+            }
+
+            // Draw SAM Preview and Prompts
+            if (currentTool === 'sam') {
+                if (currentSamPreview && currentSamPreview.points.length > 0) {
+                    ctx.strokeStyle = '#4f46e5';
+                    ctx.fillStyle = 'rgba(79, 70, 229, 0.3)';
+                    ctx.lineWidth = 2 / transformScale;
+                    ctx.beginPath();
+                    ctx.moveTo(currentSamPreview.points[0].x, currentSamPreview.points[0].y);
+                    for (let i = 1; i < currentSamPreview.points.length; i++) {
+                        ctx.lineTo(currentSamPreview.points[i].x, currentSamPreview.points[i].y);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+                currentSamPoints.forEach(p => {
+                    ctx.fillStyle = p.label === 1 ? '#10b981' : '#ef4444';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, markerSize, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // Add outline for visibility
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1 / transformScale;
+                    ctx.stroke();
+                });
             }
 
             // Reset transform for UI rendering if any
