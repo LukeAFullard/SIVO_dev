@@ -104,6 +104,7 @@ def main():
     # annotate command
     parser_annotate = subparsers.add_parser("annotate", help="Start the web-based SVG template generation tool")
     parser_annotate.add_argument("-p", "--port", type=int, default=8080, help="Port to run the local server on")
+    parser_annotate.add_argument("--host", type=str, default="127.0.0.1", help="Host to bind the local server to")
     parser_annotate.set_defaults(func=cmd_annotate)
 
     args = parser.parse_args()

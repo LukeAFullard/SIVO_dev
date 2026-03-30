@@ -64,7 +64,11 @@
         </div>
 
         <div id="tools" style="display: none;">
-            <h2>Drawing Tool</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Drawing Tool</h2>
+                <input type="color" id="tool-color" value="#3b82f6" title="Change Drawing Color" style="cursor: pointer; padding: 0; margin: 0; width: 24px; height: 24px; border: none; background: none;">
+            </div>
+
             <div class="button-group" style="flex-wrap: wrap;">
                 <button id="tool-select" class="secondary" style="flex: 1 1 100%; border-color: #3b82f6; color: #3b82f6;">Select / Move</button>
                 <button id="tool-poly" class="secondary tool-active" style="flex: 1 1 45%;">Polygon (Click)</button>
@@ -85,6 +89,11 @@
 
             <div class="instructions" id="tool-instructions">
                 Click to add points. Press <strong>Enter</strong> or click the first point to complete the polygon. Press <strong>Esc</strong> to cancel.
+            </div>
+
+            <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;">
+                <button id="btn-undo" class="secondary" style="flex: 1; padding: 5px;" disabled>Undo (Ctrl+Z)</button>
+                <button id="btn-redo" class="secondary" style="flex: 1; padding: 5px;" disabled>Redo (Ctrl+Y)</button>
             </div>
 
             <h2>Regions</h2>
@@ -133,9 +142,16 @@
         const magicOptionsDiv = document.getElementById('magic-wand-options');
         const magicToleranceInput = document.getElementById('magic-tolerance');
         const magicToleranceVal = document.getElementById('tolerance-val');
+        const toolColorInput = document.getElementById('tool-color');
+        const btnUndo = document.getElementById('btn-undo');
+        const btnRedo = document.getElementById('btn-redo');
 
         magicToleranceInput.addEventListener('input', (e) => {
             magicToleranceVal.innerText = e.target.value;
+        });
+
+        toolColorInput.addEventListener('input', () => {
+            redraw(); // Update live colors
         });
 
         const exportBtn = document.getElementById('export-btn');
@@ -170,12 +186,79 @@
         let isSpacePressed = false;
         let lastPanPoint = null;
 
+        // Undo / Redo History State
+        let historyStack = [];
+        let historyIndex = -1;
+
         // Image data cache for Magic Wand
         let imageDataCache = null;
         const hiddenCanvas = document.createElement('canvas');
         const hiddenCtx = hiddenCanvas.getContext('2d', { willReadFrequently: true });
 
         const bgImage = new Image(); // Create image object manually, not tied to DOM
+
+        // --- Undo / Redo History System ---
+        function saveState() {
+            // Drop any history after the current index if we branched
+            if (historyIndex < historyStack.length - 1) {
+                historyStack = historyStack.slice(0, historyIndex + 1);
+            }
+
+            // Deep copy shapes array
+            const state = JSON.parse(JSON.stringify(shapes));
+            historyStack.push(state);
+
+            // Limit stack to 50 states to save memory
+            if (historyStack.length > 50) {
+                historyStack.shift();
+            } else {
+                historyIndex++;
+            }
+            updateHistoryButtons();
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                shapes = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+
+                // Clear selection if the shape was deleted in this past state
+                if (selectedShapeIndex >= shapes.length) {
+                    selectedShapeIndex = -1;
+                }
+
+                updateShapeList();
+                redraw();
+                updateHistoryButtons();
+            } else if (historyIndex === 0) {
+                // Revert to empty state (before first drawing)
+                historyIndex = -1;
+                shapes = [];
+                selectedShapeIndex = -1;
+                updateShapeList();
+                redraw();
+                updateHistoryButtons();
+            }
+        }
+
+        function redo() {
+            if (historyIndex < historyStack.length - 1) {
+                historyIndex++;
+                shapes = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+                updateShapeList();
+                redraw();
+                updateHistoryButtons();
+            }
+        }
+
+        function updateHistoryButtons() {
+            btnUndo.disabled = historyIndex < 0;
+            btnRedo.disabled = historyIndex >= historyStack.length - 1;
+        }
+
+        btnUndo.addEventListener('click', undo);
+        btnRedo.addEventListener('click', redo);
+
 
         // --- Image Loading ---
         imageUpload.addEventListener('change', (e) => {
@@ -723,9 +806,11 @@
                 if (isDraggingHandle) {
                     isDraggingHandle = false;
                     selectedHandleIndex = -1;
+                    saveState();
                 } else if (isDraggingShape) {
                     isDraggingShape = false;
                     lastDragPoint = null;
+                    saveState();
                 }
                 return;
             }
@@ -802,6 +887,9 @@
 
         // --- Keyboard Events ---
         window.addEventListener('keydown', (e) => {
+            // Ignore keystrokes if typing in an input
+            if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'text') return;
+
             if (e.code === 'Space' && !isSpacePressed) {
                 isSpacePressed = true;
                 canvas.style.cursor = 'grab';
@@ -814,6 +902,21 @@
                 redraw();
             } else if (e.key === 'Enter' && currentTool === 'poly' && currentPath.length > 2) {
                 finishPolygon();
+            }
+
+            // Undo / Redo Shortcuts
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'z') {
+                    if (e.shiftKey) {
+                        redo();
+                    } else {
+                        undo();
+                    }
+                    e.preventDefault();
+                } else if (e.key === 'y') {
+                    redo();
+                    e.preventDefault();
+                }
             }
         });
 
@@ -829,6 +932,7 @@
             const id = `region_${shapeCounter++}`;
             shapes.push({ id, type, rect: rectBounds, points: pathPoints, ellipse: ellipseData });
             updateShapeList();
+            saveState();
         }
 
         function removeShape(index) {
@@ -843,10 +947,12 @@
             }
             updateShapeList();
             redraw();
+            saveState();
         }
 
         function updateShapeId(index, newId) {
             shapes[index].id = newId;
+            saveState();
         }
 
         function updateShapeList() {
@@ -870,6 +976,23 @@
             });
         }
 
+        // --- Color Helper ---
+        function hexToRgb(hex, alpha) {
+            let r = 0, g = 0, b = 0;
+            // 3 digits
+            if (hex.length == 4) {
+                r = "0x" + hex[1] + hex[1];
+                g = "0x" + hex[2] + hex[2];
+                b = "0x" + hex[3] + hex[3];
+            // 6 digits
+            } else if (hex.length == 7) {
+                r = "0x" + hex[1] + hex[2];
+                g = "0x" + hex[3] + hex[4];
+                b = "0x" + hex[5] + hex[6];
+            }
+            return `rgba(${+r}, ${+g}, ${+b}, ${alpha})`;
+        }
+
         // --- Drawing Canvas ---
         function redraw() {
             // Clear entire actual canvas
@@ -884,11 +1007,15 @@
                 ctx.drawImage(bgImage, 0, 0, imgWidth, imgHeight);
             }
 
+            const baseColorHex = toolColorInput.value || '#3b82f6';
+            const baseColorFill = hexToRgb(baseColorHex, 0.3);
+            const activeColorFill = hexToRgb(baseColorHex, 0.5);
+
             // Draw committed shapes
             shapes.forEach((shape, idx) => {
                 const isSelected = (idx === selectedShapeIndex);
-                ctx.fillStyle = isSelected ? 'rgba(139, 92, 246, 0.4)' : 'rgba(59, 130, 246, 0.3)';
-                ctx.strokeStyle = isSelected ? '#7c3aed' : '#2563eb';
+                ctx.fillStyle = isSelected ? activeColorFill : baseColorFill;
+                ctx.strokeStyle = baseColorHex;
                 ctx.lineWidth = isSelected ? 3 / transformScale : 2 / transformScale;
 
                 ctx.beginPath();
@@ -941,15 +1068,17 @@
 
             // Draw current path/rect in progress
             const markerSize = 6 / transformScale;
+            const tempColorHex = '#10b981';
+            const tempColorFill = hexToRgb(tempColorHex, 0.3);
 
             if (currentTool === 'poly' && currentPath.length > 0) {
-                ctx.strokeStyle = '#10b981';
+                ctx.strokeStyle = tempColorHex;
                 ctx.lineWidth = 2 / transformScale;
                 ctx.beginPath();
                 ctx.moveTo(currentPath[0].x, currentPath[0].y);
                 for (let i = 1; i < currentPath.length; i++) {
                     ctx.lineTo(currentPath[i].x, currentPath[i].y);
-                    ctx.fillStyle = '#10b981';
+                    ctx.fillStyle = tempColorHex;
                     ctx.fillRect(currentPath[i].x - (markerSize/2), currentPath[i].y - (markerSize/2), markerSize, markerSize);
                 }
                 if (tempEndPoint) {
@@ -962,18 +1091,18 @@
                 ctx.fillRect(currentPath[0].x - (markerSize), currentPath[0].y - (markerSize), markerSize*2, markerSize*2);
             }
             else if (currentTool === 'rect' && isDrawing && startPoint && tempEndPoint) {
-                ctx.strokeStyle = '#10b981';
+                ctx.strokeStyle = tempColorHex;
                 ctx.lineWidth = 2 / transformScale;
-                ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+                ctx.fillStyle = tempColorFill;
                 const w = tempEndPoint.x - startPoint.x;
                 const h = tempEndPoint.y - startPoint.y;
                 ctx.fillRect(startPoint.x, startPoint.y, w, h);
                 ctx.strokeRect(startPoint.x, startPoint.y, w, h);
             }
             else if (currentTool === 'ellipse' && isDrawing && startPoint && tempEndPoint) {
-                ctx.strokeStyle = '#10b981';
+                ctx.strokeStyle = tempColorHex;
                 ctx.lineWidth = 2 / transformScale;
-                ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+                ctx.fillStyle = tempColorFill;
 
                 const rx = Math.abs(tempEndPoint.x - startPoint.x) / 2;
                 const ry = Math.abs(tempEndPoint.y - startPoint.y) / 2;
