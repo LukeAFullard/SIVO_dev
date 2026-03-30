@@ -45,6 +45,7 @@ class ElementConfig(BaseModel):
     draggable: bool = False
     color: Optional[str] = None
     hover_color: Optional[str] = None
+    hover_image: Optional[str] = None
     fill_gradient: Optional[Dict[str, Any]] = None
     fill_pattern: Optional[Dict[str, Any]] = None
     border_width: Optional[float] = None

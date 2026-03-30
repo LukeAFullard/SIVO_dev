@@ -158,12 +158,17 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
 
             if item_style:
                 data_item['itemStyle'] = item_style
-
             emphasis_style = {}
-            if theme.get('hover_color'):
+            if theme.get('hover_image'):
+                emphasis_style['areaColor'] = {
+                    'image': theme['hover_image'],
+                    'repeat': 'no-repeat'
+                }
+            elif theme.get('hover_color'):
                 emphasis_style['areaColor'] = theme['hover_color']
             else:
                 # If no specific hover color is set, ensure areaColor stays transparent or inherits correctly
+
                 # so we don't accidentally override it in emphasis if we don't want to.
                 pass
 
