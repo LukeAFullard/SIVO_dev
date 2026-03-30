@@ -397,6 +397,7 @@ class Infographic:
         draggable: bool = False,
         color: Optional[str] = None,
         hover_color: Optional[str] = None,
+        hover_image: Optional[str] = None,
         fill_gradient: Optional[dict] = None,
         fill_pattern: Optional[dict] = None,
         border_width: Optional[float] = None,
@@ -575,6 +576,9 @@ class Infographic:
 
         if color:
             mapping.theme.color = color
+
+        if hover_image:
+            mapping.theme.hover_image = hover_image
 
         if hover_color:
             mapping.theme.hover_color = hover_color

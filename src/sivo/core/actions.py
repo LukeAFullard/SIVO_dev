@@ -196,6 +196,7 @@ class LoadingAction(BaseAction):
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
     hover_color: Optional[str] = None
+    hover_image: Optional[str] = None
     fill_gradient: Optional[dict] = None
     fill_pattern: Optional[dict] = None
     border_width: Optional[float] = None
