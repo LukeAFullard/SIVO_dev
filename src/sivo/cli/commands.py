@@ -4,6 +4,7 @@ import os
 import json
 from ..core.sivo import Sivo
 from ..core.config import ProjectConfig
+from .tools.annotator import cmd_annotate
 
 def cmd_init(args):
     """Initializes a new SIVO project configuration based on an SVG file."""
@@ -99,6 +100,12 @@ def main():
     parser_export.add_argument("config_file", type=str, help="Path to the project.json configuration file")
     parser_export.add_argument("-o", "--output", type=str, default="output.html", help="Output HTML file path")
     parser_export.set_defaults(func=cmd_export)
+
+    # annotate command
+    parser_annotate = subparsers.add_parser("annotate", help="Start the web-based SVG template generation tool")
+    parser_annotate.add_argument("-p", "--port", type=int, default=8080, help="Port to run the local server on")
+    parser_annotate.add_argument("--host", type=str, default="127.0.0.1", help="Host to bind the local server to")
+    parser_annotate.set_defaults(func=cmd_annotate)
 
     args = parser.parse_args()
 
