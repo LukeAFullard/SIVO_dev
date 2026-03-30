@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIVO Template Annotator</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f5; color: #1f2937; }
+        #sidebar { width: 300px; background: white; padding: 20px; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; overflow-y: auto; z-index: 10;}
+        #workspace { flex-grow: 1; position: relative; overflow: auto; background: #e5e7eb; display: flex; align-items: center; justify-content: center; }
+
+        .container { position: relative; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
+        img { display: block; max-width: none; } /* keep original size, canvas scales with scroll */
+
+        h1 { font-size: 1.5rem; margin-top: 0; margin-bottom: 20px; }
+        h2 { font-size: 1rem; margin-top: 20px; margin-bottom: 10px; color: #4b5563; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        button { background-color: #3b82f6; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; margin-bottom: 10px; width: 100%; transition: background-color 0.2s; }
+        button:hover { background-color: #2563eb; }
+        button.secondary { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+        button.secondary:hover { background-color: #e5e7eb; }
+
+        .button-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .button-group button { margin-bottom: 0; }
+
+        .tool-active { background-color: #10b981 !important; color: white !important; border-color: #10b981 !important;}
+
+        input[type="file"] { display: none; }
+        .file-upload-label { display: block; background-color: #3b82f6; color: white; text-align: center; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; margin-bottom: 20px; transition: background-color 0.2s;}
+        .file-upload-label:hover { background-color: #2563eb; }
+
+        .shape-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .shape-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; margin-bottom: 8px; font-size: 0.875rem; }
+        .shape-item input { border: 1px solid #d1d5db; padding: 4px 8px; border-radius: 4px; width: 60%; }
+        .shape-item button { width: auto; padding: 4px 8px; background: #ef4444; margin-bottom: 0; }
+        .shape-item button:hover { background: #dc2626; }
+
+        .instructions { font-size: 0.875rem; color: #6b7280; margin-bottom: 20px; line-height: 1.5; }
+
+        #export-btn { margin-top: 20px; background-color: #8b5cf6; }
+        #export-btn:hover { background-color: #7c3aed; }
+
+        /* Modal for Export Preview */
+        #export-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; display: flex; flex-direction: column; }
+        .modal-content textarea { flex-grow: 1; min-height: 300px; font-family: monospace; font-size: 0.875rem; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; margin-bottom: 15px; resize: vertical; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+        .modal-actions button { width: auto; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <h1>SIVO Annotator</h1>
+
+        <label class="file-upload-label">
+            <input type="file" id="image-upload" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml">
+            Load Background Image
+        </label>
+
+        <div class="instructions" id="setup-instructions">
+            Load an image to start drawing regions of interest. The dimensions will dictate the SVG template's viewBox.
+        </div>
+
+        <div id="tools" style="display: none;">
+            <h2>Drawing Tool</h2>
+            <div class="button-group">
+                <button id="tool-poly" class="secondary tool-active">Polygon (Click points)</button>
+                <button id="tool-rect" class="secondary">Rectangle (Drag)</button>
+            </div>
+
+            <div class="instructions" id="tool-instructions">
+                Click to add points. Press <strong>Enter</strong> or click the first point to complete the polygon. Press <strong>Esc</strong> to cancel.
+            </div>
+
+            <h2>Regions</h2>
+            <ul class="shape-list" id="shape-list">
+                <!-- Items populated here -->
+            </ul>
+
+            <button id="export-btn">Generate SVG Template</button>
+        </div>
+    </div>
+
+    <div id="workspace">
+        <div class="container" id="canvas-container" style="display: none;">
+            <img id="bg-image" draggable="false">
+            <canvas id="draw-canvas"></canvas>
+        </div>
+    </div>
+
+    <div id="export-modal">
+        <div class="modal-content">
+            <h2>Generated SVG Template</h2>
+            <p class="instructions">Save this file as <code>template.svg</code> and load it using <code>Sivo.from_template()</code>. Remember to add your background image using <code>app.add_background_image()</code>.</p>
+            <textarea id="svg-output" readonly></textarea>
+            <div class="modal-actions">
+                <button class="secondary" id="close-modal">Close</button>
+                <button id="download-svg-btn">Download .svg</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imageUpload = document.getElementById('image-upload');
+        const bgImage = document.getElementById('bg-image');
+        const canvas = document.getElementById('draw-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        const toolsDiv = document.getElementById('tools');
+        const setupInstructions = document.getElementById('setup-instructions');
+        const toolInstructions = document.getElementById('tool-instructions');
+        const shapeList = document.getElementById('shape-list');
+
+        const toolPolyBtn = document.getElementById('tool-poly');
+        const toolRectBtn = document.getElementById('tool-rect');
+        const exportBtn = document.getElementById('export-btn');
+
+        const exportModal = document.getElementById('export-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const downloadSvgBtn = document.getElementById('download-svg-btn');
+        const svgOutputArea = document.getElementById('svg-output');
+
+        let shapes = []; // { id: string, type: 'poly'|'rect', points: [{x,y}], rect: {x,y,w,h} }
+        let currentPath = [];
+        let isDrawing = false;
+        let currentTool = 'poly'; // 'poly' or 'rect'
+        let startPoint = null;
+        let tempEndPoint = null;
+
+        let imgWidth = 0;
+        let imgHeight = 0;
+        let shapeCounter = 1;
+
+        // --- Image Loading ---
+        imageUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    imgWidth = img.width;
+                    imgHeight = img.height;
+
+                    bgImage.src = event.target.result;
+
+                    canvas.width = imgWidth;
+                    canvas.height = imgHeight;
+                    container.style.width = `${imgWidth}px`;
+                    container.style.height = `${imgHeight}px`;
+
+                    container.style.display = 'block';
+                    toolsDiv.style.display = 'block';
+                    setupInstructions.style.display = 'none';
+
+                    shapes = [];
+                    updateShapeList();
+                    redraw();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // --- Tool Selection ---
+        function setTool(tool) {
+            currentTool = tool;
+            toolPolyBtn.classList.remove('tool-active');
+            toolRectBtn.classList.remove('tool-active');
+
+            if (tool === 'poly') {
+                toolPolyBtn.classList.add('tool-active');
+                toolInstructions.innerHTML = "Click to add points. Press <strong>Enter</strong> or click the first point to complete the polygon. Press <strong>Esc</strong> to cancel.";
+            } else {
+                toolRectBtn.classList.add('tool-active');
+                toolInstructions.innerHTML = "Click and drag to create a rectangle.";
+            }
+
+            // Reset state
+            currentPath = [];
+            isDrawing = false;
+            startPoint = null;
+            redraw();
+        }
+
+        toolPolyBtn.addEventListener('click', () => setTool('poly'));
+        toolRectBtn.addEventListener('click', () => setTool('rect'));
+
+        // --- Mouse Events for Drawing ---
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            // Calculate scale in case canvas is scaled via CSS (though currently it's 1:1)
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+
+            if (currentTool === 'poly') {
+                // If clicking near the first point to close
+                if (currentPath.length > 2) {
+                    const firstPt = currentPath[0];
+                    const dist = Math.hypot(firstPt.x - x, firstPt.y - y);
+                    if (dist < 10) {
+                        finishPolygon();
+                        return;
+                    }
+                }
+                currentPath.push({x, y});
+                redraw();
+            }
+            else if (currentTool === 'rect') {
+                isDrawing = true;
+                startPoint = {x, y};
+                tempEndPoint = {x, y};
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+
+            if (currentTool === 'poly' && currentPath.length > 0) {
+                tempEndPoint = {x, y};
+                redraw();
+            }
+            else if (currentTool === 'rect' && isDrawing) {
+                tempEndPoint = {x, y};
+                redraw();
+            }
+        });
+
+        canvas.addEventListener('mouseup', (e) => {
+            if (currentTool === 'rect' && isDrawing) {
+                isDrawing = false;
+                const rectBounds = {
+                    x: Math.min(startPoint.x, tempEndPoint.x),
+                    y: Math.min(startPoint.y, tempEndPoint.y),
+                    w: Math.abs(tempEndPoint.x - startPoint.x),
+                    h: Math.abs(tempEndPoint.y - startPoint.y)
+                };
+
+                if (rectBounds.w > 5 && rectBounds.h > 5) {
+                    addShape('rect', rectBounds, null);
+                }
+                startPoint = null;
+                tempEndPoint = null;
+                redraw();
+            }
+        });
+
+        // --- Keyboard Events ---
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                currentPath = [];
+                isDrawing = false;
+                startPoint = null;
+                redraw();
+            } else if (e.key === 'Enter' && currentTool === 'poly' && currentPath.length > 2) {
+                finishPolygon();
+            }
+        });
+
+        function finishPolygon() {
+            addShape('poly', null, [...currentPath]);
+            currentPath = [];
+            tempEndPoint = null;
+            redraw();
+        }
+
+        // --- Shape Management ---
+        function addShape(type, rectBounds, pathPoints) {
+            const id = `region_${shapeCounter++}`;
+            shapes.push({ id, type, rect: rectBounds, points: pathPoints });
+            updateShapeList();
+        }
+
+        function removeShape(index) {
+            shapes.splice(index, 1);
+            updateShapeList();
+            redraw();
+        }
+
+        function updateShapeId(index, newId) {
+            shapes[index].id = newId;
+        }
+
+        function updateShapeList() {
+            shapeList.innerHTML = '';
+            shapes.forEach((shape, index) => {
+                const li = document.createElement('li');
+                li.className = 'shape-item';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = shape.id;
+                input.addEventListener('change', (e) => updateShapeId(index, e.target.value));
+
+                const delBtn = document.createElement('button');
+                delBtn.innerText = 'Delete';
+                delBtn.addEventListener('click', () => removeShape(index));
+
+                li.appendChild(input);
+                li.appendChild(delBtn);
+                shapeList.appendChild(li);
+            });
+        }
+
+        // --- Drawing Canvas ---
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw committed shapes
+            shapes.forEach(shape => {
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.3)';
+                ctx.strokeStyle = '#2563eb';
+                ctx.lineWidth = 2;
+
+                ctx.beginPath();
+                if (shape.type === 'rect') {
+                    ctx.rect(shape.rect.x, shape.rect.y, shape.rect.w, shape.rect.h);
+                } else if (shape.type === 'poly') {
+                    ctx.moveTo(shape.points[0].x, shape.points[0].y);
+                    for (let i = 1; i < shape.points.length; i++) {
+                        ctx.lineTo(shape.points[i].x, shape.points[i].y);
+                    }
+                    ctx.closePath();
+                }
+                ctx.fill();
+                ctx.stroke();
+            });
+
+            // Draw current path/rect in progress
+            if (currentTool === 'poly' && currentPath.length > 0) {
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(currentPath[0].x, currentPath[0].y);
+                for (let i = 1; i < currentPath.length; i++) {
+                    ctx.lineTo(currentPath[i].x, currentPath[i].y);
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillRect(currentPath[i].x - 3, currentPath[i].y - 3, 6, 6);
+                }
+                if (tempEndPoint) {
+                    ctx.lineTo(tempEndPoint.x, tempEndPoint.y);
+                }
+                ctx.stroke();
+
+                // Draw start point larger
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(currentPath[0].x - 4, currentPath[0].y - 4, 8, 8);
+            }
+            else if (currentTool === 'rect' && isDrawing && startPoint && tempEndPoint) {
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 2;
+                ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+                const w = tempEndPoint.x - startPoint.x;
+                const h = tempEndPoint.y - startPoint.y;
+                ctx.fillRect(startPoint.x, startPoint.y, w, h);
+                ctx.strokeRect(startPoint.x, startPoint.y, w, h);
+            }
+        }
+
+        // --- Export ---
+        function generateSVG() {
+            let svgStr = `<svg viewBox="0 0 ${imgWidth} ${imgHeight}" xmlns="http://www.w3.org/2000/svg">\n`;
+
+            shapes.forEach(shape => {
+                // Ensure IDs are safe for SVG/XML
+                const safeId = shape.id.replace(/[^a-zA-Z0-9_\-]/g, '_');
+
+                if (shape.type === 'rect') {
+                    // SIVO/Echarts works better with pure paths rather than rects for click areas, but rect is valid SVG.
+                    svgStr += `    <rect id="${safeId}" fill="transparent" x="${shape.rect.x.toFixed(1)}" y="${shape.rect.y.toFixed(1)}" width="${shape.rect.w.toFixed(1)}" height="${shape.rect.h.toFixed(1)}" />\n`;
+                } else if (shape.type === 'poly') {
+                    let d = `M${shape.points[0].x.toFixed(1)},${shape.points[0].y.toFixed(1)}`;
+                    for (let i = 1; i < shape.points.length; i++) {
+                        d += ` L${shape.points[i].x.toFixed(1)},${shape.points[i].y.toFixed(1)}`;
+                    }
+                    d += ' Z';
+                    svgStr += `    <path id="${safeId}" fill="transparent" d="${d}" />\n`;
+                }
+            });
+
+            svgStr += `</svg>`;
+            return svgStr;
+        }
+
+        exportBtn.addEventListener('click', () => {
+            const svgContent = generateSVG();
+            svgOutputArea.value = svgContent;
+            exportModal.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            exportModal.style.display = 'none';
+        });
+
+        downloadSvgBtn.addEventListener('click', () => {
+            const svgContent = svgOutputArea.value;
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sivo_template.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+    </script>
+</body>
+</html>
