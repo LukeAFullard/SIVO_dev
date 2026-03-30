@@ -370,6 +370,11 @@
         function generateSVG() {
             let svgStr = `<svg viewBox="0 0 ${imgWidth} ${imgHeight}" xmlns="http://www.w3.org/2000/svg">\n`;
 
+            // Generate a background rect that matches the image dimensions exactly.
+            // This ensures the viewBox scales correctly, and gives the user an anchor for app.add_svg_background_image()
+            svgStr += `    <!-- Background anchor for add_svg_background_image -->\n`;
+            svgStr += `    <rect id="background" x="0" y="0" width="${imgWidth}" height="${imgHeight}" fill="transparent" pointer-events="none" />\n\n`;
+
             shapes.forEach(shape => {
                 // Ensure IDs are safe for SVG/XML
                 const safeId = shape.id.replace(/[^a-zA-Z0-9_\-]/g, '_');
