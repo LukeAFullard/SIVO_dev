@@ -65,9 +65,17 @@
 
         <div id="tools" style="display: none;">
             <h2>Drawing Tool</h2>
-            <div class="button-group">
-                <button id="tool-poly" class="secondary tool-active">Polygon (Click points)</button>
-                <button id="tool-rect" class="secondary">Rectangle (Drag)</button>
+            <div class="button-group" style="flex-wrap: wrap;">
+                <button id="tool-poly" class="secondary tool-active" style="flex: 1 1 45%;">Polygon (Click)</button>
+                <button id="tool-rect" class="secondary" style="flex: 1 1 45%;">Rectangle (Drag)</button>
+                <button id="tool-ellipse" class="secondary" style="flex: 1 1 45%;">Ellipse (Drag)</button>
+                <button id="tool-freehand" class="secondary" style="flex: 1 1 45%;">Freehand (Draw)</button>
+                <button id="tool-magic" class="secondary" style="flex: 1 1 100%;">Magic Wand (Click)</button>
+            </div>
+
+            <div id="magic-wand-options" style="display: none; margin-bottom: 15px;">
+                <label for="magic-tolerance" style="font-size: 0.875rem; color: #4b5563;">Wand Tolerance: <span id="tolerance-val">30</span></label>
+                <input type="range" id="magic-tolerance" min="0" max="100" value="30" style="width: 100%;">
             </div>
 
             <div class="instructions" id="tool-instructions">
@@ -115,6 +123,17 @@
 
         const toolPolyBtn = document.getElementById('tool-poly');
         const toolRectBtn = document.getElementById('tool-rect');
+        const toolEllipseBtn = document.getElementById('tool-ellipse');
+        const toolFreehandBtn = document.getElementById('tool-freehand');
+        const toolMagicBtn = document.getElementById('tool-magic');
+        const magicOptionsDiv = document.getElementById('magic-wand-options');
+        const magicToleranceInput = document.getElementById('magic-tolerance');
+        const magicToleranceVal = document.getElementById('tolerance-val');
+
+        magicToleranceInput.addEventListener('input', (e) => {
+            magicToleranceVal.innerText = e.target.value;
+        });
+
         const exportBtn = document.getElementById('export-btn');
 
         const exportModal = document.getElementById('export-modal');
@@ -122,16 +141,21 @@
         const downloadSvgBtn = document.getElementById('download-svg-btn');
         const svgOutputArea = document.getElementById('svg-output');
 
-        let shapes = []; // { id: string, type: 'poly'|'rect', points: [{x,y}], rect: {x,y,w,h} }
+        let shapes = []; // { id: string, type: 'poly'|'rect'|'ellipse', points: [{x,y}], rect: {x,y,w,h}, ellipse: {cx, cy, rx, ry} }
         let currentPath = [];
         let isDrawing = false;
-        let currentTool = 'poly'; // 'poly' or 'rect'
+        let currentTool = 'poly'; // 'poly' or 'rect' or 'ellipse' or 'freehand' or 'magic'
         let startPoint = null;
         let tempEndPoint = null;
 
         let imgWidth = 0;
         let imgHeight = 0;
         let shapeCounter = 1;
+
+        // Image data cache for Magic Wand
+        let imageDataCache = null;
+        const hiddenCanvas = document.createElement('canvas');
+        const hiddenCtx = hiddenCanvas.getContext('2d', { willReadFrequently: true });
 
         // --- Image Loading ---
         imageUpload.addEventListener('change', (e) => {
@@ -156,6 +180,12 @@
                     toolsDiv.style.display = 'block';
                     setupInstructions.style.display = 'none';
 
+                    // Cache image data for magic wand
+                    hiddenCanvas.width = imgWidth;
+                    hiddenCanvas.height = imgHeight;
+                    hiddenCtx.drawImage(img, 0, 0);
+                    imageDataCache = hiddenCtx.getImageData(0, 0, imgWidth, imgHeight);
+
                     shapes = [];
                     updateShapeList();
                     redraw();
@@ -170,13 +200,27 @@
             currentTool = tool;
             toolPolyBtn.classList.remove('tool-active');
             toolRectBtn.classList.remove('tool-active');
+            toolEllipseBtn.classList.remove('tool-active');
+            toolFreehandBtn.classList.remove('tool-active');
+            toolMagicBtn.classList.remove('tool-active');
+            magicOptionsDiv.style.display = 'none';
 
             if (tool === 'poly') {
                 toolPolyBtn.classList.add('tool-active');
                 toolInstructions.innerHTML = "Click to add points. Press <strong>Enter</strong> or click the first point to complete the polygon. Press <strong>Esc</strong> to cancel.";
-            } else {
+            } else if (tool === 'rect') {
                 toolRectBtn.classList.add('tool-active');
                 toolInstructions.innerHTML = "Click and drag to create a rectangle.";
+            } else if (tool === 'ellipse') {
+                toolEllipseBtn.classList.add('tool-active');
+                toolInstructions.innerHTML = "Click and drag to draw an ellipse. Hold Shift for a perfect circle.";
+            } else if (tool === 'freehand') {
+                toolFreehandBtn.classList.add('tool-active');
+                toolInstructions.innerHTML = "Click and drag freely to draw a path. Release to close it. The path is automatically smoothed.";
+            } else if (tool === 'magic') {
+                toolMagicBtn.classList.add('tool-active');
+                magicOptionsDiv.style.display = 'block';
+                toolInstructions.innerHTML = "Click any solid colored area in the image. The tool will auto-detect the edges and generate a polygon.";
             }
 
             // Reset state
@@ -188,6 +232,162 @@
 
         toolPolyBtn.addEventListener('click', () => setTool('poly'));
         toolRectBtn.addEventListener('click', () => setTool('rect'));
+        toolEllipseBtn.addEventListener('click', () => setTool('ellipse'));
+        toolFreehandBtn.addEventListener('click', () => setTool('freehand'));
+        toolMagicBtn.addEventListener('click', () => setTool('magic'));
+
+        // --- Douglas-Peucker Algorithm for Path Simplification ---
+        function getSqDist(p1, p2) {
+            const dx = p1.x - p2.x, dy = p1.y - p2.y;
+            return dx * dx + dy * dy;
+        }
+
+        function getSqSegDist(p, p1, p2) {
+            let x = p1.x, y = p1.y, dx = p2.x - x, dy = p2.y - y;
+            if (dx !== 0 || dy !== 0) {
+                const t = ((p.x - x) * dx + (p.y - y) * dy) / (dx * dx + dy * dy);
+                if (t > 1) {
+                    x = p2.x; y = p2.y;
+                } else if (t > 0) {
+                    x += dx * t; y += dy * t;
+                }
+            }
+            dx = p.x - x; dy = p.y - y;
+            return dx * dx + dy * dy;
+        }
+
+        function simplifyDPStep(points, first, last, sqTolerance, simplified) {
+            let maxSqDist = sqTolerance;
+            let index;
+            for (let i = first + 1; i < last; i++) {
+                const sqDist = getSqSegDist(points[i], points[first], points[last]);
+                if (sqDist > maxSqDist) {
+                    index = i; maxSqDist = sqDist;
+                }
+            }
+            if (maxSqDist > sqTolerance) {
+                if (index - first > 1) simplifyDPStep(points, first, index, sqTolerance, simplified);
+                simplified.push(points[index]);
+                if (last - index > 1) simplifyDPStep(points, index, last, sqTolerance, simplified);
+            }
+        }
+
+        function simplifyPath(points, tolerance) {
+            if (points.length <= 2) return points;
+            const sqTolerance = tolerance !== undefined ? tolerance * tolerance : 1;
+            const simplified = [points[0]];
+            simplifyDPStep(points, 0, points.length - 1, sqTolerance, simplified);
+            simplified.push(points[points.length - 1]);
+            return simplified;
+        }
+
+        // --- Magic Wand Algorithm ---
+        function magicWand(startX, startY, tolerance) {
+            if (!imageDataCache) return;
+            const imgData = imageDataCache.data;
+            const w = imgWidth;
+            const h = imgHeight;
+
+            startX = Math.round(startX);
+            startY = Math.round(startY);
+            if (startX < 0 || startX >= w || startY < 0 || startY >= h) return;
+
+            const startIndex = (startY * w + startX) * 4;
+            const r = imgData[startIndex];
+            const g = imgData[startIndex + 1];
+            const b = imgData[startIndex + 2];
+            const a = imgData[startIndex + 3];
+
+            // Boolean mask of filled pixels
+            const mask = new Uint8Array(w * h);
+            const stack = [[startX, startY]];
+
+            function colorMatch(idx) {
+                const tr = imgData[idx];
+                const tg = imgData[idx + 1];
+                const tb = imgData[idx + 2];
+                const ta = imgData[idx + 3];
+                // Simple Euclidean distance in RGB space
+                const dist = Math.sqrt((r-tr)*(r-tr) + (g-tg)*(g-tg) + (b-tb)*(b-tb));
+                // Scale distance to 0-100 range roughly (max dist is ~441)
+                return (dist / 4.41) <= tolerance;
+            }
+
+            // Flood fill
+            while (stack.length > 0) {
+                const [x, y] = stack.pop();
+                const idx = y * w + x;
+
+                if (mask[idx]) continue; // Already filled
+
+                const pixelIdx = idx * 4;
+                if (!colorMatch(pixelIdx)) continue;
+
+                mask[idx] = 1;
+
+                if (x > 0) stack.push([x - 1, y]);
+                if (x < w - 1) stack.push([x + 1, y]);
+                if (y > 0) stack.push([x, y - 1]);
+                if (y < h - 1) stack.push([x, y + 1]);
+            }
+
+            // --- Marching Squares / Contour Tracing to extract Path ---
+            return traceContour(mask, w, h);
+        }
+
+        function traceContour(mask, w, h) {
+            // Find a starting pixel
+            let startX = -1, startY = -1;
+            for (let y = 0; y < h; y++) {
+                for (let x = 0; x < w; x++) {
+                    if (mask[y * w + x]) {
+                        startX = x; startY = y; break;
+                    }
+                }
+                if (startX !== -1) break;
+            }
+            if (startX === -1) return [];
+
+            const path = [];
+            let cx = startX, cy = startY;
+
+            // Directions: 0=E, 1=NE, 2=N, 3=NW, 4=W, 5=SW, 6=S, 7=SE
+            const dx = [1, 1, 0, -1, -1, -1, 0, 1];
+            const dy = [0, -1, -1, -1, 0, 1, 1, 1];
+            let dir = 7; // Initial search direction
+
+            path.push({x: cx, y: cy});
+
+            // Moore Neighborhood Tracing
+            let pointsFound = 0;
+            const MAX_POINTS = 10000; // safety breaker
+
+            while (pointsFound < MAX_POINTS) {
+                let found = false;
+                // Check 8 neighbors counter-clockwise starting from the previous background pixel
+                for (let i = 0; i < 8; i++) {
+                    const ndir = (dir + i) % 8;
+                    const nx = cx + dx[ndir];
+                    const ny = cy + dy[ndir];
+
+                    if (nx >= 0 && nx < w && ny >= 0 && ny < h && mask[ny * w + nx]) {
+                        cx = nx; cy = ny;
+                        path.push({x: cx, y: cy});
+                        // Backtrack by 2 to find the next boundary pixel
+                        dir = (ndir + 5) % 8;
+                        found = true;
+                        pointsFound++;
+                        break;
+                    }
+                }
+
+                // If we're back at the start, contour is closed
+                if (cx === startX && cy === startY) break;
+                if (!found) break; // Isolated pixel
+            }
+
+            return path;
+        }
 
         // --- Mouse Events for Drawing ---
         canvas.addEventListener('mousedown', (e) => {
@@ -211,10 +411,31 @@
                 currentPath.push({x, y});
                 redraw();
             }
-            else if (currentTool === 'rect') {
+            else if (currentTool === 'rect' || currentTool === 'ellipse') {
                 isDrawing = true;
                 startPoint = {x, y};
                 tempEndPoint = {x, y};
+            }
+            else if (currentTool === 'freehand') {
+                isDrawing = true;
+                currentPath = [{x, y}];
+                redraw();
+            }
+            else if (currentTool === 'magic') {
+                const tol = parseInt(magicToleranceInput.value, 10);
+                canvas.style.cursor = 'wait';
+
+                // Use setTimeout to allow UI to update cursor before heavy work
+                setTimeout(() => {
+                    const rawPath = magicWand(x, y, tol);
+                    if (rawPath && rawPath.length > 2) {
+                        // Simplify the extremely dense pixel path
+                        const simplified = simplifyPath(rawPath, 2.0);
+                        addShape('poly', null, simplified, null);
+                    }
+                    canvas.style.cursor = 'crosshair';
+                    redraw();
+                }, 10);
             }
         });
 
@@ -229,27 +450,67 @@
                 tempEndPoint = {x, y};
                 redraw();
             }
-            else if (currentTool === 'rect' && isDrawing) {
+            else if ((currentTool === 'rect' || currentTool === 'ellipse') && isDrawing) {
                 tempEndPoint = {x, y};
+
+                // If shift is held, constrain ellipse to perfect circle
+                if (currentTool === 'ellipse' && e.shiftKey) {
+                    const dx = tempEndPoint.x - startPoint.x;
+                    const dy = tempEndPoint.y - startPoint.y;
+                    const radius = Math.max(Math.abs(dx), Math.abs(dy));
+                    tempEndPoint.x = startPoint.x + Math.sign(dx) * radius;
+                    tempEndPoint.y = startPoint.y + Math.sign(dy) * radius;
+                }
+
+                redraw();
+            }
+            else if (currentTool === 'freehand' && isDrawing) {
+                currentPath.push({x, y});
                 redraw();
             }
         });
 
         canvas.addEventListener('mouseup', (e) => {
-            if (currentTool === 'rect' && isDrawing) {
+            if (isDrawing && (currentTool === 'rect' || currentTool === 'ellipse')) {
                 isDrawing = false;
-                const rectBounds = {
-                    x: Math.min(startPoint.x, tempEndPoint.x),
-                    y: Math.min(startPoint.y, tempEndPoint.y),
-                    w: Math.abs(tempEndPoint.x - startPoint.x),
-                    h: Math.abs(tempEndPoint.y - startPoint.y)
-                };
 
-                if (rectBounds.w > 5 && rectBounds.h > 5) {
-                    addShape('rect', rectBounds, null);
+                if (currentTool === 'rect') {
+                    const rectBounds = {
+                        x: Math.min(startPoint.x, tempEndPoint.x),
+                        y: Math.min(startPoint.y, tempEndPoint.y),
+                        w: Math.abs(tempEndPoint.x - startPoint.x),
+                        h: Math.abs(tempEndPoint.y - startPoint.y)
+                    };
+
+                    if (rectBounds.w > 5 && rectBounds.h > 5) {
+                        addShape('rect', rectBounds, null, null);
+                    }
+                } else if (currentTool === 'ellipse') {
+                    // Start point is center, tempEndPoint is edge
+                    // OR start point is corner, tempEndPoint is opposite corner
+                    // Let's go with start->temp = bounding box for consistency with rect
+                    const rx = Math.abs(tempEndPoint.x - startPoint.x) / 2;
+                    const ry = Math.abs(tempEndPoint.y - startPoint.y) / 2;
+                    const cx = Math.min(startPoint.x, tempEndPoint.x) + rx;
+                    const cy = Math.min(startPoint.y, tempEndPoint.y) + ry;
+
+                    if (rx > 2 && ry > 2) {
+                        addShape('ellipse', null, null, {cx, cy, rx, ry});
+                    }
                 }
+
                 startPoint = null;
                 tempEndPoint = null;
+                redraw();
+            }
+            else if (currentTool === 'freehand' && isDrawing) {
+                isDrawing = false;
+                if (currentPath.length > 2) {
+                    // Simplify the path so it's not a million points
+                    const simplified = simplifyPath(currentPath, 2.0); // 2.0 tolerance works well for freehand
+                    addShape('poly', null, simplified, null);
+                }
+                currentPath = [];
                 redraw();
             }
         });
@@ -274,9 +535,9 @@
         }
 
         // --- Shape Management ---
-        function addShape(type, rectBounds, pathPoints) {
+        function addShape(type, rectBounds, pathPoints, ellipseData) {
             const id = `region_${shapeCounter++}`;
-            shapes.push({ id, type, rect: rectBounds, points: pathPoints });
+            shapes.push({ id, type, rect: rectBounds, points: pathPoints, ellipse: ellipseData });
             updateShapeList();
         }
 
@@ -324,6 +585,8 @@
                 ctx.beginPath();
                 if (shape.type === 'rect') {
                     ctx.rect(shape.rect.x, shape.rect.y, shape.rect.w, shape.rect.h);
+                } else if (shape.type === 'ellipse') {
+                    ctx.ellipse(shape.ellipse.cx, shape.ellipse.cy, shape.ellipse.rx, shape.ellipse.ry, 0, 0, 2 * Math.PI);
                 } else if (shape.type === 'poly') {
                     ctx.moveTo(shape.points[0].x, shape.points[0].y);
                     for (let i = 1; i < shape.points.length; i++) {
@@ -364,6 +627,21 @@
                 ctx.fillRect(startPoint.x, startPoint.y, w, h);
                 ctx.strokeRect(startPoint.x, startPoint.y, w, h);
             }
+            else if (currentTool === 'ellipse' && isDrawing && startPoint && tempEndPoint) {
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 2;
+                ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+
+                const rx = Math.abs(tempEndPoint.x - startPoint.x) / 2;
+                const ry = Math.abs(tempEndPoint.y - startPoint.y) / 2;
+                const cx = Math.min(startPoint.x, tempEndPoint.x) + rx;
+                const cy = Math.min(startPoint.y, tempEndPoint.y) + ry;
+
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, rx, ry, 0, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
         }
 
         // --- Export ---
@@ -380,8 +658,9 @@
                 const safeId = shape.id.replace(/[^a-zA-Z0-9_\-]/g, '_');
 
                 if (shape.type === 'rect') {
-                    // SIVO/Echarts works better with pure paths rather than rects for click areas, but rect is valid SVG.
                     svgStr += `    <rect id="${safeId}" fill="transparent" x="${shape.rect.x.toFixed(1)}" y="${shape.rect.y.toFixed(1)}" width="${shape.rect.w.toFixed(1)}" height="${shape.rect.h.toFixed(1)}" />\n`;
+                } else if (shape.type === 'ellipse') {
+                    svgStr += `    <ellipse id="${safeId}" fill="transparent" cx="${shape.ellipse.cx.toFixed(1)}" cy="${shape.ellipse.cy.toFixed(1)}" rx="${shape.ellipse.rx.toFixed(1)}" ry="${shape.ellipse.ry.toFixed(1)}" />\n`;
                 } else if (shape.type === 'poly') {
                     let d = `M${shape.points[0].x.toFixed(1)},${shape.points[0].y.toFixed(1)}`;
                     for (let i = 1; i < shape.points.length; i++) {
