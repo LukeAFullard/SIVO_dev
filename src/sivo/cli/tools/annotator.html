@@ -80,7 +80,7 @@
                 <button id="tool-ellipse" class="secondary" style="flex: 1 1 45%;">Ellipse (Drag)</button>
                 <button id="tool-freehand" class="secondary" style="flex: 1 1 45%;">Freehand (Draw)</button>
                 <button id="tool-magic" class="secondary" style="flex: 1 1 45%;">Magic Wand (Click)</button>
-                <button id="tool-sam" class="secondary" style="flex: 1 1 45%; border-color: #4f46e5; color: #4f46e5;" disabled>Smart Seg (SAM)</button>
+                <button id="tool-sam" class="secondary" style="flex: 1 1 45%; border-color: #4f46e5; color: #4f46e5;" title="Downloads AI Model (~300MB) on first use">Smart Seg (SAM)</button>
             </div>
 
             <div id="sam-loading">
@@ -218,7 +218,8 @@
             if (samWorker) return;
 
             samLoadingDiv.style.display = 'block';
-            samStatusText.innerText = "Loading AI Model...";
+            samStatusText.innerText = "Initializing AI Model...";
+            toolSamBtn.disabled = true;
 
             const workerCode = `
                 import { env, AutoModel, AutoProcessor, RawImage } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.0';
@@ -313,6 +314,7 @@
                         embedImageForSam();
                     } else {
                         samLoadingDiv.style.display = 'none';
+                        toolSamBtn.disabled = false;
                     }
                 } else if (e.data.type === 'progress') {
                     samStatusText.innerText = e.data.message;
@@ -452,12 +454,11 @@
                     updateShapeList();
                     redraw();
 
-                    // Trigger SAM embedding
+                    // Reset SAM embedding state for new image
                     isImageEmbedded = false;
-                    toolSamBtn.disabled = true;
-                    if (!samWorker) {
-                        initSamWorker();
-                    } else if (isSamReady) {
+
+                    // Only embed if SAM was already loaded and active from a previous image
+                    if (samWorker && isSamReady) {
                         embedImageForSam();
                     }
                 };
@@ -509,6 +510,13 @@
             } else if (tool === 'sam') {
                 toolSamBtn.classList.add('tool-active');
                 toolInstructions.innerHTML = "Click on an object. The AI model will segment the shape automatically.";
+
+                // Lazy-load SAM Worker when tool is clicked
+                if (!samWorker) {
+                    initSamWorker();
+                } else if (isSamReady && !isImageEmbedded) {
+                    embedImageForSam();
+                }
             }
 
             // Reset state
