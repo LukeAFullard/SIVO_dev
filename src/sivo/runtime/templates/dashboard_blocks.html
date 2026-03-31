@@ -250,6 +250,7 @@
         // SIVO passes `views_data` directly to this template
         const viewsData = {{ views_data | safe }};
         const activeCharts = {};
+        window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         function calculateLayoutSize(view, domElement) {
             if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
@@ -507,6 +508,56 @@
                                     origin: { x: x, y: y },
                                     zIndex: 10000
                                 });
+                            }
+                        } else if (action.action_type === 'toggle_image') {
+                            var targetId = action.target_id || params.name;
+                            var urls = action.image_urls;
+                            if (urls && urls.length > 0) {
+                                if (window.sivoToggleImageState[targetId] === undefined) {
+                                    window.sivoToggleImageState[targetId] = 0;
+                                } else {
+                                    window.sivoToggleImageState[targetId] = (window.sivoToggleImageState[targetId] + 1) % urls.length;
+                                }
+                                var nextUrl = urls[window.sivoToggleImageState[targetId]];
+
+                                var currentOption = chart.getOption();
+                                var seriesData = currentOption.series[0].data || [];
+                                var updated = false;
+
+                                for (var i = 0; i < seriesData.length; i++) {
+                                    if (seriesData[i].name === targetId) {
+                                        if (!seriesData[i].itemStyle) {
+                                            seriesData[i].itemStyle = {};
+                                        }
+                                        var img = new Image();
+                                        img.src = nextUrl;
+                                        seriesData[i].itemStyle.areaColor = {
+                                            image: img,
+                                            repeat: 'repeat'
+                                        };
+                                        updated = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!updated) {
+                                    var img = new Image();
+                                    img.src = nextUrl;
+                                    seriesData.push({
+                                        name: targetId,
+                                        itemStyle: {
+                                            areaColor: {
+                                                image: img,
+                                                repeat: 'repeat'
+                                            }
+                                        }
+                                    });
+                                    updated = true;
+                                }
+
+                                if (updated) {
+                                    chart.setOption({ series: [{ data: seriesData }] });
+                                }
                             }
                         } else if (action.action_type === 'callback') {
                             console.log('Triggering callback:', action.event_name, action.payload);

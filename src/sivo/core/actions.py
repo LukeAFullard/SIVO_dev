@@ -142,6 +142,11 @@ class EchartsAction(BaseAction):
     map_name: Optional[str] = Field(default=None, description="Optional map name to register before rendering the chart.")
     map_data: Optional[Union[str, dict]] = Field(default=None, description="Optional map data (SVG string or GeoJSON dict) to register.")
 
+class ToggleImageAction(BaseAction):
+    action_type: Literal["toggle_image"] = "toggle_image"
+    target_id: Optional[str] = Field(default=None, description="The ID of the target element to apply the background image to. Defaults to the mapped element.")
+    image_urls: list[str] = Field(description="List of image URLs to cycle through.")
+
 class ZoomAction(BaseAction):
     action_type: Literal["zoom"] = "zoom"
     center: list[float] = Field(description="The [x, y] center coordinate of the element to zoom to")
@@ -217,7 +222,7 @@ class ThemeOverride(BaseModel):
     odometer_duration_ms: Optional[int] = 2000
     odometer_format: Optional[str] = None
 
-ActionType = Annotated[Union[ExplodeAction, ConfettiAction, LoadingAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, FootnoteAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction], Field(discriminator='action_type')]
+ActionType = Annotated[Union[ExplodeAction, ConfettiAction, LoadingAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, FootnoteAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction, ToggleImageAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
     id: str

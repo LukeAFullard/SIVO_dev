@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union, List
 from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction, LoadingAction
+from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ToggleImageAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction, LoadingAction
 from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
@@ -383,6 +383,7 @@ class Infographic:
         loading: Optional[dict] = None,
         replit: Optional[str] = None,
         echarts_option: Optional[dict] = None,
+        toggle_image: Optional[dict] = None,
         map_name: Optional[str] = None,
         map_data: Optional[Union[str, dict]] = None,
         context_menu: Optional[list[dict]] = None,
@@ -573,6 +574,9 @@ class Infographic:
 
         if echarts_option:
             mapping.actions.append(EchartsAction(option=echarts_option, panel_position=panel_position or self.default_panel_position, map_name=map_name, map_data=map_data))
+
+        if toggle_image and 'image_urls' in toggle_image:
+            mapping.actions.append(ToggleImageAction(target_id=toggle_image.get('target_id'), image_urls=toggle_image['image_urls']))
 
         if color:
             mapping.theme.color = color
