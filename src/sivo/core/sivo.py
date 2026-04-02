@@ -1665,6 +1665,35 @@ class Sivo:
         """
         self.infographic.add_connection(source_id, target_id, label, color, width, animation_speed, type, opacity, flow_effect, effect_symbol, effect_size, source_coord, target_coord)
 
+
+    def add_card(self, element_id: str, title: str, value: str = "", subtitle: str = "", body: str = "",
+                 left: str = "0%", top: str = "0%", width: str = "100%", height: str = "100%",
+                 shape: str = "rect", bg_color: str = "#ffffff", border_color: str = "#e2e8f0", border_width: str = "1px", rx: str = "8",
+                 title_color: str = "#64748b", value_color: str = "#0f172a", subtitle_color: str = "#94a3b8", body_color: str = "#475569",
+                 auto_fit_text: bool = True):
+        """
+        Automatically generates a perfectly scaled, native SVG card relative to the bounding box
+        of a target element, displaying a title, main value, and optional subtitle.
+
+        Args:
+            element_id: The ID or name of the target SVG element (e.g., a card or region) to anchor to.
+            title: The title text of the card.
+            value: The main value text of the card.
+            subtitle: Optional subtitle text.
+            left: The left offset relative to the bounding box (e.g., "0%").
+            top: The top offset relative to the bounding box (e.g., "0%").
+            width: The total width of the card relative to the bounding box (e.g., "100%").
+            height: The height of the card relative to the bounding box (e.g., "100%").
+            bg_color: Background color of the card.
+            border_color: Border color of the card.
+            border_width: Border width of the card.
+            rx: The border radius of the card (in absolute pixels).
+            title_color: The text color for the title.
+            value_color: The text color for the main value.
+            subtitle_color: The text color for the subtitle.
+        """
+        self.infographic.add_card(element_id, title, value, subtitle, body, left, top, width, height, shape, bg_color, border_color, border_width, rx, title_color, value_color, subtitle_color, body_color, auto_fit_text)
+
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """
         Automatically generates a perfectly scaled, native SVG progress bar relative to the bounding box
