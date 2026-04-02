@@ -1594,6 +1594,261 @@ class Infographic:
         # If the user wants the image to tint on 'hover_color', they should set `opacity < 1.0`
         # so the underlying ECharts shape's color change can be seen blending through the image.
 
+
+    def add_card(self, element_id: str, title: str, value: str = "", subtitle: str = "", body: str = "",
+                 left: str = "0%", top: str = "0%", width: str = "100%", height: str = "100%",
+                 shape: str = "rect", bg_color: str = "#ffffff", border_color: str = "#e2e8f0", border_width: str = "1px", rx: str = "8",
+                 title_color: str = "#64748b", value_color: str = "#0f172a", subtitle_color: str = "#94a3b8", body_color: str = "#475569",
+                 auto_fit_text: bool = True):
+        """
+        Generates a perfectly scaled, native SVG card relative to the bounding box
+        of a target element.
+
+        Args:
+            element_id: The ID or name of the target SVG element to anchor to.
+            title: The title text of the card.
+            value: The main value text of the card.
+            subtitle: Optional subtitle text.
+            left: The left offset relative to the bounding box.
+            top: The top offset relative to the bounding box.
+            width: The total width of the card relative to the bounding box.
+            height: The height of the card relative to the bounding box.
+            bg_color: Background color of the card.
+            border_color: Border color of the card.
+            border_width: Border width of the card.
+            rx: Border radius of the card.
+            title_color: Color of the title text.
+            value_color: Color of the main value text.
+            subtitle_color: Color of the subtitle text.
+        """
+        import uuid
+        import lxml.etree as etree
+
+        target_elem = self._element_lookup.get(element_id)
+        if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
+            raise ValueError(f"Cannot add scalable card: Element '{element_id}' not found or has no bounding box.")
+
+        bbox = target_elem['bbox']
+        bbox_min_x, bbox_min_y, bbox_max_x, bbox_max_y = bbox
+        bbox_width = bbox_max_x - bbox_min_x
+        bbox_height = bbox_max_y - bbox_min_y
+
+        def _parse_val(val_str, relative_to):
+            if isinstance(val_str, (int, float)):
+                return float(val_str)
+            if val_str.endswith('%'):
+                return (float(val_str[:-1]) / 100.0) * relative_to
+            return float(val_str)
+
+        abs_left = bbox_min_x + _parse_val(str(left), bbox_width)
+        abs_top = bbox_min_y + _parse_val(str(top), bbox_height)
+        abs_width = _parse_val(str(width), bbox_width)
+        abs_height = _parse_val(str(height), bbox_height)
+
+        card_id = f"sivo_card_{uuid.uuid4().hex[:8]}"
+
+        # Create a group for the card
+        group = etree.Element("g", id=card_id, **{"class": "sivo-injected-card"})
+
+        shape_attrs = {
+            "fill": bg_color,
+            "stroke": border_color,
+            "stroke-width": border_width,
+            "style": "pointer-events: none;"
+        }
+
+        if shape == "circle":
+            cx = abs_left + abs_width / 2
+            cy = abs_top + abs_height / 2
+            r = min(abs_width, abs_height) / 2
+            shape_attrs.update({"cx": str(cx), "cy": str(cy), "r": str(r)})
+            bg = etree.SubElement(group, "circle", shape_attrs)
+        elif shape == "ellipse":
+            cx = abs_left + abs_width / 2
+            cy = abs_top + abs_height / 2
+            rx_val = abs_width / 2
+            ry_val = abs_height / 2
+            shape_attrs.update({"cx": str(cx), "cy": str(cy), "rx": str(rx_val), "ry": str(ry_val)})
+            bg = etree.SubElement(group, "ellipse", shape_attrs)
+        elif shape == "pill":
+            rx_val = abs_height / 2
+            shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx_val), "ry": str(rx_val)})
+            bg = etree.SubElement(group, "rect", shape_attrs)
+        else: # default to rect
+            shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx)})
+            bg = etree.SubElement(group, "rect", shape_attrs)
+
+        text_group = group
+
+        import math
+
+        is_centered = shape in ["circle", "ellipse"]
+
+        # Calculate base padding
+        padding_x = abs_width * 0.08
+        padding_y = abs_height * 0.15
+
+        if is_centered:
+            text_x = abs_left + abs_width / 2
+            text_anchor = "middle"
+        else:
+            text_x = abs_left + padding_x
+            text_anchor = "start"
+
+        def get_max_width_at_y(y_pos):
+            # Calculate the horizontal available width inside the shape at a specific Y coordinate
+            if shape == "circle":
+                cy = abs_top + abs_height / 2
+                r = min(abs_width, abs_height) / 2
+                dy = abs(y_pos - cy)
+                if dy >= r: return 0
+                return 2 * math.sqrt(r**2 - dy**2) * 0.85 # 15% padding
+            elif shape == "ellipse":
+                cy = abs_top + abs_height / 2
+                rx_val = abs_width / 2
+                ry_val = abs_height / 2
+                dy = abs(y_pos - cy)
+                if dy >= ry_val: return 0
+                return 2 * rx_val * math.sqrt(1 - (dy**2 / ry_val**2)) * 0.85 # 15% padding
+            elif shape == "pill":
+                r = abs_height / 2
+                cy = abs_top + r
+                dy = abs(y_pos - cy)
+                if dy >= r: return 0
+                circle_width = 2 * math.sqrt(r**2 - dy**2)
+                straight_width = abs_width - 2*r
+                return (straight_width + circle_width) * 0.9 # 10% padding
+            else:
+                return abs_width - (padding_x * 2)
+
+        def auto_shrink_font(text, initial_size, y_pos):
+            available_width = get_max_width_at_y(y_pos)
+            if available_width <= 0: return initial_size
+
+            # Estimate text width
+            est_width = len(str(text)) * (initial_size * 0.6)
+
+            if est_width > available_width:
+                return initial_size * (available_width / est_width)
+            return initial_size
+
+        # Default scaling
+        scale = 1.0
+
+        # Determine base proportions. If there's a body, header sizes should be significantly smaller.
+        if body:
+            base_title_fs = abs_height * 0.10
+            base_value_fs = abs_height * 0.15
+            base_subtitle_fs = abs_height * 0.08
+            base_body_fs = abs_height * 0.07
+        else:
+            base_title_fs = abs_height * 0.15
+            base_value_fs = abs_height * 0.35
+            base_subtitle_fs = abs_height * 0.12
+            base_body_fs = abs_height * 0.08
+
+        # We simulate the layout block inside a while loop to find the best `scale`
+        # such that the final Y coordinate does not overflow `abs_top + abs_height - padding_y`
+
+        max_y_limit = abs_top + abs_height - padding_y
+
+        rendered_elements = [] # To hold the final attributes we decide to render
+
+        while scale >= 0.2: # Don't shrink to invisible
+            rendered_elements.clear()
+            current_y = abs_top + padding_y
+
+            # 1. Title
+            title_font_size = base_title_fs * scale
+            title_y = current_y + (title_font_size * 0.8)
+            actual_title_size = auto_shrink_font(title, title_font_size, title_y)
+            rendered_elements.append(("title", title, actual_title_size, title_y, title_color, "600"))
+
+            current_y = title_y
+
+            # 2. Value
+            if value:
+                value_font_size = base_value_fs * scale
+                value_y = current_y + (title_font_size * 0.2) + (abs_height * 0.05 * scale) + (value_font_size * 0.8)
+                actual_value_size = auto_shrink_font(value, value_font_size, value_y)
+                rendered_elements.append(("value", value, actual_value_size, value_y, value_color, "bold"))
+                current_y = value_y
+            else:
+                value_font_size = 0
+
+            # 3. Subtitle
+            if subtitle:
+                subtitle_font_size = base_subtitle_fs * scale
+                prev_fs = value_font_size if value else title_font_size
+                subtitle_y = current_y + (prev_fs * 0.2) + (abs_height * 0.05 * scale) + (subtitle_font_size * 0.8)
+                actual_subtitle_size = auto_shrink_font(subtitle, subtitle_font_size, subtitle_y)
+                rendered_elements.append(("subtitle", subtitle, actual_subtitle_size, subtitle_y, subtitle_color, "normal"))
+                current_y = subtitle_y
+            else:
+                subtitle_font_size = 0
+
+            # 4. Body (Wrapped)
+            if body:
+                body_font_size = base_body_fs * scale
+                prev_fs = subtitle_font_size if subtitle else (value_font_size if value else title_font_size)
+
+                # Start body
+                body_start_y = current_y + (prev_fs * 0.2) + (abs_height * 0.08 * scale) + (body_font_size * 0.8)
+                line_y = body_start_y
+
+                words = str(body).split()
+                current_line = []
+
+                for word in words:
+                    current_line.append(word)
+                    test_line = " ".join(current_line)
+
+                    est_width = len(test_line) * (body_font_size * 0.55)
+                    available_width = get_max_width_at_y(line_y)
+
+                    if est_width > available_width and len(current_line) > 1:
+                        current_line.pop()
+                        rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal"))
+                        current_line = [word]
+                        line_y += body_font_size * 1.2
+
+                if current_line:
+                    rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal"))
+                    line_y += body_font_size * 1.2
+
+                current_y = line_y - (body_font_size * 1.2) # Undo the last addition to get the true bottom of the text block
+
+            # Check if we overflowed the bottom boundary of the card
+            # Or if it's a circle/ellipse, we should check `get_max_width_at_y(current_y)` to see if there's enough room at the bottom tip.
+            # A simple bounding box check is sufficient.
+
+            if auto_fit_text and current_y > max_y_limit:
+                # Shrink and try again
+                scale -= 0.05
+            else:
+                # Layout fits perfectly! Break out of the loop and render.
+                break
+
+        # Finally, render all the elements
+        for elem_type, text_content, font_size, y_pos, color, weight in rendered_elements:
+            attrs = {
+                "x": str(text_x),
+                "y": str(y_pos),
+                "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                "font-size": f"{font_size}px",
+                "fill": color,
+                "text-anchor": text_anchor,
+                "style": "pointer-events: none;"
+            }
+            if weight != "normal":
+                attrs["font-weight"] = weight
+
+            node = etree.SubElement(text_group, "text", attrs)
+            node.text = text_content
+
+        # Inject at the end of the SVG
+        self.parser.root.append(group)
+
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """
         Automatically generates a perfectly scaled, native SVG progress bar relative to the bounding box
