@@ -4625,7 +4625,12 @@
 
 
             function applyPanelPosition(position, initCharts, elementCss) {
-                if (window.sivoDisablePanel) return;
+                if (window.sivoDisablePanel || position === 'none') {
+                    // Close the panel instead if position is "none"
+                    // but don't prevent the background interactions (callbacks, DOM update)
+                    closePanel();
+                    return;
+                }
 
                 // Update dynamic CSS
                 var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
