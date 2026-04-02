@@ -184,8 +184,8 @@ class ProjectConfig(BaseModel):
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
     default_panel_position: str = Field(
-        default="overlay",
-        description="Global default position for the info panel ('right', 'left', 'top', 'bottom', 'overlay')."
+        default="none",
+        description="Global default position for the info panel ('right', 'left', 'top', 'bottom', 'overlay', 'none')."
     )
     disable_panel: bool = Field(
         default=False,

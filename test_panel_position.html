@@ -5,47 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    {% if echarts_stat %}
-    <!-- Include echarts-stat -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-stat@1.2.0/dist/ecStat.min.js"></script>
-    {% endif %}
-    {% if echarts_wordcloud %}
-    <!-- Include echarts-wordcloud -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
-    {% endif %}
-    {% if echarts_liquidfill %}
-    <!-- Include echarts-liquidfill -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
-    {% endif %}
-    {% if dompurify %}
+
+
+
+
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-    {% endif %}
-    {% if marked %}
-    <!-- Include marked.js for Markdown Action -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
-    {% if lottie %}
-    <!-- Include lottie-player for Lottie animations -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    {% endif %}
-    {% if confetti %}
-    <!-- Include canvas-confetti for gamification effects -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    {% endif %}
-    {% if jspdf %}
-    <!-- Include jsPDF for PDF export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
-    {% endif %}
+
+
+
+
+
+
 
     <style>
         body {
@@ -1688,8 +1662,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\"\u003e\n    \u003crect width=\"400\" height=\"400\" fill=\"#f8fafc\"/\u003e\n    \u003ccircle id=\"circle1\" cx=\"100\" cy=\"200\" r=\"80\" fill=\"#3b82f6\" name=\"circle1\"/\u003e\n    \u003ctext x=\"100\" y=\"200\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#fff\" text-anchor=\"middle\" pointer-events=\"none\"\u003eNone\u003c/text\u003e\n    \u003ccircle id=\"circle2\" cx=\"300\" cy=\"200\" r=\"80\" fill=\"#ef4444\" name=\"circle2\"/\u003e\n    \u003ctext x=\"300\" y=\"200\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#fff\" text-anchor=\"middle\" pointer-events=\"none\"\u003eRight Panel\u003c/text\u003e\n    \u003ctext x=\"200\" y=\"50\" font-family=\"sans-serif\" font-size=\"16\" fill=\"#333\" text-anchor=\"middle\" pointer-events=\"none\"\u003eTest: panel_position=\"none\"\u003c/text\u003e\n    \u003ctext x=\"200\" y=\"350\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#666\" text-anchor=\"middle\" pointer-events=\"none\"\u003e1. Click Red to open. 2. Click Blue to close.\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "circle1", "value": 1}, {"name": "circle2", "value": 1}], "actions_manifest": {"circle1": [{"action_type": "tooltip", "content": "\u003ch2\u003eThis should NOT appear in a sidebar!\u003c/h2\u003e", "title": null, "panel_position": "none"}], "circle2": [{"action_type": "tooltip", "content": "\u003ch2\u003eThis is the right sidebar\u003c/h2\u003e\u003cp\u003eClicking the blue circle should close this.\u003c/p\u003e", "title": null, "panel_position": "right"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "panel_css": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": null, "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "svg_background_image_url": null, "svg_background_image_opacity": 1.0, "svg_background_image_grayscale": false, "svg_background_image_insert_after": null, "transparent_template_lines": false, "mappings": {"circle1": {"id": "circle1", "actions": [{"action_type": "tooltip", "content": "\u003ch2\u003eThis should NOT appear in a sidebar!\u003c/h2\u003e", "title": null, "panel_position": "none"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "hover_image": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "circle2": {"id": "circle2", "actions": [{"action_type": "tooltip", "content": "\u003ch2\u003eThis is the right sidebar\u003c/h2\u003e\u003cp\u003eClicking the blue circle should close this.\u003c/p\u003e", "title": null, "panel_position": "right"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "hover_image": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -3923,7 +3897,7 @@
             var htmlContent = '';
             var hasInteraction = false;
             var view = viewsData[currentViewId];
-            var panelPosition = view ? (view.default_panel_position || 'none') : 'none'; // Default
+            var panelPosition = view ? (view.default_panel_position || 'right') : 'right'; // Default
             var socialIframes = []; // Store secure iframes to append after DOMPurify
             var sivoChartsToInit = [];
 
@@ -6996,8 +6970,8 @@ function tourNext() {
 
     <!-- Custom injected assets placeholder -->
     <style id="sivo-panel-dynamic-css"></style>
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>
