@@ -111,12 +111,26 @@
             </ul>
 
             <button id="export-btn">Generate SVG Template</button>
+
+            <div style="margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 15px;">
+                <h3 style="font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">Project State</h3>
+                <div style="display: flex; gap: 10px;">
+                    <button id="save-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Save</button>
+                    <button id="load-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Load</button>
+                    <input type="file" id="load-project-file" accept=".json" style="display: none;">
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="workspace">
         <div class="container" id="canvas-container" style="display: none; width: 100%; height: 100%;">
             <canvas id="draw-canvas"></canvas>
+            <div id="zoom-controls" style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 5px;">
+                <button id="zoom-in-btn" style="width: 32px; height: 32px; padding: 0; font-size: 18px; font-weight: bold; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; color: #374151;">+</button>
+                <button id="zoom-out-btn" style="width: 32px; height: 32px; padding: 0; font-size: 18px; font-weight: bold; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; color: #374151;">-</button>
+                <button id="zoom-reset-btn" style="padding: 4px 8px; font-size: 12px; font-weight: bold; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; color: #374151;">Reset</button>
+            </div>
         </div>
     </div>
 
@@ -170,12 +184,20 @@
 
         const exportBtn = document.getElementById('export-btn');
 
+        const saveProjectBtn = document.getElementById('save-project-btn');
+        const loadProjectBtn = document.getElementById('load-project-btn');
+        const loadProjectFile = document.getElementById('load-project-file');
+
         const exportModal = document.getElementById('export-modal');
         const closeModalBtn = document.getElementById('close-modal');
         const downloadSvgBtn = document.getElementById('download-svg-btn');
         const saveIdbfsBtn = document.getElementById('save-idbfs-btn');
         const saveFilenameInput = document.getElementById('save-filename');
         const svgOutputArea = document.getElementById('svg-output');
+
+        const zoomInBtn = document.getElementById('zoom-in-btn');
+        const zoomOutBtn = document.getElementById('zoom-out-btn');
+        const zoomResetBtn = document.getElementById('zoom-reset-btn');
 
         let shapes = []; // { id: string, type: 'poly'|'rect'|'ellipse', points: [{x,y}], rect: {x,y,w,h}, ellipse: {cx, cy, rx, ry} }
         let currentPath = [];
@@ -1096,6 +1118,38 @@
             redraw();
         }, { passive: false });
 
+        // --- Zoom Buttons ---
+        function applyZoomCenter(factor) {
+            const rect = canvas.getBoundingClientRect();
+            const screenX = rect.width / 2;
+            const screenY = rect.height / 2;
+
+            const worldX = (screenX - transformPanX) / transformScale;
+            const worldY = (screenY - transformPanY) / transformScale;
+
+            transformScale *= factor;
+            transformScale = Math.max(0.1, Math.min(transformScale, 10));
+
+            transformPanX = screenX - worldX * transformScale;
+            transformPanY = screenY - worldY * transformScale;
+            redraw();
+        }
+
+        zoomInBtn.addEventListener('click', () => applyZoomCenter(1.2));
+        zoomOutBtn.addEventListener('click', () => applyZoomCenter(0.8));
+        zoomResetBtn.addEventListener('click', () => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = rect.width / imgWidth;
+            const scaleY = rect.height / imgHeight;
+            transformScale = Math.min(scaleX, scaleY) * 0.95;
+
+            const renderW = imgWidth * transformScale;
+            const renderH = imgHeight * transformScale;
+            transformPanX = (rect.width - renderW) / 2;
+            transformPanY = (rect.height - renderH) / 2;
+            redraw();
+        });
+
         // --- Keyboard Events ---
         window.addEventListener('keydown', (e) => {
             // Ignore keystrokes if typing in an input
@@ -1421,6 +1475,97 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         });
+
+        // --- Save/Load Project State ---
+        function serializeProject() {
+            return JSON.stringify({
+                shapes: shapes,
+                imgWidth: imgWidth,
+                imgHeight: imgHeight,
+                bgImageSrc: bgImage.src,
+                shapeCounter: shapeCounter
+            });
+        }
+
+        function loadProjectState(data) {
+            try {
+                const state = JSON.parse(data);
+                shapes = state.shapes || [];
+                imgWidth = state.imgWidth || 0;
+                imgHeight = state.imgHeight || 0;
+                shapeCounter = state.shapeCounter || 1;
+
+                if (state.bgImageSrc) {
+                    toolsDiv.style.display = 'block';
+                    setupInstructions.style.display = 'none';
+                    container.style.display = 'block';
+                    bgImage.src = state.bgImageSrc;
+                    // bgImage.onload handles redraw and zoom resets
+                }
+                updateShapeList();
+                saveHistoryState();
+            } catch (e) {
+                console.error("Failed to load project state", e);
+                alert("Failed to load project file. Invalid format.");
+            }
+        }
+
+        saveProjectBtn.addEventListener('click', () => {
+            const data = serializeProject();
+            const pyodideInst = getPyodideInstance();
+            if (pyodideInst && pyodideInst.FS) {
+                const filename = prompt("Enter project filename to save to Pyodide FS:", "sivo_project.json");
+                if (!filename) return;
+                try {
+                    pyodideInst.FS.writeFile(filename, data);
+                    pyodideInst.FS.syncfs(false, function(err) {
+                        if (err) alert("Sync error: " + err);
+                        else alert("Saved to Pyodide Virtual File System: " + filename);
+                    });
+                } catch (err) {
+                    alert("Error saving: " + err);
+                }
+            } else {
+                // Standard browser download
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'sivo_project.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        });
+
+        loadProjectBtn.addEventListener('click', () => {
+            const pyodideInst = getPyodideInstance();
+            if (pyodideInst && pyodideInst.FS) {
+                const filename = prompt("Enter project filename to load from Pyodide FS:", "sivo_project.json");
+                if (!filename) return;
+                try {
+                    const data = pyodideInst.FS.readFile(filename, { encoding: 'utf8' });
+                    loadProjectState(data);
+                } catch (err) {
+                    alert("Error loading file (does it exist?): " + err);
+                }
+            } else {
+                loadProjectFile.click();
+            }
+        });
+
+        loadProjectFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                loadProjectState(evt.target.result);
+            };
+            reader.readAsText(file);
+            loadProjectFile.value = ''; // Reset
+        });
+
 
         // Detect Pyodide in window or parent to enable IDBFS saving
         function getPyodideInstance() {
