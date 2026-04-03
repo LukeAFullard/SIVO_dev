@@ -16,21 +16,38 @@ class Sivo:
         Fetches an image from a URL and returns it as a base64 data URI.
         Useful for ensuring ECharts renders images immediately without async loading issues.
         """
-        import urllib.request
         import base64
         import mimetypes
+        import sys
 
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-        with urllib.request.urlopen(req, timeout=10) as response:
-            img_data = response.read()
-            b64_str = base64.b64encode(img_data).decode('utf-8')
+        # Try to guess mime type from URL, default to jpeg
+        mime_type, _ = mimetypes.guess_type(url)
+        if not mime_type:
+            mime_type = "image/jpeg"
 
-            # Try to guess mime type from URL, default to jpeg
-            mime_type, _ = mimetypes.guess_type(url)
-            if not mime_type:
-                mime_type = "image/jpeg"
+        if "pyodide" in sys.modules:
+            # In Pyodide, use synchronous XMLHttpRequest or js fetch if available.
+            # However, pyodide.http.open_url returns a StringIO. For binary data, we use pyodide.http.pyfetch synchronously using async/await if possible,
+            # but since this is a synchronous method, pyodide.http.open_url is our best fallback if we want to avoid asyncio.
+            try:
+                # pyodide.http.open_url doesn't support binary easily before 0.21, but in modern pyodide we can just use urllib as it's patched.
+                # However, it will fail if CORS is missing.
+                import urllib.request
+                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+                with urllib.request.urlopen(req, timeout=10) as response:
+                    img_data = response.read()
+            except Exception as e:
+                print(f"Warning: Failed to fetch image synchronously in Pyodide/WASM. CORS or network issues may block this. Error: {e}")
+                return ""
+        else:
+            import urllib.request
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+            with urllib.request.urlopen(req, timeout=10) as response:
+                img_data = response.read()
 
-            return f"data:{mime_type};base64,{b64_str}"
+        b64_str = base64.b64encode(img_data).decode('utf-8')
+
+        return f"data:{mime_type};base64,{b64_str}"
     def __init__(self, infographic: Infographic, default_panel_position: str = "none", disable_panel: bool = False, panel_width: Optional[str] = "90%", panel_height: Optional[str] = "90%", panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_scroll_bounds: bool = True, lock_zoom_out: bool = True, layout_size: Optional[str] = "95%", starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = False, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, ambient_speed: float = 1.0, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, border_image_url: Optional[str] = None, border_image_position: str = 'all', border_image_width: str = '10%', border_image_opacity: float = 1.0, border_image_grayscale: bool = False, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False, presentation_order: Optional[list[str]] = None):
         self.infographic = infographic
         self.infographic.presentation_order = presentation_order
@@ -1605,6 +1622,11 @@ class Sivo:
         bundle frontend assets instead of relying on CDN links.
         Requires Node.js and 'npm install' to have been run.
         """
+        import sys
+        if "pyodide" in sys.modules:
+            print("Error: JavaScript bundling is not supported in WebAssembly/Pyodide because the subprocess module is not available.")
+            return
+
         import subprocess
         import os
         print(f"SIVO Build System: Bundling JS assets from {entry_point} -> {output_dir}")
