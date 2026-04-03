@@ -6,7 +6,7 @@
     <title>SIVO Serverless Browser App</title>
     <script>
         if (window.location.protocol === 'file:') {
-            alert('Error: You are loading this file directly from the filesystem (file://).\n\nWeb browsers enforce strict security policies that prevent loading external files (like the Annotator tool) from local paths.\n\nPlease start a local HTTP server from the root of the repository instead:\n\ncd ../../\npython -m http.server 8000\n\nThen visit http://localhost:8000/examples/web_app/index.html');
+            console.warn('Running from file:// protocol. The Annotator tool is embedded successfully, but loading local Python wheels via micropip.install("./sivo.whl") will still fail due to browser CORS policies. Please start a local HTTP server to fully test the SIVO Python backend.');
         }
     </script>
     <!-- Load Pyodide from CDN -->
@@ -40,7 +40,1675 @@
                 <span style="font-size: 12px; font-weight: normal; color: #64748b;">(Saves directly to IDBFS)</span>
             </div>
             <!-- The annotator tool automatically detects `window.parent.pyodide` and enables the IDBFS save button -->
-            <iframe src="../../src/sivo/cli/tools/annotator.html" id="annotator-frame"></iframe>
+            <iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;SIVO Template Annotator&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f5; color: #1f2937; }
+        #sidebar { width: 300px; background: white; padding: 20px; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; overflow-y: auto; z-index: 10;}
+        #workspace { flex-grow: 1; position: relative; overflow: auto; background: #e5e7eb; display: flex; align-items: center; justify-content: center; }
+
+        .container { position: relative; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
+        img { display: block; max-width: none; } /* keep original size, canvas scales with scroll */
+
+        h1 { font-size: 1.5rem; margin-top: 0; margin-bottom: 20px; }
+        h2 { font-size: 1rem; margin-top: 20px; margin-bottom: 10px; color: #4b5563; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        button { background-color: #3b82f6; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; margin-bottom: 10px; width: 100%; transition: background-color 0.2s; }
+        button:hover { background-color: #2563eb; }
+        button.secondary { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+        button.secondary:hover { background-color: #e5e7eb; }
+
+        .button-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .button-group button { margin-bottom: 0; }
+
+        .tool-active { background-color: #10b981 !important; color: white !important; border-color: #10b981 !important;}
+
+        input[type=&quot;file&quot;] { display: none; }
+        .file-upload-label { display: block; background-color: #3b82f6; color: white; text-align: center; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; margin-bottom: 20px; transition: background-color 0.2s;}
+        .file-upload-label:hover { background-color: #2563eb; }
+
+        .shape-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .shape-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; margin-bottom: 8px; font-size: 0.875rem; }
+        .shape-item input { border: 1px solid #d1d5db; padding: 4px 8px; border-radius: 4px; width: 60%; }
+        .shape-item button { width: auto; padding: 4px 8px; background: #ef4444; margin-bottom: 0; }
+        .shape-item button:hover { background: #dc2626; }
+
+        .instructions { font-size: 0.875rem; color: #6b7280; margin-bottom: 20px; line-height: 1.5; }
+
+        #export-btn { margin-top: 20px; background-color: #8b5cf6; }
+        #export-btn:hover { background-color: #7c3aed; }
+
+        /* Modal for Export Preview */
+        #export-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; display: flex; flex-direction: column; }
+        .modal-content textarea { flex-grow: 1; min-height: 300px; font-family: monospace; font-size: 0.875rem; padding: 10px; border: 1px solid #d1d5db; border-radius: 4px; margin-bottom: 15px; resize: vertical; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+        .modal-actions button { width: auto; margin: 0; }
+
+        #sam-loading { display: none; margin-top: 10px; font-size: 0.8rem; color: #4f46e5; text-align: center; font-weight: bold; }
+        .spinner { border: 2px solid #f3f3f3; border-top: 2px solid #4f46e5; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 5px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;div id=&quot;sidebar&quot;&gt;
+        &lt;h1&gt;SIVO Annotator&lt;/h1&gt;
+
+        &lt;label class=&quot;file-upload-label&quot;&gt;
+            &lt;input type=&quot;file&quot; id=&quot;image-upload&quot; accept=&quot;image/png, image/jpeg, image/jpg, image/webp, image/svg+xml&quot;&gt;
+            Load Background Image
+        &lt;/label&gt;
+
+        &lt;div class=&quot;instructions&quot; id=&quot;setup-instructions&quot;&gt;
+            Load an image to start drawing regions of interest. The dimensions will dictate the SVG template&#x27;s viewBox.
+        &lt;/div&gt;
+
+        &lt;div id=&quot;tools&quot; style=&quot;display: none;&quot;&gt;
+            &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center;&quot;&gt;
+                &lt;h2&gt;Drawing Tool&lt;/h2&gt;
+                &lt;input type=&quot;color&quot; id=&quot;tool-color&quot; value=&quot;#3b82f6&quot; title=&quot;Change Drawing Color&quot; style=&quot;cursor: pointer; padding: 0; margin: 0; width: 24px; height: 24px; border: none; background: none;&quot;&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;button-group&quot; style=&quot;flex-wrap: wrap;&quot;&gt;
+                &lt;button id=&quot;tool-select&quot; class=&quot;secondary&quot; style=&quot;flex: 1 1 100%; border-color: #3b82f6; color: #3b82f6;&quot;&gt;Select / Move&lt;/button&gt;
+                &lt;button id=&quot;tool-poly&quot; class=&quot;secondary tool-active&quot; style=&quot;flex: 1 1 45%;&quot;&gt;Polygon (Click)&lt;/button&gt;
+                &lt;button id=&quot;tool-rect&quot; class=&quot;secondary&quot; style=&quot;flex: 1 1 45%;&quot;&gt;Rectangle (Drag)&lt;/button&gt;
+                &lt;button id=&quot;tool-ellipse&quot; class=&quot;secondary&quot; style=&quot;flex: 1 1 45%;&quot;&gt;Ellipse (Drag)&lt;/button&gt;
+                &lt;button id=&quot;tool-freehand&quot; class=&quot;secondary&quot; style=&quot;flex: 1 1 45%;&quot;&gt;Freehand (Draw)&lt;/button&gt;
+                &lt;button id=&quot;tool-magic&quot; class=&quot;secondary&quot; style=&quot;flex: 1 1 45%;&quot;&gt;Magic Wand (Click)&lt;/button&gt;
+                &lt;button id=&quot;tool-sam&quot; class=&quot;secondary&quot; style=&quot;flex: 1 1 45%; border-color: #4f46e5; color: #4f46e5;&quot; title=&quot;Downloads AI Model (~300MB) on first use&quot;&gt;Smart Seg (SAM)&lt;/button&gt;
+            &lt;/div&gt;
+
+            &lt;div id=&quot;sam-loading&quot;&gt;
+                &lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt; &lt;span id=&quot;sam-status-text&quot;&gt;Loading AI Model...&lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;div id=&quot;magic-wand-options&quot; style=&quot;display: none; margin-bottom: 15px;&quot;&gt;
+                &lt;label for=&quot;magic-tolerance&quot; style=&quot;font-size: 0.875rem; color: #4b5563;&quot;&gt;Wand Tolerance: &lt;span id=&quot;tolerance-val&quot;&gt;30&lt;/span&gt;&lt;/label&gt;
+                &lt;input type=&quot;range&quot; id=&quot;magic-tolerance&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;30&quot; style=&quot;width: 100%;&quot;&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;instructions&quot; style=&quot;margin-bottom: 10px;&quot;&gt;
+                &lt;strong&gt;Pan &amp; Zoom:&lt;/strong&gt; Hold Spacebar and drag to Pan. Scroll to Zoom.
+            &lt;/div&gt;
+
+            &lt;div class=&quot;instructions&quot; id=&quot;tool-instructions&quot;&gt;
+                Click to add points. Press &lt;strong&gt;Enter&lt;/strong&gt; or click the first point to complete the polygon. Press &lt;strong&gt;Esc&lt;/strong&gt; to cancel.
+            &lt;/div&gt;
+
+            &lt;div style=&quot;display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px;&quot;&gt;
+                &lt;button id=&quot;btn-undo&quot; class=&quot;secondary&quot; style=&quot;flex: 1; padding: 5px;&quot; disabled&gt;Undo (Ctrl+Z)&lt;/button&gt;
+                &lt;button id=&quot;btn-redo&quot; class=&quot;secondary&quot; style=&quot;flex: 1; padding: 5px;&quot; disabled&gt;Redo (Ctrl+Y)&lt;/button&gt;
+            &lt;/div&gt;
+
+            &lt;h2&gt;Regions&lt;/h2&gt;
+            &lt;ul class=&quot;shape-list&quot; id=&quot;shape-list&quot;&gt;
+                &lt;!-- Items populated here --&gt;
+            &lt;/ul&gt;
+
+            &lt;button id=&quot;export-btn&quot;&gt;Generate SVG Template&lt;/button&gt;
+
+            &lt;div style=&quot;margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 15px;&quot;&gt;
+                &lt;h3 style=&quot;font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;&quot;&gt;Project State&lt;/h3&gt;
+                &lt;div style=&quot;display: flex; gap: 10px;&quot;&gt;
+                    &lt;button id=&quot;save-project-btn&quot; class=&quot;secondary&quot; style=&quot;flex: 1; padding: 6px; font-size: 0.8rem;&quot;&gt;Save&lt;/button&gt;
+                    &lt;button id=&quot;load-project-btn&quot; class=&quot;secondary&quot; style=&quot;flex: 1; padding: 6px; font-size: 0.8rem;&quot;&gt;Load&lt;/button&gt;
+                    &lt;input type=&quot;file&quot; id=&quot;load-project-file&quot; accept=&quot;.json&quot; style=&quot;display: none;&quot;&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;workspace&quot;&gt;
+        &lt;div class=&quot;container&quot; id=&quot;canvas-container&quot; style=&quot;display: none; width: 100%; height: 100%;&quot;&gt;
+            &lt;canvas id=&quot;draw-canvas&quot;&gt;&lt;/canvas&gt;
+            &lt;div id=&quot;zoom-controls&quot; style=&quot;position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 5px;&quot;&gt;
+                &lt;button id=&quot;zoom-in-btn&quot; style=&quot;width: 32px; height: 32px; padding: 0; font-size: 18px; font-weight: bold; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; color: #374151;&quot;&gt;+&lt;/button&gt;
+                &lt;button id=&quot;zoom-out-btn&quot; style=&quot;width: 32px; height: 32px; padding: 0; font-size: 18px; font-weight: bold; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; color: #374151;&quot;&gt;-&lt;/button&gt;
+                &lt;button id=&quot;zoom-reset-btn&quot; style=&quot;padding: 4px 8px; font-size: 12px; font-weight: bold; background: white; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; color: #374151;&quot;&gt;Reset&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;export-modal&quot;&gt;
+        &lt;div class=&quot;modal-content&quot;&gt;
+            &lt;h2&gt;Generated SVG Template&lt;/h2&gt;
+            &lt;p class=&quot;instructions&quot;&gt;Save this file as &lt;code&gt;template.svg&lt;/code&gt; and load it using &lt;code&gt;Sivo.from_template()&lt;/code&gt;. Remember to add your background image using &lt;code&gt;app.add_background_image()&lt;/code&gt;.&lt;/p&gt;
+            &lt;textarea id=&quot;svg-output&quot; readonly&gt;&lt;/textarea&gt;
+            &lt;div class=&quot;modal-actions&quot;&gt;
+                &lt;input type=&quot;text&quot; id=&quot;save-filename&quot; value=&quot;sivo_template.svg&quot; style=&quot;padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; width: 150px;&quot;&gt;
+                &lt;button class=&quot;secondary&quot; id=&quot;close-modal&quot;&gt;Close&lt;/button&gt;
+                &lt;button id=&quot;save-idbfs-btn&quot; style=&quot;display: none; background-color: #10b981;&quot;&gt;Save to Pyodide FS&lt;/button&gt;
+                &lt;button id=&quot;download-svg-btn&quot;&gt;Download .svg&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        const imageUpload = document.getElementById(&#x27;image-upload&#x27;);
+        const canvas = document.getElementById(&#x27;draw-canvas&#x27;);
+        const ctx = canvas.getContext(&#x27;2d&#x27;);
+        const container = document.getElementById(&#x27;canvas-container&#x27;);
+        const toolsDiv = document.getElementById(&#x27;tools&#x27;);
+        const setupInstructions = document.getElementById(&#x27;setup-instructions&#x27;);
+        const toolInstructions = document.getElementById(&#x27;tool-instructions&#x27;);
+        const shapeList = document.getElementById(&#x27;shape-list&#x27;);
+
+        const toolSelectBtn = document.getElementById(&#x27;tool-select&#x27;);
+        const toolPolyBtn = document.getElementById(&#x27;tool-poly&#x27;);
+        const toolRectBtn = document.getElementById(&#x27;tool-rect&#x27;);
+        const toolEllipseBtn = document.getElementById(&#x27;tool-ellipse&#x27;);
+        const toolFreehandBtn = document.getElementById(&#x27;tool-freehand&#x27;);
+        const toolMagicBtn = document.getElementById(&#x27;tool-magic&#x27;);
+        const toolSamBtn = document.getElementById(&#x27;tool-sam&#x27;);
+        const magicOptionsDiv = document.getElementById(&#x27;magic-wand-options&#x27;);
+        const samLoadingDiv = document.getElementById(&#x27;sam-loading&#x27;);
+        const samStatusText = document.getElementById(&#x27;sam-status-text&#x27;);
+        const magicToleranceInput = document.getElementById(&#x27;magic-tolerance&#x27;);
+        const magicToleranceVal = document.getElementById(&#x27;tolerance-val&#x27;);
+        const toolColorInput = document.getElementById(&#x27;tool-color&#x27;);
+        const btnUndo = document.getElementById(&#x27;btn-undo&#x27;);
+        const btnRedo = document.getElementById(&#x27;btn-redo&#x27;);
+
+        magicToleranceInput.addEventListener(&#x27;input&#x27;, (e) =&gt; {
+            magicToleranceVal.innerText = e.target.value;
+        });
+
+        toolColorInput.addEventListener(&#x27;input&#x27;, () =&gt; {
+            redraw(); // Update live colors
+        });
+
+        const exportBtn = document.getElementById(&#x27;export-btn&#x27;);
+
+        const saveProjectBtn = document.getElementById(&#x27;save-project-btn&#x27;);
+        const loadProjectBtn = document.getElementById(&#x27;load-project-btn&#x27;);
+        const loadProjectFile = document.getElementById(&#x27;load-project-file&#x27;);
+
+        const exportModal = document.getElementById(&#x27;export-modal&#x27;);
+        const closeModalBtn = document.getElementById(&#x27;close-modal&#x27;);
+        const downloadSvgBtn = document.getElementById(&#x27;download-svg-btn&#x27;);
+        const saveIdbfsBtn = document.getElementById(&#x27;save-idbfs-btn&#x27;);
+        const saveFilenameInput = document.getElementById(&#x27;save-filename&#x27;);
+        const svgOutputArea = document.getElementById(&#x27;svg-output&#x27;);
+
+        const zoomInBtn = document.getElementById(&#x27;zoom-in-btn&#x27;);
+        const zoomOutBtn = document.getElementById(&#x27;zoom-out-btn&#x27;);
+        const zoomResetBtn = document.getElementById(&#x27;zoom-reset-btn&#x27;);
+
+        let shapes = []; // { id: string, type: &#x27;poly&#x27;|&#x27;rect&#x27;|&#x27;ellipse&#x27;, points: [{x,y}], rect: {x,y,w,h}, ellipse: {cx, cy, rx, ry} }
+        let currentPath = [];
+        let isDrawing = false;
+        let currentTool = &#x27;poly&#x27;; // &#x27;select&#x27; or &#x27;poly&#x27; or &#x27;rect&#x27; or &#x27;ellipse&#x27; or &#x27;freehand&#x27; or &#x27;magic&#x27;
+        let startPoint = null;
+        let tempEndPoint = null;
+
+        let imgWidth = 0;
+        let imgHeight = 0;
+        let shapeCounter = 1;
+
+        // Selection &amp; Transformation State
+        let selectedShapeIndices = new Set();
+        let clipboard = [];
+        let isDraggingShape = false;
+        let isDraggingHandle = false;
+        let selectedHandleIndex = -1; // -1 means none
+        let lastDragPoint = null;
+
+        // SAM Active State
+        let currentSamPoints = []; // [{x, y, label: 1 or 0}]
+        let currentSamPreview = null; // { points: [{x, y}] }
+
+        let transformScale = 1.0;
+        let transformPanX = 0;
+        let transformPanY = 0;
+        let isPanning = false;
+        let isSpacePressed = false;
+        let lastPanPoint = null;
+
+        // Undo / Redo History State
+        let historyStack = [];
+        let historyIndex = -1;
+
+        // Image data cache for Magic Wand
+        let imageDataCache = null;
+        const hiddenCanvas = document.createElement(&#x27;canvas&#x27;);
+        const hiddenCtx = hiddenCanvas.getContext(&#x27;2d&#x27;, { willReadFrequently: true });
+
+        const bgImage = new Image(); // Create image object manually, not tied to DOM
+
+        // --- SAM Worker Setup ---
+        let samWorker = null;
+        let isSamReady = false;
+        let isImageEmbedded = false;
+
+        function initSamWorker() {
+            if (samWorker) return;
+
+            samLoadingDiv.style.display = &#x27;block&#x27;;
+            samStatusText.innerText = &quot;Initializing AI Model...&quot;;
+            toolSamBtn.disabled = true;
+
+            const workerCode = `
+                import { env, AutoModel, AutoProcessor, RawImage } from &#x27;https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.0&#x27;;
+
+                // Configure environments
+                env.allowLocalModels = false;
+                env.useBrowserCache = true;
+
+                let model = null;
+                let processor = null;
+                let image_embeddings = null;
+                let original_image_size = null;
+
+                async function initModel() {
+                    const model_id = &#x27;Xenova/slimsam-77-uniform&#x27;;
+                    try {
+                        model = await AutoModel.from_pretrained(model_id, { quantized: true });
+                        processor = await AutoProcessor.from_pretrained(model_id);
+                        postMessage({ type: &#x27;ready&#x27; });
+                    } catch (e) {
+                        postMessage({ type: &#x27;error&#x27;, message: e.toString() });
+                    }
+                }
+
+                self.onmessage = async (e) =&gt; {
+                    if (e.data.type === &#x27;init&#x27;) {
+                        initModel();
+                    }
+                    else if (e.data.type === &#x27;embed&#x27;) {
+                        if (!model || !processor) return;
+                        try {
+                            const { imageSrc } = e.data;
+                            postMessage({ type: &#x27;progress&#x27;, message: &#x27;Embedding image...&#x27; });
+
+                            const image = await RawImage.fromURL(imageSrc);
+                            original_image_size = [image.height, image.width];
+
+                            const inputs = await processor(image);
+                            image_embeddings = await model.get_image_embeddings(inputs);
+
+                            postMessage({ type: &#x27;embedded&#x27; });
+                        } catch (err) {
+                            postMessage({ type: &#x27;error&#x27;, message: err.toString() });
+                        }
+                    }
+                    else if (e.data.type === &#x27;segment&#x27;) {
+                        if (!model || !processor || !image_embeddings) return;
+                        try {
+                            const { points, labels } = e.data;
+
+                            // Reformat arrays for processor: shape is [batch, num_points, 2]
+                            const formattedPoints = points.map(p =&gt; [p.x, p.y]);
+                            const formattedLabels = labels;
+
+                            const inputs = await processor({
+                                input_points: [[formattedPoints]],
+                                input_labels: [[formattedLabels]],
+                                image_embeddings: image_embeddings,
+                                original_sizes: [original_image_size],
+                                reshaped_input_sizes: [[image_embeddings.dims[2] * 16, image_embeddings.dims[3] * 16]],
+                            });
+
+                            const outputs = await model(inputs);
+                            const masks = outputs.pred_masks;
+
+                            // masks shape: [batch_size, num_masks, height, width]
+                            // We take the first mask (index 0)
+                            const maskData = masks.data;
+                            const h = masks.dims[2];
+                            const w = masks.dims[3];
+
+                            const binaryMask = new Uint8Array(w * h);
+
+                            // Output mask is [h, w] matching original image size mostly
+                            for (let i = 0; i &lt; maskData.length; i++) {
+                                // Threshold &gt; 0
+                                binaryMask[i] = maskData[i] &gt; 0.0 ? 1 : 0;
+                            }
+
+                            postMessage({ type: &#x27;segmented&#x27;, mask: binaryMask, w, h });
+                        } catch (err) {
+                            postMessage({ type: &#x27;error&#x27;, message: err.toString() });
+                        }
+                    }
+                };
+            `;
+
+            const blob = new Blob([workerCode], { type: &#x27;application/javascript&#x27; });
+            samWorker = new Worker(URL.createObjectURL(blob), { type: &#x27;module&#x27; });
+
+            samWorker.onmessage = (e) =&gt; {
+                if (e.data.type === &#x27;ready&#x27;) {
+                    isSamReady = true;
+                    // If an image was loaded before SAM was ready, embed it now
+                    if (bgImage.src &amp;&amp; !isImageEmbedded) {
+                        embedImageForSam();
+                    } else {
+                        samLoadingDiv.style.display = &#x27;none&#x27;;
+                        toolSamBtn.disabled = false;
+                    }
+                } else if (e.data.type === &#x27;progress&#x27;) {
+                    samStatusText.innerText = e.data.message;
+                } else if (e.data.type === &#x27;embedded&#x27;) {
+                    isImageEmbedded = true;
+                    samLoadingDiv.style.display = &#x27;none&#x27;;
+                    toolSamBtn.disabled = false;
+                } else if (e.data.type === &#x27;segmented&#x27;) {
+                    handleSamSegmentation(e.data.mask, e.data.w, e.data.h);
+                } else if (e.data.type === &#x27;error&#x27;) {
+                    console.error(&quot;SAM Worker Error:&quot;, e.data.message);
+                    samStatusText.innerText = &quot;SAM Error&quot;;
+                    setTimeout(() =&gt; { samLoadingDiv.style.display = &#x27;none&#x27;; }, 3000);
+                }
+            };
+
+            samWorker.postMessage({ type: &#x27;init&#x27; });
+        }
+
+        function embedImageForSam() {
+            if (!isSamReady || !bgImage.src) return;
+            samLoadingDiv.style.display = &#x27;block&#x27;;
+            samStatusText.innerText = &quot;Computing Image Embedding...&quot;;
+            toolSamBtn.disabled = true;
+            samWorker.postMessage({ type: &#x27;embed&#x27;, imageSrc: bgImage.src });
+        }
+
+        function handleSamSegmentation(maskArray, w, h) {
+            canvas.style.cursor = &#x27;crosshair&#x27;;
+
+            // Fast extraction logic using existing Moore-Neighborhood trace
+            const rawPath = traceContour(maskArray, w, h);
+            if (rawPath &amp;&amp; rawPath.length &gt; 2) {
+                const simplified = simplifyPath(rawPath, 2.0);
+                currentSamPreview = { points: simplified };
+            } else {
+                currentSamPreview = null;
+            }
+            redraw();
+        }
+
+        // --- Undo / Redo History System ---
+        function saveState() {
+            // Drop any history after the current index if we branched
+            if (historyIndex &lt; historyStack.length - 1) {
+                historyStack = historyStack.slice(0, historyIndex + 1);
+            }
+
+            // Deep copy shapes array
+            const state = JSON.parse(JSON.stringify(shapes));
+            historyStack.push(state);
+
+            // Limit stack to 50 states to save memory
+            if (historyStack.length &gt; 50) {
+                historyStack.shift();
+            } else {
+                historyIndex++;
+            }
+            updateHistoryButtons();
+        }
+
+        function undo() {
+            if (historyIndex &gt; 0) {
+                historyIndex--;
+                shapes = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+
+                // Clear selection if the shape was deleted in this past state
+                const newSel = new Set(); selectedShapeIndices.forEach(i =&gt; {if (i &lt; shapes.length) newSel.add(i);}); selectedShapeIndices = newSel;
+
+                updateShapeList();
+                redraw();
+                updateHistoryButtons();
+            } else if (historyIndex === 0) {
+                // Revert to empty state (before first drawing)
+                historyIndex = -1;
+                shapes = [];
+                selectedShapeIndices.clear();
+                updateShapeList();
+                redraw();
+                updateHistoryButtons();
+            }
+        }
+
+        function redo() {
+            if (historyIndex &lt; historyStack.length - 1) {
+                historyIndex++;
+                shapes = JSON.parse(JSON.stringify(historyStack[historyIndex]));
+                updateShapeList();
+                redraw();
+                updateHistoryButtons();
+            }
+        }
+
+        function updateHistoryButtons() {
+            btnUndo.disabled = historyIndex &lt; 0;
+            btnRedo.disabled = historyIndex &gt;= historyStack.length - 1;
+        }
+
+        btnUndo.addEventListener(&#x27;click&#x27;, undo);
+        btnRedo.addEventListener(&#x27;click&#x27;, redo);
+
+
+        // --- Image Loading ---
+        imageUpload.addEventListener(&#x27;change&#x27;, (e) =&gt; {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) =&gt; {
+                const img = new Image();
+                img.onload = () =&gt; {
+                    imgWidth = img.width;
+                    imgHeight = img.height;
+
+                    bgImage.src = event.target.result;
+
+                    canvas.width = window.innerWidth - 300; // minus sidebar
+                    canvas.height = window.innerHeight;
+
+                    // Center the image initially
+                    transformScale = Math.min((canvas.width - 100) / imgWidth, (canvas.height - 100) / imgHeight);
+                    if (transformScale &gt; 1) transformScale = 1;
+                    transformPanX = (canvas.width - (imgWidth * transformScale)) / 2;
+                    transformPanY = (canvas.height - (imgHeight * transformScale)) / 2;
+
+                    container.style.display = &#x27;block&#x27;;
+                    toolsDiv.style.display = &#x27;block&#x27;;
+                    setupInstructions.style.display = &#x27;none&#x27;;
+
+                    // Cache image data for magic wand
+                    hiddenCanvas.width = imgWidth;
+                    hiddenCanvas.height = imgHeight;
+                    hiddenCtx.drawImage(img, 0, 0);
+                    imageDataCache = hiddenCtx.getImageData(0, 0, imgWidth, imgHeight);
+
+                    shapes = [];
+                    updateShapeList();
+                    redraw();
+
+                    // Reset SAM embedding state for new image
+                    isImageEmbedded = false;
+
+                    // Only embed if SAM was already loaded and active from a previous image
+                    if (samWorker &amp;&amp; isSamReady) {
+                        embedImageForSam();
+                    }
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Resize canvas when window resizes
+        window.addEventListener(&#x27;resize&#x27;, () =&gt; {
+            if (imgWidth &gt; 0) {
+                canvas.width = window.innerWidth - 300;
+                canvas.height = window.innerHeight;
+                redraw();
+            }
+        });
+
+        // --- Tool Selection ---
+        function setTool(tool) {
+            currentTool = tool;
+            toolSelectBtn.classList.remove(&#x27;tool-active&#x27;);
+            toolPolyBtn.classList.remove(&#x27;tool-active&#x27;);
+            toolRectBtn.classList.remove(&#x27;tool-active&#x27;);
+            toolEllipseBtn.classList.remove(&#x27;tool-active&#x27;);
+            toolFreehandBtn.classList.remove(&#x27;tool-active&#x27;);
+            toolMagicBtn.classList.remove(&#x27;tool-active&#x27;);
+            toolSamBtn.classList.remove(&#x27;tool-active&#x27;);
+            magicOptionsDiv.style.display = &#x27;none&#x27;;
+
+            if (tool === &#x27;select&#x27;) {
+                toolSelectBtn.classList.add(&#x27;tool-active&#x27;);
+                toolInstructions.innerHTML = &quot;Click a shape to select it. Drag to move it.&quot;;
+            } else if (tool === &#x27;poly&#x27;) {
+                toolPolyBtn.classList.add(&#x27;tool-active&#x27;);
+                toolInstructions.innerHTML = &quot;Click to add points. Press &lt;strong&gt;Enter&lt;/strong&gt; or click the first point to complete the polygon. Press &lt;strong&gt;Esc&lt;/strong&gt; to cancel.&quot;;
+            } else if (tool === &#x27;rect&#x27;) {
+                toolRectBtn.classList.add(&#x27;tool-active&#x27;);
+                toolInstructions.innerHTML = &quot;Click and drag to create a rectangle.&quot;;
+            } else if (tool === &#x27;ellipse&#x27;) {
+                toolEllipseBtn.classList.add(&#x27;tool-active&#x27;);
+                toolInstructions.innerHTML = &quot;Click and drag to draw an ellipse. Hold Shift for a perfect circle.&quot;;
+            } else if (tool === &#x27;freehand&#x27;) {
+                toolFreehandBtn.classList.add(&#x27;tool-active&#x27;);
+                toolInstructions.innerHTML = &quot;Click and drag freely to draw a path. Release to close it. The path is automatically smoothed.&quot;;
+            } else if (tool === &#x27;magic&#x27;) {
+                toolMagicBtn.classList.add(&#x27;tool-active&#x27;);
+                magicOptionsDiv.style.display = &#x27;block&#x27;;
+                toolInstructions.innerHTML = &quot;Click any solid colored area in the image. The tool will auto-detect the edges and generate a polygon.&quot;;
+            } else if (tool === &#x27;sam&#x27;) {
+                toolSamBtn.classList.add(&#x27;tool-active&#x27;);
+                toolInstructions.innerHTML = &quot;&lt;strong&gt;Left Click&lt;/strong&gt; to include. &lt;strong&gt;Right Click&lt;/strong&gt; to exclude. Press &lt;strong&gt;Enter&lt;/strong&gt; to complete the shape. Press &lt;strong&gt;Esc&lt;/strong&gt; to cancel.&quot;;
+
+                // Lazy-load SAM Worker when tool is clicked
+                if (!samWorker) {
+                    initSamWorker();
+                } else if (isSamReady &amp;&amp; !isImageEmbedded) {
+                    embedImageForSam();
+                }
+            }
+
+            // Reset state
+            currentPath = [];
+            currentSamPoints = [];
+            currentSamPreview = null;
+            isDrawing = false;
+            startPoint = null;
+            selectedShapeIndices.clear();
+            redraw();
+        }
+
+        toolSelectBtn.addEventListener(&#x27;click&#x27;, () =&gt; setTool(&#x27;select&#x27;));
+        toolPolyBtn.addEventListener(&#x27;click&#x27;, () =&gt; setTool(&#x27;poly&#x27;));
+        toolRectBtn.addEventListener(&#x27;click&#x27;, () =&gt; setTool(&#x27;rect&#x27;));
+        toolEllipseBtn.addEventListener(&#x27;click&#x27;, () =&gt; setTool(&#x27;ellipse&#x27;));
+        toolFreehandBtn.addEventListener(&#x27;click&#x27;, () =&gt; setTool(&#x27;freehand&#x27;));
+        toolMagicBtn.addEventListener(&#x27;click&#x27;, () =&gt; setTool(&#x27;magic&#x27;));
+        toolSamBtn.addEventListener(&#x27;click&#x27;, () =&gt; setTool(&#x27;sam&#x27;));
+
+        // --- Douglas-Peucker Algorithm for Path Simplification ---
+        function getSqDist(p1, p2) {
+            const dx = p1.x - p2.x, dy = p1.y - p2.y;
+            return dx * dx + dy * dy;
+        }
+
+        function getSqSegDist(p, p1, p2) {
+            let x = p1.x, y = p1.y, dx = p2.x - x, dy = p2.y - y;
+            if (dx !== 0 || dy !== 0) {
+                const t = ((p.x - x) * dx + (p.y - y) * dy) / (dx * dx + dy * dy);
+                if (t &gt; 1) {
+                    x = p2.x; y = p2.y;
+                } else if (t &gt; 0) {
+                    x += dx * t; y += dy * t;
+                }
+            }
+            dx = p.x - x; dy = p.y - y;
+            return dx * dx + dy * dy;
+        }
+
+        function simplifyDPStep(points, first, last, sqTolerance, simplified) {
+            let maxSqDist = sqTolerance;
+            let index;
+            for (let i = first + 1; i &lt; last; i++) {
+                const sqDist = getSqSegDist(points[i], points[first], points[last]);
+                if (sqDist &gt; maxSqDist) {
+                    index = i; maxSqDist = sqDist;
+                }
+            }
+            if (maxSqDist &gt; sqTolerance) {
+                if (index - first &gt; 1) simplifyDPStep(points, first, index, sqTolerance, simplified);
+                simplified.push(points[index]);
+                if (last - index &gt; 1) simplifyDPStep(points, index, last, sqTolerance, simplified);
+            }
+        }
+
+        function simplifyPath(points, tolerance) {
+            if (points.length &lt;= 2) return points;
+            const sqTolerance = tolerance !== undefined ? tolerance * tolerance : 1;
+            const simplified = [points[0]];
+            simplifyDPStep(points, 0, points.length - 1, sqTolerance, simplified);
+            simplified.push(points[points.length - 1]);
+            return simplified;
+        }
+
+        // --- Magic Wand Algorithm ---
+        function magicWand(startX, startY, tolerance) {
+            if (!imageDataCache) return;
+            const imgData = imageDataCache.data;
+            const w = imgWidth;
+            const h = imgHeight;
+
+            startX = Math.round(startX);
+            startY = Math.round(startY);
+            if (startX &lt; 0 || startX &gt;= w || startY &lt; 0 || startY &gt;= h) return;
+
+            const startIndex = (startY * w + startX) * 4;
+            const r = imgData[startIndex];
+            const g = imgData[startIndex + 1];
+            const b = imgData[startIndex + 2];
+            const a = imgData[startIndex + 3];
+
+            // Boolean mask of filled pixels
+            const mask = new Uint8Array(w * h);
+            const stack = [[startX, startY]];
+
+            function colorMatch(idx) {
+                const tr = imgData[idx];
+                const tg = imgData[idx + 1];
+                const tb = imgData[idx + 2];
+                const ta = imgData[idx + 3];
+                // Simple Euclidean distance in RGB space
+                const dist = Math.sqrt((r-tr)*(r-tr) + (g-tg)*(g-tg) + (b-tb)*(b-tb));
+                // Scale distance to 0-100 range roughly (max dist is ~441)
+                return (dist / 4.41) &lt;= tolerance;
+            }
+
+            // Flood fill
+            while (stack.length &gt; 0) {
+                const [x, y] = stack.pop();
+                const idx = y * w + x;
+
+                if (mask[idx]) continue; // Already filled
+
+                const pixelIdx = idx * 4;
+                if (!colorMatch(pixelIdx)) continue;
+
+                mask[idx] = 1;
+
+                if (x &gt; 0) stack.push([x - 1, y]);
+                if (x &lt; w - 1) stack.push([x + 1, y]);
+                if (y &gt; 0) stack.push([x, y - 1]);
+                if (y &lt; h - 1) stack.push([x, y + 1]);
+            }
+
+            // --- Marching Squares / Contour Tracing to extract Path ---
+            return traceContour(mask, w, h);
+        }
+
+        function traceContour(mask, w, h) {
+            // Find a starting pixel
+            let startX = -1, startY = -1;
+            for (let y = 0; y &lt; h; y++) {
+                for (let x = 0; x &lt; w; x++) {
+                    if (mask[y * w + x]) {
+                        startX = x; startY = y; break;
+                    }
+                }
+                if (startX !== -1) break;
+            }
+            if (startX === -1) return [];
+
+            const path = [];
+            let cx = startX, cy = startY;
+
+            // Directions: 0=E, 1=NE, 2=N, 3=NW, 4=W, 5=SW, 6=S, 7=SE
+            const dx = [1, 1, 0, -1, -1, -1, 0, 1];
+            const dy = [0, -1, -1, -1, 0, 1, 1, 1];
+            let dir = 7; // Initial search direction
+
+            path.push({x: cx, y: cy});
+
+            // Moore Neighborhood Tracing
+            let pointsFound = 0;
+            const MAX_POINTS = 10000; // safety breaker
+
+            while (pointsFound &lt; MAX_POINTS) {
+                let found = false;
+                // Check 8 neighbors counter-clockwise starting from the previous background pixel
+                for (let i = 0; i &lt; 8; i++) {
+                    const ndir = (dir + i) % 8;
+                    const nx = cx + dx[ndir];
+                    const ny = cy + dy[ndir];
+
+                    if (nx &gt;= 0 &amp;&amp; nx &lt; w &amp;&amp; ny &gt;= 0 &amp;&amp; ny &lt; h &amp;&amp; mask[ny * w + nx]) {
+                        cx = nx; cy = ny;
+                        path.push({x: cx, y: cy});
+                        // Backtrack by 2 to find the next boundary pixel
+                        dir = (ndir + 5) % 8;
+                        found = true;
+                        pointsFound++;
+                        break;
+                    }
+                }
+
+                // If we&#x27;re back at the start, contour is closed
+                if (cx === startX &amp;&amp; cy === startY) break;
+                if (!found) break; // Isolated pixel
+            }
+
+            return path;
+        }
+
+        // --- Coordinate Transformation Helpers ---
+        function getMouseWorldPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            // Get raw screen coords relative to canvas
+            const screenX = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const screenY = (e.clientY - rect.top) * (canvas.height / rect.height);
+            // Translate to world coords
+            const worldX = (screenX - transformPanX) / transformScale;
+            const worldY = (screenY - transformPanY) / transformScale;
+            return { x: worldX, y: worldY, screenX, screenY };
+        }
+
+        // --- Ray Casting for Hit Testing ---
+        function pointInPolygon(point, vs) {
+            let x = point.x, y = point.y;
+            let inside = false;
+            for (let i = 0, j = vs.length - 1; i &lt; vs.length; j = i++) {
+                let xi = vs[i].x, yi = vs[i].y;
+                let xj = vs[j].x, yj = vs[j].y;
+                let intersect = ((yi &gt; y) != (yj &gt; y)) &amp;&amp; (x &lt; (xj - xi) * (y - yi) / (yj - yi) + xi);
+                if (intersect) inside = !inside;
+            }
+            return inside;
+        }
+
+        // --- Handle Hit Testing ---
+        function getHandleAtPoint(point, shape) {
+            const handleSize = 8 / transformScale;
+            const hs = handleSize / 2;
+
+            const check = (hx, hy, idx) =&gt; {
+                if (point.x &gt;= hx - hs &amp;&amp; point.x &lt;= hx + hs &amp;&amp; point.y &gt;= hy - hs &amp;&amp; point.y &lt;= hy + hs) {
+                    return idx;
+                }
+                return -1;
+            };
+
+            if (shape.type === &#x27;rect&#x27;) {
+                const {x, y, w, h} = shape.rect;
+                // 4 corners: TL=0, TR=1, BR=2, BL=3
+                let hIdx = check(x, y, 0); if (hIdx !== -1) return hIdx;
+                hIdx = check(x + w, y, 1); if (hIdx !== -1) return hIdx;
+                hIdx = check(x + w, y + h, 2); if (hIdx !== -1) return hIdx;
+                hIdx = check(x, y + h, 3); if (hIdx !== -1) return hIdx;
+            } else if (shape.type === &#x27;ellipse&#x27;) {
+                const {cx, cy, rx, ry} = shape.ellipse;
+                // 4 cardinal points: T=0, R=1, B=2, L=3
+                let hIdx = check(cx, cy - ry, 0); if (hIdx !== -1) return hIdx;
+                hIdx = check(cx + rx, cy, 1); if (hIdx !== -1) return hIdx;
+                hIdx = check(cx, cy + ry, 2); if (hIdx !== -1) return hIdx;
+                hIdx = check(cx - rx, cy, 3); if (hIdx !== -1) return hIdx;
+            } else if (shape.type === &#x27;poly&#x27;) {
+                for (let i = 0; i &lt; shape.points.length; i++) {
+                    const hIdx = check(shape.points[i].x, shape.points[i].y, i);
+                    if (hIdx !== -1) return hIdx;
+                }
+            }
+            return -1;
+        }
+
+        function getShapeAtPoint(point) {
+            // Check in reverse order so we hit the top-most shape first
+            for (let i = shapes.length - 1; i &gt;= 0; i--) {
+                const shape = shapes[i];
+                if (shape.type === &#x27;rect&#x27;) {
+                    if (point.x &gt;= shape.rect.x &amp;&amp; point.x &lt;= shape.rect.x + shape.rect.w &amp;&amp;
+                        point.y &gt;= shape.rect.y &amp;&amp; point.y &lt;= shape.rect.y + shape.rect.h) {
+                        return i;
+                    }
+                } else if (shape.type === &#x27;ellipse&#x27;) {
+                    // (x-cx)^2 / rx^2 + (y-cy)^2 / ry^2 &lt;= 1
+                    const dx = point.x - shape.ellipse.cx;
+                    const dy = point.y - shape.ellipse.cy;
+                    const val = (dx * dx) / (shape.ellipse.rx * shape.ellipse.rx) + (dy * dy) / (shape.ellipse.ry * shape.ellipse.ry);
+                    if (val &lt;= 1.0) {
+                        return i;
+                    }
+                } else if (shape.type === &#x27;poly&#x27;) {
+                    if (pointInPolygon(point, shape.points)) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        // Prevent default context menu on canvas for right clicks
+        canvas.addEventListener(&#x27;contextmenu&#x27;, e =&gt; e.preventDefault());
+
+        // --- Keyboard Events for Panning ---
+        window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+            if (e.code === &#x27;Space&#x27; &amp;&amp; !isSpacePressed) {
+                isSpacePressed = true;
+                canvas.style.cursor = &#x27;grab&#x27;;
+                e.preventDefault(); // prevent scrolling
+            }
+        });
+
+        window.addEventListener(&#x27;keyup&#x27;, (e) =&gt; {
+            if (e.code === &#x27;Space&#x27;) {
+                isSpacePressed = false;
+                isPanning = false;
+                canvas.style.cursor = currentTool === &#x27;select&#x27; ? &#x27;default&#x27; : &#x27;crosshair&#x27;;
+            }
+        });
+
+        // --- Mouse Events for Drawing / Panning / Editing ---
+        canvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; {
+            const { x, y, screenX, screenY } = getMouseWorldPos(e);
+
+            // Panning Logic
+            if (isSpacePressed || e.button === 1) { // Middle click or Space+Drag
+                isPanning = true;
+                lastPanPoint = { x: screenX, y: screenY };
+                canvas.style.cursor = &#x27;grabbing&#x27;;
+                e.preventDefault();
+                return;
+            }
+
+            // Normal Tools
+            if (currentTool === &#x27;select&#x27;) {
+                if (selectedShapeIndices.size === 1) {
+                    const singleIdx = Array.from(selectedShapeIndices)[0];
+                    const handleIdx = getHandleAtPoint({x, y}, shapes[singleIdx]);
+                    if (handleIdx !== -1) {
+                        isDraggingHandle = true;
+                        selectedHandleIndex = handleIdx;
+                        return; // Done
+                    }
+                }
+
+                const hoverIdx = getShapeAtPoint({x, y});
+                if (hoverIdx !== -1) {
+                    if (e.shiftKey) {
+                        if (selectedShapeIndices.has(hoverIdx)) selectedShapeIndices.delete(hoverIdx);
+                        else selectedShapeIndices.add(hoverIdx);
+                    } else {
+                        if (!selectedShapeIndices.has(hoverIdx)) {
+                            selectedShapeIndices.clear();
+                            selectedShapeIndices.add(hoverIdx);
+                        }
+                    }
+                    isDraggingShape = true;
+                    lastDragPoint = {x, y};
+                } else {
+                    if (!e.shiftKey) selectedShapeIndices.clear();
+                }
+                redraw();
+                return;
+            }
+
+            if (currentTool === &#x27;poly&#x27;) {
+                // If clicking near the first point to close
+                if (currentPath.length &gt; 2) {
+                    const firstPt = currentPath[0];
+                    const dist = Math.hypot(firstPt.x - x, firstPt.y - y);
+                    if (dist &lt; 10) {
+                        finishPolygon();
+                        return;
+                    }
+                }
+                currentPath.push({x, y});
+                redraw();
+            }
+            else if (currentTool === &#x27;rect&#x27; || currentTool === &#x27;ellipse&#x27;) {
+                isDrawing = true;
+                startPoint = {x, y};
+                tempEndPoint = {x, y};
+            }
+            else if (currentTool === &#x27;freehand&#x27;) {
+                isDrawing = true;
+                currentPath = [{x, y}];
+                redraw();
+            }
+            else if (currentTool === &#x27;magic&#x27;) {
+                const tol = parseInt(magicToleranceInput.value, 10);
+                canvas.style.cursor = &#x27;wait&#x27;;
+
+                // Use setTimeout to allow UI to update cursor before heavy work
+                setTimeout(() =&gt; {
+                    const rawPath = magicWand(x, y, tol);
+                    if (rawPath &amp;&amp; rawPath.length &gt; 2) {
+                        // Simplify the extremely dense pixel path
+                        const simplified = simplifyPath(rawPath, 2.0);
+                        addShape(&#x27;poly&#x27;, null, simplified, null);
+                    }
+                    canvas.style.cursor = &#x27;crosshair&#x27;;
+                    redraw();
+                }, 10);
+            }
+            else if (currentTool === &#x27;sam&#x27; &amp;&amp; isSamReady &amp;&amp; isImageEmbedded) {
+                // Ignore left/right clicks for tools other than select or specific logic, but handle SAM right clicks here
+                if (e.button === 0) {
+                    currentSamPoints.push({ x, y, label: 1 }); // Positive point
+                } else if (e.button === 2) {
+                    currentSamPoints.push({ x, y, label: 0 }); // Negative point
+                }
+
+                canvas.style.cursor = &#x27;wait&#x27;;
+                const pList = currentSamPoints.map(p =&gt; ({x: p.x, y: p.y}));
+                const lList = currentSamPoints.map(p =&gt; p.label);
+                samWorker.postMessage({ type: &#x27;segment&#x27;, points: pList, labels: lList });
+
+                redraw();
+            }
+        });
+
+        canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; {
+            const { x, y, screenX, screenY } = getMouseWorldPos(e);
+
+            if (isPanning &amp;&amp; lastPanPoint) {
+                const dx = screenX - lastPanPoint.x;
+                const dy = screenY - lastPanPoint.y;
+                transformPanX += dx;
+                transformPanY += dy;
+                lastPanPoint = { x: screenX, y: screenY };
+                redraw();
+                return;
+            }
+
+            if (currentTool === &#x27;select&#x27;) {
+                if (isDraggingHandle &amp;&amp; selectedShapeIndices.size === 1 &amp;&amp; selectedHandleIndex !== -1) {
+                    const shape = shapes[Array.from(selectedShapeIndices)[0]];
+                    if (shape.type === &#x27;poly&#x27;) {
+                        shape.points[selectedHandleIndex] = {x, y};
+                    } else if (shape.type === &#x27;rect&#x27;) {
+                        const {x: sx, y: sy, w: sw, h: sh} = shape.rect;
+                        if (selectedHandleIndex === 0) { // TL
+                            shape.rect.w = sw + (sx - x);
+                            shape.rect.h = sh + (sy - y);
+                            shape.rect.x = x;
+                            shape.rect.y = y;
+                        } else if (selectedHandleIndex === 1) { // TR
+                            shape.rect.w = x - sx;
+                            shape.rect.h = sh + (sy - y);
+                            shape.rect.y = y;
+                        } else if (selectedHandleIndex === 2) { // BR
+                            shape.rect.w = x - sx;
+                            shape.rect.h = y - sy;
+                        } else if (selectedHandleIndex === 3) { // BL
+                            shape.rect.w = sw + (sx - x);
+                            shape.rect.h = y - sy;
+                            shape.rect.x = x;
+                        }
+                        // Enforce positive width/height to avoid inversion bugs
+                        if (shape.rect.w &lt; 1) shape.rect.w = 1;
+                        if (shape.rect.h &lt; 1) shape.rect.h = 1;
+
+                    } else if (shape.type === &#x27;ellipse&#x27;) {
+                        const {cx, cy} = shape.ellipse;
+                        if (selectedHandleIndex === 0 || selectedHandleIndex === 2) { // T or B
+                            shape.ellipse.ry = Math.abs(cy - y);
+                        } else if (selectedHandleIndex === 1 || selectedHandleIndex === 3) { // R or L
+                            shape.ellipse.rx = Math.abs(cx - x);
+                        }
+                    }
+                    redraw();
+                } else if (isDraggingShape &amp;&amp; selectedShapeIndices.size &gt; 0 &amp;&amp; lastDragPoint) {
+                    const dx = x - lastDragPoint.x;
+                    const dy = y - lastDragPoint.y;
+
+                    selectedShapeIndices.forEach(idx =&gt; {
+                        const shape = shapes[idx];
+                        if (shape.type === &#x27;rect&#x27;) {
+                            shape.rect.x += dx;
+                            shape.rect.y += dy;
+                        } else if (shape.type === &#x27;ellipse&#x27;) {
+                            shape.ellipse.cx += dx;
+                            shape.ellipse.cy += dy;
+                        } else if (shape.type === &#x27;poly&#x27;) {
+                            shape.points.forEach(p =&gt; { p.x += dx; p.y += dy; });
+                        }
+                    });
+
+                    lastDragPoint = { x, y };
+                    redraw();
+                } else {
+                    // Hover effect
+                    let cursor = &#x27;default&#x27;;
+                    if (selectedShapeIndices.size === 1) {
+                        const hIdx = getHandleAtPoint({x, y}, shapes[Array.from(selectedShapeIndices)[0]]);
+                        if (hIdx !== -1) cursor = &#x27;crosshair&#x27;;
+                    }
+                    if (cursor === &#x27;default&#x27;) {
+                        const hoverIdx = getShapeAtPoint({x, y});
+                        if (hoverIdx !== -1) cursor = &#x27;move&#x27;;
+                    }
+                    canvas.style.cursor = cursor;
+                }
+                return;
+            }
+
+            if (currentTool === &#x27;poly&#x27; &amp;&amp; currentPath.length &gt; 0) {
+                tempEndPoint = {x, y};
+                redraw();
+            }
+            else if ((currentTool === &#x27;rect&#x27; || currentTool === &#x27;ellipse&#x27;) &amp;&amp; isDrawing) {
+                tempEndPoint = {x, y};
+
+                // If shift is held, constrain ellipse to perfect circle
+                if (currentTool === &#x27;ellipse&#x27; &amp;&amp; e.shiftKey) {
+                    const dx = tempEndPoint.x - startPoint.x;
+                    const dy = tempEndPoint.y - startPoint.y;
+                    const radius = Math.max(Math.abs(dx), Math.abs(dy));
+                    tempEndPoint.x = startPoint.x + Math.sign(dx) * radius;
+                    tempEndPoint.y = startPoint.y + Math.sign(dy) * radius;
+                }
+
+                redraw();
+            }
+            else if (currentTool === &#x27;freehand&#x27; &amp;&amp; isDrawing) {
+                currentPath.push({x, y});
+                redraw();
+            }
+        });
+
+        canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; {
+            if (isPanning) {
+                isPanning = false;
+                canvas.style.cursor = currentTool === &#x27;select&#x27; ? &#x27;default&#x27; : &#x27;crosshair&#x27;;
+                return;
+            }
+            if (currentTool === &#x27;select&#x27;) {
+                if (isDraggingHandle) {
+                    isDraggingHandle = false;
+                    selectedHandleIndex = -1;
+                    saveState();
+                } else if (isDraggingShape) {
+                    isDraggingShape = false;
+                    lastDragPoint = null;
+                    saveState();
+                }
+                return;
+            }
+
+            if (isDrawing &amp;&amp; (currentTool === &#x27;rect&#x27; || currentTool === &#x27;ellipse&#x27;)) {
+                isDrawing = false;
+
+                if (currentTool === &#x27;rect&#x27;) {
+                    const rectBounds = {
+                        x: Math.min(startPoint.x, tempEndPoint.x),
+                        y: Math.min(startPoint.y, tempEndPoint.y),
+                        w: Math.abs(tempEndPoint.x - startPoint.x),
+                        h: Math.abs(tempEndPoint.y - startPoint.y)
+                    };
+
+                    if (rectBounds.w &gt; 5 &amp;&amp; rectBounds.h &gt; 5) {
+                        addShape(&#x27;rect&#x27;, rectBounds, null, null);
+                    }
+                } else if (currentTool === &#x27;ellipse&#x27;) {
+                    // Start point is center, tempEndPoint is edge
+                    // OR start point is corner, tempEndPoint is opposite corner
+                    // Let&#x27;s go with start-&gt;temp = bounding box for consistency with rect
+                    const rx = Math.abs(tempEndPoint.x - startPoint.x) / 2;
+                    const ry = Math.abs(tempEndPoint.y - startPoint.y) / 2;
+                    const cx = Math.min(startPoint.x, tempEndPoint.x) + rx;
+                    const cy = Math.min(startPoint.y, tempEndPoint.y) + ry;
+
+                    if (rx &gt; 2 &amp;&amp; ry &gt; 2) {
+                        addShape(&#x27;ellipse&#x27;, null, null, {cx, cy, rx, ry});
+                    }
+                }
+
+                startPoint = null;
+                tempEndPoint = null;
+                redraw();
+            }
+            else if (currentTool === &#x27;freehand&#x27; &amp;&amp; isDrawing) {
+                isDrawing = false;
+                if (currentPath.length &gt; 2) {
+                    // Simplify the path so it&#x27;s not a million points
+                    const simplified = simplifyPath(currentPath, 2.0); // 2.0 tolerance works well for freehand
+                    addShape(&#x27;poly&#x27;, null, simplified, null);
+                }
+                currentPath = [];
+                redraw();
+            }
+        });
+
+        // --- Zooming Event (Mouse Wheel) ---
+        canvas.addEventListener(&#x27;wheel&#x27;, (e) =&gt; {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const screenX = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const screenY = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+            // Compute world position before zoom
+            const worldX = (screenX - transformPanX) / transformScale;
+            const worldY = (screenY - transformPanY) / transformScale;
+
+            const zoomSpeed = 0.1;
+            if (e.deltaY &lt; 0) {
+                transformScale *= (1 + zoomSpeed);
+            } else {
+                transformScale *= (1 - zoomSpeed);
+            }
+            transformScale = Math.max(0.1, Math.min(transformScale, 10)); // Clamp scale
+
+            // Adjust pan to keep the world position under the mouse
+            transformPanX = screenX - worldX * transformScale;
+            transformPanY = screenY - worldY * transformScale;
+
+            redraw();
+        }, { passive: false });
+
+        // --- Zoom Buttons ---
+        function applyZoomCenter(factor) {
+            const rect = canvas.getBoundingClientRect();
+            const screenX = rect.width / 2;
+            const screenY = rect.height / 2;
+
+            const worldX = (screenX - transformPanX) / transformScale;
+            const worldY = (screenY - transformPanY) / transformScale;
+
+            transformScale *= factor;
+            transformScale = Math.max(0.1, Math.min(transformScale, 10));
+
+            transformPanX = screenX - worldX * transformScale;
+            transformPanY = screenY - worldY * transformScale;
+            redraw();
+        }
+
+        zoomInBtn.addEventListener(&#x27;click&#x27;, () =&gt; applyZoomCenter(1.2));
+        zoomOutBtn.addEventListener(&#x27;click&#x27;, () =&gt; applyZoomCenter(0.8));
+        zoomResetBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = rect.width / imgWidth;
+            const scaleY = rect.height / imgHeight;
+            transformScale = Math.min(scaleX, scaleY) * 0.95;
+
+            const renderW = imgWidth * transformScale;
+            const renderH = imgHeight * transformScale;
+            transformPanX = (rect.width - renderW) / 2;
+            transformPanY = (rect.height - renderH) / 2;
+            redraw();
+        });
+
+        // --- Keyboard Events ---
+        window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+            // Ignore keystrokes if typing in an input
+            if (e.target.tagName.toLowerCase() === &#x27;input&#x27; &amp;&amp; e.target.type === &#x27;text&#x27;) return;
+
+            if (e.code === &#x27;Space&#x27; &amp;&amp; !isSpacePressed) {
+                isSpacePressed = true;
+                canvas.style.cursor = &#x27;grab&#x27;;
+                e.preventDefault(); // prevent scrolling
+            }
+            if (e.key === &#x27;Escape&#x27;) {
+                currentPath = [];
+                isDrawing = false;
+                startPoint = null;
+                redraw();
+            } else if (e.key === &#x27;Enter&#x27;) {
+                if (currentTool === &#x27;poly&#x27; &amp;&amp; currentPath.length &gt; 2) {
+                    finishPolygon();
+                } else if (currentTool === &#x27;sam&#x27; &amp;&amp; currentSamPreview) {
+                    // Finalize SAM Shape
+                    addShape(&#x27;poly&#x27;, null, [...currentSamPreview.points], null);
+                    currentSamPoints = [];
+                    currentSamPreview = null;
+                    redraw();
+                }
+            }
+
+            // Undo / Redo Shortcuts
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === &#x27;z&#x27;) {
+                    if (e.shiftKey) {
+                        redo();
+                    } else {
+                        undo();
+                    }
+                    e.preventDefault();
+                } else if (e.key === &#x27;y&#x27;) {
+                    redo();
+                    e.preventDefault();
+                } else if (e.key === &#x27;c&#x27;) {
+                    if (selectedShapeIndices.size &gt; 0) {
+                        clipboard = Array.from(selectedShapeIndices).map(idx =&gt; JSON.parse(JSON.stringify(shapes[idx])));
+                        e.preventDefault();
+                    }
+                } else if (e.key === &#x27;v&#x27;) {
+                    if (clipboard.length &gt; 0) {
+                        selectedShapeIndices.clear();
+                        const newClipboard = [];
+                        clipboard.forEach(shape =&gt; {
+                            // Offset paste slightly
+                            if (shape.type === &#x27;rect&#x27;) { shape.rect.x += 20; shape.rect.y += 20; }
+                            else if (shape.type === &#x27;ellipse&#x27;) { shape.ellipse.cx += 20; shape.ellipse.cy += 20; }
+                            else if (shape.type === &#x27;poly&#x27;) { shape.points.forEach(p =&gt; { p.x += 20; p.y += 20; }); }
+
+                            shape.id = &quot;shape_&quot; + shapeCounter++;
+                            shapes.push(shape);
+                            selectedShapeIndices.add(shapes.length - 1);
+                            newClipboard.push(JSON.parse(JSON.stringify(shape)));
+                        });
+                        clipboard = newClipboard; // update for subsequent pastes
+                        updateShapeList();
+                        redraw();
+                        saveState();
+                        e.preventDefault();
+                    }
+                }
+            }
+
+            if (e.key === &#x27;Delete&#x27; || e.key === &#x27;Backspace&#x27;) {
+                if (selectedShapeIndices.size &gt; 0) {
+                    const indices = Array.from(selectedShapeIndices).sort((a,b) =&gt; b - a); // descending
+                    indices.forEach(idx =&gt; shapes.splice(idx, 1));
+                    selectedShapeIndices.clear();
+                    updateShapeList();
+                    redraw();
+                    saveState();
+                    e.preventDefault();
+                }
+            }
+        });
+
+        function finishPolygon() {
+            addShape(&#x27;poly&#x27;, null, [...currentPath]);
+            currentPath = [];
+            tempEndPoint = null;
+            redraw();
+        }
+
+        // --- Shape Management ---
+        function addShape(type, rectBounds, pathPoints, ellipseData) {
+            const id = `region_${shapeCounter++}`;
+            shapes.push({ id, type, rect: rectBounds, points: pathPoints, ellipse: ellipseData });
+            updateShapeList();
+            saveState();
+        }
+
+        function removeShape(index) {
+            shapes.splice(index, 1);
+            if (selectedShapeIndices.has(index)) {
+                selectedShapeIndices.delete(index);
+                isDraggingShape = false;
+                isDraggingHandle = false;
+                selectedHandleIndex = -1;
+            }
+            const newSel = new Set();
+            selectedShapeIndices.forEach(idx =&gt; {
+                if (idx &gt; index) newSel.add(idx - 1);
+                else newSel.add(idx);
+            });
+            selectedShapeIndices = newSel;
+            updateShapeList();
+            redraw();
+            saveState();
+        }
+
+        function updateShapeId(index, newId) {
+            shapes[index].id = newId;
+            saveState();
+        }
+
+        function updateShapeList() {
+            shapeList.innerHTML = &#x27;&#x27;;
+            shapes.forEach((shape, index) =&gt; {
+                const li = document.createElement(&#x27;li&#x27;);
+                li.className = &#x27;shape-item&#x27;;
+                if (selectedShapeIndices.has(index)) {
+                    li.style.borderLeft = &#x27;3px solid #3b82f6&#x27;;
+                }
+
+                const input = document.createElement(&#x27;input&#x27;);
+                input.type = &#x27;text&#x27;;
+                input.value = shape.id;
+                input.addEventListener(&#x27;change&#x27;, (e) =&gt; updateShapeId(index, e.target.value));
+
+                const delBtn = document.createElement(&#x27;button&#x27;);
+                delBtn.innerText = &#x27;Delete&#x27;;
+                delBtn.addEventListener(&#x27;click&#x27;, () =&gt; removeShape(index));
+
+                li.appendChild(input);
+                li.appendChild(delBtn);
+                shapeList.appendChild(li);
+            });
+        }
+
+        // --- Color Helper ---
+        function hexToRgb(hex, alpha) {
+            let r = 0, g = 0, b = 0;
+            // 3 digits
+            if (hex.length == 4) {
+                r = &quot;0x&quot; + hex[1] + hex[1];
+                g = &quot;0x&quot; + hex[2] + hex[2];
+                b = &quot;0x&quot; + hex[3] + hex[3];
+            // 6 digits
+            } else if (hex.length == 7) {
+                r = &quot;0x&quot; + hex[1] + hex[2];
+                g = &quot;0x&quot; + hex[3] + hex[4];
+                b = &quot;0x&quot; + hex[5] + hex[6];
+            }
+            return `rgba(${+r}, ${+g}, ${+b}, ${alpha})`;
+        }
+
+        // --- Drawing Canvas ---
+        function redraw() {
+            // Clear entire actual canvas
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Apply Zoom/Pan Transform
+            ctx.setTransform(transformScale, 0, 0, transformScale, transformPanX, transformPanY);
+
+            // Draw Background Image
+            if (bgImage.src) {
+                ctx.drawImage(bgImage, 0, 0, imgWidth, imgHeight);
+            }
+
+            const baseColorHex = toolColorInput.value || &#x27;#3b82f6&#x27;;
+            const baseColorFill = hexToRgb(baseColorHex, 0.3);
+            const activeColorFill = hexToRgb(baseColorHex, 0.5);
+
+            // Draw committed shapes
+            shapes.forEach((shape, idx) =&gt; {
+                const isSelected = selectedShapeIndices.has(idx);
+                ctx.fillStyle = isSelected ? activeColorFill : baseColorFill;
+                ctx.strokeStyle = baseColorHex;
+                ctx.lineWidth = isSelected ? 3 / transformScale : 2 / transformScale;
+
+                ctx.beginPath();
+                if (shape.type === &#x27;rect&#x27;) {
+                    ctx.rect(shape.rect.x, shape.rect.y, shape.rect.w, shape.rect.h);
+                } else if (shape.type === &#x27;ellipse&#x27;) {
+                    ctx.ellipse(shape.ellipse.cx, shape.ellipse.cy, shape.ellipse.rx, shape.ellipse.ry, 0, 0, 2 * Math.PI);
+                } else if (shape.type === &#x27;poly&#x27;) {
+                    ctx.moveTo(shape.points[0].x, shape.points[0].y);
+                    for (let i = 1; i &lt; shape.points.length; i++) {
+                        ctx.lineTo(shape.points[i].x, shape.points[i].y);
+                    }
+                    ctx.closePath();
+                }
+                ctx.fill();
+                ctx.stroke();
+
+                // Draw Edit Handles if selected
+                if (isSelected &amp;&amp; selectedShapeIndices.size === 1) {
+                    const handleSize = 8 / transformScale;
+                    const hs = handleSize / 2;
+                    ctx.fillStyle = &#x27;#ffffff&#x27;;
+                    ctx.strokeStyle = &#x27;#ef4444&#x27;;
+                    ctx.lineWidth = 2 / transformScale;
+
+                    const drawHandle = (hx, hy) =&gt; {
+                        ctx.beginPath();
+                        ctx.rect(hx - hs, hy - hs, handleSize, handleSize);
+                        ctx.fill();
+                        ctx.stroke();
+                    };
+
+                    if (shape.type === &#x27;rect&#x27;) {
+                        const {x, y, w, h} = shape.rect;
+                        drawHandle(x, y); // TL
+                        drawHandle(x + w, y); // TR
+                        drawHandle(x + w, y + h); // BR
+                        drawHandle(x, y + h); // BL
+                    } else if (shape.type === &#x27;ellipse&#x27;) {
+                        const {cx, cy, rx, ry} = shape.ellipse;
+                        drawHandle(cx, cy - ry); // T
+                        drawHandle(cx + rx, cy); // R
+                        drawHandle(cx, cy + ry); // B
+                        drawHandle(cx - rx, cy); // L
+                    } else if (shape.type === &#x27;poly&#x27;) {
+                        shape.points.forEach(p =&gt; drawHandle(p.x, p.y));
+                    }
+                }
+            });
+
+            // Draw current path/rect in progress
+            const markerSize = 6 / transformScale;
+            const tempColorHex = &#x27;#10b981&#x27;;
+            const tempColorFill = hexToRgb(tempColorHex, 0.3);
+
+            if (currentTool === &#x27;poly&#x27; &amp;&amp; currentPath.length &gt; 0) {
+                ctx.strokeStyle = tempColorHex;
+                ctx.lineWidth = 2 / transformScale;
+                ctx.beginPath();
+                ctx.moveTo(currentPath[0].x, currentPath[0].y);
+                for (let i = 1; i &lt; currentPath.length; i++) {
+                    ctx.lineTo(currentPath[i].x, currentPath[i].y);
+                    ctx.fillStyle = tempColorHex;
+                    ctx.fillRect(currentPath[i].x - (markerSize/2), currentPath[i].y - (markerSize/2), markerSize, markerSize);
+                }
+                if (tempEndPoint) {
+                    ctx.lineTo(tempEndPoint.x, tempEndPoint.y);
+                }
+                ctx.stroke();
+
+                // Draw start point larger
+                ctx.fillStyle = &#x27;#ef4444&#x27;;
+                ctx.fillRect(currentPath[0].x - (markerSize), currentPath[0].y - (markerSize), markerSize*2, markerSize*2);
+            }
+            else if (currentTool === &#x27;rect&#x27; &amp;&amp; isDrawing &amp;&amp; startPoint &amp;&amp; tempEndPoint) {
+                ctx.strokeStyle = tempColorHex;
+                ctx.lineWidth = 2 / transformScale;
+                ctx.fillStyle = tempColorFill;
+                const w = tempEndPoint.x - startPoint.x;
+                const h = tempEndPoint.y - startPoint.y;
+                ctx.fillRect(startPoint.x, startPoint.y, w, h);
+                ctx.strokeRect(startPoint.x, startPoint.y, w, h);
+            }
+            else if (currentTool === &#x27;ellipse&#x27; &amp;&amp; isDrawing &amp;&amp; startPoint &amp;&amp; tempEndPoint) {
+                ctx.strokeStyle = tempColorHex;
+                ctx.lineWidth = 2 / transformScale;
+                ctx.fillStyle = tempColorFill;
+
+                const rx = Math.abs(tempEndPoint.x - startPoint.x) / 2;
+                const ry = Math.abs(tempEndPoint.y - startPoint.y) / 2;
+                const cx = Math.min(startPoint.x, tempEndPoint.x) + rx;
+                const cy = Math.min(startPoint.y, tempEndPoint.y) + ry;
+
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, rx, ry, 0, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            // Draw SAM Preview and Prompts
+            if (currentTool === &#x27;sam&#x27;) {
+                if (currentSamPreview &amp;&amp; currentSamPreview.points.length &gt; 0) {
+                    ctx.strokeStyle = &#x27;#4f46e5&#x27;;
+                    ctx.fillStyle = &#x27;rgba(79, 70, 229, 0.3)&#x27;;
+                    ctx.lineWidth = 2 / transformScale;
+                    ctx.beginPath();
+                    ctx.moveTo(currentSamPreview.points[0].x, currentSamPreview.points[0].y);
+                    for (let i = 1; i &lt; currentSamPreview.points.length; i++) {
+                        ctx.lineTo(currentSamPreview.points[i].x, currentSamPreview.points[i].y);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+                currentSamPoints.forEach(p =&gt; {
+                    ctx.fillStyle = p.label === 1 ? &#x27;#10b981&#x27; : &#x27;#ef4444&#x27;;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, markerSize, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // Add outline for visibility
+                    ctx.strokeStyle = &#x27;#ffffff&#x27;;
+                    ctx.lineWidth = 1 / transformScale;
+                    ctx.stroke();
+                });
+            }
+
+            // Reset transform for UI rendering if any
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+
+        // --- Export ---
+        function generateSVG() {
+            let svgStr = `&lt;svg viewBox=&quot;0 0 ${imgWidth} ${imgHeight}&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;\n`;
+
+            // Generate a background rect that matches the image dimensions exactly.
+            // This ensures the viewBox scales correctly, and gives the user an anchor for app.add_svg_background_image()
+            svgStr += `    &lt;!-- Background anchor for add_svg_background_image --&gt;\n`;
+            svgStr += `    &lt;rect id=&quot;background&quot; x=&quot;0&quot; y=&quot;0&quot; width=&quot;${imgWidth}&quot; height=&quot;${imgHeight}&quot; fill=&quot;transparent&quot; pointer-events=&quot;none&quot; /&gt;\n\n`;
+
+            shapes.forEach(shape =&gt; {
+                // Ensure IDs are safe for SVG/XML
+                const safeId = shape.id.replace(/[^a-zA-Z0-9_\-]/g, &#x27;_&#x27;);
+
+                if (shape.type === &#x27;rect&#x27;) {
+                    svgStr += `    &lt;rect id=&quot;${safeId}&quot; fill=&quot;transparent&quot; x=&quot;${shape.rect.x.toFixed(1)}&quot; y=&quot;${shape.rect.y.toFixed(1)}&quot; width=&quot;${shape.rect.w.toFixed(1)}&quot; height=&quot;${shape.rect.h.toFixed(1)}&quot; /&gt;\n`;
+                } else if (shape.type === &#x27;ellipse&#x27;) {
+                    svgStr += `    &lt;ellipse id=&quot;${safeId}&quot; fill=&quot;transparent&quot; cx=&quot;${shape.ellipse.cx.toFixed(1)}&quot; cy=&quot;${shape.ellipse.cy.toFixed(1)}&quot; rx=&quot;${shape.ellipse.rx.toFixed(1)}&quot; ry=&quot;${shape.ellipse.ry.toFixed(1)}&quot; /&gt;\n`;
+                } else if (shape.type === &#x27;poly&#x27;) {
+                    let d = `M${shape.points[0].x.toFixed(1)},${shape.points[0].y.toFixed(1)}`;
+                    for (let i = 1; i &lt; shape.points.length; i++) {
+                        d += ` L${shape.points[i].x.toFixed(1)},${shape.points[i].y.toFixed(1)}`;
+                    }
+                    d += &#x27; Z&#x27;;
+                    svgStr += `    &lt;path id=&quot;${safeId}&quot; fill=&quot;transparent&quot; d=&quot;${d}&quot; /&gt;\n`;
+                }
+            });
+
+            svgStr += `&lt;/svg&gt;`;
+            return svgStr;
+        }
+
+        exportBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
+            const svgContent = generateSVG();
+            svgOutputArea.value = svgContent;
+            exportModal.style.display = &#x27;flex&#x27;;
+        });
+
+        closeModalBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
+            exportModal.style.display = &#x27;none&#x27;;
+        });
+
+        downloadSvgBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
+            const svgContent = svgOutputArea.value;
+            const blob = new Blob([svgContent], { type: &#x27;image/svg+xml&#x27; });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement(&#x27;a&#x27;);
+            a.href = url;
+            a.download = saveFilenameInput.value || &#x27;sivo_template.svg&#x27;;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // --- Save/Load Project State ---
+        function serializeProject() {
+            return JSON.stringify({
+                shapes: shapes,
+                imgWidth: imgWidth,
+                imgHeight: imgHeight,
+                bgImageSrc: bgImage.src,
+                shapeCounter: shapeCounter
+            });
+        }
+
+        function loadProjectState(data) {
+            try {
+                const state = JSON.parse(data);
+                shapes = state.shapes || [];
+                imgWidth = state.imgWidth || 0;
+                imgHeight = state.imgHeight || 0;
+                shapeCounter = state.shapeCounter || 1;
+
+                if (state.bgImageSrc) {
+                    toolsDiv.style.display = &#x27;block&#x27;;
+                    setupInstructions.style.display = &#x27;none&#x27;;
+                    container.style.display = &#x27;block&#x27;;
+                    bgImage.src = state.bgImageSrc;
+                    // bgImage.onload handles redraw and zoom resets
+                }
+                updateShapeList();
+                saveHistoryState();
+            } catch (e) {
+                console.error(&quot;Failed to load project state&quot;, e);
+                alert(&quot;Failed to load project file. Invalid format.&quot;);
+            }
+        }
+
+        saveProjectBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
+            const data = serializeProject();
+            const pyodideInst = getPyodideInstance();
+            if (pyodideInst &amp;&amp; pyodideInst.FS) {
+                const filename = prompt(&quot;Enter project filename to save to Pyodide FS:&quot;, &quot;sivo_project.json&quot;);
+                if (!filename) return;
+                try {
+                    pyodideInst.FS.writeFile(filename, data);
+                    pyodideInst.FS.syncfs(false, function(err) {
+                        if (err) alert(&quot;Sync error: &quot; + err);
+                        else alert(&quot;Saved to Pyodide Virtual File System: &quot; + filename);
+                    });
+                } catch (err) {
+                    alert(&quot;Error saving: &quot; + err);
+                }
+            } else {
+                // Standard browser download
+                const blob = new Blob([data], { type: &#x27;application/json&#x27; });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement(&#x27;a&#x27;);
+                a.href = url;
+                a.download = &#x27;sivo_project.json&#x27;;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        });
+
+        loadProjectBtn.addEventListener(&#x27;click&#x27;, () =&gt; {
+            const pyodideInst = getPyodideInstance();
+            if (pyodideInst &amp;&amp; pyodideInst.FS) {
+                const filename = prompt(&quot;Enter project filename to load from Pyodide FS:&quot;, &quot;sivo_project.json&quot;);
+                if (!filename) return;
+                try {
+                    const data = pyodideInst.FS.readFile(filename, { encoding: &#x27;utf8&#x27; });
+                    loadProjectState(data);
+                } catch (err) {
+                    alert(&quot;Error loading file (does it exist?): &quot; + err);
+                }
+            } else {
+                loadProjectFile.click();
+            }
+        });
+
+        loadProjectFile.addEventListener(&#x27;change&#x27;, (e) =&gt; {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) =&gt; {
+                loadProjectState(evt.target.result);
+            };
+            reader.readAsText(file);
+            loadProjectFile.value = &#x27;&#x27;; // Reset
+        });
+
+
+        // Detect Pyodide in window or parent to enable IDBFS saving
+        function getPyodideInstance() {
+            if (window.pyodide) return window.pyodide;
+            if (window.parent &amp;&amp; window.parent.pyodide) return window.parent.pyodide;
+            return null;
+        }
+
+        const pyodideInstance = getPyodideInstance();
+        if (pyodideInstance &amp;&amp; pyodideInstance.FS) {
+            saveIdbfsBtn.style.display = &#x27;inline-block&#x27;;
+            saveIdbfsBtn.addEventListener(&#x27;click&#x27;, async () =&gt; {
+                const svgContent = svgOutputArea.value;
+                const filename = saveFilenameInput.value || &#x27;sivo_template.svg&#x27;;
+
+                try {
+                    // Write to the virtual file system
+                    pyodideInstance.FS.writeFile(filename, svgContent);
+
+                    // Sync the virtual file system back to IndexedDB
+                    pyodideInstance.FS.syncfs(false, function (err) {
+                        if (err) {
+                            console.error(&#x27;Error syncing IDBFS:&#x27;, err);
+                            alert(&#x27;Failed to sync to IndexedDB: &#x27; + err);
+                        } else {
+                            const originalText = saveIdbfsBtn.innerText;
+                            saveIdbfsBtn.innerText = &#x27;Saved!&#x27;;
+                            saveIdbfsBtn.style.backgroundColor = &#x27;#059669&#x27;;
+                            setTimeout(() =&gt; {
+                                saveIdbfsBtn.innerText = originalText;
+                                saveIdbfsBtn.style.backgroundColor = &#x27;#10b981&#x27;;
+                            }, 2000);
+                        }
+                    });
+                } catch (err) {
+                    console.error(&#x27;Error writing to Pyodide FS:&#x27;, err);
+                    alert(&#x27;Failed to write to virtual file system: &#x27; + err);
+                }
+            });
+        }
+
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;" id="annotator-frame"></iframe>
         </div>
 
         <!-- Pane 2: Python Code -->
