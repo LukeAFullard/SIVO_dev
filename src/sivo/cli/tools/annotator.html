@@ -126,7 +126,9 @@
             <p class="instructions">Save this file as <code>template.svg</code> and load it using <code>Sivo.from_template()</code>. Remember to add your background image using <code>app.add_background_image()</code>.</p>
             <textarea id="svg-output" readonly></textarea>
             <div class="modal-actions">
+                <input type="text" id="save-filename" value="sivo_template.svg" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; width: 150px;">
                 <button class="secondary" id="close-modal">Close</button>
+                <button id="save-idbfs-btn" style="display: none; background-color: #10b981;">Save to Pyodide FS</button>
                 <button id="download-svg-btn">Download .svg</button>
             </div>
         </div>
@@ -171,6 +173,8 @@
         const exportModal = document.getElementById('export-modal');
         const closeModalBtn = document.getElementById('close-modal');
         const downloadSvgBtn = document.getElementById('download-svg-btn');
+        const saveIdbfsBtn = document.getElementById('save-idbfs-btn');
+        const saveFilenameInput = document.getElementById('save-filename');
         const svgOutputArea = document.getElementById('svg-output');
 
         let shapes = []; // { id: string, type: 'poly'|'rect'|'ellipse', points: [{x,y}], rect: {x,y,w,h}, ellipse: {cx, cy, rx, ry} }
@@ -1411,12 +1415,52 @@
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'sivo_template.svg';
+            a.download = saveFilenameInput.value || 'sivo_template.svg';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         });
+
+        // Detect Pyodide in window or parent to enable IDBFS saving
+        function getPyodideInstance() {
+            if (window.pyodide) return window.pyodide;
+            if (window.parent && window.parent.pyodide) return window.parent.pyodide;
+            return null;
+        }
+
+        const pyodideInstance = getPyodideInstance();
+        if (pyodideInstance && pyodideInstance.FS) {
+            saveIdbfsBtn.style.display = 'inline-block';
+            saveIdbfsBtn.addEventListener('click', async () => {
+                const svgContent = svgOutputArea.value;
+                const filename = saveFilenameInput.value || 'sivo_template.svg';
+
+                try {
+                    // Write to the virtual file system
+                    pyodideInstance.FS.writeFile(filename, svgContent);
+
+                    // Sync the virtual file system back to IndexedDB
+                    pyodideInstance.FS.syncfs(false, function (err) {
+                        if (err) {
+                            console.error('Error syncing IDBFS:', err);
+                            alert('Failed to sync to IndexedDB: ' + err);
+                        } else {
+                            const originalText = saveIdbfsBtn.innerText;
+                            saveIdbfsBtn.innerText = 'Saved!';
+                            saveIdbfsBtn.style.backgroundColor = '#059669';
+                            setTimeout(() => {
+                                saveIdbfsBtn.innerText = originalText;
+                                saveIdbfsBtn.style.backgroundColor = '#10b981';
+                            }, 2000);
+                        }
+                    });
+                } catch (err) {
+                    console.error('Error writing to Pyodide FS:', err);
+                    alert('Failed to write to virtual file system: ' + err);
+                }
+            });
+        }
 
     </script>
 </body>
