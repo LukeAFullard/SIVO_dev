@@ -211,7 +211,8 @@
         let shapeCounter = 1;
 
         // Selection & Transformation State
-        let selectedShapeIndex = -1;
+        let selectedShapeIndices = new Set();
+        let clipboard = [];
         let isDraggingShape = false;
         let isDraggingHandle = false;
         let selectedHandleIndex = -1; // -1 means none
@@ -416,9 +417,7 @@
                 shapes = JSON.parse(JSON.stringify(historyStack[historyIndex]));
 
                 // Clear selection if the shape was deleted in this past state
-                if (selectedShapeIndex >= shapes.length) {
-                    selectedShapeIndex = -1;
-                }
+                const newSel = new Set(); selectedShapeIndices.forEach(i => {if (i < shapes.length) newSel.add(i);}); selectedShapeIndices = newSel;
 
                 updateShapeList();
                 redraw();
@@ -427,7 +426,7 @@
                 // Revert to empty state (before first drawing)
                 historyIndex = -1;
                 shapes = [];
-                selectedShapeIndex = -1;
+                selectedShapeIndices.clear();
                 updateShapeList();
                 redraw();
                 updateHistoryButtons();
@@ -561,7 +560,7 @@
             currentSamPreview = null;
             isDrawing = false;
             startPoint = null;
-            selectedShapeIndex = -1;
+            selectedShapeIndices.clear();
             redraw();
         }
 
@@ -847,9 +846,9 @@
 
             // Normal Tools
             if (currentTool === 'select') {
-                // First check if clicking a handle of the already selected shape
-                if (selectedShapeIndex !== -1) {
-                    const handleIdx = getHandleAtPoint({x, y}, shapes[selectedShapeIndex]);
+                if (selectedShapeIndices.size === 1) {
+                    const singleIdx = Array.from(selectedShapeIndices)[0];
+                    const handleIdx = getHandleAtPoint({x, y}, shapes[singleIdx]);
                     if (handleIdx !== -1) {
                         isDraggingHandle = true;
                         selectedHandleIndex = handleIdx;
@@ -857,11 +856,21 @@
                     }
                 }
 
-                // Otherwise, select a shape or clear selection
-                selectedShapeIndex = getShapeAtPoint({x, y});
-                if (selectedShapeIndex !== -1) {
+                const hoverIdx = getShapeAtPoint({x, y});
+                if (hoverIdx !== -1) {
+                    if (e.shiftKey) {
+                        if (selectedShapeIndices.has(hoverIdx)) selectedShapeIndices.delete(hoverIdx);
+                        else selectedShapeIndices.add(hoverIdx);
+                    } else {
+                        if (!selectedShapeIndices.has(hoverIdx)) {
+                            selectedShapeIndices.clear();
+                            selectedShapeIndices.add(hoverIdx);
+                        }
+                    }
                     isDraggingShape = true;
                     lastDragPoint = {x, y};
+                } else {
+                    if (!e.shiftKey) selectedShapeIndices.clear();
                 }
                 redraw();
                 return;
@@ -937,8 +946,8 @@
             }
 
             if (currentTool === 'select') {
-                if (isDraggingHandle && selectedShapeIndex !== -1 && selectedHandleIndex !== -1) {
-                    const shape = shapes[selectedShapeIndex];
+                if (isDraggingHandle && selectedShapeIndices.size === 1 && selectedHandleIndex !== -1) {
+                    const shape = shapes[Array.from(selectedShapeIndices)[0]];
                     if (shape.type === 'poly') {
                         shape.points[selectedHandleIndex] = {x, y};
                     } else if (shape.type === 'rect') {
@@ -973,27 +982,30 @@
                         }
                     }
                     redraw();
-                } else if (isDraggingShape && selectedShapeIndex !== -1 && lastDragPoint) {
+                } else if (isDraggingShape && selectedShapeIndices.size > 0 && lastDragPoint) {
                     const dx = x - lastDragPoint.x;
                     const dy = y - lastDragPoint.y;
-                    const shape = shapes[selectedShapeIndex];
 
-                    if (shape.type === 'rect') {
-                        shape.rect.x += dx;
-                        shape.rect.y += dy;
-                    } else if (shape.type === 'ellipse') {
-                        shape.ellipse.cx += dx;
-                        shape.ellipse.cy += dy;
-                    } else if (shape.type === 'poly') {
-                        shape.points.forEach(p => { p.x += dx; p.y += dy; });
-                    }
+                    selectedShapeIndices.forEach(idx => {
+                        const shape = shapes[idx];
+                        if (shape.type === 'rect') {
+                            shape.rect.x += dx;
+                            shape.rect.y += dy;
+                        } else if (shape.type === 'ellipse') {
+                            shape.ellipse.cx += dx;
+                            shape.ellipse.cy += dy;
+                        } else if (shape.type === 'poly') {
+                            shape.points.forEach(p => { p.x += dx; p.y += dy; });
+                        }
+                    });
+
                     lastDragPoint = { x, y };
                     redraw();
                 } else {
                     // Hover effect
                     let cursor = 'default';
-                    if (selectedShapeIndex !== -1) {
-                        const hIdx = getHandleAtPoint({x, y}, shapes[selectedShapeIndex]);
+                    if (selectedShapeIndices.size === 1) {
+                        const hIdx = getHandleAtPoint({x, y}, shapes[Array.from(selectedShapeIndices)[0]]);
                         if (hIdx !== -1) cursor = 'crosshair';
                     }
                     if (cursor === 'default') {
@@ -1189,6 +1201,44 @@
                 } else if (e.key === 'y') {
                     redo();
                     e.preventDefault();
+                } else if (e.key === 'c') {
+                    if (selectedShapeIndices.size > 0) {
+                        clipboard = Array.from(selectedShapeIndices).map(idx => JSON.parse(JSON.stringify(shapes[idx])));
+                        e.preventDefault();
+                    }
+                } else if (e.key === 'v') {
+                    if (clipboard.length > 0) {
+                        selectedShapeIndices.clear();
+                        const newClipboard = [];
+                        clipboard.forEach(shape => {
+                            // Offset paste slightly
+                            if (shape.type === 'rect') { shape.rect.x += 20; shape.rect.y += 20; }
+                            else if (shape.type === 'ellipse') { shape.ellipse.cx += 20; shape.ellipse.cy += 20; }
+                            else if (shape.type === 'poly') { shape.points.forEach(p => { p.x += 20; p.y += 20; }); }
+
+                            shape.id = "shape_" + shapeCounter++;
+                            shapes.push(shape);
+                            selectedShapeIndices.add(shapes.length - 1);
+                            newClipboard.push(JSON.parse(JSON.stringify(shape)));
+                        });
+                        clipboard = newClipboard; // update for subsequent pastes
+                        updateShapeList();
+                        redraw();
+                        saveState();
+                        e.preventDefault();
+                    }
+                }
+            }
+
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                if (selectedShapeIndices.size > 0) {
+                    const indices = Array.from(selectedShapeIndices).sort((a,b) => b - a); // descending
+                    indices.forEach(idx => shapes.splice(idx, 1));
+                    selectedShapeIndices.clear();
+                    updateShapeList();
+                    redraw();
+                    saveState();
+                    e.preventDefault();
                 }
             }
         });
@@ -1210,14 +1260,18 @@
 
         function removeShape(index) {
             shapes.splice(index, 1);
-            if (selectedShapeIndex === index) {
-                selectedShapeIndex = -1;
+            if (selectedShapeIndices.has(index)) {
+                selectedShapeIndices.delete(index);
                 isDraggingShape = false;
                 isDraggingHandle = false;
                 selectedHandleIndex = -1;
-            } else if (selectedShapeIndex > index) {
-                selectedShapeIndex--; // Shift selection index down if a preceding shape was deleted
             }
+            const newSel = new Set();
+            selectedShapeIndices.forEach(idx => {
+                if (idx > index) newSel.add(idx - 1);
+                else newSel.add(idx);
+            });
+            selectedShapeIndices = newSel;
             updateShapeList();
             redraw();
             saveState();
@@ -1233,6 +1287,9 @@
             shapes.forEach((shape, index) => {
                 const li = document.createElement('li');
                 li.className = 'shape-item';
+                if (selectedShapeIndices.has(index)) {
+                    li.style.borderLeft = '3px solid #3b82f6';
+                }
 
                 const input = document.createElement('input');
                 input.type = 'text';
@@ -1286,7 +1343,7 @@
 
             // Draw committed shapes
             shapes.forEach((shape, idx) => {
-                const isSelected = (idx === selectedShapeIndex);
+                const isSelected = selectedShapeIndices.has(idx);
                 ctx.fillStyle = isSelected ? activeColorFill : baseColorFill;
                 ctx.strokeStyle = baseColorHex;
                 ctx.lineWidth = isSelected ? 3 / transformScale : 2 / transformScale;
@@ -1307,7 +1364,7 @@
                 ctx.stroke();
 
                 // Draw Edit Handles if selected
-                if (isSelected) {
+                if (isSelected && selectedShapeIndices.size === 1) {
                     const handleSize = 8 / transformScale;
                     const hs = handleSize / 2;
                     ctx.fillStyle = '#ffffff';
