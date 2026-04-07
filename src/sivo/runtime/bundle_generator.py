@@ -178,8 +178,10 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
                 emphasis_style['shadowOffsetX'] = 0
                 emphasis_style['shadowOffsetY'] = 0
 
+            data_item['label'] = {'show': False}
+            data_item['emphasis'] = {'label': {'show': False}}
             if emphasis_style:
-                data_item['emphasis'] = {'itemStyle': emphasis_style}
+                data_item['emphasis']['itemStyle'] = emphasis_style
 
             echarts_data.append(data_item)
 
