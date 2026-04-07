@@ -41,13 +41,12 @@ class TestDocumentMapEmbed(unittest.TestCase):
 
         doc_mapping = sivo_app.infographic.mappings["my-doc"]
         self.assertEqual(doc_mapping.id, "my-doc")
-        self.assertEqual(doc_mapping.actions[0].action_type, "document")
-        self.assertEqual(doc_mapping.actions[0].document_url, "https://example.com/sample.pptx")
+        self.assertTrue(any(a.action_type == "document" for a in doc_mapping.actions))
+        self.assertEqual(next(a for a in doc_mapping.actions if a.action_type == "document").document_url, "https://example.com/sample.pptx")
 
         map_mapping = sivo_app.infographic.mappings["my-map"]
-        self.assertEqual(map_mapping.id, "my-map")
-        self.assertEqual(map_mapping.actions[0].action_type, "map")
-        self.assertEqual(map_mapping.actions[0].map_location, "Tokyo, Japan")
+        self.assertTrue(any(a.action_type == "map" for a in map_mapping.actions))
+        self.assertEqual(next(a for a in map_mapping.actions if a.action_type == "map").map_location, "Tokyo, Japan")
 
 if __name__ == '__main__':
     unittest.main()

@@ -174,22 +174,22 @@ class TestSivoRender(unittest.TestCase):
 
         sivo_app.map_polar_line_chart("rect1", "Polar Line", [10, 20])
         actions = sivo_app.infographic.mappings["rect1"].actions
-        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "line")
+        echarts_action = next(a for a in actions if getattr(a, "option", {}).get("series", [{}])[0].get("type") == "line")
         self.assertEqual(echarts_action.option["series"][0]["coordinateSystem"], "polar")
 
         sivo_app.map_polar_scatter_chart("rect1", "Polar Scatter", [[10, 20]])
         actions = sivo_app.infographic.mappings["rect1"].actions
-        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "scatter")
+        echarts_action = next(a for a in actions if getattr(a, "option", {}).get("series", [{}])[0].get("type") == "scatter")
         self.assertEqual(echarts_action.option["series"][0]["coordinateSystem"], "polar")
 
         sivo_app.map_liquidfill_chart("rect1", "Liquid Fill", [0.6])
         actions = sivo_app.infographic.mappings["rect1"].actions
-        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "liquidFill")
+        echarts_action = next(a for a in actions if getattr(a, "option", {}).get("series", [{}])[0].get("type") == "liquidFill")
         self.assertEqual(echarts_action.option["series"][0]["type"], "liquidFill")
 
         sivo_app.map_custom_chart("rect1", "Custom", "return {}", [10])
         actions = sivo_app.infographic.mappings["rect1"].actions
-        echarts_action = next(a for a in actions if a.option["series"][0]["type"] == "custom")
+        echarts_action = next(a for a in actions if getattr(a, "option", {}).get("series", [{}])[0].get("type") == "custom")
         self.assertEqual(echarts_action.option["series"][0]["type"], "custom")
         self.assertEqual(echarts_action.option["series"][0]["_sivo_render_item"], "return {}")
 
