@@ -232,7 +232,7 @@ class ProjectConfig(BaseModel):
         description="The initial zoom magnification level of the map."
     )
     enable_a11y: bool = Field(
-        default=False,
+        default=True,
         description="If True, automatically generates accessibility actions (A11yAction) for interactive elements."
     )
     presentation_order: Optional[List[str]] = Field(

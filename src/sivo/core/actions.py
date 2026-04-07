@@ -8,7 +8,7 @@ class TooltipAction(BaseAction):
     action_type: Literal["tooltip"] = "tooltip"
     content: str = Field(description="HTML content for the tooltip")
     title: Optional[str] = Field(default=None, description="Optional title for the tooltip")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class FootnoteAction(BaseAction):
     action_type: Literal["footnote"] = "footnote"
@@ -62,34 +62,34 @@ class AudioAction(BaseAction):
 class MarkdownAction(BaseAction):
     action_type: Literal["markdown"] = "markdown"
     markdown_text: str = Field(description="Markdown content to render in the info panel")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class FetchAction(BaseAction):
     action_type: Literal["fetch"] = "fetch"
     fetch_url: str = Field(description="URL to fetch data from and display in the info panel")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class FormAction(BaseAction):
     action_type: Literal["form"] = "form"
     form_fields: list[dict] = Field(description="List of fields (e.g., {'name': 'ticket', 'type': 'text'})")
     submit_event: str = Field(description="Event name to trigger on form submission")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class SocialAction(BaseAction):
     action_type: Literal["social"] = "social"
     provider: Literal["instagram", "tiktok", "linkedin", "wikipedia", "website", "twitch", "pinterest", "apple_music", "reddit"] = Field(description="The platform provider or generic type")
     url: str = Field(description="The URL to the post or page")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class DocumentAction(BaseAction):
     action_type: Literal["document"] = "document"
     document_url: str = Field(description="URL to the PDF, DOCX, PPTX, or XLSX file")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class MapAction(BaseAction):
     action_type: Literal["map"] = "map"
     map_location: str = Field(description="Location query for Google Maps")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class AnalyticsAction(BaseAction):
     action_type: Literal["analytics"] = "analytics"
@@ -101,44 +101,44 @@ class DataSourceAction(BaseAction):
     action_type: Literal["datasource"] = "datasource"
     provider: Literal["google_sheets", "airtable", "notion"] = Field(description="The data source provider")
     api_endpoint: str = Field(description="The API endpoint or URL to fetch data from")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ExternalFormAction(BaseAction):
     action_type: Literal["external_form"] = "external_form"
     provider: Literal["typeform", "jotform", "hubspot", "google_forms", "surveymonkey", "qualtrics", "calendly"] = Field(description="The external form provider")
     form_url: str = Field(description="The URL of the external form to embed")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class EcommerceAction(BaseAction):
     action_type: Literal["ecommerce"] = "ecommerce"
     provider: Literal["stripe", "shopify"] = Field(description="The e-commerce provider")
     checkout_url: str = Field(description="The URL for the checkout or buy button")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class RichMediaAction(BaseAction):
     action_type: Literal["rich_media"] = "rich_media"
     provider: Literal["vimeo", "wistia", "spotify", "soundcloud"] = Field(description="The rich media provider")
     media_url: str = Field(description="The URL of the media to embed")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class BIAction(BaseAction):
     action_type: Literal["bi"] = "bi"
     provider: Literal["metabase", "tableau", "powerbi"] = Field(description="The Business Intelligence provider")
     dashboard_url: str = Field(description="The URL of the dashboard to embed")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 
 
 class ReplitAction(BaseAction):
     action_type: Literal["replit"] = "replit"
     repl_url: str = Field(description="The URL of the Repl to embed")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class EchartsAction(BaseAction):
     action_type: Literal["echarts"] = "echarts"
     option: dict = Field(description="The Apache ECharts option dictionary to render")
     height: str = Field(default="400px", description="The CSS height for the ECharts container")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
     map_name: Optional[str] = Field(default=None, description="Optional map name to register before rendering the chart.")
     map_data: Optional[Union[str, dict]] = Field(default=None, description="Optional map data (SVG string or GeoJSON dict) to register.")
 
@@ -166,7 +166,7 @@ class LottieAction(BaseAction):
     lottie_url: str = Field(description="URL to the Lottie JSON animation file")
     loop: bool = Field(default=True, description="Whether the animation should loop")
     autoplay: bool = Field(default=True, description="Whether the animation should play automatically")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class CompareAction(BaseAction):
     action_type: Literal["compare"] = "compare"
@@ -174,14 +174,14 @@ class CompareAction(BaseAction):
     after_image: str = Field(description="URL of the 'after' image")
     label_before: str = Field(default="Before", description="Label for the before image")
     label_after: str = Field(default="After", description="Label for the after image")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ProgressBarAction(BaseAction):
     action_type: Literal["progress_bar"] = "progress_bar"
     title: str = Field(description="Title of the progress bar")
     progress: float = Field(description="Progress value between 0 and 100")
     color: str = Field(default="#38bdf8", description="Color of the progress bar")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ConfettiAction(BaseAction):
     action_type: Literal["confetti"] = "confetti"
@@ -196,7 +196,7 @@ class LoadingAction(BaseAction):
     style: Literal["spinner", "pulse", "typewriter", "shimmer", "glitch", "matrix", "bouncing_dots", "ripple", "radar", "neon", "typing_indicator", "progress_bar", "heartbeat", "slot_machine", "orbit", "breathe", "liquid", "flip", "blocks"] = Field(default="spinner", description="Visual style of the loading animation")
     completion_html: Optional[str] = Field(default=None, description="HTML content to display permanently in the overlay after loading completes")
     completion_color: Optional[str] = Field(default=None, description="Color to apply to the SVG element after loading completes")
-    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="right", description="Position of the info panel")
+    panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ThemeOverride(BaseModel):
     color: Optional[str] = None
