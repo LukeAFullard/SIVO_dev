@@ -325,6 +325,8 @@
                     geo: {
                         map: 'sivoMap_' + blockId,
                         roam: true,
+                        label: { show: false },
+                        emphasis: { disabled: true },
                         layoutCenter: ['50%', '50%'],
                         layoutSize: calculateLayoutSize(viewData, dom),
                         regions: viewData.echarts_data // Apply colors directly to SVG regions via geo
@@ -340,6 +342,8 @@
                         type: 'map',
                         map: 'sivoMap_' + blockId,
                         geoIndex: 0,
+                        label: { show: false },
+                        emphasis: { disabled: true },
                         data: viewData.echarts_data
                     });
 

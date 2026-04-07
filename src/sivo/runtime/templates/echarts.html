@@ -2025,13 +2025,14 @@
                         type: 'map',
                         map: mapName,
                         roam: view.lock_canvas ? false : true, // Enable zoom and pan
+                        label: { show: false },
                         itemStyle: {
                             borderColor: '#cbd5e1', // Sleek slate-300
                             borderWidth: 1,
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
-                            disabled: false
+                            disabled: true
                         },
                         selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
@@ -2063,17 +2064,17 @@
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 0,
+                        label: { show: false },
                         itemStyle: {
                             color: 'transparent',
                             borderColor: 'transparent'
                         },
                         emphasis: {
-                            disabled: false,
+                            disabled: true,
                             itemStyle: {
                                 color: 'transparent',
                                 borderColor: 'transparent'
-                            },
-                            label: { show: false }
+                            }
                         },
                         zlevel: 0
                     };
