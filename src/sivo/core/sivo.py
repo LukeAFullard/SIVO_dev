@@ -30,7 +30,7 @@ class Sivo:
         hostname = parsed_url.hostname
         if hostname:
             hostname = hostname.lower()
-            # Simple heuristic blocklist for common SSRF targets
+            # Blocklist for common SSRF targets
             if hostname in ['localhost', '127.0.0.1', '0.0.0.0'] or hostname.startswith('10.') or hostname.startswith('192.168.'):
                 raise ValueError(f"SSRF Protection: Fetching images from local/internal network ({hostname}) is forbidden.")
 
