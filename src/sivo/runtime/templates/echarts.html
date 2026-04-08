@@ -3524,6 +3524,25 @@
             // Reset zoom tracking
             currentZoom = view.starting_zoom || 1.0;
             currentCenter = null;
+            if (myChart && isBackNavigation) {
+                 myChart.dispatchAction({
+                    type: 'restore'
+                 });
+                 if (view.starting_zoom || view.layout_size) {
+                      var newSize = calculateLayoutSize(view, chartDom);
+                      var optToSet = { series: [{ zoom: currentZoom, center: null }] };
+                      if (newSize) {
+                           optToSet.series[0].layoutSize = newSize;
+                      }
+                      if (myChart.getOption().geo) {
+                           optToSet.geo = [{ zoom: currentZoom, center: null }];
+                           if (newSize) {
+                                optToSet.geo[0].layoutSize = newSize;
+                           }
+                      }
+                      myChart.setOption(optToSet, false);
+                 }
+            }
 
             // Re-initialize overlays for this view
             initOverlays();
