@@ -1,4 +1,4 @@
-from typing import Optional, Literal, Union, Annotated, Dict
+from typing import Optional, Literal, Union, Annotated
 from pydantic import BaseModel, Field, ConfigDict
 
 class BaseAction(BaseModel):

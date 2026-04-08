@@ -572,7 +572,6 @@
                                 });
                             }
                         } else if (action.action_type === 'callback') {
-                            console.log('Triggering callback:', action.event_name, action.payload);
                             window.parent.postMessage({
                                 type: 'sivo_click',
                                 payload: {
@@ -582,7 +581,6 @@
                                 }
                             }, '*');
                         } else if (action.action_type === 'drilldown' && action.target_svg) {
-                            console.warn("Dashboard Drilldown triggered to:", action.target_svg);
                         }
                     });
 

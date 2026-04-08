@@ -42,9 +42,9 @@
 - [x] Search for informal or prototype-level comments (e.g., "Note: We use a heuristic here," "I've added the requested feature").
 
 ### Task 2.2: Dead Code & Console Logs
-- [ ] Identify and remove non-error `console.log()`, `console.warn()`, and `console.dir()` statements in frontend code.
-- [ ] Delete commented-out blocks of trial-and-error code across the entire codebase.
-- [ ] Remove unused test variables, unused imports, and unreachable code paths.
+- [x] Identify and remove non-error `console.log()`, `console.warn()`, and `console.dir()` statements in frontend code.
+- [x] Delete commented-out blocks of trial-and-error code across the entire codebase.
+- [x] Remove unused test variables, unused imports, and unreachable code paths.
 
 ### Task 2.3: API Polish & Documentation
 - [ ] Review all Python docstrings to ensure a professional, cohesive library tone.

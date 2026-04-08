@@ -3,7 +3,6 @@ import sys
 import os
 import json
 from ..core.sivo import Sivo
-from ..core.config import ProjectConfig
 from .tools.annotator import cmd_annotate
 
 def cmd_init(args):
@@ -55,7 +54,7 @@ def cmd_validate(args):
 
     try:
         # Load config and validate the mapping against the SVG
-        sivo_app = Sivo.from_config(config_path)
+        Sivo.from_config(config_path)
         print(f"Success: Configuration '{config_path}' and its associated SVG are valid.")
     except Exception as e:
         print(f"Validation failed: {e}", file=sys.stderr)

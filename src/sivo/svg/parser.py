@@ -1,5 +1,5 @@
 from lxml import etree
-from typing import List, Dict, Any
+from typing import List, Dict
 from .normalizer import SVGNormalizer
 from .metadata import get_bounding_box
 
