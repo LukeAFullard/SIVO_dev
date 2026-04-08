@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
     {% if build_js %}
@@ -4634,12 +4635,16 @@
                     return;
                 }
 
-                // Update dynamic CSS
+                // Update dynamic CSS safely
                 var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
                 if (dynamicStyleEl) {
                     var cssContent = '';
-                    if (window.sivoGlobalPanelCSS) cssContent += window.sivoGlobalPanelCSS + '\n';
-                    if (elementCss) cssContent += elementCss + '\n';
+                    // Basic sanitization: remove </style> or HTML closing tags to prevent breaking out of the style block
+                    function sanitizeCSS(cssStr) {
+                        return cssStr.replace(/<\/style>/gi, '').replace(/</g, '\\3c ').replace(/>/g, '\\3e ');
+                    }
+                    if (window.sivoGlobalPanelCSS) cssContent += sanitizeCSS(window.sivoGlobalPanelCSS) + '\n';
+                    if (elementCss) cssContent += sanitizeCSS(elementCss) + '\n';
                     dynamicStyleEl.innerHTML = cssContent;
                 }
 
@@ -6085,7 +6090,7 @@ function tourNext() {
                     var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
 
                     if (results.length === 0) {
-                        searchResults.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>') : '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                        searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
                         searchResults.style.display = 'block';
                         return;
                     }
@@ -6094,7 +6099,12 @@ function tourNext() {
                     results.forEach(function(item) {
                         var el = document.createElement('div');
                         el.className = 'sivo-search-result-item';
-                        el.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(`<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`) : `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
+
+                        // We sanitize the text variables only, or use DOMPurify if available
+                        var titleHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.title) : item.title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var subtitleHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.subtitle) : item.subtitle.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                        el.innerHTML = `<div class="sivo-search-result-title">${titleHtml}</div><div class="sivo-search-result-subtitle">${subtitleHtml}</div>`;
 
                         el.addEventListener('mousedown', function(e) {
                             e.preventDefault(); // Prevent input blur
@@ -6233,6 +6243,11 @@ function tourNext() {
                         geocodeSpinner.style.display = 'block';
 
                         var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`;
+                        if (view.geocode_provider === 'google' && view.geocode_api_key) {
+                            url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${view.geocode_api_key}`;
+                        } else if (view.geocode_provider === 'mapbox' && view.geocode_api_key) {
+                            url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${view.geocode_api_key}`;
+                        }
 
                         fetch(url, {
                             headers: {
@@ -6244,16 +6259,32 @@ function tourNext() {
                             geocodeSpinner.style.display = 'none';
 
                             if (!data || data.length === 0) {
-                                geocodeResults.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>') : '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                                geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
                                 geocodeResults.style.display = 'block';
                                 return;
                             }
 
                             geocodeResults.innerHTML = '';
-                            data.forEach(function(item) {
+                            var resultsArr = data;
+                            if (view.geocode_provider === 'google' && data.results) {
+                                resultsArr = data.results.map(r => ({
+                                    display_name: r.formatted_address,
+                                    lat: r.geometry.location.lat,
+                                    lon: r.geometry.location.lng
+                                }));
+                            } else if (view.geocode_provider === 'mapbox' && data.features) {
+                                resultsArr = data.features.map(f => ({
+                                    display_name: f.place_name,
+                                    lat: f.center[1],
+                                    lon: f.center[0]
+                                }));
+                            }
+
+                            resultsArr.forEach(function(item) {
                                 var el = document.createElement('div');
                                 el.className = 'sivo-search-result-item';
-                                el.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(`<div class="sivo-search-result-title">${item.display_name}</div>`) : `<div class="sivo-search-result-title">${item.display_name}</div>`;
+                                var nameHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.display_name) : item.display_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                                el.innerHTML = `<div class="sivo-search-result-title">${nameHtml}</div>`;
 
                                 el.addEventListener('mousedown', function(e) {
                                     e.preventDefault();
@@ -6267,6 +6298,8 @@ function tourNext() {
                         .catch(error => {
                             console.error('Error fetching geocode results:', error);
                             geocodeSpinner.style.display = 'none';
+                            geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle" style="color: red;">Error fetching results</span></div>';
+                            geocodeResults.style.display = 'block';
                         });
                     }, 500);
                 };
@@ -7208,7 +7241,7 @@ function tourNext() {
             }, '*');
 
             // Show success message
-            formEl.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>') : '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
+            formEl.innerHTML = '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
         }
     </script>
 

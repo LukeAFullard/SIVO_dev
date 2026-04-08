@@ -83,9 +83,14 @@ class Infographic:
 
     @classmethod
     def from_svg(cls, filepath: str) -> "Infographic":
-        if not os.path.exists(filepath):
-            raise FileNotFoundError(f"SVG file not found: {filepath}")
-        parser = SVGParser(filepath, is_file=True)
+        import os
+        # Prevent basic path traversal when loading SVGs dynamically
+        abs_path = os.path.abspath(filepath)
+        if ".." in filepath or "/../" in filepath:
+            raise ValueError(f"Path Traversal detected in filepath: {filepath}")
+        if not os.path.exists(abs_path):
+            raise FileNotFoundError(f"SVG file not found: {abs_path}")
+        parser = SVGParser(abs_path, is_file=True)
         return cls(parser)
 
     @classmethod
@@ -652,6 +657,12 @@ class Infographic:
 
     def embed_svg(self, element_id: str, filepath_or_string: str, is_file: bool = False, preserve_aspect_ratio: bool = True, keep_target: bool = False, scale_multiplier: float = 1.0):
         import lxml.etree as etree
+        import os
+
+        if is_file:
+            # Prevent basic path traversal when embedding SVGs dynamically
+            if ".." in filepath_or_string or "/../" in filepath_or_string:
+                raise ValueError(f"Path Traversal detected in embedded filepath: {filepath_or_string}")
 
         target_elem = self._element_lookup.get(element_id)
         if not target_elem or 'bbox' not in target_elem or not target_elem['bbox']:
