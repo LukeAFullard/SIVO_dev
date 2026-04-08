@@ -23,6 +23,11 @@
 - [ ] Ensure file paths passed to `from_svg()` or `embed_svg()` are protected against Path Traversal vulnerabilities (`../`).
 - [ ] Audit CSS injection endpoints (like `panel_css`) for possible injection attacks or layout-breaking code.
 - [ ] Confirm that generated HTML bundles apply a strict Content Security Policy (CSP) where applicable to mitigate execution of unauthorized scripts.
+- [ ] Ensure API keys (e.g., `geocode_api_key`) and sensitive configurations are securely handled and never accidentally exposed in client-side bundles unless explicitly designed for public access.
+
+### CLI & Local Server Security
+- [ ] Audit the `sivo annotate` Python HTTP server (`src/sivo/cli/`) to ensure it strictly restricts file serving to the designated workspace and prevents arbitrary local file read/write access.
+- [ ] Verify the local server binds to `127.0.0.1` by default instead of `0.0.0.0` to prevent unintended local network exposure.
 
 ### State Management & Navigation
 - [ ] Test the robustness of the `viewHistory` history stack in multi-view/drilldown scenarios.
@@ -78,7 +83,13 @@
 ### Testing & CI/CD
 - [ ] Verify Unit Test coverage over the core API (`sivo.py`, `infographic.py`, `dashboard.py`) and catch edge cases.
 - [ ] Verify End-to-End (E2E) Playwright tests exist for critical user journeys in the frontend interactives.
-- [ ] Confirm CI/CD pipelines (e.g., GitHub Actions) enforce linting, type-checking (MyPy), and test execution before merge.
+- [ ] Confirm CI/CD pipelines (e.g., GitHub Actions) enforce linting (Flake8/Ruff), type-checking (MyPy), and test execution before merge.
+- [ ] Implement automated vulnerability scanning (e.g., `pip-audit`, `npm audit`, Dependabot) in the repository.
+
+### Developer Experience & Governance
+- [ ] Verify the presence of a robust `CONTRIBUTING.md` outlining PR workflows, code standards, and branch policies.
+- [ ] Ensure a comprehensive documentation site structure exists (e.g., MkDocs, Sphinx) covering installation, advanced API usage, and deployment.
+- [ ] Implement a strict Semantic Versioning (SemVer) strategy for the Python package.
 
 ### User Experience (UX) & Accessibility (A11y)
 - [ ] Test interactive maps across modern browsers (Chrome, Safari, Firefox, Edge) and mobile environments (iOS Safari, Android Chrome) for consistent behavior.
