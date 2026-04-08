@@ -26,10 +26,10 @@
     <!-- Include echarts-liquidfill -->
     <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
     {% endif %}
-    {% if dompurify %}
-    <!-- Include DOMPurify -->
+
+    <!-- Include DOMPurify unconditionally for core security -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-    {% endif %}
+
     {% if marked %}
     <!-- Include marked.js for Markdown Action -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -3758,7 +3758,8 @@
                 });
             }
             // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
-            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            if (str == null) return '';
+            return String(str).replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
         // Implement Draggable Logic (for map elements marked as draggable)

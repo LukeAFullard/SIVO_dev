@@ -602,14 +602,14 @@
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
                         const container = panel.querySelector('.sivo-details-content');
-                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : params.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         container.innerHTML = `<h3>${safeName}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
                         const container = panel.querySelector('.sivo-details-content');
-                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : params.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         if (tooltipContent) {
                             var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
                             container.innerHTML = `<h3>${safeName}</h3>${safeTooltip}`;
