@@ -3113,6 +3113,7 @@
             setTimeout(function() {
                 if (!isBackNavigation && currentViewId && currentViewId !== viewId) {
                     viewHistory.push(currentViewId);
+                    if (typeof updateBackButton === 'function') updateBackButton();
                 }
 
                 currentViewId = viewId;
@@ -4045,7 +4046,7 @@
                     } else if (action.action_type === 'audio') {
                         // Play audio
                         var audio = new Audio(action.audio_url);
-                        audio.play();
+                        audio.play().catch(e => console.error("Audio playback failed:", e));
                     } else if (action.action_type === 'fetch') {
                         // Fetch data and display in info panel
                         htmlContent += `<div id="sivo-fetch-container-${name}"><div class="sivo-spinner"></div><em>Loading data...</em></div>`;
@@ -6084,7 +6085,7 @@ function tourNext() {
                     var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
 
                     if (results.length === 0) {
-                        searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                        searchResults.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>') : '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
                         searchResults.style.display = 'block';
                         return;
                     }
@@ -6093,7 +6094,7 @@ function tourNext() {
                     results.forEach(function(item) {
                         var el = document.createElement('div');
                         el.className = 'sivo-search-result-item';
-                        el.innerHTML = `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
+                        el.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(`<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`) : `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
 
                         el.addEventListener('mousedown', function(e) {
                             e.preventDefault(); // Prevent input blur
@@ -6243,7 +6244,7 @@ function tourNext() {
                             geocodeSpinner.style.display = 'none';
 
                             if (!data || data.length === 0) {
-                                geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                                geocodeResults.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>') : '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
                                 geocodeResults.style.display = 'block';
                                 return;
                             }
@@ -6252,7 +6253,7 @@ function tourNext() {
                             data.forEach(function(item) {
                                 var el = document.createElement('div');
                                 el.className = 'sivo-search-result-item';
-                                el.innerHTML = `<div class="sivo-search-result-title">${item.display_name}</div>`;
+                                el.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(`<div class="sivo-search-result-title">${item.display_name}</div>`) : `<div class="sivo-search-result-title">${item.display_name}</div>`;
 
                                 el.addEventListener('mousedown', function(e) {
                                     e.preventDefault();
@@ -6977,21 +6978,24 @@ function tourNext() {
 
         document.getElementById('chart-container').appendChild(backBtn); // Append to chart container so flex layout doesn't break it
 
-        backBtn.addEventListener('click', function() {
-            if (viewHistory.length > 0) {
-                var prevView = viewHistory.pop();
-                renderView(prevView, true);
-            }
-        });
-
-        // Watch history to toggle back button visibility
-        setInterval(function() {
+        function updateBackButton() {
             if (viewHistory.length > 0) {
                 backBtn.style.display = 'flex';
             } else {
                 backBtn.style.display = 'none';
             }
-        }, 100);
+        }
+
+        backBtn.addEventListener('click', function() {
+            if (viewHistory.length > 0) {
+                var prevView = viewHistory.pop();
+                renderView(prevView, true);
+                updateBackButton();
+            }
+        });
+
+        // Initialize back button visibility
+        updateBackButton();
 
     </script>
 
@@ -7204,7 +7208,7 @@ function tourNext() {
             }, '*');
 
             // Show success message
-            formEl.innerHTML = '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
+            formEl.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>') : '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
         }
     </script>
 
