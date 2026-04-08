@@ -3,27 +3,27 @@
 ## Pillar 1: Deep Code Review for Bugs & Edge Cases
 
 ### Task 1.1: Data Validation & Typing (Python Runtime)
-- [ ] Inspect Pydantic models in `src/sivo/core/` for strict type enforcement and missing constraints.
-- [ ] Analyze kwargs handling to ensure malformed data or unexpected types fail gracefully rather than crashing the runtime.
-- [ ] Verify that invalid data structures cannot produce malformed JavaScript inside `src/sivo/runtime/bundle_generator.py`.
-- [ ] Check Pyodide/WebAssembly (WASM) compatibility for core file operations and imports (e.g. replacing synchronous `urllib` fetch or subprocess calls gracefully if missing).
-- [ ] Ensure robust handling of missing files, network timeouts, and malformed SVG structures during instantiation (`Sivo.from_svg()`, `Sivo.from_url()`).
+- [x] Inspect Pydantic models in `src/sivo/core/` for strict type enforcement and missing constraints.
+- [x] Analyze kwargs handling to ensure malformed data or unexpected types fail gracefully rather than crashing the runtime.
+- [x] Verify that invalid data structures cannot produce malformed JavaScript inside `src/sivo/runtime/bundle_generator.py`.
+- [x] Check Pyodide/WebAssembly (WASM) compatibility for core file operations and imports (e.g. replacing synchronous `urllib` fetch or subprocess calls gracefully if missing).
+- [x] Ensure robust handling of missing files, network timeouts, and malformed SVG structures during instantiation (`Sivo.from_svg()`, `Sivo.from_url()`).
 
 ### Task 1.2: Frontend Error Handling (JavaScript/HTML Templates)
-- [ ] Audit `src/sivo/runtime/templates/echarts.html` and `dashboard_blocks.html` for undefined variable risks.
-- [ ] Review asynchronous operations (e.g., audio playback, fetch API) for missing `.catch()` blocks or uncaught promise rejections.
-- [ ] Identify and fix potential memory leaks (e.g., uncleared `setInterval`, uncancelled `requestAnimationFrame`, or dangling event listeners during view transitions/drilldowns).
-- [ ] Check for race conditions in asynchronous data binding (API polling, WebSocket live bindings).
+- [x] Audit `src/sivo/runtime/templates/echarts.html` and `dashboard_blocks.html` for undefined variable risks.
+- [x] Review asynchronous operations (e.g., audio playback, fetch API) for missing `.catch()` blocks or uncaught promise rejections.
+- [x] Identify and fix potential memory leaks (e.g., uncleared `setInterval`, uncancelled `requestAnimationFrame`, or dangling event listeners during view transitions/drilldowns).
+- [x] Check for race conditions in asynchronous data binding (API polling, WebSocket live bindings).
 
 ### Task 1.3: Security & Sanitization (XSS, XXE, SSRF, Path Traversal)
-- [ ] Verify `DOMPurify.sanitize()` is consistently applied to all user-provided inputs rendered in the DOM (e.g., tooltips, injected HTML panels, `callback_payload` data).
-- [ ] Audit dynamic SVG string handling for injection vulnerabilities before reaching ECharts or the DOM.
-- [ ] Inspect `src/sivo/svg/parser.py` (and related files) to confirm `lxml` is configured to prevent XXE (XML External Entity) attacks (e.g., `resolve_entities=False`, `no_network=True`).
-- [ ] Audit `Sivo.fetch_image_base64` and any URL fetching functions for Server-Side Request Forgery (SSRF) vulnerabilities (e.g. attempting to fetch internal network IPs).
-- [ ] Ensure file paths passed to `from_svg()` or `embed_svg()` are protected against Path Traversal vulnerabilities (`../`).
-- [ ] Audit CSS injection endpoints (like `panel_css`) for possible injection attacks or layout-breaking code.
-- [ ] Confirm that generated HTML bundles apply a strict Content Security Policy (CSP) where applicable to mitigate execution of unauthorized scripts.
-- [ ] Ensure API keys (e.g., `geocode_api_key`) and sensitive configurations are securely handled and never accidentally exposed in client-side bundles unless explicitly designed for public access.
+- [x] Verify `DOMPurify.sanitize()` is consistently applied to all user-provided inputs rendered in the DOM (e.g., tooltips, injected HTML panels, `callback_payload` data).
+- [x] Audit dynamic SVG string handling for injection vulnerabilities before reaching ECharts or the DOM.
+- [x] Inspect `src/sivo/svg/parser.py` (and related files) to confirm `lxml` is configured to prevent XXE (XML External Entity) attacks (e.g., `resolve_entities=False`, `no_network=True`).
+- [x] Audit `Sivo.fetch_image_base64` and any URL fetching functions for Server-Side Request Forgery (SSRF) vulnerabilities (e.g. attempting to fetch internal network IPs).
+- [x] Ensure file paths passed to `from_svg()` or `embed_svg()` are protected against Path Traversal vulnerabilities (`../`).
+- [x] Audit CSS injection endpoints (like `panel_css`) for possible injection attacks or layout-breaking code.
+- [x] Confirm that generated HTML bundles apply a strict Content Security Policy (CSP) where applicable to mitigate execution of unauthorized scripts.
+- [x] Ensure API keys (e.g., `geocode_api_key`) and sensitive configurations are securely handled and never accidentally exposed in client-side bundles unless explicitly designed for public access.
 
 ### Task 1.4: CLI & Local Server Security
 - [ ] Audit the `sivo annotate` Python HTTP server (`src/sivo/cli/`) to ensure it strictly restricts file serving to the designated workspace and prevents arbitrary local file read/write access.

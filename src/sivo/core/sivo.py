@@ -24,11 +24,23 @@ class Sivo:
 
         # SSRF Protection: Block known internal/local IP spaces and localhost
         parsed_url = urlparse(url)
+        if parsed_url.scheme not in ['http', 'https']:
+            raise ValueError(f"SSRF Protection: Invalid URL scheme '{parsed_url.scheme}'. Only http and https are allowed.")
+
         hostname = parsed_url.hostname
         if hostname:
             hostname = hostname.lower()
-            if hostname in ['localhost', '127.0.0.1', '0.0.0.0'] or hostname.startswith('10.') or hostname.startswith('192.168.') or (hostname.startswith('172.') and 16 <= int(hostname.split('.')[1]) <= 31):
+            # Simple heuristic blocklist for common SSRF targets
+            if hostname in ['localhost', '127.0.0.1', '0.0.0.0'] or hostname.startswith('10.') or hostname.startswith('192.168.'):
                 raise ValueError(f"SSRF Protection: Fetching images from local/internal network ({hostname}) is forbidden.")
+
+            # More careful check for 172.16.x.x - 172.31.x.x
+            if hostname.startswith('172.'):
+                parts = hostname.split('.')
+                if len(parts) >= 2 and parts[1].isdigit():
+                    octet = int(parts[1])
+                    if 16 <= octet <= 31:
+                        raise ValueError(f"SSRF Protection: Fetching images from local/internal network ({hostname}) is forbidden.")
 
         # Try to guess mime type from URL, default to jpeg
         mime_type, _ = mimetypes.guess_type(url)

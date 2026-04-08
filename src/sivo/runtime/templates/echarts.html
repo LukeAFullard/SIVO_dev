@@ -4635,12 +4635,16 @@
                     return;
                 }
 
-                // Update dynamic CSS
+                // Update dynamic CSS safely
                 var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
                 if (dynamicStyleEl) {
                     var cssContent = '';
-                    if (window.sivoGlobalPanelCSS) cssContent += window.sivoGlobalPanelCSS + '\n';
-                    if (elementCss) cssContent += elementCss + '\n';
+                    // Basic sanitization: remove </style> or HTML closing tags to prevent breaking out of the style block
+                    function sanitizeCSS(cssStr) {
+                        return cssStr.replace(/<\/style>/gi, '').replace(/</g, '\\3c ').replace(/>/g, '\\3e ');
+                    }
+                    if (window.sivoGlobalPanelCSS) cssContent += sanitizeCSS(window.sivoGlobalPanelCSS) + '\n';
+                    if (elementCss) cssContent += sanitizeCSS(elementCss) + '\n';
                     dynamicStyleEl.innerHTML = cssContent;
                 }
 
@@ -6086,7 +6090,7 @@ function tourNext() {
                     var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
 
                     if (results.length === 0) {
-                        searchResults.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>') : '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                        searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
                         searchResults.style.display = 'block';
                         return;
                     }
@@ -6095,7 +6099,12 @@ function tourNext() {
                     results.forEach(function(item) {
                         var el = document.createElement('div');
                         el.className = 'sivo-search-result-item';
-                        el.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(`<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`) : `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
+
+                        // We sanitize the text variables only, or use DOMPurify if available
+                        var titleHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.title) : item.title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var subtitleHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.subtitle) : item.subtitle.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                        el.innerHTML = `<div class="sivo-search-result-title">${titleHtml}</div><div class="sivo-search-result-subtitle">${subtitleHtml}</div>`;
 
                         el.addEventListener('mousedown', function(e) {
                             e.preventDefault(); // Prevent input blur
@@ -6250,7 +6259,7 @@ function tourNext() {
                             geocodeSpinner.style.display = 'none';
 
                             if (!data || data.length === 0) {
-                                geocodeResults.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>') : '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                                geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
                                 geocodeResults.style.display = 'block';
                                 return;
                             }
@@ -6274,7 +6283,8 @@ function tourNext() {
                             resultsArr.forEach(function(item) {
                                 var el = document.createElement('div');
                                 el.className = 'sivo-search-result-item';
-                                el.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(`<div class="sivo-search-result-title">${item.display_name}</div>`) : `<div class="sivo-search-result-title">${item.display_name}</div>`;
+                                var nameHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.display_name) : item.display_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                                el.innerHTML = `<div class="sivo-search-result-title">${nameHtml}</div>`;
 
                                 el.addEventListener('mousedown', function(e) {
                                     e.preventDefault();
@@ -6288,6 +6298,8 @@ function tourNext() {
                         .catch(error => {
                             console.error('Error fetching geocode results:', error);
                             geocodeSpinner.style.display = 'none';
+                            geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle" style="color: red;">Error fetching results</span></div>';
+                            geocodeResults.style.display = 'block';
                         });
                     }, 500);
                 };
@@ -7229,7 +7241,7 @@ function tourNext() {
             }, '*');
 
             // Show success message
-            formEl.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize('<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>') : '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
+            formEl.innerHTML = '<div style="color:green; text-align:center; padding:10px;">Submitted successfully!</div>';
         }
     </script>
 
