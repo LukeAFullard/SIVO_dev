@@ -83,11 +83,15 @@ class Infographic:
 
     @classmethod
     def from_svg(cls, filepath: str) -> "Infographic":
+        if not os.path.exists(filepath):
+            raise FileNotFoundError(f"SVG file not found: {filepath}")
         parser = SVGParser(filepath, is_file=True)
         return cls(parser)
 
     @classmethod
     def from_string(cls, svg_string: str) -> "Infographic":
+        if not svg_string or not isinstance(svg_string, str) or '<svg' not in svg_string.lower():
+            raise ValueError("Invalid SVG string provided.")
         parser = SVGParser(svg_string, is_file=False)
         return cls(parser)
 
@@ -97,8 +101,13 @@ class Infographic:
         Creates an Infographic from a configuration file, dictionary, or ProjectConfig object.
         """
         if isinstance(config, str):
-            with open(config, 'r', encoding='utf-8') as f:
-                data = json.load(f)
+            if not os.path.exists(config):
+                raise FileNotFoundError(f"Config file not found: {config}")
+            try:
+                with open(config, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            except json.JSONDecodeError as e:
+                raise ValueError(f"Invalid JSON in config file: {e}")
             # If config is a file path, base_dir is the directory of that file
             base_dir = os.path.dirname(os.path.abspath(config))
             cfg = ProjectConfig(**data)

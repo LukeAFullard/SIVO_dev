@@ -1,7 +1,10 @@
 import os
 import json
+import logging
 from typing import Dict, Optional
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+logger = logging.getLogger(__name__)
 
 def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
     """Re-structure the views data to format echarts Data and actionsManifest directly for the JS side."""
@@ -17,14 +20,18 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
         mappings = view_obj["mappings"]
 
         for name, mapping in mappings.items():
-            if hasattr(mapping, "model_dump"):
-                mapping_dict = mapping.model_dump()
-            elif hasattr(mapping, "dict"):
-                mapping_dict = mapping.dict()
-            elif isinstance(mapping, dict):
-                mapping_dict = mapping.copy()
-            else:
-                mapping_dict = dict(mapping)
+            try:
+                if hasattr(mapping, "model_dump"):
+                    mapping_dict = mapping.model_dump()
+                elif hasattr(mapping, "dict"):
+                    mapping_dict = mapping.dict()
+                elif isinstance(mapping, dict):
+                    mapping_dict = mapping.copy()
+                else:
+                    mapping_dict = dict(mapping)
+            except Exception as e:
+                logger.warning(f"Failed to parse mapping for {name}: {e}")
+                mapping_dict = {}
 
             data_item = {
                 'name': name,
@@ -43,14 +50,18 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             actions_list = mapping_dict.get('actions', [])
 
             for action in actions_list:
-                if hasattr(action, "model_dump"):
-                    act_dict = action.model_dump()
-                elif hasattr(action, "dict"):
-                    act_dict = action.dict()
-                elif isinstance(action, dict):
-                    act_dict = action.copy()
-                else:
-                    act_dict = dict(action)
+                try:
+                    if hasattr(action, "model_dump"):
+                        act_dict = action.model_dump()
+                    elif hasattr(action, "dict"):
+                        act_dict = action.dict()
+                    elif isinstance(action, dict):
+                        act_dict = action.copy()
+                    else:
+                        act_dict = dict(action)
+                except Exception as e:
+                    logger.warning(f"Failed to parse action {action}: {e}")
+                    continue
 
                 # Check for action_type correctly handling 'url' vs URLAction
                 if "action_type" not in act_dict:
@@ -188,14 +199,18 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
         # We need to pass the raw mappings back so the frontend can access them, e.g. for native svg themes
         safe_mappings = {}
         for m_name, mapping in mappings.items():
-            if hasattr(mapping, "model_dump"):
-                safe_mappings[m_name] = mapping.model_dump()
-            elif hasattr(mapping, "dict"):
-                safe_mappings[m_name] = mapping.dict()
-            elif isinstance(mapping, dict):
-                safe_mappings[m_name] = mapping.copy()
-            else:
-                safe_mappings[m_name] = dict(mapping)
+            try:
+                if hasattr(mapping, "model_dump"):
+                    safe_mappings[m_name] = mapping.model_dump()
+                elif hasattr(mapping, "dict"):
+                    safe_mappings[m_name] = mapping.dict()
+                elif isinstance(mapping, dict):
+                    safe_mappings[m_name] = mapping.copy()
+                else:
+                    safe_mappings[m_name] = dict(mapping)
+            except Exception as e:
+                logger.warning(f"Failed to parse safe mapping for {m_name}: {e}")
+                safe_mappings[m_name] = {}
 
         view_dict = {
             "svg_string": view_obj["svg_string"],

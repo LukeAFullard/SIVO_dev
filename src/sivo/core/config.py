@@ -1,7 +1,8 @@
 from typing import Dict, Optional, Any, List, Union
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 class ElementConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for a single SVG element's interactions and theme."""
     aria_label: Optional[str] = None
     role: Optional[str] = None
@@ -66,6 +67,7 @@ class ElementConfig(BaseModel):
     odometer_format: Optional[str] = None
 
 class DataBindingConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     data: Dict[str, Dict[str, float]]
     key: str
     colors: List[str]
@@ -73,6 +75,7 @@ class DataBindingConfig(BaseModel):
     max_val: float
 
 class TimelineBindingConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     data: Dict[str, Dict[str, Dict[str, float]]]
     key: str
     colors: List[str]
@@ -88,6 +91,7 @@ class TimelineBindingConfig(BaseModel):
     bottom: Union[int, str] = 20
 
 class HexbinConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for hexagonal binning (hexbins)."""
     data: List[Dict[str, Any]] = Field(description="List of aggregated hexbins containing 'coord' and 'value'.")
     hex_size: float = Field(default=15.0, description="Size (radius) of each hexagon.")
@@ -98,6 +102,7 @@ class HexbinConfig(BaseModel):
     stroke_width: float = Field(default=1.0, description="Stroke width for hexagons.")
 
 class DotDensityConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for dot density maps."""
     data: Dict[str, Dict[str, Any]] = Field(description="Mapping of Element IDs to dicts containing 'value', 'coord', 'bbox', and 'd' (path data).")
     dot_size: float = Field(default=3.0, description="Size (radius) of each dot.")
@@ -105,6 +110,7 @@ class DotDensityConfig(BaseModel):
     dots_per_value: float = Field(default=1.0, description="Number of dots to render per unit of value (e.g., 1 dot per 100 people).")
 
 class ConnectionConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     source_id: str
     target_id: str
     label: str = ""
@@ -118,6 +124,7 @@ class ConnectionConfig(BaseModel):
     effect_size: float = 3.0
 
 class LiveBindingConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for native WebSocket/PubSub real-time data updates without Streamlit re-renders."""
     url: str
     topic: str
@@ -126,6 +133,7 @@ class LiveBindingConfig(BaseModel):
     fallback_polling_interval: int = 0
 
 class ApiBindingConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for Live API & Database Connections via polling."""
     url: str = Field(description="The API endpoint to poll for data updates.")
     polling_interval_ms: int = Field(default=5000, description="Interval in milliseconds to poll the API.")
@@ -135,6 +143,7 @@ class ApiBindingConfig(BaseModel):
     data_path: Optional[str] = Field(default=None, description="Optional dot-notation path to extract the relevant data array/object from the response (e.g., 'data.results').")
 
 class ScrollytellingStepConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for a single scrollytelling step."""
     content: str = Field(description="HTML content for the step text")
     zoom_to: Optional[str] = Field(default=None, description="Element ID to zoom to")
@@ -145,6 +154,7 @@ class ScrollytellingStepConfig(BaseModel):
     audio_url: Optional[str] = Field(default=None, description="Optional audio file URL to play automatically when this step is reached")
 
 class TourStepConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for a single guided tour step."""
     content: str = Field(description="HTML content for the tour step tooltip/modal")
     zoom_to: Optional[str] = Field(default=None, description="Element ID to zoom to")
@@ -154,12 +164,14 @@ class TourStepConfig(BaseModel):
     audio_url: Optional[str] = Field(default=None, description="Optional audio file URL to play automatically when this step is reached")
 
 class ScratchoffConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for a scratch-off reveal layer."""
     image_url: Optional[str] = Field(default=None, description="URL to an image to use as the scratch-off layer. If None, color is used.")
     color: str = Field(default="#cccccc", description="Solid color to use as the scratch-off layer if image_url is not provided.")
     brush_size: int = Field(default=40, description="Size of the scratch-off brush.")
 
 class ProportionalSymbolConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for a proportional symbol map."""
     data: Dict[str, Dict[str, Any]] = Field(description="Mapping of Element IDs to dicts containing 'value' and 'coord'.")
     min_size: float = Field(default=10.0, description="Minimum symbol size")
@@ -168,6 +180,7 @@ class ProportionalSymbolConfig(BaseModel):
     is_pulse: bool = Field(default=False, description="If True, renders the symbols as animated, rippling markers.")
 
 class SpikeMapConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for a spike map."""
     data: Dict[str, Dict[str, Any]] = Field(description="Mapping of Element IDs to dicts containing 'value' and 'coord'.")
     max_height: float = Field(default=100.0, description="Maximum spike height")
@@ -175,12 +188,14 @@ class SpikeMapConfig(BaseModel):
     color: str = Field(default="rgba(255, 0, 0, 0.8)", description="Color of the spikes")
 
 class LayerToggleConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for an interactive layer toggle legend."""
     label: str = Field(description="Display label for the legend item")
     element_ids: List[str] = Field(description="List of SVG Element IDs to toggle visibility for")
     default_visible: bool = Field(default=True, description="Initial visibility state")
 
 class ProjectConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     """Configuration for a complete SIVO project."""
     svg_file: str = Field(description="Path to the source SVG file.")
     default_panel_position: str = Field(
