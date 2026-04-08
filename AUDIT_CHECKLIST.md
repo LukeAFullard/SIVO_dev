@@ -6,6 +6,7 @@
 - [ ] Inspect Pydantic models in `src/sivo/core/` for strict type enforcement and missing constraints.
 - [ ] Analyze kwargs handling to ensure malformed data or unexpected types fail gracefully rather than crashing the runtime.
 - [ ] Verify that invalid data structures cannot produce malformed JavaScript inside `src/sivo/runtime/bundle_generator.py`.
+- [ ] Check Pyodide/WebAssembly (WASM) compatibility for core file operations and imports (e.g. replacing synchronous `urllib` fetch or subprocess calls gracefully if missing).
 
 ### Frontend Error Handling (JavaScript/HTML Templates)
 - [ ] Audit `src/sivo/runtime/templates/echarts.html` and `dashboard_blocks.html` for undefined variable risks.
@@ -16,6 +17,7 @@
 - [ ] Verify `DOMPurify.sanitize()` is consistently applied to all user-provided inputs rendered in the DOM (e.g., tooltips, injected HTML panels, `callback_payload` data).
 - [ ] Audit dynamic SVG string handling for injection vulnerabilities before reaching ECharts or the DOM.
 - [ ] Inspect `src/sivo/svg/parser.py` (and related files) to confirm `lxml` is configured to prevent XXE (XML External Entity) attacks (e.g., `resolve_entities=False`, `no_network=True`).
+- [ ] Audit CSS injection endpoints (like `panel_css`) for possible injection attacks or layout-breaking code.
 
 ### State Management & Navigation
 - [ ] Test the robustness of the `viewHistory` history stack in multi-view/drilldown scenarios.
@@ -47,6 +49,7 @@
 - [ ] Check `package.json` (if present) for frontend dependency licenses.
 - [ ] Audit all CDN links in frontend templates (ECharts, DOMPurify, Marked.js, jsPDF, Confetti, Lottie) for commercial viability.
 - [ ] Immediately flag any GPL, AGPL, or other copyleft licenses found in the dependency tree.
+- [ ] Review any GitHub Actions / workflow dependencies for open-source license adherence.
 
 ### Asset Clearances
 - [ ] Inspect SVGs, background images, and audio files in `examples/` and `src/sivo/templates/`.
