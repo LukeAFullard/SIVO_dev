@@ -1,127 +1,151 @@
 from typing import Optional, Literal, Union, Annotated, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 class BaseAction(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     action_type: str
 
 class TooltipAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["tooltip"] = "tooltip"
     content: str = Field(description="HTML content for the tooltip")
     title: Optional[str] = Field(default=None, description="Optional title for the tooltip")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class FootnoteAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["footnote"] = "footnote"
     content: str = Field(description="HTML content explaining provenance or footnotes")
     title: Optional[str] = Field(default="Data Note", description="Optional title for the footnote popover")
 
 class ExplodeAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["explode"] = "explode"
     target_svg: str = Field(description="The path or content of the stylized hex/grid SVG to explode into.")
     duration_ms: int = Field(default=1000, description="Animation duration in milliseconds.")
 
 class URLAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["url"] = "url"
     url: str = Field(description="External URL to navigate to")
     target: Literal["_blank", "_self"] = Field(default="_blank")
 
 class DrillDownAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["drilldown"] = "drilldown"
     target_svg: str = Field(description="Registered view_id from SivoProject OR path to an external secondary SVG file")
     transition: Optional[str] = Field(default=None, description="Optional transition animation name (e.g., 'fade', 'slide-left', 'slide-right', 'page-turn')")
 
 class DrillThroughAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["drill_through"] = "drill_through"
     url: str = Field(description="URL to a deeply detailed sub-dashboard or external page to navigate to")
     target: Literal["_blank", "_self"] = Field(default="_self")
     transition: Optional[str] = Field(default=None, description="Optional transition animation name (e.g., 'fade', 'slide-left', 'slide-right', 'page-turn')")
 
 class CallbackAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["callback"] = "callback"
     event_name: str = Field(description="Event name to send back to Streamlit or backend")
     payload: Optional[dict] = Field(default=None, description="Optional data payload to send")
 
 class HoverCallbackAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["hover_callback"] = "hover_callback"
     event_name: str = Field(description="Event name to send back to Streamlit or backend on hover")
     payload: Optional[dict] = Field(default=None, description="Optional data payload to send")
 
 class VideoAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["video"] = "video"
     video_url: str = Field(description="Embed URL for the video (e.g., YouTube embed URL)")
 
 
 class GalleryAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["gallery"] = "gallery"
     images: list[str] = Field(description="List of image URLs to display in a lightbox gallery")
 
 class AudioAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["audio"] = "audio"
     audio_url: str = Field(description="URL of the audio file to play")
 
 class MarkdownAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["markdown"] = "markdown"
     markdown_text: str = Field(description="Markdown content to render in the info panel")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class FetchAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["fetch"] = "fetch"
     fetch_url: str = Field(description="URL to fetch data from and display in the info panel")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class FormAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["form"] = "form"
     form_fields: list[dict] = Field(description="List of fields (e.g., {'name': 'ticket', 'type': 'text'})")
     submit_event: str = Field(description="Event name to trigger on form submission")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class SocialAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["social"] = "social"
     provider: Literal["instagram", "tiktok", "linkedin", "wikipedia", "website", "twitch", "pinterest", "apple_music", "reddit"] = Field(description="The platform provider or generic type")
     url: str = Field(description="The URL to the post or page")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class DocumentAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["document"] = "document"
     document_url: str = Field(description="URL to the PDF, DOCX, PPTX, or XLSX file")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class MapAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["map"] = "map"
     map_location: str = Field(description="Location query for Google Maps")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class AnalyticsAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["analytics"] = "analytics"
     provider: Literal["google_analytics", "posthog", "plausible"] = Field(description="The analytics provider")
     event_name: str = Field(description="The event name to track")
     payload: Optional[dict] = Field(default=None, description="Optional payload/properties for the event")
 
 class DataSourceAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["datasource"] = "datasource"
     provider: Literal["google_sheets", "airtable", "notion"] = Field(description="The data source provider")
     api_endpoint: str = Field(description="The API endpoint or URL to fetch data from")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ExternalFormAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["external_form"] = "external_form"
     provider: Literal["typeform", "jotform", "hubspot", "google_forms", "surveymonkey", "qualtrics", "calendly"] = Field(description="The external form provider")
     form_url: str = Field(description="The URL of the external form to embed")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class EcommerceAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["ecommerce"] = "ecommerce"
     provider: Literal["stripe", "shopify"] = Field(description="The e-commerce provider")
     checkout_url: str = Field(description="The URL for the checkout or buy button")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class RichMediaAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["rich_media"] = "rich_media"
     provider: Literal["vimeo", "wistia", "spotify", "soundcloud"] = Field(description="The rich media provider")
     media_url: str = Field(description="The URL of the media to embed")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class BIAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["bi"] = "bi"
     provider: Literal["metabase", "tableau", "powerbi"] = Field(description="The Business Intelligence provider")
     dashboard_url: str = Field(description="The URL of the dashboard to embed")
@@ -130,11 +154,13 @@ class BIAction(BaseAction):
 
 
 class ReplitAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["replit"] = "replit"
     repl_url: str = Field(description="The URL of the Repl to embed")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class EchartsAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["echarts"] = "echarts"
     option: dict = Field(description="The Apache ECharts option dictionary to render")
     height: str = Field(default="400px", description="The CSS height for the ECharts container")
@@ -143,11 +169,13 @@ class EchartsAction(BaseAction):
     map_data: Optional[Union[str, dict]] = Field(default=None, description="Optional map data (SVG string or GeoJSON dict) to register.")
 
 class ToggleImageAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["toggle_image"] = "toggle_image"
     target_id: Optional[str] = Field(default=None, description="The ID of the target element to apply the background image to. Defaults to the mapped element.")
     image_urls: list[str] = Field(description="List of image URLs to cycle through.")
 
 class ZoomAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["zoom"] = "zoom"
     center: list[float] = Field(description="The [x, y] center coordinate of the element to zoom to")
     zoom_level: float = Field(default=2.0, description="The ECharts zoom magnification level")
@@ -156,12 +184,14 @@ class ZoomAction(BaseAction):
     zoom_to_size: Optional[str] = Field(default="90%", description="The percentage of the viewport the target bounding box should fill when zoomed")
 
 class A11yAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["a11y"] = "a11y"
     role: str = Field(default="button", description="The ARIA role for the interactive element")
     tabindex: str = Field(default="0", description="The tabindex for keyboard navigation")
     aria_label: str = Field(description="The screen reader accessible label for the element")
 
 class LottieAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["lottie"] = "lottie"
     lottie_url: str = Field(description="URL to the Lottie JSON animation file")
     loop: bool = Field(default=True, description="Whether the animation should loop")
@@ -169,6 +199,7 @@ class LottieAction(BaseAction):
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class CompareAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["compare"] = "compare"
     before_image: str = Field(description="URL of the 'before' image")
     after_image: str = Field(description="URL of the 'after' image")
@@ -177,6 +208,7 @@ class CompareAction(BaseAction):
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ProgressBarAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["progress_bar"] = "progress_bar"
     title: str = Field(description="Title of the progress bar")
     progress: float = Field(description="Progress value between 0 and 100")
@@ -184,11 +216,13 @@ class ProgressBarAction(BaseAction):
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ConfettiAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["confetti"] = "confetti"
     particle_count: int = Field(default=100, description="Number of confetti particles")
     spread: int = Field(default=70, description="Spread of the confetti burst in degrees")
 
 class LoadingAction(BaseAction):
+    model_config = ConfigDict(extra="forbid")
     action_type: Literal["loading"] = "loading"
     trigger: Literal["load", "click"] = Field(default="click", description="When to trigger the loading animation")
     duration_ms: int = Field(default=2000, description="Duration of the loading animation in milliseconds")
@@ -199,6 +233,7 @@ class LoadingAction(BaseAction):
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ThemeOverride(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     color: Optional[str] = None
     hover_color: Optional[str] = None
     hover_image: Optional[str] = None
@@ -225,6 +260,7 @@ class ThemeOverride(BaseModel):
 ActionType = Annotated[Union[ExplodeAction, ConfettiAction, LoadingAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, FootnoteAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction, ToggleImageAction], Field(discriminator='action_type')]
 
 class InteractionMapping(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     id: str
     actions: list[ActionType] = Field(default_factory=list)
     context_menu: Optional[list[dict]] = Field(default=None, description="List of dicts defining context menu items: [{'label': 'Action', 'event': 'my_event'}]")
