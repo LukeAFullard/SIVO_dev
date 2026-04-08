@@ -38,8 +38,8 @@
 ## Pillar 2: Removal of AI/Prototype Artifacts
 
 ### Task 2.1: Leftover Commentary & Metadata
-- [ ] Scan all `.py`, `.js`, and `.html` files for AI-generated conversational text (e.g., "Here is the code," "As an AI model," "TODO: Implement this later").
-- [ ] Search for informal or prototype-level comments (e.g., "Note: We use a heuristic here," "I've added the requested feature").
+- [x] Scan all `.py`, `.js`, and `.html` files for AI-generated conversational text (e.g., "Here is the code," "As an AI model," "TODO: Implement this later").
+- [x] Search for informal or prototype-level comments (e.g., "Note: We use a heuristic here," "I've added the requested feature").
 
 ### Task 2.2: Dead Code & Console Logs
 - [ ] Identify and remove non-error `console.log()`, `console.warn()`, and `console.dir()` statements in frontend code.

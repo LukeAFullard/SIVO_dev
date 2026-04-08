@@ -2638,7 +2638,7 @@
             // ECharts uses Canvas or SVG.
             // If it's SVG renderer, we can apply classes.
             // But since ECharts defaults to canvas, animating individual geo regions via CSS is hard.
-            // Instead, we will use a workaround: ECharts doesn't support CSS animations on canvas paths easily.
+            // ECharts doesn't support CSS animations on canvas paths easily.
             // If an animation is set, we will use setInterval to mutate the ECharts option instead for basic effects,
             // or if it's rendered as SVG (which echarts map allows), we can query the dom.
             // For now, if we want robust canvas animation, we just toggle emphasis state.
@@ -5492,7 +5492,7 @@
                     overlayObj.dom.style.width = bboxPixel.w + 'px';
                     overlayObj.dom.style.height = bboxPixel.h + 'px';
 
-                    // Center within the precise bounding box without transform translation hacks
+                    // Center within the precise bounding box without transform translation
                     overlayObj.dom.style.transform = 'none';
 
                     if (overlayObj.data.scale_with_zoom) {
@@ -6832,8 +6832,8 @@ function tourNext() {
 
         function convertToLogical(x, y) {
             // Because ECharts doesn't provide a perfect public API to convert pixel to logical coordinate
-            // taking into account BOTH pan and zoom for the map series simply, we use a rough heuristic,
-            // or we store the raw mouse pixels and apply the ECharts transform manually.
+            // taking into account BOTH pan and zoom for the map series simply,
+            // we store the raw mouse pixels and apply the ECharts transform manually.
             // A more robust way is to just use ECharts convertFromPixel if geo is used, or store relative to canvas
             // For a simple annotation layer, we will just store raw pixels and apply the getOption().series[0].zoom manually on redraw.
 
