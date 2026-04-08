@@ -26,12 +26,12 @@
 - [x] Ensure API keys (e.g., `geocode_api_key`) and sensitive configurations are securely handled and never accidentally exposed in client-side bundles unless explicitly designed for public access.
 
 ### Task 1.4: CLI & Local Server Security
-- [ ] Audit the `sivo annotate` Python HTTP server (`src/sivo/cli/`) to ensure it strictly restricts file serving to the designated workspace and prevents arbitrary local file read/write access.
-- [ ] Verify the local server binds to `127.0.0.1` by default instead of `0.0.0.0` to prevent unintended local network exposure.
+- [x] Audit the `sivo annotate` Python HTTP server (`src/sivo/cli/`) to ensure it strictly restricts file serving to the designated workspace and prevents arbitrary local file read/write access.
+- [x] Verify the local server binds to `127.0.0.1` by default instead of `0.0.0.0` to prevent unintended local network exposure.
 
 ### Task 1.5: State Management & Navigation
-- [ ] Test the robustness of the `viewHistory` history stack in multi-view/drilldown scenarios.
-- [ ] Ensure pan, zoom, and transform states reset correctly when navigating back to previous views, checking for visual glitches or coordinate offsets.
+- [x] Test the robustness of the `viewHistory` history stack in multi-view/drilldown scenarios.
+- [x] Ensure pan, zoom, and transform states reset correctly when navigating back to previous views, checking for visual glitches or coordinate offsets.
 
 ---
 

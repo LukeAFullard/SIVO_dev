@@ -9,6 +9,19 @@ from urllib.parse import urlparse
 TOOL_HTML_PATH = os.path.join(os.path.dirname(__file__), "annotator.html")
 
 class AnnotatorHandler(http.server.SimpleHTTPRequestHandler):
+    def translate_path(self, path):
+        # Override to prevent path traversal via symlinks or other tricks
+        path = super().translate_path(path)
+
+        # Resolve real paths to counter symlinks
+        real_base = os.path.realpath(os.getcwd())
+        real_path = os.path.realpath(path)
+
+        # Ensure the resolved real path falls strictly within the current working directory
+        if os.path.commonpath([real_base, real_path]) != real_base:
+            return os.devnull # Return a safe, non-existent path
+        return path
+
     def do_GET(self):
         if self.path == '/' or self.path == '/index.html':
             self.send_response(200)
