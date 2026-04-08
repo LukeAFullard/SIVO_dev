@@ -3242,7 +3242,6 @@
                 liveSocket = new WebSocket(liveBinding.url);
 
                 liveSocket.onopen = function(e) {
-                    console.log("[SIVO] Live binding WebSocket connected to", liveBinding.url);
                     if (liveBinding.auth_token) {
                         liveSocket.send(JSON.stringify({ type: 'auth', token: liveBinding.auth_token }));
                     }
@@ -3256,7 +3255,6 @@
                         var msg = JSON.parse(event.data);
                         // Expected format: { element_id: "id1", color: "#ff0000", tooltip: "New data" }
                         if (msg && msg.element_id) {
-                            console.log("[SIVO] Live update received:", msg);
                             // Merge into existing mapped logic dynamically
                             if (!actionsManifest[msg.element_id]) {
                                 actionsManifest[msg.element_id] = { actions: [], theme: {} };
@@ -3284,7 +3282,6 @@
                 };
 
                 liveSocket.onclose = function(event) {
-                    console.warn("[SIVO] Live binding WebSocket closed.", event);
                 };
             }
 
@@ -3294,7 +3291,6 @@
                 window.sivoApiPollingInterval = null;
             }
             if (apiBinding) {
-                console.log("[SIVO] Initializing API binding to poll:", apiBinding.url);
                 window.sivoApiPollingInterval = setInterval(() => {
                     var fetchOptions = {
                         method: apiBinding.method || 'GET',
@@ -3308,7 +3304,6 @@
                     fetch(apiBinding.url, fetchOptions)
                         .then(res => res.json())
                         .then(data => {
-                            console.log("[SIVO] API binding data received:", data);
                             var targetData = data;
                             if (apiBinding.data_path) {
                                 var parts = apiBinding.data_path.split('.');
@@ -3316,7 +3311,6 @@
                                     if (targetData && targetData[parts[i]] !== undefined) {
                                         targetData = targetData[parts[i]];
                                     } else {
-                                        console.warn("[SIVO] apiBinding.data_path not found in response:", apiBinding.data_path);
                                         return;
                                     }
                                 }
@@ -3437,11 +3431,9 @@
                             }
 
                             if (hasChanges) {
-                                console.log("[SIVO] API binding detected changes, updating chart.");
                                 var updatedOption = getBaseOption(viewId);
                                 myChart.setOption(updatedOption, false);
                             } else {
-                                console.log("[SIVO] API binding data fetched, but no visual changes detected.");
                             }
                         })
                         .catch(err => console.error("[SIVO] API binding fetch error:", err));
@@ -3996,7 +3988,6 @@
                             }
                         }
                     } else if (action.action_type === 'explode') {
-                        console.log('Exploding view to:', action.target_svg);
                         if (viewsData[action.target_svg]) {
                             // First, let's gracefully morph existing paths if possible, then swap
                             // ECharts Universal Transition handles data-level morphing, but SIVO map morphing
@@ -4010,7 +4001,6 @@
                                 if (loadingIndicator) loadingIndicator.style.display = 'none';
                             }, action.duration_ms || 1000);
                         } else {
-                            console.warn("Target SVG for explosion not found in viewsData: " + action.target_svg);
                         }
                     } else if (action.action_type === 'drilldown') {
                         // Handle custom transition if defined
@@ -4020,11 +4010,9 @@
 
                         // Check if it's an internal multi-view drill down
                         if (viewsData[action.target_svg]) {
-                            console.log('Switching view to:', action.target_svg);
                             renderView(action.target_svg, false);
                         } else {
                             // Fallback to legacy external fetch
-                            console.log('Fetching external drilldown:', action.target_svg);
                             var loadingIndicator = document.getElementById('sivo-global-loading');
                             if (loadingIndicator) loadingIndicator.style.display = 'flex';
 
@@ -4620,7 +4608,6 @@
                             }
                         }
                     } else if (action.action_type === 'callback') {
-                        console.log('Triggering callback:', action.event_name, action.payload);
                         // Post message to parent window (e.g. Streamlit iframe wrapper)
                         window.parent.postMessage({
                             type: 'sivo_click',
@@ -4793,7 +4780,6 @@
                                                 nestedChart.setOption(chartData.option);
                                             };
                                             img.onerror = function() {
-                                                console.warn("SIVO: Failed to load Word Cloud mask image:", imgUrl);
                                                 nestedChart.setOption(chartData.option);
                                             };
                                             img.src = imgUrl;
@@ -5689,7 +5675,7 @@
                         var dummyAudio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
                         dummyAudio.play().then(() => {
                             dummyAudio.pause();
-                        }).catch(e => console.log("Dummy audio unlock skipped", e));
+                        }).catch(() => {});
 
                         enableBtn.innerText = 'Audio Enabled ✓';
                         enableBtn.style.background = '#10b981'; // Green
@@ -6400,7 +6386,7 @@ function tourNext() {
                     title: view.title || 'Interactive Infographic',
                     text: view.subtitle || 'Check out this interactive graphic',
                     url: window.location.href,
-                }).catch((error) => console.log('Error sharing', error));
+                }).catch(() => {});
             }
         }
 
@@ -7249,8 +7235,6 @@ function tourNext() {
             formData.forEach(function(value, key){
                 payload[key] = value;
             });
-
-            console.log('Form submitted:', payload);
             window.parent.postMessage({
                 type: 'sivo_click',
                 payload: {

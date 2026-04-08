@@ -1,10 +1,9 @@
 import streamlit as st
 from typing import Optional, Any
-import html
 
 from sivo.core.sivo import Sivo
 
-from typing import Optional, Any, Dict
+from typing import Dict
 
 def sivo_component(
     sivo_app: Sivo,

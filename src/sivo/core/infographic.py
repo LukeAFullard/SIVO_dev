@@ -1,11 +1,10 @@
 import os
 import json
 from typing import Dict, Optional, Union, List
-from pydantic import BaseModel
 
 from ..svg.parser import SVGParser
-from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, ThemeOverride, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ToggleImageAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction, LoadingAction
-from .config import ProjectConfig, ElementConfig, DataBindingConfig, TimelineBindingConfig
+from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ToggleImageAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction, LoadingAction
+from .config import ProjectConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
@@ -657,7 +656,6 @@ class Infographic:
 
     def embed_svg(self, element_id: str, filepath_or_string: str, is_file: bool = False, preserve_aspect_ratio: bool = True, keep_target: bool = False, scale_multiplier: float = 1.0):
         import lxml.etree as etree
-        import os
 
         if is_file:
             # Prevent basic path traversal when embedding SVGs dynamically
@@ -905,13 +903,7 @@ class Infographic:
             return
 
         # Hexagon grid math (pointy-topped)
-        # width = sqrt(3) * size
-        # height = 2 * size
-        # horizontal spacing = width
-        # vertical spacing = 3/4 * height = 1.5 * size
 
-        w = math.sqrt(3) * hex_size
-        h = 2 * hex_size
 
         bins = {}
 
@@ -1682,21 +1674,21 @@ class Infographic:
             cy = abs_top + abs_height / 2
             r = min(abs_width, abs_height) / 2
             shape_attrs.update({"cx": str(cx), "cy": str(cy), "r": str(r)})
-            bg = etree.SubElement(group, "circle", shape_attrs)
+            etree.SubElement(group, "circle", shape_attrs)
         elif shape == "ellipse":
             cx = abs_left + abs_width / 2
             cy = abs_top + abs_height / 2
             rx_val = abs_width / 2
             ry_val = abs_height / 2
             shape_attrs.update({"cx": str(cx), "cy": str(cy), "rx": str(rx_val), "ry": str(ry_val)})
-            bg = etree.SubElement(group, "ellipse", shape_attrs)
+            etree.SubElement(group, "ellipse", shape_attrs)
         elif shape == "pill":
             rx_val = abs_height / 2
             shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx_val), "ry": str(rx_val)})
-            bg = etree.SubElement(group, "rect", shape_attrs)
+            etree.SubElement(group, "rect", shape_attrs)
         else: # default to rect
             shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx)})
-            bg = etree.SubElement(group, "rect", shape_attrs)
+            etree.SubElement(group, "rect", shape_attrs)
 
         text_group = group
 

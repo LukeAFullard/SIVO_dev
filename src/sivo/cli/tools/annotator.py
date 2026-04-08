@@ -2,8 +2,6 @@ import http.server
 import socketserver
 import webbrowser
 import os
-import threading
-from urllib.parse import urlparse
 
 # Path to the HTML tool
 TOOL_HTML_PATH = os.path.join(os.path.dirname(__file__), "annotator.html")

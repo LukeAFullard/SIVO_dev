@@ -1,6 +1,6 @@
 import re
 from lxml import etree
-from typing import List, Dict, Any, Tuple, Optional
+from typing import List, Optional
 
 def parse_coord(coord_str: Optional[str]) -> float:
     if not coord_str:

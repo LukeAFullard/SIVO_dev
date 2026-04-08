@@ -7,5 +7,3 @@ import { marked } from 'marked';
 window.echarts = echarts;
 window.DOMPurify = DOMPurify;
 window.marked = marked;
-
-console.log("[SIVO] Local dependencies (ECharts, DOMPurify, Marked) initialized and bundled via esbuild.");
