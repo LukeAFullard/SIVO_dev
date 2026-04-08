@@ -7,17 +7,22 @@
 - [ ] Analyze kwargs handling to ensure malformed data or unexpected types fail gracefully rather than crashing the runtime.
 - [ ] Verify that invalid data structures cannot produce malformed JavaScript inside `src/sivo/runtime/bundle_generator.py`.
 - [ ] Check Pyodide/WebAssembly (WASM) compatibility for core file operations and imports (e.g. replacing synchronous `urllib` fetch or subprocess calls gracefully if missing).
+- [ ] Ensure robust handling of missing files, network timeouts, and malformed SVG structures during instantiation (`Sivo.from_svg()`, `Sivo.from_url()`).
 
 ### Frontend Error Handling (JavaScript/HTML Templates)
 - [ ] Audit `src/sivo/runtime/templates/echarts.html` and `dashboard_blocks.html` for undefined variable risks.
 - [ ] Review asynchronous operations (e.g., audio playback, fetch API) for missing `.catch()` blocks or uncaught promise rejections.
 - [ ] Identify and fix potential memory leaks (e.g., uncleared `setInterval`, uncancelled `requestAnimationFrame`, or dangling event listeners during view transitions/drilldowns).
+- [ ] Check for race conditions in asynchronous data binding (API polling, WebSocket live bindings).
 
-### Security & Sanitization (XSS & XXE)
+### Security & Sanitization (XSS, XXE, SSRF, Path Traversal)
 - [ ] Verify `DOMPurify.sanitize()` is consistently applied to all user-provided inputs rendered in the DOM (e.g., tooltips, injected HTML panels, `callback_payload` data).
 - [ ] Audit dynamic SVG string handling for injection vulnerabilities before reaching ECharts or the DOM.
 - [ ] Inspect `src/sivo/svg/parser.py` (and related files) to confirm `lxml` is configured to prevent XXE (XML External Entity) attacks (e.g., `resolve_entities=False`, `no_network=True`).
+- [ ] Audit `Sivo.fetch_image_base64` and any URL fetching functions for Server-Side Request Forgery (SSRF) vulnerabilities (e.g. attempting to fetch internal network IPs).
+- [ ] Ensure file paths passed to `from_svg()` or `embed_svg()` are protected against Path Traversal vulnerabilities (`../`).
 - [ ] Audit CSS injection endpoints (like `panel_css`) for possible injection attacks or layout-breaking code.
+- [ ] Confirm that generated HTML bundles apply a strict Content Security Policy (CSP) where applicable to mitigate execution of unauthorized scripts.
 
 ### State Management & Navigation
 - [ ] Test the robustness of the `viewHistory` history stack in multi-view/drilldown scenarios.
@@ -39,6 +44,7 @@
 ### API Polish & Documentation
 - [ ] Review all Python docstrings to ensure a professional, cohesive library tone.
 - [ ] Rewrite or remove docstrings that read like isolated snippets or chat session outputs.
+- [ ] Standardize logging practices across the Python package (use `logging` module instead of naked `print` statements).
 
 ---
 
@@ -62,9 +68,29 @@
 
 ---
 
+## Pillar 4: Production Readiness & Consumer Product Standards
+
+### Performance & Scalability
+- [ ] Profile SVG parsing (`SVGParser`) and normalization (`SVGNormalizer`) for large, complex paths. Ensure adequate path simplification logic is available/applied.
+- [ ] Audit ECharts/ZRender configuration for performance bottlenecks when rendering tens of thousands of dynamic shapes (e.g., dot density maps, hexbins).
+- [ ] Review JavaScript bundling (`bundle_generator.py`) to ensure assets are correctly minified and optimized for production delivery.
+
+### Testing & CI/CD
+- [ ] Verify Unit Test coverage over the core API (`sivo.py`, `infographic.py`, `dashboard.py`) and catch edge cases.
+- [ ] Verify End-to-End (E2E) Playwright tests exist for critical user journeys in the frontend interactives.
+- [ ] Confirm CI/CD pipelines (e.g., GitHub Actions) enforce linting, type-checking (MyPy), and test execution before merge.
+
+### User Experience (UX) & Accessibility (A11y)
+- [ ] Test interactive maps across modern browsers (Chrome, Safari, Firefox, Edge) and mobile environments (iOS Safari, Android Chrome) for consistent behavior.
+- [ ] Verify keyboard navigation (tabbing, arrow keys for presentation mode) functions flawlessly and doesn't get trapped.
+- [ ] Confirm ARIA roles and labels are correctly injected into the generated `a11y-container` for screen-reader support.
+
+---
+
 ## Final Output Generation
 
 - [ ] Compile **Critical Bugs/Vulnerabilities** section (Issues requiring immediate fixes).
 - [ ] Compile **Code Smells & Refactoring Opportunities** section (Suggestions for robustness and performance).
 - [ ] Compile **AI Artifacts & Dead Code Removed** section (Specific files and lines cleaned up).
 - [ ] Compile **License & Dependency Audit Report** section (Final "Go/No-Go" on commercial viability).
+- [ ] Compile **Production Readiness Assessment** section (Confidence level for consumer product launch).
