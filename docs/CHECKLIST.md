@@ -12,7 +12,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 
 | Status | Task ID | Documentation Component | Description / Requirements |
 |---|---|---|---|
-| [ ] | H-01 | `docs/README.md` (Project Hub) | High-level value prop, installation, and "Quick Start" visual gallery. |
+| [x] | H-01 | `docs/README.md` (Project Hub) | High-level value prop, installation, and "Quick Start" visual gallery. |
 | [ ] | H-02 | `docs/tutorials/getting-started.md` | Step-by-step guide from pip install to rendering your first interactive SVG. |
 | [ ] | H-03 | `docs/guides/core-concepts.md` | Explaining the "Bridge": How Python objects become interactive frontend elements. |
 | [ ] | H-04 | `docs/guides/styling-and-layout.md` | Comprehensive guide on SVG attributes, CSS injection, and layout containers. |
