@@ -1,6 +1,10 @@
 import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'src')))
 from sivo import Sivo
 from playwright.sync_api import sync_playwright
+import tempfile
 
 def test_long_text_autoshrink():
     # Setup test file
@@ -24,20 +28,24 @@ def test_long_text_autoshrink():
         left="10%", top="45%", width="80%", height="50%", font_size="10%", font_weight="normal", color="#64748b"
     )
 
-    output_path = "/app/test_autoshrink.html"
-    app.to_html(output_path)
+    with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as f:
+        output_path = f.name
 
-    # Run playwright - inside a pytest environment, playwright-pytest handles pages better
-    # But since this is a unit test just asserting HTML generation, we will just assert the HTML.
+    try:
+        app.to_html(output_path)
 
-    assert os.path.exists(output_path)
-    with open(output_path, "r") as f:
-        html_content = f.read()
+        # Run playwright - inside a pytest environment, playwright-pytest handles pages better
+        # But since this is a unit test just asserting HTML generation, we will just assert the HTML.
 
-    # Assert that the text wrapping was applied (meaning the string was injected into the JS payload)
-    # The SVG payload is serialized in the python `infographic.to_html()`.
-    # Just asserting it didn't crash is good enough for our backend unit test of text replacement logic.
-    pass
+        assert os.path.exists(output_path)
+        with open(output_path, "r") as f:
+            html_content = f.read()
+
+        # Assert that the text wrapping was applied (meaning the string was injected into the JS payload)
+        # The SVG payload is serialized in the python `infographic.to_html()`.
+        # Just asserting it didn't crash is good enough for our backend unit test of text replacement logic.
+    finally:
+        os.remove(output_path)
 
 if __name__ == "__main__":
     test_long_text_autoshrink()

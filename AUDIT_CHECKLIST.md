@@ -81,10 +81,10 @@
 - [x] Review JavaScript bundling (`bundle_generator.py`) to ensure assets are correctly minified and optimized for production delivery.
 
 ### Task 4.2: Testing & CI/CD
-- [ ] Verify Unit Test coverage over the core API (`sivo.py`, `infographic.py`, `dashboard.py`) and catch edge cases.
-- [ ] Verify End-to-End (E2E) Playwright tests exist for critical user journeys in the frontend interactives.
-- [ ] Confirm CI/CD pipelines (e.g., GitHub Actions) enforce linting (Flake8/Ruff), type-checking (MyPy), and test execution before merge.
-- [ ] Implement automated vulnerability scanning (e.g., `pip-audit`, `npm audit`, Dependabot) in the repository.
+- [x] Verify Unit Test coverage over the core API (`sivo.py`, `infographic.py`, `dashboard.py`) and catch edge cases.
+- [x] Verify End-to-End (E2E) Playwright tests exist for critical user journeys in the frontend interactives.
+- [x] Confirm CI/CD pipelines (e.g., GitHub Actions) enforce linting (Flake8/Ruff), type-checking (MyPy), and test execution before merge.
+- [x] Implement automated vulnerability scanning (e.g., `pip-audit`, `npm audit`, Dependabot) in the repository.
 
 ### Task 4.3: Developer Experience & Governance
 - [ ] Verify the presence of a robust `CONTRIBUTING.md` outlining PR workflows, code standards, and branch policies.
