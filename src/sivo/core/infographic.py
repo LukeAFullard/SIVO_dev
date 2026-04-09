@@ -87,7 +87,7 @@ class Infographic:
             self._element_lookup[elem['name']] = elem
 
     @classmethod
-    def from_svg(cls, filepath: str) -> "Infographic":
+    def from_svg(cls, filepath: str, simplify_tolerance: Optional[float] = None) -> "Infographic":
         import os
         # Prevent basic path traversal when loading SVGs dynamically
         abs_path = os.path.abspath(filepath)
@@ -95,14 +95,14 @@ class Infographic:
             raise ValueError(f"Path Traversal detected in filepath: {filepath}")
         if not os.path.exists(abs_path):
             raise FileNotFoundError(f"SVG file not found: {abs_path}")
-        parser = SVGParser(abs_path, is_file=True)
+        parser = SVGParser(abs_path, is_file=True, simplify_tolerance=simplify_tolerance)
         return cls(parser)
 
     @classmethod
-    def from_string(cls, svg_string: str) -> "Infographic":
+    def from_string(cls, svg_string: str, simplify_tolerance: Optional[float] = None) -> "Infographic":
         if not svg_string or not isinstance(svg_string, str) or '<svg' not in svg_string.lower():
             raise ValueError("Invalid SVG string provided.")
-        parser = SVGParser(svg_string, is_file=False)
+        parser = SVGParser(svg_string, is_file=False, simplify_tolerance=simplify_tolerance)
         return cls(parser)
 
     @classmethod

@@ -349,8 +349,8 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
             bundled_js_content = f.read()
 
     html_output = template.render(
-        views_data=json.dumps(formatted_views).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
-        initial_view=json.dumps(initial_view).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
+        views_data=json.dumps(formatted_views, separators=(',', ':')).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
+        initial_view=json.dumps(initial_view, separators=(',', ':')).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
         custom_css=custom_css,
         custom_js=custom_js,
         build_js=build_js,

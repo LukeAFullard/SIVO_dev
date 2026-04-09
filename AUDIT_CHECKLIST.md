@@ -76,9 +76,9 @@
 ## Pillar 4: Production Readiness & Consumer Product Standards
 
 ### Task 4.1: Performance & Scalability
-- [ ] Profile SVG parsing (`SVGParser`) and normalization (`SVGNormalizer`) for large, complex paths. Ensure adequate path simplification logic is available/applied.
-- [ ] Audit ECharts/ZRender configuration for performance bottlenecks when rendering tens of thousands of dynamic shapes (e.g., dot density maps, hexbins).
-- [ ] Review JavaScript bundling (`bundle_generator.py`) to ensure assets are correctly minified and optimized for production delivery.
+- [x] Profile SVG parsing (`SVGParser`) and normalization (`SVGNormalizer`) for large, complex paths. Ensure adequate path simplification logic is available/applied.
+- [x] Audit ECharts/ZRender configuration for performance bottlenecks when rendering tens of thousands of dynamic shapes (e.g., dot density maps, hexbins).
+- [x] Review JavaScript bundling (`bundle_generator.py`) to ensure assets are correctly minified and optimized for production delivery.
 
 ### Task 4.2: Testing & CI/CD
 - [ ] Verify Unit Test coverage over the core API (`sivo.py`, `infographic.py`, `dashboard.py`) and catch edge cases.

@@ -26,7 +26,7 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
     deps = determine_dependencies(formatted_views)
 
     html_output = template_obj.render(
-        views_data=json.dumps(formatted_views).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
+        views_data=json.dumps(formatted_views, separators=(',', ':')).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
         layout_order=layout_order,
         html_blocks=html_blocks,
         details_panels=details_panels,

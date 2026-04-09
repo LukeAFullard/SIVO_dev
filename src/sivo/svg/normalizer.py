@@ -4,10 +4,11 @@ import re
 import collections
 
 class SVGNormalizer:
-    def __init__(self, tree: etree._ElementTree):
+    def __init__(self, tree: etree._ElementTree, simplify_tolerance: float = None):
         self.tree = tree
         self.root = self.tree.getroot()
         self.namespaces = {'svg': 'http://www.w3.org/2000/svg', 'xlink': 'http://www.w3.org/1999/xlink'}
+        self.simplify_tolerance = simplify_tolerance
 
         if None in self.root.nsmap:
             self.namespaces['svg'] = self.root.nsmap[None]
@@ -19,6 +20,8 @@ class SVGNormalizer:
         Applies a series of normalization steps to the SVG.
         """
         self.resolve_use_tags()
+        if self.simplify_tolerance is not None and self.simplify_tolerance > 0:
+            self.simplify_paths(self.simplify_tolerance)
         # Add more normalization steps here (e.g. flattening transforms, converting coordinates to absolute)
 
     def _parse_coord(self, coord_str: str) -> str:
@@ -32,6 +35,128 @@ class SVGNormalizer:
         if match:
             return match.group(0)
         return '0'
+
+    def simplify_paths(self, tolerance: float):
+        """
+        Simplifies SVG paths by reducing the number of points in straight line segments.
+        This uses a basic distance-based simplification to reduce file size and rendering overhead
+        for very dense SVG maps, while preserving the overall shape.
+        Note: This is a basic implementation that primarily targets L and polygon/polyline points.
+        True bezier curve simplification is extremely complex and outside the scope without external dependencies,
+        but reducing point density for GIS-exported SVGs (which are mostly lines) is highly effective.
+        """
+        def get_sq_seg_dist(p, p1, p2):
+            x = p1[0]
+            y = p1[1]
+            dx = p2[0] - x
+            dy = p2[1] - y
+
+            if dx != 0 or dy != 0:
+                t = ((p[0] - x) * dx + (p[1] - y) * dy) / (dx * dx + dy * dy)
+                if t > 1:
+                    x = p2[0]
+                    y = p2[1]
+                elif t > 0:
+                    x += dx * t
+                    y += dy * t
+
+            dx = p[0] - x
+            dy = p[1] - y
+
+            return dx * dx + dy * dy
+
+        def simplify_dp_step(points, first, last, sq_tolerance, simplified):
+            max_sq_dist = sq_tolerance
+            index = -1
+
+            for i in range(first + 1, last):
+                sq_dist = get_sq_seg_dist(points[i], points[first], points[last])
+                if sq_dist > max_sq_dist:
+                    index = i
+                    max_sq_dist = sq_dist
+
+            if max_sq_dist > sq_tolerance:
+                if index - first > 1:
+                    simplify_dp_step(points, first, index, sq_tolerance, simplified)
+                simplified.append(points[index])
+                if last - index > 1:
+                    simplify_dp_step(points, index, last, sq_tolerance, simplified)
+
+        def simplify_points(points, tol):
+            if len(points) <= 2:
+                return points
+            sq_tolerance = tol * tol
+            simplified = [points[0]]
+            simplify_dp_step(points, 0, len(points) - 1, sq_tolerance, simplified)
+            simplified.append(points[-1])
+            return simplified
+
+        # Process polylines and polygons which are purely points
+        for tag in ['polyline', 'polygon']:
+            for elem in self.root.xpath(f'.//svg:{tag}', namespaces=self.namespaces):
+                points_str = elem.get('points', '')
+                if not points_str: continue
+                # Parse points
+                raw_coords = re.findall(r'[+-]?(?:\d+(?:\.\d*)?|\.\d+)', points_str)
+                if len(raw_coords) < 4: continue
+
+                points = []
+                for i in range(0, len(raw_coords)-1, 2):
+                    points.append((float(raw_coords[i]), float(raw_coords[i+1])))
+
+                if points:
+                    simplified = simplify_points(points, tolerance)
+                    new_points_str = " ".join([f"{p[0]},{p[1]}" for p in simplified])
+                    elem.set('points', new_points_str)
+
+        # Basic path simplification (only contiguous absolute L segments, which GIS tools generate heavily)
+        for elem in self.root.xpath('.//svg:path', namespaces=self.namespaces):
+            d = elem.get('d', '')
+            if not d: continue
+
+            # This regex splits the path commands and arguments
+            tokens = re.findall(r'([a-zA-Z])|([+-]?(?:\d+(?:\.\d*)?|\.\d+))', d)
+
+            new_d = []
+            current_command = None
+            current_points = []
+
+            def flush_points():
+                if current_points:
+                    if current_command == 'L' and len(current_points) > 2:
+                        simplified = simplify_points(current_points, tolerance)
+                        for p in simplified:
+                            new_d.append(f"{p[0]} {p[1]}")
+                    else:
+                        for p in current_points:
+                            new_d.append(f"{p[0]} {p[1]}")
+                    current_points.clear()
+
+            # We will track current absolute position to convert relative 'l' to absolute 'L' for simplification
+            # or just skip 'l'. Since converting relative to absolute correctly for the whole path is complex
+            # and requires full state machine (tracking M, m, C, c, etc.), we'll only simplify absolute 'L' commands.
+            # If a user provides relative paths, they won't be simplified.
+
+            i = 0
+            while i < len(tokens):
+                cmd, val = tokens[i]
+                if cmd:
+                    flush_points()
+                    new_d.append(cmd)
+                    current_command = cmd
+                elif val:
+                    # Look ahead for next value to form a pair
+                    if i + 1 < len(tokens) and tokens[i+1][1]:
+                        current_points.append((float(val), float(tokens[i+1][1])))
+                        i += 1
+                    else:
+                        # Single value (like for H or V), flush existing and append
+                        flush_points()
+                        new_d.append(val)
+                i += 1
+            flush_points()
+
+            elem.set('d', " ".join(new_d))
 
     def resolve_use_tags(self):
         """
