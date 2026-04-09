@@ -56,8 +56,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | Status | Task ID | Documentation Component | Description / Requirements |
 |---|---|---|---|
 | [x] | T-01 | `docs/api/sivo_class.md` | Comprehensive API reference for the main `Sivo` class (`src/sivo/core/sivo.py`). |
-| [ ] | T-01a| `docs/api/actions_reference.md` | Complete reference for all action models (e.g., TooltipAction, VideoAction) in `src/sivo/core/actions.py`. |
-| [ ] | T-01b| `docs/api/config_reference.md` | Complete reference for all configuration models (e.g., HexbinConfig, LiveBindingConfig) in `src/sivo/core/config.py`. |
+| [x] | T-01a| `docs/api/actions_reference.md` | Complete reference for all action models (e.g., TooltipAction, VideoAction) in `src/sivo/core/actions.py`. |
+| [x] | T-01b| `docs/api/config_reference.md` | Complete reference for all configuration models (e.g., HexbinConfig, LiveBindingConfig) in `src/sivo/core/config.py`. |
 | [ ] | T-01c| `docs/api/dashboard_project_api.md` | API reference for `SivoDashboard` and `SivoProject` classes. |
 | [ ] | T-01d| `docs/api/infographic_api.md` | API reference for the `Infographic` class (`src/sivo/core/infographic.py`). |
 | [ ] | T-01e| `docs/api/core_models.md` | Reference for every class in src/sivo/core/. |
