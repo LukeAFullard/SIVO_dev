@@ -1,3 +1,8 @@
+---
+Last Updated: 2026-04-09
+SIVO Version: 0.1.0
+---
+
 # SIVO Documentation Progress Checklist
 
 Below is the detailed checklist to track the development of the SIVO documentation suite.
@@ -15,7 +20,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [ ] | H-06 | `docs/guides/drilldowns-state.md` | Managing the viewHistory stack and multi-level data dashboards. |
 | [ ] | H-07 | `docs/examples/gallery.md` | A curated list of .py scripts with corresponding screenshots/descriptions. |
 | [ ] | H-08 | `docs/reference/troubleshooting.md` | Common errors (e.g., Pydantic validation failures, SVG path clipping). |
-| [ ] | H-09 | `docs/guides/dashboards.md` | Building multi-block interactive dashboards with CSS Grid Builder. |
+| [x] | H-09 | `docs/guides/dashboards.md` | Building multi-block interactive dashboards with CSS Grid Builder. |
 | [ ] | H-10 | `docs/guides/streamlit-integration.md` | How to use SIVO inside Streamlit applications. |
 | [ ] | H-11 | `docs/guides/serverless-web-apps.md` | Guide on using SIVO with Pyodide and WebAssembly for 100% serverless apps. |
 | [ ] | H-12 | `docs/guides/cli-tools.md` | Using SIVO's command-line interface for init, validation, export, and annotation. |
@@ -55,6 +60,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [ ] | T-01b| `docs/api/config_reference.md` | Complete reference for all configuration models (e.g., HexbinConfig, LiveBindingConfig) in `src/sivo/core/config.py`. |
 | [ ] | T-01c| `docs/api/dashboard_project_api.md` | API reference for `SivoDashboard` and `SivoProject` classes. |
 | [ ] | T-01d| `docs/api/infographic_api.md` | API reference for the `Infographic` class (`src/sivo/core/infographic.py`). |
+| [ ] | T-01e| `docs/api/core_models.md` | Reference for every class in src/sivo/core/. |
 | [ ] | T-02 | `docs/api/svg_processor.md` | Reference for path manipulation, coordinate transforms, and lxml integration. |
 | [ ] | T-03 | `docs/api/template_engine.md` | Documentation for Jinja2 templates and how data is injected into HTML/JS. |
 | [ ] | T-04 | `docs/api/export_formats.md` | Specs for PDF (jsPDF), Image, and JSON exports. |
