@@ -17,7 +17,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | H-03 | `docs/guides/core-concepts.md` | Explaining the "Bridge": How Python objects become interactive frontend elements. |
 | [x] | H-04 | `docs/guides/styling-and-layout.md` | Comprehensive guide on SVG attributes, CSS injection, and layout containers. |
 | [x] | H-05 | `docs/guides/interactivity-events.md` | How to use Python callbacks, tooltips, and click events. Include JS snippets. |
-| [ ] | H-06 | `docs/guides/drilldowns-state.md` | Managing the viewHistory stack and multi-level data dashboards. |
+| [x] | H-06 | `docs/guides/drilldowns-state.md` | Managing the viewHistory stack and multi-level data dashboards. |
 | [ ] | H-07 | `docs/examples/gallery.md` | A curated list of .py scripts with corresponding screenshots/descriptions. |
 | [ ] | H-08 | `docs/reference/troubleshooting.md` | Common errors (e.g., Pydantic validation failures, SVG path clipping). |
 | [x] | H-09 | `docs/guides/dashboards.md` | Building multi-block interactive dashboards with CSS Grid Builder. |
