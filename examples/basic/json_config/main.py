@@ -1,6 +1,7 @@
 import os
 from sivo import Sivo
 
+
 def main():
     config_path = os.path.join(os.path.dirname(__file__), "config.json")
 
@@ -10,6 +11,7 @@ def main():
     output_path = os.path.join(os.path.dirname(__file__), "output.html")
     sivo_app.to_html(output_path)
     print(f"Exported interactive HTML to {output_path}")
+
 
 if __name__ == "__main__":
     main()
