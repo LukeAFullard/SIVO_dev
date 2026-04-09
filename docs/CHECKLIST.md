@@ -66,8 +66,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | T-04 | `docs/api/export_formats.md` | Specs for PDF (jsPDF), Image, and JSON exports. |
 | [x] | T-05 | `docs/api/streamlit_component.md` | API Reference for Streamlit SIVO component. |
 | [x] | T-06 | `docs/api/cli_reference.md` | API Reference for SIVO command line tools. |
-| [ ] | T-07 | `docs/api/template_catalog.md` | Comprehensive list and reference of all provided SVG templates. |
-| [ ] | T-08 | `docs/api/developer_contributing.md` | Guidelines for running tests (pytest, Playwright) and managing dependencies. |
+| [x] | T-07 | `docs/api/template_catalog.md` | Comprehensive list and reference of all provided SVG templates. |
+| [x] | T-08 | `docs/api/developer_contributing.md` | Guidelines for running tests (pytest, Playwright) and managing dependencies. |
 | [ ] | T-09 | `docs/api/annotator_server.md` | API and architecture reference for the local Annotator HTTP server (`src/sivo/cli/tools/annotator.py`). |
 
 ## 🛠️ Documentation Infrastructure Tasks
