@@ -30,6 +30,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [ ] | H-21 | `docs/guides/accessibility.md` | Best practices for making SIVO maps and dashboards accessible (WCAG, ARIA, high contrast). |
 | [ ] | H-22 | `docs/guides/external-integrations.md` | Guide on integrating external services (Ecommerce, BI tools, Replit, Forms). |
 | [ ] | H-23 | `docs/guides/multi-view-projects.md` | Organizing complex applications with `SivoProject` and multiple interconnected views. |
+| [ ] | H-24 | `docs/guides/infographics.md` | Building static and dynamic data visualizations using the `Infographic` class. |
 
 ## 🔵 Pillar 2: AI-Agent Documentation (The "Context" Path)
 *Focus: Schema definitions, API signatures, and prompt-injection readiness.*
@@ -53,6 +54,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [ ] | T-01a| `docs/api/actions_reference.md` | Complete reference for all action models (e.g., TooltipAction, VideoAction) in `src/sivo/core/actions.py`. |
 | [ ] | T-01b| `docs/api/config_reference.md` | Complete reference for all configuration models (e.g., HexbinConfig, LiveBindingConfig) in `src/sivo/core/config.py`. |
 | [ ] | T-01c| `docs/api/dashboard_project_api.md` | API reference for `SivoDashboard` and `SivoProject` classes. |
+| [ ] | T-01d| `docs/api/infographic_api.md` | API reference for the `Infographic` class (`src/sivo/core/infographic.py`). |
 | [ ] | T-02 | `docs/api/svg_processor.md` | Reference for path manipulation, coordinate transforms, and lxml integration. |
 | [ ] | T-03 | `docs/api/template_engine.md` | Documentation for Jinja2 templates and how data is injected into HTML/JS. |
 | [ ] | T-04 | `docs/api/export_formats.md` | Specs for PDF (jsPDF), Image, and JSON exports. |
