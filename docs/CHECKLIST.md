@@ -44,8 +44,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 |---|---|---|---|
 | [x] | A-01 | `docs/ai/manifest.md` | A "Map" for AI agents to understand the repository structure and entry points. |
 | [x] | A-02 | `docs/ai/schema-reference.md` | Deep dive into Pydantic models; detailed I/O for bundle_generator.py. |
-| [ ] | A-03 | `docs/ai/svg-logic-internals.md` | Explanation of the src/sivo/svg/ logic for AI-assisted path generation. |
-| [ ] | A-04 | `docs/ai/runtime-api.md` | Detailed technical spec of the JS runtime (echarts.html, dashboard_blocks.html). |
+| [x] | A-03 | `docs/ai/svg-logic-internals.md` | Explanation of the src/sivo/svg/ logic for AI-assisted path generation. |
+| [x] | A-04 | `docs/ai/runtime-api.md` | Detailed technical spec of the JS runtime (echarts.html, dashboard_blocks.html). |
 | [ ] | A-05 | `docs/ai/state-machine-spec.md` | Formal logic of the viewHistory and state transitions for code-gen accuracy. |
 | [ ] | A-06 | `docs/ai/security-protocols.md` | Strict rules on DOMPurify usage and sanitization to ensure AI doesn't generate unsafe code. |
 | [ ] | A-07 | `docs/ai/testing-guidelines.md` | Testing strategies for Playwright and WASM/Pyodide constraints for AI test generation. |
