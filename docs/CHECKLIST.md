@@ -42,8 +42,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 
 | Status | Task ID | Documentation Component | Description / Requirements |
 |---|---|---|---|
-| [ ] | A-01 | `docs/ai/manifest.md` | A "Map" for AI agents to understand the repository structure and entry points. |
-| [ ] | A-02 | `docs/ai/schema-reference.md` | Deep dive into Pydantic models; detailed I/O for bundle_generator.py. |
+| [x] | A-01 | `docs/ai/manifest.md` | A "Map" for AI agents to understand the repository structure and entry points. |
+| [x] | A-02 | `docs/ai/schema-reference.md` | Deep dive into Pydantic models; detailed I/O for bundle_generator.py. |
 | [ ] | A-03 | `docs/ai/svg-logic-internals.md` | Explanation of the src/sivo/svg/ logic for AI-assisted path generation. |
 | [ ] | A-04 | `docs/ai/runtime-api.md` | Detailed technical spec of the JS runtime (echarts.html, dashboard_blocks.html). |
 | [ ] | A-05 | `docs/ai/state-machine-spec.md` | Formal logic of the viewHistory and state transitions for code-gen accuracy. |
