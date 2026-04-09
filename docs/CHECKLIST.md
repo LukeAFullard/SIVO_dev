@@ -23,7 +23,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | H-09 | `docs/guides/dashboards.md` | Building multi-block interactive dashboards with CSS Grid Builder. |
 | [x] | H-10 | `docs/guides/streamlit-integration.md` | How to use SIVO inside Streamlit applications. |
 | [x] | H-11 | `docs/guides/serverless-web-apps.md` | Guide on using SIVO with Pyodide and WebAssembly for 100% serverless apps. |
-| [ ] | H-12 | `docs/guides/cli-tools.md` | Using SIVO's command-line interface for init, validation, export, and annotation. |
+| [x] | H-12 | `docs/guides/cli-tools.md` | Using SIVO's command-line interface for init, validation, export, and annotation. |
 | [ ] | H-13 | `docs/guides/charts-and-graphs.md` | Guide on embedding native ECharts (bar, line, pie, scatter, etc.) into SIVO maps. |
 | [ ] | H-14 | `docs/guides/advanced-mapping.md` | Guide on advanced thematic mapping: choropleths, hexbins, dot density, flow maps, and geocoding via Mapbox/Google. |
 | [ ] | H-15 | `docs/guides/live-data-and-animations.md` | Connecting SIVO to live API endpoints, WebSockets, and timeline animations. |
