@@ -19,6 +19,11 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [ ] | H-10 | `docs/guides/streamlit-integration.md` | How to use SIVO inside Streamlit applications. |
 | [ ] | H-11 | `docs/guides/serverless-web-apps.md` | Guide on using SIVO with Pyodide and WebAssembly for 100% serverless apps. |
 | [ ] | H-12 | `docs/guides/cli-tools.md` | Using SIVO's command-line interface for init, validation, export, and annotation. |
+| [ ] | H-13 | `docs/guides/charts-and-graphs.md` | Guide on embedding native ECharts (bar, line, pie, scatter, etc.) into SIVO maps. |
+| [ ] | H-14 | `docs/guides/advanced-mapping.md` | Guide on advanced thematic mapping: choropleths, hexbins, dot density, and flow maps. |
+| [ ] | H-15 | `docs/guides/live-data-and-animations.md` | Connecting SIVO to live API endpoints, WebSockets, and timeline animations. |
+| [ ] | H-16 | `docs/guides/dynamic-ui-elements.md` | Programmatically adding UI layers: cards, progress bars, markers, image overlays, and scalable text. |
+| [ ] | H-17 | `docs/guides/scrollytelling-and-tours.md` | Building narrative-driven data presentations using `bind_scrollytelling` and `bind_tour`. |
 
 ## 🔵 Pillar 2: AI-Agent Documentation (The "Context" Path)
 *Focus: Schema definitions, API signatures, and prompt-injection readiness.*
