@@ -26,7 +26,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | H-12 | `docs/guides/cli-tools.md` | Using SIVO's command-line interface for init, validation, export, and annotation. |
 | [x] | H-13 | `docs/guides/charts-and-graphs.md` | Guide on embedding native ECharts (bar, line, pie, scatter, etc.) into SIVO maps. |
 | [x] | H-14 | `docs/guides/advanced-mapping.md` | Guide on advanced thematic mapping: choropleths, hexbins, dot density, flow maps, and geocoding via Mapbox/Google. |
-| [ ] | H-15 | `docs/guides/live-data-and-animations.md` | Connecting SIVO to live API endpoints, WebSockets, and timeline animations. |
+| [x] | H-15 | `docs/guides/live-data-and-animations.md` | Connecting SIVO to live API endpoints, WebSockets, and timeline animations. |
 | [ ] | H-16 | `docs/guides/dynamic-ui-elements.md` | Programmatically adding UI layers: cards, progress bars, markers, image overlays, and scalable text. |
 | [ ] | H-17 | `docs/guides/scrollytelling-and-tours.md` | Building narrative-driven data presentations using `bind_scrollytelling` and `bind_tour`. |
 | [ ] | H-18 | `docs/guides/built-in-templates.md` | Guide on using the built-in aspect-ratio based SVG templates (1_1, 16_10, 3_2, etc.) and filling zones. |
