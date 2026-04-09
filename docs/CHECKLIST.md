@@ -19,7 +19,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | H-05 | `docs/guides/interactivity-events.md` | How to use Python callbacks, tooltips, and click events. Include JS snippets. |
 | [x] | H-06 | `docs/guides/drilldowns-state.md` | Managing the viewHistory stack and multi-level data dashboards. |
 | [x] | H-07 | `docs/examples/gallery.md` | A curated list of .py scripts with corresponding screenshots/descriptions. |
-| [ ] | H-08 | `docs/reference/troubleshooting.md` | Common errors (e.g., Pydantic validation failures, SVG path clipping). |
+| [x] | H-08 | `docs/reference/troubleshooting.md` | Common errors (e.g., Pydantic validation failures, SVG path clipping). |
 | [x] | H-09 | `docs/guides/dashboards.md` | Building multi-block interactive dashboards with CSS Grid Builder. |
 | [ ] | H-10 | `docs/guides/streamlit-integration.md` | How to use SIVO inside Streamlit applications. |
 | [ ] | H-11 | `docs/guides/serverless-web-apps.md` | Guide on using SIVO with Pyodide and WebAssembly for 100% serverless apps. |
