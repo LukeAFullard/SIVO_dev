@@ -64,8 +64,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | T-02 | `docs/api/svg_processor.md` | Reference for path manipulation, coordinate transforms, and lxml integration. |
 | [x] | T-03 | `docs/api/template_engine.md` | Documentation for Jinja2 templates and how data is injected into HTML/JS. |
 | [x] | T-04 | `docs/api/export_formats.md` | Specs for PDF (jsPDF), Image, and JSON exports. |
-| [ ] | T-05 | `docs/api/streamlit_component.md` | API Reference for Streamlit SIVO component. |
-| [ ] | T-06 | `docs/api/cli_reference.md` | API Reference for SIVO command line tools. |
+| [x] | T-05 | `docs/api/streamlit_component.md` | API Reference for Streamlit SIVO component. |
+| [x] | T-06 | `docs/api/cli_reference.md` | API Reference for SIVO command line tools. |
 | [ ] | T-07 | `docs/api/template_catalog.md` | Comprehensive list and reference of all provided SVG templates. |
 | [ ] | T-08 | `docs/api/developer_contributing.md` | Guidelines for running tests (pytest, Playwright) and managing dependencies. |
 | [ ] | T-09 | `docs/api/annotator_server.md` | API and architecture reference for the local Annotator HTTP server (`src/sivo/cli/tools/annotator.py`). |
