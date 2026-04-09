@@ -2225,6 +2225,10 @@
                         coordinateSystem: 'geo',
                         zlevel: 3,
                         symbol: 'circle',
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         itemStyle: {
                             color: proportionalSymbols.color
                         },
@@ -2289,6 +2293,10 @@
                         type: 'custom',
                         coordinateSystem: 'geo',
                         zlevel: 3,
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         renderItem: function (params, api) {
                             var val = api.value(2);
                             var ratio = (val - minValSpike) / rangeSpike;
@@ -2441,6 +2449,10 @@
                         type: 'custom',
                         coordinateSystem: 'geo',
                         zlevel: 2,
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         renderItem: function (params, api) {
                             var pt = api.coord([api.value(0), api.value(1)]);
                             var sizePtY = api.coord([api.value(0), api.value(1) + hexbinConfig.hex_size]); // Calculate radius in pixel space
@@ -2588,6 +2600,10 @@
                         zlevel: 3,
                         symbol: 'circle',
                         symbolSize: dotDensityConfig.dot_size,
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         itemStyle: {
                             color: dotDensityConfig.dot_color
                         },

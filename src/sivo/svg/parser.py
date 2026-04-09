@@ -4,7 +4,7 @@ from .normalizer import SVGNormalizer
 from .metadata import get_bounding_box
 
 class SVGParser:
-    def __init__(self, filepath_or_string: str, is_file: bool = True):
+    def __init__(self, filepath_or_string: str, is_file: bool = True, simplify_tolerance: float = None):
         # Explicitly secure the parser against XXE
         parser = etree.XMLParser(resolve_entities=False, no_network=True)
 
@@ -21,7 +21,7 @@ class SVGParser:
             self.namespaces['svg'] = self.root.nsmap[None]
 
         # Normalize the SVG (e.g., inline <use> references) before processing
-        normalizer = SVGNormalizer(self.tree)
+        normalizer = SVGNormalizer(self.tree, simplify_tolerance=simplify_tolerance)
         normalizer.normalize()
 
     def process_elements(self) -> List[Dict[str, str]]:
