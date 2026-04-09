@@ -48,14 +48,14 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | A-04 | `docs/ai/runtime-api.md` | Detailed technical spec of the JS runtime (echarts.html, dashboard_blocks.html). |
 | [x] | A-05 | `docs/ai/state-machine-spec.md` | Formal logic of the viewHistory and state transitions for code-gen accuracy. |
 | [x] | A-06 | `docs/ai/security-protocols.md` | Strict rules on DOMPurify usage and sanitization to ensure AI doesn't generate unsafe code. |
-| [ ] | A-07 | `docs/ai/testing-guidelines.md` | Testing strategies for Playwright and WASM/Pyodide constraints for AI test generation. |
+| [x] | A-07 | `docs/ai/testing-guidelines.md` | Testing strategies for Playwright and WASM/Pyodide constraints for AI test generation. |
 
 ## 🟠 Pillar 3: Technical API Reference (Common Foundation)
 *Focus: Complete functional coverage of the codebase.*
 
 | Status | Task ID | Documentation Component | Description / Requirements |
 |---|---|---|---|
-| [ ] | T-01 | `docs/api/sivo_class.md` | Comprehensive API reference for the main `Sivo` class (`src/sivo/core/sivo.py`). |
+| [x] | T-01 | `docs/api/sivo_class.md` | Comprehensive API reference for the main `Sivo` class (`src/sivo/core/sivo.py`). |
 | [ ] | T-01a| `docs/api/actions_reference.md` | Complete reference for all action models (e.g., TooltipAction, VideoAction) in `src/sivo/core/actions.py`. |
 | [ ] | T-01b| `docs/api/config_reference.md` | Complete reference for all configuration models (e.g., HexbinConfig, LiveBindingConfig) in `src/sivo/core/config.py`. |
 | [ ] | T-01c| `docs/api/dashboard_project_api.md` | API reference for `SivoDashboard` and `SivoProject` classes. |
