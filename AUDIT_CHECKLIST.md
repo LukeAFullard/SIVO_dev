@@ -87,9 +87,9 @@
 - [x] Implement automated vulnerability scanning (e.g., `pip-audit`, `npm audit`, Dependabot) in the repository.
 
 ### Task 4.3: Developer Experience & Governance
-- [ ] Verify the presence of a robust `CONTRIBUTING.md` outlining PR workflows, code standards, and branch policies.
-- [ ] Ensure a comprehensive documentation site structure exists (e.g., MkDocs, Sphinx) covering installation, advanced API usage, and deployment.
-- [ ] Implement a strict Semantic Versioning (SemVer) strategy for the Python package.
+- [x] Verify the presence of a robust `CONTRIBUTING.md` outlining PR workflows, code standards, and branch policies.
+- [x] Ensure a comprehensive documentation site structure exists (e.g., MkDocs, Sphinx) covering installation, advanced API usage, and deployment.
+- [x] Implement a strict Semantic Versioning (SemVer) strategy for the Python package.
 
 ### Task 4.4: User Experience (UX) & Accessibility (A11y)
 - [ ] Test interactive maps across modern browsers (Chrome, Safari, Firefox, Edge) and mobile environments (iOS Safari, Android Chrome) for consistent behavior.

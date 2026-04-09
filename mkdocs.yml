@@ -1,0 +1,23 @@
+site_name: SIVO Documentation
+site_description: Documentation for SIVO, an interactive SVG visualization library.
+site_url: https://example.com/sivo
+
+theme:
+  name: material
+
+nav:
+  - Home: README.md
+  - Tutorials:
+    - Getting Started: tutorials/getting-started.md
+  - Guides:
+    - Core Concepts: guides/core-concepts.md
+    - Dashboards: guides/dashboards.md
+  - Examples:
+    - Gallery: examples/gallery.md
+  - Reference:
+    - API Reference: reference/index.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
