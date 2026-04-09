@@ -23,3 +23,4 @@ wheels/
 .coverage
 htmlcov/
 node_modules/
+site/

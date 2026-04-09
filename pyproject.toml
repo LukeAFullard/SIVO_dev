@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sivo"
+dynamic = ["version"]
+description = "SIVO: Serverless Interactive Vector Objects"
+readme = "README.md"
+authors = [
+    { name="SIVO Contributors" }
+]
+license = { file="LICENSE" }
+requires-python = ">=3.9"
+dependencies = [
+    "lxml>=4.9.0",
+    "Jinja2>=3.1.0",
+    "pydantic>=2.0.0"
+]
+
+[project.optional-dependencies]
+docs = [
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=9.0.0"
+]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-playwright",
+    "flake8",
+    "ruff",
+    "mypy"
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "sivo.__version__.__version__"}
