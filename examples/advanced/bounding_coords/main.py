@@ -6,10 +6,13 @@ def main():
     # The SVG represents the bounding box of the USA (roughly [-125, 25] to [-65, 50]).
     # We pass these bounds in `bounding_coords` so ECharts maps the pixel space (0,0 to 800,500)
     # to this coordinate system, allowing us to drop markers using real (longitude, latitude) coordinates.
+    # Note: the default_panel_position is explicitly set to "right" to ensure HTML content in `.map()`
+    # displays correctly in a side panel (the new Sivo default is "none").
     sivo_app = Sivo.from_svg(
         os.path.join(os.path.dirname(__file__), "map.svg"),
         title="Geographic Coordinate Mapping",
         subtitle="Using `bounding_coords` to place elements via real (lat, lng)",
+        default_panel_position="right",
         bounding_coords=[
             [-125.0, 25.0],  # [minLng, minLat] (Bottom Left of the SVG map)
             [-65.0, 50.0]    # [maxLng, maxLat] (Top Right of the SVG map)
@@ -33,7 +36,7 @@ def main():
         is_pulse=True
     )
 
-    # Add tooltips for the dynamically added points
+    # Add tooltips and HTML side-panels for the dynamically added points
     for city, props in data.items():
         # ECharts will name the scatter points by their key
         sivo_app.map(
