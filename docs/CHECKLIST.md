@@ -60,8 +60,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | T-01b| `docs/api/config_reference.md` | Complete reference for all configuration models (e.g., HexbinConfig, LiveBindingConfig) in `src/sivo/core/config.py`. |
 | [x] | T-01c| `docs/api/dashboard_project_api.md` | API reference for `SivoDashboard` and `SivoProject` classes. |
 | [x] | T-01d| `docs/api/infographic_api.md` | API reference for the `Infographic` class (`src/sivo/core/infographic.py`). |
-| [ ] | T-01e| `docs/api/core_models.md` | Reference for every class in src/sivo/core/. |
-| [ ] | T-02 | `docs/api/svg_processor.md` | Reference for path manipulation, coordinate transforms, and lxml integration. |
+| [x] | T-01e| `docs/api/core_models.md` | Reference for every class in src/sivo/core/. |
+| [x] | T-02 | `docs/api/svg_processor.md` | Reference for path manipulation, coordinate transforms, and lxml integration. |
 | [ ] | T-03 | `docs/api/template_engine.md` | Documentation for Jinja2 templates and how data is injected into HTML/JS. |
 | [ ] | T-04 | `docs/api/export_formats.md` | Specs for PDF (jsPDF), Image, and JSON exports. |
 | [ ] | T-05 | `docs/api/streamlit_component.md` | API Reference for Streamlit SIVO component. |
