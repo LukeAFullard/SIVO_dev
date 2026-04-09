@@ -1,3 +1,6 @@
+# Copyright (c) 2024 SIVO. All rights reserved.
+# Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 from typing import Dict, Optional
 from .sivo import Sivo
 from ..runtime.bundle_generator import generate_echarts_html

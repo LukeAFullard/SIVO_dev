@@ -56,20 +56,20 @@
 ## Pillar 3: License & Copyright Verification
 
 ### Task 3.1: Dependency Compliance
-- [ ] Audit `requirements.txt` for all Python dependencies to ensure permissive licensing (MIT, Apache 2.0, BSD).
-- [ ] Check `package.json` (if present) for frontend dependency licenses.
-- [ ] Audit all CDN links in frontend templates (ECharts, DOMPurify, Marked.js, jsPDF, Confetti, Lottie) for commercial viability.
-- [ ] Immediately flag any GPL, AGPL, or other copyleft licenses found in the dependency tree.
-- [ ] Review any GitHub Actions / workflow dependencies for open-source license adherence.
+- [x] Audit `requirements.txt` for all Python dependencies to ensure permissive licensing (MIT, Apache 2.0, BSD).
+- [x] Check `package.json` (if present) for frontend dependency licenses.
+- [x] Audit all CDN links in frontend templates (ECharts, DOMPurify, Marked.js, jsPDF, Confetti, Lottie) for commercial viability.
+- [x] Immediately flag any GPL, AGPL, or other copyleft licenses found in the dependency tree.
+- [x] Review any GitHub Actions / workflow dependencies for open-source license adherence.
 
 ### Task 3.2: Asset Clearances
-- [ ] Inspect SVGs, background images, and audio files in `examples/` and `src/sivo/templates/`.
-- [ ] Verify all bundled media assets are explicitly open-source, public domain, or commercially cleared.
+- [x] Inspect SVGs, background images, and audio files in `examples/` and `src/sivo/templates/`.
+- [x] Verify all bundled media assets are explicitly open-source, public domain, or commercially cleared.
 
 ### Task 3.3: Headers & Metadata
-- [ ] Verify the root `LICENSE` file is present, accurate, and reflects the intended open-source license (e.g., MIT).
-- [ ] Ensure appropriate license headers exist at the top of core source code files where necessary.
-- [ ] Confirm there is no language or configuration that accidentally claims copyright or ownership over user-generated SVG data passing through the SIVO runtime.
+- [x] Verify the root `LICENSE` file is present, accurate, and reflects the intended open-source license (e.g., MIT).
+- [x] Ensure appropriate license headers exist at the top of core source code files where necessary.
+- [x] Confirm there is no language or configuration that accidentally claims copyright or ownership over user-generated SVG data passing through the SIVO runtime.
 
 ---
 
