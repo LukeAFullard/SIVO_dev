@@ -2,6 +2,9 @@ import http.server
 import socketserver
 import webbrowser
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Path to the HTML tool
 TOOL_HTML_PATH = os.path.join(os.path.dirname(__file__), "annotator.html")
@@ -37,7 +40,7 @@ class ReusableTCPServer(socketserver.TCPServer):
 def run_annotator_server(port=8080, host="127.0.0.1"):
     handler = AnnotatorHandler
     with ReusableTCPServer((host, port), handler) as httpd:
-        print(f"Starting SIVO Annotator tool on http://{host}:{port}")
+        logger.info(f"Starting SIVO Annotator tool on http://{host}:{port}")
         # Open in browser
         if host == "127.0.0.1":
             webbrowser.open(f"http://127.0.0.1:{port}")
@@ -51,4 +54,4 @@ def cmd_annotate(args):
     try:
          run_annotator_server(port, host)
     except KeyboardInterrupt:
-         print("\nShutting down annotator server.")
+         logger.info("\nShutting down annotator server.")

@@ -1,4 +1,7 @@
+import logging
 from typing import Dict, Optional, Union, List, Any
+
+logger = logging.getLogger(__name__)
 
 from .config import ProjectConfig
 from .infographic import Infographic
@@ -827,8 +830,28 @@ class Sivo:
 
         return option
 
-    def map_bar_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Bar Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
+    def map_bar_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#3b82f6", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
+        """
+        Maps a standard Bar Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list): A list of data values corresponding to the categories.
+            categories (list): A list of category labels for the X-axis.
+            color (str | list[str]): A single color string or a list of color strings (palette). Defaults to "#3b82f6".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {},
@@ -844,7 +867,28 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_trendline_chart(self, element_id: str, title: str, data: list[list[float]], trendline_type: str = "linear", trendline_color: str = "#ff0000", trendline_width: int = 2, trendline_arrow: bool = False, trendline_arrow_size: int = 10, trendline_label: str = None, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Scatter Chart with an overlaid trendline. trendline_type can be 'linear', 'exponential', 'logarithmic', 'polynomial'. data: [[x1, y1], [x2, y2]]"""
+        """
+        Maps a Scatter Chart with an overlaid trendline to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[float]]): The scatter plot data, formatted as a list of [x, y] coordinates.
+            trendline_type (str): The type of trendline to overlay ('linear', 'exponential', 'logarithmic', 'polynomial'). Defaults to 'linear'.
+            color (str | list[str]): A single color string or a list of color strings (palette) for the scatter points. Defaults to "#3b82f6".
+            trendline_color (str): The color of the trendline. Defaults to "#ef4444".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
 
         symbol = "none"
 
@@ -968,8 +1012,31 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, axis_color, axis_size, tooltip_bg_color, grid_margin, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_pictorial_bar_chart(self, element_id: str, title: str, data: list, categories: list, symbol: str, symbol_repeat: bool | str = True, symbol_size: list | int | str = ['100%', '100%'], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Pictorial Bar Chart. 'symbol' can be 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none', an image URL ('image://url'), or an SVG path ('path://...')."""
+    def map_pictorial_bar_chart(self, element_id: str, title: str, data: list, categories: list, symbol: str, symbol_repeat: bool | str = True, symbol_size: list | int | str = ['100%', '100%'], color: str | list[str] = "#3b82f6", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
+        """
+        Maps a Pictorial Bar Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list): A list of data values corresponding to the categories.
+            categories (list): A list of category labels for the X-axis.
+            symbol (str): The symbol type to use ('circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none', 'image://url', 'path://...'). Defaults to 'circle'.
+            symbol_repeat (bool | str): Whether to repeat the symbol. Defaults to False.
+            symbol_size (list[str | int] | str | int): The size of the symbol. Defaults to ['100%', '100%'].
+            color (str | list[str]): A single color string or a list of color strings (palette). Defaults to "#3b82f6".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {},
@@ -988,7 +1055,31 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_line_chart(self, element_id: str, title: str, data: list, categories: list, color: str | list[str] = "#ff7f50", smooth: bool = True, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, uncertainty_lower: list = None, uncertainty_upper: list = None, uncertainty_color: str = 'rgba(204, 204, 204, 0.5)', datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Line Chart with extensive styling and morphing controls. 'color' can be a string or a list of strings (palette)."""
+        """
+        Maps a Line Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list): A list of data values corresponding to the categories.
+            categories (list): A list of category labels for the X-axis.
+            color (str | list[str]): A single color string or a list of color strings (palette). Defaults to "#ff7f50".
+            smooth (bool): Whether the line should be smoothed. Defaults to True.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            uncertainty_lower (list, optional): A list of lower bound uncertainty values. Defaults to None.
+            uncertainty_upper (list, optional): A list of upper bound uncertainty values. Defaults to None.
+            uncertainty_color (str, optional): The color of the uncertainty band. Defaults to 'rgba(204, 204, 204, 0.5)'.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
 
         series_data = []
 
@@ -1036,7 +1127,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_pie_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Pie Chart. data format: [{"name": "A", "value": 10}, ...] 'color' can be a list of strings (palette)."""
+        """
+        Maps a Pie Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[dict]): A list of data dictionaries formatted as `[{"name": "A", "value": 10}, ...]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title, "left": "center"},
             "tooltip": {"trigger": "item"},
@@ -1059,7 +1166,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_gauge_chart(self, element_id: str, title: str, value: float, max_value: float = 100, color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Gauge Chart."""
+        """
+        Maps a Gauge Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            value (float): The current value to display on the gauge.
+            max_value (float, optional): The maximum value of the gauge. Defaults to 100.
+            color (str, optional): The color of the gauge progress. Defaults to "#10b981".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title, "left": "center"},
             "tooltip": {"formatter": "{a} <br/>{b} : {c}"},
@@ -1075,7 +1198,24 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_radar_chart(self, element_id: str, title: str, indicators: list[dict], data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Radar Chart. indicators: [{'name': 'A', 'max': 100}], data: [{'name': 'Series 1', 'value': [10, 20]}]"""
+        """
+        Maps a Radar Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            indicators (list[dict]): A list of indicator definitions (e.g., `[{'name': 'A', 'max': 100}]`).
+            data (list[dict]): A list of data series (e.g., `[{'name': 'Series 1', 'value': [10, 20]}]`).
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {},
@@ -1092,7 +1232,26 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Scatter Chart. data: [[x1, y1], [x2, y2]]"""
+        """
+        Maps a Scatter Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[float]]): The scatter plot data, formatted as a list of [x, y] coordinates.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to "#3b82f6".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item"},
@@ -1109,9 +1268,25 @@ class Sivo:
 
     def map_nested_map_chart(self, element_id: str, title: str, map_name: str, map_data: Union[str, dict], data: list[dict], color: str | list[str] = None, min_val: float = 0, max_val: float = 100, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
         """
-        Helper to map a nested Map Chart inside the side panel.
-        `map_data` can be an SVG string or a GeoJSON dictionary.
-        `data`: [{'name': 'RegionA', 'value': 10}]
+        Maps a nested Map Chart inside the side panel.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            map_name (str): The name of the map to register in ECharts.
+            map_data (Union[str, dict]): An SVG string or a GeoJSON dictionary.
+            data (list[dict]): The data values for the regions on the map, formatted as `[{'name': 'RegionA', 'value': 10}]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            min_val (float, optional): The minimum value for the visual map scale. Defaults to 0.
+            max_val (float, optional): The maximum value for the visual map scale. Defaults to 100.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
         """
         option = {
             "title": {"text": title},
@@ -1138,7 +1313,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position, map_name=map_name, map_data=map_data)
 
     def map_treemap_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Treemap Chart. data: [{'name': 'node1', 'value': 10, 'children': [...]}]"""
+        """
+        Maps a Treemap Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[dict]): A list of hierarchical data node dictionaries formatted as `[{'name': 'node1', 'value': 10, 'children': [...]}]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"formatter": "{b}: {c}"},
@@ -1150,8 +1341,27 @@ class Sivo:
         option = self._apply_chart_styling(option, color, title_color, title_size, None, None, tooltip_bg_color, None, universal_transition, datazoom, extra_options)
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
-    def map_polar_bar_chart(self, element_id: str, title: str, data: list[float], categories: list[str], color: str | list[str] = "#43a2ca", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Polar Bar Chart. data: [10, 20, 30] corresponding to categories."""
+    def map_polar_bar_chart(self, element_id: str, title: str, data: list[float], categories: list[str], color: str | list[str] = "#3b82f6", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
+        """
+        Maps a Polar Bar Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[float]): A list of data values corresponding to the categories.
+            categories (list[str]): A list of category labels for the angular axis.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to "#3b82f6".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {},
@@ -1170,7 +1380,25 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_polar_line_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = "#ff7f50", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Polar Line Chart (often used for math functions or cyclical data). data: list of values."""
+        """
+        Maps a Polar Line Chart to an element (often used for math functions or cyclical data).
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[float]): A list of data values.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to "#ff7f50".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         # Typically, a simple polar line chart maps values to angles.
         # We can map the index to the angle.
         option = {
@@ -1191,7 +1419,25 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_polar_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Polar Scatter Chart. data: [[radius, angle], ...]"""
+        """
+        Maps a Polar Scatter Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[float]]): A list of data coordinates formatted as `[[radius, angle], ...]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to "#3b82f6".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item"},
@@ -1209,8 +1455,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_liquidfill_chart(self, element_id: str, title: str, data: list[float], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Liquid Fill Chart. data: [0.6, 0.5] (percentages as floats between 0 and 1).
-        Note: Requires echarts-liquidfill plugin."""
+        """
+        Maps a Liquid Fill Chart to an element. Note: Requires echarts-liquidfill plugin.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[float]): A list of data float percentages formatted as `[0.6, 0.5]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"show": True},
@@ -1232,10 +1493,18 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_custom_chart(self, element_id: str, title: str, render_item_js: str, data: list, tooltip: str = None, panel_position: str = None, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Custom Series Chart.
-        render_item_js must be a string containing a valid JavaScript function for the 'renderItem' property.
-        Since JSON serialization cannot pass raw JS functions, we pass it as a special _sivo_render_item string
-        which the HTML runtime will `eval()` during option generation.
+        """
+        Maps a Custom Series Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            render_item_js (str): A string containing a valid JavaScript function for the 'renderItem' property. Since JSON serialization cannot pass raw JS functions, we pass it as a special `_sivo_render_item` string which the HTML runtime will `eval()` during option generation.
+            data (list): A list of data values.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
         """
         option = {
             "title": {"text": title},
@@ -1278,7 +1547,27 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_boxplot_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Boxplot Chart. data is a 2D array of values for each category."""
+        """
+        Maps a Boxplot Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[float]]): A 2D array of values for each category.
+            categories (list[str]): A list of category labels for the axis.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item", "axisPointer": {"type": "shadow"}},
@@ -1294,7 +1583,28 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_candlestick_chart(self, element_id: str, title: str, data: list[list[float]], categories: list[str], item_color: str = '#eb5454', item_color0: str = '#47b262', tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Candlestick Chart (K-line). data: [[open, close, lowest, highest], ...]"""
+        """
+        Maps a Candlestick Chart (K-line) to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[float]]): A list of data arrays formatted as `[[open, close, lowest, highest], ...]`.
+            categories (list[str]): A list of category labels for the axis.
+            item_color (str, optional): The color of bullish candles. Defaults to '#eb5454'.
+            item_color0 (str, optional): The color of bearish candles. Defaults to '#47b262'.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross"}},
@@ -1316,9 +1626,24 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_word_cloud_chart(self, element_id: str, title: str, data: list[dict], mask_image: str = None, color: Union[str, list[str]] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Word Cloud Chart. data: [{'name': 'Word', 'value': 100}, ...]
-        mask_image: Optional URL or base64 string to a silhouette image (black and white) to constrain the word cloud shape.
-        Note: Requires echarts-wordcloud plugin (included by default in SIVO CDN templates)."""
+        """
+        Maps a Word Cloud Chart to an element. Note: Requires echarts-wordcloud plugin (included by default in SIVO CDN templates).
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[dict]): A list of word definitions formatted as `[{'name': 'Word', 'value': 100}, ...]`.
+            mask_image (str, optional): Optional URL or base64 string to a silhouette image (black and white) to constrain the word cloud shape.
+            color (Union[str, list[str]], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"show": True},
@@ -1361,7 +1686,24 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_calendar_heatmap_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], calendar_range: Union[str, list[str]], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Calendar Heatmap Chart. data: [['2017-01-01', 10], ['2017-01-02', 20], ...], calendar_range: '2017' or ['2017-01-01', '2017-12-31']"""
+        """
+        Maps a Calendar Heatmap Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[Union[str, float]]]): A list of data coordinates formatted as `[['2017-01-01', 10], ['2017-01-02', 20], ...]`.
+            calendar_range (Union[str, list[str]]): The range of the calendar, formatted as `'2017'` or `['2017-01-01', '2017-12-31']`.
+            color (list[str], optional): A list of color strings for the gradient scale. Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"position": "top"},
@@ -1390,7 +1732,28 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_heatmap_chart(self, element_id: str, title: str, data: list[list[float]], x_categories: list[str], y_categories: list[str], color: list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Cartesian Heatmap Chart. data: [[x_index, y_index, value], ...]"""
+        """
+        Maps a Cartesian Heatmap Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[float]]): A list of data coordinates formatted as `[[x_index, y_index, value], ...]`.
+            x_categories (list[str]): A list of categories for the X axis.
+            y_categories (list[str]): A list of categories for the Y axis.
+            color (list[str], optional): A list of color strings for the gradient scale. Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"position": "top"},
@@ -1422,7 +1785,26 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_graph_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], categories: list[dict] = None, color: str | list[str] = None, layout: str = "force", tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Graph Chart (Network). nodes: [{'name': 'Node1'}], links: [{'source': 'Node1', 'target': 'Node2'}]. layout can be 'none', 'circular', or 'force'."""
+        """
+        Maps a Graph Chart (Network) to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            nodes (list[dict]): A list of nodes formatted as `[{'name': 'Node1'}]`.
+            links (list[dict]): A list of links formatted as `[{'source': 'Node1', 'target': 'Node2'}]`.
+            categories (list[dict], optional): A list of categories to assign nodes to. Defaults to None.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            layout (str, optional): The layout strategy to use ('none', 'circular', 'force'). Defaults to "force".
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {},
@@ -1450,7 +1832,24 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_sankey_chart(self, element_id: str, title: str, nodes: list[dict], links: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Sankey Diagram. nodes: [{'name': 'A'}], links: [{'source': 'A', 'target': 'B', 'value': 10}]"""
+        """
+        Maps a Sankey Diagram to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            nodes (list[dict]): A list of nodes formatted as `[{'name': 'A'}]`.
+            links (list[dict]): A list of links formatted as `[{'source': 'A', 'target': 'B', 'value': 10}]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item", "triggerOn": "mousemove"},
@@ -1466,7 +1865,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_sunburst_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Sunburst Chart. data: [{'name': 'A', 'value': 10, 'children': [...]}]"""
+        """
+        Maps a Sunburst Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[dict]): A list of hierarchical nodes formatted as `[{'name': 'A', 'value': 10, 'children': [...]}]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {},
@@ -1481,7 +1896,24 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_parallel_chart(self, element_id: str, title: str, schema: list[dict], data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Parallel Coordinates Chart. schema: [{'dim': 0, 'name': 'A'}, ...], data: [[val1, val2], ...]"""
+        """
+        Maps a Parallel Coordinates Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            schema (list[dict]): A list of dimensions formatted as `[{'dim': 0, 'name': 'A'}, ...]`.
+            data (list[list[float]]): A list of data arrays formatted as `[[val1, val2], ...]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"padding": 10, "backgroundColor": "#222", "borderColor": "#777", "borderWidth": 1},
@@ -1501,7 +1933,24 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_theme_river_chart(self, element_id: str, title: str, data: list[list[Union[str, float]]], legend_data: list[str], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a ThemeRiver (Streamgraph) Chart. data: [[date, value, category_name], ...]"""
+        """
+        Maps a ThemeRiver (Streamgraph) Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[Union[str, float]]]): A list of data arrays formatted as `[[date, value, category_name], ...]`.
+            legend_data (list[str]): A list of legend category names.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "axis", "axisPointer": {"type": "line", "lineStyle": {"color": "rgba(0,0,0,0.2)", "width": 1, "type": "solid"}}},
@@ -1523,7 +1972,26 @@ class Sivo:
 
 
     def map_effect_scatter_chart(self, element_id: str, title: str, data: list[list[float]], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, axis_color: str = None, axis_size: int = None, tooltip_bg_color: str = None, grid_margin: list[int] = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map an Effect Scatter Chart. data: [[x1, y1], [x2, y2]]"""
+        """
+        Maps an Effect Scatter Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[list[float]]): A list of data coordinates formatted as `[[x1, y1], [x2, y2]]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            axis_color (str, optional): The color of the axis lines and labels. Defaults to None.
+            axis_size (int, optional): The font size of the axis labels. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            grid_margin (list[int], optional): The margins for the chart grid [top, right, bottom, left]. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item"},
@@ -1543,7 +2011,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_lines_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Lines Chart. data: [{'coords': [[lng1, lat1], [lng2, lat2]]}]"""
+        """
+        Maps a Lines Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[dict]): A list of data lines formatted as `[{'coords': [[lng1, lat1], [lng2, lat2]]}]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item"},
@@ -1564,7 +2048,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_funnel_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Funnel Chart. data: [{'value': 60, 'name': 'Visit'}]"""
+        """
+        Maps a Funnel Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[dict]): A list of data series formatted as `[{'value': 60, 'name': 'Visit'}]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item"},
@@ -1603,7 +2103,23 @@ class Sivo:
         self.map(element_id=element_id, tooltip=tooltip, echarts_option=option, panel_position=panel_position)
 
     def map_tree_chart(self, element_id: str, title: str, data: list[dict], color: str | list[str] = None, tooltip: str = None, panel_position: str = None, title_color: str = None, title_size: int = None, tooltip_bg_color: str = None, universal_transition: bool = True, datazoom: bool = False, extra_options: dict = None):
-        """Helper to map a Tree Chart. data: [{'name': 'Root', 'children': [...]}]"""
+        """
+        Maps a Tree Chart to an element.
+
+        Args:
+            element_id (str): The SVG element ID to map to.
+            title (str): The chart title.
+            data (list[dict]): A list of hierarchical nodes formatted as `[{'name': 'Root', 'children': [...]}]`.
+            color (str | list[str], optional): A single color string or a list of color strings (palette). Defaults to None.
+            tooltip (str, optional): The tooltip text to display on hover. Defaults to None.
+            panel_position (str, optional): The position of the panel where the chart will be rendered. Defaults to None.
+            title_color (str, optional): The color of the chart title. Defaults to None.
+            title_size (int, optional): The font size of the chart title. Defaults to None.
+            tooltip_bg_color (str, optional): The background color of the tooltip. Defaults to None.
+            universal_transition (bool, optional): Whether to enable universal transitions. Defaults to True.
+            datazoom (bool, optional): Whether to enable data zooming. Defaults to False.
+            extra_options (dict, optional): Additional ECharts options to merge. Defaults to None.
+        """
         option = {
             "title": {"text": title},
             "tooltip": {"trigger": "item", "triggerOn": "mousemove"},
@@ -1648,14 +2164,14 @@ class Sivo:
         """
         import sys
         if "pyodide" in sys.modules:
-            print("Error: JavaScript bundling is not supported in WebAssembly/Pyodide because the subprocess module is not available.")
+            logger.error("Error: JavaScript bundling is not supported in WebAssembly/Pyodide because the subprocess module is not available.")
             return
 
         import subprocess
         import os
-        print(f"SIVO Build System: Bundling JS assets from {entry_point} -> {output_dir}")
+        logger.info(f"SIVO Build System: Bundling JS assets from {entry_point} -> {output_dir}")
         if not os.path.exists("package.json"):
-            print("Warning: package.json not found. Generating default package.json for esbuild...")
+            logger.warning("Warning: package.json not found. Generating default package.json for esbuild...")
             import json
             pkg_data = {
                 "name": "sivo",
@@ -1674,16 +2190,16 @@ class Sivo:
             with open("package.json", "w") as f:
                 json.dump(pkg_data, f, indent=2)
         try:
-            print("Running 'npm install'...")
+            logger.info("Running 'npm install'...")
             subprocess.run(["npm", "install"], check=True)
-            print("Running 'npm run build'...")
+            logger.info("Running 'npm run build'...")
             subprocess.run(["npm", "run", "build"], check=True)
             self.infographic.build_js = True
-            print(f"Successfully bundled JS to {output_dir}/sivo.min.js")
+            logger.info(f"Successfully bundled JS to {output_dir}/sivo.min.js")
         except FileNotFoundError:
-            print("Error: npm or node not found in PATH. Please install Node.js to use JS bundling.")
+            logger.error("Error: npm or node not found in PATH. Please install Node.js to use JS bundling.")
         except subprocess.CalledProcessError as e:
-            print(f"Build failed: {e}")
+            logger.error(f"Build failed: {e}")
 
     def apply_choropleth(self, data_map: Dict[str, float], min_color: str = "#ffffff", max_color: str = "#ff0000", show_legend: bool = True):
         """
@@ -1923,7 +2439,7 @@ class Sivo:
                 break
 
         if target_node is None:
-            print(f"Warning: Could not find template zone '{element_id}'. Skipping fill.")
+            logger.warning(f"Warning: Could not find template zone '{element_id}'. Skipping fill.")
             return
 
         for elem in self.infographic.parser.process_elements():

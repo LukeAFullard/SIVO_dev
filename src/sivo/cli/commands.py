@@ -2,19 +2,22 @@ import argparse
 import sys
 import os
 import json
+import logging
 from ..core.sivo import Sivo
 from .tools.annotator import cmd_annotate
+
+logger = logging.getLogger(__name__)
 
 def cmd_init(args):
     """Initializes a new SIVO project configuration based on an SVG file."""
     svg_path = args.svg_file
     if not os.path.exists(svg_path):
-        print(f"Error: SVG file '{svg_path}' not found.", file=sys.stderr)
+        logger.error(f"Error: SVG file '{svg_path}' not found.")
         sys.exit(1)
 
     output_path = args.output or "project.json"
     if os.path.exists(output_path) and not args.force:
-        print(f"Error: Output file '{output_path}' already exists. Use --force to overwrite.", file=sys.stderr)
+        logger.error(f"Error: Output file '{output_path}' already exists. Use --force to overwrite.")
         sys.exit(1)
 
     try:
@@ -38,10 +41,10 @@ def cmd_init(args):
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
 
-        print(f"Successfully initialized SIVO project at '{output_path}'.")
+        logger.info(f"Successfully initialized SIVO project at '{output_path}'.")
 
     except Exception as e:
-        print(f"Error initializing project: {e}", file=sys.stderr)
+        logger.error(f"Error initializing project: {e}")
         sys.exit(1)
 
 
@@ -49,15 +52,15 @@ def cmd_validate(args):
     """Validates an SVG file and its configuration."""
     config_path = args.config_file
     if not os.path.exists(config_path):
-        print(f"Error: Configuration file '{config_path}' not found.", file=sys.stderr)
+        logger.error(f"Error: Configuration file '{config_path}' not found.")
         sys.exit(1)
 
     try:
         # Load config and validate the mapping against the SVG
         Sivo.from_config(config_path)
-        print(f"Success: Configuration '{config_path}' and its associated SVG are valid.")
+        logger.info(f"Success: Configuration '{config_path}' and its associated SVG are valid.")
     except Exception as e:
-        print(f"Validation failed: {e}", file=sys.stderr)
+        logger.error(f"Validation failed: {e}")
         sys.exit(1)
 
 
@@ -65,7 +68,7 @@ def cmd_export(args):
     """Exports a SIVO configuration to an interactive HTML bundle."""
     config_path = args.config_file
     if not os.path.exists(config_path):
-        print(f"Error: Configuration file '{config_path}' not found.", file=sys.stderr)
+        logger.error(f"Error: Configuration file '{config_path}' not found.")
         sys.exit(1)
 
     output_path = args.output or "output.html"
@@ -73,12 +76,13 @@ def cmd_export(args):
     try:
         sivo_app = Sivo.from_config(config_path)
         sivo_app.to_html(output_path)
-        print(f"Successfully exported interactive HTML to '{output_path}'.")
+        logger.info(f"Successfully exported interactive HTML to '{output_path}'.")
     except Exception as e:
-        print(f"Export failed: {e}", file=sys.stderr)
+        logger.error(f"Export failed: {e}")
         sys.exit(1)
 
 def main():
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     parser = argparse.ArgumentParser(description="SIVO (SVG Interactive Vector Objects) CLI")
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
