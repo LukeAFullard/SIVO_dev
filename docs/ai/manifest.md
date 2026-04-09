@@ -66,3 +66,7 @@ For more specific details, refer to the following documentation:
 *   [Pydantic Schema Reference](schema-reference.md)
 *   [Technical API Reference](../api/core_models.md) (When implemented)
 *   [Troubleshooting Guide](../reference/troubleshooting.md)
+
+## Getting Started
+
+If you are a human reading this or generating code, ensure you check out the [Getting Started Tutorial](../tutorials/getting-started.md) and [Core Concepts](../guides/core-concepts.md) for a human-centric introduction.

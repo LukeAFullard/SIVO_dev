@@ -79,3 +79,7 @@ Because SIVO injects user-defined data and configuration into HTML files, securi
 *   **JSON Serialization Escaping:** During bundling, dictionaries are serialized to JSON with `<, >, &` explicitly escaped to unicode sequences (`\u003c`, etc.) to prevent malicious payload execution within `<script>` tags.
 *   **DOMPurify:** The SIVO frontend strictly enforces the use of the `DOMPurify` library. Any dynamic assignment to `.innerHTML` (e.g., in click panels or custom HTML tooltips) is wrapped with `window.DOMPurify.sanitize()`. This sanitizes potentially unsafe HTML before it enters the DOM, effectively blocking XSS attacks. A fail-closed or basic escaping fallback is implemented if the library fails to load.
 *   **Content-Security-Policy (CSP):** The generated HTML bundles include a strict CSP meta tag to restrict the execution of unauthorized scripts and block embedded objects (`object-src 'none'`), ensuring the map runs safely even if embedded in untrusted environments.
+
+## AI Agent Context
+
+For AI agents generating code or managing SIVO projects, refer to the [Manifest](../ai/manifest.md) for the project map and the [Schema Reference](../ai/schema-reference.md) for deeper details on SIVO configurations.

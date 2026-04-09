@@ -203,3 +203,7 @@ sivo_app = Sivo.from_string(
 )
 ```
 When a user searches for an address, SIVO will fetch the coordinates, zoom the map to that location, and temporarily place an animated pulsing marker at the destination.
+
+## SVG Internal Logic
+
+For a deeper technical dive into the SVG parsing and lxml interactions used by SIVO, please refer to [SVG Logic Internals](../ai/svg-logic-internals.md).
