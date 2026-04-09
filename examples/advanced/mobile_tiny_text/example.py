@@ -55,6 +55,6 @@ app.map(
     zoom_level=120.0
 )
 
-output_path = "examples/mobile_tiny_text/mobile_tiny_text.html"
+output_path = os.path.join(os.path.dirname(__file__), "mobile_tiny_text.html")
 app.to_html(output_path)
 print(f"Created {output_path}")

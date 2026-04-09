@@ -13,10 +13,10 @@ def create_example():
 
     html_content = app.to_html()
 
-    with open("examples/mobile_pinch_zoom/index.html", "w") as f:
+    with open(os.path.join(os.path.dirname(__file__), "index.html"), "w") as f:
         f.write(html_content)
 
-    print("Example generated successfully at examples/mobile_pinch_zoom/index.html")
+    print("Example generated successfully at examples/advanced/mobile_pinch_zoom/index.html")
 
 if __name__ == "__main__":
     create_example()
