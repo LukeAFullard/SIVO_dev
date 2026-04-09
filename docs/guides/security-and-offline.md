@@ -77,3 +77,7 @@ To build an entirely offline SIVO application:
    ```bash
    python -m http.server 8000
    ```
+
+## Security Protocols
+
+For technical specifics on how DOMPurify and CSP logic mitigates risks, please see our [Security Protocols](../ai/security-protocols.md) meant for AI-driven development.

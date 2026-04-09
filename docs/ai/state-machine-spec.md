@@ -52,3 +52,7 @@ When generating JavaScript code for SIVO runtime interactions:
 - **Avoid `setInterval` for UI updates.** Continuous polling or intervals can lead to memory leaks and UI stuttering, especially in complex SVG renderings.
 - Use event-driven updates (e.g., clicking, hovering) or `requestAnimationFrame` for smooth animations where absolutely necessary.
 - Clean up any event listeners or timeouts when elements are unmounted or views change.
+
+## Drilldowns and State
+
+For managing history stacks and multi-level data dashboards, refer to the [Drilldowns and State](../guides/drilldowns-state.md) guide.

@@ -72,7 +72,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 
 ## 🛠️ Documentation Infrastructure Tasks
 
-* [ ] **Cross-Linking:** Ensure all AI docs link to Human tutorials for context and vice-versa.
-* [ ] **Validation:** Run a "Link Checker" to ensure no broken relative paths between .md files.
-* [ ] **Snippet Testing:** Verify that every code snippet in the docs runs against the current SIVO version.
+* [x] **Cross-Linking:** Ensure all AI docs link to Human tutorials for context and vice-versa.
+* [x] **Validation:** Run a "Link Checker" to ensure no broken relative paths between .md files.
+* [x] **Snippet Testing:** Verify that every code snippet in the docs runs against the current SIVO version.
 * [x] **Version Header:** Every file should include a Last Updated and SIVO Version metadata header. (Implemented in plans)

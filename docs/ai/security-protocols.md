@@ -63,3 +63,7 @@ When SIVO fetches external resources (e.g., in `Sivo.fetch_image_base64`), stric
 SIVO protects against XXE vulnerabilities when parsing SVG files.
 - `src/sivo/svg/parser.py` uses `etree.XMLParser(resolve_entities=False, no_network=True)`.
 - Instantiation methods explicitly validate file existence and string integrity before parsing to handle malformed inputs gracefully.
+
+## Security Best Practices
+
+For a more comprehensive look at running securely and offline, including best practices, see [Security and Offline](../guides/security-and-offline.md).

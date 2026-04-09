@@ -77,3 +77,7 @@ When writing functions to inject new elements dynamically, agents must:
 2. Parse relative values (e.g., \`"50%"\`) against the anchor's width/height.
 3. Calculate absolute SVG coordinate positions before generating the new nodes.
 4. Programmatically add elements using standard \`lxml\` DOM manipulation or \`parser.add_shape()\`.
+
+## Advanced Mapping and Styling
+
+For practical applications of SVG logic, review [Styling and Layout](../guides/styling-and-layout.md) and [Advanced Mapping](../guides/advanced-mapping.md).

@@ -152,3 +152,7 @@ To manage complex multi-level structures efficiently:
 1. **Use clear, hierarchical `view_id` names** (e.g., `view_world`, `view_us`, `view_us_ny`, `view_us_ny_kings`).
 2. **Pre-process Data:** Loop through your geographical hierarchies in Python, dynamically instantiating `Sivo` objects and linking them to their parents before adding them to the `SivoProject`.
 3. **External SVG loading:** The `DrillDownAction` also supports loading external SVG files via a URL as a fallback if the ID isn't registered in the `SivoProject`. This is useful if the data payload is too large to bundle into a single HTML file initially. Note that external views loaded this way will lack internal map configuration and interactive mappings initially.
+
+## State Machine Specification
+
+For formal logic on state transitions and `viewHistory` tracking intended for AI and code generation, consult the [State Machine Spec](../ai/state-machine-spec.md).
