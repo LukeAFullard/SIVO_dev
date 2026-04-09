@@ -47,9 +47,9 @@
 - [x] Remove unused test variables, unused imports, and unreachable code paths.
 
 ### Task 2.3: API Polish & Documentation
-- [ ] Review all Python docstrings to ensure a professional, cohesive library tone.
-- [ ] Rewrite or remove docstrings that read like isolated snippets or chat session outputs.
-- [ ] Standardize logging practices across the Python package (use `logging` module instead of naked `print` statements).
+- [x] Review all Python docstrings to ensure a professional, cohesive library tone.
+- [x] Rewrite or remove docstrings that read like isolated snippets or chat session outputs.
+- [x] Standardize logging practices across the Python package (use `logging` module instead of naked `print` statements).
 
 ---
 

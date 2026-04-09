@@ -1,6 +1,9 @@
 import os
 import json
+import logging
 from typing import Dict, Optional, Union, List
+
+logger = logging.getLogger(__name__)
 
 from ..svg.parser import SVGParser
 from .actions import InteractionMapping, TooltipAction, FootnoteAction, ExplodeAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ToggleImageAction, ZoomAction, LottieAction, CompareAction, ProgressBarAction, A11yAction, ConfettiAction, LoadingAction
@@ -259,7 +262,7 @@ class Infographic:
                 )
             except ValueError as e:
                 # Log or handle missing elements gracefully, perhaps a warning
-                print(f"Warning mapping {element_id}: {e}")
+                logger.warning(f"Warning mapping {element_id}: {e}")
 
         return infographic
 
@@ -351,7 +354,7 @@ class Infographic:
                 root.insert(insert_idx, img_tag)
 
         except Exception as e:
-            print(f"Warning: Failed to inject SVG background image: {e}")
+            logger.warning(f"Warning: Failed to inject SVG background image: {e}")
 
     def map(
         self,
