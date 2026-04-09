@@ -21,7 +21,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | H-07 | `docs/examples/gallery.md` | A curated list of .py scripts with corresponding screenshots/descriptions. |
 | [x] | H-08 | `docs/reference/troubleshooting.md` | Common errors (e.g., Pydantic validation failures, SVG path clipping). |
 | [x] | H-09 | `docs/guides/dashboards.md` | Building multi-block interactive dashboards with CSS Grid Builder. |
-| [ ] | H-10 | `docs/guides/streamlit-integration.md` | How to use SIVO inside Streamlit applications. |
+| [x] | H-10 | `docs/guides/streamlit-integration.md` | How to use SIVO inside Streamlit applications. |
 | [ ] | H-11 | `docs/guides/serverless-web-apps.md` | Guide on using SIVO with Pyodide and WebAssembly for 100% serverless apps. |
 | [ ] | H-12 | `docs/guides/cli-tools.md` | Using SIVO's command-line interface for init, validation, export, and annotation. |
 | [ ] | H-13 | `docs/guides/charts-and-graphs.md` | Guide on embedding native ECharts (bar, line, pie, scatter, etc.) into SIVO maps. |
