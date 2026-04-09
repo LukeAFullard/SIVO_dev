@@ -32,8 +32,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | H-18 | `docs/guides/built-in-templates.md` | Guide on using the built-in aspect-ratio based SVG templates (1_1, 16_10, 3_2, etc.) and filling zones. |
 | [x] | H-19 | `docs/guides/multimedia-advanced-actions.md` | Using Video, Audio, CycleState, Explode, and other advanced actions. |
 | [x] | H-20 | `docs/guides/security-and-offline.md` | Best practices for CSP, DOMPurify, running offline, and mitigating vulnerabilities. |
-| [ ] | H-21 | `docs/guides/accessibility.md` | Best practices for making SIVO maps and dashboards accessible (WCAG, ARIA, high contrast). |
-| [ ] | H-22 | `docs/guides/external-integrations.md` | Guide on integrating external services (Ecommerce, BI tools, Replit, Forms). |
+| [x] | H-21 | `docs/guides/accessibility.md` | Best practices for making SIVO maps and dashboards accessible (WCAG, ARIA, high contrast). |
+| [x] | H-22 | `docs/guides/external-integrations.md` | Guide on integrating external services (Ecommerce, BI tools, Replit, Forms). |
 | [ ] | H-23 | `docs/guides/multi-view-projects.md` | Organizing complex applications with `SivoProject` and multiple interconnected views. |
 | [ ] | H-24 | `docs/guides/infographics.md` | Building static and dynamic data visualizations using the `Infographic` class. |
 
