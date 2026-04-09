@@ -20,10 +20,13 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [ ] | H-11 | `docs/guides/serverless-web-apps.md` | Guide on using SIVO with Pyodide and WebAssembly for 100% serverless apps. |
 | [ ] | H-12 | `docs/guides/cli-tools.md` | Using SIVO's command-line interface for init, validation, export, and annotation. |
 | [ ] | H-13 | `docs/guides/charts-and-graphs.md` | Guide on embedding native ECharts (bar, line, pie, scatter, etc.) into SIVO maps. |
-| [ ] | H-14 | `docs/guides/advanced-mapping.md` | Guide on advanced thematic mapping: choropleths, hexbins, dot density, and flow maps. |
+| [ ] | H-14 | `docs/guides/advanced-mapping.md` | Guide on advanced thematic mapping: choropleths, hexbins, dot density, flow maps, and geocoding via Mapbox/Google. |
 | [ ] | H-15 | `docs/guides/live-data-and-animations.md` | Connecting SIVO to live API endpoints, WebSockets, and timeline animations. |
 | [ ] | H-16 | `docs/guides/dynamic-ui-elements.md` | Programmatically adding UI layers: cards, progress bars, markers, image overlays, and scalable text. |
 | [ ] | H-17 | `docs/guides/scrollytelling-and-tours.md` | Building narrative-driven data presentations using `bind_scrollytelling` and `bind_tour`. |
+| [ ] | H-18 | `docs/guides/built-in-templates.md` | Guide on using the built-in aspect-ratio based SVG templates (1_1, 16_10, 3_2, etc.) and filling zones. |
+| [ ] | H-19 | `docs/guides/multimedia-advanced-actions.md` | Using Video, Audio, CycleState, Explode, and other advanced actions. |
+| [ ] | H-20 | `docs/guides/security-and-offline.md` | Best practices for CSP, DOMPurify, running offline, and mitigating vulnerabilities. |
 
 ## 🔵 Pillar 2: AI-Agent Documentation (The "Context" Path)
 *Focus: Schema definitions, API signatures, and prompt-injection readiness.*
@@ -48,6 +51,8 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [ ] | T-04 | `docs/api/export_formats.md` | Specs for PDF (jsPDF), Image, and JSON exports. |
 | [ ] | T-05 | `docs/api/streamlit_component.md` | API Reference for Streamlit SIVO component. |
 | [ ] | T-06 | `docs/api/cli_reference.md` | API Reference for SIVO command line tools. |
+| [ ] | T-07 | `docs/api/template_catalog.md` | Comprehensive list and reference of all provided SVG templates. |
+| [ ] | T-08 | `docs/api/developer_contributing.md` | Guidelines for running tests (pytest, Playwright) and managing dependencies. |
 
 ## 🛠️ Documentation Infrastructure Tasks
 
