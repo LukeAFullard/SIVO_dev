@@ -317,6 +317,10 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 *   **UI Flow:** Toggles in the Global Controls enabling end-users to enter fullscreen mode, download the raw data, or share the view via an overlay menu.
 *   **Configuration:** Maps the selections to `enable_fullscreen`, `enable_data_download`, and `enable_share` flags in the SIVO setup.
 
+### ECharts Tooltip Z-Index Enforcement
+*   **UI Flow:** A "Tooltip Layering" override in the Property Inspector that guarantees tooltip boxes always float visually above complex or overlapping elements.
+*   **Configuration:** The builder appends `z-index: 9999;` to the `extraCssText` configuration inside the ECharts payload to force tooltip layering.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -353,7 +357,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
 2.  Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
 3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
-4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle.
+4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
 5.  Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
 6.  **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
