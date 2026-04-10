@@ -50,7 +50,7 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 
 ### Dynamic UI Layers & Multimedia
 *   **UI Flow:** An "Overlays & Media" toolbar.
-*   **Configuration:** Users can visually drop Markers (via `add_marker`), Scalable Text (`add_scalable_text`), and Progress Bars (`add_scalable_progress_bar`) onto the map. In the Property Inspector, users can attach Video, Audio, or complex actions like `Explode` or `CycleState` to specific SVG elements.
+*   **Configuration:** Users can visually drop Markers (via `add_marker`), Scalable Text (`add_scalable_text`), and Progress Bars (`add_scalable_progress_bar`) onto the map. In the Property Inspector, users can attach Video, Audio, or complex actions like `Explode`  to specific SVG elements.
 
 ### Live Data Binding & Timelines
 *   **UI Flow:** A "Data Sources" manager with tabs for Static, Live API, WebSockets, and Timelines.
@@ -283,6 +283,40 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 * **UI Flow:** Dedicated widgets in the Integration Catalog that allow users to drop in URLs for Typeform, Reddit, or Replit to instantly render embedded iframes.
 * **Configuration:** Maps the user inputs directly to the `FormAction`, `SocialAction`, and `ReplitAction` models within the interaction mapping logic.
 
+
+
+### Dramatic UI Transitions (Explode)
+*   **UI Flow:** An interaction toggle where users can configure a visual effect that dramatically transitions the UI by exploding the clicked element into a new layout.
+*   **Configuration:** Maps the interaction directly to the `ExplodeAction` to securely transition the UI.
+
+### High Contrast Theming
+*   **UI Flow:** A "Theme" dropdown in the accessibility and styling settings that allows users to toggle between standard, dark, and high-contrast visuals.
+*   **Configuration:** The builder passes the user's choice directly to the `theme` parameter during canvas instantiation to enforce accessible color profiles.
+
+### Ambient Effects
+*   **UI Flow:** An "Environment Effects" toggle in the styling panel that allows users to select atmospheric particle overlays (like snow, rain, or fireflies) and adjust their speed.
+*   **Configuration:** The builder sets the `ambient_effect` and `ambient_speed` parameters on the `Sivo` instance to natively render particle animations over the map.
+
+### Brush Selection
+*   **UI Flow:** A tool in the Global Controls panel that allows end-users to click and drag a lasso or rectangular brush over the map to select multiple elements at once.
+*   **Configuration:** Maps the user's toggle to the `enable_brush_selection` parameter during canvas instantiation.
+
+### Watermarks & Attribution
+*   **UI Flow:** A "Branding & Metadata" section in the project settings where users can input custom text for map titles, subtitles, attribution, or upload a watermark logo.
+*   **Configuration:** The builder assigns the inputs to the `title`, `subtitle`, `attribution`, and `watermark` arguments in the SIVO constructor.
+
+### Built-in Canvas Search
+*   **UI Flow:** A toggle in the Global Controls to enable a search bar overlay on the final map, allowing users to find specific mapped elements by name or ID.
+*   **Configuration:** The builder sets the `enable_search` parameter to `True` on the `Sivo` instance to natively generate the search UI.
+
+### Canvas Backgrounds & Borders
+*   **UI Flow:** A "Canvas Backdrop" settings menu where users can upload or link images to serve as the map's background or border frame, adjusting opacity and grayscale.
+*   **Configuration:** Translates inputs into the `background_image_url`, `border_image_url`, and related opacity/grayscale parameters during initialization.
+
+### Export & Sharing Overlays
+*   **UI Flow:** Toggles in the Global Controls enabling end-users to enter fullscreen mode, download the raw data, or share the view via an overlay menu.
+*   **Configuration:** Maps the selections to `enable_fullscreen`, `enable_data_download`, and `enable_share` flags in the SIVO setup.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -334,18 +368,18 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, **Ecommerce Embeds**, **Rich Media Embeds**, **Business Intelligence Embeds**, **External Forms**, as well as **Form, Social & Replit Embeds**.
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, and **Shadow DOM Custom Styling & DOMPurify** support.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, **High Contrast Theming**, **Ambient Effects**, **Canvas Backgrounds & Borders**, **Dramatic UI Transitions**, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
 2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, **Scratchoff Reveal Layers**, and configuring **HTML/DOM Overlays**.
-3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, and **Programmatic Panel Dismissal** mappings.
+3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, **Brush Selection**, **Built-in Canvas Search**, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
 1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI, Auto-Generated Legends, and **Geographic Coordinate Mapping**.
 2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures, including **Drill-Through Page Transitions**.
-3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities.
+3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities, and expose **Watermarks & Attribution** and **Export & Sharing Overlays**.
 4.  **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
 5.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 
