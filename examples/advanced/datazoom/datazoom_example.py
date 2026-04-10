@@ -2,7 +2,6 @@ import os
 import random
 import math
 from sivo.core.sivo import Sivo
-from sivo.core.infographic import Infographic
 
 # Generate a large dataset for demonstration
 data = []
@@ -19,7 +18,7 @@ svg_string = """
 """
 
 # Initialize Sivo
-app = Sivo.from_string(svg_string, theme="light")
+app = Sivo.from_string(svg_string, theme="light", layout_size="100%")
 
 # Map a Scatter Chart to the container, explicitly enabling datazoom
 app.map_scatter_chart(
@@ -27,8 +26,9 @@ app.map_scatter_chart(
     title="High-Density Scatter with DataZoom",
     data=data,
     color="#43a2ca",
-    tooltip="Value: {c}",
+    tooltip="Click to open DataZoom Scatter Chart",
     datazoom=True,
+    panel_position="overlay",
     extra_options={
         "xAxis": {"type": "value", "scale": True},
         "yAxis": {"type": "value", "scale": True}
