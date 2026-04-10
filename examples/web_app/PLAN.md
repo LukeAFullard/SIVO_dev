@@ -148,6 +148,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
     *   **Publish Mode:** Focuses on accessibility, E2E testing, geocoding API keys, and export formats.
 *   **Command Palette (Cmd+K):** A quick-action search bar will allow power users to bypass the UI to find specific tools (e.g., "Add Timeline", "Validate Project") instantly without deep menu navigation.
 *   **Opinionated Defaults & Templates:** The "New Project" wizard should offer pre-configured, best-practice templates (e.g., "Basic Sales Dashboard", "Scrollytelling Map") that automatically wire up standard interactions, rather than presenting a blank canvas.
+*   **Interactive Previews & Pre-generation:** Complex state changes (like adding a custom CSS animation, testing a hover callback, or simulating an auto-play presentation) should include an on-demand "Preview" action within their configuration panels, allowing the user to view the isolated effect before applying it to the entire canvas.
 
 ## 8. Step-by-Step Implementation Roadmap
 
