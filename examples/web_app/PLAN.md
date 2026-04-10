@@ -217,6 +217,22 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 * **UI Flow:** A masking tool that lets users drag an image file and strictly clip it to the exact bounds of a complex SVG path (e.g., fitting a photo inside a country border).
 * **Configuration:** Calls `clip_image_to_shape()` to inject a dynamic SVG clip-path referencing the target node.
 
+### Interactive Drawing Tools
+* **UI Flow:** A drawing toolbar on the canvas allowing users to sketch or annotate freely on top of the loaded SVG map or dashboard.
+* **Configuration:** The builder sets `enable_drawing_tools=True` when instantiating the canvas, enabling native interactive drawing layer support.
+
+### SVG Affine Transformations
+* **UI Flow:** A "Transform" panel within the Property Inspector where users can visually rotate, scale, and translate SVG elements using sliders or input fields.
+* **Configuration:** When the builder is running with `render_mode="svg"`, the user's inputs are compiled into a valid transformation string and passed to the `transform` property of `Sivo.map()`.
+
+### Geographic Coordinate Mapping
+* **UI Flow:** A configuration dialog that lets users bind the canvas to real-world latitude and longitude bounds, mapping pixel space to geographic space for accurate data plotting.
+* **Configuration:** The user defines the geo-bounds, which are passed to the `bounding_coords` parameter in `Sivo.from_svg()`, enabling exact geographic placement of proportional symbols and other elements.
+
+### Native SVG Shape Generation
+* **UI Flow:** A "Shapes" library that allows users to drag-and-drop basic geometry (rectangles, circles, lines) or text nodes directly onto a blank or existing canvas.
+* **Configuration:** The builder translates these actions into programmatic calls to `sivo_app.add_shape()`, injecting native scalable geometry or text (via the `text_content` attribute) into the layout.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -268,16 +284,16 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets and API polling.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI) and support for **Document & Map Embeds**.
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, and **Shadow DOM Custom Styling & DOMPurify** support.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
-2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, Visual Comparisons, and configuring **HTML/DOM Overlays**.
-3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, and **Programmatic Panel Dismissal** mappings.
+2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, Visual Comparisons, **Native SVG Shape Generation**, and configuring **HTML/DOM Overlays**.
+3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
-1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI and Auto-Generated Legends.
+1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI, Auto-Generated Legends, and **Geographic Coordinate Mapping**.
 2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures.
 3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities.
 4.  **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
