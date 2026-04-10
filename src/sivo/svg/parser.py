@@ -60,6 +60,21 @@ class SVGParser:
                     if bbox:
                         element_data['bbox'] = bbox
 
+                    # Extract original fill color to preserve it natively if present
+                    # Either from style attribute 'fill: #color' or direct 'fill="#color"'
+                    fill_color = elem.get('fill')
+                    if not fill_color:
+                        style_attr = elem.get('style', '')
+                        if 'fill:' in style_attr:
+                            parts = style_attr.split(';')
+                            for p in parts:
+                                if p.strip().startswith('fill:'):
+                                    fill_color = p.split(':')[1].strip()
+                                    break
+
+                    if fill_color and fill_color.lower() != 'none':
+                        element_data['fill'] = fill_color
+
                     elements.append(element_data)
         return elements
 

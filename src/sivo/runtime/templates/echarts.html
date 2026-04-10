@@ -3775,8 +3775,9 @@
         function sanitizeHTML(str) {
             if (typeof DOMPurify !== 'undefined') {
                 return DOMPurify.sanitize(str, {
-                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player'],
+                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player', 'style'],
                     ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value'],
+                    FORCE_BODY: true, // Needed for DOMPurify to allow <style> tags at root
                     CUSTOM_ELEMENT_HANDLING: {
                         tagNameCheck: (tagName) => tagName.match(/-/),
                         attributeNameCheck: (attr) => attr.match(/-/),

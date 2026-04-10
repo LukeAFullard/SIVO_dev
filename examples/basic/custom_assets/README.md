@@ -11,31 +11,47 @@ The `to_html()` method allows injecting a `custom_css` block and a `custom_js` b
 ## Key Code Snippets
 
 ### 1. Mapping a custom HTML Tooltip
-When you provide raw HTML to the `html` parameter in `sivo_app.map()`, you can include specific classes (e.g., `custom-tooltip`) that aren't styled by default.
+When you provide raw HTML to the `html` parameter in `sivo_app.map()`, you can include inline `<style>` tags. Because SIVO renders HTML mapped content inside a secure **Shadow DOM**, standard global CSS classes won't automatically style it. Injecting the styles directly into the payload ensures they penetrate the Shadow DOM.
 
 ```python
+html_payload = \"\"\"
+<style>
+    /* This style block will be safely injected inside the Shadow DOM */
+    .custom-tooltip {
+        background-color: #ff0055 !important;
+        color: #fff !important;
+        padding: 30px !important;
+        border-radius: 20px !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+        font-size: 24px !important;
+        text-align: center !important;
+    }
+    .custom-tooltip h3 {
+        margin-top: 0 !important;
+        color: #ffff00 !important;
+        font-size: 32px !important;
+        text-transform: uppercase !important;
+    }
+</style>
+<div class='custom-tooltip'><h3>The Custom Sun</h3><p>Styled with VERY custom CSS to make it obvious!</p></div>
+\"\"\"
+
 sivo_app.map(
     element_id="sun",
     tooltip="The Custom Sun",
-    html="<div class='custom-tooltip'><h3>The Custom Sun</h3><p>Styled with custom CSS!</p></div>"
+    html=html_payload,
+    panel_position="overlay" # Explicitly show the HTML inside an overlay panel
 )
 ```
 
 ### 2. Defining Custom CSS and JS
-You define standard CSS strings and JavaScript strings in Python.
+You can still define standard CSS strings and JavaScript strings in Python. This CSS will be injected into the main document (e.g. to style the overall body or outer containers).
 
 ```python
 custom_css = """
-    .custom-tooltip {
-        background-color: #333;
-        color: #fff;
-        padding: 10px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-    .custom-tooltip h3 {
-        margin-top: 0;
-        color: #f1c40f;
+    /* Main document custom CSS */
+    body {
+        /* Example of styling the main window */
     }
 """
 
