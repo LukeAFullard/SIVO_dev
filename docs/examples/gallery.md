@@ -73,7 +73,11 @@ Showcase complex interactivity within the exported HTML, requiring no backend se
 *   **Location:** `examples/basic/07_multi_view_standalone/`
 *   **Description:** Use the `SivoProject` class to bundle a Building, Floor, and Room SVG into a single, offline-capable interactive HTML file.
 
-### 5. Animations & Dynamic Markers
+### 5. Bounding Coordinates (Geospatial Mapping)
+*   **Location:** `examples/advanced/bounding_coords/`
+*   **Description:** Demonstrates mapping real-world geographical coordinates (longitude and latitude) onto an SVG map and properly scaling dynamically generated proportional symbol scatter markers.
+
+### 6. Animations & Dynamic Markers
 *   **Location:** `examples/basic/09_animations_markers/`
 *   **Description:** Load an SVG, use the animation API to make elements pulse, and use the marker API to drop pins at calculated center points.
 
