@@ -11,6 +11,7 @@ def main():
         element_id="sun",
         tooltip="A pulsing sun",
         animation="pulse",
+        animation_duration_ms=500, # Faster pulse
         color="orange"
     )
 
@@ -18,6 +19,7 @@ def main():
         element_id="house",
         tooltip="Fading house",
         animation="fade",
+        animation_duration_ms=2000,
         color="purple"
     )
 

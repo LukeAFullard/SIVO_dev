@@ -6,47 +6,21 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    {% if echarts_stat %}
-    <!-- Include echarts-stat -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-stat@1.2.0/dist/ecStat.min.js"></script>
-    {% endif %}
-    {% if echarts_wordcloud %}
-    <!-- Include echarts-wordcloud -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
-    {% endif %}
-    {% if echarts_liquidfill %}
-    <!-- Include echarts-liquidfill -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
-    {% endif %}
+
+
+
 
     <!-- Include DOMPurify unconditionally for core security -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
-    {% if marked %}
-    <!-- Include marked.js for Markdown Action -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
-    {% if lottie %}
-    <!-- Include lottie-player for Lottie animations -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    {% endif %}
-    {% if confetti %}
-    <!-- Include canvas-confetti for gamification effects -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    {% endif %}
-    {% if jspdf %}
-    <!-- Include jsPDF for PDF export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
-    {% endif %}
+
+
+
+
+
 
     <style>
         body {
@@ -1689,8 +1663,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"default_view":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"\u003e\n  \u003cg id=\"scene\" name=\"scene\"\u003e\n    \u003crect id=\"background\" width=\"400\" height=\"400\" fill=\"#f0f0f0\" name=\"background\"/\u003e\n    \u003ccircle id=\"play_button\" cx=\"200\" cy=\"200\" r=\"80\" fill=\"#FF0000\" name=\"play_button\"/\u003e\n    \u003cpolygon id=\"play_icon\" points=\"170,150 250,200 170,250\" fill=\"white\" name=\"play_icon\"/\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e","echarts_data":[{"name":"scene","value":1,"label":{"show":false},"emphasis":{"label":{"show":false}}},{"name":"background","value":1,"label":{"show":false},"emphasis":{"label":{"show":false}}},{"name":"play_button","value":1,"tooltip":"Click to fetch cat fact","label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"#e68a00","shadowBlur":15,"shadowColor":"#e68a00","shadowOffsetX":0,"shadowOffsetY":0}}},{"name":"play_icon","value":1,"label":{"show":false},"emphasis":{"label":{"show":false}}}],"actions_manifest":{"play_button":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Click to fetch cat fact"},{"action_type":"tooltip","content":"\u003ch3\u003eClick to fetch cat fact\u003c/h3\u003e","title":"Click to fetch cat fact","panel_position":"top"},{"action_type":"fetch","fetch_url":"https://catfact.ninja/fact","fetch_data_path":"fact","panel_position":"top"}]},"overlays":{},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":null,"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"scene":{"id":"scene","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"background":{"id":"background","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"play_button":{"id":"play_button","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Click to fetch cat fact"},{"action_type":"tooltip","content":"\u003ch3\u003eClick to fetch cat fact\u003c/h3\u003e","title":"Click to fetch cat fact","panel_position":"top"},{"action_type":"fetch","fetch_url":"https://catfact.ninja/fact","fetch_data_path":"fact","panel_position":"top"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":"#e68a00","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":true,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"play_icon":{"id":"play_icon","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
+        var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -2033,7 +2007,7 @@
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
-                            disabled: false
+                            disabled: true
                         },
                         selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
@@ -2689,9 +2663,6 @@
                             if (!item.itemStyle) item.itemStyle = {};
                             item.itemStyle.opacity = 0.2;
                             item._has_faded = true;
-                            item._just_faded = true;
-                            // Ensure the fade uses the configured duration for its transition
-                            item._fade_duration = item.animation_duration_ms || 1000;
                             updated = true;
                         }
                     } else if (item.animation_class === 'pulse') {
@@ -2703,14 +2674,11 @@
 
                         // We will simulate a pulse by rapidly alternating a highly contrasting border and a slight opacity change
                         // that differs from the deep fade. We also change the base color slightly.
-                        // Setting animationDurationUpdate specifically on itemStyle helps ECharts tween the values rather than jumping.
-                        if (!item.itemStyle) item.itemStyle = {};
                         item.itemStyle.opacity = toggle ? 0.8 : 1.0;
                         item.itemStyle.borderWidth = toggle ? 3 : 0;
                         item.itemStyle.borderColor = 'rgba(255,255,255,0.8)';
                         item.itemStyle.shadowBlur = toggle ? 15 : 0;
                         item.itemStyle.shadowColor = item.itemStyle.color || 'yellow';
-                        // Note: ECharts handles transition tweening if animationDurationUpdate is applied
 
                         if (toggle) {
                             myChart.dispatchAction({ type: 'highlight', name: item.name });
@@ -2722,26 +2690,7 @@
                 });
 
                 if (updated) {
-                    // Tell ECharts to smoothly tween the update over the pulse interval duration.
-                    // This creates a ramped transition rather than a blunt switch.
-                    // If we have a fade happening that has a custom duration, we can use that, otherwise pulseIntervalMs.
-                    var maxDuration = pulseIntervalMs;
-                    currentData.forEach(d => {
-                        if (d._just_faded) {
-                            if (d._fade_duration > maxDuration) {
-                                maxDuration = d._fade_duration;
-                            }
-                            d._just_faded = false;
-                        }
-                    });
-
-                    myChart.setOption({
-                        series: [{
-                            animationDurationUpdate: maxDuration,
-                            animationEasingUpdate: 'cubicInOut',
-                            data: currentData
-                        }]
-                    });
+                    myChart.setOption({ series: [{ data: currentData }] });
                 }
             }, pulseIntervalMs);
         }
@@ -3827,9 +3776,8 @@
         function sanitizeHTML(str) {
             if (typeof DOMPurify !== 'undefined') {
                 return DOMPurify.sanitize(str, {
-                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player', 'style'],
+                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player'],
                     ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value'],
-                    FORCE_BODY: true, // Needed for DOMPurify to allow <style> tags at root
                     CUSTOM_ELEMENT_HANDLING: {
                         tagNameCheck: (tagName) => tagName.match(/-/),
                         attributeNameCheck: (attr) => attr.match(/-/),
@@ -7155,8 +7103,8 @@ function tourNext() {
 
     <!-- Custom injected assets placeholder -->
     <style id="sivo-panel-dynamic-css"></style>
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

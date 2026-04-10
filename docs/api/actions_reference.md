@@ -149,6 +149,7 @@ Renders an internal data entry form.
 Fetches external data and displays it in the panel.
 - **`action_type`**: `"fetch"`
 - **`fetch_url`** (`str`): URL to fetch data from.
+- **`fetch_data_path`** (`Optional[str]`): Optional dot-notation path to extract specific data from the JSON response (e.g., `'data.results'`).
 - **`panel_position`** (`Literal["right", "left", "bottom", "top", "overlay", "none"]`): Position of the info panel. Defaults to `"none"`.
 
 ---

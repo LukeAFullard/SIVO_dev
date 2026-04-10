@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field, ConfigDict
 class ElementConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
     """Configuration for a single SVG element's interactions and theme."""
+    animation_duration_ms: Optional[int] = 1000
     aria_label: Optional[str] = None
     role: Optional[str] = None
     tabindex: Optional[str] = None
@@ -27,6 +28,7 @@ class ElementConfig(BaseModel):
     datasource: Optional[Dict[str, str]] = None
     external_form: Optional[Dict[str, str]] = None
     ecommerce: Optional[Dict[str, str]] = None
+    fetch_data_path: Optional[str] = None
     rich_media: Optional[Dict[str, str]] = None
     bi: Optional[Dict[str, str]] = None
     lottie: Optional[Dict[str, Any]] = None

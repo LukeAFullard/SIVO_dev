@@ -80,6 +80,8 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
                 if hasattr(action, 'transition') and "transition" not in act_dict: act_dict["transition"] = action.transition
                 if hasattr(action, 'target') and "target" not in act_dict: act_dict["target"] = action.target
                 if hasattr(action, 'repl_url') and "repl_url" not in act_dict: act_dict["repl_url"] = action.repl_url
+                if hasattr(action, 'fetch_url') and "fetch_url" not in act_dict: act_dict["fetch_url"] = action.fetch_url
+                if hasattr(action, 'fetch_data_path') and "fetch_data_path" not in act_dict: act_dict["fetch_data_path"] = action.fetch_data_path
                 if hasattr(action, 'content') and "content" not in act_dict: act_dict["content"] = action.content
                 if hasattr(action, 'event_name') and "event_name" not in act_dict: act_dict["event_name"] = action.event_name
                 if hasattr(action, 'payload') and "payload" not in act_dict: act_dict["payload"] = action.payload
