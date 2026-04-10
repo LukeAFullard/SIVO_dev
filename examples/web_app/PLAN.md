@@ -60,6 +60,22 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 *   **UI Flow:** An "Integrations" catalog component within the Dashboard Layout mode or Property Inspector.
 *   **Configuration:** Users select third-party services (e.g., Google Analytics, Shopify, Typeform, Tableau) and input API keys, endpoint URLs, or embed codes. The UI maps these to the `datasource` and `analytics` schemas or specific panel embeds.
 
+### Animations & Dynamic Styling
+*   **UI Flow:** An "Animations & Styling" sub-panel within the Property Inspector.
+*   **Configuration:** Users can toggle standard CSS keyframe animations (like `pulse` and `fade`), set interactive image fills (`fill_pattern`, `hover_image`), and configure auto-shrinking text logic for regions where ZRender ignores `textLength`.
+
+### Advanced Injections & Overlays
+*   **UI Flow:** A "Dynamic Regions" tool that allows dragging content (HTML or scaled text) onto specific SVG paths.
+*   **Configuration:** Maps directly to `fill_template_zone` (for replacing placeholders with scaled native SVG text) and `clip_html_to_shape` (for clipping raw HTML to the exact shape of an SVG element).
+
+### Advanced Controls & Navigation
+*   **UI Flow:** A global "Controls" settings tab for the map/dashboard view.
+*   **Configuration:** Users can toggle built-in Zoom UI controls (`lock_zoom_out`), enable Minimap overviews, and set up Layer Toggles.
+
+### Publishing & Integrations (Offline & Streamlit)
+*   **UI Flow:** An "Export & Publish" wizard.
+*   **Configuration:** Allows users to select output formats: standard HTML, offline HTML (triggers `build_js=True` bundling pipeline), or auto-generates Streamlit V2 Custom Component code snippets for embedding in Streamlit.
+
 ### Accessibility (A11y) & Security
 *   **UI Flow:** An "Accessibility & Security" settings menu for the project.
 *   **Configuration:** Allows users to explicitly define ARIA roles, set `presentation_order` for sequential keyboard navigation, and configure strict CSP or DOMPurify options.
@@ -96,15 +112,19 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, and Flow Maps.
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets and API polling.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI).
-4.  **A11y & Multimedia:** Expose Marker, Video, Audio, and Keyboard Navigation configurations in the Property Inspector.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, and Keyboard Navigation configurations in the Property Inspector.
 
-### Phase 5: Scrollytelling & UX Polish (Weeks 9-10)
+### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI:** Add the timeline components for Scrollytelling and Tours.
-2.  **Export/Share:** Implement a feature to export the finished multi-view/dashboard SIVO app as a single standalone HTML file directly downloaded from the browser.
-3.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+2.  **Dynamic Regions:** Implement UI for `fill_template_zone` and `clip_html_to_shape` mappings.
+3.  **Global Controls:** Expose Zoom UI, Minimap, and Layer Toggles configurations.
 
-### Phase 6: AI Copilot Integration (Future Work)
+### Phase 6: Export, Publish, & UX Polish (Weeks 11-12)
+1.  **Export/Share:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), or Streamlit integration snippets.
+2.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+
+### Phase 7: AI Copilot Integration (Future Work)
 To further enhance the developer and no-code experience, an intelligent AI Copilot will be integrated natively into the browser. This ensures a 100% serverless, private AI assistant that can generate SIVO maps and code at $0 cloud compute cost.
 
 1.  **Train a SIVO Adapter (LoRA):** Parse the SIVO repository (examples, docs, tests) into instruction-response pairs to fine-tune a small, capable base model (e.g., Llama-3.2-1B, Qwen2.5-1.5B, or Phi-3-mini) using PEFT.
