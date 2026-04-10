@@ -177,6 +177,46 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 * **UI Flow:** A tool that allows users to place raw HTML or DOM elements directly on top of the map.
 * **Configuration:** Users can map custom HTML directly via the SIVO API to float above the canvas.
 
+### Proportional Symbols Map
+* **UI Flow:** A tool in the "Map Types" drawer allowing users to scale circles over map regions based on numerical data.
+* **Configuration:** Maps directly to `apply_proportional_symbols()` in the `Infographic` class to auto-generate scaled visual indicators.
+
+### Spike Map
+* **UI Flow:** An option in the "Map Types" drawer where users can select data columns to render 3D-like spikes emerging from map coordinates.
+* **Configuration:** Maps to `apply_spike_map()` to automatically calculate and inject spike paths based on data values.
+
+### Bivariate Choropleths (Value by Alpha)
+* **UI Flow:** A mapping wizard that lets users select two separate data columns (one for color hue, one for opacity/alpha) to create complex data intersections.
+* **Configuration:** Utilizes `apply_value_by_alpha()` to cross-reference two datasets against a unified map layer.
+
+### Categorical Maps
+* **UI Flow:** A simple configuration tab to bind string or categorical datasets to discrete colors (e.g., zoning maps or sales territories) with auto-generated legends.
+* **Configuration:** Triggers `apply_categorical_map()` to securely map qualitative data blocks to SVG color properties.
+
+### Path Connections
+* **UI Flow:** A drag-and-drop relationship tool allowing users to draw animated flow lines or solid connectors between two different SVG nodes.
+* **Configuration:** Maps visual endpoints to the `add_connection()` method to render SVG curves between calculated bounding boxes.
+
+### Lottie Animations
+* **UI Flow:** A widget in the Overlays toolbar where users can upload or link Lottie JSON files to render high-quality vector animations directly on the map.
+* **Configuration:** Configures the `LottieAction` to inject the player script and animation data.
+
+### Visual Comparisons
+* **UI Flow:** A split-screen interaction block where users can configure "Before" and "After" images with a draggable slider.
+* **Configuration:** Maps the configuration inputs to the `CompareAction` or leverages `sivo.to_html_compare()` for full map diffing.
+
+### Gamification & Loaders
+* **UI Flow:** A fun engagement settings panel where users can trigger celebratory confetti on clicks or custom loading animations while fetching external data.
+* **Configuration:** Implements the `ConfettiAction` and `LoadingAction` within element interaction payloads.
+
+### Path Morphing
+* **UI Flow:** An advanced animation setting that lets users link an element's path to another element, enabling fluid shape transitions on click or hover.
+* **Configuration:** Embeds `morph_to_path` and `morph_duration_ms` parameters inside the element's `ThemeOverride` configuration.
+
+### Image Shape Clipping
+* **UI Flow:** A masking tool that lets users drag an image file and strictly clip it to the exact bounds of a complex SVG path (e.g., fitting a photo inside a country border).
+* **Configuration:** Calls `clip_image_to_shape()` to inject a dynamic SVG clip-path referencing the target node.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -225,15 +265,15 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
-1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, and Flow Maps.
+1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets and API polling.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI) and support for **Document & Map Embeds**.
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, and **Shadow DOM Custom Styling & DOMPurify** support.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
-2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, and configuring **HTML/DOM Overlays**.
+2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, Visual Comparisons, and configuring **HTML/DOM Overlays**.
 3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
