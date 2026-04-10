@@ -10,6 +10,7 @@ def main():
         os.path.join(os.path.dirname(__file__), "map.svg"),
         title="Geographic Coordinate Mapping",
         subtitle="Using `bounding_coords` to place elements via real (lat, lng)",
+        default_panel_position="right",
         bounding_coords=[
             [-125.0, 25.0],  # [minLng, minLat] (Bottom Left of the SVG map)
             [-65.0, 50.0]    # [maxLng, maxLat] (Top Right of the SVG map)
@@ -25,9 +26,20 @@ def main():
         "Austin": {"value": 900, "coord": [-97.7431, 30.2672], "color": "#fbbf24"}
     }
 
+    mapped_data = {}
+    for city, props in data.items():
+        # Correct the SVG Y-Axis Inversion
+        # Formula: (maxLat + minLat) - actual_lat
+        inverted_lat = (50.0 + 25.0) - props["coord"][1]
+        mapped_data[city] = {
+            "value": props["value"],
+            "coord": [props["coord"][0], inverted_lat],
+            "color": props["color"]
+        }
+
     # Proportional symbols calculates a scatter plot internally on the map geometry
     sivo_app.apply_proportional_symbols(
-        data,
+        mapped_data,
         min_size=10,
         max_size=40,
         is_pulse=True
@@ -36,6 +48,7 @@ def main():
     # Add tooltips for the dynamically added points
     for city, props in data.items():
         # ECharts will name the scatter points by their key
+        # Use the original, non-inverted coordinates for the display
         sivo_app.map(
             element_id=city,
             tooltip=city,
