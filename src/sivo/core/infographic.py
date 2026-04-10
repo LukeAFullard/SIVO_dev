@@ -82,7 +82,10 @@ class Infographic:
 
         # Initialize default mappings
         for elem in self.elements:
-            self.mappings[elem['name']] = InteractionMapping(id=elem['id'])
+            mapping = InteractionMapping(id=elem['id'])
+            if 'fill' in elem:
+                mapping.theme.color = elem['fill']
+            self.mappings[elem['name']] = mapping
             self._element_lookup[elem['id']] = elem
             self._element_lookup[elem['name']] = elem
 
@@ -743,7 +746,10 @@ class Infographic:
             # Initialize mapping
             if elem['name'] not in self.mappings:
                 from .actions import InteractionMapping
-                self.mappings[elem['name']] = InteractionMapping(id=elem['id'])
+                mapping = InteractionMapping(id=elem['id'])
+                if 'fill' in elem:
+                    mapping.theme.color = elem['fill']
+                self.mappings[elem['name']] = mapping
 
         ns = self.parser.root.nsmap.get(None, "http://www.w3.org/2000/svg")
         g_wrapper = etree.Element(f"{{{ns}}}g")

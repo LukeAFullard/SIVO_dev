@@ -22,16 +22,16 @@ def main():
     # 2. Add HTML overlays over the map coordinates dynamically
     sivo_app.add_overlay(
         element_id="sun",
-        html="<div style='background: white; padding: 2px 4px; border-radius: 4px; font-weight: bold;'>☀️ 30°C</div>",
-        offset_x=20, # offset from the center
-        offset_y=-30
+        html="<div style='background: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); border: 2px solid gold;'>☀️ 30°C</div>",
+        offset_x=40, # offset from the center
+        offset_y=-40
     )
 
     sivo_app.add_overlay(
         element_id="house",
-        html="<div style='background: #fff; padding: 2px 4px; border: 1px solid #000; font-size: 10px;'>Home</div>",
+        html="<div style='background: #fff; padding: 4px 8px; border: 2px solid brown; font-size: 14px; border-radius: 4px;'>Home</div>",
         offset_x=0,
-        offset_y=-20
+        offset_y=-40
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "output.html")
