@@ -43,7 +43,15 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 *   **UI Flow:** A "Dashboard Layout" mode where users select CSS Grid block layouts (e.g., "Map + Sidebar + Graph").
 *   **Graphing Integration:** When dropping a Graph Block, the wizard asks for a dataset. The user maps the X/Y axes from the uploaded CSV/XLSX. The builder uses SIVO's internal `map_bar_chart` / `map_line_chart` API to inject ECharts instances.
 
-## 6. Step-by-Step Implementation Roadmap
+## 6. Modern UI/UX Design System & Productization
+To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
+*   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
+*   **Dark Mode & Theming:** Implement native system-level Dark Mode detection with seamless toggling. Code editors (Monaco/CodeMirror) and canvas backgrounds will automatically sync with the active theme.
+*   **Drag-and-Drop UX:** Add fluid animations and clear visual drop zones (e.g., dashed borders, highlighting) when dragging files from the OS or moving blocks around in the Dashboard Layout mode.
+*   **Onboarding & Empty States:** Implement guided interactive tooltips for first-time users (e.g., "Drag a CSV here to start"), and ensure robust empty states for panels rather than blank screens or console errors.
+*   **State & Feedback:** Introduce non-blocking toast notifications for system events ("Saving to IDBFS...", "Error parsing CSV"), and skeletal loading screens during the initial WASM/Pyodide load phase.
+
+## 7. Step-by-Step Implementation Roadmap
 
 ### Phase 1: Core Storage & File Management (Weeks 1-2)
 1.  Extend the current `index.html` UI to include a robust File Manager Sidebar.
@@ -52,7 +60,7 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 4.  Implement CSV/XLSX to IDBFS parsing utility.
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
-1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace".
+1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
 2.  Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`).
 3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
 4.  Build the Property Inspector panel (colors, text, hover states).
