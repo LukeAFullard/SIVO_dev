@@ -2,7 +2,6 @@ import os
 import random
 import math
 from sivo.core.sivo import Sivo
-from sivo.core.infographic import Infographic
 
 # Generate a large dataset for demonstration
 data = []
@@ -18,8 +17,8 @@ svg_string = """
 </svg>
 """
 
-# Initialize Sivo
-app = Sivo.from_string(svg_string, theme="light")
+# Initialize Sivo, explicitly setting the layout size
+app = Sivo.from_string(svg_string, theme="light", layout_size="100%")
 
 # Map a Scatter Chart to the container, explicitly enabling datazoom
 app.map_scatter_chart(
