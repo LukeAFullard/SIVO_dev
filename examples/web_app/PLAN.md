@@ -109,6 +109,26 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 *   **UI Flow:** An "Accessibility & Security" settings menu for the project.
 *   **Configuration:** Allows users to explicitly define ARIA roles, set `presentation_order` for sequential keyboard navigation, and configure strict CSP or DOMPurify options.
 
+### Visual Annotation & Element Inspection
+* **UI Flow:** An "Annotator Studio" mode where users can click on SVG elements in a preview pane to instantly view their IDs, bounding boxes, and coordinates.
+* **Configuration:** Emulates the `sivo annotate` CLI command by integrating `annotator.html` logic to visually inspect and annotate SVGs directly within the browser workspace.
+
+### Project Validation & Diagnostics
+* **UI Flow:** A "Validate Project" tool that runs an automated health check, highlighting disconnected nodes or configuration errors directly on the canvas with warning icons.
+* **Configuration:** Maps to the `sivo validate` CLI command logic, validating the JSON configuration payload against the parsed SVG structure to ensure all mapped element IDs are present.
+
+### Project Initialization & Scaffolding
+* **UI Flow:** A "New Project" wizard that takes an uploaded SVG and automatically scaffolds a baseline configuration with all discoverable element IDs.
+* **Configuration:** Emulates the `sivo init` CLI command to create the initial `ProjectConfig` and extract available SVG IDs into a starter declarative JSON payload.
+
+### Complex SVG Normalization & Style Preservation
+* **UI Flow:** Users upload complex SVGs directly from design tools (like Illustrator or Figma), and the builder automatically flattens groups and retains original colors without manual styling.
+* **Configuration:** Under the hood, the builder relies on SIVO's `SVGParser` to correctly handle nested `<g>` tags and `<use>` symbol references, automatically mapping native `fill` attributes to `theme.color`.
+
+### Automated E2E Testing Scaffolding
+* **UI Flow:** A "Testing & QA" toggle within the project settings allowing enterprise users to generate end-to-end test suites for their exported dashboards.
+* **Configuration:** Sets the `enable_e2e_testing` flag to `True` in `ProjectConfig`, seamlessly generating scaffolded Playwright tests to ensure custom interactive SVGs scale correctly across browsers.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -124,6 +144,7 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 2.  Implement the drag-and-drop / URL fetcher in JS that streams directly to Pyodide IDBFS.
 3.  Add memory cleanup routines to ensure large files are flushed from RAM after saving to IDBFS.
 4.  Implement CSV/XLSX to IDBFS parsing utility.
+5.  **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
 1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
@@ -131,11 +152,13 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
 4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, and Dynamic State Transitions via `ToggleImageAction`).
 5.  Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
+6.  **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
 1.  **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
 2.  **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, metrics panels, and details panels.
 3.  **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs.
+4.  **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) to check for missing nodes or bad mappings.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
@@ -154,7 +177,8 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI and Auto-Generated Legends.
 2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures.
 3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets.
-4.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+4.  **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
+5.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 
 ### Phase 7: AI Copilot Integration (Future Work)
 To further enhance the developer and no-code experience, an intelligent AI Copilot will be integrated natively into the browser. This ensures a 100% serverless, private AI assistant that can generate SIVO maps and code at $0 cloud compute cost.
