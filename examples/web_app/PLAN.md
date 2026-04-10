@@ -70,11 +70,23 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 
 ### Advanced Controls & Navigation
 *   **UI Flow:** A global "Controls" settings tab for the map/dashboard view.
-*   **Configuration:** Users can toggle built-in Zoom UI controls (`lock_zoom_out`), enable Minimap overviews, and set up Layer Toggles.
+*   **Configuration:** Users can toggle built-in Zoom UI controls (`lock_zoom_out`), configure "Zoom on Click" interactions, enable Minimap overviews, set up Layer Toggles, and configure URL Navigation for SVG elements.
 
-### Publishing & Integrations (Offline & Streamlit)
+### Presentation Mode
+*   **UI Flow:** A "Presentation Settings" tab next to Storyline Mode.
+*   **Configuration:** Users can configure Auto-Play intervals (`presentation_autoplay_ms`), enable a visual Progress Indicator (`Slide X of Y`), select a Laser Pointer tool variant, configure Speaker Notes to render in a side-channel, and set up an Overview Step (`Escape`/`Home` shortcut) to zoom out to the map view.
+
+### Geocoding & Thematic Mapping Extensibility
+*   **UI Flow:** A "Geocoding & Data" panel when configuring maps.
+*   **Configuration:** Users can input Mapbox or Google API keys to seamlessly geocode data coordinates. It also automatically generates interactive legends when a Choropleth or other data-driven map is created.
+
+### Dynamic Odometers & Multi-View Projects
+*   **UI Flow:** An "Odometers & Multi-View" manager.
+*   **Configuration:** Users can drag-and-drop Dynamic Odometers onto the canvas to visualize numerical changes. Additionally, the builder manages `SivoProject` structures, allowing users to register multiple interconnected views (`add_view`) without being limited to just drill-downs.
+
+### Publishing & Integrations (Offline, Streamlit, & Export Formats)
 *   **UI Flow:** An "Export & Publish" wizard.
-*   **Configuration:** Allows users to select output formats: standard HTML, offline HTML (triggers `build_js=True` bundling pipeline), or auto-generates Streamlit V2 Custom Component code snippets for embedding in Streamlit.
+*   **Configuration:** Allows users to select output formats: standard HTML, offline HTML (triggers `build_js=True` bundling pipeline), PDF (via jsPDF), Image, JSON, or auto-generates Streamlit V2 Custom Component code snippets for embedding in Streamlit.
 
 ### Accessibility (A11y) & Security
 *   **UI Flow:** An "Accessibility & Security" settings menu for the project.
@@ -116,13 +128,15 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
-1.  **Timeline UI:** Add the timeline components for Scrollytelling and Tours.
-2.  **Dynamic Regions:** Implement UI for `fill_template_zone` and `clip_html_to_shape` mappings.
-3.  **Global Controls:** Expose Zoom UI, Minimap, and Layer Toggles configurations.
+1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
+2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, and dropping Dynamic Odometers.
+3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, and Zoom on Click configurations.
 
-### Phase 6: Export, Publish, & UX Polish (Weeks 11-12)
-1.  **Export/Share:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), or Streamlit integration snippets.
-2.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
+1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI and Auto-Generated Legends.
+2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures.
+3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets.
+4.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 
 ### Phase 7: AI Copilot Integration (Future Work)
 To further enhance the developer and no-code experience, an intelligent AI Copilot will be integrated natively into the browser. This ensures a 100% serverless, private AI assistant that can generate SIVO maps and code at $0 cloud compute cost.
