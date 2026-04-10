@@ -3,8 +3,8 @@ import os
 
 def build_architecture_stack():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "premium_layer_stack_2026.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "src", "sivo", "templates", "3_2", "premium_layer_stack_2026.svg"
     )
     output_dir = os.path.dirname(__file__)
 
