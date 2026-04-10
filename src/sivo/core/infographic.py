@@ -384,6 +384,7 @@ class Infographic:
         audio: Optional[str] = None,
         markdown: Optional[str] = None,
         fetch_url: Optional[str] = None,
+        fetch_data_path: Optional[str] = None,
         form_fields: Optional[list[dict]] = None,
         form_submit_event: Optional[str] = None,
         social: Optional[dict] = None,
@@ -425,6 +426,7 @@ class Infographic:
         transparent_lines: Optional[bool] = None,
         glow: Optional[bool] = None,
         animation: Optional[str] = None,
+        animation_duration_ms: Optional[int] = 1000,
         morph_to_path: Optional[str] = None,
         morph_duration_ms: Optional[int] = 1000,
         morph_delay_ms: Optional[int] = 0,
@@ -533,7 +535,7 @@ class Infographic:
             mapping.actions.append(MarkdownAction(markdown_text=markdown, panel_position=panel_position or self.default_panel_position))
 
         if fetch_url:
-            mapping.actions.append(FetchAction(fetch_url=fetch_url, panel_position=panel_position or self.default_panel_position))
+            mapping.actions.append(FetchAction(fetch_url=fetch_url, fetch_data_path=fetch_data_path, panel_position=panel_position or self.default_panel_position))
 
         if form_fields and form_submit_event:
             mapping.actions.append(FormAction(form_fields=form_fields, submit_event=form_submit_event, panel_position=panel_position or self.default_panel_position))
@@ -626,6 +628,7 @@ class Infographic:
 
         if animation:
             mapping.theme.animation = animation
+            mapping.theme.animation_duration_ms = animation_duration_ms
 
         if morph_to_path:
             mapping.theme.morph_to_path = morph_to_path

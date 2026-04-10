@@ -84,6 +84,7 @@ class FetchAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
     action_type: Literal["fetch"] = "fetch"
     fetch_url: str = Field(description="URL to fetch data from and display in the info panel")
+    fetch_data_path: Optional[str] = Field(default=None, description="Optional dot-notation path to extract specific data from the JSON response.")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class FormAction(BaseAction):
@@ -237,6 +238,7 @@ class LoadingAction(BaseAction):
 
 class ThemeOverride(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    animation_duration_ms: Optional[int] = 1000
     color: Optional[str] = None
     hover_color: Optional[str] = None
     hover_image: Optional[str] = None
