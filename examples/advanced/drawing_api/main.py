@@ -42,7 +42,7 @@ sivo_app.add_shape("text", {
     "font-family": "sans-serif",
     "font-size": "24",
     "fill": "#333",
-    "text_content": "SIVO Drawing API" # Needs support
+    "text_content": "SIVO Drawing API"
 })
 
 # 3. Map interactions to the dynamically created shapes
