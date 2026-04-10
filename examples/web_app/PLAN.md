@@ -66,3 +66,15 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 1.  **Timeline UI:** Add the timeline components for Scrollytelling and Tours.
 2.  **Export/Share:** Implement a feature to export the finished multi-view/dashboard SIVO app as a single standalone HTML file directly downloaded from the browser.
 3.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+
+### Phase 5: AI Copilot Integration (Future Work)
+To further enhance the developer and no-code experience, an intelligent AI Copilot will be integrated natively into the browser. This ensures a 100% serverless, private AI assistant that can generate SIVO maps and code at $0 cloud compute cost.
+
+1.  **Train a SIVO Adapter (LoRA):** Parse the SIVO repository (examples, docs, tests) into instruction-response pairs to fine-tune a small, capable base model (e.g., Llama-3.2-1B, Qwen2.5-1.5B, or Phi-3-mini) using PEFT.
+2.  **Model Export & Fusion:** Since client-side inference engines require bundled weights, the trained LoRA adapter will be merged into the base model and exported to an optimized ONNX format (quantized to int4/int8 to fit browser memory limits).
+3.  **Inference via Transformers.js:** Utilize Hugging Face's `Transformers.js` (with WebGPU acceleration) to load the merged ONNX model directly in the browser.
+4.  **Chat Interface & Execution:**
+    *   Implement a Copilot chat sidebar.
+    *   When the user prompts (e.g., "Make a hexbin map using this dataset"), `Transformers.js` streams the generated SIVO Python code.
+    *   The generated code block is passed directly to `pyodide.runPythonAsync(code)`.
+    *   Pyodide reads any user data from IDBFS, generates the interactive map, and instantly renders the result in the UI iframe.
