@@ -30,7 +30,7 @@ Below is the detailed checklist to track the development of the SIVO documentati
 | [x] | H-16 | `docs/guides/dynamic-ui-elements.md` | Programmatically adding UI layers: cards, progress bars, markers, image overlays, and scalable text. |
 | [x] | H-17 | `docs/guides/scrollytelling-and-tours.md` | Building narrative-driven data presentations using `bind_scrollytelling` and `bind_tour`. |
 | [x] | H-18 | `docs/guides/built-in-templates.md` | Guide on using the built-in aspect-ratio based SVG templates (1_1, 16_10, 3_2, etc.) and filling zones. |
-| [x] | H-19 | `docs/guides/multimedia-advanced-actions.md` | Using Video, Audio, CycleState, Explode, and other advanced actions. |
+| [x] | H-19 | `docs/guides/multimedia-advanced-actions.md` | Using Video, Audio,  Explode, and other advanced actions. |
 | [x] | H-20 | `docs/guides/security-and-offline.md` | Best practices for CSP, DOMPurify, running offline, and mitigating vulnerabilities. |
 | [x] | H-21 | `docs/guides/accessibility.md` | Best practices for making SIVO maps and dashboards accessible (WCAG, ARIA, high contrast). |
 | [x] | H-22 | `docs/guides/external-integrations.md` | Guide on integrating external services (Ecommerce, BI tools, Replit, Forms). |
