@@ -30,6 +30,14 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 *   **Data Binding Wizard:** Users select an IDBFS dataset (e.g., `sales.csv`) and visually map its columns to SVG element IDs to auto-generate a choropleth.
 
 ## 5. Implementing Complex SIVO Features in the No-Code UI
+Embedded SVG Background Images
+UI Flow: A canvas settings panel allowing users to upload or link an image to embed directly within the SVG layer so it pans and zooms alongside the vector elements.
+Configuration: Maps directly to the `svg_background_image_url` and `svg_background_image_insert_after` parameters in `Sivo.from_svg()`.
+
+Absolute Image Overlays
+UI Flow: Users can drag and drop standalone image assets directly onto the builder canvas, locking them to specific map coordinates with scaling rules.
+Configuration: Translates to `sivo_app.add_image_overlay()` to position images over element centers, optionally setting `scale_with_zoom`.
+
 
 ### Drill-Downs (Multi-Level Maps)
 *   **UI Flow:** The user uploads multiple SVGs (e.g., `Campus Map`, `Building A`). In the Visual Mapper, clicking "Building A" in the main map opens a "Click Action" menu.
@@ -372,12 +380,12 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, **Ecommerce Embeds**, **Rich Media Embeds**, **Business Intelligence Embeds**, **External Forms**, as well as **Form, Social & Replit Embeds**.
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, **High Contrast Theming**, **Ambient Effects**, **Canvas Backgrounds & Borders**, **Dramatic UI Transitions**, and **Shadow DOM Custom Styling & DOMPurify** support.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, **High Contrast Theming**, **Ambient Effects**, **Canvas Backgrounds & Borders**, **Embedded SVG Background Images**, **Dramatic UI Transitions**, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
-2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, **Scratchoff Reveal Layers**, and configuring **HTML/DOM Overlays**.
+2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, **Absolute Image Overlays**, **Scratchoff Reveal Layers**, and configuring **HTML/DOM Overlays**.
 3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, **Brush Selection**, **Built-in Canvas Search**, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
