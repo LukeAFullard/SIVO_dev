@@ -182,9 +182,8 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
                 emphasis_style['areaColor'] = theme['hover_color']
             else:
                 # If no specific hover color is set, ensure areaColor stays transparent or inherits correctly
-
-                # so we don't accidentally override it in emphasis if we don't want to.
-                pass
+                # We disable emphasis for items that don't have interactive feedback configured to prevent default ECharts yellow flash
+                data_item['emphasis'] = {'disabled': True}
 
             if theme.get('glow'):
                 emphasis_style['shadowBlur'] = 15
@@ -193,9 +192,14 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
                 emphasis_style['shadowOffsetY'] = 0
 
             data_item['label'] = {'show': False}
-            data_item['emphasis'] = {'label': {'show': False}}
+            if 'emphasis' not in data_item:
+                data_item['emphasis'] = {'label': {'show': False}}
+            else:
+                data_item['emphasis']['label'] = {'show': False}
             if emphasis_style:
                 data_item['emphasis']['itemStyle'] = emphasis_style
+                if 'disabled' in data_item['emphasis']:
+                    del data_item['emphasis']['disabled']
 
             echarts_data.append(data_item)
 
