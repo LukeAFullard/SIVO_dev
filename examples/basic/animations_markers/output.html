@@ -2663,6 +2663,9 @@
                             if (!item.itemStyle) item.itemStyle = {};
                             item.itemStyle.opacity = 0.2;
                             item._has_faded = true;
+                            item._just_faded = true;
+                            // Ensure the fade uses the configured duration for its transition
+                            item._fade_duration = item.animation_duration_ms || 1000;
                             updated = true;
                         }
                     } else if (item.animation_class === 'pulse') {
@@ -2674,11 +2677,14 @@
 
                         // We will simulate a pulse by rapidly alternating a highly contrasting border and a slight opacity change
                         // that differs from the deep fade. We also change the base color slightly.
+                        // Setting animationDurationUpdate specifically on itemStyle helps ECharts tween the values rather than jumping.
+                        if (!item.itemStyle) item.itemStyle = {};
                         item.itemStyle.opacity = toggle ? 0.8 : 1.0;
                         item.itemStyle.borderWidth = toggle ? 3 : 0;
                         item.itemStyle.borderColor = 'rgba(255,255,255,0.8)';
                         item.itemStyle.shadowBlur = toggle ? 15 : 0;
                         item.itemStyle.shadowColor = item.itemStyle.color || 'yellow';
+                        // Note: ECharts handles transition tweening if animationDurationUpdate is applied
 
                         if (toggle) {
                             myChart.dispatchAction({ type: 'highlight', name: item.name });
@@ -2690,7 +2696,26 @@
                 });
 
                 if (updated) {
-                    myChart.setOption({ series: [{ data: currentData }] });
+                    // Tell ECharts to smoothly tween the update over the pulse interval duration.
+                    // This creates a ramped transition rather than a blunt switch.
+                    // If we have a fade happening that has a custom duration, we can use that, otherwise pulseIntervalMs.
+                    var maxDuration = pulseIntervalMs;
+                    currentData.forEach(d => {
+                        if (d._just_faded) {
+                            if (d._fade_duration > maxDuration) {
+                                maxDuration = d._fade_duration;
+                            }
+                            d._just_faded = false;
+                        }
+                    });
+
+                    myChart.setOption({
+                        series: [{
+                            animationDurationUpdate: maxDuration,
+                            animationEasingUpdate: 'cubicInOut',
+                            data: currentData
+                        }]
+                    });
                 }
             }, pulseIntervalMs);
         }
@@ -4083,23 +4108,69 @@
                                 // Basic attempt to pretty-print JSON if it is JSON
                                 try {
                                     var jsonData = JSON.parse(data);
-                                    data = '<pre>' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                    if (action.fetch_data_path) {
+                                        var parts = action.fetch_data_path.split('.');
+                                        var targetData = jsonData;
+                                        for (var i = 0; i < parts.length; i++) {
+                                            if (targetData && targetData[parts[i]] !== undefined) {
+                                                targetData = targetData[parts[i]];
+                                            } else {
+                                                targetData = undefined;
+                                                break;
+                                            }
+                                        }
+                                        if (targetData !== undefined) {
+                                            if (typeof targetData === 'object' && targetData !== null) {
+                                                data = '<pre style="white-space: pre-wrap; word-wrap: break-word;">' + JSON.stringify(targetData, null, 2) + '</pre>';
+                                            } else {
+                                                // Just output the bare string safely
+                                                var rawString = String(targetData);
+                                                data = '<div style="font-size:16px; margin-top:10px;">' + (window.DOMPurify ? window.DOMPurify.sanitize(rawString) : rawString.replace(/</g, "&lt;").replace(/>/g, "&gt;")) + '</div>';
+                                            }
+                                        } else {
+                                            data = '<pre style="white-space: pre-wrap; word-wrap: break-word;">' + JSON.stringify(jsonData, null, 2) + '</pre>'; // Fallback
+                                        }
+                                    } else {
+                                        data = '<pre style="white-space: pre-wrap; word-wrap: break-word;">' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                    }
                                 } catch (e) {
                                     // Not JSON, keep as text
                                 }
-                                var container = document.getElementById(`sivo-fetch-container-${name}`);
-                                if (container) container.innerHTML = sanitizeHTML(data);
+                                // Since infoContent uses Shadow DOM, document.getElementById won't find the container directly.
+                                // We need to search inside the shadowRoot of info-content-host
+                                var host = document.getElementById('info-content-host');
+                                var container = null;
+                                if (host && host.shadowRoot) {
+                                    container = host.shadowRoot.querySelector(`#sivo-fetch-container-${name}`);
+                                }
+                                if (!container) {
+                                    container = document.getElementById(`sivo-fetch-container-${name}`);
+                                }
+
+                                if (container) {
+                                    container.innerHTML = sanitizeHTML(data);
+                                } else {
+                                    // If the panel hasn't rendered yet (because this fetch resolved extremely fast),
+                                    // we can retry after a short delay
+                                    setTimeout(() => {
+                                        var retryHost = document.getElementById('info-content-host');
+                                        var retryContainer = retryHost && retryHost.shadowRoot ? retryHost.shadowRoot.querySelector(`#sivo-fetch-container-${name}`) : document.getElementById(`sivo-fetch-container-${name}`);
+                                        if (retryContainer) retryContainer.innerHTML = sanitizeHTML(data);
+                                    }, 100);
+                                }
                             })
                             .catch(err => {
-                                var container = document.getElementById(`sivo-fetch-container-${name}`);
+                                var host = document.getElementById('info-content-host');
+                                var container = host && host.shadowRoot ? host.shadowRoot.querySelector(`#sivo-fetch-container-${name}`) : document.getElementById(`sivo-fetch-container-${name}`);
                                 if (container) container.innerHTML = `<span style="color:red">Failed to fetch data</span>`;
                             });
                     } else if (action.action_type === 'gallery') {
                         // Built-in gallery modal
                         var galleryModal = document.getElementById('sivo-gallery-modal');
                         var galleryWrapper = document.getElementById('sivo-gallery-wrapper');
-                        if (galleryModal && galleryWrapper && action.images.length > 0) {
-                            var imgHtml = `<img src="${action.images[0]}" style="max-width:100%; max-height:80vh; border-radius:4px;" />`;
+                        if (galleryModal && galleryWrapper && action.images && action.images.length > 0) {
+                            var firstImg = action.images[0] ? action.images[0] : '';
+                            var imgHtml = `<img src="${firstImg}" style="max-width:100%; max-height:80vh; border-radius:4px;" />`;
 
                             // If multiple images, add simple navigation
                             if (action.images.length > 1) {

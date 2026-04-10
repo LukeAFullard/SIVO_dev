@@ -2689,6 +2689,9 @@
                             if (!item.itemStyle) item.itemStyle = {};
                             item.itemStyle.opacity = 0.2;
                             item._has_faded = true;
+                            item._just_faded = true;
+                            // Ensure the fade uses the configured duration for its transition
+                            item._fade_duration = item.animation_duration_ms || 1000;
                             updated = true;
                         }
                     } else if (item.animation_class === 'pulse') {
@@ -2700,11 +2703,14 @@
 
                         // We will simulate a pulse by rapidly alternating a highly contrasting border and a slight opacity change
                         // that differs from the deep fade. We also change the base color slightly.
+                        // Setting animationDurationUpdate specifically on itemStyle helps ECharts tween the values rather than jumping.
+                        if (!item.itemStyle) item.itemStyle = {};
                         item.itemStyle.opacity = toggle ? 0.8 : 1.0;
                         item.itemStyle.borderWidth = toggle ? 3 : 0;
                         item.itemStyle.borderColor = 'rgba(255,255,255,0.8)';
                         item.itemStyle.shadowBlur = toggle ? 15 : 0;
                         item.itemStyle.shadowColor = item.itemStyle.color || 'yellow';
+                        // Note: ECharts handles transition tweening if animationDurationUpdate is applied
 
                         if (toggle) {
                             myChart.dispatchAction({ type: 'highlight', name: item.name });
@@ -2716,7 +2722,26 @@
                 });
 
                 if (updated) {
-                    myChart.setOption({ series: [{ data: currentData }] });
+                    // Tell ECharts to smoothly tween the update over the pulse interval duration.
+                    // This creates a ramped transition rather than a blunt switch.
+                    // If we have a fade happening that has a custom duration, we can use that, otherwise pulseIntervalMs.
+                    var maxDuration = pulseIntervalMs;
+                    currentData.forEach(d => {
+                        if (d._just_faded) {
+                            if (d._fade_duration > maxDuration) {
+                                maxDuration = d._fade_duration;
+                            }
+                            d._just_faded = false;
+                        }
+                    });
+
+                    myChart.setOption({
+                        series: [{
+                            animationDurationUpdate: maxDuration,
+                            animationEasingUpdate: 'cubicInOut',
+                            data: currentData
+                        }]
+                    });
                 }
             }, pulseIntervalMs);
         }
