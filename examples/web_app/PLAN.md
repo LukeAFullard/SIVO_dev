@@ -88,6 +88,23 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 *   **UI Flow:** An "Export & Publish" wizard.
 *   **Configuration:** Allows users to select output formats: standard HTML, offline HTML (triggers `build_js=True` bundling pipeline), PDF (via jsPDF), Image, JSON, or auto-generates Streamlit V2 Custom Component code snippets for embedding in Streamlit.
 
+
+### Interactive Callbacks & Rich HTML Tooltips
+*   **UI Flow:** A "Tooltips & Interactivity" configuration area in the Property Inspector.
+*   **Configuration:** Users can attach rich HTML content (rendered securely inside a Shadow DOM) and define callback payloads (`callback_payload`) when elements are interacted with.
+
+### Custom CSS, JS Injection & Layout Control
+*   **UI Flow:** A "Code & Layout" settings panel within the main settings.
+*   **Configuration:** Users can inject raw `custom_css` and `custom_js` during the `sivo.to_html()` export, and set the `default_panel_position` to control the overall side panel alignment.
+
+### Declarative JSON Import & State Hydration
+*   **UI Flow:** An "Import Project" function in the main File Manager Sidebar.
+*   **Configuration:** Allows users to upload a SIVO JSON configuration payload which the builder automatically uses to hydrate the project state via `Sivo.from_config()`.
+
+### Dynamic State Transitions (Image Toggles)
+*   **UI Flow:** A "State Actions" sub-panel within the Property Inspector.
+*   **Configuration:** Users can configure click interactions to dynamically toggle states, mapping to SIVO's `ToggleImageAction` to cycle through image overlays on map elements.
+
 ### Accessibility (A11y) & Security
 *   **UI Flow:** An "Accessibility & Security" settings menu for the project.
 *   **Configuration:** Allows users to explicitly define ARIA roles, set `presentation_order` for sequential keyboard navigation, and configure strict CSP or DOMPurify options.
@@ -112,7 +129,8 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
 2.  Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`).
 3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
-4.  Build the Property Inspector panel (colors, text, hover states).
+4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, and Dynamic State Transitions via `ToggleImageAction`).
+5.  Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
 1.  **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
@@ -124,7 +142,7 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, and Flow Maps.
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets and API polling.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI).
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, and Keyboard Navigation configurations in the Property Inspector.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, and Layout Control (`default_panel_position`) configurations.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
