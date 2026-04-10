@@ -137,7 +137,19 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 *   **Onboarding & Empty States:** Implement guided interactive tooltips for first-time users (e.g., "Drag a CSV here to start"), and ensure robust empty states for panels rather than blank screens or console errors.
 *   **State & Feedback:** Introduce non-blocking toast notifications for system events ("Saving to IDBFS...", "Error parsing CSV"), and skeletal loading screens during the initial WASM/Pyodide load phase.
 
-## 7. Step-by-Step Implementation Roadmap
+## 7. UX Strategy: Managing Complexity & Cognitive Load
+With a feature set this extensive, a core product risk is overwhelming non-technical users. To ensure the SIVO No-Code Builder remains accessible, the following UX principles must be strictly implemented:
+
+*   **Progressive Disclosure:** By default, the Property Inspector will only show basic settings (e.g., Tooltip Text, Color, Hover Color). Complex configurations like Interactive Callbacks, Custom CSS Injection, and E2E Testing scaffolding must be hidden behind an "Advanced Settings" toggle or a collapsible accordion to reduce visual clutter.
+*   **Contextual Tooling:** Features should only appear when relevant. For example, the "Map Types" drawer (Choropleth, Hexbin) should only activate when a dataset is successfully linked to an SVG. Data binding options should not be visible when editing purely cosmetic elements like SVGs or Images.
+*   **Task-Based Workspaces:** Instead of one massive editor, the UI should be divided into distinct modes:
+    *   **Design Mode:** Focuses on layout, SVG normalization, theming, and aesthetics.
+    *   **Data Mode:** Focuses on the CSV binding wizard, live data connections, and multi-view project linking.
+    *   **Publish Mode:** Focuses on accessibility, E2E testing, geocoding API keys, and export formats.
+*   **Command Palette (Cmd+K):** A quick-action search bar will allow power users to bypass the UI to find specific tools (e.g., "Add Timeline", "Validate Project") instantly without deep menu navigation.
+*   **Opinionated Defaults & Templates:** The "New Project" wizard should offer pre-configured, best-practice templates (e.g., "Basic Sales Dashboard", "Scrollytelling Map") that automatically wire up standard interactions, rather than presenting a blank canvas.
+
+## 8. Step-by-Step Implementation Roadmap
 
 ### Phase 1: Core Storage & File Management (Weeks 1-2)
 1.  Extend the current `index.html` UI to include a robust File Manager Sidebar.
