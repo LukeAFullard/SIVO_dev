@@ -233,6 +233,27 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 * **UI Flow:** A "Shapes" library that allows users to drag-and-drop basic geometry (rectangles, circles, lines) or text nodes directly onto a blank or existing canvas.
 * **Configuration:** The builder translates these actions into programmatic calls to `sivo_app.add_shape()`, injecting native scalable geometry or text (via the `text_content` attribute) into the layout.
 
+
+### Drill-Through Page Transitions
+* **UI Flow:** An interaction setting where users can define a URL or file path and a page transition animation (e.g., 'flip', 'slide-left') to navigate completely away from the current map view.
+* **Configuration:** Maps the user inputs to the `drill_through` and `drill_transition` parameters in the `sivo.map()` API for multi-page routing.
+
+### Markdown & Image Gallery Rendering
+* **UI Flow:** A rich content tab where users can drop Markdown text blocks or upload a series of images to display when an element is clicked.
+* **Configuration:** The builder parses these inputs and binds them to `MarkdownAction` and `GalleryAction` within the interaction mapping payload.
+
+### Contextual Footnotes
+* **UI Flow:** A text input field in the Property Inspector to add small contextual annotations or citations that appear dynamically below the main map view when hovering or clicking an element.
+* **Configuration:** Passes the text string to the `FootnoteAction` model to render non-intrusive supplementary information.
+
+### Dynamic API Fetching on Click
+* **UI Flow:** An advanced action setting where users can provide a REST endpoint URL to be queried in real-time only when a specific SVG element is interacted with, displaying the result.
+* **Configuration:** Binds the endpoint URL to `FetchAction` to securely retrieve and inject external JSON/HTML data upon user click.
+
+### Hover Callbacks
+* **UI Flow:** A specific interactivity toggle allowing users to send data payloads back to the host system immediately upon hovering over an element, rather than waiting for a click.
+* **Configuration:** Compiles the configured payload and triggers the `HoverCallbackAction` to enable bidirectional communication on mouse-over events.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -269,7 +290,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
 2.  Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
 3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
-4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle.
+4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle.
 5.  Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
 6.  **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
@@ -282,9 +303,9 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
-2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets and API polling.
+2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI) and support for **Document & Map Embeds**.
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, and **Shadow DOM Custom Styling & DOMPurify** support.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
@@ -294,7 +315,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
 1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI, Auto-Generated Legends, and **Geographic Coordinate Mapping**.
-2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures.
+2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures, including **Drill-Through Page Transitions**.
 3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities.
 4.  **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
 5.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
