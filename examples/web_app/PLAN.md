@@ -129,6 +129,38 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 * **UI Flow:** A "Testing & QA" toggle within the project settings allowing enterprise users to generate end-to-end test suites for their exported dashboards.
 * **Configuration:** Sets the `enable_e2e_testing` flag to `True` in `ProjectConfig`, seamlessly generating scaffolded Playwright tests to ensure custom interactive SVGs scale correctly across browsers.
 
+### Built-in SVG Templates
+* **UI Flow:** A visual "Template Library" overlay where users can browse pre-configured aspect ratios (16:10, 1:1, etc.) instead of uploading an SVG.
+* **Configuration:** The builder directly instantiates the canvas using `Sivo.from_template('template_name')` to start a new project.
+
+### Dashboard Details & Metrics Panels
+* **UI Flow:** In Dashboard Mode, users can drag pre-configured panel components (like a live feed or data readout) onto the CSS Grid alongside their map.
+* **Configuration:** These visual blocks map directly to the `dashboard.add_details_panel` and `dashboard.add_metrics_panel` methods for automatic click-event rendering.
+
+### Streamlit Bidirectional Communication
+* **UI Flow:** A "Streamlit Connection" toggle in the export settings that enables real-time messaging between the web UI and a Python host.
+* **Configuration:** Generates a custom component snippet utilizing `sivo_component` with iframe message passing to support bidirectional click/hover callbacks, dynamic color updates, and programmatic zooming.
+
+### Shadow DOM Custom Styling & DOMPurify
+* **UI Flow:** An "Advanced HTML Style" editor for components allowing users to write inline CSS specifically scoped to an element's tooltip or panel.
+* **Configuration:** The builder configures DOMPurify with `FORCE_BODY: true` to allow `<style>` tags at the root of the string, which securely styles the content isolated inside the `#info-content-host` Shadow DOM.
+
+### Selective ECharts Hover Effects
+* **UI Flow:** A "Hover Feedback" toggle switch on non-interactive aesthetic elements to prevent distracting glow or color changes when moused over.
+* **Configuration:** Sets `emphasis.disabled = true` per-element in the generated payload, turning off ECharts' default interactive highlights for unmapped nodes.
+
+### Runtime Debugging & State Inspection
+* **UI Flow:** A "Debug Console" panel in the builder that displays the live JSON payload of the currently rendered map.
+* **Configuration:** Intercepts and parses the global `window.SivoData` object from the injected JS runtime to display the raw compiled Pydantic state.
+
+### Programmatic Panel Dismissal
+* **UI Flow:** A visual "Close Button" behavior that can be mapped to custom SVG elements, letting users create their own modal close triggers.
+* **Configuration:** Binds the `onClick` event of the targeted element to the global `closePanel()` JavaScript function.
+
+### XXE Security Mitigation
+* **UI Flow:** An invisible, foundational security feature that safely parses user-uploaded XML files without risk of external attacks.
+* **Configuration:** Under the hood, SIVO sets `resolve_entities=False` and `no_network=True` within the `lxml` parser to prevent XML External Entity (XXE) injection.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -158,38 +190,39 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 3.  Add memory cleanup routines to ensure large files are flushed from RAM after saving to IDBFS.
 4.  Implement CSV/XLSX to IDBFS parsing utility.
 5.  **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
+6.  **XXE Security Mitigation:** Ensure all uploaded XML/SVG parsing relies securely on `resolve_entities=False` and `no_network=True` to prevent injection attacks.
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
 1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
-2.  Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`).
+2.  Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
 3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
-4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, and Dynamic State Transitions via `ToggleImageAction`).
+4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle.
 5.  Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
 6.  **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
 1.  **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
-2.  **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, metrics panels, and details panels.
+2.  **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
 3.  **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs.
-4.  **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) to check for missing nodes or bad mappings.
+4.  **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, and Flow Maps.
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets and API polling.
 3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI).
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, and Layout Control (`default_panel_position`) configurations.
+4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
 2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, and dropping Dynamic Odometers.
-3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, and Zoom on Click configurations.
+3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
 1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI and Auto-Generated Legends.
 2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures.
-3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets.
+3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities.
 4.  **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
 5.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 
