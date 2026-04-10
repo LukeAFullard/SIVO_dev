@@ -161,6 +161,22 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 * **UI Flow:** An invisible, foundational security feature that safely parses user-uploaded XML files without risk of external attacks.
 * **Configuration:** Under the hood, SIVO sets `resolve_entities=False` and `no_network=True` within the `lxml` parser to prevent XML External Entity (XXE) injection.
 
+### JSON Serialization XSS Mitigation
+* **UI Flow:** A built-in security guarantee that ensures no custom text or data entered by the user in the builder can break the exported output.
+* **Configuration:** The builder serializes data and safely escapes `<` and `>` into `\u003c` and `\u003e` before injecting the `views_data` payload into JS templates, preventing XSS breakout.
+
+### Nested ECharts Actions
+* **UI Flow:** In the graphing setup, users can configure interactive charts to dispatch events that SIVO listens to, tying chart data selection directly back to the visual SVG map.
+* **Configuration:** The builder maps standard ECharts events to the `NestedEchartsAction` mechanism in SIVO.
+
+### Document & Map Embeds
+* **UI Flow:** A specific component block allowing users to drag full PDF or external live map iframes into the interactive interface.
+* **Configuration:** Configures the `add_document_embed` or `add_map_embed` functionality inside the generated Pydantic output.
+
+### HTML/DOM Overlays
+* **UI Flow:** A tool that allows users to place raw HTML or DOM elements directly on top of the map.
+* **Configuration:** Users can map custom HTML directly via the SIVO API to float above the canvas.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -191,6 +207,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 4.  Implement CSV/XLSX to IDBFS parsing utility.
 5.  **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
 6.  **XXE Security Mitigation:** Ensure all uploaded XML/SVG parsing relies securely on `resolve_entities=False` and `no_network=True` to prevent injection attacks.
+7.  **JSON Serialization XSS Mitigation:** Integrate the safe escaping logic for injected JSON `views_data` to secure templates from cross-site scripting natively.
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
 1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
@@ -203,20 +220,20 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
 1.  **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
 2.  **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
-3.  **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs.
+3.  **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs, adding support for **Nested ECharts Actions** configuration.
 4.  **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, and Flow Maps.
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets and API polling.
-3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI).
+3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI) and support for **Document & Map Embeds**.
 4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
-2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, and dropping Dynamic Odometers.
+2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, and configuring **HTML/DOM Overlays**.
 3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
