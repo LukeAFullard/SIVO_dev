@@ -340,6 +340,9 @@ To elevate the web app from an "example" to a modern, production-grade product, 
 ## 7. UX Strategy: Managing Complexity & Cognitive Load
 With a feature set this extensive, a core product risk is overwhelming non-technical users. To ensure the SIVO No-Code Builder remains accessible, the following UX principles must be strictly implemented:
 
+*   **Undo/Redo History Engine:** Implement a robust state history manager, allowing users to experiment freely without fear of breaking their layouts or configurations.
+*   **"Pre-Flight" Assistant & Auto-Fixes:** Expand standard validation into a friendly publishing checklist that not only flags missing configurations (e.g., "Choropleth mapped but no color gradient selected") but offers one-click "Auto-Fix" solutions.
+*   **Preset & Community Recipe Library:** Beyond basic templates, allow users to browse and import pre-configured "recipes" or UI blocks for common dashboard patterns, accelerating the path to a polished product.
 *   **Progressive Disclosure:** By default, the Property Inspector will only show basic settings (e.g., Tooltip Text, Color, Hover Color). Complex configurations like Interactive Callbacks, Custom CSS Injection, and E2E Testing scaffolding must be hidden behind an "Advanced Settings" toggle or a collapsible accordion to reduce visual clutter.
 *   **Contextual Tooling:** Features should only appear when relevant. For example, the "Map Types" drawer (Choropleth, Hexbin) should only activate when a dataset is successfully linked to an SVG. Data binding options should not be visible when editing purely cosmetic elements like SVGs or Images.
 *   **Task-Based Workspaces:** Instead of one massive editor, the UI should be divided into distinct modes:
@@ -367,19 +370,20 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
 4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
 5.  Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
-6.  **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
+6.  **State Management:** Integrate an **Undo/Redo History Engine** to safely manage configuration states during visual editing.
+7.  **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
 1.  **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
 2.  **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
 3.  **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs, adding support for **Nested ECharts Actions** configuration.
-4.  **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
+4.  **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
-3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, **Ecommerce Embeds**, **Rich Media Embeds**, **Business Intelligence Embeds**, **External Forms**, as well as **Form, Social & Replit Embeds**.
+3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, **Ecommerce Embeds**, **Rich Media Embeds**, **Business Intelligence Embeds**, **External Forms**, **Form, Social & Replit Embeds**, and browse the **Preset & Community Recipe Library**.
 4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, **High Contrast Theming**, **Ambient Effects**, **Canvas Backgrounds & Borders**, **Embedded SVG Background Images**, **Dramatic UI Transitions**, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
