@@ -254,6 +254,15 @@ A brand-new, visually driven React/Vanilla JS interface aimed at non-coders. It 
 * **UI Flow:** A specific interactivity toggle allowing users to send data payloads back to the host system immediately upon hovering over an element, rather than waiting for a click.
 * **Configuration:** Compiles the configured payload and triggers the `HoverCallbackAction` to enable bidirectional communication on mouse-over events.
 
+
+### Visual Data Flow Connections
+* **UI Flow:** A "Connect Nodes" tool allowing users to click and drag lines between two SVG elements to show relationships or logic flows.
+* **Configuration:** Calls `sivo_app.add_connection()` to dynamically draw SVG connection paths between the calculated bounding boxes of the targeted elements.
+
+### Form, Social & Replit Embeds
+* **UI Flow:** Dedicated widgets in the Integration Catalog that allow users to drop in URLs for Typeform, Reddit, or Replit to instantly render embedded iframes.
+* **Configuration:** Maps the user inputs directly to the `FormAction`, `SocialAction`, and `ReplitAction` models within the interaction mapping logic.
+
 ## 6. Modern UI/UX Design System & Productization
 To elevate the web app from an "example" to a modern, production-grade product, the interface will undergo a complete design system overhaul.
 *   **CSS Framework:** Migrate from raw CSS to a utility-first framework like Tailwind CSS, paired with highly accessible, pre-built component libraries (e.g., Shadcn UI or Radix UI) for clean modals, dropdowns, and context menus.
@@ -304,13 +313,13 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
 1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
 2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
-3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (Forms, E-commerce, BI) and support for **Document & Map Embeds**.
+3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, as well as **Form, Social & Replit Embeds**.
 4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
 1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
-2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, Visual Comparisons, **Native SVG Shape Generation**, and configuring **HTML/DOM Overlays**.
+2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, and configuring **HTML/DOM Overlays**.
 3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
