@@ -11,7 +11,7 @@ from sivo import Sivo, ProjectConfig
 from sivo.core.dashboard import SivoDashboard
 
 def main():
-    # 1. Initialize empty dashboard using the bento_box template
+    # 1. Initialize empty dashboard
     dashboard = SivoDashboard(title="Operations Overview", columns=3)
     dashboard.set_grid_layout(
         desktop='''
@@ -41,7 +41,7 @@ def main():
     dashboard.add_html_block("header_info", header_html, grid_area="header")
 
     # 3. Create a primary Map for the left side
-    us_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True)
+    us_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True, default_panel_position="none")
 
     # Add some dummy interactions to the map
     us_map.map(
@@ -49,6 +49,7 @@ def main():
         color="#3b82f6",
         hover_color="#2563eb",
         tooltip="<h3>Main Panel Hub</h3><p>Status: Healthy<br>Nodes: 1,245</p>",
+        panel_position="right",
         callback_payload={"active_nodes": "1,245", "latency": "12ms", "uptime": "99.99%"}
     )
     us_map.map(
@@ -56,6 +57,7 @@ def main():
         color="#f59e0b",
         hover_color="#d97706",
         tooltip="<h3>Metric Box 1 Hub</h3><p>Status: Warning<br>Nodes: 850</p>",
+        panel_position="right",
         callback_payload={"active_nodes": "850", "latency": "45ms", "uptime": "98.5%"}
     )
     us_map.map(
@@ -63,6 +65,7 @@ def main():
         color="#3b82f6",
         hover_color="#2563eb",
         tooltip="<h3>Metric Box 2 Hub</h3><p>Status: Healthy<br>Nodes: 920</p>",
+        panel_position="right",
         callback_payload={"active_nodes": "920", "latency": "18ms", "uptime": "99.9%"}
     )
 
@@ -70,8 +73,8 @@ def main():
     dashboard.add_sivo_block("regional_map", us_map, grid_area="main")
 
     # 4. Create a Secondary Map (e.g., a specific floorplan or detailed area)
-    floorplan = Sivo.from_template('dashboards/sidebar_layout', layout_size="80%", lock_scroll_bounds=False)
-    floorplan.map("main_panel", color="#10b981", tooltip="London DC: Online")
+    floorplan = Sivo.from_template('dashboards/sidebar_layout', layout_size="80%", lock_scroll_bounds=False, default_panel_position="none")
+    floorplan.map("main_panel", color="#10b981", tooltip="London DC: Online", panel_position="right")
 
     # Add the secondary map, taking up 1 column
     dashboard.add_sivo_block("eu_operations", floorplan, grid_area="side1")
