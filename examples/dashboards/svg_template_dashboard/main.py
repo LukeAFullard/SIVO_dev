@@ -11,7 +11,8 @@ def main():
         "main_panel",
         hover_color="#f8fafc",
         tooltip="Primary Visualization Area",
-        html="<p>This is where your main graph or map would go.</p>"
+        html="<p>This is where your main graph or map would go.</p>",
+        panel_position="right"
     )
 
     sivo_app.map(
