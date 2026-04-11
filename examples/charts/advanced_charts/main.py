@@ -29,7 +29,8 @@ def main():
         title="Advanced Chart Types",
         subtitle="Exploring Polar, Liquid Fill, and Custom Series natively in SIVO",
         disable_zoom_controls=True,
-        panel_width="40%"
+        panel_width="40%",
+        default_panel_position="right"
     )
 
     # Let's map the general theme options like hover_color independently using base app.map
@@ -129,7 +130,7 @@ def main():
     )
 
     # Export the bundle
-    output_path = os.path.join(os.path.dirname(__file__), "advanced_charts.html")
+    output_path = os.path.join(os.path.dirname(__file__), "output.html")
     app.to_html(output_path)
     print(f"Successfully generated: {output_path}")
 
