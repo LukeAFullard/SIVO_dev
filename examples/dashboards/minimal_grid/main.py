@@ -39,28 +39,36 @@ def main():
         color="#10b981",
         hover_color="#059669",
         tooltip="<h3>Cluster Alpha</h3><p>Status: Healthy<br>Nodes: 120</p>",
-        callback_payload={"cpu_load": "45%", "memory_usage": "62%", "network_io": "1.2 GB/s", "active_connections": "4,502"}
+        html="<h3>Cluster Alpha</h3><p>Status: Healthy<br>Nodes: 120</p>",
+        callback_payload={"cpu_load": "45%", "memory_usage": "62%", "network_io": "1.2 GB/s", "active_connections": "4,502"},
+        panel_position="right"
     )
     cluster_map.map(
         "quadrant_2",
         color="#f59e0b",
         hover_color="#d97706",
         tooltip="<h3>Cluster Beta</h3><p>Status: Warning<br>Nodes: 95</p>",
-        callback_payload={"cpu_load": "88%", "memory_usage": "75%", "network_io": "2.1 GB/s", "active_connections": "6,100"}
+        html="<h3>Cluster Beta</h3><p>Status: Warning<br>Nodes: 95</p>",
+        callback_payload={"cpu_load": "88%", "memory_usage": "75%", "network_io": "2.1 GB/s", "active_connections": "6,100"},
+        panel_position="right"
     )
     cluster_map.map(
         "quadrant_3",
         color="#10b981",
         hover_color="#059669",
         tooltip="<h3>Cluster Gamma</h3><p>Status: Healthy<br>Nodes: 150</p>",
-        callback_payload={"cpu_load": "32%", "memory_usage": "41%", "network_io": "0.8 GB/s", "active_connections": "2,150"}
+        html="<h3>Cluster Gamma</h3><p>Status: Healthy<br>Nodes: 150</p>",
+        callback_payload={"cpu_load": "32%", "memory_usage": "41%", "network_io": "0.8 GB/s", "active_connections": "2,150"},
+        panel_position="right"
     )
     cluster_map.map(
         "quadrant_4",
         color="#ef4444",
         hover_color="#dc2626",
         tooltip="<h3>Cluster Delta</h3><p>Status: Critical<br>Nodes: 5</p>",
-        callback_payload={"cpu_load": "99%", "memory_usage": "98%", "network_io": "0.1 GB/s", "active_connections": "52"}
+        html="<h3>Cluster Delta</h3><p>Status: Critical<br>Nodes: 5</p>",
+        callback_payload={"cpu_load": "99%", "memory_usage": "98%", "network_io": "0.1 GB/s", "active_connections": "52"},
+        panel_position="right"
     )
 
     dashboard.add_sivo_block("cluster_topology", cluster_map, grid_area="map")
