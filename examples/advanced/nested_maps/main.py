@@ -5,7 +5,8 @@ def main():
     sivo_app = Sivo.from_svg(
         os.path.join(os.path.dirname(__file__), "main.svg"),
         title="Nested Maps Example",
-        subtitle="Click Region A to open a detailed map inside the info panel"
+        subtitle="Click Region A to open a detailed map inside the info panel",
+        default_panel_position="right"
     )
 
     # Read the submap SVG as a string so we can pass it as map_data
