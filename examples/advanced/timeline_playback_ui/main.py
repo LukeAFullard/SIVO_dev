@@ -11,7 +11,13 @@ def main():
     </svg>"""
 
     # 2. Initialize SIVO
-    app = Sivo.from_string(svg_data, title="Native Timeline Playback UI", subtitle="Demonstrating programmatic control over the ECharts timeline component.")
+    # Setting default_panel_position="none" as it's the current default and appropriate for a timeline map
+    app = Sivo.from_string(
+        svg_data,
+        title="Native Timeline Playback UI",
+        subtitle="Demonstrating programmatic control over the ECharts timeline component.",
+        default_panel_position="none"
+    )
 
     # 3. Create temporal data to drive the map
     # The structure is: { "TimeStep": { "ElementID": { "DataKey": Value } } }
