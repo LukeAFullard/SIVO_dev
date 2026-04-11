@@ -1,7 +1,6 @@
 import os
 from sivo import Sivo, SivoDashboard
 
-
 # --- 1. Create a Primary Sivo Map Block ---
 map_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
     <rect id="bg" width="800" height="600" fill="#f8fafc" />
@@ -11,7 +10,7 @@ map_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
     <text x="350" y="400" font-family="sans-serif" font-size="24" fill="#333" pointer-events="none">South Region</text>
 </svg>"""
 
-sivo_map = Sivo.from_string(map_svg, theme="light")
+sivo_map = Sivo.from_string(map_svg, theme="light", default_panel_position="none")
 
 # --- Rich Media in the Details Panel ---
 # By passing HTML directly into the 'html' parameter, you can inject rich text,
@@ -69,7 +68,7 @@ chart_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
     <text x="310" y="380" font-family="sans-serif" text-anchor="middle">Q3</text>
 </svg>"""
 
-sivo_chart = Sivo.from_string(chart_svg, theme="light")
+sivo_chart = Sivo.from_string(chart_svg, theme="light", default_panel_position="none")
 sivo_chart.map("bar1", tooltip="Q1 Revenue: $400,000")
 sivo_chart.map("bar2", tooltip="Q2 Revenue: $850,000")
 sivo_chart.map("bar3", tooltip="Q3 Revenue: $250,000")
