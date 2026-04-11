@@ -84,3 +84,8 @@ When defining a state or mapping for an element, you can apply images to the fil
 - `hover_image`: Displays an image within the boundaries of the SVG shape when the user hovers over it.
 
 These properties are especially powerful for creating "x-ray" effects, revealing photographs within map boundaries, or dynamically changing textures based on data states.
+
+
+### Tooltip Styling and z-index
+
+To ensure tooltips are never clipped or hidden behind SVG shapes or sidebars, SIVO configures ECharts tooltips with `appendToBody: true` and applies `z-index: 99999 !important` via `extraCssText`. This renders the tooltips at the absolute highest level in the DOM structure, solving overflow issues within smaller embedding containers.

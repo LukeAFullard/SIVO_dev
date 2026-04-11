@@ -286,3 +286,8 @@ Injects ARIA labels and keyboard navigability attributes.
 - **`role`** (`str`): The ARIA role for the interactive element. Defaults to `"button"`.
 - **`tabindex`** (`str`): The tabindex for keyboard navigation. Defaults to `"0"`.
 - **`aria_label`** (`str`): The screen reader accessible label for the element.
+
+
+### Note on Tooltips
+
+Tooltips are rendered natively via ECharts with `appendToBody: true` and `z-index: 99999 !important` to guarantee they appear above all other SVG/HTML layers and prevent clipping within overflow containers.

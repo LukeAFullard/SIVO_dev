@@ -1977,12 +1977,13 @@
                 tooltip: {
                     show: !window.sivoDisableTooltips,
                     trigger: 'item',
+                    appendToBody: true,
                     triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
                     borderColor: 'rgba(0, 0, 0, 0.05)',
                     borderWidth: 1,
                     textStyle: { color: '#334155', fontFamily: 'system-ui, sans-serif' },
-                    extraCssText: 'box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 8px; backdrop-filter: blur(8px); padding: 12px 16px;',
+                    extraCssText: 'box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 8px; backdrop-filter: blur(8px); padding: 12px 16px; z-index: 99999 !important;',
                     position: function (point, params, dom, rect, size) {
                         var x = point[0];
                         var y = point[1];
@@ -3852,8 +3853,8 @@
 
         window.isDraggingElement = false;
 
-        // Catch mousedown at the root DOM level before ECharts initiates pan (georoam)
-        document.getElementById('sivo-native-overlay-svg-container').addEventListener('mousedown', function (e) {
+        // Catch mousedown/touchstart at the root DOM level before ECharts initiates pan (georoam)
+        function handleDragStart(e) {
             if (renderMode !== 'svg') return;
 
             // Check if the clicked target has data-draggable true
@@ -3863,10 +3864,21 @@
             }
             if (target && target.getAttribute('data-draggable') === 'true') {
                 e.stopPropagation(); // Stop ECharts from getting the mousedown and starting a pan
+                // Prevent default scrolling on touch devices
+                if (e.type === 'touchstart') {
+                    // We don't preventDefault here because it might block clicks on non-draggable elements if not careful,
+                    // but since we verified it's draggable, we should preventDefault to stop scroll/pan.
+                    e.preventDefault();
+                }
 
                 draggedElement = target;
-                dragStartX = e.clientX;
-                dragStartY = e.clientY;
+
+                // Handle touch vs mouse coordinates
+                var clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                var clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+
+                dragStartX = clientX;
+                dragStartY = clientY;
                 window.isDraggingElement = true; // prevent click immediately after drag
 
                 // Parse existing transform translation
@@ -3880,21 +3892,57 @@
                     currentElementY = 0;
                 }
             }
-        }, true);
+        }
 
-        // Listen for mousemove on the window to support dragging
-        window.addEventListener('mousemove', function (e) {
+        var container = document.getElementById('sivo-native-overlay-svg-container');
+        container.addEventListener('mousedown', handleDragStart, { passive: false });
+        container.addEventListener('touchstart', handleDragStart, { passive: false });
+
+
+        // Listen for mousemove/touchmove on the window to support dragging
+        function handleDragMove(e) {
             if (draggedElement) {
-                var dx = e.clientX - dragStartX;
-                var dy = e.clientY - dragStartY;
+                if (e.type === 'touchmove') {
+                    e.preventDefault(); // Prevent scrolling while dragging
+                }
 
-                // Account for global ECharts zoom level so it drags 1:1 with mouse
-                var zoomLevel = currentZoom || 1;
+                var clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                var clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+                                                var dx = clientX - dragStartX;
+                var dy = clientY - dragStartY;
+
+                // Dynamically fetch the ACTUAL CTM scale factor from the SVG root group
+                var zoomLevel = 1;
+                var overlayGroup = document.getElementById('sivo-global-transform-group');
+                if (overlayGroup) {
+                    var ctm = overlayGroup.getAttribute('transform');
+                    if (ctm) {
+                        var matrixMatch = ctm.match(/matrix\(([^,]+)/);
+                        if (matrixMatch && matrixMatch[1]) {
+                            zoomLevel = parseFloat(matrixMatch[1]);
+                        }
+                    }
+                }
+
+                // Fallback to series zoom if matrix parse fails
+                if (zoomLevel === 1 || isNaN(zoomLevel)) {
+                    var option = myChart.getOption();
+                    var seriesZoom = (option && option.series && option.series.length > 0 && option.series[0].zoom) ? option.series[0].zoom : 1;
+                    zoomLevel = currentZoom || seriesZoom;
+                }
+
                 dx = dx / zoomLevel;
                 dy = dy / zoomLevel;
 
                 var newX = currentElementX + dx;
                 var newY = currentElementY + dy;
+
+                // Update tracking variables to support delta movements and prevent accelerating cursor
+                dragStartX = clientX;
+                dragStartY = clientY;
+                currentElementX = newX;
+                currentElementY = newY;
 
                 var currentTransform = draggedElement.getAttribute('transform') || '';
                 // Remove old translate to overwrite it
@@ -3907,16 +3955,116 @@
                 // Prevent anything else from handling this move
                 e.stopPropagation();
             }
+        }
+
+        window.addEventListener('mousemove', handleDragMove, { passive: false, capture: true });
+        window.addEventListener('touchmove', handleDragMove, { passive: false, capture: true });
+
+        // Use global window events to ensure mouseup/touchend is always caught even if it leaves the canvas
+
+
+        // Intercept hover/mousemove on draggable elements to show tooltips at their new locations
+        document.addEventListener('mousemove', function(e) {
+            if (window.isDraggingElement) return; // Don't trigger while actively dragging
+
+            var target = e.target;
+            if (target && target.closest) {
+                target = target.closest('[data-draggable="true"]');
+            }
+            if (target && target.getAttribute('data-draggable') === 'true') {
+                // The element ID is usually mapped as the 'name' attribute by ECharts in SVG mode,
+                // or we fall back to the DOM ID if preserved.
+                var originalId = target.getAttribute('name') || target.id;
+                if (!originalId && target.parentNode) originalId = target.parentNode.getAttribute('name') || target.parentNode.id;
+
+                                if (originalId) {
+                    var containerRect = myChart.getDom().getBoundingClientRect();
+                    var localX = e.clientX - containerRect.left;
+                    var localY = e.clientY - containerRect.top;
+
+                    myChart.dispatchAction({
+                        type: 'showTip',
+                        seriesIndex: 0,
+                        name: originalId,
+                        x: localX,
+                        y: localY,
+                        position: [localX, localY]
+                    });
+                }
+            }
         }, true);
 
-        // Use global window events to ensure mouseup is always caught even if it leaves the canvas
-        window.addEventListener('mouseup', function(e) {
+        // Intercept native clicks/touchends on draggable elements since ECharts ZRender loses track of them when their DOM transform is mutated
+        document.addEventListener('click', function(e) {
+            var target = e.target;
+            if (target && target.closest) {
+                target = target.closest('[data-draggable="true"]');
+            }
+            if (target && target.getAttribute('data-draggable') === 'true') {
+                // If we just finished dragging, we might not want to trigger a click.
+                if (window.isDraggingElement) return;
+
+                // Find the element name
+                var elementId = target.getAttribute('name') || target.id;
+                // Sometimes ECharts doesn't put name on the path, but puts it on the parent group or we can find it via our mapped data
+                if (!elementId) {
+                    // Try to extract from ECharts generated ID or class if needed
+                    // For SIVO map series, usually the name is mapped in ZRender but not always in DOM.
+                    // However, we can dispatch the tooltip via the element name.
+                    // Let's iterate echartsData to find a matching DOM node if possible, or just use the target's ID if SIVO preserved it.
+                }
+
+                // A reliable way in SIVO: The mapped element ID is usually preserved in the DOM structure by ECharts as the 'name' or we can look up echartsData
+                // Wait, ECharts SVG renderer strips custom IDs unless we use `name`.
+                // Actually, the `data-draggable="true"` was added in `bundle_generator.py` or `echarts.html` during `renderView`.
+                // Look at line 2874: `if (mapping.draggable) { node.setAttribute('data-draggable', 'true'); }`
+                // This means the node has the original SVG ID!
+                // The element ID is usually mapped as the 'name' attribute by ECharts in SVG mode,
+                // or we fall back to the DOM ID if preserved.
+                var originalId = target.getAttribute('name') || target.id;
+                if (!originalId && target.parentNode) originalId = target.parentNode.getAttribute('name') || target.parentNode.id;
+
+if (originalId) {
+                    var containerRect = myChart.getDom().getBoundingClientRect();
+                    var clientX = e.clientX;
+                    var clientY = e.clientY;
+                    if (e.changedTouches && e.changedTouches.length > 0) {
+                        clientX = e.changedTouches[0].clientX;
+                        clientY = e.changedTouches[0].clientY;
+                    }
+                    var localX = clientX - containerRect.left;
+                    var localY = clientY - containerRect.top;
+
+                    // Manually trigger tooltip at exact pointer position
+                    myChart.dispatchAction({
+                        type: 'showTip',
+                        seriesIndex: 0,
+                        name: originalId,
+                        x: localX,
+                        y: localY,
+                        position: [localX, localY]
+                    });
+
+                    // Manually trigger click actions
+                    myChart.trigger('click', {
+                        componentType: 'series',
+                        name: originalId
+                    });
+                }
+            }
+        }, true);
+
+        function handleDragEnd(e) {
             if (draggedElement) {
                 draggedElement = null;
                 // delay clearing isDraggingElement so click handlers don't fire immediately
                 setTimeout(() => window.isDraggingElement = false, 100);
             }
-        });
+        }
+
+        window.addEventListener('mouseup', handleDragEnd);
+        window.addEventListener('touchend', handleDragEnd);
+        window.addEventListener('touchcancel', handleDragEnd);
 
 
         function applyFadeUnselected(selectedName, force = false) {
