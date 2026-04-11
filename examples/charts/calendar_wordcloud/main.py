@@ -50,7 +50,8 @@ wordcloud_data = [
 
 # We use a larger base64 string of a circle shape for the mask so the words have room to render
 # Generated via a 400x400 PIL image with a black circle
-large_mask_b64 = open("mask_b64.txt").read().strip()
+mask_path = os.path.join(os.path.dirname(__file__), "mask_b64.txt")
+large_mask_b64 = open(mask_path).read().strip()
 
 sivo_app.map_word_cloud_chart(
     element_id="wordcloud_box",
