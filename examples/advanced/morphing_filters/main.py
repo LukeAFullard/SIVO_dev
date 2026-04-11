@@ -18,7 +18,8 @@ svg_string = """
 """
 
 # Enable render_mode='svg' to use native SVG properties
-sivo_app = Sivo.from_string(svg_string, render_mode="svg")
+# We set default_panel_position="overlay" as default is now 'none'
+sivo_app = Sivo.from_string(svg_string, render_mode="svg", default_panel_position="overlay")
 
 # Map path morphing (native SMIL animate requires the exact same number and type of path commands)
 # Source path has 5 commands: M, L, L, L, Z
