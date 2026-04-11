@@ -12,7 +12,8 @@ def main():
         tooltip="Texas Region",
         html="<h3>Texas Region</h3><p>Zoomed in automatically to Texas.</p>",
         zoom_on_click=True,
-        zoom_level=3.5
+        zoom_level=3.5,
+        panel_position="right"
     )
 
     sivo_app.map(
@@ -20,10 +21,11 @@ def main():
         tooltip="California Region",
         html="<h3>California Region</h3><p>Zoomed in automatically to California.</p>",
         zoom_on_click=True,
-        zoom_level=3.5
+        zoom_level=3.5,
+        panel_position="right"
     )
 
-    # 3. Export to HTML
+    # 2. Export to HTML
     output_path = os.path.join(os.path.dirname(__file__), "output.html")
     sivo_app.to_html(output_path)
     print(f"Exported Zoom Action HTML to {output_path}")
