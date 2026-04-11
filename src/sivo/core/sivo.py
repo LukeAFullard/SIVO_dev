@@ -133,6 +133,20 @@ class Sivo:
         """
         # Path validation is explicitly handled in Infographic.from_svg
         info = Infographic.from_svg(filepath, simplify_tolerance=simplify_tolerance)
+
+        if bounding_coords is None:
+            viewbox = info.parser.get_viewbox()
+            if viewbox:
+                parts = viewbox.split()
+                if len(parts) >= 4:
+                    try:
+                        x = float(parts[0])
+                        y = float(parts[1])
+                        w = float(parts[2])
+                        h = float(parts[3])
+                        bounding_coords = [[x, y], [x + w, y + h]]
+                    except:
+                        pass
         return cls(info, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, panel_height=panel_height, panel_css=panel_css, disable_resizer=disable_resizer, disable_tooltips=disable_tooltips, disable_zoom_controls=disable_zoom_controls, lock_scroll_bounds=lock_scroll_bounds, lock_zoom_out=lock_zoom_out, layout_size=layout_size, starting_zoom=starting_zoom, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, enable_geocoder=enable_geocoder, geocode_provider=geocode_provider, geocode_api_key=geocode_api_key, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, enable_drawing_tools=enable_drawing_tools, ambient_effect=ambient_effect, ambient_speed=ambient_speed, bounding_coords=bounding_coords, graphic=graphic, background_image_url=background_image_url, border_image_url=border_image_url, border_image_position=border_image_position, border_image_width=border_image_width, border_image_opacity=border_image_opacity, border_image_grayscale=border_image_grayscale, background_image_opacity=background_image_opacity, background_image_grayscale=background_image_grayscale, svg_background_image_url=svg_background_image_url, svg_background_image_opacity=svg_background_image_opacity, svg_background_image_grayscale=svg_background_image_grayscale, svg_background_image_insert_after=svg_background_image_insert_after, transparent_template_lines=transparent_template_lines, presentation_order=presentation_order)
 
     @classmethod
@@ -154,6 +168,20 @@ class Sivo:
         if not svg_string or not isinstance(svg_string, str) or '<svg' not in svg_string.lower():
             raise ValueError("Invalid SVG string provided.")
         info = Infographic.from_string(svg_string, simplify_tolerance=simplify_tolerance)
+
+        if bounding_coords is None:
+            viewbox = info.parser.get_viewbox()
+            if viewbox:
+                parts = viewbox.split()
+                if len(parts) >= 4:
+                    try:
+                        x = float(parts[0])
+                        y = float(parts[1])
+                        w = float(parts[2])
+                        h = float(parts[3])
+                        bounding_coords = [[x, y], [x + w, y + h]]
+                    except:
+                        pass
         return cls(info, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, panel_height=panel_height, panel_css=panel_css, disable_resizer=disable_resizer, disable_tooltips=disable_tooltips, disable_zoom_controls=disable_zoom_controls, lock_scroll_bounds=lock_scroll_bounds, lock_zoom_out=lock_zoom_out, layout_size=layout_size, starting_zoom=starting_zoom, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, enable_geocoder=enable_geocoder, geocode_provider=geocode_provider, geocode_api_key=geocode_api_key, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, enable_drawing_tools=enable_drawing_tools, ambient_effect=ambient_effect, ambient_speed=ambient_speed, bounding_coords=bounding_coords, graphic=graphic, background_image_url=background_image_url, border_image_url=border_image_url, border_image_position=border_image_position, border_image_width=border_image_width, border_image_opacity=border_image_opacity, border_image_grayscale=border_image_grayscale, background_image_opacity=background_image_opacity, background_image_grayscale=background_image_grayscale, svg_background_image_url=svg_background_image_url, svg_background_image_opacity=svg_background_image_opacity, svg_background_image_grayscale=svg_background_image_grayscale, svg_background_image_insert_after=svg_background_image_insert_after, transparent_template_lines=transparent_template_lines, presentation_order=presentation_order)
 
     @classmethod
