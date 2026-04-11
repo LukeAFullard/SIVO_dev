@@ -5,7 +5,8 @@ def main():
     sivo_app = Sivo.from_svg(
         os.path.join(os.path.dirname(__file__), "grid.svg"),
         title="New 2D ECharts Wrappers",
-        subtitle="Click any box to view the corresponding advanced ECharts visualization"
+        subtitle="Click any box to view the corresponding advanced ECharts visualization",
+        default_panel_position="right"
     )
 
     # 1. Boxplot
