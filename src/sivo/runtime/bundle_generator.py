@@ -92,6 +92,8 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
                 if hasattr(action, 'completion_color') and "completion_color" not in act_dict: act_dict["completion_color"] = action.completion_color
                 if hasattr(action, 'center') and "center" not in act_dict: act_dict["center"] = action.center
                 if hasattr(action, 'zoom_level') and "zoom_level" not in act_dict: act_dict["zoom_level"] = action.zoom_level
+                if hasattr(action, 'zoom_to_size') and "zoom_to_size" not in act_dict: act_dict["zoom_to_size"] = action.zoom_to_size
+                if hasattr(action, 'target_bbox') and "target_bbox" not in act_dict: act_dict["target_bbox"] = action.target_bbox
                 if hasattr(action, 'panel_position') and "panel_position" not in act_dict: act_dict["panel_position"] = action.panel_position
                 if hasattr(action, 'map_name') and "map_name" not in act_dict: act_dict["map_name"] = action.map_name
                 if hasattr(action, 'map_data') and "map_data" not in act_dict: act_dict["map_data"] = action.map_data

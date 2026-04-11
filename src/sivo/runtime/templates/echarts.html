@@ -4752,8 +4752,15 @@ if (originalId) {
                                 var scaleX = fullWidth / bboxWidth;
                                 var scaleY = fullHeight / bboxHeight;
 
+
                                 var sizeRatioStr = action.zoom_to_size || "90%";
-                                var sizeRatio = parseFloat(sizeRatioStr.replace('%', '')) / 100.0;
+                                var sizeRatio = 0.9;
+                                if (sizeRatioStr === "auto") {
+                                    sizeRatio = 0.9;
+                                } else {
+                                    sizeRatio = parseFloat(sizeRatioStr.replace('%', '')) / 100.0;
+                                }
+
 
                                 // The new zoom level is the ratio of full viewBox to the target bbox, multiplied by the screen padding ratio.
                                 targetZoom = Math.min(scaleX, scaleY) * sizeRatio;
