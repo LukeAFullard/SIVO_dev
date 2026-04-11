@@ -28,6 +28,8 @@ config = ProjectConfig(
     subtitle="Demonstrates the presentation_order parameter",
     presentation_order=["step1", "step2", "step3"],
     disable_zoom_controls=True,  # Disable manual zoom controls for a cleaner presentation feel
+    default_panel_position="right",
+    panel_width="30%",  # Set an explicit width so it doesn't take up the whole screen
     mappings={
         "step1": ElementConfig(
             html="<h3>Step 1: Introduction</h3><p>This is the first step in our presentation. We zoomed in on the blue box.</p>",
@@ -61,5 +63,6 @@ app = Sivo.from_string(svg, **conf_dict)
 for elem_id, elem_conf in config.mappings.items():
     app.map(elem_id, **elem_conf.model_dump(exclude_none=True, exclude_unset=True))
 
-app.to_html("examples/advanced/presentation_mode.html")
-print("Saved presentation_mode.html to examples/advanced/.")
+output_path = "examples/advanced/presentation_mode/presentation_mode.html"
+app.to_html(output_path)
+print(f"Saved {output_path}")
