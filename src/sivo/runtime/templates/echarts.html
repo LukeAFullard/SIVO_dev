@@ -2763,6 +2763,11 @@
             var svgEl = overlayContainer.querySelector('svg');
             if (!svgEl) return;
 
+            // Remove the viewBox from the native overlay because ECharts will apply a pixel-perfect
+            // transform matrix to the internal <g> wrapper based on the bounding_coords.
+            // Keeping the viewBox would cause double-scaling.
+            svgEl.removeAttribute('viewBox');
+
             // Ensure SVG fills the container and allows us to control the global transform
             svgEl.style.width = '100%';
             svgEl.style.height = '100%';
