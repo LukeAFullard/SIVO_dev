@@ -84,7 +84,8 @@ def main():
         title="Revenue by Quarter",
         categories=["Q1", "Q2", "Q3", "Q4"],
         data=[12000, 15000, 14000, 18000],
-        color=["#3b82f6", "#10b981", "#f59e0b", "#ef4444"]
+        color=["#3b82f6", "#10b981", "#f59e0b", "#ef4444"],
+        panel_position="overlay"
     )
 
     # Render an ECharts pie chart directly onto Quadrant 2
@@ -96,7 +97,8 @@ def main():
             {"name": "Desktop", "value": 300},
             {"name": "Tablet", "value": 200}
         ],
-        color=["#6366f1", "#ec4899", "#14b8a6"]
+        color=["#6366f1", "#ec4899", "#14b8a6"],
+        panel_position="overlay"
     )
 
     quad_grid_block.map(
