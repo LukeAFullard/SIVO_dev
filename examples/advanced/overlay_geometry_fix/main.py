@@ -3,7 +3,7 @@ from sivo.core.config import ProjectConfig
 import os
 
 # Create a clean directory
-os.makedirs("examples/60_overlay_geometry_fix", exist_ok=True)
+os.makedirs("examples/advanced/overlay_geometry_fix", exist_ok=True)
 
 # Generate a simple SVG file with distinct shapes to test overlay alignment
 svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
@@ -19,7 +19,7 @@ svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" w
     <rect id="box-3" x="600" y="400" width="100" height="100" fill="#60a5fa" rx="12" />
 </svg>"""
 
-svg_path = "examples/60_overlay_geometry_fix/test_geometry.svg"
+svg_path = "examples/advanced/overlay_geometry_fix/test_geometry.svg"
 with open(svg_path, "w") as f:
     f.write(svg_content)
 
@@ -50,7 +50,7 @@ content_html = '<div style="width: 100%; height: 100%; padding: 12px; box-sizing
 app.add_overlay("box-3", content_html, scale_with_zoom=True)
 
 # Generate the output HTML
-output_html = "examples/60_overlay_geometry_fix/index.html"
+output_html = "examples/advanced/overlay_geometry_fix/index.html"
 app.to_html(output_html)
 
 print(f"✅ Success! Interactive SVG with perfectly aligned geometry overlays saved to: {output_html}")
