@@ -28,7 +28,14 @@ def main():
     )
 
     # 1. The Large Square (Left)
-    large_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)
+    # We set default_panel_position="none" because we are using a custom dashboard layout
+    # and don't need SIVO's internal side panel.
+    large_map = Sivo.from_template(
+        'dashboards/four_quadrants',
+        default_panel_position="none",
+        layout_size="90%",
+        lock_zoom_out=True
+    )
 
     large_map.map(
         "quadrant_1",
