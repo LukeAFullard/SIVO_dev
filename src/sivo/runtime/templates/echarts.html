@@ -6230,12 +6230,50 @@ function tourNext() {
             if (!isMinimapEnabled) return;
             var option = myChart.getOption();
             if (!option || !option.series || option.series.length === 0) return;
+
             var zoom = option.series[0].zoom || 1;
+            var center = option.series[0].center; // [x, y] coordinates
+
             var viewport = document.getElementById('minimap-viewport');
-            var vpWidth = 150 / zoom;
-            var vpHeight = 150 / zoom;
-            var left = (150 - vpWidth) / 2;
-            var top = (150 - vpHeight) / 2;
+
+            var containerWidth = 150;
+            var containerHeight = 150;
+
+            // On mobile or smaller screens, check if minimap container is 80px instead of 150px
+            var minimapContainer = document.getElementById('minimap-container');
+            if (minimapContainer && window.getComputedStyle(minimapContainer).width === '80px') {
+                containerWidth = 80;
+                containerHeight = 80;
+            }
+
+            var vpWidth = containerWidth / zoom;
+            var vpHeight = containerHeight / zoom;
+
+            var cx = containerWidth / 2;
+            var cy = containerHeight / 2;
+
+            var actualViewId = (currentViewId === "compare_mode") ? "compare_left" : currentViewId;
+            var view = viewsData[actualViewId];
+
+            if (center && view && view.bounding_coords) {
+                var bc = view.bounding_coords;
+                var minX = bc[0][0];
+                var minY = bc[0][1];
+                var maxX = bc[1][0];
+                var maxY = bc[1][1];
+
+                var mapWidth = maxX - minX;
+                var mapHeight = maxY - minY;
+
+                if (mapWidth > 0 && mapHeight > 0) {
+                    cx = ((center[0] - minX) / mapWidth) * containerWidth;
+                    cy = ((center[1] - minY) / mapHeight) * containerHeight;
+                }
+            }
+
+            var left = cx - (vpWidth / 2);
+            var top = cy - (vpHeight / 2);
+
             viewport.style.width = vpWidth + 'px';
             viewport.style.height = vpHeight + 'px';
             viewport.style.left = left + 'px';
