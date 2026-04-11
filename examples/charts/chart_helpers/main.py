@@ -5,7 +5,7 @@ def main():
     svg_path = os.path.join(os.path.dirname(__file__), "sample.svg")
 
     # Initialize Sivo from SVG
-    sivo_app = Sivo.from_svg(svg_path, theme="dark")
+    sivo_app = Sivo.from_svg(svg_path, theme="dark", default_panel_position="right")
 
     # 1. Bar Chart with INDIVIDUAL part colors
     # Passing a list of colors here will use the color palette for each individual bar
@@ -20,7 +20,8 @@ def main():
         title_size=20,
         axis_color="#9ca3af",
         tooltip_bg_color="rgba(0, 0, 0, 0.8)",
-        grid_margin=[60, 20, 40, 60]
+        grid_margin=[60, 20, 40, 60],
+        panel_position="right"
     )
 
     # 2. Line Chart with morphing transition enabled
@@ -36,7 +37,8 @@ def main():
         tooltip="View Growth Trend (Line)",
         title_color="#cbd5e1",
         universal_transition=True,
-        extra_options={"series": [{"areaStyle": {"opacity": 0.2}}]} # Example of injecting raw echarts options
+        extra_options={"series": [{"areaStyle": {"opacity": 0.2}}]}, # Example of injecting raw echarts options
+        panel_position="right"
     )
 
     # 3. Pie Chart (with its own palette)
@@ -50,7 +52,8 @@ def main():
         ],
         color=["#3b82f6", "#10b981", "#8b5cf6"], # Blue, Emerald, Violet
         tooltip="View Demographics (Pie)",
-        title_color="#fff"
+        title_color="#fff",
+        panel_position="right"
     )
 
     # 4. Gauge Chart
@@ -59,7 +62,8 @@ def main():
         title="Wyoming Energy Output",
         value=82,
         max_value=100,
-        tooltip="View Energy Output (Gauge)"
+        tooltip="View Energy Output (Gauge)",
+        panel_position="right"
     )
 
     # Export to HTML
