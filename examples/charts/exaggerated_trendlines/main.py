@@ -29,7 +29,7 @@ def create_exaggerated_trendline_infographic():
         title="Exaggerated Trendlines",
         svg_file=svg_path,
         enable_minimap=False,
-        theme="light"
+        theme="light", default_panel_position="overlay"
     )
 
     app = Sivo.from_config(config)
