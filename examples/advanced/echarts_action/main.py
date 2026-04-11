@@ -6,7 +6,7 @@ def main():
 
     sivo_app = Sivo.from_svg(svg_path)
 
-    # 1. Bar Chart Option (TX)
+    # Bar Chart Option (TX)
     bar_chart_option = {
         "title": {"text": "Texas Regional Sales"},
         "tooltip": {},
@@ -20,7 +20,7 @@ def main():
         }]
     }
 
-    # 2. Line Chart Option (CA)
+    # Line Chart Option (CA)
     line_chart_option = {
         "title": {"text": "California Growth Trend"},
         "tooltip": {"trigger": "axis"},
@@ -34,7 +34,7 @@ def main():
         }]
     }
 
-    # 3. Pie Chart Option (NY)
+    # Pie Chart Option (NY)
     pie_chart_option = {
         "title": {"text": "NY Demographics", "left": "center"},
         "tooltip": {"trigger": "item"},
@@ -60,7 +60,7 @@ def main():
         }]
     }
 
-    # 4. Gauge Chart Option (WY)
+    # Gauge Chart Option (WY)
     gauge_chart_option = {
         "title": {"text": "Wyoming Energy Output", "left": "center"},
         "tooltip": {"formatter": "{a} <br/>{b} : {c}%"},
@@ -73,10 +73,10 @@ def main():
     }
 
     # Map the elements
-    sivo_app.map(element_id="TX", tooltip="View Regional Data (Bar)", html="<h3>Bar Chart</h3>", echarts_option=bar_chart_option)
-    sivo_app.map(element_id="CA", tooltip="View Growth Trend (Line)", html="<h3>Line Chart</h3>", echarts_option=line_chart_option)
-    sivo_app.map(element_id="NY", tooltip="View Demographics (Pie)", html="<h3>Pie Chart</h3>", echarts_option=pie_chart_option)
-    sivo_app.map(element_id="WY", tooltip="View Energy Output (Gauge)", html="<h3>Gauge Chart</h3>", echarts_option=gauge_chart_option)
+    sivo_app.map(element_id="TX", tooltip="View Regional Data (Bar)", html="<h3>Bar Chart</h3>", echarts_option=bar_chart_option, panel_position="overlay")
+    sivo_app.map(element_id="CA", tooltip="View Growth Trend (Line)", html="<h3>Line Chart</h3>", echarts_option=line_chart_option, panel_position="overlay")
+    sivo_app.map(element_id="NY", tooltip="View Demographics (Pie)", html="<h3>Pie Chart</h3>", echarts_option=pie_chart_option, panel_position="overlay")
+    sivo_app.map(element_id="WY", tooltip="View Energy Output (Gauge)", html="<h3>Gauge Chart</h3>", echarts_option=gauge_chart_option, panel_position="overlay")
 
     # Export to HTML
     output_path = os.path.join(os.path.dirname(__file__), "output.html")
