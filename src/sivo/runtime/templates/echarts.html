@@ -4211,17 +4211,19 @@ if (originalId) {
                         }
                     } else if (action.action_type === 'explode') {
                         if (viewsData[action.target_svg]) {
-                            // First, let's gracefully morph existing paths if possible, then swap
-                            // ECharts Universal Transition handles data-level morphing, but SIVO map morphing
-                            // is usually done by transitioning the SVG if we had a MorphAction.
-                            // For an Exploded View, we transition the entire map container safely.
-                            var loadingIndicator = document.getElementById('sivo-global-loading');
-                            if (loadingIndicator) loadingIndicator.style.display = 'flex';
+                            // Set a crossfade transition for the explode action
+                            nextTransition = 'sivo-view-transition'; // Default crossfade
+
+                            // Optional: If we want to simulate morphing visually across the whole container:
+                            chartDom.style.transition = 'transform ' + (action.duration_ms || 1000) + 'ms cubic-bezier(0.25, 1, 0.5, 1), opacity ' + (action.duration_ms || 1000) + 'ms';
+
+                            // Apply custom transition class for morph out
+                            chartDom.classList.add('sivo-view-transition-out');
 
                             setTimeout(() => {
                                 renderView(action.target_svg, false);
-                                if (loadingIndicator) loadingIndicator.style.display = 'none';
-                            }, action.duration_ms || 1000);
+                                chartDom.style.transition = ''; // Reset after swap
+                            }, (action.duration_ms || 1000) / 2);
                         } else {
                         }
                     } else if (action.action_type === 'drilldown') {

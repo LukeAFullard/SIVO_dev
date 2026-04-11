@@ -1,11 +1,10 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'src')))
+# Add the 'src' directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'src')))
 
 from sivo.core.sivo import Sivo
-from sivo.core.infographic import Infographic
-from sivo.svg.parser import SVGParser
 from sivo.core.project import SivoProject
 
 dense_map = os.path.join(os.path.dirname(__file__), 'dense_map.svg')
@@ -43,12 +42,12 @@ with open(exploded_map, 'w') as f:
 project = SivoProject(initial_view_id="dense_view")
 
 # Add Dense View
-s1 = Sivo(Infographic(parser=SVGParser(dense_map)))
+s1 = Sivo.from_svg(dense_map, default_panel_position="none")
 s1.map("explode_btn", explode_to="exploded_view", explode_duration_ms=600, tooltip="Click to Peel-Back")
 project.add_view("dense_view", s1)
 
 # Add Exploded View
-s2 = Sivo(Infographic(parser=SVGParser(exploded_map)))
+s2 = Sivo.from_svg(exploded_map, default_panel_position="none")
 s2.map("reset_btn", explode_to="dense_view", explode_duration_ms=600, tooltip="Go Back")
 s2.map("r1_exp", tooltip="District A (Expanded)", footnote="Detailed demographics available here.")
 project.add_view("exploded_view", s2)
