@@ -1,4 +1,5 @@
 from sivo import Sivo
+import os
 
 svg_content = """
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000">
@@ -36,8 +37,6 @@ sivo_app.map("zone_ne", tooltip="North East Zone", hover_color="#94a3b8")
 sivo_app.map("zone_sw", tooltip="South West Zone", hover_color="#94a3b8")
 sivo_app.map("zone_se", tooltip="South East Zone", hover_color="#94a3b8")
 sivo_app.map("center_core", tooltip="Core Facility", glow=True)
-
-import os
 
 output_path = os.path.join(os.path.dirname(__file__), "minimap_export.html")
 sivo_app.to_html(output_path)
