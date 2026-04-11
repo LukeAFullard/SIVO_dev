@@ -2,7 +2,7 @@
 Quad Grid Zooming Example
 =========================
 
-This example demonstrates how to use the `quad_grid.html` template
+This example demonstrates how to use the dashboard grid layout
 with interactive zoom features. Clicking an element within a square
 zooms the map into another area within the same square using the
 `zoom_to` and `zoom_to_size` features.
@@ -17,13 +17,13 @@ def main():
     dashboard.set_grid_layout(
         desktop='''
     "tl tr"
-"bl br"
+    "bl br"
         ''',
         mobile='''
     "tl"
-"tr"
-"bl"
-"br"
+    "tr"
+    "bl"
+    "br"
         '''
     )
 
@@ -42,15 +42,18 @@ def main():
     </svg>"""
 
     # We will create 4 Sivo blocks, one for each quadrant
-    for i in range(1, 5):
-        block = Sivo.from_string(quad_svg, title=f"Quadrant {i}", layout_size="90%")
+    grid_areas = ["tl", "tr", "bl", "br"]
+    for i, area in enumerate(grid_areas, start=1):
+        # We explicitly set default_panel_position to "none" as we only want to zoom, not show a panel
+        block = Sivo.from_string(quad_svg, title=f"Quadrant {i}", layout_size="90%", default_panel_position="none")
 
         # When clicking the detail area, zoom into it
         block.map(
             "detail_area",
             hover_color="#2563eb",
             zoom_to="detail_area",
-            zoom_to_size="80%"
+            zoom_to_size="80%",
+            panel_position="none"
         )
 
         # When clicking the main area, zoom out to show the whole main area
@@ -58,11 +61,12 @@ def main():
             "main_area",
             hover_color="#94a3b8",
             zoom_to="main_area",
-            zoom_to_size="90%"
+            zoom_to_size="90%",
+            panel_position="none"
         )
 
-        # Add the block to the dashboard grid
-        dashboard.add_sivo_block(f"quadrant_{i}", block)
+        # Add the block to the dashboard grid using the grid_area
+        dashboard.add_sivo_block(f"quadrant_{i}", block, grid_area=area)
 
     # Export
     output_file = os.path.join(os.path.dirname(__file__), "output.html")
