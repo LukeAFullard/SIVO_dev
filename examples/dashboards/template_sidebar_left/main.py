@@ -13,31 +13,58 @@ def main():
         <text x="600" y="260" font-family="sans-serif" font-size="18" fill="#333" pointer-events="none" text-anchor="middle">Europe</text>
         <text x="800" y="350" font-family="sans-serif" font-size="18" fill="#333" pointer-events="none" text-anchor="middle">Asia</text>
     </svg>"""
-    # Pass `layout_size` to control exactly how much of the card the SVG fills.
-    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Active Nodes", layout_size="100%")
-    sivo_map.map("node_na", hover_color="#2563eb", tooltip="NA Region Details", callback_payload={"status": "Healthy", "latency": "24ms"})
-    sivo_map.map("node_eu", hover_color="#d97706", tooltip="EU Region Details", callback_payload={"status": "Degraded", "latency": "180ms"})
-    sivo_map.map("node_as", hover_color="#059669", tooltip="AS Region Details", callback_payload={"status": "Healthy", "latency": "45ms"})
 
-    # --- 2. Assemble the Dashboard using 'sidebar_left' template ---
+    # By default, Sivo uses panel_position='none' which is perfect for SivoDashboard
+    # since we use external dashboard panels to render the payloads.
+    sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Active Nodes", layout_size="100%")
+
+    sivo_map.map(
+        "node_na",
+        hover_color="#2563eb",
+        tooltip="NA Region Details",
+        html="<h3>North America</h3><p>Main processing hub.</p>",
+        callback_payload={"status": "Healthy", "latency": "24ms"}
+    )
+    sivo_map.map(
+        "node_eu",
+        hover_color="#d97706",
+        tooltip="EU Region Details",
+        html="<h3>Europe</h3><p>Secondary fallback node.</p>",
+        callback_payload={"status": "Degraded", "latency": "180ms"}
+    )
+    sivo_map.map(
+        "node_as",
+        hover_color="#059669",
+        tooltip="AS Region Details",
+        html="<h3>Asia</h3><p>High throughput node.</p>",
+        callback_payload={"status": "Healthy", "latency": "45ms"}
+    )
+
+    # --- 2. Assemble the Dashboard using CSS Grid layout ---
     # By specifying the CSS Grid layout, SivoDashboard builds a responsive sidebar view
     dashboard = SivoDashboard(title="Sidebar Layout HTML Template Example", columns=1)
+
+    # Notice we can append standard CSS properties like grid-template-columns
+    # to the string directly so that they are inserted alongside grid-template-areas.
+    # This prevents the grid from "jumping" when dynamic content is inserted!
     dashboard.set_grid_layout(
         desktop='''
-    "sidebar1 main"
-"sidebar2 main"
+        "sidebar1 main main"
+        "sidebar2 main main";
+        grid-template-columns: 350px 1fr 1fr;
         ''',
         mobile='''
-    "main"
-"sidebar1"
-"sidebar2"
+        "main"
+        "sidebar1"
+        "sidebar2";
+        grid-template-columns: 1fr;
         '''
     )
 
     # Assign the map to the 'main' content slot
     dashboard.add_sivo_block("global_map", sivo_map, grid_area="main")
 
-    # Assign interaction panels to the 'sidebar' slot
+    # Assign interaction panels to the 'sidebar' slots
     dashboard.add_metrics_panel("metrics", title="Node Metrics", metrics=["status", "latency"], grid_area="sidebar1")
     dashboard.add_details_panel("details", title="Node Details", grid_area="sidebar2")
 
