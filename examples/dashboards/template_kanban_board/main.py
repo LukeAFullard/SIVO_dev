@@ -12,7 +12,7 @@ def main():
             <circle cx="260" cy="160" r="16" fill="#e2e8f0" />
             <text x="260" y="165" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">JD</text>
         </svg>"""
-        return Sivo.from_string(svg, theme="light", layout_size="95%")
+        return Sivo.from_string(svg, theme="light", layout_size="95%", default_panel_position="none")
 
     # Create task cards
     task1 = create_task_card("T-101", "Design API", "#3b82f6")
@@ -26,8 +26,8 @@ def main():
     task3.map("bg", hover_color="#f8fafc", tooltip="<b>T-103</b><br/>Implement OAuth2 flow.")
     task4.map("bg", hover_color="#f8fafc", tooltip="<b>T-104</b><br/>Deploy using GitHub Actions.")
 
-    # Assemble Dashboard using 'kanban_board' template
-    dashboard = SivoDashboard(title="Project Sprint Board", columns=3)
+    # Assemble Dashboard using CSS Grid to emulate a Kanban layout
+    dashboard = SivoDashboard(title="Project Sprint Board")
     dashboard.set_grid_layout(
         desktop='''
     "to_do1 in_progress done review"
@@ -42,7 +42,7 @@ def main():
         '''
     )
 
-    # Assign blocks to different "lanes" using the 'slot' parameter
+    # Assign blocks to different "lanes" using the 'grid_area' parameter
     dashboard.add_sivo_block("task_api", task1, grid_area="to_do1")
     dashboard.add_sivo_block("task_db", task2, grid_area="to_do2")
 
