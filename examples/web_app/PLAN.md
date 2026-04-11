@@ -356,56 +356,56 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 ## 8. Step-by-Step Implementation Roadmap
 
 ### Phase 1: Core Storage & File Management (Weeks 1-2)
-1.  Extend the current `index.html` UI to include a robust File Manager Sidebar.
-2.  Implement the drag-and-drop / URL fetcher in JS that streams directly to Pyodide IDBFS.
-3.  Add memory cleanup routines to ensure large files are flushed from RAM after saving to IDBFS.
-4.  Implement CSV/XLSX to IDBFS parsing utility.
-5.  **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
-6.  **XXE Security Mitigation:** Ensure all uploaded XML/SVG parsing relies securely on `resolve_entities=False` and `no_network=True` to prevent injection attacks.
-7.  **JSON Serialization XSS Mitigation:** Integrate the safe escaping logic for injected JSON `views_data` to secure templates from cross-site scripting natively.
+- [ ] Extend the current `index.html` UI to include a robust File Manager Sidebar.
+- [ ] Implement the drag-and-drop / URL fetcher in JS that streams directly to Pyodide IDBFS.
+- [ ] Add memory cleanup routines to ensure large files are flushed from RAM after saving to IDBFS.
+- [ ] Implement CSV/XLSX to IDBFS parsing utility.
+- [ ] **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
+- [ ] **XXE Security Mitigation:** Ensure all uploaded XML/SVG parsing relies securely on `resolve_entities=False` and `no_network=True` to prevent injection attacks.
+- [ ] **JSON Serialization XSS Mitigation:** Integrate the safe escaping logic for injected JSON `views_data` to secure templates from cross-site scripting natively.
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
-1.  Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
-2.  Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
-3.  Implement the Interactive Preview Pane (renders via `app.to_html()`).
-4.  Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
-5.  Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
-6.  **State Management:** Integrate an **Undo/Redo History Engine** to safely manage configuration states during visual editing.
-7.  **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
+- [ ] Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
+- [ ] Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
+- [ ] Implement the Interactive Preview Pane (renders via `app.to_html()`).
+- [ ] Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
+- [ ] Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
+- [ ] **State Management:** Integrate an **Undo/Redo History Engine** to safely manage configuration states during visual editing.
+- [ ] **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
-1.  **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
-2.  **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
-3.  **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs, adding support for **Nested ECharts Actions** configuration.
-4.  **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
+- [ ] **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
+- [ ] **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
+- [ ] **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap, graph, sankey, sunburst, parallel, theme river, word cloud, pictorial bar, effect scatter, lines, funnel, tree, trendline, and nested maps), adding support for **Nested ECharts Actions** configuration.
+- [ ] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
-1.  **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
-2.  **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
-3.  **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, **Ecommerce Embeds**, **Rich Media Embeds**, **Business Intelligence Embeds**, **External Forms**, **Form, Social & Replit Embeds**, and browse the **Preset & Community Recipe Library**.
-4.  **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, **High Contrast Theming**, **Ambient Effects**, **Canvas Backgrounds & Borders**, **Embedded SVG Background Images**, **Dramatic UI Transitions**, and **Shadow DOM Custom Styling & DOMPurify** support.
+- [ ] **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
+- [ ] **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
+- [ ] **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, **Ecommerce Embeds**, **Rich Media Embeds**, **Business Intelligence Embeds**, **External Forms**, **Form, Social & Replit Embeds**, and browse the **Preset & Community Recipe Library**.
+- [ ] **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Embedded SVG Injection (`embed_svg`), Cinematic Camera Panning & Zooming (`zoom_to`, `zoom_to_size`, `zoom_duration_ms`), Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, **High Contrast Theming**, **Ambient Effects**, **Canvas Backgrounds & Borders**, **Embedded SVG Background Images**, **Dramatic UI Transitions**, and **Shadow DOM Custom Styling & DOMPurify** support.
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
-1.  **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
-2.  **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, **Absolute Image Overlays**, **Scratchoff Reveal Layers**, and configuring **HTML/DOM Overlays**.
-3.  **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles, URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, **Brush Selection**, **Built-in Canvas Search**, and **Programmatic Panel Dismissal** mappings.
+- [ ] **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
+- [ ] **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, **Absolute Image Overlays**, **Scratchoff Reveal Layers**, and configuring **HTML/DOM Overlays**.
+- [ ] **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles (`add_layer_toggle`), URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, **Brush Selection**, **Built-in Canvas Search**, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
-1.  **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI, Auto-Generated Legends, and **Geographic Coordinate Mapping**.
-2.  **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures, including **Drill-Through Page Transitions**.
-3.  **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities, and expose **Watermarks & Attribution** and **Export & Sharing Overlays**.
-4.  **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
-5.  Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+- [ ] **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI, Auto-Generated Legends, and **Geographic Coordinate Mapping**.
+- [ ] **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures, including **Drill-Through Page Transitions**.
+- [ ] **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities, and expose **Watermarks & Attribution** and **Export & Sharing Overlays**.
+- [ ] **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
+- [ ] Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 
 ### Phase 7: AI Copilot Integration (Future Work)
 To further enhance the developer and no-code experience, an intelligent AI Copilot will be integrated natively into the browser. This ensures a 100% serverless, private AI assistant that can generate SIVO maps and code at $0 cloud compute cost.
 
-1.  **Train a SIVO Adapter (LoRA):** Parse the SIVO repository (examples, docs, tests) into instruction-response pairs to fine-tune a small, capable base model (e.g., Llama-3.2-1B, Qwen2.5-1.5B, or Phi-3-mini) using PEFT.
-2.  **Model Export & Fusion:** Since client-side inference engines require bundled weights, the trained LoRA adapter will be merged into the base model and exported to an optimized ONNX format (quantized to int4/int8 to fit browser memory limits).
-3.  **Inference via Transformers.js:** Utilize Hugging Face's `Transformers.js` (with WebGPU acceleration) to load the merged ONNX model directly in the browser.
-4.  **Chat Interface & Execution:**
+- [ ] **Train a SIVO Adapter (LoRA):** Parse the SIVO repository (examples, docs, tests) into instruction-response pairs to fine-tune a small, capable base model (e.g., Llama-3.2-1B, Qwen2.5-1.5B, or Phi-3-mini) using PEFT.
+- [ ] **Model Export & Fusion:** Since client-side inference engines require bundled weights, the trained LoRA adapter will be merged into the base model and exported to an optimized ONNX format (quantized to int4/int8 to fit browser memory limits).
+- [ ] **Inference via Transformers.js:** Utilize Hugging Face's `Transformers.js` (with WebGPU acceleration) to load the merged ONNX model directly in the browser.
+- [ ] **Chat Interface & Execution:**
     *   Implement a Copilot chat sidebar.
     *   When the user prompts (e.g., "Make a hexbin map using this dataset"), `Transformers.js` streams the generated SIVO Python code.
     *   The generated code block is passed directly to `pyodide.runPythonAsync(code)`.
