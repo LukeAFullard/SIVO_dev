@@ -13,7 +13,8 @@ def create_trendline_infographic():
         title="Trendline Variations",
         svg_file=svg_path,
         enable_minimap=False,
-        theme="light"
+        theme="light",
+        default_panel_position="right"
     )
 
     # 2. Create the Sivo app
@@ -34,7 +35,8 @@ def create_trendline_infographic():
         trendline_color="#3b82f6", # Blue
         trendline_width=3,
         trendline_arrow=True,
-        color="#93c5fd" # Light Blue
+        color="#93c5fd", # Light Blue
+        panel_position="right"
     )
 
     # Map Exponential Trendline
@@ -46,7 +48,8 @@ def create_trendline_infographic():
         trendline_color="#ef4444", # Red
         trendline_width=2,
         trendline_arrow=False,
-        color="#fca5a5" # Light Red
+        color="#fca5a5", # Light Red
+        panel_position="right"
     )
 
     # Map Logarithmic Trendline
@@ -58,7 +61,8 @@ def create_trendline_infographic():
         trendline_color="#10b981", # Green
         trendline_width=4,
         trendline_arrow=True,
-        color="#6ee7b7" # Light Green
+        color="#6ee7b7", # Light Green
+        panel_position="right"
     )
 
     # Map Polynomial Trendline
@@ -70,7 +74,8 @@ def create_trendline_infographic():
         trendline_color="#8b5cf6", # Purple
         trendline_width=2,
         trendline_arrow=False,
-        color="#c4b5fd" # Light Purple
+        color="#c4b5fd", # Light Purple
+        panel_position="right"
     )
 
     # Export to HTML
