@@ -1,7 +1,6 @@
 import os
 from sivo import Sivo, SivoDashboard
 
-
 # --- 1. Base Sivo Registration Map ---
 map_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
     <rect id="bg" width="800" height="600" fill="#f1f5f9" />
@@ -11,7 +10,8 @@ map_svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
     <text x="600" y="420" font-family="sans-serif" font-size="20" fill="#333" pointer-events="none" text-anchor="middle">London Expo</text>
 </svg>"""
 
-sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Developer Events")
+# Using default_panel_position="none" because the dashboard uses a Details Panel layout block
+sivo_map = Sivo.from_string(map_svg, theme="light", title="Global Developer Events", default_panel_position="none")
 
 # --- 2. Advanced Feature: Rich External Integrations via HTML Block ---
 # We can use SivoDashboard's `add_html_block` to embed fully functional third-party widgets,
@@ -56,7 +56,6 @@ dashboard.add_details_panel("schedule", title="Event Schedule", placeholder="Cli
 
 # ...and the external registration form on the right.
 dashboard.add_html_block("registration", registration_form_html)
-
 
 # Export the dashboard
 output_file = os.path.join(os.path.dirname(__file__), "output.html")
