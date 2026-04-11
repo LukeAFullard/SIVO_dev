@@ -19,7 +19,8 @@ config = ProjectConfig(
     svg_file=SVG_FILE,
     title="More ECharts Types Demo",
     subtitle="Demonstrating effectScatter, lines, funnel, and tree",
-    theme="light"
+    theme="light",
+    default_panel_position="right"
 )
 
 sivo_app = Sivo.from_config(config)
