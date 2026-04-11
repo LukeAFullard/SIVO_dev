@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
     <title>Right Sidebar Layout HTML Template Example</title>
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Include DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
     <style>
         :root {
@@ -255,8 +258,9 @@
     <!-- SIVO Data Injection -->
     <script>
         // SIVO passes `views_data` directly to this template
-        const viewsData = {"global_map": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n        \u003crect id=\"bg\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n        \u003ccircle id=\"node_na\" cx=\"250\" cy=\"200\" r=\"60\" fill=\"#3b82f6\" name=\"node_na\"/\u003e\n        \u003ccircle id=\"node_eu\" cx=\"600\" cy=\"180\" r=\"50\" fill=\"#f59e0b\" name=\"node_eu\"/\u003e\n        \u003ccircle id=\"node_as\" cx=\"800\" cy=\"250\" r=\"70\" fill=\"#10b981\" name=\"node_as\"/\u003e\n\n        \u003ctext x=\"250\" y=\"290\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNorth America\u003c/text\u003e\n        \u003ctext x=\"600\" y=\"260\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eEurope\u003c/text\u003e\n        \u003ctext x=\"800\" y=\"350\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eAsia\u003c/text\u003e\n    \u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "node_na", "value": 1, "tooltip": "NA Region Details", "emphasis": {"itemStyle": {"areaColor": "#2563eb"}}}, {"name": "node_eu", "value": 1, "tooltip": "EU Region Details", "emphasis": {"itemStyle": {"areaColor": "#d97706"}}}, {"name": "node_as", "value": 1, "tooltip": "AS Region Details", "emphasis": {"itemStyle": {"areaColor": "#059669"}}}], "actions_manifest": {"node_na": [{"action_type": "tooltip", "content": "\u003ch3\u003eNA Region Details\u003c/h3\u003e", "title": "NA Region Details", "panel_position": "overlay"}], "node_eu": [{"action_type": "tooltip", "content": "\u003ch3\u003eEU Region Details\u003c/h3\u003e", "title": "EU Region Details", "panel_position": "overlay"}], "node_as": [{"action_type": "tooltip", "content": "\u003ch3\u003eAS Region Details\u003c/h3\u003e", "title": "AS Region Details", "panel_position": "overlay"}]}, "overlays": {}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "100%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": "Global Active Nodes", "subtitle": null, "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_na": {"id": "node_na", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eNA Region Details\u003c/h3\u003e", "title": "NA Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#2563eb", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_eu": {"id": "node_eu", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eEU Region Details\u003c/h3\u003e", "title": "EU Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#d97706", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "node_as": {"id": "node_as", "actions": [{"action_type": "tooltip", "content": "\u003ch3\u003eAS Region Details\u003c/h3\u003e", "title": "AS Region Details", "panel_position": "overlay"}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": "#059669", "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        const viewsData = {"global_map":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n        \u003crect id=\"bg\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n        \u003ccircle id=\"node_na\" cx=\"250\" cy=\"200\" r=\"60\" fill=\"#3b82f6\" name=\"node_na\"/\u003e\n        \u003ccircle id=\"node_eu\" cx=\"600\" cy=\"180\" r=\"50\" fill=\"#f59e0b\" name=\"node_eu\"/\u003e\n        \u003ccircle id=\"node_as\" cx=\"800\" cy=\"250\" r=\"70\" fill=\"#10b981\" name=\"node_as\"/\u003e\n\n        \u003ctext x=\"250\" y=\"290\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNorth America\u003c/text\u003e\n        \u003ctext x=\"600\" y=\"260\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eEurope\u003c/text\u003e\n        \u003ctext x=\"800\" y=\"350\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eAsia\u003c/text\u003e\n    \u003c/svg\u003e","echarts_data":[{"name":"bg","value":1,"itemStyle":{"areaColor":"#f8fafc"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"node_na","value":1,"tooltip":"NA Region Details","itemStyle":{"areaColor":"#3b82f6"},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"#2563eb"}}},{"name":"node_eu","value":1,"tooltip":"EU Region Details","itemStyle":{"areaColor":"#f59e0b"},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"#d97706"}}},{"name":"node_as","value":1,"tooltip":"AS Region Details","itemStyle":{"areaColor":"#10b981"},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"#059669"}}}],"actions_manifest":{"node_na":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"NA Region Details"},{"action_type":"tooltip","content":"\u003ch3\u003eNA Region Details\u003c/h3\u003e","title":"NA Region Details","panel_position":"none"}],"node_eu":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"EU Region Details"},{"action_type":"tooltip","content":"\u003ch3\u003eEU Region Details\u003c/h3\u003e","title":"EU Region Details","panel_position":"none"}],"node_as":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"AS Region Details"},{"action_type":"tooltip","content":"\u003ch3\u003eAS Region Details\u003c/h3\u003e","title":"AS Region Details","panel_position":"none"}]},"overlays":{},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":"Global Active Nodes","subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[1000.0,600.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"bg":{"id":"bg","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#f8fafc","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"node_na":{"id":"node_na","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"NA Region Details"},{"action_type":"tooltip","content":"\u003ch3\u003eNA Region Details\u003c/h3\u003e","title":"NA Region Details","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#3b82f6","hover_color":"#2563eb","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"node_eu":{"id":"node_eu","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"EU Region Details"},{"action_type":"tooltip","content":"\u003ch3\u003eEU Region Details\u003c/h3\u003e","title":"EU Region Details","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#f59e0b","hover_color":"#d97706","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"node_as":{"id":"node_as","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"AS Region Details"},{"action_type":"tooltip","content":"\u003ch3\u003eAS Region Details\u003c/h3\u003e","title":"AS Region Details","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#10b981","hover_color":"#059669","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
         const activeCharts = {};
+        window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         function calculateLayoutSize(view, domElement) {
             if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
@@ -331,6 +335,8 @@
                     geo: {
                         map: 'sivoMap_' + blockId,
                         roam: true,
+                        label: { show: false },
+                        emphasis: { disabled: true },
                         layoutCenter: ['50%', '50%'],
                         layoutSize: calculateLayoutSize(viewData, dom),
                         regions: viewData.echarts_data // Apply colors directly to SVG regions via geo
@@ -346,6 +352,8 @@
                         type: 'map',
                         map: 'sivoMap_' + blockId,
                         geoIndex: 0,
+                        label: { show: false },
+                        emphasis: { disabled: true },
                         data: viewData.echarts_data
                     });
 
@@ -515,8 +523,57 @@
                                     zIndex: 10000
                                 });
                             }
+                        } else if (action.action_type === 'toggle_image') {
+                            var targetId = action.target_id || params.name;
+                            var urls = action.image_urls;
+                            if (urls && urls.length > 0) {
+                                if (window.sivoToggleImageState[targetId] === undefined) {
+                                    window.sivoToggleImageState[targetId] = 0;
+                                } else {
+                                    window.sivoToggleImageState[targetId] = (window.sivoToggleImageState[targetId] + 1) % urls.length;
+                                }
+                                var nextUrl = urls[window.sivoToggleImageState[targetId]];
+
+                                var currentOption = chart.getOption();
+                                var seriesData = currentOption.series[0].data || [];
+                                var updated = false;
+
+                                for (var i = 0; i < seriesData.length; i++) {
+                                    if (seriesData[i].name === targetId) {
+                                        if (!seriesData[i].itemStyle) {
+                                            seriesData[i].itemStyle = {};
+                                        }
+                                        var img = new Image();
+                                        img.src = nextUrl;
+                                        seriesData[i].itemStyle.areaColor = {
+                                            image: img,
+                                            repeat: 'repeat'
+                                        };
+                                        updated = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!updated) {
+                                    var img = new Image();
+                                    img.src = nextUrl;
+                                    seriesData.push({
+                                        name: targetId,
+                                        itemStyle: {
+                                            areaColor: {
+                                                image: img,
+                                                repeat: 'repeat'
+                                            }
+                                        }
+                                    });
+                                    updated = true;
+                                }
+
+                                if (updated) {
+                                    chart.setOption({ series: [{ data: seriesData }] });
+                                }
+                            }
                         } else if (action.action_type === 'callback') {
-                            console.log('Triggering callback:', action.event_name, action.payload);
                             window.parent.postMessage({
                                 type: 'sivo_click',
                                 payload: {
@@ -526,7 +583,6 @@
                                 }
                             }, '*');
                         } else if (action.action_type === 'drilldown' && action.target_svg) {
-                            console.warn("Dashboard Drilldown triggered to:", action.target_svg);
                         }
                     });
 
@@ -545,22 +601,25 @@
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
-                    document.getElementById('sidebar-content').innerHTML = tooltipContent;
+                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
                     document.getElementById('sivo-sliding-sidebar').classList.add('active');
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
                         const container = panel.querySelector('.sivo-details-content');
-                        container.innerHTML = `<h3>${params.name}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        container.innerHTML = `<h3>${safeName}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
                         const container = panel.querySelector('.sivo-details-content');
+                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         if (tooltipContent) {
-                            container.innerHTML = `<h3>${params.name}</h3>${tooltipContent}`;
+                            var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
+                            container.innerHTML = `<h3>${safeName}</h3>${safeTooltip}`;
                         } else {
-                            container.innerHTML = `<h3>${params.name}</h3><p>No additional details mapped.</p>`;
+                            container.innerHTML = `<h3>${safeName}</h3><p>No additional details mapped.</p>`;
                         }
                     });
                 }
