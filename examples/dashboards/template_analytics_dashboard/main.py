@@ -39,7 +39,7 @@ def main():
         <text x="240" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Q3</text>
         <text x="310" y="270" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Q4</text>
     </svg>"""
-    sivo_bar = Sivo.from_string(bar_svg, theme="light", layout_size="90%")
+    sivo_bar = Sivo.from_string(bar_svg, theme="light", layout_size="90%", default_panel_position="none")
 
     sivo_bar.map("bar1", hover_color="#2563eb", tooltip="Q1 Revenue: $15,000", callback_payload={"selected_quarter": "Q1", "revenue": "$15k"})
     sivo_bar.map("bar2", hover_color="#2563eb", tooltip="Q2 Revenue: $22,000", callback_payload={"selected_quarter": "Q2", "revenue": "$22k"})
@@ -53,7 +53,7 @@ def main():
         <circle id="pie_center" cx="150" cy="150" r="60" fill="#ffffff" />
         <text x="150" y="155" font-family="sans-serif" font-size="20" font-weight="bold" fill="#111827" text-anchor="middle">25%</text>
     </svg>"""
-    sivo_pie = Sivo.from_string(pie_svg, theme="light", layout_size="90%")
+    sivo_pie = Sivo.from_string(pie_svg, theme="light", layout_size="90%", default_panel_position="none")
     sivo_pie.map("pie_slice", hover_color="#059669", tooltip="New Users: 25%")
 
 
