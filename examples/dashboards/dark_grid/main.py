@@ -2,22 +2,24 @@
 Dark Grid Dashboard Example
 ===========================
 
-This example demonstrates how to use the modern, dark-themed `dark_grid.html`
-template to create a dashboard with a high-contrast layout, perfect for NOCs
-(Network Operations Centers) or live monitoring views.
+This example demonstrates how to build a high-contrast, dark-mode dashboard using the `SivoDashboard`.
+It creates a sleek, modern UI suitable for Operations Centers, live system monitoring, or technical readouts, using
+ECharts' dark theme support and a custom CSS Grid.
 """
 
-from sivo import Sivo, ProjectConfig
+from sivo import Sivo
 from sivo.core.dashboard import SivoDashboard
 
 def main():
-    # 1. Initialize empty dashboard using the dark_grid template
+    # 1. Initialize empty dashboard
     dashboard = SivoDashboard(title="Global Server Status", columns=4)
+
+    # 2. Define the responsive grid layout
     dashboard.set_grid_layout(
         desktop='''
-    "header header header"
-    "main main side"
-    "bottom1 bottom2 side"
+    "header header header header"
+    "main main side side"
+    "bottom1 bottom2 side side"
         ''',
         mobile='''
     "header"
@@ -28,7 +30,7 @@ def main():
         '''
     )
 
-    # 2. Add an HTML Header
+    # 3. Add an HTML Header
     header_html = '''
     <div style="padding: 10px;">
         <h3 style="margin: 0; color: #f8fafc; font-size: 1.25rem;">Live Feed</h3>
@@ -37,8 +39,8 @@ def main():
     '''
     dashboard.add_html_block("live_feed", header_html, grid_area="header")
 
-    # 3. Create a primary Global Map spanning 3 columns
-    world_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True)
+    # 4. Create a primary Global Map
+    world_map = Sivo.from_template('dashboards/sidebar_layout', layout_size="90%", lock_zoom_out=True, theme="dark", default_panel_position="none")
 
     # Add dummy data to some nodes
     world_map.map(
@@ -65,7 +67,7 @@ def main():
 
     dashboard.add_sivo_block("global_network", world_map, grid_area="main")
 
-    # 4. Add a Metrics Panel on the right (1 column)
+    # 5. Add a Metrics Panel on the right
     dashboard.add_metrics_panel(
         "server_metrics",
         title="Server Telemetry",
@@ -73,7 +75,7 @@ def main():
         grid_area="side"
     )
 
-    # 5. Add Details Panel
+    # 6. Add Details Panel
     dashboard.add_details_panel(
         "datacenter_logs",
         title="Node Logs",
@@ -81,7 +83,7 @@ def main():
         grid_area="bottom1"
     )
 
-    # 6. Generate the HTML Dashboard
+    # 7. Generate the HTML Dashboard
     print("Generating Dark Grid Dashboard to 'output.html'...")
     dashboard.to_html("output.html")
     print("Dashboard generated successfully!")
