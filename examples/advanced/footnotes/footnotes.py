@@ -1,11 +1,9 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'src')))
 
 from sivo.core.sivo import Sivo
-from sivo.core.infographic import Infographic
-from sivo.svg.parser import SVGParser
 
 svg_path = os.path.join(os.path.dirname(__file__), 'footnote_map.svg')
 with open(svg_path, 'w') as f:
@@ -16,9 +14,9 @@ with open(svg_path, 'w') as f:
         <text x="200" y="50" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Click points for Data Provenance</text>
     </svg>''')
 
-parser = SVGParser(svg_path)
-info = Infographic(parser=parser)
-sivo_app = Sivo(info)
+# To render side panels in overlay by default, default_panel_position="overlay" must be explicitly passed
+# when instantiating Sivo.
+sivo_app = Sivo.from_svg(svg_path, default_panel_position="overlay")
 
 sivo_app.map(
     element_id="point1",
