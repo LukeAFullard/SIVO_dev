@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
     <title>Q3 Executive Insights</title>
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <!-- Include DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
     <style>
         :root {
@@ -258,8 +261,9 @@
     <!-- SIVO Data Injection -->
     <script>
         // SIVO passes `views_data` directly to this template
-        const viewsData = {"heat_map": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n    \u003crect id=\"bg\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n    \u003cpath id=\"state_ca\" d=\"M 100 100 L 300 100 L 250 400 L 150 400 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_ca\"/\u003e\n    \u003cpath id=\"state_tx\" d=\"M 400 300 L 700 250 L 650 550 L 350 500 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_tx\"/\u003e\n    \u003cpath id=\"state_ny\" d=\"M 750 100 L 950 120 L 900 250 L 700 220 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_ny\"/\u003e\n\n    \u003ctext x=\"200\" y=\"250\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eCA\u003c/text\u003e\n    \u003ctext x=\"525\" y=\"400\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eTX\u003c/text\u003e\n    \u003ctext x=\"825\" y=\"175\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNY\u003c/text\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "bg", "value": 1}, {"name": "state_ca", "value": 1, "itemStyle": {"areaColor": "#acb9d9"}}, {"name": "state_tx", "value": 1, "itemStyle": {"areaColor": "#eff6ff"}}, {"name": "state_ny", "value": 1, "animation_class": "pulse", "itemStyle": {"areaColor": "#1e3a8a"}}], "actions_manifest": {"state_ca": [{"action_type": "tooltip", "content": "\u003ch4\u003eCalifornia Operations\u003c/h4\u003e\u003cp\u003eSteady growth in Q3. Expanding warehouse capacity.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$1.25M", "growth": "+12%", "status": "On Track"}}], "state_tx": [{"action_type": "tooltip", "content": "\u003ch4\u003eTexas Operations\u003c/h4\u003e\u003cp\u003eSupply chain constraints identified in Houston hub.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$850K", "growth": "-3%", "status": "Action Required"}}], "state_ny": [{"action_type": "tooltip", "content": "\u003ch4\u003eNew York Operations\u003c/h4\u003e\u003cp\u003eRecord-breaking sales driven by new B2B partnerships.\u003c/p\u003e\u003cimg src='https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format\u0026fit=crop\u0026w=400\u0026q=80' style='width:100%; border-radius:8px;'/\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$2.1M", "growth": "+25%", "status": "Exceeding Targets"}}]}, "overlays": {"sivo_choropleth_legend": {"html": "\n            \u003cdiv style=\"background: rgba(255,255,255,0.9); padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: sans-serif; font-size: 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); user-select: none;\"\u003e\n                \u003cspan\u003e850000.0\u003c/span\u003e\n                \u003cdiv style=\"width: 100px; height: 15px; background: linear-gradient(to right, #eff6ff, #1e3a8a); border: 1px solid #999; border-radius: 3px;\"\u003e\u003c/div\u003e\n                \u003cspan\u003e2100000.0\u003c/span\u003e\n            \u003c/div\u003e\n            ", "fixed": true, "position": "bottom-left"}}, "connections": [], "default_panel_position": "overlay", "disable_panel": false, "panel_width": "90%", "panel_height": "90%", "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_scroll_bounds": true, "presentation_order": null, "lock_zoom_out": true, "layout_size": "95%", "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "enable_geocoder": false, "geocode_provider": "nominatim", "geocode_api_key": null, "watermark": null, "enable_brush_selection": false, "title": "National Sales Heatmap", "subtitle": "Hover or click for region details", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": null, "graphic": null, "border_image_url": null, "border_image_position": "all", "border_image_width": "10%", "border_image_opacity": 1.0, "border_image_grayscale": false, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"bg": {"id": "bg", "actions": [], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": null, "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "state_ca": {"id": "state_ca", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eCalifornia Operations\u003c/h4\u003e\u003cp\u003eSteady growth in Q3. Expanding warehouse capacity.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$1.25M", "growth": "+12%", "status": "On Track"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#acb9d9", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "state_tx": {"id": "state_tx", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eTexas Operations\u003c/h4\u003e\u003cp\u003eSupply chain constraints identified in Houston hub.\u003c/p\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$850K", "growth": "-3%", "status": "Action Required"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#eff6ff", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "state_ny": {"id": "state_ny", "actions": [{"action_type": "tooltip", "content": "\u003ch4\u003eNew York Operations\u003c/h4\u003e\u003cp\u003eRecord-breaking sales driven by new B2B partnerships.\u003c/p\u003e\u003cimg src='https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format\u0026fit=crop\u0026w=400\u0026q=80' style='width:100%; border-radius:8px;'/\u003e", "title": null, "panel_position": "overlay"}, {"action_type": "callback", "event_name": "select", "payload": {"revenue": "$2.1M", "growth": "+25%", "status": "Exceeding Targets"}}], "context_menu": null, "open_by_default": false, "panel_position": null, "panel_css": null, "draggable": false, "theme": {"color": "#1e3a8a", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": "pulse", "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        const viewsData = {"heat_map":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\"\u003e\n    \u003crect id=\"bg\" width=\"1000\" height=\"600\" fill=\"#f8fafc\" name=\"bg\"/\u003e\n    \u003cpath id=\"state_ca\" d=\"M 100 100 L 300 100 L 250 400 L 150 400 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_ca\"/\u003e\n    \u003cpath id=\"state_tx\" d=\"M 400 300 L 700 250 L 650 550 L 350 500 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_tx\"/\u003e\n    \u003cpath id=\"state_ny\" d=\"M 750 100 L 950 120 L 900 250 L 700 220 Z\" fill=\"#e2e8f0\" stroke=\"#fff\" stroke-width=\"2\" name=\"state_ny\"/\u003e\n\n    \u003ctext x=\"200\" y=\"250\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eCA\u003c/text\u003e\n    \u003ctext x=\"525\" y=\"400\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eTX\u003c/text\u003e\n    \u003ctext x=\"825\" y=\"175\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#333\" pointer-events=\"none\" text-anchor=\"middle\"\u003eNY\u003c/text\u003e\n\u003c/svg\u003e","echarts_data":[{"name":"bg","value":1,"itemStyle":{"areaColor":"#f8fafc"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"state_ca","value":1,"itemStyle":{"areaColor":"#acb9d9"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"state_tx","value":1,"itemStyle":{"areaColor":"#eff6ff"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"state_ny","value":1,"animation_class":"pulse","itemStyle":{"areaColor":"#1e3a8a"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"state_ca":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"state_ca"},{"action_type":"tooltip","content":"\u003ch4\u003eCalifornia Operations\u003c/h4\u003e\u003cp\u003eSteady growth in Q3. Expanding warehouse capacity.\u003c/p\u003e","title":null,"panel_position":"none"},{"action_type":"callback","event_name":"select","payload":{"revenue":"$1.25M","growth":"+12%","status":"On Track"}}],"state_tx":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"state_tx"},{"action_type":"tooltip","content":"\u003ch4\u003eTexas Operations\u003c/h4\u003e\u003cp\u003eSupply chain constraints identified in Houston hub.\u003c/p\u003e","title":null,"panel_position":"none"},{"action_type":"callback","event_name":"select","payload":{"revenue":"$850K","growth":"-3%","status":"Action Required"}}],"state_ny":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"state_ny"},{"action_type":"tooltip","content":"\u003ch4\u003eNew York Operations\u003c/h4\u003e\u003cp\u003eRecord-breaking sales driven by new B2B partnerships.\u003c/p\u003e\u003cimg src='https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format\u0026fit=crop\u0026w=400\u0026q=80' style='width:100%; border-radius:8px;'/\u003e","title":null,"panel_position":"none"},{"action_type":"callback","event_name":"select","payload":{"revenue":"$2.1M","growth":"+25%","status":"Exceeding Targets"}}]},"overlays":{"sivo_choropleth_legend":{"html":"\n            \u003cdiv style=\"background: rgba(255,255,255,0.9); padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: sans-serif; font-size: 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); user-select: none;\"\u003e\n                \u003cspan\u003e850000.0\u003c/span\u003e\n                \u003cdiv style=\"width: 100px; height: 15px; background: linear-gradient(to right, #eff6ff, #1e3a8a); border: 1px solid #999; border-radius: 3px;\"\u003e\u003c/div\u003e\n                \u003cspan\u003e2100000.0\u003c/span\u003e\n            \u003c/div\u003e\n            ","fixed":true,"position":"bottom-left"}},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":"National Sales Heatmap","subtitle":"Hover or click for region details","attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[1000.0,600.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"bg":{"id":"bg","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#f8fafc","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"state_ca":{"id":"state_ca","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"state_ca"},{"action_type":"tooltip","content":"\u003ch4\u003eCalifornia Operations\u003c/h4\u003e\u003cp\u003eSteady growth in Q3. Expanding warehouse capacity.\u003c/p\u003e","title":null,"panel_position":"none"},{"action_type":"callback","event_name":"select","payload":{"revenue":"$1.25M","growth":"+12%","status":"On Track"}}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#acb9d9","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"state_tx":{"id":"state_tx","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"state_tx"},{"action_type":"tooltip","content":"\u003ch4\u003eTexas Operations\u003c/h4\u003e\u003cp\u003eSupply chain constraints identified in Houston hub.\u003c/p\u003e","title":null,"panel_position":"none"},{"action_type":"callback","event_name":"select","payload":{"revenue":"$850K","growth":"-3%","status":"Action Required"}}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#eff6ff","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"state_ny":{"id":"state_ny","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"state_ny"},{"action_type":"tooltip","content":"\u003ch4\u003eNew York Operations\u003c/h4\u003e\u003cp\u003eRecord-breaking sales driven by new B2B partnerships.\u003c/p\u003e\u003cimg src='https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format\u0026fit=crop\u0026w=400\u0026q=80' style='width:100%; border-radius:8px;'/\u003e","title":null,"panel_position":"none"},{"action_type":"callback","event_name":"select","payload":{"revenue":"$2.1M","growth":"+25%","status":"Exceeding Targets"}}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#1e3a8a","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":"pulse","morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
         const activeCharts = {};
+        window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         function calculateLayoutSize(view, domElement) {
             if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
@@ -334,6 +338,8 @@
                     geo: {
                         map: 'sivoMap_' + blockId,
                         roam: true,
+                        label: { show: false },
+                        emphasis: { disabled: true },
                         layoutCenter: ['50%', '50%'],
                         layoutSize: calculateLayoutSize(viewData, dom),
                         regions: viewData.echarts_data // Apply colors directly to SVG regions via geo
@@ -349,6 +355,8 @@
                         type: 'map',
                         map: 'sivoMap_' + blockId,
                         geoIndex: 0,
+                        label: { show: false },
+                        emphasis: { disabled: true },
                         data: viewData.echarts_data
                     });
 
@@ -518,8 +526,57 @@
                                     zIndex: 10000
                                 });
                             }
+                        } else if (action.action_type === 'toggle_image') {
+                            var targetId = action.target_id || params.name;
+                            var urls = action.image_urls;
+                            if (urls && urls.length > 0) {
+                                if (window.sivoToggleImageState[targetId] === undefined) {
+                                    window.sivoToggleImageState[targetId] = 0;
+                                } else {
+                                    window.sivoToggleImageState[targetId] = (window.sivoToggleImageState[targetId] + 1) % urls.length;
+                                }
+                                var nextUrl = urls[window.sivoToggleImageState[targetId]];
+
+                                var currentOption = chart.getOption();
+                                var seriesData = currentOption.series[0].data || [];
+                                var updated = false;
+
+                                for (var i = 0; i < seriesData.length; i++) {
+                                    if (seriesData[i].name === targetId) {
+                                        if (!seriesData[i].itemStyle) {
+                                            seriesData[i].itemStyle = {};
+                                        }
+                                        var img = new Image();
+                                        img.src = nextUrl;
+                                        seriesData[i].itemStyle.areaColor = {
+                                            image: img,
+                                            repeat: 'repeat'
+                                        };
+                                        updated = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!updated) {
+                                    var img = new Image();
+                                    img.src = nextUrl;
+                                    seriesData.push({
+                                        name: targetId,
+                                        itemStyle: {
+                                            areaColor: {
+                                                image: img,
+                                                repeat: 'repeat'
+                                            }
+                                        }
+                                    });
+                                    updated = true;
+                                }
+
+                                if (updated) {
+                                    chart.setOption({ series: [{ data: seriesData }] });
+                                }
+                            }
                         } else if (action.action_type === 'callback') {
-                            console.log('Triggering callback:', action.event_name, action.payload);
                             window.parent.postMessage({
                                 type: 'sivo_click',
                                 payload: {
@@ -529,7 +586,6 @@
                                 }
                             }, '*');
                         } else if (action.action_type === 'drilldown' && action.target_svg) {
-                            console.warn("Dashboard Drilldown triggered to:", action.target_svg);
                         }
                     });
 
@@ -548,22 +604,25 @@
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
-                    document.getElementById('sidebar-content').innerHTML = tooltipContent;
+                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
                     document.getElementById('sivo-sliding-sidebar').classList.add('active');
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
                         const container = panel.querySelector('.sivo-details-content');
-                        container.innerHTML = `<h3>${params.name}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        container.innerHTML = `<h3>${safeName}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
                         const container = panel.querySelector('.sivo-details-content');
+                        var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         if (tooltipContent) {
-                            container.innerHTML = `<h3>${params.name}</h3>${tooltipContent}`;
+                            var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
+                            container.innerHTML = `<h3>${safeName}</h3>${safeTooltip}`;
                         } else {
-                            container.innerHTML = `<h3>${params.name}</h3><p>No additional details mapped.</p>`;
+                            container.innerHTML = `<h3>${safeName}</h3><p>No additional details mapped.</p>`;
                         }
                     });
                 }
