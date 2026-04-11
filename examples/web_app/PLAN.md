@@ -49,7 +49,7 @@ Configuration: Translates to `sivo_app.add_image_overlay()` to position images o
 
 ### Interactive Dashboards & Graphs
 *   **UI Flow:** A "Dashboard Layout" mode where users select CSS Grid block layouts (e.g., "Map + Sidebar + Graph").
-*   **Graphing Integration:** When dropping a Graph Block, the wizard asks for a dataset. The user maps the X/Y axes from the uploaded CSV/XLSX. The builder uses SIVO's internal `map_bar_chart` / `map_line_chart` API to inject ECharts instances.
+*   **Graphing Integration:** When dropping a Graph Block, the wizard asks for a dataset. The user maps the X/Y axes from the uploaded CSV/XLSX. The builder uses SIVO's internal `map_bar_chart` / `map_line_chart` / `map_pie_chart` API to inject ECharts instances.
 
 
 ### Advanced Thematic Mapping & Infographics
@@ -115,11 +115,11 @@ Configuration: Translates to `sivo_app.add_image_overlay()` to position images o
 
 ### Accessibility (A11y) & Security
 *   **UI Flow:** An "Accessibility & Security" settings menu for the project.
-*   **Configuration:** Allows users to explicitly define ARIA roles, set `presentation_order` for sequential keyboard navigation, and configure strict CSP or DOMPurify options.
+* **Configuration:** Allows users to explicitly define ARIA roles, `aria_label`, and `tabindex` via `Sivo.map()`, set `presentation_order` for sequential keyboard navigation during instantiation, and configure strict CSP or DOMPurify options.
 
 ### Visual Annotation & Element Inspection
 * **UI Flow:** An "Annotator Studio" mode where users can click on SVG elements in a preview pane to instantly view their IDs, bounding boxes, and coordinates.
-* **Configuration:** Emulates the `sivo annotate` CLI command by integrating `annotator.html` logic to visually inspect and annotate SVGs directly within the browser workspace.
+* **Configuration:** Emulates the `sivo annotate` CLI command by integrating `annotator.html` logic to visually inspect and annotate SVGs directly within the browser workspace, embedding it via an HTML5 `<template>` tag and `iframe srcdoc` to bypass local CORS restrictions.
 
 ### Project Validation & Diagnostics
 * **UI Flow:** A "Validate Project" tool that runs an automated health check, highlighting disconnected nodes or configuration errors directly on the canvas with warning icons.
@@ -179,7 +179,7 @@ Configuration: Translates to `sivo_app.add_image_overlay()` to position images o
 
 ### Document & Map Embeds
 * **UI Flow:** A specific component block allowing users to drag full PDF or external live map iframes into the interactive interface.
-* **Configuration:** Configures the `add_document_embed` or `add_map_embed` functionality inside the generated Pydantic output.
+* **Configuration:** Configures the `document` or `map_location` arguments within `sivo.map()` (e.g., `sivo.map('id', document='url')`) inside the generated Pydantic output.
 
 ### HTML/DOM Overlays
 * **UI Flow:** A tool that allows users to place raw HTML or DOM elements directly on top of the map.
@@ -235,7 +235,7 @@ Configuration: Translates to `sivo_app.add_image_overlay()` to position images o
 
 ### Geographic Coordinate Mapping
 * **UI Flow:** A configuration dialog that lets users bind the canvas to real-world latitude and longitude bounds, mapping pixel space to geographic space for accurate data plotting.
-* **Configuration:** The user defines the geo-bounds, which are passed to the `bounding_coords` parameter in `Sivo.from_svg()`, enabling exact geographic placement of proportional symbols and other elements.
+* **Configuration:** The user defines the geo-bounds, which are passed to the `bounding_coords` parameter in `Sivo.from_svg()`. Because SVG Y-axes point down, latitudes must be inverted using `(maxLat + minLat) - actual_lat`. Dynamic map layers explicitly inject `boundingCoords: view.bounding_coords || undefined` into ECharts `option.geo` configurations for accurate placement.
 
 ### Native SVG Shape Generation
 * **UI Flow:** A "Shapes" library that allows users to drag-and-drop basic geometry (rectangles, circles, lines) or text nodes directly onto a blank or existing canvas.
