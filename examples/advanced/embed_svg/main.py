@@ -36,7 +36,7 @@ def main():
 </svg>"""
 
     # 1. Initialize the Sivo app with the outer SVG and layout_size 99%
-    app = Sivo.from_string(outer_svg, theme="light", disable_zoom_controls=False, layout_size="99%")
+    app = Sivo.from_string(outer_svg, theme="light", disable_zoom_controls=False, layout_size="99%", default_panel_position="right")
 
     # 2. Embed the inner SVG directly into the 'target_zone'
     # We set preserve_aspect_ratio=True to uniformly scale the circle without stretching
