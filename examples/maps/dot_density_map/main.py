@@ -17,12 +17,17 @@ def main():
         <path id="zoneC" d="M 50 140 A 30 30 0 1 0 50 141 Z" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2" />
     </svg>"""
 
-    sivo_app = Sivo.from_string(svg_data, title="Population Density", subtitle="1 Dot = 100 People")
+    sivo_app = Sivo.from_string(
+        svg_data,
+        title="Population Density",
+        subtitle="1 Dot = 100 People",
+        default_panel_position="overlay"
+    )
 
-    # 2. Add tooltips so we can interact with the zones
-    sivo_app.map("zoneA", tooltip="Zone A: 12,000 people")
-    sivo_app.map("zoneB", tooltip="Zone B: 35,000 people")
-    sivo_app.map("zoneC", tooltip="Zone C: 20,000 people")
+    # 2. Add html so we can interact with the zones
+    sivo_app.map("zoneA", html="<p>Zone A: 12,000 people</p>")
+    sivo_app.map("zoneB", html="<p>Zone B: 35,000 people</p>")
+    sivo_app.map("zoneC", html="<p>Zone C: 20,000 people</p>")
 
     # 3. Define the data mapping (Scalar counts per region)
     data = {
@@ -42,7 +47,7 @@ def main():
     )
 
     # 5. Export the result
-    output_path = os.path.join(os.path.dirname(__file__), "interactive_dot_density.html")
+    output_path = os.path.join(os.path.dirname(__file__), "output.html")
     sivo_app.to_html(output_path)
     print(f"Exported Dot Density Example to {output_path}")
 
