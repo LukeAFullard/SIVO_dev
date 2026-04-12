@@ -27,7 +27,8 @@ def create_example():
         gdf,
         id_col='id',
         name_col='name',
-        simplify_tolerance=0.2
+        simplify_tolerance=0.2,
+        default_panel_position="overlay"
     )
 
     # Let's map some data for good measure
