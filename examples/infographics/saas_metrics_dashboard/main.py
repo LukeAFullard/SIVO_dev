@@ -3,8 +3,8 @@ import os
 
 def build_saas_dashboard():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "sleek_bento_stats_2026.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "src", "sivo", "templates", "3_2", "sleek_bento_stats_2026.svg"
     )
     output_dir = os.path.dirname(__file__)
 
