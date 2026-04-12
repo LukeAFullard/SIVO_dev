@@ -12,7 +12,7 @@ def main():
         <rect width="100" height="100" fill="#f8fafc" />
     </svg>"""
 
-    sivo_app = Sivo.from_string(svg_data, title="City Traffic Incidents", subtitle="Hexagonal Binning Map")
+    sivo_app = Sivo.from_string(svg_data, title="City Traffic Incidents", subtitle="Hexagonal Binning Map", default_panel_position="none")
 
     # 2. Simulate raw point data (e.g., traffic incidents or check-ins)
     # We'll create two clusters of dense points
