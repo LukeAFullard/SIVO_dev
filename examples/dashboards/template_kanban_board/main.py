@@ -12,7 +12,7 @@ def main():
             <circle cx="260" cy="160" r="16" fill="#e2e8f0" />
             <text x="260" y="165" font-family="sans-serif" font-size="12" fill="#475569" text-anchor="middle">JD</text>
         </svg>"""
-        return Sivo.from_string(svg, theme="light", layout_size="95%", default_panel_position="none")
+        return Sivo.from_string(svg, theme="light", layout_size="95%", default_panel_position="none", render_mode="svg")
 
     # Create task cards
     task1 = create_task_card("T-101", "Design API", "#3b82f6")
@@ -30,15 +30,14 @@ def main():
     dashboard = SivoDashboard(title="Project Sprint Board")
     dashboard.set_grid_layout(
         desktop='''
-    "to_do1 in_progress done review"
-    "to_do2 in_progress done review"
+    "to_do1 in_progress done"
+    "to_do2 in_progress done"
         ''',
         mobile='''
     "to_do1"
     "to_do2"
     "in_progress"
     "done"
-    "review"
         '''
     )
 

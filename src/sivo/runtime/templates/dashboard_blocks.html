@@ -330,12 +330,63 @@
                         roam: true,
                         label: { show: false },
                         emphasis: { disabled: true },
+                        boundingCoords: viewData.bounding_coords || undefined,
                         layoutCenter: ['50%', '50%'],
                         layoutSize: calculateLayoutSize(viewData, dom),
                         regions: viewData.echarts_data // Apply colors directly to SVG regions via geo
                     },
                     series: []
                 };
+
+                // Handle Native SVG Overlay exactly like standard Sivo
+                var overlayContainer = document.getElementById('overlay-' + blockId);
+                if (viewData.render_mode === 'svg' && overlayContainer && viewData.svg_string) {
+                    overlayContainer.innerHTML = viewData.svg_string;
+                    overlayContainer.style.display = 'block';
+
+                    // Group native SVG contents exactly like echarts.html does to accept the ECharts transform
+                    var svgInside = overlayContainer.querySelector('svg');
+                    if (svgInside) {
+                        var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                        g.id = "sivo-global-transform-group-" + blockId;
+                        while (svgInside.firstChild) {
+                            g.appendChild(svgInside.firstChild);
+                        }
+                        svgInside.appendChild(g);
+                        // Make sure the overlay SVG exactly matches the ECharts canvas bounds
+                        svgInside.style.position = 'absolute';
+                        svgInside.style.top = '0';
+                        svgInside.style.left = '0';
+                        svgInside.style.width = '100%';
+                        svgInside.style.height = '100%';
+
+                        // Remove viewBox to prevent the browser from double-scaling the native SVG
+                        // before the ECharts transform matrix is applied to the <g> wrapper.
+                        svgInside.removeAttribute('viewBox');
+                    }
+
+                    function syncOverlayTransform() {
+                        var overlayGroup = document.getElementById('sivo-global-transform-group-' + blockId);
+                        if (!overlayGroup) return;
+
+                        // Grab the transform from ECharts natively-rendered SVG nodes.
+                        // ECharts maps often use <g> or <path> with a transform attribute for scaling/panning.
+                        var echartsElement = dom.querySelector('svg g[transform], svg path[transform], svg rect[transform]');
+                        if (echartsElement) {
+                            var transform = echartsElement.getAttribute('transform');
+                            if (transform) {
+                                overlayGroup.setAttribute('transform', transform);
+                            }
+                        }
+                    }
+
+                    chart.on('georoam', function(params) {
+                        syncOverlayTransform();
+                    });
+
+                    // Trigger initial align
+                    setTimeout(syncOverlayTransform, 100);
+                }
 
                 // Add visualMap for choropleths if data_binding exists
                 if (viewData.data_binding) {
