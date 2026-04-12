@@ -2,14 +2,20 @@ import os
 from sivo import Sivo
 
 def main():
-    svg_path = os.path.join(os.path.dirname(__file__), "..", "01_hello_world", "sample.svg")
+    svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "basic", "hello_world", "sample.svg"))
 
-    sivo_app = Sivo.from_svg(svg_path, title="Proportional Symbol Map", subtitle="Size represents budget")
+    sivo_app = Sivo.from_svg(
+        svg_path,
+        title="Proportional Symbol Map",
+        subtitle="Size represents budget",
+        default_panel_position="right"
+    )
 
     # Map the buildings to generate bounding boxes
-    sivo_app.map("sun", tooltip="Building A (Budget: $500k)")
-    sivo_app.map("house", tooltip="Building B (Budget: $250k)")
-    sivo_app.map("river", tooltip="Building C (Budget: $1.2M)")
+    # Use 'html' instead of deprecated 'tooltip' parameter
+    sivo_app.map("sun", html="Building A (Budget: $500k)")
+    sivo_app.map("house", html="Building B (Budget: $250k)")
+    sivo_app.map("river", html="Building C (Budget: $1.2M)")
 
     # Apply proportional symbols
     sivo_app.apply_proportional_symbols(
