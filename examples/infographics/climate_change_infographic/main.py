@@ -3,8 +3,8 @@ import os
 
 def build_climate_dashboard():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "glassmorphic_radial_dashboard_2026.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))),
+        "src", "sivo", "templates", "3_2", "glassmorphic_radial_dashboard_2026.svg"
     )
     output_dir = os.path.dirname(__file__)
 
@@ -96,9 +96,10 @@ def build_climate_dashboard():
     # Simple tooltip for Center Hub
     app.map(
         element_id="center-hub",
-        tooltip="Global Temperature Target",
+
         html="<h3>The 1.5°C Target</h3><p>The Paris Agreement sets out a global framework to avoid dangerous climate change by limiting global warming to well below 2°C and pursuing efforts to limit it to 1.5°C.</p>",
-        glow=True
+        glow=True,
+        panel_position="overlay"
     )
 
     # 5. Export the Final Interactive HTML Bundle
