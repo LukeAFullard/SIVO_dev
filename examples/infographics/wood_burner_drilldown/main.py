@@ -261,7 +261,8 @@ def main():
         lock_zoom_out=True,
         transparent_template_lines=True,
         title="Old Wood-Burner (Damp Wood)",
-        subtitle="Thick smoke due to poor combustion and wet wood."
+        subtitle="Thick smoke due to poor combustion and wet wood.",
+        default_panel_position="overlay"
     )
 
     # Inject thick smoke via HTML overlay
@@ -273,7 +274,8 @@ def main():
         lock_zoom_out=True,
         transparent_template_lines=True,
         title="Modern Wood-Burner (Dry Wood)",
-        subtitle="Clean burning with minimal smoke."
+        subtitle="Clean burning with minimal smoke.",
+        default_panel_position="overlay"
     )
 
     # Inject light smoke via HTML overlay
@@ -283,8 +285,10 @@ def main():
     # 4. Map interactivities for Old View
     app_old.map(
         element_id="woodpile_area",
-        tooltip="Wet damp woodpile",
-        markdown="This wood is damp and creates thick smoke when burned.",
+        html="""
+        <h3>Wet damp woodpile</h3>
+        <p>This wood is damp and creates thick smoke when burned.</p>
+        """,
         hover_color="rgba(41, 182, 246, 0.4)",
         glow=True,
         color="transparent",
@@ -293,7 +297,7 @@ def main():
 
     app_old.map(
         element_id="switch_to_modern",
-        tooltip="Click to upgrade to a modern wood-burner",
+        html="<p>Click to upgrade to a modern wood-burner</p>",
         explode_to="modern_view",
         explode_duration_ms=800,
         hover_color="rgba(0, 0, 0, 0.1)",
@@ -304,10 +308,9 @@ def main():
     # 5. Map interactivities for Modern View
     app_modern.map(
         element_id="modern_dry_woodpile",
-        tooltip="Dry Woodpile",
-        markdown="""
-### Dry Firewood
-Properly seasoned wood burns efficiently and produces little smoke.
+        html="""
+        <h3>Dry Firewood</h3>
+        <p>Properly seasoned wood burns efficiently and produces little smoke.</p>
         """,
         hover_color="rgba(76, 175, 80, 0.3)",
         color="transparent",
@@ -316,8 +319,10 @@ Properly seasoned wood burns efficiently and produces little smoke.
 
     app_modern.map(
         element_id="modern_stove_glass",
-        tooltip="Modern Wood-Burner",
-        markdown="Highly efficient with secondary combustion.",
+        html="""
+        <h3>Modern Wood-Burner</h3>
+        <p>Highly efficient with secondary combustion.</p>
+        """,
         hover_color="rgba(0, 0, 0, 0.1)",
         color="transparent",
         transparent_lines=True
@@ -325,7 +330,7 @@ Properly seasoned wood burns efficiently and produces little smoke.
 
     app_modern.map(
         element_id="switch_to_old",
-        tooltip="Click to go back to the old wood-burner",
+        html="<p>Click to go back to the old wood-burner</p>",
         explode_to="old_view",
         explode_duration_ms=800,
         hover_color="rgba(0, 0, 0, 0.1)",
