@@ -12,8 +12,8 @@ def main():
         subtitle="Using `bounding_coords` to place elements via real (lat, lng)",
         default_panel_position="right",
         bounding_coords=[
-            [-125.0, 25.0],  # [minLng, minLat] (Bottom Left of the SVG map)
-            [-65.0, 50.0]    # [maxLng, maxLat] (Top Right of the SVG map)
+            [-124.7258, 24.4981],  # [minLng, minLat] (Bottom Left of the SVG map)
+            [-66.9499, 49.3844]    # [maxLng, maxLat] (Top Right of the SVG map)
         ]
     )
 
@@ -30,7 +30,7 @@ def main():
     for city, props in data.items():
         # Correct the SVG Y-Axis Inversion
         # Formula: (maxLat + minLat) - actual_lat
-        inverted_lat = (50.0 + 25.0) - props["coord"][1]
+        inverted_lat = (49.3844 + 24.4981) - props["coord"][1]
         mapped_data[city] = {
             "value": props["value"],
             "coord": [props["coord"][0], inverted_lat],
