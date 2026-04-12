@@ -15,7 +15,7 @@ svg_content = """
 """
 
 # Initialize Sivo App
-sivo_app = Sivo.from_string(svg_content)
+sivo_app = Sivo.from_string(svg_content, default_panel_position="none")
 
 # We use generic external audio links for demonstration purposes
 audio_beep_1 = "https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
@@ -68,9 +68,9 @@ steps = [
     }
 ]
 
-sivo_app.map("section1", tooltip="Data Center (Active)")
-sivo_app.map("section2", tooltip="Logistics Hub (Active)")
-sivo_app.map("section3", tooltip="Headquarters (Active)")
+sivo_app.map("section1", html="Data Center (Active)", panel_position="none")
+sivo_app.map("section2", html="Logistics Hub (Active)", panel_position="none")
+sivo_app.map("section3", html="Headquarters (Active)", panel_position="none")
 
 # Bind the scrollytelling steps
 sivo_app.bind_scrollytelling(steps)
