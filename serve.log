@@ -1,0 +1,5 @@
+ INFO  Accepting connections at http://localhost:8080
+ HTTP  4/12/2026 4:57:23 AM ::1 GET /output.html
+ HTTP  4/12/2026 4:57:23 AM ::1 Returned 301 in 397 ms
+ HTTP  4/12/2026 4:57:24 AM ::1 GET /output
+ HTTP  4/12/2026 4:57:24 AM ::1 Returned 200 in 17 ms
