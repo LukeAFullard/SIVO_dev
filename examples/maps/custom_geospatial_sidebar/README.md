@@ -7,7 +7,7 @@ This example demonstrates how to embed interactive, third-party mapping librarie
 - Setting a global default sidebar location via `default_panel_position="right"`.
 - Mapping specific SVG elements (`hq`, `spike_demo`) to interactive actions.
 - Embedding local HTML files (like a Leaflet map exported from Folium) inside the sidebar iframe using `social={"provider": "website", "url": "folium_map.html"}`.
-- Embedding external, remote web visualizations (like an Observable HQ D3 spike map) using `social={"provider": "website", "url": "..."}`.
+- Embedding external, remote web pages (like a Wikipedia article on Data Visualization) using `social={"provider": "website", "url": "..."}`.
 
 ## Relevant Code
 
@@ -27,11 +27,11 @@ sivo_app.map(
     social={"provider": "website", "url": "folium_map.html"}
 )
 
-# Embed an external data visualization
+# Embed an external remote website inside the iframe
 sivo_app.map(
     element_id="spike_demo",
-    html="<h3>D3 Spike Map</h3><p>An interactive, data-driven visualization from Observable embedded seamlessly.</p>",
-    social={"provider": "website", "url": "https://observablehq.com/embed/@d3/spike-map?cells=chart"}
+    html="<h3>Data Visualization</h3><p>An embedded external web page detailing topics related to this map element.</p>",
+    social={"provider": "website", "url": "https://en.wikipedia.org/wiki/Data_visualization"}
 )
 ```
 

@@ -19,11 +19,11 @@ def main():
         glow=True
     )
 
-    # 2. Embed an external advanced data visualization (e.g., D3 Spike Map hosted on Observable or external server)
+    # 2. Embed an external remote website inside the iframe
     sivo_app.map(
         element_id="spike_demo",
-        html="<h3>D3 Spike Map</h3><p>An interactive, data-driven visualization from Observable embedded seamlessly.</p>",
-        social={"provider": "website", "url": "https://observablehq.com/embed/@d3/spike-map?cells=chart"},
+        html="<h3>Data Visualization</h3><p>An embedded external web page detailing topics related to this map element.</p>",
+        social={"provider": "website", "url": "https://en.wikipedia.org/wiki/Data_visualization"},
         hover_color="#f87171",
         glow=True
     )
