@@ -13,8 +13,9 @@ svg_content = """
 </svg>
 """
 
-# Initialize Sivo App
-sivo_app = Sivo.from_string(svg_content)
+# Initialize Sivo App, default_panel_position defaults to "none", so we specify "right"
+# to allow the elements to show info when clicked outside of the scrollytelling flow.
+sivo_app = Sivo.from_string(svg_content, default_panel_position="right")
 
 # Define Scrollytelling narrative
 steps = [
@@ -69,9 +70,10 @@ steps = [
     }
 ]
 
-sivo_app.map("section1", tooltip="Data Center (Active)")
-sivo_app.map("section2", tooltip="Logistics Hub (Active)")
-sivo_app.map("section3", tooltip="Headquarters (Active)")
+# tooltip and markdown are deprecated. Use html instead.
+sivo_app.map("section1", html="<h3>Data Center (Active)</h3>")
+sivo_app.map("section2", html="<h3>Logistics Hub (Active)</h3>")
+sivo_app.map("section3", html="<h3>Headquarters (Active)</h3>")
 
 # Bind the scrollytelling steps
 sivo_app.bind_scrollytelling(steps)
