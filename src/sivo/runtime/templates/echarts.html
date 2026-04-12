@@ -112,6 +112,7 @@
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
             display: none;
             clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+            pointer-events: none;
         }
 
         #sivo-compare-slider-ui {
@@ -2044,8 +2045,8 @@
                         },
                         data: echartsData,
                         zlevel: 1,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 0, // Disable tweening delay for native feel during manual pan/zoom
                         animationEasingUpdate: 'cubicInOut'
@@ -2065,8 +2066,8 @@
                         map: mapName,
                         boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                         roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 0,
                         label: { show: false },
@@ -2210,8 +2211,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
@@ -2281,8 +2282,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
@@ -2421,8 +2422,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
@@ -2592,8 +2593,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
@@ -4139,6 +4140,16 @@ if (originalId) {
             }
         }
 
+        window.sivoLastMouseX = 0;
+        window.addEventListener('mousemove', function(e) {
+            window.sivoLastMouseX = e.clientX;
+        });
+        window.addEventListener('touchmove', function(e) {
+            if(e.touches && e.touches[0]) {
+                window.sivoLastMouseX = e.touches[0].clientX;
+            }
+        }, {passive: true});
+
         // Catch background clicks to clear selection and close panel
         myChart.getZr().on('click', function (event) {
             // Check if the click did not hit a target element
@@ -4149,7 +4160,7 @@ if (originalId) {
 
         // Handle click events
         myChart.on('click', function (params) {
-            triggerElementClick(params.name);
+            window.triggerElementClick(params.name);
         });
 
         window.sivoCurrentPanelElement = null;
@@ -4173,7 +4184,74 @@ if (originalId) {
             var elementActions = elementData ? (elementData.actions || elementData) : null;
             var htmlContent = '';
             var hasInteraction = false;
+
+            // In compare mode, we must retrieve mappings from the correct side's manifest
+            // since currentViewId is literally "compare_mode" instead of the split views
             var view = viewsData[currentViewId];
+            if (currentViewId === "compare_mode") {
+                // Determine if we clicked the left or right side of the slider
+                var sliderUi = document.getElementById('sivo-compare-slider-ui');
+
+                var sliderPct = 50;
+                if (sliderUi) {
+                    var styleLeft = window.getComputedStyle(sliderUi).left; // Usually in pixels
+                    if (styleLeft && styleLeft.includes('px')) {
+                        sliderPct = (parseFloat(styleLeft) / window.innerWidth) * 100;
+                    } else if (sliderUi.style.left) {
+                        sliderPct = parseFloat(sliderUi.style.left.replace('%', ''));
+                    }
+                }
+
+                // Find where the click occurred relative to screen width using ECharts global layout
+                var isRightSideClick = false;
+
+                // Because both canvases intercept clicks globally (left intercepts all because right is pointer-events: none),
+                // and the domains overlap perfectly, we need a way to know where the pointer was.
+                // We can save the last mouse position globally during ECharts events, or simply use the slider % and assumption.
+
+                // Wait, if the slider is being dragged, the mouse is on the slider, not the element.
+                // We should find the actual on-screen bounding box of the element itself, and check if its center is to the right of the slider!
+                var model = myChart.getModel().getSeriesByIndex(0);
+                var geo = model ? model.coordinateSystem : null;
+                var elCenterX = 0;
+
+                if (geo && geo.regions) {
+                    var region = geo.regions.find(r => r.name === name);
+                    if (region && region._elOnlyForCalculate) {
+                        var zrender_el = region._elOnlyForCalculate;
+                        var bBox = zrender_el.getBoundingRect();
+                        var tl = zrender_el.transformCoordToGlobal(bBox.x, bBox.y);
+                        var br = zrender_el.transformCoordToGlobal(bBox.x + bBox.width, bBox.y + bBox.height);
+                        elCenterX = (tl[0] + br[0]) / 2;
+                    }
+                }
+
+                // If element center was successfully found, we compare its screen X to the slider screen X
+                if (elCenterX > 0) {
+                    var elCenterPct = (elCenterX / window.innerWidth) * 100;
+                    isRightSideClick = elCenterPct > sliderPct;
+                } else if (window.sivoLastMouseX !== undefined && window.sivoLastMouseX !== 0) {
+                    // Fallback to mouse position if element bounds calculation fails
+                    var clickPct = (window.sivoLastMouseX / window.innerWidth) * 100;
+                    isRightSideClick = clickPct >= sliderPct;
+                } else {
+                    isRightSideClick = sliderPct < 50;
+                }
+
+                var leftView = viewsData["compare_left"];
+                var rightView = viewsData["compare_right"];
+
+                if (isRightSideClick && rightView && rightView.mappings && rightView.mappings[name]) {
+                    view = rightView;
+                    elementData = rightView.mappings[name];
+                    elementActions = elementData.actions || elementData;
+                } else if (!isRightSideClick && leftView && leftView.mappings && leftView.mappings[name]) {
+                    view = leftView;
+                    elementData = leftView.mappings[name];
+                    elementActions = elementData.actions || elementData;
+                }
+            }
+
             var panelPosition = view ? (view.default_panel_position || 'none') : 'none'; // Default
             var socialIframes = []; // Store secure iframes to append after DOMPurify
             var sivoChartsToInit = [];
@@ -5143,13 +5221,13 @@ if (originalId) {
                     });
                 });
 
-                var mappingConfig = viewsData[currentViewId] && viewsData[currentViewId].mappings && viewsData[currentViewId].mappings[name];
+                var mappingConfig = view && view.mappings && view.mappings[name];
                 var elementCss = mappingConfig ? mappingConfig.panel_css : null;
 
                 applyPanelPosition(panelPosition, true, elementCss);
                 window.sivoCurrentPanelElement = name;
             } else if (!hasInteraction && !elementActions) {
-                var mappingConfig = viewsData[currentViewId] && viewsData[currentViewId].mappings && viewsData[currentViewId].mappings[name];
+                var mappingConfig = view && view.mappings && view.mappings[name];
                 var elementCss = mappingConfig ? mappingConfig.panel_css : null;
 
                 var emptySvg = `<svg class="sivo-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
@@ -5684,6 +5762,15 @@ if (originalId) {
                     if (pct > 100) pct = 100;
                     sliderUi.style.left = pct + '%';
                     rightChart.style.clipPath = `polygon(${pct}% 0, 100% 0, 100% 100%, ${pct}% 100%)`;
+
+                    if (window.sivoCurrentPanelElement) {
+                        // Avoid triggering until slider DOM has updated its layout natively, otherwise we read old style.left
+                        setTimeout(() => {
+                            if (window.sivoCurrentPanelElement) {
+                                window.triggerElementClick(window.sivoCurrentPanelElement);
+                            }
+                        }, 10);
+                    }
                 });
 
                 window.addEventListener('touchmove', function(e) {
@@ -5694,10 +5781,38 @@ if (originalId) {
                     if (pct > 100) pct = 100;
                     sliderUi.style.left = pct + '%';
                     rightChart.style.clipPath = `polygon(${pct}% 0, 100% 0, 100% 100%, ${pct}% 100%)`;
+
+                    if (window.sivoCurrentPanelElement) {
+                        setTimeout(() => {
+                            if (window.sivoCurrentPanelElement) {
+                                window.triggerElementClick(window.sivoCurrentPanelElement);
+                            }
+                        }, 10);
+                    }
                 }, {passive: false});
 
-                window.addEventListener('mouseup', function() { isDraggingSlider = false; });
-                window.addEventListener('touchend', function() { isDraggingSlider = false; });
+                function finishDrag(e) {
+                    var wasDragging = isDraggingSlider;
+                    isDraggingSlider = false;
+                    if (!wasDragging) return;
+
+                    // Reset sivoLastMouseX explicitly on drop to ensure the final calculation is perfect.
+                    if (e && e.clientX) {
+                        window.sivoLastMouseX = e.clientX;
+                    } else if (e && e.changedTouches && e.changedTouches[0]) {
+                        window.sivoLastMouseX = e.changedTouches[0].clientX;
+                    }
+
+                    if (window.sivoCurrentPanelElement) {
+                        setTimeout(() => {
+                            if (window.sivoCurrentPanelElement) {
+                                window.triggerElementClick(window.sivoCurrentPanelElement);
+                            }
+                        }, 50);
+                    }
+                }
+                window.addEventListener('mouseup', finishDrag);
+                window.addEventListener('touchend', finishDrag);
             }
         })();
 
