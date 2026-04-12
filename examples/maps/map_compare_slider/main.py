@@ -14,10 +14,10 @@ def main():
         svg_left,
         title="Regional Growth Comparison",
         subtitle="Swipe to see changes from 2020 to 2024",
-        disable_panel=True
+        default_panel_position="overlay"
     )
-    sivo_left.map("region1", tooltip="Region 1 - 2020", color="#cbd5e1")
-    sivo_left.map("region2", tooltip="Region 2 - 2020", color="#cbd5e1")
+    sivo_left.map("region1", html="<h3>Region 1 - 2020</h3>", color="#cbd5e1")
+    sivo_left.map("region2", html="<h3>Region 2 - 2020</h3>", color="#cbd5e1")
 
 
     # 2. Secondary Map (e.g. 2024 Data)
@@ -28,9 +28,9 @@ def main():
         <text x="500" y="50" font-family="sans-serif" font-size="24" fill="#333" text-anchor="middle">2024 Regional Data</text>
     </svg>"""
 
-    sivo_right = Sivo.from_string(svg_right, disable_panel=True)
-    sivo_right.map("region1", tooltip="Region 1 - 2024 (Growth)", color="#10b981") # Green
-    sivo_right.map("region2", tooltip="Region 2 - 2024 (Decline)", color="#ef4444") # Red
+    sivo_right = Sivo.from_string(svg_right, default_panel_position="overlay")
+    sivo_right.map("region1", html="<h3>Region 1 - 2024 (Growth)</h3><p>Significant increase observed.</p>", color="#10b981") # Green
+    sivo_right.map("region2", html="<h3>Region 2 - 2024 (Decline)</h3><p>Decrease in region metrics.</p>", color="#ef4444") # Red
 
     # 3. Export as Compare Slider
     output_file = os.path.join(os.path.dirname(__file__), 'output.html')
