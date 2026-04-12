@@ -29,7 +29,8 @@ def main():
         title="Advanced Chart Types",
         subtitle="Exploring Polar, Liquid Fill, and Custom Series natively in SIVO",
         disable_zoom_controls=True,
-        panel_width="40%"
+        panel_width="40%",
+        default_panel_position="right"
     )
 
     # Let's map the general theme options like hover_color independently using base app.map
@@ -104,7 +105,7 @@ def main():
             type: 'rect',
             transition: ['shape'],
             shape: rectShape,
-            style: api.style()
+            style: api.style({ fill: api.visual('color') })
         };
     }
     """
@@ -120,8 +121,8 @@ def main():
         render_item_js=custom_render_js,
         data=gantt_data,
         extra_options={
-            "xAxis": {"scale": True},
-            "yAxis": {"data": ["Team 1", "Team 2", "Team 3"]},
+            "xAxis": {"type": "value", "scale": True},
+            "yAxis": {"type": "category", "data": ["Team 1", "Team 2", "Team 3"]},
             "tooltip": {
                 "formatter": "function(params) { return params.name + ': ' + params.value[1] + ' to ' + params.value[2]; }"
             }
@@ -129,7 +130,7 @@ def main():
     )
 
     # Export the bundle
-    output_path = os.path.join(os.path.dirname(__file__), "advanced_charts.html")
+    output_path = os.path.join(os.path.dirname(__file__), "output.html")
     app.to_html(output_path)
     print(f"Successfully generated: {output_path}")
 
