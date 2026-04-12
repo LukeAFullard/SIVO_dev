@@ -25,7 +25,7 @@ def create_example():
         title="Spike Map Demo",
         subtitle="COVID-19 Case Density Representation",
         theme="light",
-        disable_panel=True
+        default_panel_position="none"
     )
 
     # Base styling
@@ -47,7 +47,8 @@ def create_example():
     # but pixel offsets are required for drawing custom shapes properly, so max_height should be large enough (e.g. 100-200px)
     app.apply_spike_map(spike_data, max_height=100.0, base_width=20.0, color="rgba(220, 38, 38, 0.8)")
 
-    html_output = "examples/67_spike_map/spike_map.html"
+    import os
+    html_output = os.path.join(os.path.dirname(__file__), "spike_map.html")
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 
