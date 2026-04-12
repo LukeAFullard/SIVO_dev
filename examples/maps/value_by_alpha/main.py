@@ -44,7 +44,8 @@ def create_example():
         show_legend=True
     )
 
-    html_output = "examples/69_value_by_alpha/value_by_alpha.html"
+    import os
+    html_output = os.path.join(os.path.dirname(__file__), "output.html")
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 
