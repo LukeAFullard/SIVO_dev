@@ -2735,6 +2735,7 @@ class Sivo:
             "svg_string": self.infographic.parser.to_string(),
             "mappings": mappings_dict,
             "overlays": self.infographic.overlays,
+            "metadata": self.get_metadata(),
             "connections": self.infographic.connections,
             "lock_zoom_out": getattr(self.infographic, "lock_zoom_out", False),
             "default_panel_position": getattr(self.infographic, "default_panel_position", "none"),
