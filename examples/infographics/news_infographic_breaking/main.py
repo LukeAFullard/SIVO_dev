@@ -128,13 +128,12 @@ def main():
 
     sivo_app = Sivo.from_string(
         svg_content, title="Incident Report: Pier 42", panel_width="450px", disable_zoom_controls=True,
-        bounding_coords=[[0, 1414], [1000, 0]]
+        bounding_coords=[[0, 1414], [1000, 0]], default_panel_position="right"
     )
 
     # Interactions
     sivo_app.map(
         element_id="hotspot_crane",
-        tooltip="Crane A Failure Zone",
         hover_color="#fca5a5", glow=True,
         html="""
         <h3>Structural Failure</h3>
@@ -149,7 +148,6 @@ def main():
 
     sivo_app.map(
         element_id="hotspot_cargo",
-        tooltip="Hazmat Cargo Impact",
         hover_color="#fde68a", glow=True,
         html="""
         <h3>Cargo Impact & Hazmat</h3>
@@ -167,7 +165,7 @@ def main():
         }
     )
 
-    output_path = os.path.join(os.path.dirname(__file__), "breaking_a4.html")
+    output_path = os.path.join(os.path.dirname(__file__), "output.html")
     sivo_app.to_html(output_path, custom_css=custom_css)
     print(f"Generated at: {output_path}")
 
