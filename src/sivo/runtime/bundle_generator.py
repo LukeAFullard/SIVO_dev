@@ -232,6 +232,7 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             "echarts_data": echarts_data,
             "actions_manifest": actions_manifest,
             "overlays": view_obj["overlays"],
+            "metadata": view_obj.get("metadata", {}),
             "connections": view_obj.get("connections", []),
             "default_panel_position": view_obj.get("default_panel_position", "none"),
             "disable_panel": view_obj.get("disable_panel", False),

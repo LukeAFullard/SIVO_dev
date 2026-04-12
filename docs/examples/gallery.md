@@ -118,7 +118,7 @@ Demonstrate narrative storytelling features and specific infographic visual cont
 *   **Description:** An interactive presentation where the SVG stays sticky while a text column scrolls, automatically triggering map zooms and color changes.
 
 ### 2. Guided Tours
-*   **Location:** `examples/infographics/27_guided_tour/`
+*   **Location:** `examples/infographics/guided_tour/`
 *   **Description:** An automatic step-by-step UI "Next/Prev" dialog overlay that walks a user through specific areas of a map.
 
 ---

@@ -1,3 +1,4 @@
+import os
 from sivo import Sivo
 
 svg_content = """
@@ -13,12 +14,14 @@ svg_content = """
 </svg>
 """
 
-sivo_app = Sivo.from_string(svg_content)
+# The default side panel position is none, so we specify 'right' if we want the
+# html content to display on the side when elements are clicked.
+sivo_app = Sivo.from_string(svg_content, default_panel_position="right")
 
-# Map standard tooltips for the tour to trigger
-sivo_app.map("gallery", tooltip="Main Art Gallery", html="<p>Featuring modern artists.</p>")
-sivo_app.map("cafe", tooltip="Museum Cafe", html="<p>Coffee and pastries.</p>")
-sivo_app.map("giftshop", tooltip="Gift Shop", html="<p>Souvenirs and books.</p>")
+# Map rich HTML content to each element instead of deprecated tooltips
+sivo_app.map("gallery", html="<h2>Main Art Gallery</h2><p>Featuring modern artists.</p>")
+sivo_app.map("cafe", html="<h2>Museum Cafe</h2><p>Coffee and pastries.</p>")
+sivo_app.map("giftshop", html="<h2>Gift Shop</h2><p>Souvenirs and books.</p>")
 
 # Define Guided Tour Steps
 steps = [
@@ -50,8 +53,6 @@ steps = [
 
 # Bind the tour to the app
 sivo_app.bind_tour(steps)
-
-import os
 
 output_path = os.path.join(os.path.dirname(__file__), "guided_tour.html")
 sivo_app.to_html(output_path)

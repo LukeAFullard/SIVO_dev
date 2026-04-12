@@ -1888,6 +1888,8 @@
         var echartsData = [];
         var actionsManifest = {};
         var overlaysData = {};
+        var elementMetadataArray = [];
+        var elementMetadata = {};
         var connectionsData = [];
         var lockZoomOut = false;
         var lockScrollBounds = true;
@@ -3295,6 +3297,13 @@
 
             actionsManifest = view.actions_manifest;
             overlaysData = view.overlays;
+            elementMetadataArray = (view.metadata && view.metadata.objects) ? view.metadata.objects : [];
+            elementMetadata = {};
+            for (var i = 0; i < elementMetadataArray.length; i++) {
+                if (elementMetadataArray[i].id) {
+                    elementMetadata[elementMetadataArray[i].id] = elementMetadataArray[i];
+                }
+            }
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
             lockScrollBounds = view.lock_scroll_bounds !== undefined ? view.lock_scroll_bounds : true;
@@ -6001,9 +6010,12 @@ if (originalId) {
 
                         if (step.zoom_to) {
                             myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
-                            var viewMeta = overlaysData[step.zoom_to];
-                            if (viewMeta && viewMeta.coord) {
-                                myChart.setOption({ series: [{ center: viewMeta.coord, zoom: step.zoom_level || 2.0 }] });
+                            var meta = elementMetadata[step.zoom_to];
+                            if (meta && meta.bbox) {
+                                var bbox = meta.bbox;
+                                var cx = (bbox[0] + bbox[2]) / 2.0;
+                                var cy = (bbox[1] + bbox[3]) / 2.0;
+                                myChart.setOption({ series: [{ center: [cx, cy], zoom: step.zoom_level || 2.0 }] });
                             } else {
                                 myChart.setOption({ series: [{ zoom: step.zoom_level || 2.0 }] });
                             }
@@ -6079,9 +6091,12 @@ if (originalId) {
 
             if (step.zoom_to) {
                 myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
-                var viewMeta = overlaysData[step.zoom_to];
-                if (viewMeta && viewMeta.coord) {
-                    myChart.setOption({ series: [{ center: viewMeta.coord, zoom: step.zoom_level || 2.0 }] });
+                var meta = elementMetadata[step.zoom_to];
+                if (meta && meta.bbox) {
+                    var bbox = meta.bbox;
+                    var cx = (bbox[0] + bbox[2]) / 2.0;
+                    var cy = (bbox[1] + bbox[3]) / 2.0;
+                    myChart.setOption({ series: [{ center: [cx, cy], zoom: step.zoom_level || 2.0 }] });
                 } else {
                     myChart.setOption({ series: [{ zoom: step.zoom_level || 2.0 }] });
                 }
@@ -6133,9 +6148,12 @@ if (originalId) {
 
                     if (step.zoom_to) {
                         myChart.dispatchAction({ type: 'geoSelect', name: step.zoom_to });
-                        var viewMeta = overlaysData[step.zoom_to];
-                        if (viewMeta && viewMeta.coord) {
-                            myChart.setOption({ series: [{ center: viewMeta.coord, zoom: step.zoom_level || 2.0 }] });
+                        var meta = elementMetadata[step.zoom_to];
+                        if (meta && meta.bbox) {
+                            var bbox = meta.bbox;
+                            var cx = (bbox[0] + bbox[2]) / 2.0;
+                            var cy = (bbox[1] + bbox[3]) / 2.0;
+                            myChart.setOption({ series: [{ center: [cx, cy], zoom: step.zoom_level || 2.0 }] });
                         } else {
                             myChart.setOption({ series: [{ zoom: step.zoom_level || 2.0 }] });
                         }
@@ -6453,17 +6471,19 @@ function tourNext() {
                     // Force highlight by fading everything else
                     applyFadeUnselected(elementId, true);
 
-                    // Check if it has a specific overlay bound center
-                    var viewMeta = overlaysData[elementId];
-                    if (viewMeta && viewMeta.coord) {
-                        myChart.setOption({ series: [{ center: viewMeta.coord, zoom: 3.0 }] });
+                    // Center the search result
+                    var meta = elementMetadata[elementId];
+                    if (meta && meta.bbox) {
+                        var bbox = meta.bbox;
+                        var cx = (bbox[0] + bbox[2]) / 2.0;
+                        var cy = (bbox[1] + bbox[3]) / 2.0;
+                        myChart.setOption({ series: [{ center: [cx, cy], zoom: 3.0 }] });
                     } else {
                         // Trigger click to center map if ECharts handles it, or trigger panel logic
                         myChart.trigger('click', { componentType: 'series', name: elementId });
-
-                        // Show tooltip
-                        myChart.dispatchAction({ type: 'showTip', name: elementId });
                     }
+                    // Show tooltip
+                    myChart.dispatchAction({ type: 'showTip', name: elementId });
                 }
 
                 // Using oninput/onfocus/onblur directly to safely overwrite any old closure references
