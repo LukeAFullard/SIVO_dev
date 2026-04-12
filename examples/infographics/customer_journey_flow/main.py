@@ -2,9 +2,11 @@ from sivo import Sivo
 import os
 
 def build_journey_flow():
-    template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "minimalist_journey_flow_2026.svg"
+    template_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../src/sivo/templates/3_2/minimalist_journey_flow_2026.svg"
+        )
     )
     output_dir = os.path.dirname(__file__)
 
