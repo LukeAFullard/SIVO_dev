@@ -28,7 +28,13 @@ def main():
         <text x="500" y="50" font-family="sans-serif" font-size="24" fill="#333" text-anchor="middle">2024 Regional Data</text>
     </svg>"""
 
-    sivo_right = Sivo.from_string(svg_right, default_panel_position="overlay")
+    # Adding empty title and subtitle to right to ensure both SVGs are scaled to the same size
+    sivo_right = Sivo.from_string(
+        svg_right,
+        title=" ",
+        subtitle=" ",
+        default_panel_position="overlay"
+    )
     sivo_right.map("region1", html="<h3>Region 1 - 2024 (Growth)</h3><p>Significant increase observed.</p>", color="#10b981") # Green
     sivo_right.map("region2", html="<h3>Region 2 - 2024 (Decline)</h3><p>Decrease in region metrics.</p>", color="#ef4444") # Red
 
