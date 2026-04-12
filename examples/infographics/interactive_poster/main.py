@@ -198,23 +198,14 @@ def main():
     """
 
     # 3. Initialize Sivo
-    # Using bounding_coords to ensure the aspect ratio of the tall poster is perfectly maintained
-    sivo_app = Sivo.from_string(
-        svg_content,
-        title="Interactive Poster",
-        theme="light",
-        panel_width="40%",
-        disable_zoom_controls=False,
-        bounding_coords=[[0, 2400], [1000, 0]] # Map SVG 0,0 to bottom left lat/long logic if needed, but not strictly necessary for standard interactives. We'll omit bounding_coords to let ECharts auto-fit the SVG natively.
-    )
-
-    # We recreate the app without bounding coords so the SVG just fits the container natively
+    # We create the app without bounding coords so the SVG just fits the container natively
     sivo_app = Sivo.from_string(
         svg_content,
         title="The State of Digital Media",
         theme="light",
         panel_width="450px",
-        bounding_coords=[[0, 2400], [1000, 0]]
+        default_panel_position="right",
+        disable_zoom_controls=False
     )
 
     # 4. Map Interactions to the Poster Sections
@@ -222,7 +213,6 @@ def main():
     # Section 1: Video -> ECharts Bar Race or detailed Line Chart
     sivo_app.map(
         element_id="section_video",
-        tooltip="Click to view Engagement Analytics",
         hover_color="#f8fafc", # Subtle hover effect
         glow=True,
         html="""
@@ -247,7 +237,6 @@ def main():
     # Section 2: Audio -> Embedded Podcast / Audio Player
     sivo_app.map(
         element_id="section_audio",
-        tooltip="Click to explore Audio Insights",
         hover_color="#f8fafc",
         glow=True,
         html="""
@@ -261,7 +250,6 @@ def main():
     # Section 3: Creators -> ECharts Pie / Treemap
     sivo_app.map(
         element_id="section_creators",
-        tooltip="Click to view Revenue Streams",
         hover_color="#f8fafc",
         glow=True,
         html="""
@@ -293,7 +281,6 @@ def main():
     # Section 4: AI -> Image Gallery
     sivo_app.map(
         element_id="section_ai",
-        tooltip="Click to view AI Gallery",
         hover_color="#334155", # Darker hover for the dark section
         glow=True,
         html="""
@@ -311,7 +298,6 @@ def main():
     # 5. Add a "Floating" Action button at the top
     sivo_app.map(
         element_id="header_section",
-        tooltip="Download Full PDF Report",
         url="https://example.com/report.pdf" # Navigates away
     )
 
