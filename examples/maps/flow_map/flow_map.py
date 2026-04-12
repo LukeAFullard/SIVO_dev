@@ -53,7 +53,8 @@ def create_example():
     }
     app.apply_proportional_symbols(nodes_data, min_size=12.0, max_size=12.0, is_pulse=True)
 
-    html_output = "examples/68_flow_map/flow_map.html"
+    import os
+    html_output = os.path.join(os.path.dirname(__file__), "flow_map.html")
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 
