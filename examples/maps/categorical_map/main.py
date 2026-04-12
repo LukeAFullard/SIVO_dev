@@ -1,3 +1,4 @@
+import os
 import geopandas as gpd
 from shapely.geometry import Polygon
 from sivo import Sivo
@@ -51,7 +52,7 @@ def create_example():
         border_width=1.5
     )
 
-    html_output = "examples/70_categorical_map/categorical_map.html"
+    html_output = os.path.join(os.path.dirname(__file__), 'output.html')
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 
