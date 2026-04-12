@@ -2044,8 +2044,8 @@
                         },
                         data: echartsData,
                         zlevel: 1,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 0, // Disable tweening delay for native feel during manual pan/zoom
                         animationEasingUpdate: 'cubicInOut'
@@ -2065,8 +2065,8 @@
                         map: mapName,
                         boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                         roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
                         animationDurationUpdate: 0,
                         label: { show: false },
@@ -2210,8 +2210,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
@@ -2281,8 +2281,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
@@ -2421,8 +2421,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
@@ -2592,8 +2592,8 @@
                             map: mapName,
                             boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
-                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
-                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
+                        layoutCenter: (view.layout_size || isCompareMode) ? ["50%", "50%"] : undefined,
+                        layoutSize: (view.layout_size || isCompareMode) ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
                             itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0

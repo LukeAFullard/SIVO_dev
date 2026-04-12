@@ -14,7 +14,8 @@ def main():
         svg_left,
         title="Regional Growth Comparison",
         subtitle="Swipe to see changes from 2020 to 2024",
-        default_panel_position="overlay"
+        default_panel_position="overlay",
+        bounding_coords=[[0, 0], [1000, 600]]
     )
     sivo_left.map("region1", html="<h3>Region 1 - 2020</h3>", color="#cbd5e1")
     sivo_left.map("region2", html="<h3>Region 2 - 2020</h3>", color="#cbd5e1")
@@ -28,12 +29,14 @@ def main():
         <text x="500" y="50" font-family="sans-serif" font-size="24" fill="#333" text-anchor="middle">2024 Regional Data</text>
     </svg>"""
 
-    # Adding empty title and subtitle to right to ensure both SVGs are scaled to the same size
+    # Adding empty title and subtitle to right to ensure both SVGs are scaled to the same size natively
+    # Using bounding_coords to ensure they lock into the same native coordinate system projection
     sivo_right = Sivo.from_string(
         svg_right,
-        title=" ",
-        subtitle=" ",
-        default_panel_position="overlay"
+        title="Regional Growth Comparison",
+        subtitle="Swipe to see changes from 2020 to 2024",
+        default_panel_position="overlay",
+        bounding_coords=[[0, 0], [1000, 600]]
     )
     sivo_right.map("region1", html="<h3>Region 1 - 2024 (Growth)</h3><p>Significant increase observed.</p>", color="#10b981") # Green
     sivo_right.map("region2", html="<h3>Region 2 - 2024 (Decline)</h3><p>Decrease in region metrics.</p>", color="#ef4444") # Red
