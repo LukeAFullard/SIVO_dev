@@ -157,7 +157,20 @@ class Sivo:
         """
         import os
         template_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "templates")
-        filepath = os.path.join(template_dir, f"{template_name}_template.svg")
+
+        # Determine the subdirectory if template_name contains it
+        if "/" in template_name:
+            filepath = os.path.join(template_dir, f"{template_name}_template.svg")
+        else:
+            # Fallback for old template names without subdirectory
+            filepath = None
+            for root, dirs, files in os.walk(template_dir):
+                if f"{template_name}_template.svg" in files:
+                    filepath = os.path.join(root, f"{template_name}_template.svg")
+                    break
+            if not filepath:
+                filepath = os.path.join(template_dir, f"{template_name}_template.svg") # trigger FileNotFoundError
+
         if not os.path.exists(filepath):
             raise FileNotFoundError(f"Template '{template_name}' not found. Looked in {template_dir}")
         return cls.from_svg(filepath, default_panel_position=default_panel_position, disable_panel=disable_panel, panel_width=panel_width, panel_height=panel_height, panel_css=panel_css, disable_resizer=disable_resizer, disable_tooltips=disable_tooltips, disable_zoom_controls=disable_zoom_controls, lock_scroll_bounds=lock_scroll_bounds, lock_zoom_out=lock_zoom_out, layout_size=layout_size, starting_zoom=starting_zoom, lock_canvas=lock_canvas, enable_a11y=enable_a11y, render_mode=render_mode, enable_minimap=enable_minimap, enable_export=enable_export, fade_unselected=fade_unselected, theme=theme, enable_search=enable_search, enable_geocoder=enable_geocoder, geocode_provider=geocode_provider, geocode_api_key=geocode_api_key, watermark=watermark, enable_brush_selection=enable_brush_selection, title=title, subtitle=subtitle, attribution=attribution, enable_fullscreen=enable_fullscreen, enable_share=enable_share, enable_data_download=enable_data_download, enable_drawing_tools=enable_drawing_tools, ambient_effect=ambient_effect, ambient_speed=ambient_speed, bounding_coords=bounding_coords, graphic=graphic, background_image_url=background_image_url, border_image_url=border_image_url, border_image_position=border_image_position, border_image_width=border_image_width, border_image_opacity=border_image_opacity, border_image_grayscale=border_image_grayscale, background_image_opacity=background_image_opacity, background_image_grayscale=background_image_grayscale, svg_background_image_url=svg_background_image_url, svg_background_image_opacity=svg_background_image_opacity, svg_background_image_grayscale=svg_background_image_grayscale, svg_background_image_insert_after=svg_background_image_insert_after, transparent_template_lines=transparent_template_lines, presentation_order=presentation_order)
