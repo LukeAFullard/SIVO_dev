@@ -20,33 +20,30 @@ config = ProjectConfig(
     svg_file=SVG_FILE,
     title="Interactive Guided Tour to PDF Export Demo",
     subtitle="Walk through the map and download a PDF presentation deck offline",
-    theme="light"
+    theme="light",
+    default_panel_position="none"
 )
 
 sivo_app = Sivo.from_config(config)
 
 tour_steps = [
     dict(
-        title="Introduction",
-        content="Welcome to the SIVO Tour to PDF demo. Click 'Download PDF' below to export the whole tour.",
+        content="<h3>Introduction</h3><p>Welcome to the SIVO Tour to PDF demo. Click 'Download PDF' below to export the whole tour.</p>",
         zoom_to="rect1",
         zoom_level=2.5
     ),
     dict(
-        title="Data Analysis",
-        content="This slide highlights our new findings. Notice how the map dynamically zoomed to focus on this area.",
+        content="<h3>Data Analysis</h3><p>This slide highlights our new findings. Notice how the map dynamically zoomed to focus on this area.</p>",
         zoom_to="rect2",
         zoom_level=3.0
     ),
     dict(
-        title="Deep Dive",
-        content="Here we can explore further details of the graphic and include any extra narrative context.",
+        content="<h3>Deep Dive</h3><p>Here we can explore further details of the graphic and include any extra narrative context.</p>",
         zoom_to="rect3",
         zoom_level=2.5
     ),
     dict(
-        title="Conclusion",
-        content="We've reached the end of the tour. Now go ahead and click 'Download PDF' to generate the deck!",
+        content="<h3>Conclusion</h3><p>We've reached the end of the tour. Now go ahead and click 'Download PDF' to generate the deck!</p>",
         zoom_to="rect4",
         zoom_level=2.0
     )
