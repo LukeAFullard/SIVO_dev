@@ -1,15 +1,18 @@
 # Adding Dynamic Information Cards
 
-This example demonstrates how to use the `add_card()` API to dynamically inject perfectly-scaled SVG information cards into specific named regions of a template.
+This example demonstrates how to use the `add_card()` API to dynamically inject perfectly-scaled SVG information cards into specific named regions of a template. It is useful for creating complex dashboards where text information needs to be nicely laid out over different SVG components in an interactive manner.
 
 ## Overview
-The `add_card()` method computes bounding box coordinates of a target SVG element (such as a dashboard quadrant or an isolated region on a map) and dynamically draws an SVG `<g>` group containing a styled `<rect>` background and properly scaled multiline `<text>` nodes representing a title, primary value, and optional subtitle.
+The `add_card()` method computes bounding box coordinates of a target SVG element (such as a dashboard quadrant or an isolated region on a map) and dynamically draws an SVG `<g>` group containing a styled `<rect>` (or other shape like ellipse or pill) background and properly scaled multiline `<text>` nodes representing a title, primary value, and optional subtitle.
 
 Because the injected cards are rendered natively as SVGs, they smoothly pan and zoom along with the ECharts canvas without causing visual misalignment during user interaction.
 
 ## Key Code Snippets
 
 ```python
+# Initialize Sivo app with the four_quadrants built-in dashboard template and default panel to 'none'
+sivo_app = Sivo.from_template("dashboards/four_quadrants", layout_size="95%", default_panel_position="none")
+
 # Add a styled card to the center of "quadrant_1"
 sivo_app.add_card(
     "quadrant_1",           # Target element ID

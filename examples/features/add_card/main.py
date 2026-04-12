@@ -16,13 +16,13 @@ import os
 def main():
     # Initialize a Sivo app using the four_quadrants built-in dashboard template
     # We use this because it has four clearly defined named rectangle regions.
-    sivo_app = Sivo.from_template("dashboards/four_quadrants", layout_size="95%")
+    sivo_app = Sivo.from_template("dashboards/four_quadrants", layout_size="95%", default_panel_position="none")
 
     # Add interactive mapping for the quadrants so they are clickable
-    sivo_app.map("quadrant_1", hover_color="#f1f5f9", tooltip="Water Quality Station A")
-    sivo_app.map("quadrant_2", hover_color="#f1f5f9", tooltip="Water Quality Station B")
-    sivo_app.map("quadrant_3", hover_color="#f1f5f9", tooltip="Water Quality Station C")
-    sivo_app.map("quadrant_4", hover_color="#f1f5f9", tooltip="Water Quality Station D")
+    sivo_app.map("quadrant_1", hover_color="#f1f5f9", html="Water Quality Station A")
+    sivo_app.map("quadrant_2", hover_color="#f1f5f9", html="Water Quality Station B")
+    sivo_app.map("quadrant_3", hover_color="#f1f5f9", html="Water Quality Station C")
+    sivo_app.map("quadrant_4", hover_color="#f1f5f9", html="Water Quality Station D")
 
     # Add an Informational Card with a Body paragraph
     # We set width and height slightly smaller than the region to create padding.
