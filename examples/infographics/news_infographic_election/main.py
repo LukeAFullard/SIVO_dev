@@ -144,7 +144,8 @@ def main():
         title="Election 2024 Final Tally",
         panel_width="450px",
         disable_zoom_controls=True,
-        bounding_coords=[[0, 1414], [1000, 0]]
+        bounding_coords=[[0, 1414], [1000, 0]],
+        default_panel_position="right"
     )
 
     # Polished ECharts styling
