@@ -99,6 +99,8 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
                 if hasattr(action, 'map_data') and "map_data" not in act_dict: act_dict["map_data"] = action.map_data
                 if hasattr(action, 'document_url') and "document_url" not in act_dict: act_dict["document_url"] = action.document_url
                 if hasattr(action, 'map_location') and "map_location" not in act_dict: act_dict["map_location"] = action.map_location
+                if hasattr(action, 'target_id') and "target_id" not in act_dict: act_dict["target_id"] = action.target_id
+                if hasattr(action, 'image_urls') and "image_urls" not in act_dict: act_dict["image_urls"] = action.image_urls
 
                 element_actions.append(act_dict)
 

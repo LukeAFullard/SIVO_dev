@@ -12,7 +12,8 @@ app = Sivo.from_string(
     title="Toggle Image Example",
     subtitle="Click the button below to cycle through background images.",
     layout_size="100%",
-    theme="dark"
+    theme="dark",
+    default_panel_position="none"
 )
 
 app.add_scalable_text(
