@@ -18,8 +18,8 @@ def main():
         <rect id="liquid_fill" x="200" y="300" width="250" height="200" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
         <text x="325" y="400" font-family="sans-serif" font-size="20" font-weight="bold" fill="#334155" text-anchor="middle">Liquid Fill Chart</text>
 
-        <rect id="custom_series" x="500" y="300" width="250" height="200" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
-        <text x="625" y="400" font-family="sans-serif" font-size="20" font-weight="bold" fill="#334155" text-anchor="middle">Custom Series</text>
+        <rect id="radar_chart" x="500" y="300" width="250" height="200" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2" rx="10"/>
+        <text x="625" y="400" font-family="sans-serif" font-size="20" font-weight="bold" fill="#334155" text-anchor="middle">Radar Chart</text>
     </svg>
     """
 
@@ -27,7 +27,7 @@ def main():
     app = Sivo.from_string(
         svg_string,
         title="Advanced Chart Types",
-        subtitle="Exploring Polar, Liquid Fill, and Custom Series natively in SIVO",
+        subtitle="Exploring Polar, Liquid Fill, and Radar charts natively in SIVO",
         disable_zoom_controls=True,
         panel_width="40%",
         default_panel_position="right"
@@ -38,7 +38,7 @@ def main():
     app.map("polar_line", hover_color="#e2e8f0")
     app.map("polar_scatter", hover_color="#e2e8f0")
     app.map("liquid_fill", hover_color="#e2e8f0")
-    app.map("custom_series", hover_color="#e2e8f0")
+    app.map("radar_chart", hover_color="#e2e8f0")
 
     # 2. Map Polar Bar Chart
     app.map_polar_bar_chart(
@@ -83,50 +83,31 @@ def main():
         }
     )
 
-    # 6. Map Custom Series (e.g. A Gantt Chart or specialized visualization)
-    custom_render_js = """
-    function (params, api) {
-        var categoryIndex = api.value(0);
-        var start = api.coord([api.value(1), categoryIndex]);
-        var end = api.coord([api.value(2), categoryIndex]);
-        var height = api.size([0, 1])[1] * 0.6;
-        var rectShape = echarts.graphic.clipRectByRect({
-            x: start[0],
-            y: start[1] - height / 2,
-            width: end[0] - start[0],
-            height: height
-        }, {
-            x: params.coordSys.x,
-            y: params.coordSys.y,
-            width: params.coordSys.width,
-            height: params.coordSys.height
-        });
-        return rectShape && {
-            type: 'rect',
-            transition: ['shape'],
-            shape: rectShape,
-            style: api.style({ fill: api.visual('color') })
-        };
-    }
-    """
-    gantt_data = [
-        # [category_index, start_val, end_val]
-        {"name": "Task A", "value": [0, 10, 25], "itemStyle": {"color": "#ef4444"}},
-        {"name": "Task B", "value": [1, 20, 45], "itemStyle": {"color": "#f97316"}},
-        {"name": "Task C", "value": [2, 40, 60], "itemStyle": {"color": "#84cc16"}},
+    # 6. Map Radar Chart
+    radar_indicators = [
+        {"name": "Sales", "max": 6500},
+        {"name": "Administration", "max": 16000},
+        {"name": "Information Technology", "max": 30000},
+        {"name": "Customer Support", "max": 38000},
+        {"name": "Development", "max": 52000},
+        {"name": "Marketing", "max": 25000}
     ]
-    app.map_custom_chart(
-        element_id="custom_series",
-        title="Project Timeline (Custom Gantt)",
-        render_item_js=custom_render_js,
-        data=gantt_data,
-        extra_options={
-            "xAxis": {"type": "value", "scale": True},
-            "yAxis": {"type": "category", "data": ["Team 1", "Team 2", "Team 3"]},
-            "tooltip": {
-                "formatter": "function(params) { return params.name + ': ' + params.value[1] + ' to ' + params.value[2]; }"
-            }
+    radar_data = [
+        {
+            "value": [4200, 3000, 20000, 35000, 50000, 18000],
+            "name": "Allocated Budget"
+        },
+        {
+            "value": [5000, 14000, 28000, 26000, 42000, 21000],
+            "name": "Actual Spending"
         }
+    ]
+    app.map_radar_chart(
+        element_id="radar_chart",
+        title="Budget vs Spending",
+        indicators=radar_indicators,
+        data=radar_data,
+        color=["#f59e0b", "#10b981"]
     )
 
     # Export the bundle
