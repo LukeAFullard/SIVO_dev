@@ -136,6 +136,12 @@ def main():
     app.map(
         element_id="woodpile_area",
         tooltip="Wet damp woodpile - needs to dry before burning!",
+        html="""
+<h3>Wet Damp Woodpile</h3>
+<p>This wood is damp and needs to dry before burning!</p>
+<p>Burning wet wood creates thick dark smoke and reduces the efficiency of the fire.</p>
+        """,
+        panel_position="overlay",
         hover_color="rgba(129, 212, 250, 0.4)",
         glow=True,
         color="transparent",
