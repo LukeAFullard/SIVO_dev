@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <script>
+        var center = [2.2137, 46.2276];
+        var bc = [[-10.66, 71.18], [31.59, 34.56]];
+        var minX = bc[0][0];
+        var minY = bc[0][1];
+        var maxX = bc[1][0];
+        var maxY = bc[1][1];
+
+        var mapWidth = maxX - minX;
+        var mapHeight = maxY - minY;
+
+        var containerWidth = 150;
+        var containerHeight = 150;
+
+        var cx = ((center[0] - minX) / mapWidth) * containerWidth;
+        // In Geojson bounding box, y represents latitude. Usually bottom left and top right coords are given.
+        // wait, let's see echarts bbox.
+
+        var cy1 = ((center[1] - minY) / mapHeight) * containerHeight;
+        var cy2 = containerHeight - (((center[1] - minY) / mapHeight) * containerHeight);
+
+        console.log({ mapHeight: mapHeight, cy1: cy1, cy2: cy2 });
+
+    </script>
+</body>
+</html>
