@@ -27,11 +27,11 @@ def main():
             name_col="NAME",
             enable_geocoder=True,
             geocode_provider="nominatim",
-            disable_panel=True,
+            default_panel_position="none",
             layout_size="90%"
         )
 
-        output_path = os.path.join(os.path.dirname(__file__), "geocoder_example.html")
+        output_path = os.path.join(os.path.dirname(__file__), "output.html")
         sivo_app.to_html(output_path)
         print(f"Successfully generated {output_path}")
 
