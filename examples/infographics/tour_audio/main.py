@@ -2,13 +2,13 @@ import os
 from sivo import Sivo
 
 def main():
-    svg_path = os.path.join(os.path.dirname(__file__), "..", "01_hello_world", "sample.svg")
+    svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "basic", "hello_world", "sample.svg"))
 
-    sivo_app = Sivo.from_svg(svg_path, title="Audio Guided Tour")
+    sivo_app = Sivo.from_svg(svg_path, title="Audio Guided Tour", default_panel_position="none")
 
-    sivo_app.map("sun", tooltip="Building A")
-    sivo_app.map("house", tooltip="Building B")
-    sivo_app.map("river", tooltip="Building C")
+    sivo_app.map("sun", html="Building A")
+    sivo_app.map("house", html="Building B")
+    sivo_app.map("river", html="Building C")
 
     # Define tour steps with short royalty-free sample audio URLs (like a voiceover)
     sivo_app.bind_tour([
