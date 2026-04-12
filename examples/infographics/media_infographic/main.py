@@ -152,7 +152,8 @@ def main():
         title="Media Analytics Dashboard",
         theme="dark",
         ambient_effect="particles", # Gives a high-tech floating particle background
-        panel_width="35%",
+
+        default_panel_position="right",
         disable_zoom_controls=False
     )
 
@@ -172,7 +173,7 @@ def main():
             "loop": True,
             "autoplay": True
         },
-        social={"provider": "website", "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"}, # Example tech video
+        video="https://www.youtube.com/watch?v=aqz-KE-bpKQ", # Example tech video
         color="#0ea5e9",
         hover_color="#38bdf8",
         glow=True
@@ -244,25 +245,25 @@ def main():
             "zoom_to": "hub-core",
             "zoom_level": 1.5,
             "show_tooltips": ["hub-core"],
-            "colors": {"hub-core": "#a78bfa"} # Highlight color during tour
+             # Highlight color during tour
         },
         {
             "content": "<h3>2. Streaming Hub</h3><p>This node manages high-bandwidth video delivery. We utilize advanced edge-caching here.</p>",
             "zoom_to": "hub-video",
             "zoom_level": 1.8,
             "show_tooltips": ["hub-video"],
-            "colors": {"hub-core": "#1e293b", "hub-video": "#7dd3fc"}
+
         },
         {
             "content": "<h3>3. Content Studio</h3><p>Where creative assets are ingested, processed, and distributed to the CDN.</p>",
             "zoom_to": "hub-studio",
             "zoom_level": 1.8,
             "show_tooltips": ["hub-studio"],
-            "colors": {"hub-video": "#1e293b", "hub-studio": "#fcd34d"}
+
         },
         {
             "content": "<h2>Explore Freely</h2><p>The tour is complete. Feel free to click around the nodes to view YouTube embeds, Galleries, Lottie animations, and ECharts.</p>",
-            "colors": {"hub-studio": "#1e293b"}
+
         }
     ]
     sivo_app.bind_tour(tour_steps)
