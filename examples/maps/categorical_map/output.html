@@ -3,27 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    <!-- Include echarts-stat -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-stat@1.2.0/dist/ecStat.min.js"></script>
-    <!-- Include echarts-wordcloud -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
-    <!-- Include echarts-liquidfill -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
-    <!-- Include DOMPurify -->
+
+
+
+
+    <!-- Include DOMPurify unconditionally for core security -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-    <!-- Include marked.js for Markdown Action -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Include lottie-player for Lottie animations -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <!-- Include canvas-confetti for gamification effects -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    <!-- Include jsPDF for PDF export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+
+
+
 
 
     <style>
@@ -43,6 +39,7 @@
             top: 0; left: 0;
             overflow: hidden;
         }
+
         #sivo-background-image {
             position: absolute;
             top: 0;
@@ -50,15 +47,25 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            z-index: -2;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-border-image {
+            position: absolute;
+            object-fit: cover;
             z-index: -1;
             display: none;
             pointer-events: none;
         }
+
         #chart-wrapper {
             position: relative;
             flex: 1;
             height: 100%;
             width: 100%;
+            touch-action: none;
         }
         #chart-container {
             position: absolute;
@@ -67,6 +74,7 @@
             width: 100%;
             height: 100%;
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            touch-action: none;
         }
 
         #chart-container-compare-right {
@@ -529,6 +537,83 @@
             color: #0f172a;
         }
 
+        #sivo-geocoder-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            max-width: 90%;
+            z-index: 1000;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, top 0.3s ease;
+            cursor: text;
+        }
+
+        #sivo-geocoder-container:focus-within {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #38bdf8;
+        }
+
+        #sivo-geocoder-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 12px 20px 12px 40px;
+            font-size: 15px;
+            color: #334155;
+            outline: none;
+            border-radius: 24px;
+            box-sizing: border-box;
+        }
+
+        .sivo-geocoder-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .sivo-geocoder-spinner {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #38bdf8;
+            border-radius: 50%;
+            animation: sivo-spin 1s linear infinite;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-geocoder-results {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+
 
         #sivo-watermark-container {
             position: absolute;
@@ -682,6 +767,52 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             box-sizing: border-box;
         }
+        #info-panel.pos-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 90%;
+            z-index: 1050;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sivo-overlay-roll-in {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(-15deg) translateY(10%);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) translateY(0);
+            }
+        }
+
+        @keyframes sivo-overlay-roll-out {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(-15deg) translateY(10%);
+            }
+        }
+
+        #info-panel.pos-overlay.active {
+            animation: sivo-overlay-roll-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        #info-panel.pos-overlay.closing {
+            animation: sivo-overlay-roll-out 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         /* Responsive Layout Overrides */
         .mobile-handle {
@@ -739,7 +870,7 @@
             }
             .zoom-controls {
                 right: 10px !important;
-                bottom: 20px !important;
+                bottom: 40px !important;
                 z-index: 1001 !important;
             }
             .zoom-btn {
@@ -747,7 +878,7 @@
                 height: 25px !important;
                 font-size: 14px !important;
             }
-            #info-panel.active {
+            #info-panel.active:not(.pos-overlay) {
                 width: 100% !important;
                 height: 45vh !important; /* Give fixed part of the screen to info panel */
                 flex: none !important;
@@ -755,6 +886,9 @@
                 border: none !important;
                 border-top: 1px solid #ddd !important;
                 box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
+            }
+            #info-panel.pos-overlay.active {
+                /* Let the overlay dictate its own dimensions on mobile via JS/CSS */
             }
             .sivo-resizer {
                 display: none !important;
@@ -909,6 +1043,21 @@
         body.sivo-theme-dark .sivo-context-menu-item:hover {
             background: #475569 !important;
             color: #f8fafc !important;
+        }
+
+        body.sivo-theme-dark #sivo-geocoder-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            border-color: #334155 !important;
+        }
+        body.sivo-theme-dark #sivo-geocoder-input {
+            color: #f8fafc !important;
+        }
+        body.sivo-theme-dark #sivo-geocoder-input::placeholder {
+            color: #64748b !important;
+        }
+        body.sivo-theme-dark #sivo-geocoder-results {
+            background: rgba(30, 41, 59, 0.98) !important;
+            border-color: #334155 !important;
         }
 
 
@@ -1397,6 +1546,7 @@
         <div id="scrollytelling-container"></div>
         <div id="chart-wrapper">
             <img id="sivo-background-image" src="" alt="Background" />
+            <img id="sivo-border-image" src="" alt="Border" />
             <div id="a11y-container" class="sr-only"></div>
             <div id="sivo-watermark-container"></div>
             <div id="sivo-context-menu"></div>
@@ -1408,6 +1558,13 @@
                 <svg class="sivo-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 <input type="text" id="sivo-search-input" placeholder="Search map..." autocomplete="off">
                 <div id="sivo-search-results"></div>
+            </div>
+
+            <div id="sivo-geocoder-container">
+                <svg class="sivo-geocoder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <input type="text" id="sivo-geocoder-input" placeholder="Search address or place..." autocomplete="off">
+                <div class="sivo-geocoder-spinner" id="sivo-geocoder-spinner"></div>
+                <div id="sivo-geocoder-results"></div>
             </div>
 
             <div id="sivo-title-container">
@@ -1506,7 +1663,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view": {"svg_string": "\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0.0 0.0 30.0 20.0\"\u003e\n  \u003cg transform=\"matrix(1, 0, 0, -1, 0, 20.0)\"\u003e\n    \u003cg id=\"Z1\" name=\"Forest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,0.0 L 0.0,10.0 L 10.0,10.0 L 10.0,0.0 L 0.0,0.0 z\" id=\"Z1_0\" name=\"Forest\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z2\" name=\"Lake\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,0.0 L 10.0,10.0 L 20.0,10.0 L 20.0,0.0 L 10.0,0.0 z\" id=\"Z2_0\" name=\"Lake\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z3\" name=\"City\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,10.0 L 0.0,20.0 L 10.0,20.0 L 10.0,10.0 L 0.0,10.0 z\" id=\"Z3_0\" name=\"City\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z4\" name=\"Suburbs\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,10.0 L 10.0,20.0 L 20.0,20.0 L 20.0,10.0 L 10.0,10.0 z\" id=\"Z4_0\" name=\"Suburbs\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z5\" name=\"Plains\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 20.0,0.0 L 20.0,10.0 L 30.0,10.0 L 30.0,0.0 L 20.0,0.0 z\" id=\"Z5_0\" name=\"Plains\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z6\" name=\"Forest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 20.0,10.0 L 20.0,20.0 L 30.0,20.0 L 30.0,10.0 L 20.0,10.0 z\" id=\"Z6_0\" name=\"Forest\"/\u003e\u003c/g\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e", "echarts_data": [{"name": "Forest", "value": 1, "itemStyle": {"areaColor": "rgba(34,197,94,0.8)"}}, {"name": "Lake", "value": 1, "itemStyle": {"areaColor": "rgba(59,130,246,0.8)"}}, {"name": "City", "value": 1, "itemStyle": {"areaColor": "rgba(203,213,225,0.8)"}}, {"name": "Suburbs", "value": 1, "itemStyle": {"areaColor": "rgba(203,213,225,0.8)"}}, {"name": "Plains", "value": 1, "itemStyle": {"areaColor": "rgba(254,240,138,0.8)"}}], "actions_manifest": {}, "overlays": {"sivo_categorical_legend": {"html": "\n            \u003cdiv style=\"background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: sans-serif; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); user-select: none; pointer-events: auto; cursor: grab; z-index: 100;\"\u003e\n                \u003cstrong style=\"color: #334155; font-size: 11px; text-transform: uppercase; margin-bottom: 4px;\"\u003eLegend\u003c/strong\u003e\n                \u003cdiv style=\"display: flex; flex-direction: column; gap: 8px;\"\u003e\n                    \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(34,197,94,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eForest\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(59,130,246,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eWater\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(203,213,225,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eUrban\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(254,240,138,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eAgriculture\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                \u003c/div\u003e\n            \u003c/div\u003e\n            ", "fixed": true, "position": "bottom-right", "draggable": true, "z_index": 100}}, "connections": [], "disable_panel": true, "panel_width": null, "panel_height": null, "disable_resizer": false, "disable_tooltips": false, "disable_zoom_controls": false, "lock_zoom_out": false, "starting_zoom": 1.0, "lock_canvas": false, "render_mode": "canvas", "enable_minimap": false, "enable_export": false, "fade_unselected": false, "theme": "light", "enable_search": false, "watermark": null, "enable_brush_selection": false, "title": "Categorical Map Demo", "subtitle": "Land Cover Classification", "attribution": null, "enable_fullscreen": false, "enable_share": false, "enable_data_download": false, "enable_drawing_tools": false, "ambient_effect": null, "ambient_speed": 1.0, "bounding_coords": [[0.0, 0.0], [30.0, 20.0]], "graphic": null, "background_image_url": null, "background_image_opacity": 1.0, "background_image_grayscale": false, "mappings": {"Forest": {"id": "Z6_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(34,197,94,0.8)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Lake": {"id": "Z2_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(59,130,246,0.8)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "City": {"id": "Z3_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(203,213,225,0.8)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Suburbs": {"id": "Z4_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(203,213,225,0.8)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}, "Plains": {"id": "Z5_0", "actions": [], "context_menu": null, "open_by_default": false, "draggable": false, "theme": {"color": "rgba(254,240,138,0.8)", "hover_color": null, "fill_gradient": null, "fill_pattern": null, "border_width": null, "border_color": null, "transparent_lines": null, "glow": null, "animation": null, "morph_to_path": null, "morph_duration_ms": 1000, "morph_delay_ms": 0, "morph_easing": "ease-in-out", "morph_iterations": 1.0, "filter": null, "clip_path": null, "mask": null, "transform": null, "odometer_value": null, "odometer_duration_ms": 2000, "odometer_format": null}}}}};
+        var viewsData = {"default_view":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0.0 0.0 30.0 20.0\"\u003e\n  \u003cg transform=\"matrix(1, 0, 0, -1, 0, 20.0)\"\u003e\n    \u003cg id=\"Z1\" name=\"Forest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,0.0 L 0.0,10.0 L 10.0,10.0 L 10.0,0.0 L 0.0,0.0 z\" id=\"Z1_0\" name=\"Forest\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z2\" name=\"Lake\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,0.0 L 10.0,10.0 L 20.0,10.0 L 20.0,0.0 L 10.0,0.0 z\" id=\"Z2_0\" name=\"Lake\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z3\" name=\"City\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 0.0,10.0 L 0.0,20.0 L 10.0,20.0 L 10.0,10.0 L 0.0,10.0 z\" id=\"Z3_0\" name=\"City\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z4\" name=\"Suburbs\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 10.0,10.0 L 10.0,20.0 L 20.0,20.0 L 20.0,10.0 L 10.0,10.0 z\" id=\"Z4_0\" name=\"Suburbs\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z5\" name=\"Plains\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 20.0,0.0 L 20.0,10.0 L 30.0,10.0 L 30.0,0.0 L 20.0,0.0 z\" id=\"Z5_0\" name=\"Plains\"/\u003e\u003c/g\u003e\n\u003cg id=\"Z6\" name=\"Forest\"\u003e\u003cpath fill-rule=\"evenodd\" d=\"M 20.0,10.0 L 20.0,20.0 L 30.0,20.0 L 30.0,10.0 L 20.0,10.0 z\" id=\"Z6_0\" name=\"Forest\"/\u003e\u003c/g\u003e\n  \u003c/g\u003e\n\u003c/svg\u003e","echarts_data":[{"name":"Forest","value":1,"itemStyle":{"areaColor":"rgba(34,197,94,0.8)"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"Lake","value":1,"itemStyle":{"areaColor":"rgba(59,130,246,0.8)"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"City","value":1,"itemStyle":{"areaColor":"rgba(203,213,225,0.8)"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"Suburbs","value":1,"itemStyle":{"areaColor":"rgba(203,213,225,0.8)"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"Plains","value":1,"itemStyle":{"areaColor":"rgba(254,240,138,0.8)"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"Forest":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z1"}],"Lake":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z2"}],"City":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z3"}],"Suburbs":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z4"}],"Plains":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z5"}]},"overlays":{"sivo_categorical_legend":{"html":"\n            \u003cdiv style=\"background: rgba(255,255,255,0.9); padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: sans-serif; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); user-select: none; pointer-events: auto; cursor: grab; z-index: 100;\"\u003e\n                \u003cstrong style=\"color: #334155; font-size: 11px; text-transform: uppercase; margin-bottom: 4px;\"\u003eLegend\u003c/strong\u003e\n                \u003cdiv style=\"display: flex; flex-direction: column; gap: 8px;\"\u003e\n                    \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(34,197,94,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eForest\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(59,130,246,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eWater\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(203,213,225,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eUrban\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                    \u003cdiv style=\"display: flex; align-items: center; gap: 8px;\"\u003e\n                        \u003cdiv style=\"width: 14px; height: 14px; background-color: rgba(254,240,138,0.8); border-radius: 3px; border: 1.5px solid #0f172a;\"\u003e\u003c/div\u003e\n                        \u003cspan style=\"color: #475569; font-size: 12px;\"\u003eAgriculture\u003c/span\u003e\n                    \u003c/div\u003e\n                \n                \u003c/div\u003e\n            \u003c/div\u003e\n            ","fixed":true,"position":"bottom-right","draggable":true,"z_index":100}},"connections":[],"default_panel_position":"none","disable_panel":true,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":"Categorical Map Demo","subtitle":"Land Cover Classification","attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[30.0,20.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"Forest":{"id":"Z6_0","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z1"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(34,197,94,0.8)","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"Lake":{"id":"Z2_0","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z2"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(59,130,246,0.8)","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"City":{"id":"Z3_0","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z3"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(203,213,225,0.8)","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"Suburbs":{"id":"Z4_0","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z4"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(203,213,225,0.8)","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"Plains":{"id":"Z5_0","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Z5"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(254,240,138,0.8)","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
         var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
@@ -1514,6 +1671,17 @@
 
         // Setup base views to render
         var leftViewId = isCompareMode ? "compare_left" : currentViewId;
+
+        // Implement ECharts Mobile Pinch-to-Zoom Sensitivity Fix
+        // ECharts hardcodes pinch zoom scale delta to 1.1 or 1/1.1 regardless of finger movement distance.
+        // This causes extreme over-sensitivity on mobile devices. We intercept the 'roam' dispatchAction
+        // and replace the hardcoded scale with the true relative scale computed from ZRender's pinchScale.
+        var _sivoLastAbsolutePinchScale = null;
+        var _sivoPinchDeltaScale = null;
+        var _sivoPinchTimeout = null;
+
+        // Initialize Global State
+        window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         // Apply Global Theme
         var currentTheme = viewsData[leftViewId] ? (viewsData[leftViewId].theme || 'light') : 'light';
@@ -1564,12 +1732,139 @@
             echarts.connect([myChart, myChartCompareRight]);
         }
 
+        function _applyPinchZoomFix(chartInstance) {
+            if (!chartInstance) return;
+            var zr = chartInstance.getZr();
+            if (!zr) return;
+
+            // 1. Capture the raw absolute pinch scale from ZRender and compute the delta
+            zr.on('pinch', function (e) {
+                if (e && e.pinchScale) {
+                    if (_sivoLastAbsolutePinchScale === null) {
+                        _sivoPinchDeltaScale = e.pinchScale; // First event
+                    } else {
+                        // Compute delta for this frame relative to last frame
+                        _sivoPinchDeltaScale = e.pinchScale / _sivoLastAbsolutePinchScale;
+                    }
+                    _sivoLastAbsolutePinchScale = e.pinchScale;
+
+                    if (_sivoPinchTimeout) clearTimeout(_sivoPinchTimeout);
+                    _sivoPinchTimeout = setTimeout(function() {
+                        _sivoLastAbsolutePinchScale = null;
+                        _sivoPinchDeltaScale = null;
+                    }, 50);
+                }
+            });
+
+            // Reset start scale at end of gesture
+            zr.on('pinchend', function(e) {
+                _sivoLastAbsolutePinchScale = null;
+                _sivoPinchDeltaScale = null;
+            });
+
+            // 2. Intercept the dispatchAction that triggers the map zoom
+            var origDispatchAction = chartInstance.dispatchAction;
+            chartInstance.dispatchAction = function (payload) {
+                if (payload && payload.type === 'roam') {
+                    if (payload.zoom != null && _sivoPinchDeltaScale != null) {
+                        var hardcodedZoomIn = 1.1;
+                        var hardcodedZoomOut = 1 / 1.1;
+
+                        if (Math.abs(payload.zoom - hardcodedZoomIn) < 0.001 ||
+                            Math.abs(payload.zoom - hardcodedZoomOut) < 0.001) {
+
+                            payload.zoom = _sivoPinchDeltaScale;
+                            _sivoPinchDeltaScale = null;
+                        }
+                    }
+
+                    if (typeof lockScrollBounds !== 'undefined' && lockScrollBounds && (payload.dx || payload.dy)) {
+                        var opt = chartInstance.getOption();
+                        if (opt && opt.series && opt.series.length > 0) {
+                            var currentZ = currentZoom;
+
+                            // If at base zoom, entirely block panning
+                            if (currentZ <= 1.05) {
+                                payload.dx = 0;
+                                payload.dy = 0;
+                            } else {
+                                // Dynamic boundary clamping to prevent map from leaving the canvas viewport
+                                var model = chartInstance.getModel().getSeriesByIndex(0);
+                                if (model && model.coordinateSystem && model.coordinateSystem.getBoundingRect) {
+                                    var geo = model.coordinateSystem;
+                                    var rect = geo.getBoundingRect();
+                                    var matrix = geo.getTransform();
+                                    var zr = chartInstance.getZr();
+
+                                    if (matrix && zr) {
+                                        var m = matrix;
+                                        // Calculate current screen coordinates of map bounding box
+                                        var pt1X = rect.x * m[0] + rect.y * m[2] + m[4];
+                                        var pt1Y = rect.x * m[1] + rect.y * m[3] + m[5];
+                                        var pt2X = (rect.x + rect.width) * m[0] + (rect.y + rect.height) * m[2] + m[4];
+                                        var pt2Y = (rect.x + rect.width) * m[1] + (rect.y + rect.height) * m[3] + m[5];
+                                        var tlX = Math.min(pt1X, pt2X);
+                                        var brX = Math.max(pt1X, pt2X);
+                                        var tlY = Math.min(pt1Y, pt2Y);
+                                        var brY = Math.max(pt1Y, pt2Y);
+
+                                        var cw = zr.getWidth();
+                                        var ch = zr.getHeight();
+
+                                        var dx = payload.dx || 0;
+                                        var dy = payload.dy || 0;
+
+                                        // Next frame coordinates after proposed pan
+                                        var nextTlX = tlX + dx;
+                                        var nextTlY = tlY + dy;
+                                        var nextBrX = brX + dx;
+                                        var nextBrY = brY + dy;
+
+                                        // If map is wider than canvas
+                                        if (brX - tlX >= cw) {
+                                            // Clamp right drag (panning left side into view)
+                                            if (nextTlX > 0) dx -= nextTlX;
+                                            // Clamp left drag (panning right side into view)
+                                            else if (nextBrX < cw) dx += (cw - nextBrX);
+                                        } else {
+                                            // If map is narrower than canvas, keep it centered or bounded
+                                            // ECharts automatically centers it on load. If they pan, we restrict it from leaving the screen entirely.
+                                            // A simple approach is just locking the center coordinate or reverting entirely.
+                                            // Let's just lock panning if it's narrower.
+                                            dx = 0;
+                                        }
+
+                                        // If map is taller than canvas
+                                        if (brY - tlY >= ch) {
+                                            if (nextTlY > 0) dy -= nextTlY;
+                                            else if (nextBrY < ch) dy += (ch - nextBrY);
+                                        } else {
+                                            dy = 0;
+                                        }
+
+                                        payload.dx = dx;
+                                        payload.dy = dy;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return origDispatchAction.apply(this, arguments);
+            };
+        }
+
+        // Apply the fix to our chart instances
+        _applyPinchZoomFix(myChart);
+        if (myChartCompareRight) _applyPinchZoomFix(myChartCompareRight);
+
         // Active variables for the current view
         var echartsData = [];
         var actionsManifest = {};
         var overlaysData = {};
         var connectionsData = [];
         var lockZoomOut = false;
+        var lockScrollBounds = true;
         var fadeUnselected = false;
         var dataBinding = null;
         var timelineBinding = null;
@@ -1581,6 +1876,68 @@
         var viewHistory = [];
         var currentZoom = 1;
         var currentCenter = null;
+
+        function calculateLayoutSize(view, domElement) {
+            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
+                return view ? view.layout_size : undefined;
+            }
+
+            if (!domElement) return view.layout_size;
+
+            var containerWidth = domElement.clientWidth;
+            var containerHeight = domElement.clientHeight;
+
+            if (containerWidth <= 0 || containerHeight <= 0) {
+                return view.layout_size;
+            }
+
+            var fraction = parseFloat(view.layout_size.replace('%', '')) / 100.0;
+
+            var svgW = 1000;
+            var svgH = 1000;
+
+            if (view.svg_string) {
+                var viewBoxMatch = view.svg_string.match(/viewBox\s*=\s*['"]([^'"]+)['"]/i);
+                if (viewBoxMatch) {
+                    var parts = viewBoxMatch[1].trim().split(/[\s,]+/);
+                    if (parts.length >= 4) {
+                        svgW = parseFloat(parts[2]);
+                        svgH = parseFloat(parts[3]);
+                    }
+                } else {
+                    var wMatch = view.svg_string.match(/width\s*=\s*['"]([^'"]+)['"]/i);
+                    var hMatch = view.svg_string.match(/height\s*=\s*['"]([^'"]+)['"]/i);
+                    if (wMatch && hMatch) {
+                        var wVal = parseFloat(wMatch[1]);
+                        var hVal = parseFloat(hMatch[1]);
+                        if (!isNaN(wVal) && !isNaN(hVal)) {
+                            svgW = wVal;
+                            svgH = hVal;
+                        }
+                    }
+                }
+            }
+
+            if (svgW <= 0 || svgH <= 0) {
+                return view.layout_size;
+            }
+
+            var containerRatio = containerWidth / containerHeight;
+            var svgRatio = svgW / svgH;
+
+            var targetMaxPx;
+
+            if (containerRatio < svgRatio) {
+                var scale = (containerWidth * fraction) / svgW;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            } else {
+                var scale = (containerHeight * fraction) / svgH;
+                targetMaxPx = Math.max(svgW, svgH) * scale;
+            }
+
+            return Math.round(targetMaxPx) + 'px';
+        }
+
 
         function getBaseOption(mapName) {
             var view = viewsData[mapName] || viewsData[currentViewId] || {};
@@ -1594,12 +1951,13 @@
                 tooltip: {
                     show: !window.sivoDisableTooltips,
                     trigger: 'item',
+                    appendToBody: true,
                     triggerOn: 'mousemove', // prevent tooltips from blocking click actions on touch devices
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
                     borderColor: 'rgba(0, 0, 0, 0.05)',
                     borderWidth: 1,
                     textStyle: { color: '#334155', fontFamily: 'system-ui, sans-serif' },
-                    extraCssText: 'box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 8px; backdrop-filter: blur(8px); padding: 12px 16px;',
+                    extraCssText: 'box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 8px; backdrop-filter: blur(8px); padding: 12px 16px; z-index: 99999 !important;',
                     position: function (point, params, dom, rect, size) {
                         var x = point[0];
                         var y = point[1];
@@ -1643,13 +2001,14 @@
                         type: 'map',
                         map: mapName,
                         roam: view.lock_canvas ? false : true, // Enable zoom and pan
+                        label: { show: false },
                         itemStyle: {
                             borderColor: '#cbd5e1', // Sleek slate-300
                             borderWidth: 1,
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
-                            disabled: true
+                            disabled: false
                         },
                         selectedMode: false, // Strictly disable ECharts native selection state
                         select: {
@@ -1657,8 +2016,10 @@
                         },
                         data: echartsData,
                         zlevel: 1,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
-                        animationDurationUpdate: 800, // Smooth transition on data/style changes and zoom
+                        animationDurationUpdate: 0, // Disable tweening delay for native feel during manual pan/zoom
                         animationEasingUpdate: 'cubicInOut'
                     }
                 ]
@@ -1674,18 +2035,23 @@
                 if (!option.geo) {
                     option.geo = {
                         map: mapName,
+                        boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                         roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                         zoom: view.starting_zoom || 1.0,
+                        animationDurationUpdate: 0,
+                        label: { show: false },
                         itemStyle: {
-                            color: 'transparent',
-                            borderColor: 'transparent'
+                            color: renderMode === 'svg' ? 'transparent' : undefined,
+                            borderColor: renderMode === 'svg' ? 'transparent' : undefined
                         },
                         emphasis: {
+                            disabled: true,
                             itemStyle: {
                                 color: 'transparent',
                                 borderColor: 'transparent'
-                            },
-                            label: { show: false }
+                            }
                         },
                         zlevel: 0
                     };
@@ -1814,9 +2180,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
@@ -1833,6 +2202,10 @@
                         coordinateSystem: 'geo',
                         zlevel: 3,
                         symbol: 'circle',
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         itemStyle: {
                             color: proportionalSymbols.color
                         },
@@ -1878,9 +2251,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
@@ -1895,6 +2271,10 @@
                         type: 'custom',
                         coordinateSystem: 'geo',
                         zlevel: 3,
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         renderItem: function (params, api) {
                             var val = api.value(2);
                             var ratio = (val - minValSpike) / rangeSpike;
@@ -2011,9 +2391,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
@@ -2045,6 +2428,10 @@
                         type: 'custom',
                         coordinateSystem: 'geo',
                         zlevel: 2,
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         renderItem: function (params, api) {
                             var pt = api.coord([api.value(0), api.value(1)]);
                             var sizePtY = api.coord([api.value(0), api.value(1) + hexbinConfig.hex_size]); // Calculate radius in pixel space
@@ -2175,9 +2562,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
+                        layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
+                        layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
@@ -2190,6 +2580,10 @@
                         zlevel: 3,
                         symbol: 'circle',
                         symbolSize: dotDensityConfig.dot_size,
+                        large: true,
+                        largeThreshold: 2000,
+                        progressive: 400,
+                        progressiveThreshold: 3000,
                         itemStyle: {
                             color: dotDensityConfig.dot_color
                         },
@@ -2240,7 +2634,7 @@
             // ECharts uses Canvas or SVG.
             // If it's SVG renderer, we can apply classes.
             // But since ECharts defaults to canvas, animating individual geo regions via CSS is hard.
-            // Instead, we will use a workaround: ECharts doesn't support CSS animations on canvas paths easily.
+            // ECharts doesn't support CSS animations on canvas paths easily.
             // If an animation is set, we will use setInterval to mutate the ECharts option instead for basic effects,
             // or if it's rendered as SVG (which echarts map allows), we can query the dom.
             // For now, if we want robust canvas animation, we just toggle emphasis state.
@@ -2252,6 +2646,15 @@
             if (animatedItems.length === 0) return;
 
             // Simple toggle for 'pulse' or 'fade' via ECharts itemStyle opacity
+            // We use animation_duration_ms if available, default to 1000
+            // If we have items with different durations, ideally we'd have separate intervals,
+            // but for simplicity we'll just pick the first valid animation_duration_ms
+            var pulseIntervalMs = 1000;
+            var customItem = animatedItems.find(d => d.animation_duration_ms && d.animation_class === 'pulse');
+            if (customItem) {
+                pulseIntervalMs = customItem.animation_duration_ms;
+            }
+
             let toggle = false;
             animationInterval = setInterval(() => {
                 toggle = !toggle;
@@ -2261,23 +2664,66 @@
 
                 currentData.forEach((item, index) => {
                     if (item.animation_class === 'fade') {
-                        if (!item.itemStyle) item.itemStyle = {};
-                        item.itemStyle.opacity = toggle ? 0.3 : 1.0;
-                        updated = true;
+                        // Fade should just happen once and stay faded
+                        if (!item._has_faded) {
+                            if (!item.itemStyle) item.itemStyle = {};
+                            item.itemStyle.opacity = 0.2;
+                            item._has_faded = true;
+                            item._just_faded = true;
+                            // Ensure the fade uses the configured duration for its transition
+                            item._fade_duration = item.animation_duration_ms || 1000;
+                            updated = true;
+                        }
                     } else if (item.animation_class === 'pulse') {
-                        // For pulse on canvas, we can fake it by highlighting
+                        // Shadow blur doesn't always render on complex map SVGs in ECharts.
+                        // For a distinct pulse, we will use a scale effect by utilizing the `select` state,
+                        // or by dynamically updating the symbolSize if it's a scatter, but this is a map item.
+                        // For map items, the only way to scale is using `emphasis.itemStyle`.
+                        if (!item.itemStyle) item.itemStyle = {};
+
+                        // We will simulate a pulse by rapidly alternating a highly contrasting border and a slight opacity change
+                        // that differs from the deep fade. We also change the base color slightly.
+                        // Setting animationDurationUpdate specifically on itemStyle helps ECharts tween the values rather than jumping.
+                        if (!item.itemStyle) item.itemStyle = {};
+                        item.itemStyle.opacity = toggle ? 0.8 : 1.0;
+                        item.itemStyle.borderWidth = toggle ? 3 : 0;
+                        item.itemStyle.borderColor = 'rgba(255,255,255,0.8)';
+                        item.itemStyle.shadowBlur = toggle ? 15 : 0;
+                        item.itemStyle.shadowColor = item.itemStyle.color || 'yellow';
+                        // Note: ECharts handles transition tweening if animationDurationUpdate is applied
+
                         if (toggle) {
                             myChart.dispatchAction({ type: 'highlight', name: item.name });
                         } else {
                             myChart.dispatchAction({ type: 'downplay', name: item.name });
                         }
+                        updated = true;
                     }
                 });
 
                 if (updated) {
-                    myChart.setOption({ series: [{ data: currentData }] });
+                    // Tell ECharts to smoothly tween the update over the pulse interval duration.
+                    // This creates a ramped transition rather than a blunt switch.
+                    // If we have a fade happening that has a custom duration, we can use that, otherwise pulseIntervalMs.
+                    var maxDuration = pulseIntervalMs;
+                    currentData.forEach(d => {
+                        if (d._just_faded) {
+                            if (d._fade_duration > maxDuration) {
+                                maxDuration = d._fade_duration;
+                            }
+                            d._just_faded = false;
+                        }
+                    });
+
+                    myChart.setOption({
+                        series: [{
+                            animationDurationUpdate: maxDuration,
+                            animationEasingUpdate: 'cubicInOut',
+                            data: currentData
+                        }]
+                    });
                 }
-            }, 1000);
+            }, pulseIntervalMs);
         }
 
         function applyNativeSvgManipulations() {
@@ -2290,6 +2736,11 @@
 
             var svgEl = overlayContainer.querySelector('svg');
             if (!svgEl) return;
+
+            // Remove the viewBox from the native overlay because ECharts will apply a pixel-perfect
+            // transform matrix to the internal <g> wrapper based on the bounding_coords.
+            // Keeping the viewBox would cause double-scaling.
+            svgEl.removeAttribute('viewBox');
 
             // Ensure SVG fills the container and allows us to control the global transform
             svgEl.style.width = '100%';
@@ -2316,7 +2767,7 @@
                 var hasTheme = mapping.theme !== undefined;
                 var hasActions = mapping.actions && mapping.actions.length > 0;
                 var isDraggable = mapping.draggable;
-                var hasHoverColor = hasTheme && mapping.theme.hover_color;
+                var hasHoverColor = hasTheme && (mapping.theme.hover_color || mapping.theme.hover_image);
 
                 var node = wrapperGroup.querySelector(`[id="${name}"], [name="${name}"]`);
                 if (!node) continue;
@@ -2333,7 +2784,28 @@
                         node.addEventListener('mouseenter', function(e) {
                             // Highlight (ECharts doesn't let us trigger its native highlight easily if opacity is 0,
                             // so we manually apply hover_color if it exists)
-                            if (mapping.theme && mapping.theme.hover_color) {
+                            if (mapping.theme && mapping.theme.hover_image) {
+                                node.setAttribute('data-original-fill', node.getAttribute('fill') || '');
+                                node.setAttribute('fill', 'url(#' + name + '-hover-pattern)');
+
+                                // Ensure pattern exists
+                                var defs = svgEl.querySelector('defs') || document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                                if (!svgEl.querySelector('defs')) svgEl.insertBefore(defs, svgEl.firstChild);
+                                if (!document.getElementById(name + '-hover-pattern')) {
+                                    var pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+                                    pattern.setAttribute('id', name + '-hover-pattern');
+                                    pattern.setAttribute('patternUnits', 'objectBoundingBox');
+                                    pattern.setAttribute('width', '1');
+                                    pattern.setAttribute('height', '1');
+                                    var img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+                                    img.setAttribute('href', mapping.theme.hover_image);
+                                    img.setAttribute('width', '100%');
+                                    img.setAttribute('height', '100%');
+                                    img.setAttribute('preserveAspectRatio', 'none');
+                                    pattern.appendChild(img);
+                                    defs.appendChild(pattern);
+                                }
+                            } else if (mapping.theme && mapping.theme.hover_color) {
                                 node.setAttribute('data-original-fill', node.getAttribute('fill') || '');
                                 node.setAttribute('fill', mapping.theme.hover_color);
                             }
@@ -2359,7 +2831,7 @@
                         });
 
                         node.addEventListener('mouseleave', function(e) {
-                            if (mapping.theme && mapping.theme.hover_color) {
+                            if (mapping.theme && (mapping.theme.hover_color || mapping.theme.hover_image)) {
                                 var orig = node.getAttribute('data-original-fill');
                                 if (orig !== null) node.setAttribute('fill', orig);
                             }
@@ -2647,6 +3119,9 @@
         // A global variable to hold the currently requested transition name
         var nextTransition = null;
 
+        var presentationOrder = [];
+        var currentPresentationIndex = -1;
+
         function renderView(viewId, isBackNavigation, customTransition) {
             if (viewId !== "compare_mode" && !viewsData[viewId]) {
                 console.error("View not found:", viewId);
@@ -2692,6 +3167,7 @@
             setTimeout(function() {
                 if (!isBackNavigation && currentViewId && currentViewId !== viewId) {
                     viewHistory.push(currentViewId);
+                    if (typeof updateBackButton === 'function') updateBackButton();
                 }
 
                 currentViewId = viewId;
@@ -2714,12 +3190,88 @@
                 bgImage.src = '';
             }
 
+            // Handle Border Image
+            var borderImage = document.getElementById('sivo-border-image');
+            if (view.border_image_url) {
+                borderImage.src = view.border_image_url;
+                borderImage.style.opacity = view.border_image_opacity !== undefined ? view.border_image_opacity : 1.0;
+                borderImage.style.filter = view.border_image_grayscale ? 'grayscale(100%)' : 'none';
+
+                // Reset styles
+                borderImage.style.top = 'auto';
+                borderImage.style.bottom = 'auto';
+                borderImage.style.left = 'auto';
+                borderImage.style.right = 'auto';
+
+                var w = view.border_image_width || '10%';
+                var pos = view.border_image_position || 'all';
+
+                if (pos === 'left') {
+                    borderImage.style.top = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = w;
+                    borderImage.style.height = '100%';
+                } else if (pos === 'right') {
+                    borderImage.style.top = '0';
+                    borderImage.style.right = '0';
+                    borderImage.style.width = w;
+                    borderImage.style.height = '100%';
+                } else if (pos === 'top') {
+                    borderImage.style.top = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = '100%';
+                    borderImage.style.height = w;
+                } else if (pos === 'bottom') {
+                    borderImage.style.bottom = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = '100%';
+                    borderImage.style.height = w;
+                } else {
+                    borderImage.style.top = '0';
+                    borderImage.style.left = '0';
+                    borderImage.style.width = '100%';
+                    borderImage.style.height = '100%';
+                }
+
+                borderImage.style.display = 'block';
+            } else {
+                borderImage.style.display = 'none';
+                borderImage.src = '';
+            }
+
+
             // Extract view-specific active data
+
             echartsData = view.echarts_data;
+
+            // Load images dynamically
+            echartsData.forEach(item => {
+                if (item.itemStyle && item.itemStyle.areaColor && item.itemStyle.areaColor.image && typeof item.itemStyle.areaColor.image === 'string') {
+                    var imgUrl = item.itemStyle.areaColor.image;
+                    var img = new Image();
+                    img.src = imgUrl;
+                    img.onload = function() {
+                        myChart.setOption({ series: [{ data: echartsData }] });
+                    };
+                    item.itemStyle.areaColor.image = img;
+                }
+
+                if (item.emphasis && item.emphasis.itemStyle && item.emphasis.itemStyle.areaColor && item.emphasis.itemStyle.areaColor.image && typeof item.emphasis.itemStyle.areaColor.image === 'string') {
+                    var imgUrl = item.emphasis.itemStyle.areaColor.image;
+                    var img = new Image();
+                    img.src = imgUrl;
+                    img.onload = function() {
+                        myChart.setOption({ series: [{ data: echartsData }] });
+                    };
+                    item.emphasis.itemStyle.areaColor.image = img;
+                }
+            });
+
             actionsManifest = view.actions_manifest;
             overlaysData = view.overlays;
             connectionsData = view.connections || [];
             lockZoomOut = view.lock_zoom_out || false;
+            lockScrollBounds = view.lock_scroll_bounds !== undefined ? view.lock_scroll_bounds : true;
             fadeUnselected = view.fade_unselected || false;
             enableBrushSelection = view.enable_brush_selection || false;
             dataBinding = view.data_binding || null;
@@ -2729,6 +3281,7 @@
             window.sivoDisablePanel = view.disable_panel || false;
             window.sivoPanelWidth = view.panel_width || null;
             window.sivoPanelHeight = view.panel_height || null;
+            window.sivoGlobalPanelCSS = view.panel_css || null;
             window.sivoDisableResizer = view.disable_resizer || false;
             window.sivoDisableTooltips = view.disable_tooltips || false;
             window.sivoDisableZoomControls = view.disable_zoom_controls || false;
@@ -2742,7 +3295,6 @@
                 liveSocket = new WebSocket(liveBinding.url);
 
                 liveSocket.onopen = function(e) {
-                    console.log("[SIVO] Live binding WebSocket connected to", liveBinding.url);
                     if (liveBinding.auth_token) {
                         liveSocket.send(JSON.stringify({ type: 'auth', token: liveBinding.auth_token }));
                     }
@@ -2756,7 +3308,6 @@
                         var msg = JSON.parse(event.data);
                         // Expected format: { element_id: "id1", color: "#ff0000", tooltip: "New data" }
                         if (msg && msg.element_id) {
-                            console.log("[SIVO] Live update received:", msg);
                             // Merge into existing mapped logic dynamically
                             if (!actionsManifest[msg.element_id]) {
                                 actionsManifest[msg.element_id] = { actions: [], theme: {} };
@@ -2784,7 +3335,6 @@
                 };
 
                 liveSocket.onclose = function(event) {
-                    console.warn("[SIVO] Live binding WebSocket closed.", event);
                 };
             }
 
@@ -2794,7 +3344,6 @@
                 window.sivoApiPollingInterval = null;
             }
             if (apiBinding) {
-                console.log("[SIVO] Initializing API binding to poll:", apiBinding.url);
                 window.sivoApiPollingInterval = setInterval(() => {
                     var fetchOptions = {
                         method: apiBinding.method || 'GET',
@@ -2808,7 +3357,6 @@
                     fetch(apiBinding.url, fetchOptions)
                         .then(res => res.json())
                         .then(data => {
-                            console.log("[SIVO] API binding data received:", data);
                             var targetData = data;
                             if (apiBinding.data_path) {
                                 var parts = apiBinding.data_path.split('.');
@@ -2816,7 +3364,6 @@
                                     if (targetData && targetData[parts[i]] !== undefined) {
                                         targetData = targetData[parts[i]];
                                     } else {
-                                        console.warn("[SIVO] apiBinding.data_path not found in response:", apiBinding.data_path);
                                         return;
                                     }
                                 }
@@ -2870,8 +3417,29 @@
                                         image: item.fill_pattern.image || '',
                                         repeat: item.fill_pattern.repeat || 'repeat'
                                     };
+                                    if (typeof echartsDataItem.itemStyle.areaColor.image === 'string' && echartsDataItem.itemStyle.areaColor.image !== '') {
+                                        var img = new Image();
+                                        img.src = echartsDataItem.itemStyle.areaColor.image;
+                                        img.onload = function() { myChart.setOption({ series: [{ data: echartsData }] }); };
+                                        echartsDataItem.itemStyle.areaColor.image = img;
+                                    }
                                     hasChanges = true;
                                 }
+                                if (item.hover_image) {
+                                    actionsManifest[id].theme.hover_image = item.hover_image;
+                                    if (!echartsDataItem.emphasis) echartsDataItem.emphasis = {};
+                                    if (!echartsDataItem.emphasis.itemStyle) echartsDataItem.emphasis.itemStyle = {};
+                                    echartsDataItem.emphasis.itemStyle.areaColor = {
+                                        image: item.hover_image,
+                                        repeat: 'no-repeat'
+                                    };
+                                    var img = new Image();
+                                    img.src = item.hover_image;
+                                    img.onload = function() { myChart.setOption({ series: [{ data: echartsData }] }); };
+                                    echartsDataItem.emphasis.itemStyle.areaColor.image = img;
+                                    hasChanges = true;
+                                }
+
                                 if (item.tooltip) {
                                     var currentTooltipAction = actionsManifest[id].actions.find(a => a.action_type === 'tooltip');
                                     if (!currentTooltipAction || currentTooltipAction.title !== item.tooltip) {
@@ -2916,11 +3484,9 @@
                             }
 
                             if (hasChanges) {
-                                console.log("[SIVO] API binding detected changes, updating chart.");
                                 var updatedOption = getBaseOption(viewId);
                                 myChart.setOption(updatedOption, false);
                             } else {
-                                console.log("[SIVO] API binding data fetched, but no visual changes detected.");
                             }
                         })
                         .catch(err => console.error("[SIVO] API binding fetch error:", err));
@@ -3003,6 +3569,25 @@
             // Reset zoom tracking
             currentZoom = view.starting_zoom || 1.0;
             currentCenter = null;
+            if (myChart && isBackNavigation) {
+                 myChart.dispatchAction({
+                    type: 'restore'
+                 });
+                 if (view.starting_zoom || view.layout_size) {
+                      var newSize = calculateLayoutSize(view, chartDom);
+                      var optToSet = { series: [{ zoom: currentZoom, center: null }] };
+                      if (newSize) {
+                           optToSet.series[0].layoutSize = newSize;
+                      }
+                      if (myChart.getOption().geo) {
+                           optToSet.geo = [{ zoom: currentZoom, center: null }];
+                           if (newSize) {
+                                optToSet.geo[0].layoutSize = newSize;
+                           }
+                      }
+                      myChart.setOption(optToSet, false);
+                 }
+            }
 
             // Re-initialize overlays for this view
             initOverlays();
@@ -3099,6 +3684,10 @@
 
             // Initialize Controls (Fullscreen, Share, Download)
             initControls(view);
+
+            // Setup Presentation Keyboard Mode
+            presentationOrder = view.presentation_order || [];
+            currentPresentationIndex = -1;
 
             // Handle Zoom Controls
             var zoomControlsContainer = document.querySelector('.zoom-controls');
@@ -3223,8 +3812,9 @@
         function sanitizeHTML(str) {
             if (typeof DOMPurify !== 'undefined') {
                 return DOMPurify.sanitize(str, {
-                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player'],
+                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player', 'style'],
                     ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value'],
+                    FORCE_BODY: true, // Needed for DOMPurify to allow <style> tags at root
                     CUSTOM_ELEMENT_HANDLING: {
                         tagNameCheck: (tagName) => tagName.match(/-/),
                         attributeNameCheck: (attr) => attr.match(/-/),
@@ -3233,7 +3823,8 @@
                 });
             }
             // Fail-safe: if DOMPurify failed to load, return an escaped string to prevent XSS.
-            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            if (str == null) return '';
+            return String(str).replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
         // Implement Draggable Logic (for map elements marked as draggable)
@@ -3246,8 +3837,8 @@
 
         window.isDraggingElement = false;
 
-        // Catch mousedown at the root DOM level before ECharts initiates pan (georoam)
-        document.getElementById('sivo-native-overlay-svg-container').addEventListener('mousedown', function (e) {
+        // Catch mousedown/touchstart at the root DOM level before ECharts initiates pan (georoam)
+        function handleDragStart(e) {
             if (renderMode !== 'svg') return;
 
             // Check if the clicked target has data-draggable true
@@ -3257,10 +3848,21 @@
             }
             if (target && target.getAttribute('data-draggable') === 'true') {
                 e.stopPropagation(); // Stop ECharts from getting the mousedown and starting a pan
+                // Prevent default scrolling on touch devices
+                if (e.type === 'touchstart') {
+                    // We don't preventDefault here because it might block clicks on non-draggable elements if not careful,
+                    // but since we verified it's draggable, we should preventDefault to stop scroll/pan.
+                    e.preventDefault();
+                }
 
                 draggedElement = target;
-                dragStartX = e.clientX;
-                dragStartY = e.clientY;
+
+                // Handle touch vs mouse coordinates
+                var clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                var clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+
+                dragStartX = clientX;
+                dragStartY = clientY;
                 window.isDraggingElement = true; // prevent click immediately after drag
 
                 // Parse existing transform translation
@@ -3274,21 +3876,57 @@
                     currentElementY = 0;
                 }
             }
-        }, true);
+        }
 
-        // Listen for mousemove on the window to support dragging
-        window.addEventListener('mousemove', function (e) {
+        var container = document.getElementById('sivo-native-overlay-svg-container');
+        container.addEventListener('mousedown', handleDragStart, { passive: false });
+        container.addEventListener('touchstart', handleDragStart, { passive: false });
+
+
+        // Listen for mousemove/touchmove on the window to support dragging
+        function handleDragMove(e) {
             if (draggedElement) {
-                var dx = e.clientX - dragStartX;
-                var dy = e.clientY - dragStartY;
+                if (e.type === 'touchmove') {
+                    e.preventDefault(); // Prevent scrolling while dragging
+                }
 
-                // Account for global ECharts zoom level so it drags 1:1 with mouse
-                var zoomLevel = currentZoom || 1;
+                var clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                var clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+                                                var dx = clientX - dragStartX;
+                var dy = clientY - dragStartY;
+
+                // Dynamically fetch the ACTUAL CTM scale factor from the SVG root group
+                var zoomLevel = 1;
+                var overlayGroup = document.getElementById('sivo-global-transform-group');
+                if (overlayGroup) {
+                    var ctm = overlayGroup.getAttribute('transform');
+                    if (ctm) {
+                        var matrixMatch = ctm.match(/matrix\(([^,]+)/);
+                        if (matrixMatch && matrixMatch[1]) {
+                            zoomLevel = parseFloat(matrixMatch[1]);
+                        }
+                    }
+                }
+
+                // Fallback to series zoom if matrix parse fails
+                if (zoomLevel === 1 || isNaN(zoomLevel)) {
+                    var option = myChart.getOption();
+                    var seriesZoom = (option && option.series && option.series.length > 0 && option.series[0].zoom) ? option.series[0].zoom : 1;
+                    zoomLevel = currentZoom || seriesZoom;
+                }
+
                 dx = dx / zoomLevel;
                 dy = dy / zoomLevel;
 
                 var newX = currentElementX + dx;
                 var newY = currentElementY + dy;
+
+                // Update tracking variables to support delta movements and prevent accelerating cursor
+                dragStartX = clientX;
+                dragStartY = clientY;
+                currentElementX = newX;
+                currentElementY = newY;
 
                 var currentTransform = draggedElement.getAttribute('transform') || '';
                 // Remove old translate to overwrite it
@@ -3301,16 +3939,116 @@
                 // Prevent anything else from handling this move
                 e.stopPropagation();
             }
+        }
+
+        window.addEventListener('mousemove', handleDragMove, { passive: false, capture: true });
+        window.addEventListener('touchmove', handleDragMove, { passive: false, capture: true });
+
+        // Use global window events to ensure mouseup/touchend is always caught even if it leaves the canvas
+
+
+        // Intercept hover/mousemove on draggable elements to show tooltips at their new locations
+        document.addEventListener('mousemove', function(e) {
+            if (window.isDraggingElement) return; // Don't trigger while actively dragging
+
+            var target = e.target;
+            if (target && target.closest) {
+                target = target.closest('[data-draggable="true"]');
+            }
+            if (target && target.getAttribute('data-draggable') === 'true') {
+                // The element ID is usually mapped as the 'name' attribute by ECharts in SVG mode,
+                // or we fall back to the DOM ID if preserved.
+                var originalId = target.getAttribute('name') || target.id;
+                if (!originalId && target.parentNode) originalId = target.parentNode.getAttribute('name') || target.parentNode.id;
+
+                                if (originalId) {
+                    var containerRect = myChart.getDom().getBoundingClientRect();
+                    var localX = e.clientX - containerRect.left;
+                    var localY = e.clientY - containerRect.top;
+
+                    myChart.dispatchAction({
+                        type: 'showTip',
+                        seriesIndex: 0,
+                        name: originalId,
+                        x: localX,
+                        y: localY,
+                        position: [localX, localY]
+                    });
+                }
+            }
         }, true);
 
-        // Use global window events to ensure mouseup is always caught even if it leaves the canvas
-        window.addEventListener('mouseup', function(e) {
+        // Intercept native clicks/touchends on draggable elements since ECharts ZRender loses track of them when their DOM transform is mutated
+        document.addEventListener('click', function(e) {
+            var target = e.target;
+            if (target && target.closest) {
+                target = target.closest('[data-draggable="true"]');
+            }
+            if (target && target.getAttribute('data-draggable') === 'true') {
+                // If we just finished dragging, we might not want to trigger a click.
+                if (window.isDraggingElement) return;
+
+                // Find the element name
+                var elementId = target.getAttribute('name') || target.id;
+                // Sometimes ECharts doesn't put name on the path, but puts it on the parent group or we can find it via our mapped data
+                if (!elementId) {
+                    // Try to extract from ECharts generated ID or class if needed
+                    // For SIVO map series, usually the name is mapped in ZRender but not always in DOM.
+                    // However, we can dispatch the tooltip via the element name.
+                    // Let's iterate echartsData to find a matching DOM node if possible, or just use the target's ID if SIVO preserved it.
+                }
+
+                // A reliable way in SIVO: The mapped element ID is usually preserved in the DOM structure by ECharts as the 'name' or we can look up echartsData
+                // Wait, ECharts SVG renderer strips custom IDs unless we use `name`.
+                // Actually, the `data-draggable="true"` was added in `bundle_generator.py` or `echarts.html` during `renderView`.
+                // Look at line 2874: `if (mapping.draggable) { node.setAttribute('data-draggable', 'true'); }`
+                // This means the node has the original SVG ID!
+                // The element ID is usually mapped as the 'name' attribute by ECharts in SVG mode,
+                // or we fall back to the DOM ID if preserved.
+                var originalId = target.getAttribute('name') || target.id;
+                if (!originalId && target.parentNode) originalId = target.parentNode.getAttribute('name') || target.parentNode.id;
+
+if (originalId) {
+                    var containerRect = myChart.getDom().getBoundingClientRect();
+                    var clientX = e.clientX;
+                    var clientY = e.clientY;
+                    if (e.changedTouches && e.changedTouches.length > 0) {
+                        clientX = e.changedTouches[0].clientX;
+                        clientY = e.changedTouches[0].clientY;
+                    }
+                    var localX = clientX - containerRect.left;
+                    var localY = clientY - containerRect.top;
+
+                    // Manually trigger tooltip at exact pointer position
+                    myChart.dispatchAction({
+                        type: 'showTip',
+                        seriesIndex: 0,
+                        name: originalId,
+                        x: localX,
+                        y: localY,
+                        position: [localX, localY]
+                    });
+
+                    // Manually trigger click actions
+                    myChart.trigger('click', {
+                        componentType: 'series',
+                        name: originalId
+                    });
+                }
+            }
+        }, true);
+
+        function handleDragEnd(e) {
             if (draggedElement) {
                 draggedElement = null;
                 // delay clearing isDraggingElement so click handlers don't fire immediately
                 setTimeout(() => window.isDraggingElement = false, 100);
             }
-        });
+        }
+
+        window.addEventListener('mouseup', handleDragEnd);
+        window.addEventListener('touchend', handleDragEnd);
+        window.addEventListener('touchcancel', handleDragEnd);
 
 
         function applyFadeUnselected(selectedName, force = false) {
@@ -3382,6 +4120,13 @@
         window.sivoCurrentPanelElement = null;
 
         window.triggerElementClick = function(name) {
+            if (presentationOrder && presentationOrder.length > 0) {
+                var idx = presentationOrder.indexOf(name);
+                if (idx !== -1) {
+                    currentPresentationIndex = idx;
+                }
+            }
+
             var infoPanel = document.getElementById('info-panel');
 
             applyFadeUnselected(name);
@@ -3393,7 +4138,8 @@
             var elementActions = elementData ? (elementData.actions || elementData) : null;
             var htmlContent = '';
             var hasInteraction = false;
-            var panelPosition = 'right'; // Default
+            var view = viewsData[currentViewId];
+            var panelPosition = view ? (view.default_panel_position || 'none') : 'none'; // Default
             var socialIframes = []; // Store secure iframes to append after DOMPurify
             var sivoChartsToInit = [];
 
@@ -3443,21 +4189,21 @@
                             }
                         }
                     } else if (action.action_type === 'explode') {
-                        console.log('Exploding view to:', action.target_svg);
                         if (viewsData[action.target_svg]) {
-                            // First, let's gracefully morph existing paths if possible, then swap
-                            // ECharts Universal Transition handles data-level morphing, but SIVO map morphing
-                            // is usually done by transitioning the SVG if we had a MorphAction.
-                            // For an Exploded View, we transition the entire map container safely.
-                            var loadingIndicator = document.getElementById('sivo-global-loading');
-                            if (loadingIndicator) loadingIndicator.style.display = 'flex';
+                            // Set a crossfade transition for the explode action
+                            nextTransition = 'sivo-view-transition'; // Default crossfade
+
+                            // Optional: If we want to simulate morphing visually across the whole container:
+                            chartDom.style.transition = 'transform ' + (action.duration_ms || 1000) + 'ms cubic-bezier(0.25, 1, 0.5, 1), opacity ' + (action.duration_ms || 1000) + 'ms';
+
+                            // Apply custom transition class for morph out
+                            chartDom.classList.add('sivo-view-transition-out');
 
                             setTimeout(() => {
                                 renderView(action.target_svg, false);
-                                if (loadingIndicator) loadingIndicator.style.display = 'none';
-                            }, action.duration_ms || 1000);
+                                chartDom.style.transition = ''; // Reset after swap
+                            }, (action.duration_ms || 1000) / 2);
                         } else {
-                            console.warn("Target SVG for explosion not found in viewsData: " + action.target_svg);
                         }
                     } else if (action.action_type === 'drilldown') {
                         // Handle custom transition if defined
@@ -3467,11 +4213,9 @@
 
                         // Check if it's an internal multi-view drill down
                         if (viewsData[action.target_svg]) {
-                            console.log('Switching view to:', action.target_svg);
                             renderView(action.target_svg, false);
                         } else {
                             // Fallback to legacy external fetch
-                            console.log('Fetching external drilldown:', action.target_svg);
                             var loadingIndicator = document.getElementById('sivo-global-loading');
                             if (loadingIndicator) loadingIndicator.style.display = 'flex';
 
@@ -3514,7 +4258,7 @@
                     } else if (action.action_type === 'audio') {
                         // Play audio
                         var audio = new Audio(action.audio_url);
-                        audio.play();
+                        audio.play().catch(e => console.error("Audio playback failed:", e));
                     } else if (action.action_type === 'fetch') {
                         // Fetch data and display in info panel
                         htmlContent += `<div id="sivo-fetch-container-${name}"><div class="sivo-spinner"></div><em>Loading data...</em></div>`;
@@ -3525,23 +4269,69 @@
                                 // Basic attempt to pretty-print JSON if it is JSON
                                 try {
                                     var jsonData = JSON.parse(data);
-                                    data = '<pre>' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                    if (action.fetch_data_path) {
+                                        var parts = action.fetch_data_path.split('.');
+                                        var targetData = jsonData;
+                                        for (var i = 0; i < parts.length; i++) {
+                                            if (targetData && targetData[parts[i]] !== undefined) {
+                                                targetData = targetData[parts[i]];
+                                            } else {
+                                                targetData = undefined;
+                                                break;
+                                            }
+                                        }
+                                        if (targetData !== undefined) {
+                                            if (typeof targetData === 'object' && targetData !== null) {
+                                                data = '<pre style="white-space: pre-wrap; word-wrap: break-word;">' + JSON.stringify(targetData, null, 2) + '</pre>';
+                                            } else {
+                                                // Just output the bare string safely
+                                                var rawString = String(targetData);
+                                                data = '<div style="font-size:16px; margin-top:10px;">' + (window.DOMPurify ? window.DOMPurify.sanitize(rawString) : rawString.replace(/</g, "&lt;").replace(/>/g, "&gt;")) + '</div>';
+                                            }
+                                        } else {
+                                            data = '<pre style="white-space: pre-wrap; word-wrap: break-word;">' + JSON.stringify(jsonData, null, 2) + '</pre>'; // Fallback
+                                        }
+                                    } else {
+                                        data = '<pre style="white-space: pre-wrap; word-wrap: break-word;">' + JSON.stringify(jsonData, null, 2) + '</pre>';
+                                    }
                                 } catch (e) {
                                     // Not JSON, keep as text
                                 }
-                                var container = document.getElementById(`sivo-fetch-container-${name}`);
-                                if (container) container.innerHTML = sanitizeHTML(data);
+                                // Since infoContent uses Shadow DOM, document.getElementById won't find the container directly.
+                                // We need to search inside the shadowRoot of info-content-host
+                                var host = document.getElementById('info-content-host');
+                                var container = null;
+                                if (host && host.shadowRoot) {
+                                    container = host.shadowRoot.querySelector(`#sivo-fetch-container-${name}`);
+                                }
+                                if (!container) {
+                                    container = document.getElementById(`sivo-fetch-container-${name}`);
+                                }
+
+                                if (container) {
+                                    container.innerHTML = sanitizeHTML(data);
+                                } else {
+                                    // If the panel hasn't rendered yet (because this fetch resolved extremely fast),
+                                    // we can retry after a short delay
+                                    setTimeout(() => {
+                                        var retryHost = document.getElementById('info-content-host');
+                                        var retryContainer = retryHost && retryHost.shadowRoot ? retryHost.shadowRoot.querySelector(`#sivo-fetch-container-${name}`) : document.getElementById(`sivo-fetch-container-${name}`);
+                                        if (retryContainer) retryContainer.innerHTML = sanitizeHTML(data);
+                                    }, 100);
+                                }
                             })
                             .catch(err => {
-                                var container = document.getElementById(`sivo-fetch-container-${name}`);
+                                var host = document.getElementById('info-content-host');
+                                var container = host && host.shadowRoot ? host.shadowRoot.querySelector(`#sivo-fetch-container-${name}`) : document.getElementById(`sivo-fetch-container-${name}`);
                                 if (container) container.innerHTML = `<span style="color:red">Failed to fetch data</span>`;
                             });
                     } else if (action.action_type === 'gallery') {
                         // Built-in gallery modal
                         var galleryModal = document.getElementById('sivo-gallery-modal');
                         var galleryWrapper = document.getElementById('sivo-gallery-wrapper');
-                        if (galleryModal && galleryWrapper && action.images.length > 0) {
-                            var imgHtml = `<img src="${action.images[0]}" style="max-width:100%; max-height:80vh; border-radius:4px;" />`;
+                        if (galleryModal && galleryWrapper && action.images && action.images.length > 0) {
+                            var firstImg = action.images[0] ? action.images[0] : '';
+                            var imgHtml = `<img src="${firstImg}" style="max-width:100%; max-height:80vh; border-radius:4px;" />`;
 
                             // If multiple images, add simple navigation
                             if (action.images.length > 1) {
@@ -3903,14 +4693,94 @@
                     } else if (action.action_type === 'loading' && action.trigger === 'click') {
                         triggerLoadingAnimation(name, action);
                     } else if (action.action_type === 'zoom') {
-                        var zoomOption = {
-                            series: [{
-                                center: action.center,
-                                zoom: action.zoom_level
-                            }]
-                        };
-                        myChart.setOption(zoomOption);
-                        currentZoom = action.zoom_level;
+                        // ECharts maps don't natively tween 'zoom' via setOption without jumping.
+                        // We animate it manually using requestAnimationFrame for a buttery smooth glide.
+                        var startZoom = currentZoom || 1.0;
+                        var targetZoom = action.zoom_level;
+                        var opt = myChart.getOption();
+                        var startCenter = (opt && opt.series && opt.series[0] && opt.series[0].center) ? opt.series[0].center : [500, 500];
+                        var targetCenter = action.center;
+
+                        // If target_bbox is provided, dynamically calculate targetZoom
+                        if (action.target_bbox) {
+                            var bboxMinX = action.target_bbox[0];
+                            var bboxMinY = action.target_bbox[1];
+                            var bboxMaxX = action.target_bbox[2];
+                            var bboxMaxY = action.target_bbox[3];
+                            var bboxWidth = bboxMaxX - bboxMinX;
+                            var bboxHeight = bboxMaxY - bboxMinY;
+
+                            var cw = myChart.getWidth();
+                            var ch = myChart.getHeight();
+
+                            // ECharts map series layout logic: The map is scaled to fit the container.
+                            // The initial zoom factor (currentZ = 1.0) maps the `boundingCoords` or full viewBox to the viewport.
+                            // ECharts handles the viewport aspect ratio fit. We only need the ratio of the whole canvas area to our shape area.
+                            // The easiest way is to use the coordinate system bounding rect.
+                            var geoModel = myChart.getModel().getSeriesByIndex(0);
+                            if (geoModel && geoModel.coordinateSystem && geoModel.coordinateSystem.getBoundingRect) {
+                                var rect = geoModel.coordinateSystem.getBoundingRect();
+                                var fullWidth = rect.width;
+                                var fullHeight = rect.height;
+
+                                var scaleX = fullWidth / bboxWidth;
+                                var scaleY = fullHeight / bboxHeight;
+
+
+                                var sizeRatioStr = action.zoom_to_size || "90%";
+                                var sizeRatio = 0.9;
+                                if (sizeRatioStr === "auto") {
+                                    sizeRatio = 0.9;
+                                } else {
+                                    sizeRatio = parseFloat(sizeRatioStr.replace('%', '')) / 100.0;
+                                }
+
+
+                                // The new zoom level is the ratio of full viewBox to the target bbox, multiplied by the screen padding ratio.
+                                targetZoom = Math.min(scaleX, scaleY) * sizeRatio;
+
+                                // In some cases, we need to respect the viewport's aspect ratio relative to the shape's.
+                                // If the screen is very tall, and the shape is very wide, the limiting factor changes.
+                                var cw = myChart.getWidth();
+                                var ch = myChart.getHeight();
+                                var screenAspect = cw / ch;
+                                var shapeAspect = bboxWidth / bboxHeight;
+                                var fullAspect = fullWidth / fullHeight;
+
+                                // ECharts fits `fullRect` into `viewport`.
+                                // Let's compute how many pixels the shape would take at zoom=1.
+                                var fitScale = Math.min(cw / fullWidth, ch / fullHeight);
+                                var shapeWAtZ1 = bboxWidth * fitScale;
+                                var shapeHAtZ1 = bboxHeight * fitScale;
+
+                                var screenScaleX = cw / shapeWAtZ1;
+                                var screenScaleY = ch / shapeHAtZ1;
+
+                                targetZoom = Math.min(screenScaleX, screenScaleY) * sizeRatio;
+                            }
+                        }
+
+                        var startTime = performance.now();
+                        var duration = action.duration_ms || 500;
+
+                        function animateZoom(time) {
+                            var progress = Math.min((time - startTime) / duration, 1.0);
+                            // Ease in-out cubic
+                            var easeProgress = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                            var currentZ = startZoom + (targetZoom - startZoom) * easeProgress;
+                            var currentCX = startCenter[0] + (targetCenter[0] - startCenter[0]) * easeProgress;
+                            var currentCY = startCenter[1] + (targetCenter[1] - startCenter[1]) * easeProgress;
+
+                            myChart.setOption({ series: [{ center: [currentCX, currentCY], zoom: currentZ }] });
+
+                            if (progress < 1.0) {
+                                requestAnimationFrame(animateZoom);
+                            } else {
+                                currentZoom = targetZoom;
+                            }
+                        }
+                        requestAnimationFrame(animateZoom);
                     } else if (action.action_type === 'confetti') {
                         if (typeof confetti === 'function') {
                             // Convert map coordinates to window coordinates for confetti origin
@@ -3941,8 +4811,59 @@
                                 zIndex: 10000
                             });
                         }
+                    } else if (action.action_type === 'toggle_image') {
+                        var targetId = action.target_id || name;
+                        var urls = action.image_urls;
+                        if (urls && urls.length > 0) {
+                            if (window.sivoToggleImageState[targetId] === undefined) {
+                                window.sivoToggleImageState[targetId] = 0;
+                            } else {
+                                window.sivoToggleImageState[targetId] = (window.sivoToggleImageState[targetId] + 1) % urls.length;
+                            }
+                            var nextUrl = urls[window.sivoToggleImageState[targetId]];
+
+                            var currentOption = myChart.getOption();
+                            var seriesData = currentOption.series[0].data;
+                            var updated = false;
+
+                            for (var i = 0; i < seriesData.length; i++) {
+                                if (seriesData[i].name === targetId) {
+                                    if (!seriesData[i].itemStyle) {
+                                        seriesData[i].itemStyle = {};
+                                    }
+                                    // Use Image object for reliability
+                                    var img = new Image();
+                                    img.src = nextUrl;
+                                    seriesData[i].itemStyle.areaColor = {
+                                        image: img,
+                                        repeat: 'repeat'
+                                    };
+                                    updated = true;
+                                    break;
+                                }
+                            }
+
+                            // If target element wasn't in ECharts data array yet, add it
+                            if (!updated) {
+                                var img = new Image();
+                                img.src = nextUrl;
+                                seriesData.push({
+                                    name: targetId,
+                                    itemStyle: {
+                                        areaColor: {
+                                            image: img,
+                                            repeat: 'repeat'
+                                        }
+                                    }
+                                });
+                                updated = true;
+                            }
+
+                            if (updated) {
+                                myChart.setOption({ series: [{ data: seriesData }] });
+                            }
+                        }
                     } else if (action.action_type === 'callback') {
-                        console.log('Triggering callback:', action.event_name, action.payload);
                         // Post message to parent window (e.g. Streamlit iframe wrapper)
                         window.parent.postMessage({
                             type: 'sivo_click',
@@ -3969,10 +4890,31 @@
             }
 
 
-            function applyPanelPosition(position, initCharts) {
-                if (window.sivoDisablePanel) return;
+            function applyPanelPosition(position, initCharts, elementCss) {
+                if (window.sivoDisablePanel || position === 'none') {
+                    // Close the panel instead if position is "none"
+                    // but don't prevent the background interactions (callbacks, DOM update)
+                    closePanel();
+                    return;
+                }
+
+                // Update dynamic CSS safely
+                var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
+                if (dynamicStyleEl) {
+                    var cssContent = '';
+                    // Basic sanitization: remove </style> or HTML closing tags to prevent breaking out of the style block
+                    function sanitizeCSS(cssStr) {
+                        return cssStr.replace(/<\/style>/gi, '').replace(/</g, '\\3c ').replace(/>/g, '\\3e ');
+                    }
+                    if (window.sivoGlobalPanelCSS) cssContent += sanitizeCSS(window.sivoGlobalPanelCSS) + '\n';
+                    if (elementCss) cssContent += sanitizeCSS(elementCss) + '\n';
+                    dynamicStyleEl.innerHTML = cssContent;
+                }
 
                 infoPanel.className = 'active'; // reset classes but keep active
+                infoPanel.style.animation = 'none'; // Clear any lingering animation states
+                infoPanel.offsetHeight; // Trigger reflow to restart animation if needed
+                infoPanel.style.animation = ''; // Re-enable CSS animations
                 var resizer = document.getElementById('sivo-resizer');
                 resizer.className = 'sivo-resizer active';
 
@@ -3989,6 +4931,10 @@
                     document.body.style.flexDirection = 'column-reverse';
                     infoPanel.classList.add('pos-top');
                     resizer.classList.add('resizer-vertical');
+                } else if (position === 'overlay') {
+                    document.body.style.flexDirection = 'row';
+                    infoPanel.classList.add('pos-overlay');
+                    resizer.classList.remove('active'); // No resizer in overlay mode
                 } else {
                     // default right
                     document.body.style.flexDirection = 'row';
@@ -4003,36 +4949,49 @@
                 infoPanel.style.height = '';
                 infoPanel.style.flexBasis = '';
 
-                if (isMobile) {
-                    // Mobile is forced to column layout (top/bottom).
-                    // Prefer panel_height if set, else fallback to panel_width for backwards compatibility.
+                if (position === 'overlay') {
+                    // Overlay gets explicit dimensions if specified, else CSS handles it (90%/90%)
+                    if (window.sivoPanelWidth) {
+                        infoPanel.style.width = window.sivoPanelWidth;
+                        infoPanel.style.setProperty('width', window.sivoPanelWidth, 'important');
+                    }
                     if (window.sivoPanelHeight) {
                         infoPanel.style.height = window.sivoPanelHeight;
-                    } else if (window.sivoPanelWidth) {
-                        infoPanel.style.height = window.sivoPanelWidth;
+                        infoPanel.style.setProperty('height', window.sivoPanelHeight, 'important');
                     }
+                    resizer.style.display = 'none';
                 } else {
-                    // Desktop
-                    if (position === 'left' || position === 'right') {
-                        if (window.sivoPanelWidth) {
-                            infoPanel.style.width = window.sivoPanelWidth;
-                            infoPanel.style.flexBasis = window.sivoPanelWidth;
-                        }
-                    } else {
-                        // Desktop Top/Bottom
+                    if (isMobile) {
+                        // Mobile is forced to column layout (top/bottom).
+                        // Prefer panel_height if set, else fallback to panel_width for backwards compatibility.
                         if (window.sivoPanelHeight) {
                             infoPanel.style.height = window.sivoPanelHeight;
                         } else if (window.sivoPanelWidth) {
-                            // Fallback logic
                             infoPanel.style.height = window.sivoPanelWidth;
                         }
+                    } else {
+                        // Desktop
+                        if (position === 'left' || position === 'right') {
+                            if (window.sivoPanelWidth) {
+                                infoPanel.style.width = window.sivoPanelWidth;
+                                infoPanel.style.flexBasis = window.sivoPanelWidth;
+                            }
+                        } else {
+                            // Desktop Top/Bottom
+                            if (window.sivoPanelHeight) {
+                                infoPanel.style.height = window.sivoPanelHeight;
+                            } else if (window.sivoPanelWidth) {
+                                // Fallback logic
+                                infoPanel.style.height = window.sivoPanelWidth;
+                            }
+                        }
                     }
-                }
 
-                if (window.sivoDisableResizer) {
-                    resizer.style.display = 'none';
-                } else {
-                    resizer.style.display = '';
+                    if (window.sivoDisableResizer) {
+                        resizer.style.display = 'none';
+                    } else {
+                        resizer.style.display = '';
+                    }
                 }
 
                 // Smoothly resize ECharts during CSS transition
@@ -4040,6 +4999,7 @@
                 function step(timestamp) {
                     if (!start) start = timestamp;
                     var progress = timestamp - start;
+                    updateChartLayoutSizes();
                     myChart.resize();
                     updateOverlaysPosition(); // Keep overlays aligned during transition
 
@@ -4076,7 +5036,6 @@
                                                 nestedChart.setOption(chartData.option);
                                             };
                                             img.onerror = function() {
-                                                console.warn("SIVO: Failed to load Word Cloud mask image:", imgUrl);
                                                 nestedChart.setOption(chartData.option);
                                             };
                                             img.src = imgUrl;
@@ -4149,12 +5108,18 @@
                     });
                 });
 
-                applyPanelPosition(panelPosition, true);
+                var mappingConfig = viewsData[currentViewId] && viewsData[currentViewId].mappings && viewsData[currentViewId].mappings[name];
+                var elementCss = mappingConfig ? mappingConfig.panel_css : null;
+
+                applyPanelPosition(panelPosition, true, elementCss);
                 window.sivoCurrentPanelElement = name;
             } else if (!hasInteraction && !elementActions) {
+                var mappingConfig = viewsData[currentViewId] && viewsData[currentViewId].mappings && viewsData[currentViewId].mappings[name];
+                var elementCss = mappingConfig ? mappingConfig.panel_css : null;
+
                 var emptySvg = `<svg class="sivo-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
                 infoContent.innerHTML = `<div class="sivo-empty-state">${emptySvg}<h3>${name}</h3><p>No additional information mapped for this region.</p></div>`;
-                applyPanelPosition(panelPosition, false);
+                applyPanelPosition(panelPosition, false, elementCss);
                 window.sivoCurrentPanelElement = name;
             } else {
                 closePanel();
@@ -4246,31 +5211,77 @@
             }
         });
 
+        // Presentation mode keyboard listener
+        document.addEventListener('keydown', function(e) {
+            if (!presentationOrder || presentationOrder.length === 0) return;
+            // Ignore if user is typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                if (currentPresentationIndex < presentationOrder.length - 1) {
+                    currentPresentationIndex++;
+                    var elementId = presentationOrder[currentPresentationIndex];
+                    var params = { componentType: 'series', name: elementId };
+                    myChart.trigger('click', params);
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                if (currentPresentationIndex > 0) {
+                    currentPresentationIndex--;
+                    var elementId = presentationOrder[currentPresentationIndex];
+                    var params = { componentType: 'series', name: elementId };
+                    myChart.trigger('click', params);
+                } else if (currentPresentationIndex === 0) {
+                     currentPresentationIndex = -1;
+                     closePanel();
+                }
+            }
+        });
+
         function closePanel() {
             window.sivoCurrentPanelElement = null;
             clearFadeUnselected();
 
             var infoPanel = document.getElementById('info-panel');
-            infoPanel.className = '';
-            infoPanel.classList.add('pos-right'); // reset to default
-            infoPanel.style.width = '';
-            infoPanel.style.height = '';
-            var resizer = document.getElementById('sivo-resizer');
-            if (resizer) resizer.className = 'sivo-resizer';
-            document.body.style.flexDirection = 'row';
 
-            // Smoothly resize ECharts during CSS transition
-            let start = null;
-            function step(timestamp) {
-                if (!start) start = timestamp;
-                var progress = timestamp - start;
-                myChart.resize();
-                updateOverlaysPosition(); // Keep overlays aligned during transition
-                if (progress < 350) {
-                    window.requestAnimationFrame(step);
-                }
+            // If we are closing the overlay, apply the closing animation class
+            if (infoPanel.classList.contains('pos-overlay')) {
+                infoPanel.classList.remove('active');
+                infoPanel.classList.add('closing');
+
+                // Wait for the animation to finish before resetting styles
+                setTimeout(finalizeClose, 300);
+            } else {
+                finalizeClose();
             }
-            window.requestAnimationFrame(step);
+
+            function finalizeClose() {
+                infoPanel.className = '';
+                infoPanel.classList.add('pos-right'); // reset to default
+                infoPanel.style.width = '';
+                infoPanel.style.height = '';
+                infoPanel.style.transform = '';
+                var resizer = document.getElementById('sivo-resizer');
+                if (resizer) resizer.className = 'sivo-resizer';
+                document.body.style.flexDirection = 'row';
+
+                // Clear dynamic css
+                var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
+                if (dynamicStyleEl) dynamicStyleEl.innerHTML = '';
+
+                // Smoothly resize ECharts during CSS transition
+                let start = null;
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    var progress = timestamp - start;
+                    updateChartLayoutSizes();
+                    myChart.resize();
+                    updateOverlaysPosition(); // Keep overlays aligned during transition
+                    if (progress < 350) {
+                        window.requestAnimationFrame(step);
+                    }
+                }
+                window.requestAnimationFrame(step);
+            }
         }
 
         // --- Resizer Logic ---
@@ -4723,7 +5734,7 @@
                     overlayObj.dom.style.width = bboxPixel.w + 'px';
                     overlayObj.dom.style.height = bboxPixel.h + 'px';
 
-                    // Center within the precise bounding box without transform translation hacks
+                    // Center within the precise bounding box without transform translation
                     overlayObj.dom.style.transform = 'none';
 
                     if (overlayObj.data.scale_with_zoom) {
@@ -4920,7 +5931,7 @@
                         var dummyAudio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
                         dummyAudio.play().then(() => {
                             dummyAudio.pause();
-                        }).catch(e => console.log("Dummy audio unlock skipped", e));
+                        }).catch(() => {});
 
                         enableBtn.innerText = 'Audio Enabled ✓';
                         enableBtn.style.background = '#10b981'; // Green
@@ -5200,12 +6211,50 @@ function tourNext() {
             if (!isMinimapEnabled) return;
             var option = myChart.getOption();
             if (!option || !option.series || option.series.length === 0) return;
+
             var zoom = option.series[0].zoom || 1;
+            var center = option.series[0].center; // [x, y] coordinates
+
             var viewport = document.getElementById('minimap-viewport');
-            var vpWidth = 150 / zoom;
-            var vpHeight = 150 / zoom;
-            var left = (150 - vpWidth) / 2;
-            var top = (150 - vpHeight) / 2;
+
+            var containerWidth = 150;
+            var containerHeight = 150;
+
+            // On mobile or smaller screens, check if minimap container is 80px instead of 150px
+            var minimapContainer = document.getElementById('minimap-container');
+            if (minimapContainer && window.getComputedStyle(minimapContainer).width === '80px') {
+                containerWidth = 80;
+                containerHeight = 80;
+            }
+
+            var vpWidth = containerWidth / zoom;
+            var vpHeight = containerHeight / zoom;
+
+            var cx = containerWidth / 2;
+            var cy = containerHeight / 2;
+
+            var actualViewId = (currentViewId === "compare_mode") ? "compare_left" : currentViewId;
+            var view = viewsData[actualViewId];
+
+            if (center && view && view.bounding_coords) {
+                var bc = view.bounding_coords;
+                var minX = bc[0][0];
+                var minY = bc[0][1];
+                var maxX = bc[1][0];
+                var maxY = bc[1][1];
+
+                var mapWidth = maxX - minX;
+                var mapHeight = maxY - minY;
+
+                if (mapWidth > 0 && mapHeight > 0) {
+                    cx = ((center[0] - minX) / mapWidth) * containerWidth;
+                    cy = ((center[1] - minY) / mapHeight) * containerHeight;
+                }
+            }
+
+            var left = cx - (vpWidth / 2);
+            var top = cy - (vpHeight / 2);
+
             viewport.style.width = vpWidth + 'px';
             viewport.style.height = vpHeight + 'px';
             viewport.style.left = left + 'px';
@@ -5300,106 +6349,268 @@ function tourNext() {
             var searchContainer = document.getElementById('sivo-search-container');
             var searchInput = document.getElementById('sivo-search-input');
             var searchResults = document.getElementById('sivo-search-results');
+            var geocoderContainer = document.getElementById('sivo-geocoder-container');
 
             if (!view.enable_search) {
                 searchContainer.style.display = 'none';
-                return;
-            }
+            } else {
+                searchContainer.style.display = 'block';
 
-            searchContainer.style.display = 'block';
+                // Build search index globally so the event listener doesn't trap old closure scope on re-render
+                window.sivoSearchIndex = [];
 
-            // Build search index globally so the event listener doesn't trap old closure scope on re-render
-            window.sivoSearchIndex = [];
-
-            // Helper to strip HTML tags for search display
-            function stripHtml(html) {
-                var tmp = document.createElement("DIV");
-                tmp.innerHTML = html;
-                return tmp.textContent || tmp.innerText || "";
-            }
-
-            echartsData.forEach(function(item) {
-                var rawTitle = item.tooltip || item.name;
-                // Strip HTML from title so we don't accidentally render images/blockquotes in the tiny search dropdown
-                var title = stripHtml(rawTitle);
-
-                var subtitle = item.name !== rawTitle ? item.name : '';
-                window.sivoSearchIndex.push({
-                    id: item.name,
-                    title: title,
-                    subtitle: subtitle,
-                    searchStr: (title + ' ' + subtitle).toLowerCase()
-                });
-            });
-
-            window.sivoRenderSearchResults = function(query) {
-                if (!query) {
-                    searchResults.style.display = 'none';
-                    return;
+                // Helper to strip HTML tags for search display
+                function stripHtml(html) {
+                    var tmp = document.createElement("DIV");
+                    tmp.innerHTML = html;
+                    return tmp.textContent || tmp.innerText || "";
                 }
 
-                var q = query.toLowerCase();
-                var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
+                echartsData.forEach(function(item) {
+                    var rawTitle = item.tooltip || item.name;
+                    // Strip HTML from title so we don't accidentally render images/blockquotes in the tiny search dropdown
+                    var title = stripHtml(rawTitle);
 
-                if (results.length === 0) {
-                    searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
-                    searchResults.style.display = 'block';
-                    return;
-                }
-
-                searchResults.innerHTML = '';
-                results.forEach(function(item) {
-                    var el = document.createElement('div');
-                    el.className = 'sivo-search-result-item';
-                    el.innerHTML = `<div class="sivo-search-result-title">${item.title}</div><div class="sivo-search-result-subtitle">${item.subtitle}</div>`;
-
-                    el.addEventListener('mousedown', function(e) {
-                        e.preventDefault(); // Prevent input blur
-                        window.sivoSelectSearchResult(item.id);
+                    var subtitle = item.name !== rawTitle ? item.name : '';
+                    window.sivoSearchIndex.push({
+                        id: item.name,
+                        title: title,
+                        subtitle: subtitle,
+                        searchStr: (title + ' ' + subtitle).toLowerCase()
                     });
-
-                    searchResults.appendChild(el);
                 });
-                searchResults.style.display = 'block';
-            }
 
-            window.sivoSelectSearchResult = function(elementId) {
-                searchInput.value = '';
-                searchResults.style.display = 'none';
-                searchInput.blur();
+                window.sivoRenderSearchResults = function(query) {
+                    if (!query) {
+                        searchResults.style.display = 'none';
+                        return;
+                    }
 
-                // Focus element
-                myChart.dispatchAction({ type: 'geoSelect', name: elementId });
+                    var q = query.toLowerCase();
+                    var results = window.sivoSearchIndex.filter(item => item.searchStr.includes(q)).slice(0, 10); // Limit to 10
 
-                // Force highlight by fading everything else
-                applyFadeUnselected(elementId, true);
+                    if (results.length === 0) {
+                        searchResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                        searchResults.style.display = 'block';
+                        return;
+                    }
 
-                // Check if it has a specific overlay bound center
-                var viewMeta = overlaysData[elementId];
-                if (viewMeta && viewMeta.coord) {
-                    myChart.setOption({ series: [{ center: viewMeta.coord, zoom: 3.0 }] });
-                } else {
-                    // Trigger click to center map if ECharts handles it, or trigger panel logic
-                    myChart.trigger('click', { componentType: 'series', name: elementId });
+                    searchResults.innerHTML = '';
+                    results.forEach(function(item) {
+                        var el = document.createElement('div');
+                        el.className = 'sivo-search-result-item';
 
-                    // Show tooltip
-                    myChart.dispatchAction({ type: 'showTip', name: elementId });
+                        // We sanitize the text variables only, or use DOMPurify if available
+                        var titleHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.title) : item.title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var subtitleHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.subtitle) : item.subtitle.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                        el.innerHTML = `<div class="sivo-search-result-title">${titleHtml}</div><div class="sivo-search-result-subtitle">${subtitleHtml}</div>`;
+
+                        el.addEventListener('mousedown', function(e) {
+                            e.preventDefault(); // Prevent input blur
+                            window.sivoSelectSearchResult(item.id);
+                        });
+
+                        searchResults.appendChild(el);
+                    });
+                    searchResults.style.display = 'block';
                 }
+
+                window.sivoSelectSearchResult = function(elementId) {
+                    searchInput.value = '';
+                    searchResults.style.display = 'none';
+                    searchInput.blur();
+
+                    // Focus element
+                    myChart.dispatchAction({ type: 'geoSelect', name: elementId });
+
+                    // Force highlight by fading everything else
+                    applyFadeUnselected(elementId, true);
+
+                    // Check if it has a specific overlay bound center
+                    var viewMeta = overlaysData[elementId];
+                    if (viewMeta && viewMeta.coord) {
+                        myChart.setOption({ series: [{ center: viewMeta.coord, zoom: 3.0 }] });
+                    } else {
+                        // Trigger click to center map if ECharts handles it, or trigger panel logic
+                        myChart.trigger('click', { componentType: 'series', name: elementId });
+
+                        // Show tooltip
+                        myChart.dispatchAction({ type: 'showTip', name: elementId });
+                    }
+                }
+
+                // Using oninput/onfocus/onblur directly to safely overwrite any old closure references
+                // without stacking up event listeners on re-render.
+                searchInput.oninput = function(e) {
+                    window.sivoRenderSearchResults(e.target.value);
+                };
+
+                searchInput.onfocus = function(e) {
+                    if (e.target.value) window.sivoRenderSearchResults(e.target.value);
+                };
+
+                searchInput.onblur = function(e) {
+                    setTimeout(() => searchResults.style.display = 'none', 100);
+                };
             }
 
-            // Using oninput/onfocus/onblur directly to safely overwrite any old closure references
-            // without stacking up event listeners on re-render.
-            searchInput.oninput = function(e) {
-                window.sivoRenderSearchResults(e.target.value);
-            };
+            if (view.enable_geocoder) {
+                geocoderContainer.style.display = 'block';
+                if (view.enable_search) {
+                    geocoderContainer.style.top = '70px';
+                } else {
+                    geocoderContainer.style.top = '20px';
+                }
 
-            searchInput.onfocus = function(e) {
-                if (e.target.value) window.sivoRenderSearchResults(e.target.value);
-            };
+                var geocodeInput = document.getElementById('sivo-geocoder-input');
+                var geocodeResults = document.getElementById('sivo-geocoder-results');
+                var geocodeSpinner = document.getElementById('sivo-geocoder-spinner');
+                var debounceTimer = null;
 
-            searchInput.onblur = function(e) {
-                setTimeout(() => searchResults.style.display = 'none', 100);
-            };
+                window.sivoSelectGeocodeResult = function(lat, lon, displayName) {
+                    geocodeInput.value = displayName;
+                    geocodeResults.style.display = 'none';
+                    geocodeInput.blur();
+
+                    var plotLat = lat;
+                    if (view && view.bounding_coords) {
+                        var minLat = view.bounding_coords[0][1];
+                        var maxLat = view.bounding_coords[1][1];
+                        plotLat = (maxLat + minLat) - lat; // INVERT LATITUDE
+                    }
+
+                    // Camera Zoom and Marker Placement
+                    var opt = myChart.getOption();
+                    var newOpt = {};
+
+                    // Update camera zoom for geo or series
+                    if (opt.geo && opt.geo.length > 0) {
+                        newOpt.geo = [{
+                            center: [lon, plotLat],
+                            zoom: 15
+                        }];
+                    } else if (opt.series && opt.series.length > 0) {
+                        newOpt.series = [{
+                            center: [lon, plotLat],
+                            zoom: 15
+                        }];
+                    }
+
+                    myChart.setOption(newOpt);
+
+                    // Pulsing Marker Placement
+                    // Using an HTML overlay ensures the marker sits on top of everything (z-index)
+                    // and perfectly tracks the coordinate dynamically without native geo scale distortions.
+                    var htmlPulse = `
+                    <div style="position: relative; width: 0; height: 0;">
+                        <!-- Pulsing Base -->
+                        <div style="position: absolute; left: -20px; top: -20px; width: 40px; height: 40px; background: rgba(239, 68, 68, 0.4); border-radius: 50%; animation: sivo-geocoder-pulse-anim 2s infinite ease-in-out; pointer-events: none;"></div>
+                        <!-- Static Pin Icon -->
+                        <div style="position: absolute; left: -12px; top: -24px; font-size: 24px; color: #ef4444; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5)); pointer-events: none;">📍</div>
+                    </div>
+                    <style>
+                        @keyframes sivo-geocoder-pulse-anim {
+                            0% { transform: scale(0.5); opacity: 1; }
+                            100% { transform: scale(2.0); opacity: 0; }
+                        }
+                    </style>
+                    `;
+
+                    overlaysData['sivo-geocoder-pulse-overlay'] = {
+                        html: htmlPulse,
+                        coord: [lon, plotLat],
+                        offset: [0, 0], // True center, the HTML shifts its own children
+                        scale_with_zoom: false
+                    };
+                    initOverlays();
+                    updateOverlaysPosition();
+                };
+
+                geocodeInput.oninput = function(e) {
+                    var query = e.target.value;
+                    if (debounceTimer) {
+                        clearTimeout(debounceTimer);
+                    }
+
+                    if (query.length < 3) {
+                        geocodeResults.style.display = 'none';
+                        geocodeSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    debounceTimer = setTimeout(function() {
+                        geocodeSpinner.style.display = 'block';
+
+                        var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`;
+                        if (view.geocode_provider === 'google' && view.geocode_api_key) {
+                            url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${view.geocode_api_key}`;
+                        } else if (view.geocode_provider === 'mapbox' && view.geocode_api_key) {
+                            url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${view.geocode_api_key}`;
+                        }
+
+                        fetch(url, {
+                            headers: {
+                                'Accept-Language': 'en-US,en;q=0.9'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            geocodeSpinner.style.display = 'none';
+
+                            if (!data || data.length === 0) {
+                                geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                                geocodeResults.style.display = 'block';
+                                return;
+                            }
+
+                            geocodeResults.innerHTML = '';
+                            var resultsArr = data;
+                            if (view.geocode_provider === 'google' && data.results) {
+                                resultsArr = data.results.map(r => ({
+                                    display_name: r.formatted_address,
+                                    lat: r.geometry.location.lat,
+                                    lon: r.geometry.location.lng
+                                }));
+                            } else if (view.geocode_provider === 'mapbox' && data.features) {
+                                resultsArr = data.features.map(f => ({
+                                    display_name: f.place_name,
+                                    lat: f.center[1],
+                                    lon: f.center[0]
+                                }));
+                            }
+
+                            resultsArr.forEach(function(item) {
+                                var el = document.createElement('div');
+                                el.className = 'sivo-search-result-item';
+                                var nameHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.display_name) : item.display_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                                el.innerHTML = `<div class="sivo-search-result-title">${nameHtml}</div>`;
+
+                                el.addEventListener('mousedown', function(e) {
+                                    e.preventDefault();
+                                    window.sivoSelectGeocodeResult(parseFloat(item.lat), parseFloat(item.lon), item.display_name);
+                                });
+
+                                geocodeResults.appendChild(el);
+                            });
+                            geocodeResults.style.display = 'block';
+                        })
+                        .catch(error => {
+                            console.error('Error fetching geocode results:', error);
+                            geocodeSpinner.style.display = 'none';
+                            geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle" style="color: red;">Error fetching results</span></div>';
+                            geocodeResults.style.display = 'block';
+                        });
+                    }, 500);
+                };
+
+                geocodeInput.onblur = function(e) {
+                    setTimeout(() => geocodeResults.style.display = 'none', 200);
+                };
+
+            } else {
+                geocoderContainer.style.display = 'none';
+            }
         }
 
         function initWatermark(view) {
@@ -5469,7 +6680,7 @@ function tourNext() {
                     title: view.title || 'Interactive Infographic',
                     text: view.subtitle || 'Check out this interactive graphic',
                     url: window.location.href,
-                }).catch((error) => console.log('Error sharing', error));
+                }).catch(() => {});
             }
         }
 
@@ -5763,8 +6974,37 @@ function tourNext() {
             updateMinimapViewport();
         });
 
+
+        function updateChartLayoutSizes() {
+            var actualViewId = (currentViewId === "compare_mode") ? "compare_left" : currentViewId;
+            var view = viewsData[actualViewId];
+            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) return;
+
+            var newSize = calculateLayoutSize(view, chartDom);
+            var opt = { series: [{ layoutSize: newSize }] };
+            var currentOpt = myChart.getOption();
+
+            if (currentOpt && currentOpt.geo && currentOpt.geo.length > 0) {
+                opt.geo = [{ layoutSize: newSize }];
+            }
+
+            myChart.setOption(opt, false);
+
+            if (myChartCompareRight) {
+                var viewRight = viewsData["compare_right"] || view;
+                var newSizeRight = calculateLayoutSize(viewRight, document.getElementById('chart-container-compare-right'));
+                var optRight = { series: [{ layoutSize: newSizeRight }] };
+                var currentOptRight = myChartCompareRight.getOption();
+                if (currentOptRight && currentOptRight.geo && currentOptRight.geo.length > 0) {
+                    optRight.geo = [{ layoutSize: newSizeRight }];
+                }
+                myChartCompareRight.setOption(optRight, false);
+            }
+        }
+
         // Handle window resize
         window.addEventListener('resize', function() {
+            updateChartLayoutSizes();
             myChart.resize();
             if (myChartCompareRight) myChartCompareRight.resize();
             updateOverlaysPosition();
@@ -5872,8 +7112,8 @@ function tourNext() {
 
         function convertToLogical(x, y) {
             // Because ECharts doesn't provide a perfect public API to convert pixel to logical coordinate
-            // taking into account BOTH pan and zoom for the map series simply, we use a rough heuristic,
-            // or we store the raw mouse pixels and apply the ECharts transform manually.
+            // taking into account BOTH pan and zoom for the map series simply,
+            // we store the raw mouse pixels and apply the ECharts transform manually.
             // A more robust way is to just use ECharts convertFromPixel if geo is used, or store relative to canvas
             // For a simple annotation layer, we will just store raw pixels and apply the getOption().series[0].zoom manually on redraw.
 
@@ -6071,25 +7311,29 @@ function tourNext() {
 
         document.getElementById('chart-container').appendChild(backBtn); // Append to chart container so flex layout doesn't break it
 
-        backBtn.addEventListener('click', function() {
-            if (viewHistory.length > 0) {
-                var prevView = viewHistory.pop();
-                renderView(prevView, true);
-            }
-        });
-
-        // Watch history to toggle back button visibility
-        setInterval(function() {
+        function updateBackButton() {
             if (viewHistory.length > 0) {
                 backBtn.style.display = 'flex';
             } else {
                 backBtn.style.display = 'none';
             }
-        }, 100);
+        }
+
+        backBtn.addEventListener('click', function() {
+            if (viewHistory.length > 0) {
+                var prevView = viewHistory.pop();
+                renderView(prevView, true);
+                updateBackButton();
+            }
+        });
+
+        // Initialize back button visibility
+        updateBackButton();
 
     </script>
 
     <!-- Custom injected assets placeholder -->
+    <style id="sivo-panel-dynamic-css"></style>
     <style id="custom-css"></style>
     <script id="custom-js"></script>
 
@@ -6285,8 +7529,6 @@ function tourNext() {
             formData.forEach(function(value, key){
                 payload[key] = value;
             });
-
-            console.log('Form submitted:', payload);
             window.parent.postMessage({
                 type: 'sivo_click',
                 payload: {
