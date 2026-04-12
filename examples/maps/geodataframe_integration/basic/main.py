@@ -14,7 +14,6 @@ def main():
     print(f"Loaded {len(europe)} European countries.")
 
     # Convert the GeoDataFrame directly into a SIVO interactive map
-    # We use 'iso_a3' as the unique ID and 'name' as the display name
     # We use 'ISO_A3' as the unique ID and 'NAME' as the display name
     sivo_app = Sivo.from_geodataframe(
         gdf=europe,
@@ -58,14 +57,15 @@ def main():
                 tooltip=country_name,
                 html=tooltip_html,
                 color=color,
-                hover_color="#31a354"
+                hover_color="#31a354",
+                panel_position="right"
             )
         except ValueError:
             # Some entries might lack a valid ISO code in the dataset
             pass
 
     # Save to HTML
-    output_path = os.path.join(os.path.dirname(__file__), 'interactive_europe.html')
+    output_path = os.path.join(os.path.dirname(__file__), 'output.html')
     sivo_app.to_html(output_path)
     print(f"Successfully generated interactive HTML at: {output_path}")
 

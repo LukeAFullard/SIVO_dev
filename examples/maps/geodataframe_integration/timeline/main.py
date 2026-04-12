@@ -90,7 +90,8 @@ def main():
         sivo_app.map(
             element_id=country_id,
             tooltip=country_name,
-            html=f"<h3>{country_name}</h3><p>Appears in: {row['discovery_year']}</p>"
+            html=f"<h3>{country_name}</h3><p>Appears in: {row['discovery_year']}</p>",
+            panel_position="right"
         )
 
     # 2. Sidebar Animation (Nested Map):
@@ -209,7 +210,7 @@ def main():
         pass # In case GBR isn't in the dataset
 
     # Save to HTML
-    output_path = os.path.join(os.path.dirname(__file__), 'interactive_europe_timeline.html')
+    output_path = os.path.join(os.path.dirname(__file__), 'output.html')
     sivo_app.to_html(output_path)
     print(f"Successfully generated interactive HTML at: {output_path}")
 

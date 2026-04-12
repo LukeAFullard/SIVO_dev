@@ -122,7 +122,8 @@ def main():
         element_id="France",
         tooltip="France - Click to view standard Folium Map",
         social={"provider": "website", "url": "folium_france.html"},
-        color="#a6bddb" # Light blue to highlight interactivity
+        color="#a6bddb", # Light blue to highlight interactivity
+        panel_position="right"
     )
 
     # We map 'Germany' to open the folium timeline map in the sidebar
@@ -130,11 +131,12 @@ def main():
         element_id="Germany",
         tooltip="Germany - Click to view Folium Timeline Map",
         social={"provider": "website", "url": "folium_germany_timeline.html"},
-        color="#a6bddb"
+        color="#a6bddb",
+        panel_position="right"
     )
 
     # Save to HTML
-    output_path = os.path.join(os.path.dirname(__file__), 'interactive_europe_with_folium.html')
+    output_path = os.path.join(os.path.dirname(__file__), 'output.html')
     sivo_app.to_html(output_path)
     print(f"Successfully generated main interactive HTML at: {output_path}")
 
