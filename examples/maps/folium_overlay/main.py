@@ -1,11 +1,12 @@
 import os
 import folium
-import base64
 from sivo import Sivo
 
 def create_example():
     # 1. Load the SVG template
     template_path = os.path.join(os.path.dirname(__file__), "template.svg")
+    # Initialize the SIVO app with the template
+    # We do not need a panel for this example, so we leave default_panel_position="none"
     app = Sivo.from_svg(template_path)
 
     # 2. Create an interactive Folium Map
@@ -35,7 +36,7 @@ def create_example():
     )
 
     # 6. Export the bundled SIVO application
-    output_html = os.path.join(os.path.dirname(__file__), "folium_example.html")
+    output_html = os.path.join(os.path.dirname(__file__), "output.html")
     app.to_html(output_html)
     print(f"Generated {output_html}")
 
