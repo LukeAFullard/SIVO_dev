@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../src')))
 
 from sivo import Sivo
 
@@ -90,7 +90,7 @@ def main():
 
     sivo_app = Sivo.from_string(
         svg_content, title="Global Trade Economy", panel_width="450px", disable_zoom_controls=True,
-        bounding_coords=[[0, 1414], [1000, 0]]
+        bounding_coords=[[0, 1414], [1000, 0]], default_panel_position="right"
     )
 
     # Interactions
