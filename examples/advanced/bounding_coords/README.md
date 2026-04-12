@@ -1,50 +1,38 @@
-# Bounding Coords Example
+# Bounding Coordinates Example
 
-This example demonstrates how to use the `bounding_coords` parameter in `Sivo.from_svg` to map real-world geographical coordinates (longitude and latitude) directly onto an SVG map. It correctly scales a set of proportional symbol markers based on provided data points.
+This example demonstrates how to correctly map real-world geographic coordinates onto a native SVG using the `bounding_coords` parameter in SIVO.
 
-## What is tested/shown
-- **Dynamic ECharts `geo` Object Construction:** Verifies that SIVO properly constructs a background ECharts `geo` object by providing `boundingCoords` to it when dynamic map layers (e.g., proportional symbols/scatter plots) are applied. This ensures markers are placed in the correct locations on the map geometry, rather than huddling in the top-left corner (pixel space).
-- **Y-Axis Inversion:** Demonstrates the formula to invert geographical latitude (which counts upwards from the equator) into SVG pixel coordinates (which count downwards from the top-left corner).
-- **Default Panel Position:** Showcases using `default_panel_position="right"` to correctly display dynamically mapped HTML content in a side panel.
+## What This Tests
+1. **Accurate Geographic Vector SVG**: Instead of a dummy background, this example uses mathematically accurate `<path>` polygons derived from US Census Shapefiles, which have been scaled to match an SVG `viewBox`.
+2. **Proper Bounding Coords**: The `bounding_coords` align perfectly to the geographic `[minLng, minLat]` and `[maxLng, maxLat]` bounding box, ensuring ECharts dynamically plots symbols at the correct mathematical positions.
+3. **SVG Y-Axis Inversion**: Standard geographic map coordinates map latitude upward, whereas SVG pixels increase downward. This script dynamically inverts the latitude of each data point prior to plotting so it accurately aligns with the top-to-bottom SVG drawing without mutating the global ECharts mapping matrix.
 
-## The Y-Axis Inversion Logic
-Since standard map coordinates have a Y-axis pointing up (latitude) while SVG pixels point down, mapping raw geographic coordinates onto an SVG directly would cause them to render upside-down. To combat this, the script applies an inversion algorithm to the mapped points before they are rendered:
+## Implementation Details
+
+### Bounding Coords Parameter
+When calling `Sivo.from_svg()`, `bounding_coords` must strictly be the bounds of the geographic map (not arbitrary values).
 
 ```python
-mapped_data = {}
-for city, props in data.items():
-    # Correct the SVG Y-Axis Inversion
-    # Formula: (maxLat + minLat) - actual_lat
-    inverted_lat = (50.0 + 25.0) - props["coord"][1]
-    mapped_data[city] = {
-        "value": props["value"],
-        "coord": [props["coord"][0], inverted_lat],
-        "color": props["color"]
-    }
-
-sivo_app.apply_proportional_symbols(
-    mapped_data,
-    min_size=10,
-    max_size=40,
-    is_pulse=True
+sivo_app = Sivo.from_svg(
+    "map.svg",
+    bounding_coords=[
+        [-124.7258, 24.4981],  # Bottom Left [minLng, minLat]
+        [-66.9499, 49.3844]    # Top Right [maxLng, maxLat]
+    ]
 )
 ```
 
-The original, un-inverted coordinates are maintained for the tooltip displays:
+### Inverting Y-Axis Points
+Because ECharts applies a strict linear map for projections when `bounding_coords` is specified, it assumes a Cartesian plane where Y goes UP. But the SVG `<path>` elements have Y pointing DOWN.
 
 ```python
-sivo_app.map(
-    element_id=city,
-    tooltip=city,
-    html=f"<h3>{city}</h3><p>Population Index: {props['value']}</p><p>Coordinates: {props['coord'][1]}, {props['coord'][0]}</p>"
-)
+# Formula: (maxLat + minLat) - actual_lat
+inverted_lat = (49.3844 + 24.4981) - props["coord"][1]
+mapped_data[city] = {
+    "value": props["value"],
+    "coord": [props["coord"][0], inverted_lat]
+}
 ```
 
-## Running the Example
-To test this functionality, build the application bundle by running:
-
-```bash
-PYTHONPATH=src python3 examples/advanced/bounding_coords/main.py
-```
-
-This compiles the interactive map to `output.html`. Open the generated `output.html` in a browser to see the proportional symbols scattered accurately over the USA map, with correct hover tooltips and a right-aligned info panel appearing on click.
+### Proper Map Geometry Names
+In `map.svg`, background elements (`<rect>`) must **not** have a `name` attribute so ECharts ignores them when looking for region geometry to cast scatter plots onto. The actual map paths must have a `name` (e.g., `<path name="usa_mainland" ...>`).

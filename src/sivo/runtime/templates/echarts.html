@@ -2061,7 +2061,7 @@
                 if (!option.geo) {
                     option.geo = {
                         map: mapName,
-                        boundingCoords: view.bounding_coords || undefined,
+                        boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                         roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
@@ -2069,8 +2069,8 @@
                         animationDurationUpdate: 0,
                         label: { show: false },
                         itemStyle: {
-                            color: 'transparent',
-                            borderColor: 'transparent'
+                            color: renderMode === 'svg' ? 'transparent' : undefined,
+                            borderColor: renderMode === 'svg' ? 'transparent' : undefined
                         },
                         emphasis: {
                             disabled: true,
@@ -2206,12 +2206,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
-                            boundingCoords: view.bounding_coords || undefined,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
@@ -2277,12 +2277,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
-                            boundingCoords: view.bounding_coords || undefined,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
@@ -2417,12 +2417,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
-                            boundingCoords: view.bounding_coords || undefined,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
@@ -2588,12 +2588,12 @@
                     if (!option.geo) {
                         option.geo = {
                             map: mapName,
-                            boundingCoords: view.bounding_coords || undefined,
+                            boundingCoords: view.bounding_coords || undefined,  // Explicitly injected per user request
                             roam: view.lock_canvas ? false : true,
                         layoutCenter: view.layout_size ? ["50%", "50%"] : undefined,
                         layoutSize: view.layout_size ? calculateLayoutSize(view, mapName === "compare_right" ? document.getElementById('chart-container-compare-right') : chartDom) : undefined,
                             zoom: view.starting_zoom || 1.0,
-                            itemStyle: { color: 'transparent', borderColor: 'transparent' },
+                            itemStyle: renderMode === 'svg' ? { color: 'transparent', borderColor: 'transparent' } : undefined,
                             zlevel: 0
                         };
                         option.series[0].geoIndex = 0;
