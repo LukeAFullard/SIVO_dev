@@ -105,7 +105,7 @@ def main():
 </svg>"""
 
     # 2. Save the SVG file
-    svg_path = "examples/64_modern_wood_burner/modern_wood_burner.svg"
+    svg_path = os.path.join(os.path.dirname(__file__), 'modern_wood_burner.svg')
     with open(svg_path, "w") as f:
         f.write(svg_content)
 
@@ -114,43 +114,46 @@ def main():
         svg_path,
         disable_zoom_controls=True,
         title="Modern Wood-Burner",
-        subtitle="Clean burning example"
+        subtitle="Clean burning example",
+        default_panel_position="overlay"
     )
 
     # 4. Map the dry woodpile to an interactive tooltip
     app.map(
         "dry_woodpile_hitbox",
-        tooltip="Dry Woodpile",
-        markdown="""
-### Dry Firewood
-This wood has been properly seasoned and dried (moisture content below 20%).
-
-Benefits of dry wood:
-* **Clean Burn**: Produces very little smoke.
-* **High Efficiency**: Generates more heat since energy isn't wasted boiling off water.
-* **Less Creosote**: Prevents dangerous buildup in the chimney.
+        html="""
+<h3>Dry Firewood</h3>
+<p>This wood has been properly seasoned and dried (moisture content below 20%).</p>
+<p>Benefits of dry wood:</p>
+<ul>
+    <li><strong>Clean Burn</strong>: Produces very little smoke.</li>
+    <li><strong>High Efficiency</strong>: Generates more heat since energy isn't wasted boiling off water.</li>
+    <li><strong>Less Creosote</strong>: Prevents dangerous buildup in the chimney.</li>
+</ul>
         """,
         hover_color="rgba(46, 204, 113, 0.3)", # Light green highlight on hover
-        color="transparent" # Keep the hitbox invisible by default
+        color="transparent", # Keep the hitbox invisible by default
+        panel_position="overlay"
     )
 
     # Map the stove glass for information
     app.map(
         "stove_glass",
-        tooltip="Modern Wood-Burner",
-        markdown="""
-### Modern Wood-Burner
-This is a modern, highly efficient wood-burner.
-
-* **Clean Air Approved**: Meets modern emission standards.
-* **Secondary Combustion**: Re-burns exhaust gases to maximize heat and minimize smoke.
+        html="""
+<h3>Modern Wood-Burner</h3>
+<p>This is a modern, highly efficient wood-burner.</p>
+<ul>
+    <li><strong>Clean Air Approved</strong>: Meets modern emission standards.</li>
+    <li><strong>Secondary Combustion</strong>: Re-burns exhaust gases to maximize heat and minimize smoke.</li>
+</ul>
         """,
         hover_color="rgba(255, 255, 255, 0.2)",
-        color="transparent" # Keep the hitbox invisible by default
+        color="transparent", # Keep the hitbox invisible by default
+        panel_position="overlay"
     )
 
     # 5. Save the interactive HTML
-    html_path = "examples/64_modern_wood_burner/index.html"
+    html_path = os.path.join(os.path.dirname(__file__), 'index.html')
     with open(html_path, "w") as f:
         f.write(app.to_html())
 
