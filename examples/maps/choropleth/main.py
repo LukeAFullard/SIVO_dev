@@ -4,7 +4,7 @@ from sivo import Sivo
 def main():
     svg_path = os.path.join(os.path.dirname(__file__), "sample.svg")
 
-    sivo_app = Sivo.from_svg(svg_path)
+    sivo_app = Sivo.from_svg(svg_path, default_panel_position="right")
 
     # 1. Provide numeric data mapped to elements
     # Simulate data on features
@@ -24,11 +24,11 @@ def main():
         show_legend=True     # Render a UI legend automatically
     )
 
-    # 3. Add tooltips for context
+    # 3. Add html panels for context
     for el, val in data.items():
         sivo_app.map(
             element_id=el,
-            tooltip=f"{el.capitalize()}: {val}",
+            html=f"<h3>{el.capitalize()}</h3><p>Value: {val}</p>",
             glow=True
         )
 
