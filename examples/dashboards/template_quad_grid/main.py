@@ -2,9 +2,9 @@
 Quad Grid Layout Example
 ========================
 
-This example demonstrates how to use the `quad_grid.html` template.
-The template provides a simple 2x2 grid where each card is forced to have
-a square aspect ratio, perfect for showing 4 key visualizations or metrics.
+This example demonstrates how to use the `SivoDashboard` with a CSS grid layout
+to create a 2x2 grid. Each card is positioned inside a responsive grid area,
+perfect for showing 4 key visualizations or metrics.
 """
 
 from sivo import Sivo
@@ -27,7 +27,13 @@ def main():
 
     # 1. Top Left - Map
     tl_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)
-    tl_map.map("quadrant_1", color="#3b82f6", hover_color="#2563eb", tooltip="Primary Region", callback_payload={"metric_val": "$1.2M"})
+    tl_map.map(
+        "quadrant_1",
+        color="#3b82f6",
+        hover_color="#2563eb",
+        html="<h3>Primary Region</h3><p>This is the main area of interest.</p>",
+        callback_payload={"metric_val": "$1.2M"}
+    )
     dashboard.add_sivo_block("sales_map", tl_map, grid_area="tl")
 
     # 2. Top Right - Metrics
@@ -40,7 +46,13 @@ def main():
 
     # 3. Bottom Left - Map
     bl_map = Sivo.from_template('dashboards/four_quadrants', layout_size="90%", lock_zoom_out=True)
-    bl_map.map("quadrant_4", color="#ef4444", hover_color="#dc2626", tooltip="Critical Region")
+    bl_map.map(
+        "quadrant_4",
+        color="#ef4444",
+        hover_color="#dc2626",
+        html="<h3>Critical Region</h3><p>This area requires immediate attention.</p>",
+        callback_payload={"metric_val": "$340K"}
+    )
     dashboard.add_sivo_block("issues_map", bl_map, grid_area="bl")
 
     # 4. Bottom Right - Details
@@ -51,8 +63,10 @@ def main():
         grid_area="br"
     )
 
-    print("Generating Quad Grid Dashboard to 'output.html'...")
-    dashboard.to_html("output.html")
+    import os
+    output_path = os.path.join(os.path.dirname(__file__), "output.html")
+    print(f"Generating Quad Grid Dashboard to '{output_path}'...")
+    dashboard.to_html(output_path)
     print("Dashboard generated successfully!")
 
 if __name__ == "__main__":
