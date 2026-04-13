@@ -39,6 +39,8 @@ UI Flow: Users can drag and drop standalone image assets directly onto the build
 Configuration: Translates to `sivo_app.add_image_overlay()` to position images over element centers, optionally setting `scale_with_zoom`.
 
 
+### Modular Architecture
+The application code should be split into manageable files separating HTML, CSS, JavaScript, and default Python templates as strictly as possible into the `src/` directory to simplify maintainability and enforce separation of concerns. The `build.py` script automatically stitches them together.
 ### Drill-Downs (Multi-Level Maps)
 *   **UI Flow:** The user uploads multiple SVGs (e.g., `Campus Map`, `Building A`). In the Visual Mapper, clicking "Building A" in the main map opens a "Click Action" menu.
 *   **Configuration:** The user selects "Drill-down to map" and picks `Building A` from the asset library. The UI generates `sivo_app.map("building_a", drill_to="building_a.svg")`.
