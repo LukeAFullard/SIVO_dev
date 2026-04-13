@@ -98,6 +98,9 @@
         const hiddenCtx = hiddenCanvas.getContext('2d', { willReadFrequently: true });
 
         const bgImage = new Image(); // Create image object manually, not tied to DOM
+        bgImage.onload = () => {
+            redraw();
+        };
 
         // --- SAM Worker Setup ---
         let samWorker = null;
