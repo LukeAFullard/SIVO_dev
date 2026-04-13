@@ -399,7 +399,14 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [ ] **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
 - [ ] Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 
-### Phase 7: AI Copilot Integration (Future Work)
+### Phase 7: PyPI Release & Initialization Cleanup
+Once the SIVO package is officially published to PyPI, the web app's installation procedure will be significantly simplified, as local wheel generation will no longer be necessary.
+
+- [ ] **Update `micropip` Installation:** Modify `index.html` to run `await micropip.install('sivo')` directly from PyPI instead of fetching the local `./sivo.whl`.
+- [ ] **Remove Local Build Steps:** Remove instructions related to building and copying the local `.whl` file from the README.
+- [ ] **Production Hosting:** Provide clear instructions for deploying the static files to platforms like GitHub Pages, Vercel, or Netlify.
+
+### Phase 8: AI Copilot Integration (Future Work)
 To further enhance the developer and no-code experience, an intelligent AI Copilot will be integrated natively into the browser. This ensures a 100% serverless, private AI assistant that can generate SIVO maps and code at $0 cloud compute cost.
 
 - [ ] **Train a SIVO Adapter (LoRA):** Parse the SIVO repository (examples, docs, tests) into instruction-response pairs to fine-tune a small, capable base model (e.g., Llama-3.2-1B, Qwen2.5-1.5B, or Phi-3-mini) using PEFT.

@@ -11,6 +11,8 @@ The app features a split-pane layout:
 
 Because this app relies on Python modules and Pyodide, it must be served over an HTTP server to avoid CORS/file protocol restrictions, and the SIVO Python package must be built into a `.whl` (Wheel) file so Pyodide can install it in the browser memory.
 
+*(Note: Once SIVO is published to PyPI, Steps 1 and 2 will no longer be necessary, and `micropip` will be able to install SIVO directly via `await micropip.install('sivo')`)*
+
 ### 1. Build the SIVO Wheel
 
 From the root of the repository, generate a Python wheel:
