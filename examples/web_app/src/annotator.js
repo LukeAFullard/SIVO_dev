@@ -140,14 +140,14 @@
                             quantized: true,
                             progress_callback: (data) => {
                                 if (data.status !== 'done') {
-                                    postMessage({ type: 'progress', message: `Downloading ${data.file || 'model'} (${Math.round(data.progress || 0)}%)` });
+                                    postMessage({ type: 'progress', message: \`Downloading \${data.file || 'model'} (\${Math.round(data.progress || 0)}%)\` });
                                 }
                             }
                         });
                         processor = await AutoProcessor.from_pretrained(model_id, {
                             progress_callback: (data) => {
                                 if (data.status !== 'done') {
-                                    postMessage({ type: 'progress', message: `Downloading ${data.file || 'processor'} (${Math.round(data.progress || 0)}%)` });
+                                    postMessage({ type: 'progress', message: \`Downloading \${data.file || 'processor'} (\${Math.round(data.progress || 0)}%)\` });
                                 }
                             }
                         });
