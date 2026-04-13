@@ -204,11 +204,21 @@ else:
                 <button id="tool-ellipse" class="secondary" style="flex: 1 1 45%;">Ellipse (Drag)</button>
                 <button id="tool-freehand" class="secondary" style="flex: 1 1 45%;">Freehand (Draw)</button>
                 <button id="tool-magic" class="secondary" style="flex: 1 1 45%;">Magic Wand (Click)</button>
-                <button id="tool-sam" class="secondary" style="flex: 1 1 45%; border-color: #4f46e5; color: #4f46e5;" title="Downloads AI Model (~300MB) on first use">Smart Seg (SAM)</button>
+                <button id="tool-sam" class="secondary" style="flex: 1 1 45%; border-color: #4f46e5; color: #4f46e5;" title="Downloads AI Model on first use">Smart Seg (SAM)</button>
             </div>
 
             <div id="sam-loading">
                 <div class="spinner"></div> <span id="sam-status-text">Loading AI Model...</span>
+            </div>
+
+
+            <div id="sam-options" style="display: none; margin-bottom: 15px;">
+                <label for="sam-model-select" style="font-size: 0.875rem; color: #4b5563;">AI Model:</label>
+                <select id="sam-model-select" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 4px;">
+                    <option value="Xenova/slimsam-50-uniform" selected>SlimSAM-50 (~5MB)</option>
+                    <option value="Xenova/slimsam-77-uniform">SlimSAM-77 (~8MB)</option>
+                    <option value="Xenova/sam-vit-base">SAM ViT-Base (~300MB)</option>
+                </select>
             </div>
 
             <div id="magic-wand-options" style="display: none; margin-bottom: 15px;">
@@ -290,6 +300,16 @@ else:
         const toolMagicBtn = document.getElementById('tool-magic');
         const toolSamBtn = document.getElementById('tool-sam');
         const magicOptionsDiv = document.getElementById('magic-wand-options');
+        const samOptionsDiv = document.getElementById('sam-options');
+        const samModelSelect = document.getElementById('sam-model-select');
+
+        samModelSelect.addEventListener('change', () => {
+            if (toolSamBtn.classList.contains('tool-active')) {
+                // If SAM is active, re-initialize worker immediately on change
+                initSamWorker();
+            }
+        });
+
         const samLoadingDiv = document.getElementById('sam-loading');
         const samStatusText = document.getElementById('sam-status-text');
         const magicToleranceInput = document.getElementById('magic-tolerance');
@@ -368,9 +388,20 @@ else:
         let samWorker = null;
         let isSamReady = false;
         let isImageEmbedded = false;
+        let currentModelId = null;
 
         function initSamWorker() {
-            if (samWorker) return;
+            const selectedModelId = samModelSelect.value;
+            if (samWorker && currentModelId === selectedModelId) return;
+
+            if (samWorker) {
+                samWorker.terminate();
+                samWorker = null;
+                isSamReady = false;
+                isImageEmbedded = false;
+            }
+
+            currentModelId = selectedModelId;
 
             samLoadingDiv.style.display = 'block';
             samStatusText.innerText = "Initializing AI Model...";
@@ -388,11 +419,23 @@ else:
                 let image_embeddings = null;
                 let original_image_size = null;
 
-                async function initModel() {
-                    const model_id = 'Xenova/slimsam-77-uniform';
+                async function initModel(model_id) {
                     try {
-                        model = await AutoModel.from_pretrained(model_id, { quantized: true });
-                        processor = await AutoProcessor.from_pretrained(model_id);
+                        model = await AutoModel.from_pretrained(model_id, {
+                            quantized: true,
+                            progress_callback: (data) => {
+                                if (data.status !== 'done') {
+                                    postMessage({ type: 'progress', message: `Downloading ${data.file || 'model'} (${Math.round(data.progress || 0)}%)` });
+                                }
+                            }
+                        });
+                        processor = await AutoProcessor.from_pretrained(model_id, {
+                            progress_callback: (data) => {
+                                if (data.status !== 'done') {
+                                    postMessage({ type: 'progress', message: `Downloading ${data.file || 'processor'} (${Math.round(data.progress || 0)}%)` });
+                                }
+                            }
+                        });
                         postMessage({ type: 'ready' });
                     } catch (e) {
                         postMessage({ type: 'error', message: e.toString() });
@@ -401,7 +444,7 @@ else:
 
                 self.onmessage = async (e) => {
                     if (e.data.type === 'init') {
-                        initModel();
+                        initModel(e.data.model_id);
                     }
                     else if (e.data.type === 'embed') {
                         if (!model || !processor) return;
@@ -490,7 +533,7 @@ else:
                 }
             };
 
-            samWorker.postMessage({ type: 'init' });
+            samWorker.postMessage({ type: 'init', model_id: currentModelId });
         }
 
         function embedImageForSam() {
@@ -646,6 +689,7 @@ else:
             toolMagicBtn.classList.remove('tool-active');
             toolSamBtn.classList.remove('tool-active');
             magicOptionsDiv.style.display = 'none';
+            samOptionsDiv.style.display = 'none';
 
             if (tool === 'select') {
                 toolSelectBtn.classList.add('tool-active');
@@ -668,6 +712,7 @@ else:
                 toolInstructions.innerHTML = "Click any solid colored area in the image. The tool will auto-detect the edges and generate a polygon.";
             } else if (tool === 'sam') {
                 toolSamBtn.classList.add('tool-active');
+                samOptionsDiv.style.display = 'block';
                 toolInstructions.innerHTML = "<strong>Left Click</strong> to include. <strong>Right Click</strong> to exclude. Press <strong>Enter</strong> to complete the shape. Press <strong>Esc</strong> to cancel.";
 
                 // Lazy-load SAM Worker when tool is clicked
