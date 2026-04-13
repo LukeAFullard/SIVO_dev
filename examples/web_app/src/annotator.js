@@ -533,22 +533,30 @@
                 return (dist / 4.41) <= tolerance;
             }
 
-            // Flood fill
-            while (stack.length > 0) {
-                const [x, y] = stack.pop();
-                const idx = y * w + x;
+            // Flood fill using 1D index array for stack to save memory
+            // mask states: 0 = unvisited, 1 = matched/filled, 2 = visited/unmatched
+            const stack1D = [startY * w + startX];
 
-                if (mask[idx]) continue; // Already filled
+            while (stack1D.length > 0) {
+                const idx = stack1D.pop();
+
+                if (mask[idx]) continue; // Already visited (1 or 2)
 
                 const pixelIdx = idx * 4;
-                if (!colorMatch(pixelIdx)) continue;
+                if (!colorMatch(pixelIdx)) {
+                    mask[idx] = 2; // Visited but no match
+                    continue;
+                }
 
-                mask[idx] = 1;
+                mask[idx] = 1; // Filled
 
-                if (x > 0) stack.push([x - 1, y]);
-                if (x < w - 1) stack.push([x + 1, y]);
-                if (y > 0) stack.push([x, y - 1]);
-                if (y < h - 1) stack.push([x, y + 1]);
+                const y = Math.floor(idx / w);
+                const x = idx % w;
+
+                if (x > 0 && !mask[idx - 1]) stack1D.push(idx - 1);
+                if (x < w - 1 && !mask[idx + 1]) stack1D.push(idx + 1);
+                if (y > 0 && !mask[idx - w]) stack1D.push(idx - w);
+                if (y < h - 1 && !mask[idx + w]) stack1D.push(idx + w);
             }
 
             // --- Marching Squares / Contour Tracing to extract Path ---
@@ -560,7 +568,7 @@
             let startX = -1, startY = -1;
             for (let y = 0; y < h; y++) {
                 for (let x = 0; x < w; x++) {
-                    if (mask[y * w + x]) {
+                    if (mask[y * w + x] === 1) { // Explicitly check for 1 (filled) not just truthy (could be 2)
                         startX = x; startY = y; break;
                     }
                 }
@@ -571,9 +579,9 @@
             const path = [];
             let cx = startX, cy = startY;
 
-            // Directions: 0=E, 1=NE, 2=N, 3=NW, 4=W, 5=SW, 6=S, 7=SE
+            // Directions: 0=E, 1=SE, 2=S, 3=SW, 4=W, 5=NW, 6=N, 7=NE (Clockwise)
             const dx = [1, 1, 0, -1, -1, -1, 0, 1];
-            const dy = [0, -1, -1, -1, 0, 1, 1, 1];
+            const dy = [0, 1, 1, 1, 0, -1, -1, -1];
             let dir = 7; // Initial search direction
 
             path.push({x: cx, y: cy});
@@ -590,7 +598,7 @@
                     const nx = cx + dx[ndir];
                     const ny = cy + dy[ndir];
 
-                    if (nx >= 0 && nx < w && ny >= 0 && ny < h && mask[ny * w + nx]) {
+                    if (nx >= 0 && nx < w && ny >= 0 && ny < h && mask[ny * w + nx] === 1) { // Explicitly check for 1
                         cx = nx; cy = ny;
                         path.push({x: cx, y: cy});
                         // Backtrack by 2 to find the next boundary pixel
@@ -1396,6 +1404,15 @@
         exportBtn.addEventListener('click', () => {
             const svgContent = generateSVG();
             svgOutputArea.value = svgContent;
+
+            // Check pyodide availability each time modal opens since it might have loaded
+            const pyodideInstance = getPyodideInstance();
+            if (pyodideInstance && pyodideInstance.FS) {
+                saveIdbfsBtn.style.display = 'inline-block';
+            } else {
+                saveIdbfsBtn.style.display = 'none';
+            }
+
             exportModal.style.display = 'flex';
         });
 
@@ -1444,7 +1461,7 @@
                     // bgImage.onload handles redraw and zoom resets
                 }
                 updateShapeList();
-                saveHistoryState();
+                saveState();
             } catch (e) {
                 console.error("Failed to load project state", e);
                 alert("Failed to load project file. Invalid format.");
@@ -1458,10 +1475,16 @@
                 const filename = prompt("Enter project filename to save to Pyodide FS:", "sivo_project.json");
                 if (!filename) return;
                 try {
-                    pyodideInst.FS.writeFile(filename, data);
+                    const mountDir = "/sivo_workspace";
+                    pyodideInst.FS.writeFile(`${mountDir}/${filename}`, data);
                     pyodideInst.FS.syncfs(false, function(err) {
                         if (err) alert("Sync error: " + err);
-                        else alert("Saved to Pyodide Virtual File System: " + filename);
+                        else {
+                            alert("Saved to Pyodide Virtual File System: " + filename);
+                            if (window.parent && window.parent.updateFileList) {
+                                window.parent.updateFileList();
+                            }
+                        }
                     });
                 } catch (err) {
                     alert("Error saving: " + err);
@@ -1483,18 +1506,59 @@
         loadProjectBtn.addEventListener('click', () => {
             const pyodideInst = getPyodideInstance();
             if (pyodideInst && pyodideInst.FS) {
-                const filename = prompt("Enter project filename to load from Pyodide FS:", "sivo_project.json");
-                if (!filename) return;
+                const mountDir = "/sivo_workspace";
                 try {
-                    const data = pyodideInst.FS.readFile(filename, { encoding: 'utf8' });
-                    loadProjectState(data);
+                    const files = pyodideInst.FS.readdir(mountDir).filter(f => f !== '.' && f !== '..');
+                    if (files.length === 0) {
+                        alert("No files found in Pyodide FS.");
+                        return;
+                    }
+
+                    const loadModal = document.getElementById('load-modal');
+                    const fileListEl = document.getElementById('load-file-list');
+                    fileListEl.innerHTML = '';
+
+                    files.forEach(f => {
+                        const li = document.createElement('li');
+                        li.style.cursor = 'pointer';
+                        li.style.padding = '8px';
+                        li.style.borderBottom = '1px solid #e5e7eb';
+                        li.style.wordBreak = 'break-all';
+                        li.innerText = `📄 ${f}`;
+                        li.addEventListener('click', () => {
+                            try {
+                                const data = pyodideInst.FS.readFile(`${mountDir}/${f}`, { encoding: 'utf8' });
+                                loadProjectState(data);
+                                loadModal.style.display = 'none';
+                            } catch (err) {
+                                alert(`Error loading ${f}: ` + err);
+                            }
+                        });
+                        li.addEventListener('mouseenter', () => {
+                            li.style.backgroundColor = '#f3f4f6';
+                        });
+                        li.addEventListener('mouseleave', () => {
+                            li.style.backgroundColor = 'transparent';
+                        });
+                        fileListEl.appendChild(li);
+                    });
+
+                    loadModal.style.display = 'flex';
                 } catch (err) {
-                    alert("Error loading file (does it exist?): " + err);
+                    alert("Error reading directory: " + err);
                 }
             } else {
                 loadProjectFile.click();
             }
         });
+
+        const loadModal = document.getElementById('load-modal');
+        const closeLoadModalBtn = document.getElementById('close-load-modal');
+        if (closeLoadModalBtn) {
+            closeLoadModalBtn.addEventListener('click', () => {
+                loadModal.style.display = 'none';
+            });
+        }
 
         loadProjectFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -1515,35 +1579,38 @@
             return null;
         }
 
-        const pyodideInstance = getPyodideInstance();
-        if (pyodideInstance && pyodideInstance.FS) {
-            saveIdbfsBtn.style.display = 'inline-block';
-            saveIdbfsBtn.addEventListener('click', async () => {
-                const svgContent = svgOutputArea.value;
-                const filename = saveFilenameInput.value || 'sivo_template.svg';
+        saveIdbfsBtn.addEventListener('click', async () => {
+            const pyodideInstance = getPyodideInstance();
+            if (!pyodideInstance || !pyodideInstance.FS) return;
 
-                try {
-                    // Write to the virtual file system
-                    pyodideInstance.FS.writeFile(filename, svgContent);
+            const svgContent = svgOutputArea.value;
+            const filename = saveFilenameInput.value || 'sivo_template.svg';
+            const mountDir = "/sivo_workspace";
 
-                    // Sync the virtual file system back to IndexedDB
-                    pyodideInstance.FS.syncfs(false, function (err) {
-                        if (err) {
-                            console.error('Error syncing IDBFS:', err);
-                            alert('Failed to sync to IndexedDB: ' + err);
-                        } else {
-                            const originalText = saveIdbfsBtn.innerText;
-                            saveIdbfsBtn.innerText = 'Saved!';
-                            saveIdbfsBtn.style.backgroundColor = '#059669';
-                            setTimeout(() => {
-                                saveIdbfsBtn.innerText = originalText;
-                                saveIdbfsBtn.style.backgroundColor = '#10b981';
-                            }, 2000);
+            try {
+                // Write to the virtual file system
+                pyodideInstance.FS.writeFile(`${mountDir}/${filename}`, svgContent);
+
+                // Sync the virtual file system back to IndexedDB
+                pyodideInstance.FS.syncfs(false, function (err) {
+                    if (err) {
+                        console.error('Error syncing IDBFS:', err);
+                        alert('Failed to sync to IndexedDB: ' + err);
+                    } else {
+                        const originalText = saveIdbfsBtn.innerText;
+                        saveIdbfsBtn.innerText = 'Saved!';
+                        saveIdbfsBtn.style.backgroundColor = '#059669';
+                        if (window.parent && window.parent.updateFileList) {
+                            window.parent.updateFileList();
                         }
-                    });
-                } catch (err) {
-                    console.error('Error writing to Pyodide FS:', err);
-                    alert('Failed to write to virtual file system: ' + err);
-                }
-            });
-        }
+                        setTimeout(() => {
+                            saveIdbfsBtn.innerText = originalText;
+                            saveIdbfsBtn.style.backgroundColor = '#10b981';
+                        }, 2000);
+                    }
+                });
+            } catch (err) {
+                console.error('Error writing to Pyodide FS:', err);
+                alert('Failed to write to virtual file system: ' + err);
+            }
+        });

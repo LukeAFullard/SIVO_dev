@@ -109,12 +109,62 @@
                 if (files.length === 0) {
                     fileListEl.innerHTML = '<div style="color: #94a3b8; font-style: italic;">No files uploaded.</div>';
                 } else {
-                    fileListEl.innerHTML = files.map(f => `<div style="padding: 2px 0; word-break: break-all;">📄 ${f}</div>`).join('');
+                    fileListEl.innerHTML = files.map(f => `
+                        <div style="padding: 4px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; word-break: break-all;">
+                            <span>📄 ${f}</span>
+                            <div style="display: flex; gap: 4px;">
+                                <button onclick="window.viewFile('${f}')" style="font-size: 10px; padding: 2px 4px; cursor: pointer;">View</button>
+                                <button onclick="window.deleteFile('${f}')" style="font-size: 10px; padding: 2px 4px; cursor: pointer; color: red;">Del</button>
+                            </div>
+                        </div>`).join('');
                 }
             } catch (err) {
                 console.error("Error reading directory", err);
             }
         }
+
+        window.viewFile = function(filename) {
+            try {
+                const mountDir = "/sivo_workspace";
+                // Read as generic binary
+                const data = pyodide.FS.readFile(`${mountDir}/${filename}`);
+
+                // Determine mime type based on extension
+                let mimeType = 'application/octet-stream';
+                if (filename.endsWith('.json')) mimeType = 'application/json';
+                else if (filename.endsWith('.svg')) mimeType = 'image/svg+xml';
+                else if (filename.endsWith('.csv')) mimeType = 'text/csv';
+                else if (filename.endsWith('.txt')) mimeType = 'text/plain';
+                else if (filename.endsWith('.png')) mimeType = 'image/png';
+                else if (filename.endsWith('.jpg') || filename.endsWith('.jpeg')) mimeType = 'image/jpeg';
+                else if (filename.endsWith('.html')) mimeType = 'text/html';
+
+                const blob = new Blob([data], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            } catch (err) {
+                alert("Error viewing file: " + err.message);
+            }
+        };
+
+        window.deleteFile = async function(filename) {
+            if (!confirm(`Are you sure you want to delete ${filename}?`)) return;
+            try {
+                const mountDir = "/sivo_workspace";
+                pyodide.FS.unlink(`${mountDir}/${filename}`);
+
+                // Sync back to IDBFS
+                await new Promise((resolve, reject) => {
+                    pyodide.FS.syncfs(false, function(err) {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                updateFileList();
+            } catch (err) {
+                alert("Error deleting file: " + err.message);
+            }
+        };
 
         async function saveBufferToFS(filename, buffer) {
             try {
