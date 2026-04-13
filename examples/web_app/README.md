@@ -7,6 +7,19 @@ The app features a split-pane layout:
 2. **Python IDE**: A basic code editor where users write standard SIVO Python code.
 3. **Interactive Output**: An `iframe` rendering the resulting `app.to_html()` string securely.
 
+## Architecture and Development
+
+The source code for the web app is located in `examples/web_app/src/`. To keep the codebase modular and maintainable, the HTML has been split into separate files (e.g., `index_base.html`, `annotator.html`). Any future UI enhancements should continue to use this modular approach.
+
+**Important:** Do not edit `examples/web_app/index.html` directly, as it is a generated file.
+
+To build the final `index.html` file after making changes in `src/`, run the build script:
+
+```bash
+cd examples/web_app
+python build.py
+```
+
 ## How to Run This Example
 
 Because this app relies on Python modules and Pyodide, it must be served over an HTTP server to avoid CORS/file protocol restrictions, and the SIVO Python package must be built into a `.whl` (Wheel) file so Pyodide can install it in the browser memory.
