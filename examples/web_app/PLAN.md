@@ -356,13 +356,13 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 ## 8. Step-by-Step Implementation Roadmap
 
 ### Phase 1: Core Storage & File Management (Weeks 1-2)
-- [ ] Extend the current `index.html` UI to include a robust File Manager Sidebar.
-- [ ] Implement the drag-and-drop / URL fetcher in JS that streams directly to Pyodide IDBFS.
-- [ ] Add memory cleanup routines to ensure large files are flushed from RAM after saving to IDBFS.
-- [ ] Implement CSV/XLSX to IDBFS parsing utility.
-- [ ] **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
-- [ ] **XXE Security Mitigation:** Ensure all uploaded XML/SVG parsing relies securely on `resolve_entities=False` and `no_network=True` to prevent injection attacks.
-- [ ] **JSON Serialization XSS Mitigation:** Integrate the safe escaping logic for injected JSON `views_data` to secure templates from cross-site scripting natively.
+- [x] Extend the current `index.html` UI to include a robust File Manager Sidebar.
+- [x] Implement the drag-and-drop / URL fetcher in JS that streams directly to Pyodide IDBFS.
+- [x] Add memory cleanup routines to ensure large files are flushed from RAM after saving to IDBFS.
+- [x] Implement CSV/XLSX to IDBFS parsing utility.
+- [x] **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
+- [x] **XXE Security Mitigation:** Ensure all uploaded XML/SVG parsing relies securely on `resolve_entities=False` and `no_network=True` to prevent injection attacks.
+- [x] **JSON Serialization XSS Mitigation:** Integrate the safe escaping logic for injected JSON `views_data` to secure templates from cross-site scripting natively.
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
 - [ ] Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
