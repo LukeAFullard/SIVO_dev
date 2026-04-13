@@ -52,6 +52,30 @@
 
     <!-- View 2: Python Workspace -->
     <div id="view-workspace" class="main-content">
+        <!-- Pane 1.5: File Manager Sidebar -->
+        <div class="panel" style="flex: 0.5; max-width: 250px; background: #f1f5f9;">
+            <div class="panel-header" style="background: #cbd5e1;">
+                File Manager
+            </div>
+            <div style="padding: 10px; font-size: 13px; display: flex; flex-direction: column; gap: 10px; height: 100%; overflow-y: auto;" id="file-manager-dropzone">
+                <p style="margin: 0; color: #475569;">/sivo_workspace</p>
+                <div id="file-list" style="flex: 1; border: 1px solid #cbd5e1; background: white; padding: 5px; border-radius: 4px; overflow-y: auto;">
+                    <div style="color: #94a3b8; font-style: italic;">Loading...</div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-weight: bold; color: #334155;">Upload File:</label>
+                    <input type="file" id="file-upload" style="font-size: 12px;" />
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-weight: bold; color: #334155;">Fetch from URL:</label>
+                    <input type="text" id="url-fetch-input" placeholder="https://..." style="padding: 4px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 2px;" />
+                    <button id="url-fetch-btn" class="action-btn" style="padding: 4px 8px; font-size: 12px;">Fetch URL</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Pane 2: Python Code -->
         <div class="panel" style="flex: 1;">
             <div class="panel-header">
@@ -1825,6 +1849,7 @@ else:
                         else resolve();
                     });
                 });
+                updateFileList();
 
                 statusEl.innerText = 'Installing SIVO...';
 
@@ -1868,6 +1893,116 @@ else:
             } finally {
                 runBtn.disabled = false;
                 runBtn.innerText = 'Run SIVO';
+            }
+        });
+
+        function updateFileList() {
+            if (!pyodide) return;
+            const mountDir = "/sivo_workspace";
+            const fileListEl = document.getElementById('file-list');
+            try {
+                const files = pyodide.FS.readdir(mountDir).filter(f => f !== '.' && f !== '..');
+                if (files.length === 0) {
+                    fileListEl.innerHTML = '<div style="color: #94a3b8; font-style: italic;">No files uploaded.</div>';
+                } else {
+                    fileListEl.innerHTML = files.map(f => `<div style="padding: 2px 0; word-break: break-all;">📄 ${f}</div>`).join('');
+                }
+            } catch (err) {
+                console.error("Error reading directory", err);
+            }
+        }
+
+        async function saveBufferToFS(filename, buffer) {
+            try {
+                const mountDir = "/sivo_workspace";
+
+                // If it's an XLSX, ideally we would convert to CSV here to save Python memory,
+                // but for now we'll write the raw file or handle it directly in Python if the user has openpyxl.
+                // We'll write the raw bytes to IDBFS
+                pyodide.FS.writeFile(`${mountDir}/${filename}`, new Uint8Array(buffer));
+
+                await new Promise((resolve, reject) => {
+                    pyodide.FS.syncfs(false, function(err) {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                updateFileList();
+            } catch (err) {
+                console.error("Error saving file to IDBFS:", err);
+                alert("Error saving file: " + err.message);
+            }
+        }
+
+        document.getElementById('file-upload').addEventListener('change', async (e) => {
+            if (!pyodide) return;
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (evt) => {
+                let buffer = evt.target.result;
+                await saveBufferToFS(file.name, buffer);
+                buffer = null; // Memory cleanup
+                e.target.value = ''; // Reset input
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        const dropzone = document.getElementById('file-manager-dropzone');
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = '#e2e8f0';
+        });
+        dropzone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = '';
+        });
+        dropzone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            dropzone.style.backgroundColor = '';
+            if (!pyodide) return;
+
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                const reader = new FileReader();
+                reader.onload = async (evt) => {
+                    let buffer = evt.target.result;
+                    await saveBufferToFS(file.name, buffer);
+                    buffer = null; // Memory cleanup
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
+
+        document.getElementById('url-fetch-btn').addEventListener('click', async () => {
+            if (!pyodide) return;
+            const urlInput = document.getElementById('url-fetch-input');
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            const btn = document.getElementById('url-fetch-btn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Fetching...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                let buffer = await response.arrayBuffer();
+
+                // Extract filename from URL or use a default
+                let filename = url.split('/').pop().split('?')[0] || 'downloaded_file';
+
+                await saveBufferToFS(filename, buffer);
+                buffer = null; // Memory cleanup
+                urlInput.value = '';
+            } catch (err) {
+                console.error("Error fetching URL:", err);
+                alert("Failed to fetch URL: " + err.message);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
             }
         });
 
