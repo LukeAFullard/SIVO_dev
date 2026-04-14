@@ -526,13 +526,13 @@ class Infographic:
             mapping.actions.append(HoverCallbackAction(event_name=hover_callback_event, payload=hover_callback_payload))
 
         if video:
-            mapping.actions.append(VideoAction(video_url=video))
+            mapping.actions.append(VideoAction(video_url=video, panel_position=panel_position or self.default_panel_position))
 
         if gallery:
-            mapping.actions.append(GalleryAction(images=gallery))
+            mapping.actions.append(GalleryAction(images=gallery, panel_position=panel_position or self.default_panel_position))
 
         if audio:
-            mapping.actions.append(AudioAction(audio_url=audio))
+            mapping.actions.append(AudioAction(audio_url=audio, panel_position=panel_position or self.default_panel_position))
 
         if markdown:
             mapping.actions.append(MarkdownAction(markdown_text=markdown, panel_position=panel_position or self.default_panel_position))

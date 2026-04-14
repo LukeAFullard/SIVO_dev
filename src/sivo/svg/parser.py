@@ -38,7 +38,7 @@ class SVGParser:
             except ValueError:
                 # E.g. when elem.tag is a Comment or PI (processing instruction)
                 continue
-            if tag_name in ['path', 'rect', 'circle', 'g', 'polygon', 'polyline', 'text', 'tspan']:
+            if tag_name in ['path', 'rect', 'circle', 'g', 'polygon', 'polyline', 'text', 'tspan', 'image']:
                 elem_id = elem.get('id')
                 if elem_id:
                     elem_name = elem.get('name')

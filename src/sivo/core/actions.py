@@ -62,17 +62,20 @@ class VideoAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
     action_type: Literal["video"] = "video"
     video_url: str = Field(description="Embed URL for the video (e.g., YouTube embed URL)")
+    panel_position: Optional[str] = Field(default=None, description="Position of the panel")
 
 
 class GalleryAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
     action_type: Literal["gallery"] = "gallery"
     images: list[str] = Field(description="List of image URLs to display in a lightbox gallery")
+    panel_position: Optional[str] = Field(default=None, description="Position of the panel")
 
 class AudioAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
     action_type: Literal["audio"] = "audio"
     audio_url: str = Field(description="URL of the audio file to play")
+    panel_position: Optional[str] = Field(default=None, description="Position of the panel")
 
 class MarkdownAction(BaseAction):
     model_config = ConfigDict(extra="forbid")

@@ -55,6 +55,8 @@
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             display: flex;
             height: 100vh;
+            /* Prevent ghost dragging universally on elements like images */
+            -webkit-user-drag: none;
         }
         #sivo-app-container {
             display: flex;
@@ -3545,7 +3547,26 @@
                 baseOpt.series[0].scaleLimit = { min: 1.0 };
             }
 
-            var mapOptions = { svg: view.svg_string };
+            let registeredSvgString = view.svg_string;
+            if (view.render_mode === 'svg') {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(registeredSvgString, "image/svg+xml");
+                const images = doc.querySelectorAll("image");
+                images.forEach(img => {
+                    const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    Array.from(img.attributes).forEach(attr => {
+                        if (attr.name !== "href" && attr.name !== "xlink:href" && attr.name !== "preserveAspectRatio") {
+                            rect.setAttribute(attr.name, attr.value);
+                        }
+                    });
+                    rect.setAttribute("fill", "transparent");
+                    rect.setAttribute("stroke", "transparent");
+                    img.replaceWith(rect);
+                });
+                registeredSvgString = new XMLSerializer().serializeToString(doc);
+            }
+
+            var mapOptions = { svg: registeredSvgString };
             if (view.bounding_coords) {
                 mapOptions.boundingCoords = view.bounding_coords;
             }

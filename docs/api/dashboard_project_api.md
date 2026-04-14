@@ -23,6 +23,7 @@ Initializes the dashboard.
 *   **`columns`** (`int`): The number of columns for the default grid layout.
 *   **`template`** (`str`): The name of the HTML layout template to use (e.g., `'default'`, `'sidebar_left'`, `'hero_top'`).
 *   **`background_image_url`** (`Optional[str]`): URL to a background image that will be automatically applied as a responsive, fixed background on the dashboard. It will also add a translucent backdrop-filter to the grid cards so the image is visible.
+*   **`theme`** (`str`): The theme of the dashboard. Defaults to `'light'`. Set to `'transparent'` to remove all card backgrounds, borders, and glassmorphism blurs.
 
 ### `add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None)`
 

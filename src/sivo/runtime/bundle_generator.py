@@ -173,14 +173,40 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             if theme.get('animation'):
                 data_item['animation_class'] = theme.get('animation')
 
+            is_image_node = False
+            for obj in view_obj.get("metadata", {}).get("objects", []):
+                if obj.get("id") == name and obj.get("tag") == "image":
+                    is_image_node = True
+                    break
+
             # Prevent double-drawing if native SVG features are used
             if view_obj.get("render_mode", "canvas") == "svg":
-                if theme.get('morph_to_path') or theme.get('filter') or theme.get('clip_path') or theme.get('mask') or theme.get('transform') or mapping_dict.get('draggable'):
+                # For elements configured to animate via CSS or Native SVG attributes, hide the ECharts layer representation.
+                # In addition, we explicitly hide `<image>` nodes mapped in ECharts because the native SVG layer already renders them,
+                # and keeping them visible here creates a "ghost" copy underneath the native node during CSS animations.
+                # However, we DO want the ECharts version to capture clicks, so we hide it via opacity: 0 instead of removing it.
+                if theme.get('morph_to_path') or theme.get('filter') or theme.get('clip_path') or theme.get('mask') or theme.get('transform') or mapping_dict.get('draggable') or is_image_node:
                     item_style['opacity'] = 0
+
+            if is_image_node:
+                # ECharts canvas renderer tends to draw a black bounding box fill or stroke for `<image>` nodes if not overridden,
+                # since it doesn't know how to render the `<image>` natively. We must ensure it's transparent,
+                # especially in canvas mode where opacity=0 wasn't set above.
+                if 'areaColor' not in item_style:
+                    item_style['areaColor'] = 'transparent'
+                if 'borderColor' not in item_style:
+                    item_style['borderColor'] = 'transparent'
+                if 'borderWidth' not in item_style:
+                    item_style['borderWidth'] = 0
 
             if item_style:
                 data_item['itemStyle'] = item_style
+
             emphasis_style = {}
+            if is_image_node:
+                emphasis_style['borderColor'] = 'transparent'
+                emphasis_style['borderWidth'] = 0
+
             if theme.get('hover_image'):
                 emphasis_style['areaColor'] = {
                     'image': theme['hover_image'],

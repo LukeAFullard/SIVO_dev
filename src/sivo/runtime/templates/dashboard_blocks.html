@@ -32,6 +32,10 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+
+            /* Prevent ghost dragging universally on elements like images */
+            -webkit-user-drag: none;
+
             {% if background_image_url %}
             background-image: url('{{ background_image_url }}');
             background-size: cover;
@@ -96,6 +100,47 @@
             backdrop-filter: blur(10px);
         }
         {% endif %}
+
+        {% if theme == 'transparent' %}
+        .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel, header {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            min-height: auto !important;
+        }
+        header, .card-header {
+            display: none !important;
+        }
+        {% endif %}
+
+        /* Floating Element Utility Classes */
+        .sivo-floating-element {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0px 20px 30px rgba(0, 0, 0, 0.5));
+            animation: sivo-float 6s ease-in-out infinite;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sivo-floating-element:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes sivo-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .sivo-obj-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px;
+        }
 
         .sivo-container {
             flex: 1 1 0;
@@ -328,13 +373,42 @@
         Object.keys(viewsData).forEach(blockId => {
             const viewData = viewsData[blockId];
             const dom = document.getElementById('chart-' + blockId);
+            const cardDom = document.getElementById('card-' + blockId);
+
+            if (cardDom && viewData.panel_css) {
+                // Apply custom CSS (like floating animations) to the entire block so both visual and hitbox move together
+                cardDom.style.cssText += viewData.panel_css;
+            }
 
             if (dom) {
                 const chart = echarts.init(dom, null, { renderer: viewData.render_mode || 'canvas' });
                 activeCharts[blockId] = chart;
 
+                // If rendering natively, ECharts' registerMap will also natively render `<image>` tags,
+                // causing a duplicate "ghost" image beneath the interactive overlay.
+                // We strip `<image>` tags from the registered map, replacing them with invisible `<rect>`
+                // hitboxes so interactions remain, but only the native SVG layer draws the image.
+                let registeredSvgString = viewData.svg_string;
+                if (viewData.render_mode === 'svg') {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(registeredSvgString, "image/svg+xml");
+                    const images = doc.querySelectorAll("image");
+                    images.forEach(img => {
+                        const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        Array.from(img.attributes).forEach(attr => {
+                            if (attr.name !== "href" && attr.name !== "xlink:href" && attr.name !== "preserveAspectRatio") {
+                                rect.setAttribute(attr.name, attr.value);
+                            }
+                        });
+                        rect.setAttribute("fill", "transparent");
+                        rect.setAttribute("stroke", "transparent");
+                        img.replaceWith(rect);
+                    });
+                    registeredSvgString = new XMLSerializer().serializeToString(doc);
+                }
+
                 // Register the SVG map unique to this block
-                echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
+                echarts.registerMap('sivoMap_' + blockId, { svg: registeredSvgString });
 
                 const option = {
                     tooltip: { trigger: 'item' },
@@ -479,14 +553,15 @@
                 let tooltipContent = null;
                 let payloadData = null;
 
-                let panelPosition = "none";
+                let panelPosition = viewData.default_panel_position || "none";
 
                 if (elementActions && elementActions.length > 0) {
                     // Extract desired panel position if provided in mapping
-                    const tooltipActionForPos = elementActions.find(a => a.action_type === 'tooltip');
-                    if (tooltipActionForPos && tooltipActionForPos.panel_position) {
-                        panelPosition = tooltipActionForPos.panel_position;
-                    }
+                    elementActions.forEach(action => {
+                        if (action.panel_position) {
+                            panelPosition = action.panel_position;
+                        }
+                    });
 
                     // Core actions
                     elementActions.forEach(action => {
