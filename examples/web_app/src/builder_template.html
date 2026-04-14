@@ -1,45 +1,79 @@
 <div class="flex h-full w-full bg-slate-50 text-slate-900 font-sans">
     <!-- Sidebar: Tools & Templates -->
     <div class="w-64 border-r border-slate-200 bg-white flex flex-col">
-        <div class="p-4 border-b border-slate-200 bg-slate-100 font-semibold text-slate-700">
-            Project Setup
+        <div class="p-4 border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 flex justify-between items-center">
+            <span>Project Setup</span>
+            <button id="btn-new-project" class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200" title="Scaffold New Project from SVG">New</button>
         </div>
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
+
+            <!-- Canvas Settings -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Canvas Settings</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Custom SVG (URL or filename)</label>
+                        <input type="text" id="prop-custom-svg" placeholder="e.g., /sivo_workspace/map.svg" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Background Image (URL)</label>
+                        <input type="text" id="prop-bg-image" placeholder="https://..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-slate-600" title="Lightly shade all mapped elements">Highlight Elements</label>
+                        <input type="checkbox" id="prop-highlight-elements" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    </div>
+                    <button id="btn-apply-canvas-settings" class="w-full px-3 py-1.5 text-xs bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600">
+                        Apply Canvas Settings
+                    </button>
+                </div>
+            </div>
+
             <!-- Visual Template Selector -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Templates</h3>
-                <div class="space-y-2">
-                    <button class="w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors">
-                        Blank Canvas
-                    </button>
-                    <button class="w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors">
-                        US Map Choropleth
-                    </button>
-                    <button class="w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors">
-                        World Map Dashboard
-                    </button>
+                <div class="space-y-2" id="template-selector">
+                    <!-- Templates will be populated here -->
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/gis_digital_twin_dashboard_2026.svg">GIS Digital Twin</button>
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/premium_timeline_2026.svg">Premium Timeline</button>
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="other/tall_vertical_scrollytelling_template.svg">Vertical Scrollytelling</button>
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="blank">Blank Canvas</button>
                 </div>
             </div>
 
             <!-- JSON Import -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Import/Export</h3>
-                <button class="w-full px-3 py-2 text-sm bg-blue-50 text-blue-600 border border-blue-200 rounded hover:bg-blue-100 transition-colors font-medium">
-                    Load JSON Config
-                </button>
+                <div class="space-y-2">
+                    <button id="btn-import-json-local" class="w-full px-3 py-2 text-sm bg-blue-50 text-blue-600 border border-blue-200 rounded hover:bg-blue-100 transition-colors font-medium">
+                        Load Local JSON
+                    </button>
+                    <button id="btn-import-json-idbfs" class="w-full px-3 py-2 text-sm bg-indigo-50 text-indigo-600 border border-indigo-200 rounded hover:bg-indigo-100 transition-colors font-medium">
+                        Load from Workspace (IDBFS)
+                    </button>
+                </div>
+                <input type="file" id="json-upload-local" accept=".json" class="hidden">
             </div>
 
             <!-- History / Undo Redo -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">History</h3>
                 <div class="flex space-x-2">
-                    <button class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50">
+                    <button id="btn-undo" class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50" disabled>
                         Undo
                     </button>
-                    <button class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50">
+                    <button id="btn-redo" class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50" disabled>
                         Redo
                     </button>
                 </div>
+            </div>
+
+            <!-- Element Annotation Tool (Annotate equivalent) -->
+            <div>
+                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Inspect</h3>
+                 <button id="btn-annotate-inspect" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors">
+                    Inspect Elements (Annotate)
+                </button>
             </div>
         </div>
     </div>
@@ -48,19 +82,31 @@
     <div class="flex-1 flex flex-col relative bg-slate-100">
         <div class="h-12 border-b border-slate-200 bg-white flex items-center justify-between px-4">
             <div class="font-semibold text-slate-700">Interactive Preview</div>
+
+            <!-- Preview Modes -->
+            <div class="flex space-x-1 items-center border border-slate-200 rounded p-1 bg-slate-50">
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded bg-white shadow-sm border border-slate-200" data-mode="desktop">Desktop</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="tablet">Tablet</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="mobile">Mobile</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="fullscreen">Fullscreen</button>
+            </div>
+
             <div class="space-x-2">
-                <button class="px-3 py-1 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200">
+                <button id="btn-preview-refresh" class="px-3 py-1 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200">
                     Refresh
                 </button>
-                <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium shadow-sm">
+                <button id="btn-preview-generate" class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium shadow-sm">
                     Generate Output
                 </button>
             </div>
         </div>
-        <div class="flex-1 p-4 flex items-center justify-center">
-            <!-- Simulated iframe or canvas area -->
-            <div class="w-full h-full bg-white border border-slate-300 shadow-sm rounded flex items-center justify-center text-slate-400 border-dashed">
-                Preview Area (SIVO Output)
+        <div class="flex-1 p-4 flex items-center justify-center overflow-auto bg-slate-200" id="preview-container-wrapper">
+            <!-- Interactive iframe area -->
+            <div id="preview-container" class="w-full h-full bg-white shadow-md transition-all duration-300 flex items-center justify-center relative">
+                 <iframe id="builder-preview-frame" class="w-full h-full border-0"></iframe>
+                 <div id="builder-preview-overlay" class="absolute inset-0 bg-white/80 flex items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10">
+                     Select a template or generate output to preview.
+                 </div>
             </div>
         </div>
     </div>
@@ -75,7 +121,7 @@
             <!-- Element Selection -->
             <div>
                 <label class="block text-sm font-bold text-slate-500 mb-1">Selected Element ID</label>
-                <input type="text" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="prop-element-id" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Appearance -->
@@ -85,15 +131,15 @@
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Fill Color</label>
                         <div class="flex space-x-2">
-                            <input type="color" value="#3b82f6" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
-                            <input type="text" value="#3b82f6" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
+                            <input type="color" id="prop-fill-color" value="#3b82f6" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
+                            <input type="text" id="prop-fill-color-text" value="#3b82f6" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Hover Color</label>
                         <div class="flex space-x-2">
-                            <input type="color" value="#60a5fa" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
-                            <input type="text" value="#60a5fa" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
+                            <input type="color" id="prop-hover-color" value="#60a5fa" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
+                            <input type="text" id="prop-hover-color-text" value="#60a5fa" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
                         </div>
                     </div>
                 </div>
@@ -105,17 +151,17 @@
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Rich HTML Tooltip</label>
-                        <textarea rows="3" placeholder="<strong>Value:</strong> 100" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea id="prop-tooltip" rows="3" placeholder="<strong>Value:</strong> 100" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
 
                     <div class="flex items-center justify-between">
-                        <label class="text-xs text-slate-600">Enforce Tooltip Z-Index</label>
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                        <label class="text-xs text-slate-600" title="Enforce Tooltip Z-Index">Enforce Tooltip Z-Index</label>
+                        <input type="checkbox" id="prop-tooltip-zindex" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
                     </div>
 
                     <div class="flex items-center justify-between">
-                        <label class="text-xs text-slate-600">Selective Hover Effects</label>
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" checked>
+                        <label class="text-xs text-slate-600" title="Selective ECharts Hover Effects">Selective Hover Effects</label>
+                        <input type="checkbox" id="prop-hover-effects" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" checked>
                     </div>
                 </div>
             </div>
@@ -125,24 +171,55 @@
                 <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Actions</h3>
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs text-slate-600 mb-1">On Click Callback</label>
-                        <select class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>None</option>
-                            <option>Zoom to Element</option>
-                            <option>Toggle Image Action</option>
-                            <option>Show Footnote</option>
+                        <label class="block text-xs text-slate-600 mb-1">On Click Callback (Interactive)</label>
+                        <select id="prop-click-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="zoom">Zoom to Element</option>
+                            <option value="toggle_image">Toggle Image Action</option>
+                            <option value="footnote">Show Contextual Footnote</option>
                         </select>
                     </div>
+
+                    <div id="prop-footnote-container" class="hidden mt-2">
+                         <label class="block text-xs text-slate-600 mb-1">Contextual Footnote Text</label>
+                         <input type="text" id="prop-footnote-text" placeholder="Citation or note..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                    </div>
+
+                    <div id="prop-toggle-image-container" class="hidden mt-2">
+                        <label class="block text-xs text-slate-600 mb-1">Image URLs (comma separated)</label>
+                        <input type="text" id="prop-toggle-image-urls" placeholder="img1.png, img2.png" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                    </div>
+
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Hover Callback</label>
-                        <select class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>None</option>
-                            <option>Update Context Panel</option>
+                        <select id="prop-hover-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="update_panel">Update Context Panel</option>
+                            <option value="custom">Custom JS Callback</option>
                         </select>
                     </div>
                 </div>
             </div>
 
+            <!-- Apply Button -->
+            <button id="btn-apply-props" class="w-full mt-4 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
+                Apply Changes
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: IDBFS File Selection -->
+<div id="idbfs-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900 bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg w-96 max-w-full flex flex-col max-h-[80vh]">
+        <div class="p-4 border-b border-slate-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-slate-800" id="idbfs-modal-title">Select File from IDBFS</h3>
+            <button id="btn-close-idbfs-modal" class="text-slate-400 hover:text-slate-600 focus:outline-none">&times;</button>
+        </div>
+        <div class="p-4 overflow-y-auto flex-1">
+            <ul id="idbfs-file-list" class="space-y-1">
+                <!-- File list items will be injected here -->
+            </ul>
         </div>
     </div>
 </div>
