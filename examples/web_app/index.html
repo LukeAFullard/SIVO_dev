@@ -189,12 +189,20 @@ else:
             Load Background Image
         </label>
 
-        <div class="instructions" id="setup-instructions">
-            Load an image to start drawing regions of interest. The dimensions will dictate the SVG template's viewBox.
+        <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">Or Load Project</h3>
+            <div style="display: flex; gap: 10px;">
+                <button id="load-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Load Project (.json)</button>
+                <input type="file" id="load-project-file" accept=".json" style="display: none;">
+            </div>
+        </div>
+
+        <div class="instructions" id="setup-instructions" style="border-top: 1px solid #e5e7eb; padding-top: 15px;">
+            Load an image or a project to start drawing regions of interest. The dimensions will dictate the SVG template's viewBox.
         </div>
 
         <div id="tools" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 15px;">
                 <h2>Drawing Tool</h2>
                 <input type="color" id="tool-color" value="#3b82f6" title="Change Drawing Color" style="cursor: pointer; padding: 0; margin: 0; width: 24px; height: 24px; border: none; background: none;">
             </div>
@@ -251,9 +259,7 @@ else:
             <div style="margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 15px;">
                 <h3 style="font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">Project State</h3>
                 <div style="display: flex; gap: 10px;">
-                    <button id="save-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Save</button>
-                    <button id="load-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Load</button>
-                    <input type="file" id="load-project-file" accept=".json" style="display: none;">
+                    <button id="save-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Save Project</button>
                 </div>
             </div>
         </div>
@@ -635,51 +641,57 @@ else:
 
 
         // --- Image Loading ---
+        function handleImageLoad(src, preserveShapes = false) {
+            const img = new Image();
+            img.onload = () => {
+                imgWidth = img.width;
+                imgHeight = img.height;
+
+                canvas.width = window.innerWidth - 300; // minus sidebar
+                canvas.height = window.innerHeight;
+
+                // Center the image initially
+                transformScale = Math.min((canvas.width - 100) / imgWidth, (canvas.height - 100) / imgHeight);
+                if (transformScale > 1) transformScale = 1;
+                transformPanX = (canvas.width - (imgWidth * transformScale)) / 2;
+                transformPanY = (canvas.height - (imgHeight * transformScale)) / 2;
+
+                container.style.display = 'block';
+                toolsDiv.style.display = 'block';
+                setupInstructions.style.display = 'none';
+
+                // Cache image data for magic wand
+                hiddenCanvas.width = imgWidth;
+                hiddenCanvas.height = imgHeight;
+                hiddenCtx.drawImage(img, 0, 0);
+                imageDataCache = hiddenCtx.getImageData(0, 0, imgWidth, imgHeight);
+
+                if (!preserveShapes) {
+                    shapes = [];
+                    updateShapeList();
+                }
+
+                redraw();
+
+                // Reset SAM embedding state for new image
+                isImageEmbedded = false;
+
+                // Only embed if SAM was already loaded and active from a previous image
+                if (samWorker && isSamReady) {
+                    embedImageForSam();
+                }
+            };
+            bgImage.src = src; // Trigger redraw updates inside onload when image naturally loads
+            img.src = src;
+        }
+
         imageUpload.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = (event) => {
-                const img = new Image();
-                img.onload = () => {
-                    imgWidth = img.width;
-                    imgHeight = img.height;
-
-                    bgImage.src = event.target.result;
-
-                    canvas.width = window.innerWidth - 300; // minus sidebar
-                    canvas.height = window.innerHeight;
-
-                    // Center the image initially
-                    transformScale = Math.min((canvas.width - 100) / imgWidth, (canvas.height - 100) / imgHeight);
-                    if (transformScale > 1) transformScale = 1;
-                    transformPanX = (canvas.width - (imgWidth * transformScale)) / 2;
-                    transformPanY = (canvas.height - (imgHeight * transformScale)) / 2;
-
-                    container.style.display = 'block';
-                    toolsDiv.style.display = 'block';
-                    setupInstructions.style.display = 'none';
-
-                    // Cache image data for magic wand
-                    hiddenCanvas.width = imgWidth;
-                    hiddenCanvas.height = imgHeight;
-                    hiddenCtx.drawImage(img, 0, 0);
-                    imageDataCache = hiddenCtx.getImageData(0, 0, imgWidth, imgHeight);
-
-                    shapes = [];
-                    updateShapeList();
-                    redraw();
-
-                    // Reset SAM embedding state for new image
-                    isImageEmbedded = false;
-
-                    // Only embed if SAM was already loaded and active from a previous image
-                    if (samWorker && isSamReady) {
-                        embedImageForSam();
-                    }
-                };
-                img.src = event.target.result;
+                handleImageLoad(event.target.result, false);
             };
             reader.readAsDataURL(file);
         });
@@ -1754,13 +1766,11 @@ else:
                 shapeCounter = state.shapeCounter || 1;
 
                 if (state.bgImageSrc) {
-                    toolsDiv.style.display = 'block';
-                    setupInstructions.style.display = 'none';
-                    container.style.display = 'block';
-                    bgImage.src = state.bgImageSrc;
-                    // bgImage.onload handles redraw and zoom resets
+                    handleImageLoad(state.bgImageSrc, true);
+                } else {
+                    updateShapeList();
+                    redraw();
                 }
-                updateShapeList();
                 saveState();
             } catch (e) {
                 console.error("Failed to load project state", e);

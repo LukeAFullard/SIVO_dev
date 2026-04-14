@@ -335,51 +335,57 @@
 
 
         // --- Image Loading ---
+        function handleImageLoad(src, preserveShapes = false) {
+            const img = new Image();
+            img.onload = () => {
+                imgWidth = img.width;
+                imgHeight = img.height;
+
+                canvas.width = window.innerWidth - 300; // minus sidebar
+                canvas.height = window.innerHeight;
+
+                // Center the image initially
+                transformScale = Math.min((canvas.width - 100) / imgWidth, (canvas.height - 100) / imgHeight);
+                if (transformScale > 1) transformScale = 1;
+                transformPanX = (canvas.width - (imgWidth * transformScale)) / 2;
+                transformPanY = (canvas.height - (imgHeight * transformScale)) / 2;
+
+                container.style.display = 'block';
+                toolsDiv.style.display = 'block';
+                setupInstructions.style.display = 'none';
+
+                // Cache image data for magic wand
+                hiddenCanvas.width = imgWidth;
+                hiddenCanvas.height = imgHeight;
+                hiddenCtx.drawImage(img, 0, 0);
+                imageDataCache = hiddenCtx.getImageData(0, 0, imgWidth, imgHeight);
+
+                if (!preserveShapes) {
+                    shapes = [];
+                    updateShapeList();
+                }
+
+                redraw();
+
+                // Reset SAM embedding state for new image
+                isImageEmbedded = false;
+
+                // Only embed if SAM was already loaded and active from a previous image
+                if (samWorker && isSamReady) {
+                    embedImageForSam();
+                }
+            };
+            bgImage.src = src; // Trigger redraw updates inside onload when image naturally loads
+            img.src = src;
+        }
+
         imageUpload.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = (event) => {
-                const img = new Image();
-                img.onload = () => {
-                    imgWidth = img.width;
-                    imgHeight = img.height;
-
-                    bgImage.src = event.target.result;
-
-                    canvas.width = window.innerWidth - 300; // minus sidebar
-                    canvas.height = window.innerHeight;
-
-                    // Center the image initially
-                    transformScale = Math.min((canvas.width - 100) / imgWidth, (canvas.height - 100) / imgHeight);
-                    if (transformScale > 1) transformScale = 1;
-                    transformPanX = (canvas.width - (imgWidth * transformScale)) / 2;
-                    transformPanY = (canvas.height - (imgHeight * transformScale)) / 2;
-
-                    container.style.display = 'block';
-                    toolsDiv.style.display = 'block';
-                    setupInstructions.style.display = 'none';
-
-                    // Cache image data for magic wand
-                    hiddenCanvas.width = imgWidth;
-                    hiddenCanvas.height = imgHeight;
-                    hiddenCtx.drawImage(img, 0, 0);
-                    imageDataCache = hiddenCtx.getImageData(0, 0, imgWidth, imgHeight);
-
-                    shapes = [];
-                    updateShapeList();
-                    redraw();
-
-                    // Reset SAM embedding state for new image
-                    isImageEmbedded = false;
-
-                    // Only embed if SAM was already loaded and active from a previous image
-                    if (samWorker && isSamReady) {
-                        embedImageForSam();
-                    }
-                };
-                img.src = event.target.result;
+                handleImageLoad(event.target.result, false);
             };
             reader.readAsDataURL(file);
         });
@@ -1454,13 +1460,11 @@
                 shapeCounter = state.shapeCounter || 1;
 
                 if (state.bgImageSrc) {
-                    toolsDiv.style.display = 'block';
-                    setupInstructions.style.display = 'none';
-                    container.style.display = 'block';
-                    bgImage.src = state.bgImageSrc;
-                    // bgImage.onload handles redraw and zoom resets
+                    handleImageLoad(state.bgImageSrc, true);
+                } else {
+                    updateShapeList();
+                    redraw();
                 }
-                updateShapeList();
                 saveState();
             } catch (e) {
                 console.error("Failed to load project state", e);
