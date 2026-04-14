@@ -445,6 +445,12 @@
                 toolsDiv.style.display = 'block';
                 setupInstructions.style.display = 'none';
 
+                // Collapse the setup section
+                const setupSection = document.getElementById('setup-section');
+                if (setupSection) {
+                    setupSection.removeAttribute('open');
+                }
+
                 // Cache image data for magic wand
                 hiddenCanvas.width = imgWidth;
                 hiddenCanvas.height = imgHeight;
@@ -742,6 +748,7 @@
 
         // --- Handle Hit Testing ---
         function getHandleAtPoint(point, shape) {
+            if (shape.visible === false) return -1;
             const handleSize = 8 / transformScale;
             const hs = handleSize / 2;
 
@@ -779,6 +786,7 @@
             // Check in reverse order so we hit the top-most shape first
             for (let i = shapes.length - 1; i >= 0; i--) {
                 const shape = shapes[i];
+                if (shape.visible === false) continue;
                 if (shape.type === 'rect') {
                     if (point.x >= shape.rect.x && point.x <= shape.rect.x + shape.rect.w &&
                         point.y >= shape.rect.y && point.y <= shape.rect.y + shape.rect.h) {
@@ -1242,7 +1250,7 @@
         // --- Shape Management ---
         function addShape(type, rectBounds, pathPoints, ellipseData) {
             const id = `region_${shapeCounter++}`;
-            shapes.push({ id, type, rect: rectBounds, points: pathPoints, ellipse: ellipseData });
+            shapes.push({ id, type, rect: rectBounds, points: pathPoints, ellipse: ellipseData, visible: true });
             updateShapeList();
             saveState();
         }
@@ -1284,11 +1292,32 @@
                 input.type = 'text';
                 input.value = shape.id;
                 input.addEventListener('change', (e) => updateShapeId(index, e.target.value));
+                input.addEventListener('focus', () => {
+                    selectedShapeIndices.clear();
+                    selectedShapeIndices.add(index);
+                    updateShapeList();
+                    redraw();
+                });
+
+                const toggleBtn = document.createElement('button');
+                // Use a simple text emoji for visibility for now
+                toggleBtn.innerText = shape.visible !== false ? '👁️' : '🙈';
+                toggleBtn.style.padding = '4px 6px';
+                toggleBtn.style.background = 'transparent';
+                toggleBtn.style.color = '#374151';
+                toggleBtn.style.border = 'none';
+                toggleBtn.style.boxShadow = 'none';
+                toggleBtn.addEventListener('click', () => {
+                    shape.visible = shape.visible !== false ? false : true;
+                    updateShapeList();
+                    redraw();
+                });
 
                 const delBtn = document.createElement('button');
                 delBtn.innerText = 'Delete';
                 delBtn.addEventListener('click', () => removeShape(index));
 
+                li.appendChild(toggleBtn);
                 li.appendChild(input);
                 li.appendChild(delBtn);
                 shapeList.appendChild(li);
@@ -1332,6 +1361,8 @@
 
             // Draw committed shapes
             shapes.forEach((shape, idx) => {
+                if (shape.visible === false) return;
+
                 const isSelected = selectedShapeIndices.has(idx);
                 ctx.fillStyle = isSelected ? activeColorFill : baseColorFill;
                 ctx.strokeStyle = baseColorHex;
@@ -1572,10 +1603,32 @@
                 try {
                     const mountDir = "/sivo_workspace";
                     pyodideInst.FS.writeFile(`${mountDir}/${filename}`, data);
+
+                    // Also save the background image if we have one
+                    if (bgImage.src && bgImage.src.startsWith('data:image')) {
+                        // Extract base64 and create Uint8Array
+                        const base64Data = bgImage.src.split(',')[1];
+                        const binaryStr = atob(base64Data);
+                        const len = binaryStr.length;
+                        const bytes = new Uint8Array(len);
+                        for (let i = 0; i < len; i++) {
+                            bytes[i] = binaryStr.charCodeAt(i);
+                        }
+
+                        // Guess extension from MIME type
+                        let ext = 'png';
+                        if (bgImage.src.indexOf('image/jpeg') !== -1) ext = 'jpg';
+                        else if (bgImage.src.indexOf('image/webp') !== -1) ext = 'webp';
+
+                        // Default naming scheme based on project name
+                        const imageFilename = filename.replace('.json', '') + '_bg.' + ext;
+                        pyodideInst.FS.writeFile(`${mountDir}/${imageFilename}`, bytes);
+                    }
+
                     pyodideInst.FS.syncfs(false, function(err) {
                         if (err) alert("Sync error: " + err);
                         else {
-                            alert("Saved to Pyodide Virtual File System: " + filename);
+                            alert("Saved to Pyodide Virtual File System: " + filename + (bgImage.src ? " (and background image)" : ""));
                             if (window.parent && window.parent.updateFileList) {
                                 window.parent.updateFileList();
                             }

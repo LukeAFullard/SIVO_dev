@@ -23,7 +23,7 @@
         .file-upload-label { display: block; background-color: #3b82f6; color: white; text-align: center; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; margin-bottom: 20px; transition: background-color 0.2s;}
         .file-upload-label:hover { background-color: #2563eb; }
 
-        .shape-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .shape-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; max-height: 250px; overflow-y: auto; }
         .shape-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; margin-bottom: 8px; font-size: 0.875rem; }
         .shape-item input { border: 1px solid #d1d5db; padding: 4px 8px; border-radius: 4px; width: 60%; }
         .shape-item button { width: auto; padding: 4px 8px; background: #ef4444; margin-bottom: 0; }
