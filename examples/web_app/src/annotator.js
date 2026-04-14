@@ -362,9 +362,9 @@
 
                 if (!preserveShapes) {
                     shapes = [];
-                    updateShapeList();
                 }
 
+                updateShapeList();
                 redraw();
 
                 // Reset SAM embedding state for new image
