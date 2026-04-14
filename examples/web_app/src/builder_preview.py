@@ -74,6 +74,11 @@ try:
         elif click_cb == 'footnote':
             kwargs['footnote'] = el_cfg.get('footnoteText', '')
 
+        hover_cb = el_cfg.get('hoverCallback')
+        if hover_cb and hover_cb != 'none':
+            kwargs['hover_callback_event'] = hover_cb
+            kwargs['hover_callback_payload'] = {"element": el_id, "action": hover_cb}
+
         app.map(el_id, **kwargs)
 
     html_output = app.to_html(build_js=False)
