@@ -130,45 +130,79 @@ else:
 <div class="flex h-full w-full bg-slate-50 text-slate-900 font-sans">
     <!-- Sidebar: Tools & Templates -->
     <div class="w-64 border-r border-slate-200 bg-white flex flex-col">
-        <div class="p-4 border-b border-slate-200 bg-slate-100 font-semibold text-slate-700">
-            Project Setup
+        <div class="p-4 border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 flex justify-between items-center">
+            <span>Project Setup</span>
+            <button id="btn-new-project" class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200" title="Scaffold New Project from SVG">New</button>
         </div>
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
+
+            <!-- Canvas Settings -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Canvas Settings</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Custom SVG (URL or filename)</label>
+                        <input type="text" id="prop-custom-svg" placeholder="e.g., /sivo_workspace/map.svg" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Background Image (URL)</label>
+                        <input type="text" id="prop-bg-image" placeholder="https://..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-slate-600" title="Lightly shade all mapped elements">Highlight Elements</label>
+                        <input type="checkbox" id="prop-highlight-elements" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    </div>
+                    <button id="btn-apply-canvas-settings" class="w-full px-3 py-1.5 text-xs bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600">
+                        Apply Canvas Settings
+                    </button>
+                </div>
+            </div>
+
             <!-- Visual Template Selector -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Templates</h3>
-                <div class="space-y-2">
-                    <button class="w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors">
-                        Blank Canvas
-                    </button>
-                    <button class="w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors">
-                        US Map Choropleth
-                    </button>
-                    <button class="w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors">
-                        World Map Dashboard
-                    </button>
+                <div class="space-y-2" id="template-selector">
+                    <!-- Templates will be populated here -->
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/gis_digital_twin_dashboard_2026.svg">GIS Digital Twin</button>
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/premium_timeline_2026.svg">Premium Timeline</button>
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="other/tall_vertical_scrollytelling_template.svg">Vertical Scrollytelling</button>
+                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="blank">Blank Canvas</button>
                 </div>
             </div>
 
             <!-- JSON Import -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Import/Export</h3>
-                <button class="w-full px-3 py-2 text-sm bg-blue-50 text-blue-600 border border-blue-200 rounded hover:bg-blue-100 transition-colors font-medium">
-                    Load JSON Config
-                </button>
+                <div class="space-y-2">
+                    <button id="btn-import-json-local" class="w-full px-3 py-2 text-sm bg-blue-50 text-blue-600 border border-blue-200 rounded hover:bg-blue-100 transition-colors font-medium">
+                        Load Local JSON
+                    </button>
+                    <button id="btn-import-json-idbfs" class="w-full px-3 py-2 text-sm bg-indigo-50 text-indigo-600 border border-indigo-200 rounded hover:bg-indigo-100 transition-colors font-medium">
+                        Load from Workspace (IDBFS)
+                    </button>
+                </div>
+                <input type="file" id="json-upload-local" accept=".json" class="hidden">
             </div>
 
             <!-- History / Undo Redo -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">History</h3>
                 <div class="flex space-x-2">
-                    <button class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50">
+                    <button id="btn-undo" class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50" disabled>
                         Undo
                     </button>
-                    <button class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50">
+                    <button id="btn-redo" class="flex-1 px-3 py-1.5 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600 disabled:opacity-50" disabled>
                         Redo
                     </button>
                 </div>
+            </div>
+
+            <!-- Element Annotation Tool (Annotate equivalent) -->
+            <div>
+                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Inspect</h3>
+                 <button id="btn-annotate-inspect" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors">
+                    Inspect Elements (Annotate)
+                </button>
             </div>
         </div>
     </div>
@@ -177,19 +211,31 @@ else:
     <div class="flex-1 flex flex-col relative bg-slate-100">
         <div class="h-12 border-b border-slate-200 bg-white flex items-center justify-between px-4">
             <div class="font-semibold text-slate-700">Interactive Preview</div>
+
+            <!-- Preview Modes -->
+            <div class="flex space-x-1 items-center border border-slate-200 rounded p-1 bg-slate-50">
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded bg-white shadow-sm border border-slate-200" data-mode="desktop">Desktop</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="tablet">Tablet</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="mobile">Mobile</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="fullscreen">Fullscreen</button>
+            </div>
+
             <div class="space-x-2">
-                <button class="px-3 py-1 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200">
+                <button id="btn-preview-refresh" class="px-3 py-1 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200">
                     Refresh
                 </button>
-                <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium shadow-sm">
+                <button id="btn-preview-generate" class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium shadow-sm">
                     Generate Output
                 </button>
             </div>
         </div>
-        <div class="flex-1 p-4 flex items-center justify-center">
-            <!-- Simulated iframe or canvas area -->
-            <div class="w-full h-full bg-white border border-slate-300 shadow-sm rounded flex items-center justify-center text-slate-400 border-dashed">
-                Preview Area (SIVO Output)
+        <div class="flex-1 p-4 flex items-center justify-center overflow-auto bg-slate-200" id="preview-container-wrapper">
+            <!-- Interactive iframe area -->
+            <div id="preview-container" class="w-full h-full bg-white shadow-md transition-all duration-300 flex items-center justify-center relative">
+                 <iframe id="builder-preview-frame" class="w-full h-full border-0"></iframe>
+                 <div id="builder-preview-overlay" class="absolute inset-0 bg-white/80 flex items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10">
+                     Select a template or generate output to preview.
+                 </div>
             </div>
         </div>
     </div>
@@ -204,7 +250,7 @@ else:
             <!-- Element Selection -->
             <div>
                 <label class="block text-sm font-bold text-slate-500 mb-1">Selected Element ID</label>
-                <input type="text" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="prop-element-id" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <!-- Appearance -->
@@ -214,15 +260,15 @@ else:
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Fill Color</label>
                         <div class="flex space-x-2">
-                            <input type="color" value="#3b82f6" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
-                            <input type="text" value="#3b82f6" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
+                            <input type="color" id="prop-fill-color" value="#3b82f6" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
+                            <input type="text" id="prop-fill-color-text" value="#3b82f6" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Hover Color</label>
                         <div class="flex space-x-2">
-                            <input type="color" value="#60a5fa" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
-                            <input type="text" value="#60a5fa" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
+                            <input type="color" id="prop-hover-color" value="#60a5fa" class="h-8 w-8 rounded cursor-pointer border border-slate-200 p-0.5">
+                            <input type="text" id="prop-hover-color-text" value="#60a5fa" class="flex-1 px-2 py-1 text-sm border border-slate-200 rounded">
                         </div>
                     </div>
                 </div>
@@ -234,17 +280,17 @@ else:
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Rich HTML Tooltip</label>
-                        <textarea rows="3" placeholder="<strong>Value:</strong> 100" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea id="prop-tooltip" rows="3" placeholder="<strong>Value:</strong> 100" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
 
                     <div class="flex items-center justify-between">
-                        <label class="text-xs text-slate-600">Enforce Tooltip Z-Index</label>
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                        <label class="text-xs text-slate-600" title="Enforce Tooltip Z-Index">Enforce Tooltip Z-Index</label>
+                        <input type="checkbox" id="prop-tooltip-zindex" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
                     </div>
 
                     <div class="flex items-center justify-between">
-                        <label class="text-xs text-slate-600">Selective Hover Effects</label>
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" checked>
+                        <label class="text-xs text-slate-600" title="Selective ECharts Hover Effects">Selective Hover Effects</label>
+                        <input type="checkbox" id="prop-hover-effects" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" checked>
                     </div>
                 </div>
             </div>
@@ -254,24 +300,55 @@ else:
                 <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Actions</h3>
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-xs text-slate-600 mb-1">On Click Callback</label>
-                        <select class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>None</option>
-                            <option>Zoom to Element</option>
-                            <option>Toggle Image Action</option>
-                            <option>Show Footnote</option>
+                        <label class="block text-xs text-slate-600 mb-1">On Click Callback (Interactive)</label>
+                        <select id="prop-click-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="zoom">Zoom to Element</option>
+                            <option value="toggle_image">Toggle Image Action</option>
+                            <option value="footnote">Show Contextual Footnote</option>
                         </select>
                     </div>
+
+                    <div id="prop-footnote-container" class="hidden mt-2">
+                         <label class="block text-xs text-slate-600 mb-1">Contextual Footnote Text</label>
+                         <input type="text" id="prop-footnote-text" placeholder="Citation or note..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                    </div>
+
+                    <div id="prop-toggle-image-container" class="hidden mt-2">
+                        <label class="block text-xs text-slate-600 mb-1">Image URLs (comma separated)</label>
+                        <input type="text" id="prop-toggle-image-urls" placeholder="img1.png, img2.png" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                    </div>
+
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Hover Callback</label>
-                        <select class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>None</option>
-                            <option>Update Context Panel</option>
+                        <select id="prop-hover-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="update_panel">Update Context Panel</option>
+                            <option value="custom">Custom JS Callback</option>
                         </select>
                     </div>
                 </div>
             </div>
 
+            <!-- Apply Button -->
+            <button id="btn-apply-props" class="w-full mt-4 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
+                Apply Changes
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: IDBFS File Selection -->
+<div id="idbfs-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900 bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg w-96 max-w-full flex flex-col max-h-[80vh]">
+        <div class="p-4 border-b border-slate-200 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-slate-800" id="idbfs-modal-title">Select File from IDBFS</h3>
+            <button id="btn-close-idbfs-modal" class="text-slate-400 hover:text-slate-600 focus:outline-none">&times;</button>
+        </div>
+        <div class="p-4 overflow-y-auto flex-1">
+            <ul id="idbfs-file-list" class="space-y-1">
+                <!-- File list items will be injected here -->
+            </ul>
         </div>
     </div>
 </div>
@@ -2513,6 +2590,478 @@ else:
 
         // Start initialization
         initApp();
+
+
+// Builder State Management
+let builderState = {
+    history: [],
+    historyIndex: -1,
+    currentConfig: {
+        template: null,
+        customSvg: '',
+        bgImage: '',
+        highlightElements: false,
+        elements: {} // e.g. { 'state-ny': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '...', ... } }
+    },
+    activeElement: null
+};
+
+// --- DOM Elements ---
+// Buttons & Inputs
+const btnNewProject = document.getElementById('btn-new-project');
+const btnImportJsonLocal = document.getElementById('btn-import-json-local');
+const btnImportJsonIdbfs = document.getElementById('btn-import-json-idbfs');
+const jsonUploadLocal = document.getElementById('json-upload-local');
+
+// Canvas Settings Elements
+const propCustomSvg = document.getElementById('prop-custom-svg');
+const propBgImage = document.getElementById('prop-bg-image');
+const propHighlightElements = document.getElementById('prop-highlight-elements');
+const btnApplyCanvasSettings = document.getElementById('btn-apply-canvas-settings');
+
+// Modal Elements
+const idbfsModal = document.getElementById('idbfs-modal');
+const idbfsModalTitle = document.getElementById('idbfs-modal-title');
+const idbfsFileList = document.getElementById('idbfs-file-list');
+const btnCloseIdbfsModal = document.getElementById('btn-close-idbfs-modal');
+
+const btnUndo = document.getElementById('btn-undo');
+const btnRedo = document.getElementById('btn-redo');
+const btnAnnotateInspect = document.getElementById('btn-annotate-inspect');
+const templateBtns = document.querySelectorAll('.template-btn');
+
+// Preview Pane
+const previewFrame = document.getElementById('builder-preview-frame');
+const previewOverlay = document.getElementById('builder-preview-overlay');
+const btnPreviewRefresh = document.getElementById('btn-preview-refresh');
+const btnPreviewGenerate = document.getElementById('btn-preview-generate');
+const previewModeBtns = document.querySelectorAll('.preview-mode-btn');
+const previewContainer = document.getElementById('preview-container');
+
+// Properties
+const propElementId = document.getElementById('prop-element-id');
+const propFillColor = document.getElementById('prop-fill-color');
+const propFillColorText = document.getElementById('prop-fill-color-text');
+const propHoverColor = document.getElementById('prop-hover-color');
+const propHoverColorText = document.getElementById('prop-hover-color-text');
+const propTooltip = document.getElementById('prop-tooltip');
+const propTooltipZIndex = document.getElementById('prop-tooltip-zindex');
+const propHoverEffects = document.getElementById('prop-hover-effects');
+const propClickCallback = document.getElementById('prop-click-callback');
+const propHoverCallback = document.getElementById('prop-hover-callback');
+const btnApplyProps = document.getElementById('btn-apply-props');
+
+// Dynamic Property Containers
+const propFootnoteContainer = document.getElementById('prop-footnote-container');
+const propToggleImageContainer = document.getElementById('prop-toggle-image-container');
+
+
+// --- State Management (Undo/Redo) ---
+function saveState() {
+    // If we're not at the end of history, truncate the future
+    if (builderState.historyIndex < builderState.history.length - 1) {
+        builderState.history = builderState.history.slice(0, builderState.historyIndex + 1);
+    }
+
+    builderState.history.push(JSON.parse(JSON.stringify(builderState.currentConfig)));
+    builderState.historyIndex++;
+    updateHistoryButtons();
+}
+
+function updateHistoryButtons() {
+    btnUndo.disabled = builderState.historyIndex <= 0;
+    btnRedo.disabled = builderState.historyIndex >= builderState.history.length - 1;
+}
+
+btnUndo.addEventListener('click', () => {
+    if (builderState.historyIndex > 0) {
+        builderState.historyIndex--;
+        builderState.currentConfig = JSON.parse(JSON.stringify(builderState.history[builderState.historyIndex]));
+        updateHistoryButtons();
+        refreshPropertiesPanel();
+        generatePreview();
+    }
+});
+
+btnRedo.addEventListener('click', () => {
+    if (builderState.historyIndex < builderState.history.length - 1) {
+        builderState.historyIndex++;
+        builderState.currentConfig = JSON.parse(JSON.stringify(builderState.history[builderState.historyIndex]));
+        updateHistoryButtons();
+        refreshPropertiesPanel();
+        generatePreview();
+    }
+});
+
+// --- Template Selection ---
+templateBtns.forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+        const templatePath = e.target.getAttribute('data-template');
+        builderState.currentConfig.template = templatePath;
+        builderState.currentConfig.elements = {}; // Reset elements
+        saveState();
+        previewOverlay.classList.add('hidden');
+        await generatePreview();
+    });
+});
+
+// --- JSON Import/Export ---
+btnImportJsonLocal.addEventListener('click', () => jsonUploadLocal.click());
+jsonUploadLocal.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+        try {
+            const config = JSON.parse(evt.target.result);
+            builderState.currentConfig = config;
+            saveState();
+            previewOverlay.classList.add('hidden');
+            generatePreview();
+        } catch (err) {
+            alert("Invalid JSON configuration file.");
+        }
+    };
+    reader.readAsText(file);
+});
+
+btnImportJsonIdbfs.addEventListener('click', () => {
+    showIdbfsModal("Select JSON Config", ".json", (filename) => {
+        const mountDir = "/sivo_workspace";
+        try {
+            const data = window.pyodide.FS.readFile(`${mountDir}/${filename}`, { encoding: 'utf8' });
+            const config = JSON.parse(data);
+            builderState.currentConfig = config;
+
+            // Sync Canvas Settings UI
+            propCustomSvg.value = config.customSvg || '';
+            propBgImage.value = config.bgImage || '';
+            propHighlightElements.checked = !!config.highlightElements;
+
+            saveState();
+            previewOverlay.classList.add('hidden');
+            generatePreview();
+        } catch(err) {
+            console.error(err);
+            alert("Failed to load JSON: " + err.message);
+        }
+    });
+});
+
+
+// --- Canvas Settings ---
+btnApplyCanvasSettings.addEventListener('click', () => {
+    builderState.currentConfig.customSvg = propCustomSvg.value.trim();
+    builderState.currentConfig.bgImage = propBgImage.value.trim();
+    builderState.currentConfig.highlightElements = propHighlightElements.checked;
+
+    // Clear template if using custom SVG
+    if (builderState.currentConfig.customSvg) {
+        builderState.currentConfig.template = null;
+    }
+
+    saveState();
+    previewOverlay.classList.add('hidden');
+    generatePreview();
+});
+
+// --- IDBFS Modal Logic ---
+let idbfsCallback = null;
+
+function showIdbfsModal(title, extension, callback) {
+    if (!window.pyodide || !window.pyodide.FS) {
+        alert("Pyodide File System is not ready yet.");
+        return;
+    }
+    const mountDir = "/sivo_workspace";
+    try {
+        let files = window.pyodide.FS.readdir(mountDir).filter(f => f !== '.' && f !== '..');
+        if (extension) {
+            files = files.filter(f => f.endsWith(extension));
+        }
+
+        idbfsModalTitle.innerText = title;
+        idbfsFileList.innerHTML = '';
+
+        if (files.length === 0) {
+            idbfsFileList.innerHTML = '<li class="text-sm text-slate-500 italic p-2">No files found.</li>';
+        } else {
+            files.forEach(f => {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left px-3 py-2 text-sm hover:bg-slate-100 rounded transition-colors';
+                btn.innerText = f;
+                btn.onclick = () => {
+                    closeIdbfsModal();
+                    if (callback) callback(f);
+                };
+                li.appendChild(btn);
+                idbfsFileList.appendChild(li);
+            });
+        }
+
+        idbfsModal.classList.remove('hidden');
+    } catch (err) {
+        console.error("Error reading IDBFS:", err);
+        alert("Error reading IDBFS: " + err.message);
+    }
+}
+
+function closeIdbfsModal() {
+    idbfsModal.classList.add('hidden');
+    idbfsCallback = null;
+}
+
+btnCloseIdbfsModal.addEventListener('click', closeIdbfsModal);
+
+
+
+// --- Preview Modes ---
+previewModeBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const mode = e.target.getAttribute('data-mode');
+
+        // Update active class
+        previewModeBtns.forEach(b => {
+            b.classList.remove('bg-white', 'shadow-sm', 'border-slate-200');
+            b.classList.add('hover:bg-slate-200', 'text-slate-600', 'border-transparent');
+        });
+        e.target.classList.remove('hover:bg-slate-200', 'text-slate-600', 'border-transparent');
+        e.target.classList.add('bg-white', 'shadow-sm', 'border-slate-200');
+
+        // Apply dimensions
+        previewContainer.className = 'bg-white shadow-md transition-all duration-300 flex items-center justify-center relative';
+        if (mode === 'desktop') {
+            previewContainer.style.width = '100%';
+            previewContainer.style.height = '100%';
+        } else if (mode === 'tablet') {
+            previewContainer.style.width = '768px';
+            previewContainer.style.height = '1024px';
+        } else if (mode === 'mobile') {
+            previewContainer.style.width = '375px';
+            previewContainer.style.height = '812px';
+        } else if (mode === 'fullscreen') {
+            // Rough approximation of full screen overlay within pane
+            previewContainer.style.width = '100%';
+            previewContainer.style.height = '100%';
+            previewContainer.classList.add('fixed', 'inset-0', 'z-50');
+        }
+    });
+});
+
+// --- Property Inspector Logic ---
+// Sync Color inputs
+propFillColor.addEventListener('input', (e) => propFillColorText.value = e.target.value);
+propFillColorText.addEventListener('input', (e) => propFillColor.value = e.target.value);
+propHoverColor.addEventListener('input', (e) => propHoverColorText.value = e.target.value);
+propHoverColorText.addEventListener('input', (e) => propHoverColor.value = e.target.value);
+
+// Show/Hide dynamic fields based on selection
+propClickCallback.addEventListener('change', (e) => {
+    const val = e.target.value;
+    propFootnoteContainer.classList.add('hidden');
+    propToggleImageContainer.classList.add('hidden');
+
+    if (val === 'footnote') propFootnoteContainer.classList.remove('hidden');
+    if (val === 'toggle_image') propToggleImageContainer.classList.remove('hidden');
+});
+
+function refreshPropertiesPanel() {
+    const id = propElementId.value;
+    if (!id || !builderState.currentConfig.elements[id]) {
+        // Reset defaults
+        propFillColor.value = '#3b82f6';
+        propFillColorText.value = '#3b82f6';
+        propHoverColor.value = '#60a5fa';
+        propHoverColorText.value = '#60a5fa';
+        propTooltip.value = '';
+        propTooltipZIndex.checked = false;
+        propHoverEffects.checked = true;
+        propClickCallback.value = 'none';
+        propHoverCallback.value = 'none';
+
+        propFootnoteContainer.classList.add('hidden');
+        propToggleImageContainer.classList.add('hidden');
+        return;
+    }
+
+    const elConfig = builderState.currentConfig.elements[id];
+    propFillColor.value = elConfig.fill || '#3b82f6';
+    propFillColorText.value = elConfig.fill || '#3b82f6';
+    propHoverColor.value = elConfig.hover || '#60a5fa';
+    propHoverColorText.value = elConfig.hover || '#60a5fa';
+    propTooltip.value = elConfig.tooltip || '';
+    propTooltipZIndex.checked = !!elConfig.enforceZIndex;
+    propHoverEffects.checked = elConfig.selectiveHover !== false;
+
+    propClickCallback.value = elConfig.clickCallback || 'none';
+    propHoverCallback.value = elConfig.hoverCallback || 'none';
+
+    // Refresh dynamic fields
+    propClickCallback.dispatchEvent(new Event('change'));
+    if (elConfig.clickCallback === 'footnote') document.getElementById('prop-footnote-text').value = elConfig.footnoteText || '';
+    if (elConfig.clickCallback === 'toggle_image') document.getElementById('prop-toggle-image-urls').value = elConfig.toggleImageUrls || '';
+}
+
+propElementId.addEventListener('input', refreshPropertiesPanel);
+
+btnApplyProps.addEventListener('click', () => {
+    const id = propElementId.value.trim();
+    if (!id) return alert("Please enter an Element ID first.");
+
+    if (!builderState.currentConfig.elements[id]) {
+        builderState.currentConfig.elements[id] = {};
+    }
+
+    const el = builderState.currentConfig.elements[id];
+    el.fill = propFillColor.value;
+    el.hover = propHoverColor.value;
+    el.tooltip = propTooltip.value;
+    el.enforceZIndex = propTooltipZIndex.checked;
+    el.selectiveHover = propHoverEffects.checked;
+    el.clickCallback = propClickCallback.value;
+    el.hoverCallback = propHoverCallback.value;
+
+    if (el.clickCallback === 'footnote') el.footnoteText = document.getElementById('prop-footnote-text').value;
+    if (el.clickCallback === 'toggle_image') el.toggleImageUrls = document.getElementById('prop-toggle-image-urls').value;
+
+    saveState();
+    generatePreview();
+});
+
+// --- Preview Generation (Pyodide Integration) ---
+btnPreviewRefresh.addEventListener('click', generatePreview);
+btnPreviewGenerate.addEventListener('click', generatePreview);
+
+async function generatePreview() {
+    if (!window.pyodide) {
+        console.warn("Pyodide not loaded yet.");
+        return;
+    }
+    if (!builderState.currentConfig.template) {
+        return;
+    }
+
+    previewOverlay.innerHTML = 'Generating...';
+    previewOverlay.classList.remove('hidden');
+
+    try {
+        // Construct Python script dynamically based on builder state
+        const configJson = JSON.stringify(builderState.currentConfig);
+
+        const pyCode = `
+import sivo
+import json
+import traceback
+
+config = json.loads('''${configJson}''')
+
+try:
+    template_path = config.get('template')
+    custom_svg = config.get('customSvg')
+    bg_image = config.get('bgImage')
+
+    # Load base template or blank or custom svg
+    if custom_svg:
+        try:
+            # check if it's a url or a file path in idbfs
+            if custom_svg.startswith('http'):
+                 app = sivo.Sivo.from_svg(custom_svg)
+            elif custom_svg.startswith('<svg'):
+                 app = sivo.Sivo.from_string(custom_svg)
+            else:
+                 with open(custom_svg, 'r') as f:
+                     app = sivo.Sivo.from_string(f.read())
+        except Exception as e:
+            app = sivo.Sivo.from_string(f'<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40">Error loading custom SVG {custom_svg}: {str(e)}</text></svg>')
+    elif template_path == 'blank' or not template_path:
+        app = sivo.Sivo.from_string('<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#f8fafc"/></svg>')
+    else:
+        try:
+            app = sivo.Sivo.from_template(template_path)
+        except Exception as e:
+            app = sivo.Sivo.from_string(f'<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40">Error loading template {template_path}: {str(e)}</text></svg>')
+
+    # Apply Canvas Settings
+    if bg_image:
+         app.background_image_url = bg_image
+
+    # Highlight Elements CSS Injection
+    if config.get('highlightElements'):
+         app.custom_css += "\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; }"
+
+
+    # Apply Element Configurations
+    elements = config.get('elements', {})
+    for el_id, el_cfg in elements.items():
+        theme = sivo.ThemeOverride(
+            color=el_cfg.get('fill'),
+            hover_color=el_cfg.get('hover')
+        )
+
+        kwargs = {
+            'theme_override': theme
+        }
+
+        if el_cfg.get('tooltip'):
+            kwargs['html'] = el_cfg['tooltip']
+
+        # Tooltip Z-Index Enforcement is handled by injecting custom CSS
+        if el_cfg.get('enforceZIndex'):
+            app.custom_css += "\\n.echarts-tooltip { z-index: 9999 !important; }"
+
+        if el_cfg.get('selectiveHover') == False:
+            # Prevent hover effects
+            theme.hover_color = el_cfg.get('fill')
+
+        # Actions
+        click_cb = el_cfg.get('clickCallback')
+        if click_cb == 'zoom':
+            kwargs['zoom_to'] = el_id
+        elif click_cb == 'toggle_image':
+            kwargs['toggle_image'] = {
+                'image_urls': [url.strip() for url in el_cfg.get('toggleImageUrls', '').split(',') if url.strip()],
+                'target_id': el_id
+            }
+        elif click_cb == 'footnote':
+            kwargs['footnote'] = el_cfg.get('footnoteText', '')
+
+        app.map(el_id, **kwargs)
+
+    html_output = app.to_html(build_js=False)
+except Exception as main_e:
+    html_output = f'<div style="color:red;"><pre>{traceback.format_exc()}</pre></div>'
+
+html_output
+`;
+
+        const resultHtml = await window.pyodide.runPythonAsync(pyCode);
+        previewFrame.srcdoc = resultHtml;
+        previewOverlay.classList.add('hidden');
+    } catch (err) {
+        console.error("Preview Generation Error:", err);
+        previewOverlay.innerHTML = `<div class="text-red-500 font-bold">Error generating preview</div><div class="text-xs text-red-400 p-4 overflow-auto">${err.message}</div>`;
+    }
+}
+
+// Scaffold Initial Project
+btnNewProject.addEventListener('click', () => {
+   // Switch tab to annotator or prompt for SVG
+   if (window.switchTab) {
+       window.switchTab('annotator');
+   }
+});
+
+btnAnnotateInspect.addEventListener('click', () => {
+   if (window.switchTab) {
+       window.switchTab('annotator');
+   }
+});
+
+// Initialize state
+saveState();
+
 
     </script>
 </body>
