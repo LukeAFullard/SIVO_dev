@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .bundle_generator import format_views_data, determine_dependencies
 
-def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
+def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, background_image_url: Optional[str] = None, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
     import warnings
     if template != "default":
         warnings.warn(f"Dashboard templates are deprecated. The '{template}' template parameter is ignored in favor of the modular CSS Grid Builder layout.", DeprecationWarning)
@@ -35,6 +35,7 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
         columns=columns,
         desktop_grid=desktop_grid,
         mobile_grid=mobile_grid,
+        background_image_url=background_image_url,
         custom_js=custom_js,
         **deps
     )

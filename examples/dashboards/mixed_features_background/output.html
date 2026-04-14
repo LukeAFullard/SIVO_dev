@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
-    <title>{{ title }}</title>
+    <title>Mixed Features with Background</title>
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    {% if confetti %}
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    {% endif %}
+
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
@@ -32,12 +30,12 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            {% if background_image_url %}
-            background-image: url('{{ background_image_url }}');
+
+            background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&amp;w=2070&amp;auto=format&amp;fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            {% endif %}
+
         }
 
         header {
@@ -60,11 +58,13 @@
             padding: 1.5rem;
             flex: 1;
             /* Remove overflow: hidden so body can scroll if needed */
-            {% if desktop_grid %}
-            grid-template-areas: {{ desktop_grid | safe }};
-            {% else %}
-            grid-template-columns: repeat({{ columns }}, 1fr);
-            {% endif %}
+
+            grid-template-areas:
+    "header header header"
+    "text graph image"
+    "video details image"
+        ;
+
         }
 
         .sivo-card {
@@ -90,12 +90,12 @@
             overflow: hidden;
         }
 
-        {% if background_image_url %}
+
         .sivo-card, .html-card, header {
             background-color: rgba(255, 255, 255, 0.85) !important;
             backdrop-filter: blur(10px);
         }
-        {% endif %}
+
 
         .sivo-container {
             flex: 1 1 0;
@@ -177,19 +177,19 @@
         /* Responsive Design */
         @media (max-width: 900px) {
             .dashboard-container {
-                {% if mobile_grid %}
-                grid-template-areas: {{ mobile_grid | safe }};
-                {% else %}
-                display: flex;
-                flex-direction: column;
-                {% endif %}
+
+                grid-template-areas:
+    "header"
+    "text"
+    "graph"
+    "details"
+    "image"
+    "video"
+        ;
+
             }
 
-            {% if not mobile_grid %}
-            .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel {
-                width: 100%;
-            }
-            {% endif %}
+
             .sivo-card {
                 min-height: 500px;
             }
@@ -199,55 +199,118 @@
 <body>
 
     <header>
-        <h1>{{ title }}</h1>
+        <h1>Mixed Features with Background</h1>
     </header>
 
     <div class="dashboard-container" id="dashboard-container">
-        {% for block in layout_order %}
-            {% set grid_style = '' %}
-            {% if desktop_grid and block.grid_area %}
-                {% set grid_style = 'grid-area: ' ~ block.grid_area ~ ';' %}
-            {% elif not desktop_grid and block.col_span %}
-                {% set grid_style = 'grid-column: span ' ~ block.col_span ~ ';' %}
-            {% endif %}
 
-            {% if block.type == "sivo" %}
-            <div class="sivo-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ block.id | title }}</div>
-                <div class="sivo-container" id="container-{{ block.id }}">
-                    <div id="chart-{{ block.id }}" style="width: 100%; height: 100%;"></div>
-                    <div id="overlay-{{ block.id }}" class="sivo-native-overlay-svg-container"></div>
+
+
+
+
+
+
+            <div class="html-card" id="card-header_block" style="grid-area: header;">
+                <div class="card-content" id="container-header_block">
+
+    <div style="text-align: center;">
+        <h2 style="margin:0;">Dashboard Header</h2>
+        <p>Observe how the fixed background image (forest) remains stable while the grid reshapes on different screen sizes.</p>
+    </div>
+
                 </div>
             </div>
-            {% elif block.type == "html" %}
-            <div class="html-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-content" id="container-{{ block.id }}">
-                    {{ html_blocks[block.id] | safe }}
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block" style="grid-area: text;">
+                <div class="card-content" id="container-text_block">
+
+    <div style="padding: 10px;">
+        <h3>Text Feature</h3>
+        <p>This is a standard text block containing HTML content.</p>
+        <p>When you resize the window, this block will reposition according to the CSS Grid rules (Desktop vs Mobile).</p>
+        <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
                 </div>
             </div>
-            {% elif block.type == "details" %}
-            <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ details_panels[block.id].title }}</div>
-                <div class="card-content sivo-details-content" id="container-{{ block.id }}">
-                    <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
+
+
+
+
+
+
+
+
+            <div class="sivo-card" id="card-graph_block" style="grid-area: graph;">
+                <div class="card-header">Graph_block</div>
+                <div class="sivo-container" id="container-graph_block">
+                    <div id="chart-graph_block" style="width: 100%; height: 100%;"></div>
+                    <div id="overlay-graph_block" class="sivo-native-overlay-svg-container"></div>
                 </div>
             </div>
-            {% elif block.type == "metrics" %}
-            <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ metrics_panels[block.id].title }}</div>
-                <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        {% for metric in metrics_panels[block.id].metrics %}
-                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
-                            <strong>{{ metric | title }}:</strong>
-                            <span class="metric-value" data-metric-key="{{ metric }}" style="font-weight: bold; color: var(--primary-color);">---</span>
-                        </div>
-                        {% endfor %}
-                    </div>
+
+
+
+
+
+
+
+
+            <div class="html-card sivo-details-panel" id="card-details_panel" data-block-id="details_panel" style="grid-area: details;">
+                <div class="card-header">Graph Details</div>
+                <div class="card-content sivo-details-content" id="container-details_panel">
+                    <p class="placeholder-text" style="color: #64748b;">Click the circle in the graph to see details.</p>
                 </div>
             </div>
-            {% endif %}
-        {% endfor %}
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-image_block" style="grid-area: image;">
+                <div class="card-content" id="container-image_block">
+
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <h3>Image Feature</h3>
+        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop" style="max-width: 100%; height: auto; border-radius: 8px;" alt="Sample image">
+    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-video_block" style="grid-area: video;">
+                <div class="card-content" id="container-video_block">
+
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <h3>Video Feature</h3>
+        <iframe width="100%" height="250" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=abcdefgh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border-radius: 8px;"></iframe>
+    </div>
+
+                </div>
+            </div>
+
+
     </div>
 
     <!-- Global Sliding Sidebar Overlay -->
@@ -264,7 +327,7 @@
     <!-- SIVO Data Injection -->
     <script>
         // SIVO passes `views_data` directly to this template
-        const viewsData = {{ views_data | safe }};
+        const viewsData = {"graph_block":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\"\u003e\n        \u003crect width=\"400\" height=\"400\" fill=\"transparent\"/\u003e\n        \u003ccircle cx=\"200\" cy=\"200\" r=\"100\" fill=\"#3b82f6\" id=\"circle_1\" name=\"circle_1\"/\u003e\n        \u003ctext x=\"200\" y=\"205\" font-family=\"sans-serif\" font-size=\"24\" fill=\"#fff\" text-anchor=\"middle\" pointer-events=\"none\"\u003eInteractive SVG\u003c/text\u003e\n    \u003c/svg\u003e","echarts_data":[{"name":"circle_1","value":1,"itemStyle":{"areaColor":"#3b82f6"},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"#f59e0b"}}}],"actions_manifest":{"circle_1":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"circle_1"},{"action_type":"tooltip","content":"\u003ch4\u003eClicked the circle\u003c/h4\u003e\u003cp\u003eInteractivity works within translucent grid items. The background image of the forest is visible.\u003c/p\u003e","title":null,"panel_position":"overlay"}]},"overlays":{},"metadata":{"objects":[{"id":"circle_1","type":"circle","bbox":[100.0,100.0,300.0,300.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[400.0,400.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"circle_1":{"id":"circle_1","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"circle_1"},{"action_type":"tooltip","content":"\u003ch4\u003eClicked the circle\u003c/h4\u003e\u003cp\u003eInteractivity works within translucent grid items. The background image of the forest is visible.\u003c/p\u003e","title":null,"panel_position":"overlay"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#3b82f6","hover_color":"#f59e0b","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
         const activeCharts = {};
         window.sivoToggleImageState = window.sivoToggleImageState || {};
 
@@ -701,9 +764,7 @@
         }
 
         // Inject Custom JS if provided
-        {% if custom_js %}
-            {{ custom_js | safe }}
-        {% endif %}
+
     </script>
 </body>
 </html>
