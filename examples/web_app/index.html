@@ -232,9 +232,12 @@ else:
                     <option value="Xenova/slimsam-77-uniform">SlimSAM-77 (~8MB)</option>
                     <option value="Xenova/sam-vit-base">SAM ViT-Base (~300MB)</option>
                 </select>
-                <div style="display: flex; gap: 5px;">
-                    <button id="sam-apply-btn" class="secondary" style="border-color: #4f46e5; color: #4f46e5; flex: 2;">Generate Mask</button>
-                    <button id="sam-clear-btn" class="secondary" style="border-color: #ef4444; color: #ef4444; flex: 1;">Clear</button>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <div style="display: flex; gap: 5px;">
+                        <button id="sam-apply-btn" class="secondary" style="border-color: #4f46e5; color: #4f46e5; flex: 2; margin-bottom: 0;">Generate Mask</button>
+                        <button id="sam-clear-btn" class="secondary" style="border-color: #ef4444; color: #ef4444; flex: 1; margin-bottom: 0;">Clear</button>
+                    </div>
+                    <button id="sam-accept-btn" class="secondary" style="border-color: #10b981; color: #10b981; width: 100%;" disabled>Accept Shape (Enter)</button>
                 </div>
             </div>
 
@@ -331,6 +334,7 @@ else:
         const samOptionsDiv = document.getElementById('sam-options');
         const samModelSelect = document.getElementById('sam-model-select');
         const samApplyBtn = document.getElementById('sam-apply-btn');
+        const samAcceptBtn = document.getElementById('sam-accept-btn');
 
         samApplyBtn.addEventListener('click', () => {
             if (currentTool === 'sam' && isSamReady && isImageEmbedded && currentSamPoints.length > 0) {
@@ -346,7 +350,20 @@ else:
             samClearBtn.addEventListener('click', () => {
                 currentSamPoints = [];
                 currentSamPreview = null;
+                if (samAcceptBtn) samAcceptBtn.disabled = true;
                 redraw();
+            });
+        }
+
+        if (samAcceptBtn) {
+            samAcceptBtn.addEventListener('click', () => {
+                if (currentTool === 'sam' && currentSamPreview) {
+                    addShape('poly', null, [...currentSamPreview.points], null);
+                    currentSamPoints = [];
+                    currentSamPreview = null;
+                    samAcceptBtn.disabled = true;
+                    redraw();
+                }
             });
         }
 
@@ -657,6 +674,9 @@ else:
             } else {
                 currentSamPreview = null;
             }
+            if (samAcceptBtn) {
+                samAcceptBtn.disabled = !currentSamPreview;
+            }
             redraw();
         }
 
@@ -835,6 +855,7 @@ else:
             currentPath = [];
             currentSamPoints = [];
             currentSamPreview = null;
+            if (samAcceptBtn) samAcceptBtn.disabled = true;
             isDrawing = false;
             startPoint = null;
             selectedShapeIndices.clear();

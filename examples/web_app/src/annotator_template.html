@@ -61,9 +61,12 @@
                     <option value="Xenova/slimsam-77-uniform">SlimSAM-77 (~8MB)</option>
                     <option value="Xenova/sam-vit-base">SAM ViT-Base (~300MB)</option>
                 </select>
-                <div style="display: flex; gap: 5px;">
-                    <button id="sam-apply-btn" class="secondary" style="border-color: #4f46e5; color: #4f46e5; flex: 2;">Generate Mask</button>
-                    <button id="sam-clear-btn" class="secondary" style="border-color: #ef4444; color: #ef4444; flex: 1;">Clear</button>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <div style="display: flex; gap: 5px;">
+                        <button id="sam-apply-btn" class="secondary" style="border-color: #4f46e5; color: #4f46e5; flex: 2; margin-bottom: 0;">Generate Mask</button>
+                        <button id="sam-clear-btn" class="secondary" style="border-color: #ef4444; color: #ef4444; flex: 1; margin-bottom: 0;">Clear</button>
+                    </div>
+                    <button id="sam-accept-btn" class="secondary" style="border-color: #10b981; color: #10b981; width: 100%;" disabled>Accept Shape (Enter)</button>
                 </div>
             </div>
 
