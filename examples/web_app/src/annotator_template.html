@@ -13,22 +13,27 @@
     <div id="sidebar">
         <h1>SIVO Annotator</h1>
 
-        <label class="file-upload-label">
-            <input type="file" id="image-upload" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml">
-            Load Background Image
-        </label>
+        <details id="setup-section" open style="margin-bottom: 20px;">
+            <summary style="cursor: pointer; font-weight: bold; margin-bottom: 10px; color: #4b5563;">Load Setup</summary>
+            <div style="padding-top: 10px;">
+                <label class="file-upload-label">
+                    <input type="file" id="image-upload" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml">
+                    Load Background Image
+                </label>
 
-        <div style="margin-bottom: 20px;">
-            <h3 style="font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">Or Load Project</h3>
-            <div style="display: flex; gap: 10px;">
-                <button id="load-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Load Project (.json)</button>
-                <input type="file" id="load-project-file" accept=".json" style="display: none;">
+                <div style="margin-bottom: 10px;">
+                    <h3 style="font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">Or Load Project</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="load-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Load Project (.json)</button>
+                        <input type="file" id="load-project-file" accept=".json" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="instructions" id="setup-instructions" style="border-top: 1px solid #e5e7eb; padding-top: 15px;">
+                    Load an image or a project to start drawing regions of interest. The dimensions will dictate the SVG template's viewBox.
+                </div>
             </div>
-        </div>
-
-        <div class="instructions" id="setup-instructions" style="border-top: 1px solid #e5e7eb; padding-top: 15px;">
-            Load an image or a project to start drawing regions of interest. The dimensions will dictate the SVG template's viewBox.
-        </div>
+        </details>
 
         <div id="tools" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 15px;">
