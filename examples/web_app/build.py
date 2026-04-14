@@ -32,6 +32,11 @@ def build():
     with open(os.path.join(src_dir, 'annotator.js'), 'r', encoding='utf-8') as f:
         annotator_js = f.read()
 
+    with open(os.path.join(src_dir, 'builder_preview.py'), 'r', encoding='utf-8') as f:
+        builder_preview_py = f.read()
+
+    import json
+
     # Process annotator_template.html
     annotator = annotator_template.replace('        /* ANNOTATOR_CSS_PLACEHOLDER */', annotator_css)
     annotator = annotator.replace('        // ANNOTATOR_JS_PLACEHOLDER', annotator_js)
@@ -41,6 +46,7 @@ def build():
     output_html = output_html.replace('EDITOR_BOILERPLATE_PLACEHOLDER', editor_boilerplate)
 
     # Combine app.js and builder.js
+    builder_js = builder_js.replace('BUILDER_PREVIEW_PY_PLACEHOLDER', json.dumps(builder_preview_py))
     combined_js = app_js + "\n\n" + builder_js
     output_html = output_html.replace('        // APP_JS_PLACEHOLDER', combined_js)
 
