@@ -368,6 +368,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
 - [ ] Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
+- [ ] Implement Preview Modes: Full screen preview mode, Mobile preview, and iPad/tablet preview.
 - [ ] Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
 - [ ] Implement the Interactive Preview Pane (renders via `app.to_html()`).
 - [ ] Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
