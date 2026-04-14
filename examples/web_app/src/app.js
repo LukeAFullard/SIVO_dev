@@ -14,6 +14,7 @@
             const buttons = document.querySelectorAll('.tab-btn');
             if (tabId === 'annotator') buttons[0].classList.add('active');
             if (tabId === 'workspace') buttons[1].classList.add('active');
+            if (tabId === 'builder') buttons[2].classList.add('active');
         }
 
         let pyodide;
