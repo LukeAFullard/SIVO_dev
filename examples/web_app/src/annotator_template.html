@@ -18,12 +18,20 @@
             Load Background Image
         </label>
 
-        <div class="instructions" id="setup-instructions">
-            Load an image to start drawing regions of interest. The dimensions will dictate the SVG template's viewBox.
+        <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">Or Load Project</h3>
+            <div style="display: flex; gap: 10px;">
+                <button id="load-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Load Project (.json)</button>
+                <input type="file" id="load-project-file" accept=".json" style="display: none;">
+            </div>
+        </div>
+
+        <div class="instructions" id="setup-instructions" style="border-top: 1px solid #e5e7eb; padding-top: 15px;">
+            Load an image or a project to start drawing regions of interest. The dimensions will dictate the SVG template's viewBox.
         </div>
 
         <div id="tools" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 15px;">
                 <h2>Drawing Tool</h2>
                 <input type="color" id="tool-color" value="#3b82f6" title="Change Drawing Color" style="cursor: pointer; padding: 0; margin: 0; width: 24px; height: 24px; border: none; background: none;">
             </div>
@@ -80,9 +88,7 @@
             <div style="margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 15px;">
                 <h3 style="font-size: 0.9rem; color: #4b5563; margin-bottom: 10px;">Project State</h3>
                 <div style="display: flex; gap: 10px;">
-                    <button id="save-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Save</button>
-                    <button id="load-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Load</button>
-                    <input type="file" id="load-project-file" accept=".json" style="display: none;">
+                    <button id="save-project-btn" class="secondary" style="flex: 1; padding: 6px; font-size: 0.8rem;">Save Project</button>
                 </div>
             </div>
         </div>
