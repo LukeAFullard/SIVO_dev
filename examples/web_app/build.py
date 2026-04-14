@@ -11,6 +11,9 @@ def build():
     with open(os.path.join(src_dir, 'annotator_template.html'), 'r', encoding='utf-8') as f:
         annotator_template = f.read()
 
+    with open(os.path.join(src_dir, 'builder_template.html'), 'r', encoding='utf-8') as f:
+        builder_template = f.read()
+
     with open(os.path.join(src_dir, 'app.css'), 'r', encoding='utf-8') as f:
         app_css = f.read()
 
@@ -35,6 +38,7 @@ def build():
     output_html = output_html.replace('EDITOR_BOILERPLATE_PLACEHOLDER', editor_boilerplate)
     output_html = output_html.replace('        // APP_JS_PLACEHOLDER', app_js)
     output_html = output_html.replace('        <!-- ANNOTATOR_TEMPLATE_PLACEHOLDER -->', annotator)
+    output_html = output_html.replace('        <!-- APP_BUILDER_PLACEHOLDER -->', builder_template)
 
     with open(os.path.join(base_dir, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(output_html)
