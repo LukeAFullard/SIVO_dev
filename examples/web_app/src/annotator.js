@@ -17,6 +17,25 @@
         const magicOptionsDiv = document.getElementById('magic-wand-options');
         const samOptionsDiv = document.getElementById('sam-options');
         const samModelSelect = document.getElementById('sam-model-select');
+        const samApplyBtn = document.getElementById('sam-apply-btn');
+
+        samApplyBtn.addEventListener('click', () => {
+            if (currentTool === 'sam' && isSamReady && isImageEmbedded && currentSamPoints.length > 0) {
+                canvas.style.cursor = 'wait';
+                const pList = currentSamPoints.map(p => ({x: p.x, y: p.y}));
+                const lList = currentSamPoints.map(p => p.label);
+                samWorker.postMessage({ type: 'segment', points: pList, labels: lList });
+            }
+        });
+
+        const samClearBtn = document.getElementById('sam-clear-btn');
+        if (samClearBtn) {
+            samClearBtn.addEventListener('click', () => {
+                currentSamPoints = [];
+                currentSamPreview = null;
+                redraw();
+            });
+        }
 
         samModelSelect.addEventListener('change', () => {
             if (toolSamBtn.classList.contains('tool-active')) {
@@ -27,6 +46,8 @@
 
         const samLoadingDiv = document.getElementById('sam-loading');
         const samStatusText = document.getElementById('sam-status-text');
+        const samProgressContainer = document.getElementById('sam-progress-container');
+        const samProgressBar = document.getElementById('sam-progress-bar');
         const magicToleranceInput = document.getElementById('magic-tolerance');
         const magicToleranceVal = document.getElementById('tolerance-val');
         const toolColorInput = document.getElementById('tool-color');
@@ -123,11 +144,11 @@
             toolSamBtn.disabled = true;
 
             const workerCode = `
-                import { env, AutoModel, AutoProcessor, RawImage } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.0';
+                import { env, SamModel, AutoProcessor, RawImage, Tensor } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.0';
 
                 // Configure environments
                 env.allowLocalModels = false;
-                env.useBrowserCache = true;
+                env.useBrowserCache = false;
 
                 let model = null;
                 let processor = null;
@@ -136,7 +157,7 @@
 
                 async function initModel(model_id) {
                     try {
-                        model = await AutoModel.from_pretrained(model_id, {
+                        model = await SamModel.from_pretrained(model_id, {
                             quantized: true,
                             progress_callback: (data) => {
                                 if (data.status !== 'done') {
@@ -172,60 +193,99 @@
 
                             const inputs = await processor(image);
                             image_embeddings = await model.get_image_embeddings(inputs);
+                            // We explicitly save reshaped_input_sizes to use in segment
+                            self.reshaped_input_sizes = inputs.reshaped_input_sizes;
 
-                            postMessage({ type: 'embedded' });
+                            postMessage({ type: 'embedded', original_sizes: [original_image_size], reshaped_input_sizes: inputs.reshaped_input_sizes });
                         } catch (err) {
                             postMessage({ type: 'error', message: err.toString() });
                         }
                     }
-                    else if (e.data.type === 'segment') {
+                                        else if (e.data.type === 'segment') {
                         if (!model || !processor || !image_embeddings) return;
                         try {
                             const { points, labels } = e.data;
 
-                            // Reformat arrays for processor: shape is [batch, num_points, 2]
-                            const formattedPoints = points.map(p => [p.x, p.y]);
-                            const formattedLabels = labels;
-
-                            const inputs = await processor({
-                                input_points: [[formattedPoints]],
-                                input_labels: [[formattedLabels]],
-                                image_embeddings: image_embeddings,
-                                original_sizes: [original_image_size],
-                                reshaped_input_sizes: [[image_embeddings.dims[2] * 16, image_embeddings.dims[3] * 16]],
+                            // Scale points to 256x256 space which is what the model uses for inputs
+                            // We don't scale it here as the processor handles it or we might need manual scaling
+                            // based on how transformers.js SAM is implemented.
+                            // In Xenova SAM demo, they scale the [0,1] coordinates by reshaped_input_sizes
+                            // But here we get world coordinates. Let's convert to [0,1] first.
+                            // Convert world coordinates to [0,1] then to reshaped size
+                            const reshaped = (self.reshaped_input_sizes && self.reshaped_input_sizes[0]) || [image_embeddings.image_embeddings.dims[2] * 16, image_embeddings.image_embeddings.dims[3] * 16];
+                            const pts = points.map(p => {
+                                const normX = p.x / original_image_size[1];
+                                const normY = p.y / original_image_size[0];
+                                return [normX * reshaped[1], normY * reshaped[0]];
                             });
 
-                            const outputs = await model(inputs);
-                            const masks = outputs.pred_masks;
+                            // Manual Tensor creation (like xenova demo)
+                            const input_points = new Tensor(
+                                'float32',
+                                pts.flat(Infinity),
+                                [1, 1, pts.length, 2],
+                            );
 
-                            // masks shape: [batch_size, num_masks, height, width]
-                            // We take the first mask (index 0)
-                            const maskData = masks.data;
-                            const h = masks.dims[2];
-                            const w = masks.dims[3];
+                            // Labels also need to be BigInt for int64 Tensor!
+                            const BigIntLabels = labels.map(x => BigInt(x));
+                            const input_labels = new Tensor(
+                                'int64',
+                                BigIntLabels.flat(Infinity),
+                                [1, 1, labels.length],
+                            );
 
-                            const binaryMask = new Uint8Array(w * h);
+                            const outputs = await model({
+                                ...image_embeddings,
+                                input_points,
+                                input_labels,
+                            });
 
-                            // Output mask is [h, w] matching original image size mostly
-                            for (let i = 0; i < maskData.length; i++) {
-                                // Threshold > 0
-                                binaryMask[i] = maskData[i] > 0.0 ? 1 : 0;
+                            // Post-process the masks
+                            // self.reshaped_input_sizes was saved during embed!
+                            const reshaped_sizes = self.reshaped_input_sizes || [[image_embeddings.image_embeddings.dims[2] * 16, image_embeddings.image_embeddings.dims[3] * 16]];
+                            const masks = await processor.post_process_masks(
+                                outputs.pred_masks,
+                                [original_image_size],
+                                reshaped_sizes
+                            );
+
+                            // The post-processed mask matches the original image dimensions exactly
+                            const finalMask = masks[0][0]; // Tensor of shape [3, h, w]
+
+                            // Select best mask using iou_scores
+                            const scores = outputs.iou_scores.data;
+                            let bestIndex = 0;
+                            for (let i = 1; i < scores.length; ++i) {
+                                if (scores[i] > scores[bestIndex]) {
+                                    bestIndex = i;
+                                }
                             }
 
-                            postMessage({ type: 'segmented', mask: binaryMask, w, h });
+                            const numMasks = scores.length;
+                            const maskData = finalMask.data;
+                            const mw = finalMask.dims[2];
+                            const mh = finalMask.dims[1];
+                            const binaryMask = new Uint8Array(mw * mh);
+
+                            for (let i = 0; i < mw * mh; ++i) {
+                                binaryMask[i] = maskData[bestIndex * mw * mh + i] > 0.0 ? 1 : 0;
+                            }
+
+                            postMessage({ type: 'segmented', mask: binaryMask, w: mw, h: mh, origW: original_image_size[1], origH: original_image_size[0] });
                         } catch (err) {
                             postMessage({ type: 'error', message: err.toString() });
                         }
-                    }
-                };
+                    }  };
             `;
 
-            const blob = new Blob([workerCode], { type: 'application/javascript' });
-            samWorker = new Worker(URL.createObjectURL(blob), { type: 'module' });
+            const dataUri = 'data:text/javascript;charset=utf-8,' + encodeURIComponent(workerCode);
+            samWorker = new Worker(dataUri, { type: 'module' });
 
             samWorker.onmessage = (e) => {
                 if (e.data.type === 'ready') {
                     isSamReady = true;
+                    samProgressContainer.style.display = 'none';
+                    samProgressBar.style.width = '0%';
                     // If an image was loaded before SAM was ready, embed it now
                     if (bgImage.src && !isImageEmbedded) {
                         embedImageForSam();
@@ -235,15 +295,21 @@
                     }
                 } else if (e.data.type === 'progress') {
                     samStatusText.innerText = e.data.message;
+                    if (e.data.progress !== undefined) {
+                        samProgressContainer.style.display = 'block';
+                        samProgressBar.style.width = e.data.progress + '%';
+                    }
                 } else if (e.data.type === 'embedded') {
                     isImageEmbedded = true;
                     samLoadingDiv.style.display = 'none';
+                    samProgressContainer.style.display = 'none';
                     toolSamBtn.disabled = false;
                 } else if (e.data.type === 'segmented') {
-                    handleSamSegmentation(e.data.mask, e.data.w, e.data.h);
+                    handleSamSegmentation(e.data.mask, e.data.w, e.data.h, e.data.origW, e.data.origH);
                 } else if (e.data.type === 'error') {
                     console.error("SAM Worker Error:", e.data.message);
                     samStatusText.innerText = "SAM Error";
+                    samProgressContainer.style.display = 'none';
                     setTimeout(() => { samLoadingDiv.style.display = 'none'; }, 3000);
                 }
             };
@@ -259,14 +325,22 @@
             samWorker.postMessage({ type: 'embed', imageSrc: bgImage.src });
         }
 
-        function handleSamSegmentation(maskArray, w, h) {
+        function handleSamSegmentation(maskArray, w, h, origW, origH) {
             canvas.style.cursor = 'crosshair';
 
             // Fast extraction logic using existing Moore-Neighborhood trace
             const rawPath = traceContour(maskArray, w, h);
             if (rawPath && rawPath.length > 2) {
                 const simplified = simplifyPath(rawPath, 2.0);
-                currentSamPreview = { points: simplified };
+
+                // Scale back up to original image dimensions if necessary
+                // Sometimes w and h are exactly origW and origH because of post_process_masks
+                // but if not, we handle it here.
+                const scaleX = origW / w;
+                const scaleY = origH / h;
+                const scaledPoints = simplified.map(p => ({ x: p.x * scaleX, y: p.y * scaleY }));
+
+                currentSamPreview = { points: scaledPoints };
             } else {
                 currentSamPreview = null;
             }
@@ -821,11 +895,7 @@
                     currentSamPoints.push({ x, y, label: 0 }); // Negative point
                 }
 
-                canvas.style.cursor = 'wait';
-                const pList = currentSamPoints.map(p => ({x: p.x, y: p.y}));
-                const lList = currentSamPoints.map(p => p.label);
-                samWorker.postMessage({ type: 'segment', points: pList, labels: lList });
-
+                // Just update the points visually, do not trigger model
                 redraw();
             }
         });
@@ -1090,7 +1160,10 @@
             // Undo / Redo Shortcuts
             if (e.ctrlKey || e.metaKey) {
                 if (e.key === 'z') {
-                    if (e.shiftKey) {
+                    if (currentTool === 'sam' && currentSamPoints.length > 0) {
+                        currentSamPoints.pop();
+                        redraw();
+                    } else if (e.shiftKey) {
                         redo();
                     } else {
                         undo();
