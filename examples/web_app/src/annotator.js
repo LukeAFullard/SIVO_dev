@@ -525,7 +525,7 @@
             } else if (tool === 'sam') {
                 toolSamBtn.classList.add('tool-active');
                 samOptionsDiv.style.display = 'block';
-                toolInstructions.innerHTML = "<strong>Left Click</strong> to include. <strong>Right Click</strong> to exclude. Press <strong>Enter</strong> to complete the shape. Press <strong>Esc</strong> to cancel.";
+                toolInstructions.innerHTML = "<strong>Left Click</strong> to include. <strong>Right Click</strong> to exclude. Click <strong>Generate Mask</strong> then <strong>Accept Shape</strong> to complete.";
 
                 // Lazy-load SAM Worker when tool is clicked
                 if (!samWorker) {
