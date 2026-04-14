@@ -18,6 +18,7 @@
         const samOptionsDiv = document.getElementById('sam-options');
         const samModelSelect = document.getElementById('sam-model-select');
         const samApplyBtn = document.getElementById('sam-apply-btn');
+        const samAcceptBtn = document.getElementById('sam-accept-btn');
 
         samApplyBtn.addEventListener('click', () => {
             if (currentTool === 'sam' && isSamReady && isImageEmbedded && currentSamPoints.length > 0) {
@@ -33,7 +34,20 @@
             samClearBtn.addEventListener('click', () => {
                 currentSamPoints = [];
                 currentSamPreview = null;
+                if (samAcceptBtn) samAcceptBtn.disabled = true;
                 redraw();
+            });
+        }
+
+        if (samAcceptBtn) {
+            samAcceptBtn.addEventListener('click', () => {
+                if (currentTool === 'sam' && currentSamPreview) {
+                    addShape('poly', null, [...currentSamPreview.points], null);
+                    currentSamPoints = [];
+                    currentSamPreview = null;
+                    samAcceptBtn.disabled = true;
+                    redraw();
+                }
             });
         }
 
@@ -344,6 +358,9 @@
             } else {
                 currentSamPreview = null;
             }
+            if (samAcceptBtn) {
+                samAcceptBtn.disabled = !currentSamPreview;
+            }
             redraw();
         }
 
@@ -522,6 +539,7 @@
             currentPath = [];
             currentSamPoints = [];
             currentSamPreview = null;
+            if (samAcceptBtn) samAcceptBtn.disabled = true;
             isDrawing = false;
             startPoint = null;
             selectedShapeIndices.clear();
