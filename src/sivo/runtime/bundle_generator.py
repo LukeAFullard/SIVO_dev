@@ -178,6 +178,17 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
                 if theme.get('morph_to_path') or theme.get('filter') or theme.get('clip_path') or theme.get('mask') or theme.get('transform') or mapping_dict.get('draggable'):
                     item_style['opacity'] = 0
 
+            element_type = None
+            for obj in view_obj.get("metadata", {}).get("objects", []):
+                if obj.get("id") == name or obj.get("name") == name:
+                    element_type = obj.get("type")
+                    break
+
+            if element_type == "image":
+                item_style['borderColor'] = 'transparent'
+                if view_obj.get("render_mode", "canvas") == "svg":
+                    item_style['opacity'] = 0
+
             if item_style:
                 data_item['itemStyle'] = item_style
             emphasis_style = {}

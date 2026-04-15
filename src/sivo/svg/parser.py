@@ -38,7 +38,7 @@ class SVGParser:
             except ValueError:
                 # E.g. when elem.tag is a Comment or PI (processing instruction)
                 continue
-            if tag_name in ['path', 'rect', 'circle', 'g', 'polygon', 'polyline', 'text', 'tspan']:
+            if tag_name in ['path', 'rect', 'circle', 'g', 'polygon', 'polyline', 'text', 'tspan', 'image']:
                 elem_id = elem.get('id')
                 if elem_id:
                     elem_name = elem.get('name')
@@ -56,6 +56,17 @@ class SVGParser:
 
                     if tag_name == 'path' and elem.get('d'):
                         element_data['d'] = elem.get('d')
+
+                    if tag_name == 'image':
+                        # Inject an invisible rect to act as a hitbox for ECharts
+                        x = elem.get('x', '0')
+                        y = elem.get('y', '0')
+                        width = elem.get('width', '0')
+                        height = elem.get('height', '0')
+                        hitbox = etree.Element('rect', {'x': x, 'y': y, 'width': width, 'height': height, 'fill': 'transparent', 'name': elem_name, 'id': elem_id + '_hitbox'})
+                        elem.addnext(hitbox)
+
+                        # ECharts ignores <image> for interactions, but because we gave the hitbox the same name, it will bind to the hitbox.
 
                     if bbox:
                         element_data['bbox'] = bbox
