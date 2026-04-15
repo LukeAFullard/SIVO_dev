@@ -58,6 +58,18 @@ const propClickCallback = document.getElementById('prop-click-callback');
 const propHoverCallback = document.getElementById('prop-hover-callback');
 const btnApplyProps = document.getElementById('btn-apply-props');
 
+
+const btnValidateProject = document.getElementById("btn-validate-project");
+const validationResults = document.getElementById("validation-results");
+const propDataFile = document.getElementById("prop-data-file");
+const btnSelectDataFile = document.getElementById("btn-select-data-file");
+
+
+const propGraphType = document.getElementById("prop-graph-type");
+
+const btnAddDashboardBlock = document.getElementById("btn-add-dashboard-block");
+
+
 // Dynamic Property Containers
 const propFootnoteContainer = document.getElementById('prop-footnote-container');
 const propToggleImageContainer = document.getElementById('prop-toggle-image-container');
@@ -128,6 +140,7 @@ jsonUploadLocal.addEventListener('change', (e) => {
             propCustomSvg.value = config.customSvg || '';
             propBgImage.value = config.bgImage || '';
             propHighlightElements.checked = !!config.highlightElements;
+            propDataFile.value = config.dataFile || "";
 
             saveState();
             previewOverlay.classList.add('hidden');
@@ -151,6 +164,7 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             propCustomSvg.value = config.customSvg || '';
             propBgImage.value = config.bgImage || '';
             propHighlightElements.checked = !!config.highlightElements;
+            propDataFile.value = config.dataFile || "";
 
             saveState();
             previewOverlay.classList.add('hidden');
@@ -302,6 +316,13 @@ propClickCallback.addEventListener('change', (e) => {
 });
 
 function refreshPropertiesPanel() {
+
+    // Sync globals
+    propCustomSvg.value = builderState.currentConfig.customSvg || "";
+    propBgImage.value = builderState.currentConfig.bgImage || "";
+    propHighlightElements.checked = !!builderState.currentConfig.highlightElements;
+    propDataFile.value = builderState.currentConfig.dataFile || "";
+
     const id = propElementId.value;
     if (!id || !builderState.currentConfig.elements[id]) {
         // Reset defaults
@@ -314,6 +335,7 @@ function refreshPropertiesPanel() {
         propHoverEffects.checked = true;
         propClickCallback.value = 'none';
         propHoverCallback.value = 'none';
+        propGraphType.value = 'none';
 
         propFootnoteContainer.classList.add('hidden');
         propToggleImageContainer.classList.add('hidden');
@@ -364,6 +386,9 @@ btnApplyProps.addEventListener('click', () => {
     el.selectiveHover = propHoverEffects.checked;
     el.clickCallback = propClickCallback.value;
     el.hoverCallback = propHoverCallback.value;
+
+    el.graphType = propGraphType.value;
+
 
     if (el.clickCallback === 'footnote') el.footnoteText = document.getElementById('prop-footnote-text').value;
     if (el.clickCallback === 'toggle_image') el.toggleImageUrls = document.getElementById('prop-toggle-image-urls').value;
@@ -436,3 +461,93 @@ btnAnnotateInspect.addEventListener('click', () => {
 
 // Initialize state
 saveState();
+
+
+
+
+// --- Phase 3 Features ---
+btnSelectDataFile.addEventListener("click", () => {
+    showIdbfsModal("Select CSV File", ".csv", (filename) => {
+        propDataFile.value = filename;
+        builderState.currentConfig.dataFile = filename;
+
+        // Data Binding Wizard Logic: Auto-populate elements if valid CSV
+        const mountDir = "/sivo_workspace";
+        try {
+            const data = window.pyodide.FS.readFile(`${mountDir}/${filename}`, { encoding: 'utf8' });
+            // Very simple CSV parse to find IDs
+            const lines = data.split("\n");
+            if (lines.length > 1) {
+                const header = lines[0].split(",");
+                const idIdx = header.indexOf("id");
+                if (idIdx !== -1) {
+                    for(let i=1; i<lines.length; i++) {
+                        const cols = lines[i].split(",");
+                        if (cols.length > idIdx) {
+                            const id = cols[idIdx].trim();
+                            if (id && !builderState.currentConfig.elements[id]) {
+                                builderState.currentConfig.elements[id] = {
+                                    fill: '#3b82f6',
+                                    hover: '#60a5fa'
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(e) {
+            console.error(e);
+        }
+
+        saveState();
+        generatePreview();
+    });
+});
+
+propDataFile.addEventListener("change", (e) => {
+    builderState.currentConfig.dataFile = e.target.value.trim();
+    saveState();
+    generatePreview();
+});
+
+
+btnAddDashboardBlock.addEventListener("click", () => {
+    if (!builderState.currentConfig.dashboardBlocks) {
+        builderState.currentConfig.dashboardBlocks = [];
+    }
+    const idx = builderState.currentConfig.dashboardBlocks.length + 1;
+    builderState.currentConfig.dashboardBlocks.push({
+        title: "Metric " + idx,
+        value: Math.floor(Math.random() * 1000).toString()
+    });
+
+    // Quick UI feedback
+    btnAddDashboardBlock.innerText = `+ Add Dashboard Block (${idx} added)`;
+    setTimeout(() => {
+        btnAddDashboardBlock.innerText = "+ Add Dashboard Block";
+    }, 1500);
+
+    saveState();
+    generatePreview();
+});
+
+btnValidateProject.addEventListener("click", () => {
+    // Basic validation
+    validationResults.classList.remove("hidden");
+    let errors = [];
+    if (!builderState.currentConfig.template && !builderState.currentConfig.customSvg) {
+        errors.push("No template or custom SVG selected.");
+    }
+
+    if (Object.keys(builderState.currentConfig.elements || {}).length === 0 && !builderState.currentConfig.dataFile) {
+        errors.push("No interactive elements or data bindings configured.");
+    }
+
+    if (errors.length > 0) {
+        validationResults.innerHTML = "<b>Validation Issues:</b><br/>" + errors.join("<br/>");
+        validationResults.className = "mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto";
+    } else {
+        validationResults.innerHTML = "Project is valid!";
+        validationResults.className = "mt-2 text-xs text-green-600 bg-green-50 border border-green-200 rounded p-2 max-h-32 overflow-y-auto";
+    }
+});
