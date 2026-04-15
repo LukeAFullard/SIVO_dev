@@ -253,6 +253,53 @@ else:
                 <input type="text" id="prop-element-id" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
+
+            <!-- Diagnostics / Validation -->
+            <div>
+                <button id="btn-validate-project" class="w-full px-3 py-2 text-sm bg-yellow-100 border border-yellow-300 rounded hover:bg-yellow-200 text-yellow-800 transition-colors">
+                    Validate Project (Diagnostics)
+                </button>
+                <div id="validation-results" class="hidden mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto"></div>
+            </div>
+
+            <!-- Data Binding (Choropleth) -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Data Binding</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">CSV File Path (IDBFS)</label>
+                        <input type="text" id="prop-data-file" placeholder="e.g. data.csv" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                        <button id="btn-select-data-file" class="mt-1 w-full px-2 py-1 text-xs bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600">Select File</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Blocks -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Dashboard Blocks</h3>
+                <div class="space-y-3">
+                    <button id="btn-add-dashboard-block" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors">
+                        + Add Dashboard Block
+                    </button>
+                </div>
+            </div>
+
+            <!-- Graph Generation -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Graph Generation</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Generate Graph on Click</label>
+                        <select id="prop-graph-type" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <!-- Appearance -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Appearance</h3>
@@ -2652,6 +2699,18 @@ const propClickCallback = document.getElementById('prop-click-callback');
 const propHoverCallback = document.getElementById('prop-hover-callback');
 const btnApplyProps = document.getElementById('btn-apply-props');
 
+
+const btnValidateProject = document.getElementById("btn-validate-project");
+const validationResults = document.getElementById("validation-results");
+const propDataFile = document.getElementById("prop-data-file");
+const btnSelectDataFile = document.getElementById("btn-select-data-file");
+
+
+const propGraphType = document.getElementById("prop-graph-type");
+
+const btnAddDashboardBlock = document.getElementById("btn-add-dashboard-block");
+
+
 // Dynamic Property Containers
 const propFootnoteContainer = document.getElementById('prop-footnote-container');
 const propToggleImageContainer = document.getElementById('prop-toggle-image-container');
@@ -2722,6 +2781,7 @@ jsonUploadLocal.addEventListener('change', (e) => {
             propCustomSvg.value = config.customSvg || '';
             propBgImage.value = config.bgImage || '';
             propHighlightElements.checked = !!config.highlightElements;
+            propDataFile.value = config.dataFile || "";
 
             saveState();
             previewOverlay.classList.add('hidden');
@@ -2745,6 +2805,7 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             propCustomSvg.value = config.customSvg || '';
             propBgImage.value = config.bgImage || '';
             propHighlightElements.checked = !!config.highlightElements;
+            propDataFile.value = config.dataFile || "";
 
             saveState();
             previewOverlay.classList.add('hidden');
@@ -2896,6 +2957,13 @@ propClickCallback.addEventListener('change', (e) => {
 });
 
 function refreshPropertiesPanel() {
+
+    // Sync globals
+    propCustomSvg.value = builderState.currentConfig.customSvg || "";
+    propBgImage.value = builderState.currentConfig.bgImage || "";
+    propHighlightElements.checked = !!builderState.currentConfig.highlightElements;
+    propDataFile.value = builderState.currentConfig.dataFile || "";
+
     const id = propElementId.value;
     if (!id || !builderState.currentConfig.elements[id]) {
         // Reset defaults
@@ -2908,6 +2976,7 @@ function refreshPropertiesPanel() {
         propHoverEffects.checked = true;
         propClickCallback.value = 'none';
         propHoverCallback.value = 'none';
+        propGraphType.value = 'none';
 
         propFootnoteContainer.classList.add('hidden');
         propToggleImageContainer.classList.add('hidden');
@@ -2959,6 +3028,9 @@ btnApplyProps.addEventListener('click', () => {
     el.clickCallback = propClickCallback.value;
     el.hoverCallback = propHoverCallback.value;
 
+    el.graphType = propGraphType.value;
+
+
     if (el.clickCallback === 'footnote') el.footnoteText = document.getElementById('prop-footnote-text').value;
     if (el.clickCallback === 'toggle_image') el.toggleImageUrls = document.getElementById('prop-toggle-image-urls').value;
 
@@ -2987,7 +3059,7 @@ async function generatePreview() {
         window.builderConfigJson = JSON.stringify(builderState.currentConfig);
 
         // Load the Python script generated by build.py
-        const pyCode = "import sivo\nimport json\nimport traceback\nimport js\n\nconfig = json.loads(js.window.builderConfigJson)\n\ntry:\n    template_path = config.get('template')\n    custom_svg = config.get('customSvg')\n    bg_image = config.get('bgImage')\n\n    # Load base template or blank or custom svg\n    if custom_svg:\n        try:\n            # check if it's a url or a file path in idbfs\n            if custom_svg.startswith('http'):\n                 app = sivo.Sivo.from_svg(custom_svg)\n            elif custom_svg.startswith('<svg'):\n                 app = sivo.Sivo.from_string(custom_svg)\n            else:\n                 with open(custom_svg, 'r') as f:\n                     app = sivo.Sivo.from_string(f.read())\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading custom SVG {custom_svg}: {str(e)}</text></svg>')\n    elif template_path == 'blank' or not template_path:\n        app = sivo.Sivo.from_string('<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#f8fafc\"/></svg>')\n    else:\n        try:\n            app = sivo.Sivo.from_template(template_path)\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading template {template_path}: {str(e)}</text></svg>')\n\n    # Apply Canvas Settings\n    if bg_image:\n         app.background_image_url = bg_image\n\n    # Highlight Elements CSS Injection\n    if config.get('highlightElements'):\n         app.custom_css += \"\\\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; cursor: pointer; transition: all 0.2s; }\"\n         app.custom_css += \"\\\\n svg [id]:hover { fill: rgba(100, 100, 255, 0.4) !important; stroke: rgba(50, 50, 255, 0.8) !important; }\"\n\n    active_element_id = config.get('activeElementId')\n    if active_element_id:\n        app.custom_css += f\"\\\\n svg #{active_element_id} {{ stroke: #ef4444 !important; stroke-width: 3px !important; stroke-dasharray: 5,5; animation: dash 1s linear infinite; }}\"\n        app.custom_css += \"\\\\n @keyframes dash { to { stroke-dashoffset: -10; } }\"\n\n    # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs\n    app.custom_js += \"\"\"\n    document.addEventListener('DOMContentLoaded', () => {\n        const svgElement = document.querySelector('svg');\n        if (!svgElement) return;\n        \n        svgElement.addEventListener('click', (e) => {\n            // Find the closest element with an ID within the SVG\n            let target = e.target;\n            while (target && target !== svgElement) {\n                if (target.id) {\n                    window.parent.postMessage({ type: 'sivo_element_clicked', id: target.id }, '*');\n                    e.preventDefault();\n                    e.stopPropagation();\n                    return;\n                }\n                target = target.parentNode;\n            }\n        });\n    });\n    \"\"\"\n\n    # Apply Element Configurations\n    elements = config.get('elements', {})\n    for el_id, el_cfg in elements.items():\n        theme = sivo.ThemeOverride(\n            color=el_cfg.get('fill'),\n            hover_color=el_cfg.get('hover')\n        )\n\n        kwargs = {\n            'theme_override': theme\n        }\n\n        if el_cfg.get('tooltip'):\n            kwargs['html'] = el_cfg['tooltip']\n\n        # Tooltip Z-Index Enforcement is handled by injecting custom CSS\n        if el_cfg.get('enforceZIndex'):\n            app.custom_css += \"\\\\n.echarts-tooltip { z-index: 9999 !important; }\"\n\n        if el_cfg.get('selectiveHover') == False:\n            # Prevent hover effects\n            theme.hover_color = el_cfg.get('fill')\n\n        # Actions\n        click_cb = el_cfg.get('clickCallback')\n        if click_cb == 'zoom':\n            kwargs['zoom_to'] = el_id\n        elif click_cb == 'toggle_image':\n            kwargs['toggle_image'] = {\n                'image_urls': [url.strip() for url in el_cfg.get('toggleImageUrls', '').split(',') if url.strip()],\n                'target_id': el_id\n            }\n        elif click_cb == 'footnote':\n            kwargs['footnote'] = el_cfg.get('footnoteText', '')\n\n        hover_cb = el_cfg.get('hoverCallback')\n        if hover_cb and hover_cb != 'none':\n            kwargs['hover_callback_event'] = hover_cb\n            kwargs['hover_callback_payload'] = {\"element\": el_id, \"action\": hover_cb}\n\n        app.map(el_id, **kwargs)\n\n    html_output = app.to_html(build_js=False)\nexcept Exception as main_e:\n    html_output = f'<div style=\"color:red;\"><pre>{traceback.format_exc()}</pre></div>'\n\nhtml_output\n";
+        const pyCode = "import sivo\nimport json\nimport traceback\nimport js\n\nconfig = json.loads(js.window.builderConfigJson)\n\ntry:\n    template_path = config.get('template')\n    custom_svg = config.get('customSvg')\n    bg_image = config.get('bgImage')\n\n    # Load base template or blank or custom svg\n    if custom_svg:\n        try:\n            # check if it's a url or a file path in idbfs\n            if custom_svg.startswith('http'):\n                 app = sivo.Sivo.from_svg(custom_svg)\n            elif custom_svg.startswith('<svg'):\n                 app = sivo.Sivo.from_string(custom_svg)\n            else:\n                 with open(custom_svg, 'r') as f:\n                     app = sivo.Sivo.from_string(f.read())\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading custom SVG {custom_svg}: {str(e)}</text></svg>')\n    elif template_path == 'blank' or not template_path:\n        app = sivo.Sivo.from_string('<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#f8fafc\"/></svg>')\n    else:\n        try:\n            app = sivo.Sivo.from_template(template_path)\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading template {template_path}: {str(e)}</text></svg>')\n\n    # Apply Canvas Settings\n    if bg_image:\n         app.background_image_url = bg_image\n\n    # Highlight Elements CSS Injection\n    if config.get('highlightElements'):\n         app.custom_css += \"\\\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; cursor: pointer; transition: all 0.2s; }\"\n         app.custom_css += \"\\\\n svg [id]:hover { fill: rgba(100, 100, 255, 0.4) !important; stroke: rgba(50, 50, 255, 0.8) !important; }\"\n\n    active_element_id = config.get('activeElementId')\n    if active_element_id:\n        app.custom_css += f\"\\\\n svg #{active_element_id} {{ stroke: #ef4444 !important; stroke-width: 3px !important; stroke-dasharray: 5,5; animation: dash 1s linear infinite; }}\"\n        app.custom_css += \"\\\\n @keyframes dash { to { stroke-dashoffset: -10; } }\"\n\n    # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs\n    app.custom_js += \"\"\"\n    document.addEventListener('DOMContentLoaded', () => {\n        const svgElement = document.querySelector('svg');\n        if (!svgElement) return;\n\n        svgElement.addEventListener('click', (e) => {\n            // Find the closest element with an ID within the SVG\n            let target = e.target;\n            while (target && target !== svgElement) {\n                if (target.id) {\n                    window.parent.postMessage({ type: 'sivo_element_clicked', id: target.id }, '*');\n                    e.preventDefault();\n                    e.stopPropagation();\n                    return;\n                }\n                target = target.parentNode;\n            }\n        });\n    });\n    \"\"\"\n\n\n    # Phase 3: Data Binding (Choropleth)\n    data_file = config.get(\"dataFile\")\n    if data_file:\n        try:\n            import pandas as pd\n            # Use IDBFS mount path\n            df = pd.read_csv(f\"/sivo_workspace/{data_file}\")\n            # If standard columns exist, apply choropleth\n            if \"id\" in df.columns and \"value\" in df.columns:\n                data_map = dict(zip(df[\"id\"].astype(str), df[\"value\"]))\n                app.apply_choropleth(data_map, min_color=\"#e2e8f0\", max_color=\"#3b82f6\")\n        except Exception as e:\n            app.custom_js += f\"console.error(\\\"Error loading data file {data_file}: {str(e)}\\\");\"\n\n    # Apply Element Configurations\n    elements = config.get('elements', {})\n    for el_id, el_cfg in elements.items():\n        theme = sivo.ThemeOverride(\n            color=el_cfg.get('fill'),\n            hover_color=el_cfg.get('hover')\n        )\n\n        kwargs = {\n            'theme_override': theme\n        }\n\n        if el_cfg.get('tooltip'):\n            kwargs['html'] = el_cfg['tooltip']\n\n        # Tooltip Z-Index Enforcement is handled by injecting custom CSS\n        if el_cfg.get('enforceZIndex'):\n            app.custom_css += \"\\\\n.echarts-tooltip { z-index: 9999 !important; }\"\n\n        if el_cfg.get('selectiveHover') == False:\n            # Prevent hover effects\n            theme.hover_color = el_cfg.get('fill')\n\n        # Actions\n        click_cb = el_cfg.get('clickCallback')\n        if click_cb == 'zoom':\n            kwargs['zoom_to'] = el_id\n        elif click_cb == 'toggle_image':\n            kwargs['toggle_image'] = {\n                'image_urls': [url.strip() for url in el_cfg.get('toggleImageUrls', '').split(',') if url.strip()],\n                'target_id': el_id\n            }\n        elif click_cb == 'footnote':\n            kwargs['footnote'] = el_cfg.get('footnoteText', '')\n\n        hover_cb = el_cfg.get('hoverCallback')\n        if hover_cb and hover_cb != 'none':\n            kwargs['hover_callback_event'] = hover_cb\n            kwargs['hover_callback_payload'] = {\"element\": el_id, \"action\": hover_cb}\n\n\n        graph_type = el_cfg.get(\"graphType\")\n        if graph_type and graph_type != \"none\":\n            # Real implementation using parsed CSV logic\n            data_file = config.get(\"dataFile\")\n            if data_file:\n                try:\n                    import pandas as pd\n                    df = pd.read_csv(f\"/sivo_workspace/{data_file}\")\n                    # If columns exist\n                    if \"id\" in df.columns and \"value\" in df.columns:\n                        # Extract data for this particular element or generally\n                        # Since we want to show a graph, let's plot the top 5 values for bar/pie or a trend\n                        top_df = df.nlargest(5, \"value\")\n                        names = top_df[\"id\"].astype(str).tolist()\n                        values = top_df[\"value\"].tolist()\n                        if graph_type == \"bar\":\n                            kwargs[\"bar_chart\"] = {\"x\": names, \"y\": values}\n                        elif graph_type == \"line\":\n                            kwargs[\"line_chart\"] = {\"x\": names, \"y\": values}\n                        elif graph_type == \"pie\":\n                            kwargs[\"pie_chart\"] = {\"data\": [{\"name\": str(n), \"value\": float(v)} for n, v in zip(names, values)]}\n                except Exception as e:\n                    pass\n\n        app.map(el_id, **kwargs)\n\n\n    dashboard_blocks = config.get(\"dashboardBlocks\", [])\n    if dashboard_blocks:\n        dashboard = sivo.SivoDashboard(app, theme=\"light\")\n        for block in dashboard_blocks:\n            title = block.get(\"title\", \"Metric\")\n            value = block.get(\"value\", \"0\")\n            dashboard.add_html_block(f\"<h3>{title}</h3><h2>{value}</h2>\")\n        html_output = dashboard.to_html(build_js=False)\n    else:\n        html_output = app.to_html(build_js=False)\n\nexcept Exception as main_e:\n    html_output = f'<div style=\"color:red;\"><pre>{traceback.format_exc()}</pre></div>'\n\nhtml_output\n";
 
         const resultHtml = await window.pyodide.runPythonAsync(pyCode);
         previewFrame.srcdoc = resultHtml;
@@ -3030,6 +3102,96 @@ btnAnnotateInspect.addEventListener('click', () => {
 
 // Initialize state
 saveState();
+
+
+
+
+// --- Phase 3 Features ---
+btnSelectDataFile.addEventListener("click", () => {
+    showIdbfsModal("Select CSV File", ".csv", (filename) => {
+        propDataFile.value = filename;
+        builderState.currentConfig.dataFile = filename;
+
+        // Data Binding Wizard Logic: Auto-populate elements if valid CSV
+        const mountDir = "/sivo_workspace";
+        try {
+            const data = window.pyodide.FS.readFile(`${mountDir}/${filename}`, { encoding: 'utf8' });
+            // Very simple CSV parse to find IDs
+            const lines = data.split("\n");
+            if (lines.length > 1) {
+                const header = lines[0].split(",");
+                const idIdx = header.indexOf("id");
+                if (idIdx !== -1) {
+                    for(let i=1; i<lines.length; i++) {
+                        const cols = lines[i].split(",");
+                        if (cols.length > idIdx) {
+                            const id = cols[idIdx].trim();
+                            if (id && !builderState.currentConfig.elements[id]) {
+                                builderState.currentConfig.elements[id] = {
+                                    fill: '#3b82f6',
+                                    hover: '#60a5fa'
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(e) {
+            console.error(e);
+        }
+
+        saveState();
+        generatePreview();
+    });
+});
+
+propDataFile.addEventListener("change", (e) => {
+    builderState.currentConfig.dataFile = e.target.value.trim();
+    saveState();
+    generatePreview();
+});
+
+
+btnAddDashboardBlock.addEventListener("click", () => {
+    if (!builderState.currentConfig.dashboardBlocks) {
+        builderState.currentConfig.dashboardBlocks = [];
+    }
+    const idx = builderState.currentConfig.dashboardBlocks.length + 1;
+    builderState.currentConfig.dashboardBlocks.push({
+        title: "Metric " + idx,
+        value: Math.floor(Math.random() * 1000).toString()
+    });
+
+    // Quick UI feedback
+    btnAddDashboardBlock.innerText = `+ Add Dashboard Block (${idx} added)`;
+    setTimeout(() => {
+        btnAddDashboardBlock.innerText = "+ Add Dashboard Block";
+    }, 1500);
+
+    saveState();
+    generatePreview();
+});
+
+btnValidateProject.addEventListener("click", () => {
+    // Basic validation
+    validationResults.classList.remove("hidden");
+    let errors = [];
+    if (!builderState.currentConfig.template && !builderState.currentConfig.customSvg) {
+        errors.push("No template or custom SVG selected.");
+    }
+
+    if (Object.keys(builderState.currentConfig.elements || {}).length === 0 && !builderState.currentConfig.dataFile) {
+        errors.push("No interactive elements or data bindings configured.");
+    }
+
+    if (errors.length > 0) {
+        validationResults.innerHTML = "<b>Validation Issues:</b><br/>" + errors.join("<br/>");
+        validationResults.className = "mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto";
+    } else {
+        validationResults.innerHTML = "Project is valid!";
+        validationResults.className = "mt-2 text-xs text-green-600 bg-green-50 border border-green-200 rounded p-2 max-h-32 overflow-y-auto";
+    }
+});
 
     </script>
 </body>

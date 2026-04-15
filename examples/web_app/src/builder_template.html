@@ -124,6 +124,53 @@
                 <input type="text" id="prop-element-id" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
+
+            <!-- Diagnostics / Validation -->
+            <div>
+                <button id="btn-validate-project" class="w-full px-3 py-2 text-sm bg-yellow-100 border border-yellow-300 rounded hover:bg-yellow-200 text-yellow-800 transition-colors">
+                    Validate Project (Diagnostics)
+                </button>
+                <div id="validation-results" class="hidden mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto"></div>
+            </div>
+
+            <!-- Data Binding (Choropleth) -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Data Binding</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">CSV File Path (IDBFS)</label>
+                        <input type="text" id="prop-data-file" placeholder="e.g. data.csv" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                        <button id="btn-select-data-file" class="mt-1 w-full px-2 py-1 text-xs bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600">Select File</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Blocks -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Dashboard Blocks</h3>
+                <div class="space-y-3">
+                    <button id="btn-add-dashboard-block" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors">
+                        + Add Dashboard Block
+                    </button>
+                </div>
+            </div>
+
+            <!-- Graph Generation -->
+            <div>
+                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Graph Generation</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Generate Graph on Click</label>
+                        <select id="prop-graph-type" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <!-- Appearance -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Appearance</h3>
