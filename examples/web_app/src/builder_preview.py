@@ -37,7 +37,35 @@ try:
 
     # Highlight Elements CSS Injection
     if config.get('highlightElements'):
-         app.custom_css += "\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; }"
+         app.custom_css += "\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; cursor: pointer; transition: all 0.2s; }"
+         app.custom_css += "\\n svg [id]:hover { fill: rgba(100, 100, 255, 0.4) !important; stroke: rgba(50, 50, 255, 0.8) !important; }"
+
+    active_element_id = config.get('activeElementId')
+    if active_element_id:
+        app.custom_css += f"\\n svg #{active_element_id} {{ stroke: #ef4444 !important; stroke-width: 3px !important; stroke-dasharray: 5,5; animation: dash 1s linear infinite; }}"
+        app.custom_css += "\\n @keyframes dash { to { stroke-dashoffset: -10; } }"
+
+    # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs
+    app.custom_js += """
+    document.addEventListener('DOMContentLoaded', () => {
+        const svgElement = document.querySelector('svg');
+        if (!svgElement) return;
+
+        svgElement.addEventListener('click', (e) => {
+            // Find the closest element with an ID within the SVG
+            let target = e.target;
+            while (target && target !== svgElement) {
+                if (target.id) {
+                    window.parent.postMessage({ type: 'sivo_element_clicked', id: target.id }, '*');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+                target = target.parentNode;
+            }
+        });
+    });
+    """
 
     # Apply Element Configurations
     elements = config.get('elements', {})
