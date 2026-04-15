@@ -7,7 +7,8 @@ let builderState = {
         customSvg: '',
         bgImage: '',
         highlightElements: false,
-        elements: {} // e.g. { 'state-ny': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '...', ... } }
+        elements: {}, // e.g. { 'state-ny': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '...', ... } }
+        activeElementId: null
     },
     activeElement: null
 };
@@ -262,6 +263,27 @@ previewModeBtns.forEach(btn => {
     });
 });
 
+// --- Selection via Click in Preview ---
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'sivo_element_clicked') {
+        const id = event.data.id;
+
+        // Auto-enable highlighting to show the selection visually if not already enabled
+        if (!builderState.currentConfig.highlightElements) {
+            builderState.currentConfig.highlightElements = true;
+            propHighlightElements.checked = true;
+        }
+
+        // Set the active element and refresh
+        builderState.currentConfig.activeElementId = id;
+        propElementId.value = id;
+
+        refreshPropertiesPanel();
+        generatePreview();
+    }
+});
+
+
 // --- Property Inspector Logic ---
 // Sync Color inputs
 propFillColor.addEventListener('input', (e) => propFillColorText.value = e.target.value);
@@ -316,7 +338,15 @@ function refreshPropertiesPanel() {
     if (elConfig.clickCallback === 'toggle_image') document.getElementById('prop-toggle-image-urls').value = elConfig.toggleImageUrls || '';
 }
 
-propElementId.addEventListener('input', refreshPropertiesPanel);
+propElementId.addEventListener('input', (e) => {
+    builderState.currentConfig.activeElementId = e.target.value.trim() || null;
+    refreshPropertiesPanel();
+
+    // Only refresh preview if it's currently generated to avoid spam
+    if (previewFrame.srcdoc) {
+         generatePreview();
+    }
+});
 
 btnApplyProps.addEventListener('click', () => {
     const id = propElementId.value.trim();
@@ -383,9 +413,25 @@ btnNewProject.addEventListener('click', () => {
 });
 
 btnAnnotateInspect.addEventListener('click', () => {
-   if (window.switchTab) {
-       window.switchTab('annotator');
-   }
+    // Re-purpose the Inspect Elements button to enable highlight mode and guide the user
+    if (!builderState.currentConfig.highlightElements) {
+        builderState.currentConfig.highlightElements = true;
+        propHighlightElements.checked = true;
+        saveState();
+        generatePreview();
+    }
+
+    // Provide user feedback
+    const originalText = btnAnnotateInspect.innerText;
+    btnAnnotateInspect.innerText = "Click an element in the preview!";
+    btnAnnotateInspect.classList.remove('bg-slate-100', 'text-slate-700');
+    btnAnnotateInspect.classList.add('bg-blue-100', 'text-blue-700', 'border-blue-300');
+
+    setTimeout(() => {
+        btnAnnotateInspect.innerText = originalText;
+        btnAnnotateInspect.classList.add('bg-slate-100', 'text-slate-700');
+        btnAnnotateInspect.classList.remove('bg-blue-100', 'text-blue-700', 'border-blue-300');
+    }, 3000);
 });
 
 // Initialize state
