@@ -97,6 +97,19 @@
         }
         {% endif %}
 
+
+        {% if theme == 'transparent' %}
+        .sivo-card, .html-card, header {
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+        }
+        .card-header {
+            display: none !important;
+        }
+        {% endif %}
+
         .sivo-container {
             flex: 1 1 0;
             min-height: 0;
