@@ -132,6 +132,9 @@
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="integrations">Integrations</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="a11y">A11y & Styling</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="controls">Controls</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="geocoding">Geocoding & Legends</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="multiview">Multi-View</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="export">Export & Testing</button>
         </div>
 
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
@@ -687,6 +690,76 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                 </div>
             </div>
 
+
+            <div id="builder-tab-geocoding" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Geocoding Search</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs text-slate-600">Enable Geocoder</label>
+                            <input type="checkbox" id="prop-geocode-enable" class="rounded border-slate-300 text-blue-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Geocode Provider</label>
+                            <select id="prop-geocode-provider" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                                <option value="nominatim">Nominatim (OSM)</option>
+                                <option value="google">Google Maps</option>
+                                <option value="mapbox">Mapbox</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">API Key (Google/Mapbox)</label>
+                            <input type="text" id="prop-geocode-api-key" placeholder="API Key" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <button id="btn-apply-geocoding" class="w-full mt-2 px-3 py-2 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 font-medium shadow-sm transition-colors">
+                            Apply Geocoding
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="builder-tab-multiview" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Multi-View Project</h3>
+                    <div class="space-y-3">
+                        <p class="text-xs text-slate-500">Configure Drill-Through Page Transitions (requires SivoProject export).</p>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Target Element ID for Drill-Through</label>
+                            <input type="text" id="prop-mv-element-id" placeholder="element-id" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Destination View ID</label>
+                            <input type="text" id="prop-mv-view-id" placeholder="view-id" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <button id="btn-apply-multiview" class="w-full mt-2 px-3 py-2 text-sm bg-teal-500 text-white rounded hover:bg-teal-600 font-medium shadow-sm transition-colors">
+                            Apply Transition
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="builder-tab-export" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Export Options</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Watermark</label>
+                            <input type="text" id="prop-export-watermark" placeholder="Watermark text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Attribution</label>
+                            <input type="text" id="prop-export-attribution" placeholder="Attribution text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs text-slate-600">Enable E2E Testing Scaffolding</label>
+                            <input type="checkbox" id="prop-export-e2e" class="rounded border-slate-300 text-blue-600">
+                        </div>
+                        <button id="btn-apply-export" class="w-full mt-2 px-3 py-2 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 font-medium shadow-sm transition-colors">
+                            Apply Export Options
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <div id="builder-tab-controls" class="builder-tab-content space-y-6 hidden">
                 <div>
