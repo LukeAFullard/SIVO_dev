@@ -70,17 +70,21 @@ try:
 
     # Phase 3: Data Binding (Choropleth)
     data_file = config.get("dataFile")
+    data_id_col = config.get("dataIdCol", "id")
+    data_value_col = config.get("dataValueCol", "value")
+
     if data_file:
         try:
             import pandas as pd
             # Use IDBFS mount path
             df = pd.read_csv(f"/sivo_workspace/{data_file}")
-            # If standard columns exist, apply choropleth
-            if "id" in df.columns and "value" in df.columns:
-                data_map = dict(zip(df["id"].astype(str), df["value"]))
+            # If specified columns exist, apply choropleth
+            if data_id_col in df.columns and data_value_col in df.columns:
+                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))
                 app.apply_choropleth(data_map, min_color="#e2e8f0", max_color="#3b82f6")
         except Exception as e:
-            app.custom_js += f"console.error(\"Error loading data file {data_file}: {str(e)}\");"
+            error_msg = json.dumps(f"Error loading data file {data_file}: {str(e)}")
+            app.custom_js += f"console.error({error_msg});"
 
     # Apply Element Configurations
     elements = config.get('elements', {})
@@ -127,17 +131,21 @@ try:
         if graph_type and graph_type != "none":
             # Real implementation using parsed CSV logic
             data_file = config.get("dataFile")
+            data_id_col = config.get("dataIdCol", "id")
+            data_value_col = config.get("dataValueCol", "value")
             if data_file:
                 try:
                     import pandas as pd
                     df = pd.read_csv(f"/sivo_workspace/{data_file}")
                     # If columns exist
-                    if "id" in df.columns and "value" in df.columns:
+                    if data_id_col in df.columns and data_value_col in df.columns:
                         # Extract data for this particular element or generally
                         # Since we want to show a graph, let's plot the top 5 values for bar/pie or a trend
-                        top_df = df.nlargest(5, "value")
-                        names = top_df["id"].astype(str).tolist()
-                        values = top_df["value"].tolist()
+                        # Coerce values to numeric first
+                        df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')
+                        top_df = df.nlargest(5, data_value_col)
+                        names = top_df[data_id_col].astype(str).tolist()
+                        values = top_df[data_value_col].tolist()
                         if graph_type == "bar":
                             kwargs["bar_chart"] = {"x": names, "y": values}
                         elif graph_type == "line":

@@ -63,12 +63,13 @@ const btnValidateProject = document.getElementById("btn-validate-project");
 const validationResults = document.getElementById("validation-results");
 const propDataFile = document.getElementById("prop-data-file");
 const btnSelectDataFile = document.getElementById("btn-select-data-file");
-
+const propDataIdCol = document.getElementById("prop-data-id-col");
+const propDataValueCol = document.getElementById("prop-data-value-col");
 
 const propGraphType = document.getElementById("prop-graph-type");
 
 const btnAddDashboardBlock = document.getElementById("btn-add-dashboard-block");
-
+const dashboardBlocksContainer = document.getElementById("dashboard-blocks-container");
 
 // Dynamic Property Containers
 const propFootnoteContainer = document.getElementById('prop-footnote-container');
@@ -322,6 +323,10 @@ function refreshPropertiesPanel() {
     propBgImage.value = builderState.currentConfig.bgImage || "";
     propHighlightElements.checked = !!builderState.currentConfig.highlightElements;
     propDataFile.value = builderState.currentConfig.dataFile || "";
+    propDataIdCol.value = builderState.currentConfig.dataIdCol || "id";
+    propDataValueCol.value = builderState.currentConfig.dataValueCol || "value";
+
+    renderDashboardBlocks();
 
     const id = propElementId.value;
     if (!id || !builderState.currentConfig.elements[id]) {
@@ -475,16 +480,53 @@ btnSelectDataFile.addEventListener("click", () => {
         const mountDir = "/sivo_workspace";
         try {
             const data = window.pyodide.FS.readFile(`${mountDir}/${filename}`, { encoding: 'utf8' });
-            // Very simple CSV parse to find IDs
-            const lines = data.split("\n");
+
+            const parseCSVLine = (text) => {
+                let result = [];
+                let cur = '';
+                let inQuotes = false;
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    if (inQuotes) {
+                        if (char === '"') {
+                            if (i + 1 < text.length && text[i+1] === '"') {
+                                cur += '"';
+                                i++;
+                            } else {
+                                inQuotes = false;
+                            }
+                        } else {
+                            cur += char;
+                        }
+                    } else {
+                        if (char === '"') {
+                            inQuotes = true;
+                        } else if (char === ',') {
+                            result.push(cur);
+                            cur = '';
+                        } else {
+                            cur += char;
+                        }
+                    }
+                }
+                result.push(cur);
+                return result.map(s => s.trim());
+            };
+
+            // Improved CSV parse to handle quotes and find IDs
+            const lines = data.split("\n").filter(l => l.trim() !== "");
             if (lines.length > 1) {
-                const header = lines[0].split(",");
-                const idIdx = header.indexOf("id");
+                // Parse header
+                const parsedHeader = parseCSVLine(lines[0]);
+
+                const idColName = builderState.currentConfig.dataIdCol || "id";
+                const idIdx = parsedHeader.indexOf(idColName);
                 if (idIdx !== -1) {
                     for(let i=1; i<lines.length; i++) {
-                        const cols = lines[i].split(",");
-                        if (cols.length > idIdx) {
-                            const id = cols[idIdx].trim();
+                        const parsedCols = parseCSVLine(lines[i]);
+
+                        if (parsedCols.length > idIdx) {
+                            const id = parsedCols[idIdx];
                             if (id && !builderState.currentConfig.elements[id]) {
                                 builderState.currentConfig.elements[id] = {
                                     fill: '#3b82f6',
@@ -510,6 +552,70 @@ propDataFile.addEventListener("change", (e) => {
     generatePreview();
 });
 
+propDataIdCol.addEventListener("change", (e) => {
+    builderState.currentConfig.dataIdCol = e.target.value.trim();
+    saveState();
+    generatePreview();
+});
+
+propDataValueCol.addEventListener("change", (e) => {
+    builderState.currentConfig.dataValueCol = e.target.value.trim();
+    saveState();
+    generatePreview();
+});
+
+
+function renderDashboardBlocks() {
+    dashboardBlocksContainer.innerHTML = '';
+    const blocks = builderState.currentConfig.dashboardBlocks || [];
+
+    blocks.forEach((block, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center space-x-2 bg-slate-50 p-2 border border-slate-200 rounded";
+
+        // Escape quotes to prevent breaking HTML attributes
+        const title = (block.title || '').replace(/"/g, '&quot;');
+        const value = (block.value || '').replace(/"/g, '&quot;');
+
+        div.innerHTML = `
+            <div class="flex-1 space-y-1">
+                <input type="text" placeholder="Title" value="${title}" class="block-title w-full px-2 py-1 text-xs border border-slate-200 rounded" data-index="${index}">
+                <input type="text" placeholder="Value" value="${value}" class="block-value w-full px-2 py-1 text-xs border border-slate-200 rounded" data-index="${index}">
+            </div>
+            <button class="block-delete text-red-500 hover:text-red-700" data-index="${index}">&times;</button>
+        `;
+        dashboardBlocksContainer.appendChild(div);
+    });
+
+    // Add event listeners
+    dashboardBlocksContainer.querySelectorAll('.block-title').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.dashboardBlocks[idx].title = e.target.value;
+            saveState();
+            generatePreview();
+        });
+    });
+
+    dashboardBlocksContainer.querySelectorAll('.block-value').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.dashboardBlocks[idx].value = e.target.value;
+            saveState();
+            generatePreview();
+        });
+    });
+
+    dashboardBlocksContainer.querySelectorAll('.block-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.dashboardBlocks.splice(idx, 1);
+            saveState();
+            renderDashboardBlocks();
+            generatePreview();
+        });
+    });
+}
 
 btnAddDashboardBlock.addEventListener("click", () => {
     if (!builderState.currentConfig.dashboardBlocks) {
@@ -518,15 +624,10 @@ btnAddDashboardBlock.addEventListener("click", () => {
     const idx = builderState.currentConfig.dashboardBlocks.length + 1;
     builderState.currentConfig.dashboardBlocks.push({
         title: "Metric " + idx,
-        value: Math.floor(Math.random() * 1000).toString()
+        value: "0"
     });
 
-    // Quick UI feedback
-    btnAddDashboardBlock.innerText = `+ Add Dashboard Block (${idx} added)`;
-    setTimeout(() => {
-        btnAddDashboardBlock.innerText = "+ Add Dashboard Block";
-    }, 1500);
-
+    renderDashboardBlocks();
     saveState();
     generatePreview();
 });
@@ -541,6 +642,15 @@ btnValidateProject.addEventListener("click", () => {
 
     if (Object.keys(builderState.currentConfig.elements || {}).length === 0 && !builderState.currentConfig.dataFile) {
         errors.push("No interactive elements or data bindings configured.");
+    }
+
+    if (builderState.currentConfig.dataFile) {
+        if (!builderState.currentConfig.dataIdCol) {
+            errors.push("Data file is bound but ID Column Name is missing.");
+        }
+        if (!builderState.currentConfig.dataValueCol) {
+            errors.push("Data file is bound but Value Column Name is missing.");
+        }
     }
 
     if (errors.length > 0) {

@@ -367,20 +367,20 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [x] **JSON Serialization XSS Mitigation:** Integrate the safe escaping logic for injected JSON `views_data` to secure templates from cross-site scripting natively.
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
-- [ ] Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
+- [x] Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
 - [ ] Implement Preview Modes: Full screen preview mode, Mobile preview, and iPad/tablet preview.
-- [ ] Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
-- [ ] Implement the Interactive Preview Pane (renders via `app.to_html()`).
-- [ ] Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
+- [x] Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
+- [x] Implement the Interactive Preview Pane (renders via `app.to_html()`).
+- [x] Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
 - [ ] Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
 - [ ] **State Management:** Integrate an **Undo/Redo History Engine** to safely manage configuration states during visual editing.
-- [ ] **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
+- [x] **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
-- [x] **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
-- [x] **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
-- [x] **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap, graph, sankey, sunburst, parallel, theme river, word cloud, pictorial bar, effect scatter, lines, funnel, tree, trendline, and nested maps), adding support for **Nested ECharts Actions** configuration.
-- [x] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
+- [ ] **Data Binding Wizard:** Implement the UI to map CSV columns to SVG IDs for instant Choropleths.
+- [ ] **Dashboard Mode:** Implement UI to add `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
+- [ ] **Graph Generation:** Integrate logic that reads the parsed CSV and utilizes SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap, graph, sankey, sunburst, parallel, theme river, word cloud, pictorial bar, effect scatter, lines, funnel, tree, trendline, and nested maps), adding support for **Nested ECharts Actions** configuration.
+- [ ] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
