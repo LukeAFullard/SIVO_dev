@@ -1,36 +1,34 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "sivo"
-dynamic = ["version"]
+version = "0.1.0"
 description = "SIVO: Serverless Interactive Vector Objects"
-readme = "README.md"
 authors = [
-    { name="SIVO Contributors" }
+    {name = "SIVO Contributors",email = "email@example.com"}
 ]
-license = { file="LICENSE" }
+license = "MIT"
+readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "lxml>=4.9.0",
-    "Jinja2>=3.1.0",
-    "pydantic>=2.0.0"
+    "lxml (>=4.9.0)",
+    "jinja2 (>=3.1.0)",
+    "pydantic (>=2.0.0)"
 ]
 
-[project.optional-dependencies]
-docs = [
-    "mkdocs>=1.4.0",
-    "mkdocs-material>=9.0.0"
-]
+[dependency-groups]
 dev = [
-    "pytest",
-    "pytest-cov",
-    "pytest-playwright",
-    "flake8",
-    "ruff",
-    "mypy"
+    "pytest (>=7.0.0)",
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "pytest-playwright (>=0.4.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "ruff (>=0.15.10,<0.16.0)",
+    "mypy (>=1.0.0)"
+]
+docs = [
+    "mkdocs (>=1.6.1,<2.0.0)",
+    "mkdocs-material (>=9.7.6,<10.0.0)"
 ]
 
-[tool.setuptools.dynamic]
-version = {attr = "sivo.__version__.__version__"}
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
