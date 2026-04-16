@@ -6,7 +6,9 @@ def main():
         title="Floating Transparent PNGs",
         columns=4,
         theme="transparent",
-        background_image_url="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2000&auto=format&fit=crop" # Image of a room with furniture, or tree
+        background_image_url="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2000&auto=format&fit=crop", # Image of a room with furniture, or tree
+        background_image_opacity=0.25,
+        lock_canvas=True
     )
 
     dashboard.set_grid_layout(
