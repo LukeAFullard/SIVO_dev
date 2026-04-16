@@ -326,10 +326,22 @@ btnImportJsonIdbfs.addEventListener('click', () => {
 
 
 // --- Canvas Settings ---
-btnApplyCanvasSettings.addEventListener('click', () => {
+btnApplyCanvasSettings.addEventListener('click', async () => {
     builderState.currentConfig.customSvg = propCustomSvg.value.trim();
     builderState.currentConfig.bgImage = propBgImage.value.trim();
     builderState.currentConfig.highlightElements = propHighlightElements.checked;
+
+    // Memory Profiling Warning: Large files check
+    if (builderState.currentConfig.customSvg && !builderState.currentConfig.customSvg.startsWith('<svg') && !builderState.currentConfig.customSvg.startsWith('http')) {
+        try {
+            const stat = window.pyodide.FS.stat(builderState.currentConfig.customSvg);
+            if (stat.size > 5 * 1024 * 1024) { // 5MB
+                alert("Warning: The selected SVG file is very large (" + (stat.size / 1024 / 1024).toFixed(2) + " MB). This might cause browser memory issues or crashes during generation. We recommend optimizing the SVG.");
+            }
+        } catch(e) {
+             // File might not exist yet or is URL, ignore
+        }
+    }
 
     // Clear template if using custom SVG
     if (builderState.currentConfig.customSvg) {
@@ -648,6 +660,9 @@ async function generatePreview() {
     previewOverlay.classList.remove('hidden');
 
     try {
+        // Unmount existing iframe document to aid browser GC before injecting massive new HTML string
+        previewFrame.srcdoc = "<html><body>Loading...</body></html>";
+
         // Expose the JSON state to the Python context
         window.builderConfigJson = JSON.stringify(builderState.currentConfig);
 
@@ -1009,6 +1024,19 @@ btnSelectDataFile.addEventListener("click", () => {
 
 propDataFile.addEventListener("change", (e) => {
     builderState.currentConfig.dataFile = e.target.value.trim();
+
+    // Memory Profiling Warning: Large data files
+    if (builderState.currentConfig.dataFile) {
+        try {
+            const stat = window.pyodide.FS.stat("/sivo_workspace/" + builderState.currentConfig.dataFile);
+            if (stat.size > 10 * 1024 * 1024) { // 10MB
+                alert("Warning: The selected data file is very large (" + (stat.size / 1024 / 1024).toFixed(2) + " MB). Mapping this dataset might consume significant memory and crash the browser tab.");
+            }
+        } catch(err) {
+            // Ignore if file stat fails
+        }
+    }
+
     saveState();
     generatePreview();
 });

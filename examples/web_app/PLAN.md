@@ -400,7 +400,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [x] **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures, including **Drill-Through Page Transitions**.
 - [x] **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities, and expose **Watermarks & Attribution** and **Export & Sharing Overlays**.
 - [x] **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
-- [ ] Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+- [x] Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 
 ### Phase 7: PyPI Release & Initialization Cleanup
 Once the SIVO package is officially published to PyPI, the web app's installation procedure will be significantly simplified, as local wheel generation will no longer be necessary.

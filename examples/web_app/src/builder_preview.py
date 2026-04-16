@@ -2,6 +2,7 @@ import sivo
 import json
 import traceback
 import js
+import gc
 
 config = json.loads(js.window.builderConfigJson)
 
@@ -411,5 +412,21 @@ try:
 
 except Exception as main_e:
     html_output = f'<div style="color:red;"><pre>{traceback.format_exc()}</pre></div>'
+
+# Memory profiling/cleanup: explicitly delete large objects and force garbage collection
+# This prevents memory leaks across successive preview generations in the browser
+try:
+    if 'app' in locals():
+        del app
+    if 'dashboard' in locals():
+        del dashboard
+    if 'project' in locals():
+        del project
+    if 'dummy_app' in locals():
+        del dummy_app
+except:
+    pass
+
+gc.collect()
 
 html_output
