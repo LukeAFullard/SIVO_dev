@@ -391,9 +391,9 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 ### Phase 5: Scrollytelling, Overlays, & Navigation (Weeks 9-10)
 
-- [ ] **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
-- [ ] **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, **Absolute Image Overlays**, **Scratchoff Reveal Layers**, and configuring **HTML/DOM Overlays**.
-- [ ] **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles (`add_layer_toggle`), URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, **Brush Selection**, **Built-in Canvas Search**, and **Programmatic Panel Dismissal** mappings.
+- [x] **Timeline UI & Presentation:** Add the timeline components for Scrollytelling, Tours, and the new Presentation Mode (Auto-play, Progress Indicators, Laser Pointer, Speaker Notes).
+- [x] **Dynamic Regions & Odometers:** Implement UI for `fill_template_zone`, `clip_html_to_shape` mappings, dropping Dynamic Odometers, Path Connections, **Visual Data Flow Connections**, Visual Comparisons, **Native SVG Shape Generation**, **Absolute Image Overlays**, **Scratchoff Reveal Layers**, and configuring **HTML/DOM Overlays**.
+- [x] **Global Controls:** Expose Zoom UI, Minimap, Layer Toggles (`add_layer_toggle`), URL Navigation, Zoom on Click configurations, **Interactive Drawing Tools**, **Brush Selection**, **Built-in Canvas Search**, and **Programmatic Panel Dismissal** mappings.
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
 - [ ] **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI, Auto-Generated Legends, and **Geographic Coordinate Mapping**.

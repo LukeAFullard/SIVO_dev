@@ -35,6 +35,23 @@ try:
     if bg_image:
          app.background_image_url = bg_image
 
+
+    # Phase 5: Global Controls
+    if config.get("ctrlZoomUi") is False:
+        app.lock_zoom_out = True
+    if config.get("ctrlMinimap"):
+        app.add_minimap()
+    if config.get("ctrlZoomClick") is False:
+        pass # Handle in elements or natively if possible, currently SIVO doesn't strictly have a global disable zoom on click unless lock_zoom_out is true, but we'll leave it
+    if config.get("ctrlDrawing"):
+        app.enable_drawing_tools = True
+    if config.get("ctrlBrush"):
+        app.enable_brush_selection = True
+    if config.get("ctrlSearch"):
+        app.enable_search = True
+    if config.get("ctrlLayerToggle"):
+        app.add_layer_toggle(config.get("ctrlLayerToggle"), label="Toggle Layer")
+
     # Highlight Elements CSS Injection
     if config.get('highlightElements'):
          app.custom_css += "\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; cursor: pointer; transition: all 0.2s; }"
@@ -182,6 +199,33 @@ try:
             if fetch_data_path:
                 kwargs['fetch_data_path'] = fetch_data_path
 
+
+        # Phase 5: Regions & Overlays
+        fill_zone = el_cfg.get('fillZone')
+        if fill_zone:
+            app.fill_template_zone(el_id, fill_zone)
+
+        clip_html = el_cfg.get('clipHtml')
+        if clip_html:
+            app.clip_html_to_shape(el_id, clip_html)
+
+        shape_type = el_cfg.get('shapeType')
+        if shape_type and shape_type != 'none':
+            if shape_type == 'circle':
+                app.add_shape('circle', cx=100, cy=100, r=50, id=el_id + "_shape", fill="red")
+            elif shape_type == 'rect':
+                app.add_shape('rect', x=100, y=100, width=100, height=50, id=el_id + "_shape", fill="blue")
+            elif shape_type == 'text':
+                app.add_shape('text', x=100, y=100, text_content="Sample Text", id=el_id + "_shape", fill="black")
+
+        abs_img = el_cfg.get('absoluteImageUrl')
+        if abs_img:
+            app.add_image_overlay(el_id, abs_img)
+
+        scratchoff = el_cfg.get('scratchoff')
+        if scratchoff:
+            app.map(el_id, scratchoff=sivo.ScratchoffConfig()) # Requires applying scratchoff config
+
         # Actions
         click_cb = el_cfg.get('clickCallback')
         if click_cb == 'zoom':
@@ -233,6 +277,40 @@ try:
                     pass
 
         app.map(el_id, **kwargs)
+
+
+    # Phase 5: Connections
+    connections = config.get("connections", [])
+    for conn in connections:
+        app.add_connection(conn["from"], conn["to"], animate=True)
+
+
+    # Phase 5: Timeline
+    timeline_steps = config.get("timelineSteps", [])
+    if timeline_steps:
+        for step in timeline_steps:
+            target_id = step.get("targetId")
+            app.add_scrollytelling_step(
+                element_id=target_id if target_id else None,
+                html_content=f"<h3>{step.get('title', '')}</h3><p>{step.get('content', '')}</p>"
+            )
+
+        presentation_autoplay = config.get("presentationAutoplay")
+        presentation_progress = config.get("presentationProgress")
+        presentation_laser = config.get("presentationLaser")
+        presentation_notes = config.get("presentationNotes")
+
+        if presentation_autoplay:
+            try:
+                app.presentation_autoplay_ms = int(presentation_autoplay)
+            except:
+                pass
+        if presentation_progress:
+            app.presentation_progress = True
+        if presentation_laser:
+            app.presentation_laser = True
+        if presentation_notes:
+            app.presentation_speaker_notes_element = presentation_notes
 
     dashboard_blocks = config.get("dashboardBlocks", [])
     if dashboard_blocks:
