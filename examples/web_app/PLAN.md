@@ -384,7 +384,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
-- [ ] **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
+- [x] **Advanced Maps:** Integrate UI for Hexbins, Dot Density, Flow Maps, Proportional Symbols, Spike Maps, Categorical Maps, and Bivariate Choropleths (Value by Alpha).
 - [ ] **Live Binding:** Build the Data Sources manager for configuring WebSockets, API polling, and **Dynamic API Fetching on Click**.
 - [ ] **Integrations:** Add the Integration Catalog to allow embedding 3rd party services (E-commerce, BI) and support for **Document & Map Embeds**, **Ecommerce Embeds**, **Rich Media Embeds**, **Business Intelligence Embeds**, **External Forms**, **Form, Social & Replit Embeds**, and browse the **Preset & Community Recipe Library**.
 - [ ] **A11y, Styling & Multimedia:** Expose Marker, Video, Audio, **Markdown & Image Gallery Rendering**, Animations, Image Fills, Embedded SVG Injection (`embed_svg`), Cinematic Camera Panning & Zooming (`zoom_to`, `zoom_to_size`, `zoom_duration_ms`), Keyboard Navigation, Custom CSS/JS Injection, Layout Control (`default_panel_position`) configurations, Lottie Animations, Gamification & Loaders, Path Morphing, Image Shape Clipping, **SVG Affine Transformations**, **High Contrast Theming**, **Ambient Effects**, **Canvas Backgrounds & Borders**, **Embedded SVG Background Images**, **Dramatic UI Transitions**, and **Shadow DOM Custom Styling & DOMPurify** support.
