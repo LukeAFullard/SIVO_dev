@@ -1167,8 +1167,8 @@ btnAddTimelineStep.addEventListener("click", () => {
     }
     const idx = builderState.currentConfig.timelineSteps.length + 1;
     builderState.currentConfig.timelineSteps.push({
-        title: "Step " + idx,
-        content: "Step description...",
+        title: "",
+        content: "",
         targetId: ""
     });
 
@@ -1236,8 +1236,8 @@ btnAddDashboardBlock.addEventListener("click", () => {
     }
     const idx = builderState.currentConfig.dashboardBlocks.length + 1;
     builderState.currentConfig.dashboardBlocks.push({
-        title: "Metric " + idx,
-        value: "0"
+        title: "",
+        value: ""
     });
 
     renderDashboardBlocks();
