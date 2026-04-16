@@ -69,14 +69,14 @@
                 // For this example to work locally, we zip the src directory and install it
                 // In production, you would build a .whl file and host it statically: `await micropip.install('./sivo-0.1.0-py3-none-any.whl')`
                 if (window.location.protocol === 'file:') {
-                    console.warn('Running from file:// protocol. Loading local Python wheels via micropip.install("./sivo.whl") will fail due to browser CORS policies. Please start a local HTTP server to fully test the SIVO Python backend.');
+                    showToast('Running from file:// protocol. Loading local Python wheels via micropip.install("./sivo.whl") will fail due to browser CORS policies. Please start a local HTTP server to fully test the SIVO Python backend.', "warning"); console.warn('Running from file:// protocol. Loading local Python wheels via micropip.install("./sivo.whl") will fail due to browser CORS policies. Please start a local HTTP server to fully test the SIVO Python backend.');
                 }
 
                 statusEl.innerText = 'Ready!';
                 runBtn.disabled = false;
 
             } catch (err) {
-                console.error(err);
+                showToast(err, "error"); console.error(err);
                 statusEl.innerText = 'Error: Check console.';
                 statusEl.style.color = '#ef4444';
             }
@@ -93,7 +93,7 @@
                 // Run the Python code
                 await pyodide.runPythonAsync(codeInput.value);
             } catch (err) {
-                console.error(err);
+                showToast(err, "error"); console.error(err);
                 outputFrame.srcdoc = `<html><body><pre style='color:red; padding:20px; white-space:pre-wrap;'>${err.message}</pre></body></html>`;
             } finally {
                 runBtn.disabled = false;
@@ -120,7 +120,7 @@
                         </div>`).join('');
                 }
             } catch (err) {
-                console.error("Error reading directory", err);
+                showToast("Error reading directory", err, "error"); console.error("Error reading directory", err);
             }
         }
 
@@ -184,7 +184,7 @@
                 });
                 updateFileList();
             } catch (err) {
-                console.error("Error saving file to IDBFS:", err);
+                showToast("Error saving file to IDBFS:", err, "error"); console.error("Error saving file to IDBFS:", err);
                 alert("Error saving file: " + err.message);
             }
         }
@@ -207,15 +207,15 @@
         const dropzone = document.getElementById('file-manager-dropzone');
         dropzone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropzone.style.backgroundColor = '#e2e8f0';
+            dropzone.classList.add('dropzone-active');
         });
         dropzone.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            dropzone.style.backgroundColor = '';
+            dropzone.classList.remove('dropzone-active');
         });
         dropzone.addEventListener('drop', async (e) => {
             e.preventDefault();
-            dropzone.style.backgroundColor = '';
+            dropzone.classList.remove('dropzone-active');
             if (!pyodide) return;
 
             if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
@@ -253,7 +253,7 @@
                 buffer = null; // Memory cleanup
                 urlInput.value = '';
             } catch (err) {
-                console.error("Error fetching URL:", err);
+                showToast("Error fetching URL:", err, "error"); console.error("Error fetching URL:", err);
                 alert("Failed to fetch URL: " + err.message);
             } finally {
                 btn.innerText = originalText;
