@@ -45,20 +45,73 @@ try:
         app.custom_css += f"\\n svg #{active_element_id} {{ stroke: #ef4444 !important; stroke-width: 3px !important; stroke-dasharray: 5,5; animation: dash 1s linear infinite; }}"
         app.custom_css += "\\n @keyframes dash { to { stroke-dashoffset: -10; } }"
 
-    # Phase 3: Data Binding (Choropleth)
+    # Phase 4: Data Binding (Advanced Maps)
     data_file = config.get("dataFile")
+    data_map_type = config.get("dataMapType", "choropleth")
+
     data_id_col = config.get("dataIdCol", "id")
     data_value_col = config.get("dataValueCol", "value")
+    data_base_col = config.get("dataBaseCol", "value1")
+    data_alpha_col = config.get("dataAlphaCol", "value2")
+    data_x_col = config.get("dataXCol", "x")
+    data_y_col = config.get("dataYCol", "y")
+    data_origin_col = config.get("dataOriginCol", "origin")
+    data_dest_col = config.get("dataDestCol", "destination")
 
     if data_file:
         try:
             import pandas as pd
             # Use IDBFS mount path
             df = pd.read_csv(f"/sivo_workspace/{data_file}")
-            # If specified columns exist, apply choropleth
-            if data_id_col in df.columns and data_value_col in df.columns:
+
+            if data_map_type == "choropleth" and data_id_col in df.columns and data_value_col in df.columns:
+                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')
                 data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))
                 app.apply_choropleth(data_map, min_color="#e2e8f0", max_color="#3b82f6")
+
+            elif data_map_type == "categorical" and data_id_col in df.columns and data_value_col in df.columns:
+                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col].astype(str)))
+                app.apply_categorical_map(data_map)
+
+            elif data_map_type == "value_by_alpha" and data_id_col in df.columns and data_base_col in df.columns and data_alpha_col in df.columns:
+                df[data_base_col] = pd.to_numeric(df[data_base_col], errors='coerce')
+                df[data_alpha_col] = pd.to_numeric(df[data_alpha_col], errors='coerce')
+                base_map = dict(zip(df[data_id_col].astype(str), df[data_base_col]))
+                alpha_map = dict(zip(df[data_id_col].astype(str), df[data_alpha_col]))
+                app.apply_value_by_alpha(base_map, alpha_map)
+
+            elif data_map_type == "hexbin" and data_x_col in df.columns and data_y_col in df.columns:
+                df[data_x_col] = pd.to_numeric(df[data_x_col], errors='coerce')
+                df[data_y_col] = pd.to_numeric(df[data_y_col], errors='coerce')
+                points = df[[data_x_col, data_y_col]].dropna().values.tolist()
+                app.apply_hexbin(points)
+
+            elif data_map_type == "dot_density" and data_id_col in df.columns and data_value_col in df.columns:
+                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')
+                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))
+                app.apply_dot_density(data_map)
+
+            elif data_map_type == "proportional_symbols" and data_id_col in df.columns and data_value_col in df.columns:
+                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')
+                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))
+                app.apply_proportional_symbols(data_map)
+
+            elif data_map_type == "spike_map" and data_id_col in df.columns and data_value_col in df.columns:
+                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')
+                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))
+                app.apply_spike_map(data_map)
+
+            elif data_map_type == "flow_map" and data_origin_col in df.columns and data_dest_col in df.columns and data_value_col in df.columns:
+                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')
+                data_list = []
+                for _, row in df.iterrows():
+                    data_list.append({
+                        "origin": str(row[data_origin_col]),
+                        "destination": str(row[data_dest_col]),
+                        "value": float(row[data_value_col]) if not pd.isna(row[data_value_col]) else 0.0
+                    })
+                app.apply_flow_map(data_list)
+
         except Exception as e:
             error_msg = json.dumps(f"Error loading data file {data_file}: {str(e)}")
             app.custom_js += f"console.error({error_msg});"

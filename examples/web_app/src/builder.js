@@ -67,6 +67,20 @@ const btnSelectDataFile = document.getElementById('btn-select-data-file');
 const propDataFile = document.getElementById('prop-data-file');
 const propDataIdCol = document.getElementById('prop-data-id-col');
 const propDataValueCol = document.getElementById('prop-data-value-col');
+const propDataMapType = document.getElementById('prop-data-map-type');
+const propDataBaseCol = document.getElementById('prop-data-base-col');
+const propDataAlphaCol = document.getElementById('prop-data-alpha-col');
+const propDataXCol = document.getElementById('prop-data-x-col');
+const propDataYCol = document.getElementById('prop-data-y-col');
+const propDataOriginCol = document.getElementById('prop-data-origin-col');
+const propDataDestCol = document.getElementById('prop-data-dest-col');
+
+const dataColsIdContainer = document.getElementById('data-cols-id-container');
+const dataColsValueContainer = document.getElementById('data-cols-value-container');
+const dataColsBivariate = document.getElementById('data-cols-bivariate');
+const dataColsHexbin = document.getElementById('data-cols-hexbin');
+const dataColsFlow = document.getElementById('data-cols-flow');
+
 const dashboardBlocksContainer = document.getElementById('dashboard-blocks-container');
 const btnAddDashboardBlock = document.getElementById('btn-add-dashboard-block');
 const propGraphElementId = document.getElementById('prop-graph-element-id');
@@ -362,6 +376,16 @@ function refreshPropertiesPanel() {
     propDataIdCol.value = builderState.currentConfig.dataIdCol || "id";
     propDataValueCol.value = builderState.currentConfig.dataValueCol || "value";
 
+    propDataMapType.value = builderState.currentConfig.dataMapType || "choropleth";
+    propDataBaseCol.value = builderState.currentConfig.dataBaseCol || "value1";
+    propDataAlphaCol.value = builderState.currentConfig.dataAlphaCol || "value2";
+    propDataXCol.value = builderState.currentConfig.dataXCol || "x";
+    propDataYCol.value = builderState.currentConfig.dataYCol || "y";
+    propDataOriginCol.value = builderState.currentConfig.dataOriginCol || "origin";
+    propDataDestCol.value = builderState.currentConfig.dataDestCol || "destination";
+
+    updateDataMapUI();
+
     renderDashboardBlocks();
 
     const id = propElementId.value;
@@ -642,6 +666,51 @@ propDataValueCol.addEventListener("change", (e) => {
     saveState();
     generatePreview();
 });
+
+propDataMapType.addEventListener("change", (e) => {
+    builderState.currentConfig.dataMapType = e.target.value;
+    updateDataMapUI();
+    saveState();
+    generatePreview();
+});
+
+function updateDataMapUI() {
+    const mapType = propDataMapType.value;
+
+    // Hide all
+    dataColsIdContainer.classList.add('hidden');
+    dataColsValueContainer.classList.add('hidden');
+    dataColsBivariate.classList.add('hidden');
+    dataColsHexbin.classList.add('hidden');
+    dataColsFlow.classList.add('hidden');
+
+    // Show relevant based on type
+    if (['choropleth', 'categorical', 'dot_density', 'proportional_symbols', 'spike_map'].includes(mapType)) {
+        dataColsIdContainer.classList.remove('hidden');
+        dataColsValueContainer.classList.remove('hidden');
+    } else if (mapType === 'value_by_alpha') {
+        dataColsIdContainer.classList.remove('hidden');
+        dataColsBivariate.classList.remove('hidden');
+    } else if (mapType === 'hexbin') {
+        dataColsHexbin.classList.remove('hidden');
+    } else if (mapType === 'flow_map') {
+        dataColsFlow.classList.remove('hidden');
+        dataColsValueContainer.classList.remove('hidden'); // usually flow has a value/weight
+    }
+}
+
+['prop-data-base-col', 'prop-data-alpha-col', 'prop-data-x-col', 'prop-data-y-col', 'prop-data-origin-col', 'prop-data-dest-col'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener("change", (e) => {
+            const key = "data" + id.replace("prop-data-", "").split("-").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join("");
+            builderState.currentConfig[key] = e.target.value.trim();
+            saveState();
+            generatePreview();
+        });
+    }
+});
+
 
 function renderDashboardBlocks() {
     dashboardBlocksContainer.innerHTML = '';
