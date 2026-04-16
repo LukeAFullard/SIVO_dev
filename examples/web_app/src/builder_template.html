@@ -91,7 +91,15 @@
                 <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="fullscreen">Fullscreen</button>
             </div>
 
-            <div class="space-x-2">
+            <div class="space-x-2 flex items-center">
+                <div class="flex space-x-1 mr-2 border-r border-slate-200 pr-2">
+                    <button id="btn-undo" class="px-2 py-1 text-sm bg-white border border-slate-200 rounded text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50" disabled title="Undo (Ctrl+Z)">
+                        &#x21B6; Undo
+                    </button>
+                    <button id="btn-redo" class="px-2 py-1 text-sm bg-white border border-slate-200 rounded text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50" disabled title="Redo (Ctrl+Y)">
+                        &#x21B7; Redo
+                    </button>
+                </div>
                 <button id="btn-preview-refresh" class="px-3 py-1 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200">
                     Refresh
                 </button>
