@@ -151,6 +151,11 @@ try:
                             kwargs["line_chart"] = {"x": names, "y": values}
                         elif graph_type == "pie":
                             kwargs["pie_chart"] = {"data": [{"name": str(n), "value": float(v)} for n, v in zip(names, values)]}
+                        elif graph_type == "scatter":
+                            # Use random pairs for demonstration
+                            kwargs["scatter_chart"] = {"data": [[i, v] for i, v in enumerate(values)]}
+                        elif graph_type == "boxplot":
+                            kwargs["boxplot_chart"] = {"data": [values]}
                 except Exception as e:
                     pass
 

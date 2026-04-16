@@ -69,6 +69,7 @@ const propDataIdCol = document.getElementById('prop-data-id-col');
 const propDataValueCol = document.getElementById('prop-data-value-col');
 const dashboardBlocksContainer = document.getElementById('dashboard-blocks-container');
 const btnAddDashboardBlock = document.getElementById('btn-add-dashboard-block');
+const propGraphElementId = document.getElementById('prop-graph-element-id');
 const propGraphType = document.getElementById('prop-graph-type');
 const btnApplyGraphProps = document.getElementById('btn-apply-graph-props');
 const btnValidateProject = document.getElementById("btn-validate-project");
@@ -364,6 +365,7 @@ function refreshPropertiesPanel() {
     renderDashboardBlocks();
 
     const id = propElementId.value;
+    propGraphElementId.value = id;
 
     if (!id || !builderState.currentConfig.elements[id]) {
         // Reset defaults
@@ -503,9 +505,9 @@ btnAnnotateInspect.addEventListener('click', () => {
 
 // --- Phase 3 Graph Properties Logic ---
 btnApplyGraphProps.addEventListener('click', () => {
-    let activeId = builderState.currentConfig.activeElementId;
+    let activeId = propGraphElementId.value.trim();
     if (!activeId) {
-        alert("Please select an element first to bind a graph.");
+        alert("Please select or enter a Target Element ID first.");
         return;
     }
 
