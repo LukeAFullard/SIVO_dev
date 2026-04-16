@@ -22,6 +22,12 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
     template_obj = env.get_template(template_file)
 
     # We reuse the processing from bundle_generator by running `views_data` through the same structurer
+
+    mobile_grid_cols = None
+    if mobile_grid:
+        first_line = mobile_grid.strip().split('\n')[0].replace('"', '').replace("'", "")
+        mobile_grid_cols = len([x for x in first_line.split() if x.strip()])
+
     formatted_views = format_views_data(views_data)
     deps = determine_dependencies(formatted_views)
 
@@ -35,6 +41,7 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
         columns=columns,
         desktop_grid=desktop_grid,
         mobile_grid=mobile_grid,
+        mobile_grid_cols=mobile_grid_cols,
         background_image_url=background_image_url, background_image_opacity=background_image_opacity,
         theme=theme,
         custom_js=custom_js,
