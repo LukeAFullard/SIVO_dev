@@ -41,11 +41,11 @@ def main():
         grid_area="text"
     )
 
-    sivo1 = Sivo.from_string('<svg width="200" height="200"><circle cx="100" cy="100" r="50" fill="blue" id="c1"/></svg>')
+    sivo1 = Sivo.from_string('<svg width="200" height="200"><circle cx="100" cy="100" r="50" fill="blue" id="c1"/></svg>', theme="transparent")
     sivo1.map(element_id="c1", tooltip="A blue circle")
     dashboard.add_sivo_block(block_id="sivo1", sivo_app=sivo1, grid_area="sivo1")
 
-    sivo2 = Sivo.from_string('<svg width="200" height="200"><rect x="50" y="50" width="100" height="100" fill="red" id="r1"/></svg>')
+    sivo2 = Sivo.from_string('<svg width="200" height="200"><rect x="50" y="50" width="100" height="100" fill="red" id="r1"/></svg>', theme="transparent")
     sivo2.map(element_id="r1", tooltip="A red square")
     dashboard.add_sivo_block(block_id="sivo2", sivo_app=sivo2, grid_area="sivo2")
 
