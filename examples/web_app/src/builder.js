@@ -45,6 +45,10 @@ const btnPreviewGenerate = document.getElementById('btn-preview-generate');
 const previewModeBtns = document.querySelectorAll('.preview-mode-btn');
 const previewContainer = document.getElementById('preview-container');
 
+// Builder Tabs
+const builderTabBtns = document.querySelectorAll('.builder-tab-btn');
+const builderTabContents = document.querySelectorAll('.builder-tab-content');
+
 // Properties
 const propElementId = document.getElementById('prop-element-id');
 const propFillColor = document.getElementById('prop-fill-color');
@@ -58,7 +62,16 @@ const propClickCallback = document.getElementById('prop-click-callback');
 const propHoverCallback = document.getElementById('prop-hover-callback');
 const btnApplyProps = document.getElementById('btn-apply-props');
 
-
+// Phase 3 Properties & Elements
+const btnSelectDataFile = document.getElementById('btn-select-data-file');
+const propDataFile = document.getElementById('prop-data-file');
+const propDataIdCol = document.getElementById('prop-data-id-col');
+const propDataValueCol = document.getElementById('prop-data-value-col');
+const dashboardBlocksContainer = document.getElementById('dashboard-blocks-container');
+const btnAddDashboardBlock = document.getElementById('btn-add-dashboard-block');
+const propGraphElementId = document.getElementById('prop-graph-element-id');
+const propGraphType = document.getElementById('prop-graph-type');
+const btnApplyGraphProps = document.getElementById('btn-apply-graph-props');
 const btnValidateProject = document.getElementById("btn-validate-project");
 const validationResults = document.getElementById("validation-results");
 
@@ -345,7 +358,15 @@ function refreshPropertiesPanel() {
     propBgImage.value = builderState.currentConfig.bgImage || "";
     propHighlightElements.checked = !!builderState.currentConfig.highlightElements;
 
+    propDataFile.value = builderState.currentConfig.dataFile || "";
+    propDataIdCol.value = builderState.currentConfig.dataIdCol || "id";
+    propDataValueCol.value = builderState.currentConfig.dataValueCol || "value";
+
+    renderDashboardBlocks();
+
     const id = propElementId.value;
+    propGraphElementId.value = id;
+
     if (!id || !builderState.currentConfig.elements[id]) {
         // Reset defaults
         propFillColor.value = '#3b82f6';
@@ -357,6 +378,7 @@ function refreshPropertiesPanel() {
         propHoverEffects.checked = true;
         propClickCallback.value = 'none';
         propHoverCallback.value = 'none';
+
         propGraphType.value = 'none';
 
         propFootnoteContainer.classList.add('hidden');
@@ -375,6 +397,8 @@ function refreshPropertiesPanel() {
 
     propClickCallback.value = elConfig.clickCallback || 'none';
     propHoverCallback.value = elConfig.hoverCallback || 'none';
+
+    propGraphType.value = elConfig.graphType || 'none';
 
     // Refresh dynamic fields
     propClickCallback.dispatchEvent(new Event('change'));
@@ -478,11 +502,213 @@ btnAnnotateInspect.addEventListener('click', () => {
     }, 3000);
 });
 
+
+// --- Phase 3 Graph Properties Logic ---
+btnApplyGraphProps.addEventListener('click', () => {
+    let activeId = propGraphElementId.value.trim();
+    if (!activeId) {
+        alert("Please select or enter a Target Element ID first.");
+        return;
+    }
+
+    if (!builderState.currentConfig.elements[activeId]) {
+        builderState.currentConfig.elements[activeId] = {};
+    }
+    let elConfig = builderState.currentConfig.elements[activeId];
+    elConfig.graphType = propGraphType.value;
+
+    saveState();
+    generatePreview();
+});
+
+// --- Builder Sub-Tabs Logic ---
+builderTabBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Reset all tabs
+        builderTabBtns.forEach(b => {
+            b.classList.remove('border-b-2', 'border-blue-600', 'text-blue-600', 'bg-white');
+            b.classList.add('border-b-2', 'border-transparent', 'hover:text-blue-600', 'hover:bg-slate-50');
+        });
+        builderTabContents.forEach(c => {
+            c.classList.remove('block');
+            c.classList.add('hidden');
+        });
+
+        // Activate clicked
+        const targetTab = e.target.getAttribute('data-tab');
+        e.target.classList.remove('border-transparent', 'hover:text-blue-600', 'hover:bg-slate-50');
+        e.target.classList.add('border-blue-600', 'text-blue-600', 'bg-white');
+        document.getElementById(`builder-tab-${targetTab}`).classList.remove('hidden');
+        document.getElementById(`builder-tab-${targetTab}`).classList.add('block');
+    });
+});
+
 // Initialize state
 saveState();
 
 
 
+
+// --- Phase 3 Features ---
+btnSelectDataFile.addEventListener("click", () => {
+    showIdbfsModal("Select CSV File", ".csv", (filename) => {
+        propDataFile.value = filename;
+        builderState.currentConfig.dataFile = filename;
+
+        // Data Binding Wizard Logic: Auto-populate elements if valid CSV
+        const mountDir = "/sivo_workspace";
+        try {
+            const data = window.pyodide.FS.readFile(`${mountDir}/${filename}`, { encoding: 'utf8' });
+
+            const parseCSVLine = (text) => {
+                let result = [];
+                let cur = '';
+                let inQuotes = false;
+                for (let i = 0; i < text.length; i++) {
+                    let char = text[i];
+                    if (inQuotes) {
+                        if (char === '"') {
+                            if (i + 1 < text.length && text[i+1] === '"') {
+                                cur += '"';
+                                i++;
+                            } else {
+                                inQuotes = false;
+                            }
+                        } else {
+                            cur += char;
+                        }
+                    } else {
+                        if (char === '"') {
+                            inQuotes = true;
+                        } else if (char === ',') {
+                            result.push(cur);
+                            cur = '';
+                        } else {
+                            cur += char;
+                        }
+                    }
+                }
+                result.push(cur);
+                return result.map(s => s.trim());
+            };
+
+            // Improved CSV parse to handle quotes and find IDs
+            const lines = data.split("\n").filter(l => l.trim() !== "");
+            if (lines.length > 1) {
+                // Parse header
+                const parsedHeader = parseCSVLine(lines[0]);
+
+                const idColName = builderState.currentConfig.dataIdCol || "id";
+                const idIdx = parsedHeader.indexOf(idColName);
+                if (idIdx !== -1) {
+                    for(let i=1; i<lines.length; i++) {
+                        const parsedCols = parseCSVLine(lines[i]);
+
+                        if (parsedCols.length > idIdx) {
+                            const id = parsedCols[idIdx];
+                            if (id && !builderState.currentConfig.elements[id]) {
+                                builderState.currentConfig.elements[id] = {
+                                    fill: '#3b82f6',
+                                    hover: '#60a5fa'
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(e) {
+            console.error(e);
+        }
+
+        saveState();
+        generatePreview();
+    });
+});
+
+propDataFile.addEventListener("change", (e) => {
+    builderState.currentConfig.dataFile = e.target.value.trim();
+    saveState();
+    generatePreview();
+});
+
+propDataIdCol.addEventListener("change", (e) => {
+    builderState.currentConfig.dataIdCol = e.target.value.trim();
+    saveState();
+    generatePreview();
+});
+
+propDataValueCol.addEventListener("change", (e) => {
+    builderState.currentConfig.dataValueCol = e.target.value.trim();
+    saveState();
+    generatePreview();
+});
+
+function renderDashboardBlocks() {
+    dashboardBlocksContainer.innerHTML = '';
+    const blocks = builderState.currentConfig.dashboardBlocks || [];
+
+    blocks.forEach((block, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center space-x-2 bg-slate-50 p-2 border border-slate-200 rounded";
+
+        // Escape quotes to prevent breaking HTML attributes
+        const title = (block.title || '').replace(/"/g, '&quot;');
+        const value = (block.value || '').replace(/"/g, '&quot;');
+
+        div.innerHTML = `
+            <div class="flex-1 space-y-1">
+                <input type="text" placeholder="Title" value="${title}" class="block-title w-full px-2 py-1 text-xs border border-slate-200 rounded" data-index="${index}">
+                <input type="text" placeholder="Value" value="${value}" class="block-value w-full px-2 py-1 text-xs border border-slate-200 rounded" data-index="${index}">
+            </div>
+            <button class="block-delete text-red-500 hover:text-red-700" data-index="${index}">&times;</button>
+        `;
+        dashboardBlocksContainer.appendChild(div);
+    });
+
+    // Add event listeners
+    dashboardBlocksContainer.querySelectorAll('.block-title').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.dashboardBlocks[idx].title = e.target.value;
+            saveState();
+            generatePreview();
+        });
+    });
+
+    dashboardBlocksContainer.querySelectorAll('.block-value').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.dashboardBlocks[idx].value = e.target.value;
+            saveState();
+            generatePreview();
+        });
+    });
+
+    dashboardBlocksContainer.querySelectorAll('.block-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.dashboardBlocks.splice(idx, 1);
+            saveState();
+            renderDashboardBlocks();
+            generatePreview();
+        });
+    });
+}
+
+btnAddDashboardBlock.addEventListener("click", () => {
+    if (!builderState.currentConfig.dashboardBlocks) {
+        builderState.currentConfig.dashboardBlocks = [];
+    }
+    const idx = builderState.currentConfig.dashboardBlocks.length + 1;
+    builderState.currentConfig.dashboardBlocks.push({
+        title: "Metric " + idx,
+        value: "0"
+    });
+
+    renderDashboardBlocks();
+    saveState();
+    generatePreview();
+});
 
 btnValidateProject.addEventListener("click", () => {
     // Basic validation
@@ -492,8 +718,17 @@ btnValidateProject.addEventListener("click", () => {
         errors.push("No template or custom SVG selected.");
     }
 
-    if (Object.keys(builderState.currentConfig.elements || {}).length === 0) {
-        errors.push("No interactive elements configured.");
+    if (Object.keys(builderState.currentConfig.elements || {}).length === 0 && !builderState.currentConfig.dataFile) {
+        errors.push("No interactive elements or data bindings configured.");
+    }
+
+    if (builderState.currentConfig.dataFile) {
+        if (!builderState.currentConfig.dataIdCol) {
+            errors.push("Data file is bound but ID Column Name is missing.");
+        }
+        if (!builderState.currentConfig.dataValueCol) {
+            errors.push("Data file is bound but Value Column Name is missing.");
+        }
     }
 
     if (errors.length > 0) {
