@@ -59,6 +59,19 @@ try:
     if config.get("ctrlLayerToggle"):
         app.add_layer_toggle(config.get("ctrlLayerToggle"), label="Toggle Layer")
 
+    # Phase 6: Geocoding & Export Globals
+    if config.get("geocodeEnable"):
+        app.enable_geocoder = True
+        if config.get("geocodeProvider"):
+            app.geocode_provider = config.get("geocodeProvider")
+        if config.get("geocodeApiKey"):
+            app.geocode_api_key = config.get("geocodeApiKey")
+
+    if config.get("exportWatermark"):
+        app.watermark = config.get("exportWatermark")
+    if config.get("exportAttribution"):
+        app.attribution = config.get("exportAttribution")
+
     # Highlight Elements CSS Injection
     if config.get('highlightElements'):
          app.custom_css += "\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; cursor: pointer; transition: all 0.2s; }"
@@ -254,6 +267,16 @@ try:
         if scratchoff:
             app.map(el_id, scratchoff=sivo.ScratchoffConfig()) # Requires applying scratchoff config
 
+        # Phase 6: Drill-Through (Multi-View preview representation)
+        # Note: In preview, this might just register as a click callback to show it's linked
+        drill_view_id = el_cfg.get('drillThroughViewId')
+        if drill_view_id:
+            kwargs['hover_callback_event'] = 'drill_through_preview'
+            kwargs['hover_callback_payload'] = {"element": el_id, "action": f"Drill to {drill_view_id}"}
+            # Add simple tooltip if none
+            if 'html' not in kwargs:
+                kwargs['html'] = f"Click to drill through to view: {drill_view_id}"
+
         # Actions
         click_cb = el_cfg.get('clickCallback')
         if click_cb == 'zoom':
@@ -350,6 +373,13 @@ try:
         to_html_kwargs["custom_js"] = gs["custom_js"]
 
     dashboard_blocks = config.get("dashboardBlocks", [])
+    # If Multi-View is somewhat configured globally, mock SivoProject compilation for export tab preview
+    export_e2e = config.get("exportE2e")
+
+    if export_e2e:
+        # Mock testing scaffold display inside preview
+        app.custom_js += "console.log('E2E Testing Scaffolding Enabled');"
+
     if dashboard_blocks:
         dashboard = sivo.SivoDashboard(app, theme="light")
         for block in dashboard_blocks:
@@ -358,7 +388,26 @@ try:
             dashboard.add_html_block(f"<h3>{title}</h3><h2>{value}</h2>")
         html_output = dashboard.to_html(**to_html_kwargs)
     else:
-        html_output = app.to_html(**to_html_kwargs)
+        # Check if there are drill-through elements, and if so, use SivoProject for the preview
+        # so drill through links correctly generate SivoProject HTML
+        has_drill = any(el.get("drillThroughViewId") for el in elements.values())
+        if has_drill:
+            project = sivo.SivoProject(initial_view_id="main")
+            project.add_view("main", app)
+            # Add dummy views for the drill through targets to prevent 404s in preview
+            for el_id, el in elements.items():
+                if el.get("drillThroughViewId"):
+                    target_view = el.get("drillThroughViewId")
+                    dummy_app = sivo.Sivo.from_string(f'<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40">Dummy View: {target_view}</text></svg>')
+                    # Back link
+                    dummy_app.map("back", html="Back to Main", hover_callback_event="drill_through_preview")
+                    try:
+                        project.add_view(target_view, dummy_app)
+                    except:
+                        pass # View already added
+            html_output = project.to_html(**to_html_kwargs)
+        else:
+            html_output = app.to_html(**to_html_kwargs)
 
 except Exception as main_e:
     html_output = f'<div style="color:red;"><pre>{traceback.format_exc()}</pre></div>'

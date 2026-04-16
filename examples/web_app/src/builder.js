@@ -177,6 +177,21 @@ const propCtrlUrlNavId = document.getElementById('prop-ctrl-url-nav-id');
 const propCtrlUrlNavUrl = document.getElementById('prop-ctrl-url-nav-url');
 const btnApplyControls = document.getElementById('btn-apply-controls');
 
+// Phase 6 Elements
+const propGeocodeEnable = document.getElementById('prop-geocode-enable');
+const propGeocodeProvider = document.getElementById('prop-geocode-provider');
+const propGeocodeApiKey = document.getElementById('prop-geocode-api-key');
+const btnApplyGeocoding = document.getElementById('btn-apply-geocoding');
+
+const propMvElementId = document.getElementById('prop-mv-element-id');
+const propMvViewId = document.getElementById('prop-mv-view-id');
+const btnApplyMultiview = document.getElementById('btn-apply-multiview');
+
+const propExportWatermark = document.getElementById('prop-export-watermark');
+const propExportAttribution = document.getElementById('prop-export-attribution');
+const propExportE2e = document.getElementById('prop-export-e2e');
+const btnApplyExport = document.getElementById('btn-apply-export');
+
 // --- State Management (Undo/Redo) ---
 function saveState() {
     // If we're not at the end of history, truncate the future
@@ -492,6 +507,15 @@ function refreshPropertiesPanel() {
     propCtrlUrlNavId.value = builderState.currentConfig.ctrlUrlNavId || "";
     propCtrlUrlNavUrl.value = builderState.currentConfig.ctrlUrlNavUrl || "";
 
+    // Phase 6 Globals
+    propGeocodeEnable.checked = !!builderState.currentConfig.geocodeEnable;
+    propGeocodeProvider.value = builderState.currentConfig.geocodeProvider || "nominatim";
+    propGeocodeApiKey.value = builderState.currentConfig.geocodeApiKey || "";
+
+    propExportWatermark.value = builderState.currentConfig.exportWatermark || "";
+    propExportAttribution.value = builderState.currentConfig.exportAttribution || "";
+    propExportE2e.checked = !!builderState.currentConfig.exportE2e;
+
 
     updateDataMapUI();
 
@@ -513,6 +537,10 @@ function refreshPropertiesPanel() {
         propOverlayShapeType.value = "none";
         propOverlayImageUrl.value = "";
         propOverlayScratchoff.checked = false;
+
+        // Phase 6 Reset
+        propMvElementId.value = "";
+        propMvViewId.value = "";
 
         // Reset defaults
         propFillColor.value = '#3b82f6';
@@ -557,6 +585,10 @@ function refreshPropertiesPanel() {
     propOverlayShapeType.value = elConfig.shapeType || 'none';
     propOverlayImageUrl.value = elConfig.absoluteImageUrl || '';
     propOverlayScratchoff.checked = !!elConfig.scratchoff;
+
+    // Phase 6 Element Config
+    propMvElementId.value = id;
+    propMvViewId.value = elConfig.drillThroughViewId || '';
 
 
     // Refresh dynamic fields
@@ -838,6 +870,35 @@ btnApplyControls.addEventListener('click', () => {
     builderState.currentConfig.ctrlPanelDismiss = propCtrlPanelDismiss.value.trim();
     builderState.currentConfig.ctrlUrlNavId = propCtrlUrlNavId.value.trim();
     builderState.currentConfig.ctrlUrlNavUrl = propCtrlUrlNavUrl.value.trim();
+    saveState();
+    generatePreview();
+});
+
+// Phase 6 Button Listeners
+btnApplyGeocoding.addEventListener('click', () => {
+    builderState.currentConfig.geocodeEnable = propGeocodeEnable.checked;
+    builderState.currentConfig.geocodeProvider = propGeocodeProvider.value;
+    builderState.currentConfig.geocodeApiKey = propGeocodeApiKey.value.trim();
+    saveState();
+    generatePreview();
+});
+
+btnApplyMultiview.addEventListener('click', () => {
+    const elId = propMvElementId.value.trim();
+    const viewId = propMvViewId.value.trim();
+    if (elId) {
+        if (!builderState.currentConfig.elements) builderState.currentConfig.elements = {};
+        if (!builderState.currentConfig.elements[elId]) builderState.currentConfig.elements[elId] = {};
+        builderState.currentConfig.elements[elId].drillThroughViewId = viewId;
+        saveState();
+        generatePreview();
+    }
+});
+
+btnApplyExport.addEventListener('click', () => {
+    builderState.currentConfig.exportWatermark = propExportWatermark.value.trim();
+    builderState.currentConfig.exportAttribution = propExportAttribution.value.trim();
+    builderState.currentConfig.exportE2e = propExportE2e.checked;
     saveState();
     generatePreview();
 });
