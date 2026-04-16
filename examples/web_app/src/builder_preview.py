@@ -139,6 +139,19 @@ try:
     """
 
 
+    # Phase 4: Live Binding
+    live_ws_url = config.get("liveWsUrl")
+    live_ws_topic = config.get("liveWsTopic")
+    if live_ws_url and live_ws_topic:
+        app.bind_live(live_ws_url, live_ws_topic)
+
+    live_api_url = config.get("liveApiUrl")
+    if live_api_url:
+        live_api_interval = config.get("liveApiInterval")
+        interval_ms = int(live_api_interval) if live_api_interval else 5000
+        live_api_path = config.get("liveApiPath")
+        app.bind_api(live_api_url, polling_interval_ms=interval_ms, data_path=live_api_path if live_api_path else None)
+
     # Apply Element Configurations
     elements = config.get('elements', {})
     for el_id, el_cfg in elements.items():
@@ -161,6 +174,13 @@ try:
         if el_cfg.get('selectiveHover') == False:
             # Prevent hover effects
             theme.hover_color = el_cfg.get('fill')
+
+        fetch_url = el_cfg.get('fetchUrl')
+        if fetch_url:
+            kwargs['fetch_url'] = fetch_url
+            fetch_data_path = el_cfg.get('fetchDataPath')
+            if fetch_data_path:
+                kwargs['fetch_data_path'] = fetch_data_path
 
         # Actions
         click_cb = el_cfg.get('clickCallback')

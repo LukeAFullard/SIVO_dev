@@ -250,11 +250,12 @@ else:
 
     <!-- Right Sidebar: Sub-Tabs -->
     <div class="w-80 border-l border-slate-200 bg-white flex flex-col">
-        <div class="flex border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 text-xs">
-            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white" data-tab="design">Design</button>
-            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="data">Data</button>
-            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="dashboard">Dashboard</button>
-            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="graphs">Graphs</button>
+        <div class="flex border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 text-xs overflow-x-auto whitespace-nowrap hide-scrollbar">
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white" data-tab="design">Design</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="data">Data</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="dashboard">Dashboard</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="graphs">Graphs</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="live">Live Data</button>
         </div>
 
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
@@ -471,6 +472,70 @@ else:
                             Apply Graph Binding
                         </button>
                         <p class="text-xs text-slate-400 mt-2 italic">Uses your bound CSV file to plot the top 5 values relative to this element when clicked.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Live Data (WebSockets, API Polling, Fetch) -->
+            <div id="builder-tab-live" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Live Data Connections</h3>
+                    <div class="space-y-4">
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+                            <h4 class="text-xs font-semibold text-slate-700 mb-2">WebSocket Binding</h4>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="block text-xs text-slate-600 mb-1">WebSocket URL</label>
+                                    <input type="text" id="prop-live-ws-url" placeholder="wss://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-600 mb-1">Topic</label>
+                                    <input type="text" id="prop-live-ws-topic" placeholder="e.g. updates" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 border border-slate-200 rounded">
+                            <h4 class="text-xs font-semibold text-slate-700 mb-2">API Polling Binding</h4>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="block text-xs text-slate-600 mb-1">API URL</label>
+                                    <input type="text" id="prop-live-api-url" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-600 mb-1">Polling Interval (ms)</label>
+                                    <input type="number" id="prop-live-api-interval" placeholder="5000" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-600 mb-1">Data Path (dot notation)</label>
+                                    <input type="text" id="prop-live-api-path" placeholder="data.results" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btn-apply-live-data" class="w-full mt-2 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
+                            Apply Connections
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Dynamic API Fetch on Click</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Target Element ID</label>
+                            <input type="text" id="prop-fetch-element-id" placeholder="e.g. info-btn" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Fetch URL</label>
+                            <input type="text" id="prop-fetch-url" placeholder="https://api.example.com/data" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Fetch Data Path</label>
+                            <input type="text" id="prop-fetch-data-path" placeholder="user.name" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none">
+                        </div>
+                        <button id="btn-apply-fetch-props" class="w-full mt-2 px-3 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 font-medium shadow-sm transition-colors">
+                            Apply Fetch Action
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2828,6 +2893,19 @@ const validationResults = document.getElementById("validation-results");
 const propFootnoteContainer = document.getElementById('prop-footnote-container');
 const propToggleImageContainer = document.getElementById('prop-toggle-image-container');
 
+// Phase 4 Live Data & Fetch Elements
+const propLiveWsUrl = document.getElementById('prop-live-ws-url');
+const propLiveWsTopic = document.getElementById('prop-live-ws-topic');
+const propLiveApiUrl = document.getElementById('prop-live-api-url');
+const propLiveApiInterval = document.getElementById('prop-live-api-interval');
+const propLiveApiPath = document.getElementById('prop-live-api-path');
+const btnApplyLiveData = document.getElementById('btn-apply-live-data');
+
+const propFetchElementId = document.getElementById('prop-fetch-element-id');
+const propFetchUrl = document.getElementById('prop-fetch-url');
+const propFetchDataPath = document.getElementById('prop-fetch-data-path');
+const btnApplyFetchProps = document.getElementById('btn-apply-fetch-props');
+
 
 // --- State Management (Undo/Redo) ---
 function saveState() {
@@ -3076,6 +3154,7 @@ window.addEventListener('message', (event) => {
         // Set the active element and refresh
         builderState.currentConfig.activeElementId = id;
         propElementId.value = id;
+        propFetchElementId.value = id;
 
         refreshPropertiesPanel();
         generatePreview();
@@ -3119,6 +3198,12 @@ function refreshPropertiesPanel() {
     propDataOriginCol.value = builderState.currentConfig.dataOriginCol || "origin";
     propDataDestCol.value = builderState.currentConfig.dataDestCol || "destination";
 
+    propLiveWsUrl.value = builderState.currentConfig.liveWsUrl || "";
+    propLiveWsTopic.value = builderState.currentConfig.liveWsTopic || "";
+    propLiveApiUrl.value = builderState.currentConfig.liveApiUrl || "";
+    propLiveApiInterval.value = builderState.currentConfig.liveApiInterval || "";
+    propLiveApiPath.value = builderState.currentConfig.liveApiPath || "";
+
     updateDataMapUI();
 
     renderDashboardBlocks();
@@ -3127,6 +3212,8 @@ function refreshPropertiesPanel() {
     propGraphElementId.value = id;
 
     if (!id || !builderState.currentConfig.elements[id]) {
+        propFetchUrl.value = "";
+        propFetchDataPath.value = "";
         // Reset defaults
         propFillColor.value = '#3b82f6';
         propFillColorText.value = '#3b82f6';
@@ -3158,6 +3245,9 @@ function refreshPropertiesPanel() {
     propHoverCallback.value = elConfig.hoverCallback || 'none';
 
     propGraphType.value = elConfig.graphType || 'none';
+
+    propFetchUrl.value = elConfig.fetchUrl || '';
+    propFetchDataPath.value = elConfig.fetchDataPath || '';
 
     // Refresh dynamic fields
     propClickCallback.dispatchEvent(new Event('change'));
@@ -3220,7 +3310,7 @@ async function generatePreview() {
         window.builderConfigJson = JSON.stringify(builderState.currentConfig);
 
         // Load the Python script generated by build.py
-        const pyCode = "import sivo\nimport json\nimport traceback\nimport js\n\nconfig = json.loads(js.window.builderConfigJson)\n\ntry:\n    template_path = config.get('template')\n    custom_svg = config.get('customSvg')\n    bg_image = config.get('bgImage')\n\n    # Load base template or blank or custom svg\n    if custom_svg:\n        try:\n            # check if it's a url or a file path in idbfs\n            if custom_svg.startswith('http'):\n                 app = sivo.Sivo.from_svg(custom_svg)\n            elif custom_svg.startswith('<svg'):\n                 app = sivo.Sivo.from_string(custom_svg)\n            else:\n                 with open(custom_svg, 'r') as f:\n                     app = sivo.Sivo.from_string(f.read())\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading custom SVG {custom_svg}: {str(e)}</text></svg>')\n    elif template_path == 'blank' or not template_path:\n        app = sivo.Sivo.from_string('<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#f8fafc\"/></svg>')\n    else:\n        try:\n            app = sivo.Sivo.from_template(template_path)\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading template {template_path}: {str(e)}</text></svg>')\n\n    # Apply Canvas Settings\n    if bg_image:\n         app.background_image_url = bg_image\n\n    # Highlight Elements CSS Injection\n    if config.get('highlightElements'):\n         app.custom_css += \"\\\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; cursor: pointer; transition: all 0.2s; }\"\n         app.custom_css += \"\\\\n svg [id]:hover { fill: rgba(100, 100, 255, 0.4) !important; stroke: rgba(50, 50, 255, 0.8) !important; }\"\n\n    active_element_id = config.get('activeElementId')\n    if active_element_id:\n        app.custom_css += f\"\\\\n svg #{active_element_id} {{ stroke: #ef4444 !important; stroke-width: 3px !important; stroke-dasharray: 5,5; animation: dash 1s linear infinite; }}\"\n        app.custom_css += \"\\\\n @keyframes dash { to { stroke-dashoffset: -10; } }\"\n\n    # Phase 4: Data Binding (Advanced Maps)\n    data_file = config.get(\"dataFile\")\n    data_map_type = config.get(\"dataMapType\", \"choropleth\")\n    \n    data_id_col = config.get(\"dataIdCol\", \"id\")\n    data_value_col = config.get(\"dataValueCol\", \"value\")\n    data_base_col = config.get(\"dataBaseCol\", \"value1\")\n    data_alpha_col = config.get(\"dataAlphaCol\", \"value2\")\n    data_x_col = config.get(\"dataXCol\", \"x\")\n    data_y_col = config.get(\"dataYCol\", \"y\")\n    data_origin_col = config.get(\"dataOriginCol\", \"origin\")\n    data_dest_col = config.get(\"dataDestCol\", \"destination\")\n\n    if data_file:\n        try:\n            import pandas as pd\n            # Use IDBFS mount path\n            df = pd.read_csv(f\"/sivo_workspace/{data_file}\")\n            \n            if data_map_type == \"choropleth\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_choropleth(data_map, min_color=\"#e2e8f0\", max_color=\"#3b82f6\")\n                \n            elif data_map_type == \"categorical\" and data_id_col in df.columns and data_value_col in df.columns:\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col].astype(str)))\n                app.apply_categorical_map(data_map)\n                \n            elif data_map_type == \"value_by_alpha\" and data_id_col in df.columns and data_base_col in df.columns and data_alpha_col in df.columns:\n                df[data_base_col] = pd.to_numeric(df[data_base_col], errors='coerce')\n                df[data_alpha_col] = pd.to_numeric(df[data_alpha_col], errors='coerce')\n                base_map = dict(zip(df[data_id_col].astype(str), df[data_base_col]))\n                alpha_map = dict(zip(df[data_id_col].astype(str), df[data_alpha_col]))\n                app.apply_value_by_alpha(base_map, alpha_map)\n                \n            elif data_map_type == \"hexbin\" and data_x_col in df.columns and data_y_col in df.columns:\n                df[data_x_col] = pd.to_numeric(df[data_x_col], errors='coerce')\n                df[data_y_col] = pd.to_numeric(df[data_y_col], errors='coerce')\n                points = df[[data_x_col, data_y_col]].dropna().values.tolist()\n                app.apply_hexbin(points)\n                \n            elif data_map_type == \"dot_density\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_dot_density(data_map)\n                \n            elif data_map_type == \"proportional_symbols\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_proportional_symbols(data_map)\n                \n            elif data_map_type == \"spike_map\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_spike_map(data_map)\n                \n            elif data_map_type == \"flow_map\" and data_origin_col in df.columns and data_dest_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_list = []\n                for _, row in df.iterrows():\n                    data_list.append({\n                        \"origin\": str(row[data_origin_col]),\n                        \"destination\": str(row[data_dest_col]),\n                        \"value\": float(row[data_value_col]) if not pd.isna(row[data_value_col]) else 0.0\n                    })\n                app.apply_flow_map(data_list)\n                \n        except Exception as e:\n            error_msg = json.dumps(f\"Error loading data file {data_file}: {str(e)}\")\n            app.custom_js += f\"console.error({error_msg});\"\n\n    # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs\n    app.custom_js += \"\"\"\n    document.addEventListener('DOMContentLoaded', () => {\n        const svgElement = document.querySelector('svg');\n        if (!svgElement) return;\n\n        svgElement.addEventListener('click', (e) => {\n            // Find the closest element with an ID within the SVG\n            let target = e.target;\n            while (target && target !== svgElement) {\n                if (target.id) {\n                    window.parent.postMessage({ type: 'sivo_element_clicked', id: target.id }, '*');\n                    e.preventDefault();\n                    e.stopPropagation();\n                    return;\n                }\n                target = target.parentNode;\n            }\n        });\n    });\n    \"\"\"\n\n\n    # Apply Element Configurations\n    elements = config.get('elements', {})\n    for el_id, el_cfg in elements.items():\n        theme = sivo.ThemeOverride(\n            color=el_cfg.get('fill'),\n            hover_color=el_cfg.get('hover')\n        )\n\n        kwargs = {\n            'theme_override': theme\n        }\n\n        if el_cfg.get('tooltip'):\n            kwargs['html'] = el_cfg['tooltip']\n\n        # Tooltip Z-Index Enforcement is handled by injecting custom CSS\n        if el_cfg.get('enforceZIndex'):\n            app.custom_css += \"\\\\n.echarts-tooltip { z-index: 9999 !important; }\"\n\n        if el_cfg.get('selectiveHover') == False:\n            # Prevent hover effects\n            theme.hover_color = el_cfg.get('fill')\n\n        # Actions\n        click_cb = el_cfg.get('clickCallback')\n        if click_cb == 'zoom':\n            kwargs['zoom_to'] = el_id\n        elif click_cb == 'toggle_image':\n            kwargs['toggle_image'] = {\n                'image_urls': [url.strip() for url in el_cfg.get('toggleImageUrls', '').split(',') if url.strip()],\n                'target_id': el_id\n            }\n        elif click_cb == 'footnote':\n            kwargs['footnote'] = el_cfg.get('footnoteText', '')\n\n        hover_cb = el_cfg.get('hoverCallback')\n        if hover_cb and hover_cb != 'none':\n            kwargs['hover_callback_event'] = hover_cb\n            kwargs['hover_callback_payload'] = {\"element\": el_id, \"action\": hover_cb}\n\n        graph_type = el_cfg.get(\"graphType\")\n        if graph_type and graph_type != \"none\":\n            # Real implementation using parsed CSV logic\n            data_file = config.get(\"dataFile\")\n            data_id_col = config.get(\"dataIdCol\", \"id\")\n            data_value_col = config.get(\"dataValueCol\", \"value\")\n            if data_file:\n                try:\n                    import pandas as pd\n                    df = pd.read_csv(f\"/sivo_workspace/{data_file}\")\n                    # If columns exist\n                    if data_id_col in df.columns and data_value_col in df.columns:\n                        # Extract data for this particular element or generally\n                        # Since we want to show a graph, let's plot the top 5 values for bar/pie or a trend\n                        # Coerce values to numeric first\n                        df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                        top_df = df.nlargest(5, data_value_col)\n                        names = top_df[data_id_col].astype(str).tolist()\n                        values = top_df[data_value_col].tolist()\n                        if graph_type == \"bar\":\n                            kwargs[\"bar_chart\"] = {\"x\": names, \"y\": values}\n                        elif graph_type == \"line\":\n                            kwargs[\"line_chart\"] = {\"x\": names, \"y\": values}\n                        elif graph_type == \"pie\":\n                            kwargs[\"pie_chart\"] = {\"data\": [{\"name\": str(n), \"value\": float(v)} for n, v in zip(names, values)]}\n                        elif graph_type == \"scatter\":\n                            # Use random pairs for demonstration\n                            kwargs[\"scatter_chart\"] = {\"data\": [[i, v] for i, v in enumerate(values)]}\n                        elif graph_type == \"boxplot\":\n                            kwargs[\"boxplot_chart\"] = {\"data\": [values]}\n                except Exception as e:\n                    pass\n\n        app.map(el_id, **kwargs)\n\n    dashboard_blocks = config.get(\"dashboardBlocks\", [])\n    if dashboard_blocks:\n        dashboard = sivo.SivoDashboard(app, theme=\"light\")\n        for block in dashboard_blocks:\n            title = block.get(\"title\", \"Metric\")\n            value = block.get(\"value\", \"0\")\n            dashboard.add_html_block(f\"<h3>{title}</h3><h2>{value}</h2>\")\n        html_output = dashboard.to_html(build_js=False)\n    else:\n        html_output = app.to_html(build_js=False)\n\nexcept Exception as main_e:\n    html_output = f'<div style=\"color:red;\"><pre>{traceback.format_exc()}</pre></div>'\n\nhtml_output\n";
+        const pyCode = "import sivo\nimport json\nimport traceback\nimport js\n\nconfig = json.loads(js.window.builderConfigJson)\n\ntry:\n    template_path = config.get('template')\n    custom_svg = config.get('customSvg')\n    bg_image = config.get('bgImage')\n\n    # Load base template or blank or custom svg\n    if custom_svg:\n        try:\n            # check if it's a url or a file path in idbfs\n            if custom_svg.startswith('http'):\n                 app = sivo.Sivo.from_svg(custom_svg)\n            elif custom_svg.startswith('<svg'):\n                 app = sivo.Sivo.from_string(custom_svg)\n            else:\n                 with open(custom_svg, 'r') as f:\n                     app = sivo.Sivo.from_string(f.read())\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading custom SVG {custom_svg}: {str(e)}</text></svg>')\n    elif template_path == 'blank' or not template_path:\n        app = sivo.Sivo.from_string('<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"100%\" height=\"100%\" fill=\"#f8fafc\"/></svg>')\n    else:\n        try:\n            app = sivo.Sivo.from_template(template_path)\n        except Exception as e:\n            app = sivo.Sivo.from_string(f'<svg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"40\">Error loading template {template_path}: {str(e)}</text></svg>')\n\n    # Apply Canvas Settings\n    if bg_image:\n         app.background_image_url = bg_image\n\n    # Highlight Elements CSS Injection\n    if config.get('highlightElements'):\n         app.custom_css += \"\\\\n svg [id] { fill: rgba(150, 150, 255, 0.2) !important; stroke: rgba(100, 100, 255, 0.5) !important; cursor: pointer; transition: all 0.2s; }\"\n         app.custom_css += \"\\\\n svg [id]:hover { fill: rgba(100, 100, 255, 0.4) !important; stroke: rgba(50, 50, 255, 0.8) !important; }\"\n\n    active_element_id = config.get('activeElementId')\n    if active_element_id:\n        app.custom_css += f\"\\\\n svg #{active_element_id} {{ stroke: #ef4444 !important; stroke-width: 3px !important; stroke-dasharray: 5,5; animation: dash 1s linear infinite; }}\"\n        app.custom_css += \"\\\\n @keyframes dash { to { stroke-dashoffset: -10; } }\"\n\n    # Phase 4: Data Binding (Advanced Maps)\n    data_file = config.get(\"dataFile\")\n    data_map_type = config.get(\"dataMapType\", \"choropleth\")\n\n    data_id_col = config.get(\"dataIdCol\", \"id\")\n    data_value_col = config.get(\"dataValueCol\", \"value\")\n    data_base_col = config.get(\"dataBaseCol\", \"value1\")\n    data_alpha_col = config.get(\"dataAlphaCol\", \"value2\")\n    data_x_col = config.get(\"dataXCol\", \"x\")\n    data_y_col = config.get(\"dataYCol\", \"y\")\n    data_origin_col = config.get(\"dataOriginCol\", \"origin\")\n    data_dest_col = config.get(\"dataDestCol\", \"destination\")\n\n    if data_file:\n        try:\n            import pandas as pd\n            # Use IDBFS mount path\n            df = pd.read_csv(f\"/sivo_workspace/{data_file}\")\n\n            if data_map_type == \"choropleth\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_choropleth(data_map, min_color=\"#e2e8f0\", max_color=\"#3b82f6\")\n\n            elif data_map_type == \"categorical\" and data_id_col in df.columns and data_value_col in df.columns:\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col].astype(str)))\n                app.apply_categorical_map(data_map)\n\n            elif data_map_type == \"value_by_alpha\" and data_id_col in df.columns and data_base_col in df.columns and data_alpha_col in df.columns:\n                df[data_base_col] = pd.to_numeric(df[data_base_col], errors='coerce')\n                df[data_alpha_col] = pd.to_numeric(df[data_alpha_col], errors='coerce')\n                base_map = dict(zip(df[data_id_col].astype(str), df[data_base_col]))\n                alpha_map = dict(zip(df[data_id_col].astype(str), df[data_alpha_col]))\n                app.apply_value_by_alpha(base_map, alpha_map)\n\n            elif data_map_type == \"hexbin\" and data_x_col in df.columns and data_y_col in df.columns:\n                df[data_x_col] = pd.to_numeric(df[data_x_col], errors='coerce')\n                df[data_y_col] = pd.to_numeric(df[data_y_col], errors='coerce')\n                points = df[[data_x_col, data_y_col]].dropna().values.tolist()\n                app.apply_hexbin(points)\n\n            elif data_map_type == \"dot_density\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_dot_density(data_map)\n\n            elif data_map_type == \"proportional_symbols\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_proportional_symbols(data_map)\n\n            elif data_map_type == \"spike_map\" and data_id_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))\n                app.apply_spike_map(data_map)\n\n            elif data_map_type == \"flow_map\" and data_origin_col in df.columns and data_dest_col in df.columns and data_value_col in df.columns:\n                df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                data_list = []\n                for _, row in df.iterrows():\n                    data_list.append({\n                        \"origin\": str(row[data_origin_col]),\n                        \"destination\": str(row[data_dest_col]),\n                        \"value\": float(row[data_value_col]) if not pd.isna(row[data_value_col]) else 0.0\n                    })\n                app.apply_flow_map(data_list)\n\n        except Exception as e:\n            error_msg = json.dumps(f\"Error loading data file {data_file}: {str(e)}\")\n            app.custom_js += f\"console.error({error_msg});\"\n\n    # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs\n    app.custom_js += \"\"\"\n    document.addEventListener('DOMContentLoaded', () => {\n        const svgElement = document.querySelector('svg');\n        if (!svgElement) return;\n\n        svgElement.addEventListener('click', (e) => {\n            // Find the closest element with an ID within the SVG\n            let target = e.target;\n            while (target && target !== svgElement) {\n                if (target.id) {\n                    window.parent.postMessage({ type: 'sivo_element_clicked', id: target.id }, '*');\n                    e.preventDefault();\n                    e.stopPropagation();\n                    return;\n                }\n                target = target.parentNode;\n            }\n        });\n    });\n    \"\"\"\n\n\n    # Phase 4: Live Binding\n    live_ws_url = config.get(\"liveWsUrl\")\n    live_ws_topic = config.get(\"liveWsTopic\")\n    if live_ws_url and live_ws_topic:\n        app.bind_live(live_ws_url, live_ws_topic)\n\n    live_api_url = config.get(\"liveApiUrl\")\n    if live_api_url:\n        live_api_interval = config.get(\"liveApiInterval\")\n        interval_ms = int(live_api_interval) if live_api_interval else 5000\n        live_api_path = config.get(\"liveApiPath\")\n        app.bind_api(live_api_url, polling_interval_ms=interval_ms, data_path=live_api_path if live_api_path else None)\n\n    # Apply Element Configurations\n    elements = config.get('elements', {})\n    for el_id, el_cfg in elements.items():\n        theme = sivo.ThemeOverride(\n            color=el_cfg.get('fill'),\n            hover_color=el_cfg.get('hover')\n        )\n\n        kwargs = {\n            'theme_override': theme\n        }\n\n        if el_cfg.get('tooltip'):\n            kwargs['html'] = el_cfg['tooltip']\n\n        # Tooltip Z-Index Enforcement is handled by injecting custom CSS\n        if el_cfg.get('enforceZIndex'):\n            app.custom_css += \"\\\\n.echarts-tooltip { z-index: 9999 !important; }\"\n\n        if el_cfg.get('selectiveHover') == False:\n            # Prevent hover effects\n            theme.hover_color = el_cfg.get('fill')\n\n        fetch_url = el_cfg.get('fetchUrl')\n        if fetch_url:\n            kwargs['fetch_url'] = fetch_url\n            fetch_data_path = el_cfg.get('fetchDataPath')\n            if fetch_data_path:\n                kwargs['fetch_data_path'] = fetch_data_path\n\n        # Actions\n        click_cb = el_cfg.get('clickCallback')\n        if click_cb == 'zoom':\n            kwargs['zoom_to'] = el_id\n        elif click_cb == 'toggle_image':\n            kwargs['toggle_image'] = {\n                'image_urls': [url.strip() for url in el_cfg.get('toggleImageUrls', '').split(',') if url.strip()],\n                'target_id': el_id\n            }\n        elif click_cb == 'footnote':\n            kwargs['footnote'] = el_cfg.get('footnoteText', '')\n\n        hover_cb = el_cfg.get('hoverCallback')\n        if hover_cb and hover_cb != 'none':\n            kwargs['hover_callback_event'] = hover_cb\n            kwargs['hover_callback_payload'] = {\"element\": el_id, \"action\": hover_cb}\n\n        graph_type = el_cfg.get(\"graphType\")\n        if graph_type and graph_type != \"none\":\n            # Real implementation using parsed CSV logic\n            data_file = config.get(\"dataFile\")\n            data_id_col = config.get(\"dataIdCol\", \"id\")\n            data_value_col = config.get(\"dataValueCol\", \"value\")\n            if data_file:\n                try:\n                    import pandas as pd\n                    df = pd.read_csv(f\"/sivo_workspace/{data_file}\")\n                    # If columns exist\n                    if data_id_col in df.columns and data_value_col in df.columns:\n                        # Extract data for this particular element or generally\n                        # Since we want to show a graph, let's plot the top 5 values for bar/pie or a trend\n                        # Coerce values to numeric first\n                        df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')\n                        top_df = df.nlargest(5, data_value_col)\n                        names = top_df[data_id_col].astype(str).tolist()\n                        values = top_df[data_value_col].tolist()\n                        if graph_type == \"bar\":\n                            kwargs[\"bar_chart\"] = {\"x\": names, \"y\": values}\n                        elif graph_type == \"line\":\n                            kwargs[\"line_chart\"] = {\"x\": names, \"y\": values}\n                        elif graph_type == \"pie\":\n                            kwargs[\"pie_chart\"] = {\"data\": [{\"name\": str(n), \"value\": float(v)} for n, v in zip(names, values)]}\n                        elif graph_type == \"scatter\":\n                            # Use random pairs for demonstration\n                            kwargs[\"scatter_chart\"] = {\"data\": [[i, v] for i, v in enumerate(values)]}\n                        elif graph_type == \"boxplot\":\n                            kwargs[\"boxplot_chart\"] = {\"data\": [values]}\n                except Exception as e:\n                    pass\n\n        app.map(el_id, **kwargs)\n\n    dashboard_blocks = config.get(\"dashboardBlocks\", [])\n    if dashboard_blocks:\n        dashboard = sivo.SivoDashboard(app, theme=\"light\")\n        for block in dashboard_blocks:\n            title = block.get(\"title\", \"Metric\")\n            value = block.get(\"value\", \"0\")\n            dashboard.add_html_block(f\"<h3>{title}</h3><h2>{value}</h2>\")\n        html_output = dashboard.to_html(build_js=False)\n    else:\n        html_output = app.to_html(build_js=False)\n\nexcept Exception as main_e:\n    html_output = f'<div style=\"color:red;\"><pre>{traceback.format_exc()}</pre></div>'\n\nhtml_output\n";
 
         const resultHtml = await window.pyodide.runPythonAsync(pyCode);
         previewFrame.srcdoc = resultHtml;
@@ -3275,6 +3365,35 @@ btnApplyGraphProps.addEventListener('click', () => {
     }
     let elConfig = builderState.currentConfig.elements[activeId];
     elConfig.graphType = propGraphType.value;
+
+    saveState();
+    generatePreview();
+});
+
+// --- Phase 4 Live Data & Fetch Action Logic ---
+btnApplyLiveData.addEventListener('click', () => {
+    builderState.currentConfig.liveWsUrl = propLiveWsUrl.value.trim();
+    builderState.currentConfig.liveWsTopic = propLiveWsTopic.value.trim();
+    builderState.currentConfig.liveApiUrl = propLiveApiUrl.value.trim();
+    builderState.currentConfig.liveApiInterval = propLiveApiInterval.value.trim();
+    builderState.currentConfig.liveApiPath = propLiveApiPath.value.trim();
+    saveState();
+    generatePreview();
+});
+
+btnApplyFetchProps.addEventListener('click', () => {
+    let activeId = propFetchElementId.value.trim();
+    if (!activeId) {
+        alert("Please select or enter a Target Element ID first.");
+        return;
+    }
+
+    if (!builderState.currentConfig.elements[activeId]) {
+        builderState.currentConfig.elements[activeId] = {};
+    }
+    let elConfig = builderState.currentConfig.elements[activeId];
+    elConfig.fetchUrl = propFetchUrl.value.trim();
+    elConfig.fetchDataPath = propFetchDataPath.value.trim();
 
     saveState();
     generatePreview();
