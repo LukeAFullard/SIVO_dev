@@ -187,6 +187,7 @@
         "sivo1"
         "sivo2"
         ;
+                grid-template-columns: unset;
 
             }
 
@@ -351,7 +352,7 @@
             const dom = document.getElementById('chart-' + blockId);
 
             if (dom) {
-                const chart = echarts.init(dom, null, { renderer: viewData.render_mode || 'canvas' });
+                const chart = echarts.init(dom, viewData.theme === 'transparent' ? null : viewData.theme, { renderer: viewData.render_mode || 'canvas' });
                 activeCharts[blockId] = chart;
 
                 // Register the SVG map unique to this block

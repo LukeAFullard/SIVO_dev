@@ -545,7 +545,7 @@ class Sivo:
     def apply_template_style(self, style_name: str):
         """
         Applies a pre-defined set of global styles and themes to the infographic.
-        Available styles: 'dark_mode', 'minimalist', 'cyberpunk', 'glassmorphism', 'neon'.
+        Available styles: 'dark_mode', 'minimalist', 'cyberpunk', 'glassmorphism', 'neon', 'monochrome', 'ocean', 'forest', 'sunset', 'pastel'.
         This method will iterate through the SVG DOM and inject inline styles directly onto
         the nodes based on their class names, ensuring 100% compatibility with ECharts ZRender.
         """
@@ -652,8 +652,108 @@ class Sivo:
                 "node-circle-active": {"fill": "#ff00ff", "stroke": "#ffffff"}
             }
 
+        elif style_name == "monochrome":
+            self.infographic.theme = "light"
+            style_map = {
+                "bg": {"fill": "#ffffff"},
+                "bento-card": {"fill": "#ffffff", "stroke": "#000000", "stroke-width": "2px", "filter": "none", "rx": "0", "ry": "0"},
+                "soft-card": {"fill": "#ffffff", "stroke": "#000000", "stroke-width": "2px", "filter": "none", "rx": "0", "ry": "0"},
+                "glass-panel": {"fill": "#f8f8f8", "stroke": "#000000", "stroke-width": "1px", "rx": "0", "ry": "0"},
+                "card-header-line": {"stroke": "#000000"},
+                "connecting-line": {"stroke": "#000000"},
+                "placeholder-title": {"fill": "#000000", "font-weight": "bold"},
+                "placeholder-text-title": {"fill": "#000000", "font-weight": "bold"},
+                "placeholder-text": {"fill": "#333333"},
+                "placeholder-text-subtitle": {"fill": "#333333"},
+                "placeholder-text-large": {"fill": "#666666"},
+                "placeholder-text-card-title": {"fill": "#000000"},
+                "placeholder-text-card-value": {"fill": "#000000"},
+                "node-circle": {"fill": "#ffffff", "stroke": "#000000", "stroke-width": "2px"},
+                "node-circle-active": {"fill": "#000000", "stroke": "#ffffff", "stroke-width": "2px"}
+            }
+
+        elif style_name == "ocean":
+            self.infographic.theme = "light"
+            style_map = {
+                "bg": {"fill": "#e0f2fe"},
+                "bento-card": {"fill": "#ffffff", "stroke": "#0284c7"},
+                "soft-card": {"fill": "#ffffff", "stroke": "#0284c7"},
+                "glass-panel": {"fill": "rgba(255, 255, 255, 0.7)", "stroke": "#38bdf8"},
+                "card-header-line": {"stroke": "#7dd3fc"},
+                "connecting-line": {"stroke": "#7dd3fc"},
+                "placeholder-title": {"fill": "#0c4a6e"},
+                "placeholder-text-title": {"fill": "#0c4a6e"},
+                "placeholder-text": {"fill": "#0284c7"},
+                "placeholder-text-subtitle": {"fill": "#0284c7"},
+                "placeholder-text-large": {"fill": "#7dd3fc"},
+                "placeholder-text-card-title": {"fill": "#0ea5e9"},
+                "placeholder-text-card-value": {"fill": "#0369a1"},
+                "node-circle": {"fill": "#ffffff", "stroke": "#0284c7"},
+                "node-circle-active": {"fill": "#0284c7", "stroke": "#ffffff"}
+            }
+
+        elif style_name == "forest":
+            self.infographic.theme = "light"
+            style_map = {
+                "bg": {"fill": "#f0fdf4"},
+                "bento-card": {"fill": "#ffffff", "stroke": "#16a34a"},
+                "soft-card": {"fill": "#ffffff", "stroke": "#16a34a"},
+                "glass-panel": {"fill": "rgba(255, 255, 255, 0.7)", "stroke": "#4ade80"},
+                "card-header-line": {"stroke": "#86efac"},
+                "connecting-line": {"stroke": "#86efac"},
+                "placeholder-title": {"fill": "#14532d"},
+                "placeholder-text-title": {"fill": "#14532d"},
+                "placeholder-text": {"fill": "#16a34a"},
+                "placeholder-text-subtitle": {"fill": "#16a34a"},
+                "placeholder-text-large": {"fill": "#86efac"},
+                "placeholder-text-card-title": {"fill": "#22c55e"},
+                "placeholder-text-card-value": {"fill": "#15803d"},
+                "node-circle": {"fill": "#ffffff", "stroke": "#16a34a"},
+                "node-circle-active": {"fill": "#16a34a", "stroke": "#ffffff"}
+            }
+
+        elif style_name == "sunset":
+            self.infographic.theme = "light"
+            style_map = {
+                "bg": {"fill": "#fff7ed"},
+                "bento-card": {"fill": "#ffffff", "stroke": "#ea580c"},
+                "soft-card": {"fill": "#ffffff", "stroke": "#ea580c"},
+                "glass-panel": {"fill": "rgba(255, 255, 255, 0.7)", "stroke": "#fb923c"},
+                "card-header-line": {"stroke": "#fdba74"},
+                "connecting-line": {"stroke": "#fdba74"},
+                "placeholder-title": {"fill": "#7c2d12"},
+                "placeholder-text-title": {"fill": "#7c2d12"},
+                "placeholder-text": {"fill": "#ea580c"},
+                "placeholder-text-subtitle": {"fill": "#ea580c"},
+                "placeholder-text-large": {"fill": "#fdba74"},
+                "placeholder-text-card-title": {"fill": "#f97316"},
+                "placeholder-text-card-value": {"fill": "#c2410c"},
+                "node-circle": {"fill": "#ffffff", "stroke": "#ea580c"},
+                "node-circle-active": {"fill": "#ea580c", "stroke": "#ffffff"}
+            }
+
+        elif style_name == "pastel":
+            self.infographic.theme = "light"
+            style_map = {
+                "bg": {"fill": "#faf5ff"},
+                "bento-card": {"fill": "#ffffff", "stroke": "#d8b4fe"},
+                "soft-card": {"fill": "#ffffff", "stroke": "#d8b4fe"},
+                "glass-panel": {"fill": "rgba(255, 255, 255, 0.7)", "stroke": "#e9d5ff"},
+                "card-header-line": {"stroke": "#f3e8ff"},
+                "connecting-line": {"stroke": "#f3e8ff"},
+                "placeholder-title": {"fill": "#4c1d95"},
+                "placeholder-text-title": {"fill": "#4c1d95"},
+                "placeholder-text": {"fill": "#9333ea"},
+                "placeholder-text-subtitle": {"fill": "#9333ea"},
+                "placeholder-text-large": {"fill": "#d8b4fe"},
+                "placeholder-text-card-title": {"fill": "#a855f7"},
+                "placeholder-text-card-value": {"fill": "#7e22ce"},
+                "node-circle": {"fill": "#ffffff", "stroke": "#9333ea"},
+                "node-circle-active": {"fill": "#9333ea", "stroke": "#ffffff"}
+            }
+
         else:
-            raise ValueError(f"Unknown template style: '{style_name}'. Supported styles: dark_mode, minimalist, cyberpunk, glassmorphism, neon.")
+            raise ValueError(f"Unknown template style: '{style_name}'. Supported styles: dark_mode, minimalist, cyberpunk, glassmorphism, neon, monochrome, ocean, forest, sunset, pastel.")
 
         # Directly mutate the SVG DOM to ensure ECharts parses these properties flawlessly natively
         for elem in self.infographic.parser.root.iter():

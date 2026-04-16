@@ -191,9 +191,11 @@
             .dashboard-container {
                 {% if mobile_grid %}
                 grid-template-areas: {{ mobile_grid | safe }};
+                grid-template-columns: unset;
                 {% else %}
                 display: flex;
                 flex-direction: column;
+                grid-template-columns: unset;
                 {% endif %}
             }
 
