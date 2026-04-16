@@ -107,6 +107,40 @@ const propFetchDataPath = document.getElementById('prop-fetch-data-path');
 const btnApplyFetchProps = document.getElementById('btn-apply-fetch-props');
 
 
+
+// Phase 5 Elements
+const propPresentationAutoplay = document.getElementById('prop-presentation-autoplay');
+const propPresentationProgress = document.getElementById('prop-presentation-progress');
+const propPresentationLaser = document.getElementById('prop-presentation-laser');
+const propPresentationNotes = document.getElementById('prop-presentation-notes');
+const btnApplyTimeline = document.getElementById('btn-apply-timeline');
+
+const timelineStepsContainer = document.getElementById('timeline-steps-container');
+const btnAddTimelineStep = document.getElementById('btn-add-timeline-step');
+
+
+const propOverlayElementId = document.getElementById('prop-overlay-element-id');
+const propOverlayFillZone = document.getElementById('prop-overlay-fill-zone');
+const propOverlayClipHtml = document.getElementById('prop-overlay-clip-html');
+const propOverlayConnFrom = document.getElementById('prop-overlay-conn-from');
+const propOverlayConnTo = document.getElementById('prop-overlay-conn-to');
+const propOverlayShapeType = document.getElementById('prop-overlay-shape-type');
+const propOverlayImageUrl = document.getElementById('prop-overlay-image-url');
+const propOverlayScratchoff = document.getElementById('prop-overlay-scratchoff');
+const btnApplyOverlays = document.getElementById('btn-apply-overlays');
+
+const propCtrlZoomUi = document.getElementById('prop-ctrl-zoom-ui');
+const propCtrlMinimap = document.getElementById('prop-ctrl-minimap');
+const propCtrlZoomClick = document.getElementById('prop-ctrl-zoom-click');
+const propCtrlDrawing = document.getElementById('prop-ctrl-drawing');
+const propCtrlBrush = document.getElementById('prop-ctrl-brush');
+const propCtrlSearch = document.getElementById('prop-ctrl-search');
+const propCtrlLayerToggle = document.getElementById('prop-ctrl-layer-toggle');
+const propCtrlPanelDismiss = document.getElementById('prop-ctrl-panel-dismiss');
+const propCtrlUrlNavId = document.getElementById('prop-ctrl-url-nav-id');
+const propCtrlUrlNavUrl = document.getElementById('prop-ctrl-url-nav-url');
+const btnApplyControls = document.getElementById('btn-apply-controls');
+
 // --- State Management (Undo/Redo) ---
 function saveState() {
     // If we're not at the end of history, truncate the future
@@ -402,18 +436,48 @@ function refreshPropertiesPanel() {
     propLiveWsTopic.value = builderState.currentConfig.liveWsTopic || "";
     propLiveApiUrl.value = builderState.currentConfig.liveApiUrl || "";
     propLiveApiInterval.value = builderState.currentConfig.liveApiInterval || "";
+
     propLiveApiPath.value = builderState.currentConfig.liveApiPath || "";
+
+    // Phase 5 Globals
+    propPresentationAutoplay.value = builderState.currentConfig.presentationAutoplay || "";
+    propPresentationProgress.checked = !!builderState.currentConfig.presentationProgress;
+    propPresentationLaser.checked = !!builderState.currentConfig.presentationLaser;
+    propPresentationNotes.value = builderState.currentConfig.presentationNotes || "";
+
+    propCtrlZoomUi.checked = builderState.currentConfig.ctrlZoomUi !== false;
+    propCtrlMinimap.checked = !!builderState.currentConfig.ctrlMinimap;
+    propCtrlZoomClick.checked = builderState.currentConfig.ctrlZoomClick !== false;
+    propCtrlDrawing.checked = !!builderState.currentConfig.ctrlDrawing;
+    propCtrlBrush.checked = !!builderState.currentConfig.ctrlBrush;
+    propCtrlSearch.checked = !!builderState.currentConfig.ctrlSearch;
+    propCtrlLayerToggle.value = builderState.currentConfig.ctrlLayerToggle || "";
+    propCtrlPanelDismiss.value = builderState.currentConfig.ctrlPanelDismiss || "";
+    propCtrlUrlNavId.value = builderState.currentConfig.ctrlUrlNavId || "";
+    propCtrlUrlNavUrl.value = builderState.currentConfig.ctrlUrlNavUrl || "";
+
 
     updateDataMapUI();
 
     renderDashboardBlocks();
+    renderTimelineSteps();
 
     const id = propElementId.value;
     propGraphElementId.value = id;
 
     if (!id || !builderState.currentConfig.elements[id]) {
+
         propFetchUrl.value = "";
         propFetchDataPath.value = "";
+
+        // Phase 5 Reset
+        propOverlayElementId.value = "";
+        propOverlayFillZone.value = "";
+        propOverlayClipHtml.value = "";
+        propOverlayShapeType.value = "none";
+        propOverlayImageUrl.value = "";
+        propOverlayScratchoff.checked = false;
+
         // Reset defaults
         propFillColor.value = '#3b82f6';
         propFillColorText.value = '#3b82f6';
@@ -446,8 +510,18 @@ function refreshPropertiesPanel() {
 
     propGraphType.value = elConfig.graphType || 'none';
 
+
     propFetchUrl.value = elConfig.fetchUrl || '';
     propFetchDataPath.value = elConfig.fetchDataPath || '';
+
+    // Phase 5 Element Config
+    propOverlayElementId.value = id;
+    propOverlayFillZone.value = elConfig.fillZone || '';
+    propOverlayClipHtml.value = elConfig.clipHtml || '';
+    propOverlayShapeType.value = elConfig.shapeType || 'none';
+    propOverlayImageUrl.value = elConfig.absoluteImageUrl || '';
+    propOverlayScratchoff.checked = !!elConfig.scratchoff;
+
 
     // Refresh dynamic fields
     propClickCallback.dispatchEvent(new Event('change'));
@@ -595,6 +669,63 @@ btnApplyFetchProps.addEventListener('click', () => {
     elConfig.fetchUrl = propFetchUrl.value.trim();
     elConfig.fetchDataPath = propFetchDataPath.value.trim();
 
+    saveState();
+    generatePreview();
+});
+
+
+// --- Phase 5 Logic ---
+btnApplyTimeline.addEventListener('click', () => {
+    builderState.currentConfig.presentationAutoplay = propPresentationAutoplay.value.trim();
+    builderState.currentConfig.presentationProgress = propPresentationProgress.checked;
+    builderState.currentConfig.presentationLaser = propPresentationLaser.checked;
+    builderState.currentConfig.presentationNotes = propPresentationNotes.value.trim();
+    saveState();
+    generatePreview();
+});
+
+btnApplyOverlays.addEventListener('click', () => {
+    // Handle connections
+    const fromId = propOverlayConnFrom.value.trim();
+    const toId = propOverlayConnTo.value.trim();
+    if (fromId && toId) {
+        if (!builderState.currentConfig.connections) builderState.currentConfig.connections = [];
+        // Only add if not already present
+        const exists = builderState.currentConfig.connections.find(c => c.from === fromId && c.to === toId);
+        if (!exists) {
+            builderState.currentConfig.connections.push({from: fromId, to: toId});
+        }
+    }
+
+    // Handle element specific overlay config
+    let activeId = propOverlayElementId.value.trim();
+    if (activeId) {
+        if (!builderState.currentConfig.elements[activeId]) {
+            builderState.currentConfig.elements[activeId] = {};
+        }
+        let elConfig = builderState.currentConfig.elements[activeId];
+        elConfig.fillZone = propOverlayFillZone.value.trim();
+        elConfig.clipHtml = propOverlayClipHtml.value.trim();
+        elConfig.shapeType = propOverlayShapeType.value;
+        elConfig.absoluteImageUrl = propOverlayImageUrl.value.trim();
+        elConfig.scratchoff = propOverlayScratchoff.checked;
+    }
+
+    saveState();
+    generatePreview();
+});
+
+btnApplyControls.addEventListener('click', () => {
+    builderState.currentConfig.ctrlZoomUi = propCtrlZoomUi.checked;
+    builderState.currentConfig.ctrlMinimap = propCtrlMinimap.checked;
+    builderState.currentConfig.ctrlZoomClick = propCtrlZoomClick.checked;
+    builderState.currentConfig.ctrlDrawing = propCtrlDrawing.checked;
+    builderState.currentConfig.ctrlBrush = propCtrlBrush.checked;
+    builderState.currentConfig.ctrlSearch = propCtrlSearch.checked;
+    builderState.currentConfig.ctrlLayerToggle = propCtrlLayerToggle.value.trim();
+    builderState.currentConfig.ctrlPanelDismiss = propCtrlPanelDismiss.value.trim();
+    builderState.currentConfig.ctrlUrlNavId = propCtrlUrlNavId.value.trim();
+    builderState.currentConfig.ctrlUrlNavUrl = propCtrlUrlNavUrl.value.trim();
     saveState();
     generatePreview();
 });
@@ -766,6 +897,85 @@ function updateDataMapUI() {
 });
 
 
+
+function renderTimelineSteps() {
+    timelineStepsContainer.innerHTML = '';
+    const steps = builderState.currentConfig.timelineSteps || [];
+
+    steps.forEach((step, index) => {
+        const div = document.createElement('div');
+        div.className = "flex flex-col space-y-1 bg-slate-50 p-2 border border-slate-200 rounded";
+
+        const title = (step.title || '').replace(/"/g, '&quot;');
+        const content = (step.content || '').replace(/"/g, '&quot;');
+        const targetId = (step.targetId || '').replace(/"/g, '&quot;');
+
+        div.innerHTML = `
+            <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold text-slate-500">Step ${index + 1}</span>
+                <button class="step-delete text-red-500 hover:text-red-700 text-xs" data-index="${index}">&times; Remove</button>
+            </div>
+            <input type="text" placeholder="Title" value="${title}" class="step-title w-full px-2 py-1 text-xs border border-slate-200 rounded" data-index="${index}">
+            <textarea placeholder="Content (HTML/Text)" class="step-content w-full px-2 py-1 text-xs border border-slate-200 rounded" data-index="${index}" rows="2">${content}</textarea>
+            <input type="text" placeholder="Target Element ID" value="${targetId}" class="step-target w-full px-2 py-1 text-xs border border-slate-200 rounded" data-index="${index}">
+        `;
+        timelineStepsContainer.appendChild(div);
+    });
+
+    timelineStepsContainer.querySelectorAll('.step-title').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.timelineSteps[idx].title = e.target.value;
+            saveState();
+            generatePreview();
+        });
+    });
+
+    timelineStepsContainer.querySelectorAll('.step-content').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.timelineSteps[idx].content = e.target.value;
+            saveState();
+            generatePreview();
+        });
+    });
+
+    timelineStepsContainer.querySelectorAll('.step-target').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.timelineSteps[idx].targetId = e.target.value;
+            saveState();
+            generatePreview();
+        });
+    });
+
+    timelineStepsContainer.querySelectorAll('.step-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            builderState.currentConfig.timelineSteps.splice(idx, 1);
+            saveState();
+            renderTimelineSteps();
+            generatePreview();
+        });
+    });
+}
+
+btnAddTimelineStep.addEventListener("click", () => {
+    if (!builderState.currentConfig.timelineSteps) {
+        builderState.currentConfig.timelineSteps = [];
+    }
+    const idx = builderState.currentConfig.timelineSteps.length + 1;
+    builderState.currentConfig.timelineSteps.push({
+        title: "Step " + idx,
+        content: "Step description...",
+        targetId: ""
+    });
+
+    renderTimelineSteps();
+    saveState();
+    generatePreview();
+});
+
 function renderDashboardBlocks() {
     dashboardBlocksContainer.innerHTML = '';
     const blocks = builderState.currentConfig.dashboardBlocks || [];
@@ -813,6 +1023,7 @@ function renderDashboardBlocks() {
             builderState.currentConfig.dashboardBlocks.splice(idx, 1);
             saveState();
             renderDashboardBlocks();
+    renderTimelineSteps();
             generatePreview();
         });
     });
