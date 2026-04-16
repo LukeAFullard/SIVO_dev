@@ -33,7 +33,7 @@
             display: flex;
             flex-direction: column;
             {% if background_image_url %}
-            background-image: url('{{ background_image_url }}');
+            background-image: url('{{ background_image_url | safe }}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -60,10 +60,9 @@
             padding: 1.5rem;
             flex: 1;
             /* Remove overflow: hidden so body can scroll if needed */
+            grid-template-columns: repeat({{ columns }}, 1fr);
             {% if desktop_grid %}
             grid-template-areas: {{ desktop_grid | safe }};
-            {% else %}
-            grid-template-columns: repeat({{ columns }}, 1fr);
             {% endif %}
         }
 
@@ -343,7 +342,7 @@
             const dom = document.getElementById('chart-' + blockId);
 
             if (dom) {
-                const chart = echarts.init(dom, null, { renderer: viewData.render_mode || 'canvas' });
+                const chart = echarts.init(dom, viewData.theme === 'transparent' ? null : viewData.theme, { renderer: viewData.render_mode || 'canvas' });
                 activeCharts[blockId] = chart;
 
                 // Register the SVG map unique to this block
