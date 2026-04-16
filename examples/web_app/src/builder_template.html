@@ -129,6 +129,8 @@
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="live">Live Data</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="timeline">Timeline</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="overlays">Regions & Overlays</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="integrations">Integrations</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="a11y">A11y & Styling</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="controls">Controls</button>
         </div>
 
@@ -516,7 +518,176 @@
                 </div>
             </div>
 
-            <!-- TAB: Controls -->
+
+            <!-- TAB: Integrations -->
+            <div id="builder-tab-integrations" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Integrations Catalog</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Target Element ID</label>
+                            <input type="text" id="prop-integ-element-id" placeholder="e.g. region-1" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Integration Type</label>
+                            <select id="prop-integ-type" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                                <option value="">None</option>
+                                <option value="document">Document / PDF</option>
+                                <option value="map_location">Map Embed</option>
+                                <option value="ecommerce">Ecommerce (Stripe/Shopify)</option>
+                                <option value="rich_media">Rich Media (Vimeo/Spotify)</option>
+                                <option value="bi">Business Intelligence (Tableau)</option>
+                                <option value="external_form">External Form</option>
+                                <option value="form">FormEmbed (Typeform)</option>
+                                <option value="social">Social (Reddit)</option>
+                                <option value="replit">Replit Embed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">URL / Embed Code</label>
+                            <input type="text" id="prop-integ-url" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <button id="btn-apply-integrations" class="w-full mt-2 px-3 py-2 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 font-medium shadow-sm transition-colors">
+                            Apply Integration
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: A11y & Styling -->
+            <div id="builder-tab-a11y" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Element Media & Interactions</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Target Element ID</label>
+                            <input type="text" id="prop-a11y-element-id" placeholder="e.g. region-1" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Marker (HTML)</label>
+                            <input type="text" id="prop-a11y-marker" placeholder="<div class='marker'>📍</div>" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Video URL</label>
+                            <input type="text" id="prop-a11y-video" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Audio URL</label>
+                            <input type="text" id="prop-a11y-audio" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Markdown Rendering</label>
+                            <textarea id="prop-a11y-markdown" rows="2" placeholder="# Title
+Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Gallery Action (Comma-separated URLs)</label>
+                            <input type="text" id="prop-a11y-gallery" placeholder="img1.jpg, img2.jpg" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Embedded SVG Injection (embed_svg URL)</label>
+                            <input type="text" id="prop-a11y-embed-svg" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Lottie Animation URL</label>
+                            <input type="text" id="prop-a11y-lottie" placeholder="https://.../data.json" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Path Morphing (morph_to_path ID)</label>
+                            <input type="text" id="prop-a11y-morph" placeholder="other-element-id" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Image Shape Clipping (URL)</label>
+                            <input type="text" id="prop-a11y-clip" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">SVG Affine Transform (e.g. translate(10 10))</label>
+                            <input type="text" id="prop-a11y-transform" placeholder="rotate(45)" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs text-slate-600">Explode UI Transition</label>
+                            <input type="checkbox" id="prop-a11y-explode" class="rounded border-slate-300 text-blue-600">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs text-slate-600">Gamification Confetti Action</label>
+                            <input type="checkbox" id="prop-a11y-confetti" class="rounded border-slate-300 text-blue-600">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs text-slate-600">Loading Action (Spinners)</label>
+                            <input type="checkbox" id="prop-a11y-loading" class="rounded border-slate-300 text-blue-600">
+                        </div>
+
+                        <!-- Advanced camera settings for elements -->
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Cinematic Zoom To Element ID</label>
+                            <input type="text" id="prop-a11y-zoom-to" placeholder="e.g. region-2" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+
+                        <button id="btn-apply-a11y-media" class="w-full mt-2 px-3 py-2 text-sm bg-teal-500 text-white rounded hover:bg-teal-600 font-medium shadow-sm transition-colors">
+                            Apply Element Settings
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Global Styling & Effects</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Theme (Standard, Dark, High Contrast, etc.)</label>
+                            <select id="prop-global-theme" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                                <option value="">Default</option>
+                                <option value="dark_mode">Dark Mode</option>
+                                <option value="minimalist">Minimalist</option>
+                                <option value="high_contrast">High Contrast</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Ambient Effect</label>
+                            <select id="prop-global-ambient" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                                <option value="">None</option>
+                                <option value="snow">Snow</option>
+                                <option value="rain">Rain</option>
+                                <option value="fireflies">Fireflies</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Default Panel Position</label>
+                            <select id="prop-global-panel-pos" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                                <option value="">Default (Right)</option>
+                                <option value="left">Left</option>
+                                <option value="top">Top</option>
+                                <option value="bottom">Bottom</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Canvas Background Image (URL)</label>
+                            <input type="text" id="prop-global-bg-img" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Embedded SVG Background Image (URL)</label>
+                            <input type="text" id="prop-global-svg-bg-img" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Canvas Border Image (URL)</label>
+                            <input type="text" id="prop-global-border-img" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Custom CSS Injection</label>
+                            <textarea id="prop-global-css" rows="2" placeholder=".my-class { ... }" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Custom JS Injection</label>
+                            <textarea id="prop-global-js" rows="2" placeholder="console.log('hi');" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
+                        </div>
+
+                        <button id="btn-apply-global-style" class="w-full mt-2 px-3 py-2 text-sm bg-pink-500 text-white rounded hover:bg-pink-600 font-medium shadow-sm transition-colors">
+                            Apply Global Styles
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
             <div id="builder-tab-controls" class="builder-tab-content space-y-6 hidden">
                 <div>
                     <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Global Map Controls</h3>

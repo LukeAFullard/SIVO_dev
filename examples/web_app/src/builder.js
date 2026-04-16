@@ -14,6 +14,42 @@ let builderState = {
 };
 
 // --- DOM Elements ---
+
+// Integrations
+const propIntegElementId = document.getElementById('prop-integ-element-id');
+const propIntegType = document.getElementById('prop-integ-type');
+const propIntegUrl = document.getElementById('prop-integ-url');
+const btnApplyIntegrations = document.getElementById('btn-apply-integrations');
+
+// A11y & Media
+const propA11yElementId = document.getElementById('prop-a11y-element-id');
+const propA11yMarker = document.getElementById('prop-a11y-marker');
+const propA11yVideo = document.getElementById('prop-a11y-video');
+const propA11yAudio = document.getElementById('prop-a11y-audio');
+const propA11yMarkdown = document.getElementById('prop-a11y-markdown');
+const propA11yGallery = document.getElementById('prop-a11y-gallery');
+const propA11yEmbedSvg = document.getElementById('prop-a11y-embed-svg');
+const propA11yLottie = document.getElementById('prop-a11y-lottie');
+const propA11yMorph = document.getElementById('prop-a11y-morph');
+const propA11yClip = document.getElementById('prop-a11y-clip');
+const propA11yTransform = document.getElementById('prop-a11y-transform');
+const propA11yExplode = document.getElementById('prop-a11y-explode');
+const propA11yConfetti = document.getElementById('prop-a11y-confetti');
+const propA11yLoading = document.getElementById('prop-a11y-loading');
+const propA11yZoomTo = document.getElementById('prop-a11y-zoom-to');
+const btnApplyA11yMedia = document.getElementById('btn-apply-a11y-media');
+
+// Global Styles
+const propGlobalTheme = document.getElementById('prop-global-theme');
+const propGlobalAmbient = document.getElementById('prop-global-ambient');
+const propGlobalPanelPos = document.getElementById('prop-global-panel-pos');
+const propGlobalBgImg = document.getElementById('prop-global-bg-img');
+const propGlobalSvgBgImg = document.getElementById('prop-global-svg-bg-img');
+const propGlobalBorderImg = document.getElementById('prop-global-border-img');
+const propGlobalCss = document.getElementById('prop-global-css');
+const propGlobalJs = document.getElementById('prop-global-js');
+const btnApplyGlobalStyle = document.getElementById('btn-apply-global-style');
+
 // Buttons & Inputs
 const btnNewProject = document.getElementById('btn-new-project');
 const btnImportJsonLocal = document.getElementById('btn-import-json-local');
@@ -596,6 +632,82 @@ async function generatePreview() {
 }
 
 // Scaffold Initial Project
+
+// Integrations
+if (btnApplyIntegrations) {
+    btnApplyIntegrations.addEventListener('click', () => {
+        const id = propIntegElementId.value.trim();
+        if (!id) return alert('Please specify a target element ID.');
+
+        if (!builderState.currentConfig.elements[id]) builderState.currentConfig.elements[id] = {};
+        const el = builderState.currentConfig.elements[id];
+
+        const type = propIntegType.value;
+        const url = propIntegUrl.value.trim();
+
+        if (type && url) {
+            el[type] = url;
+        } else {
+            ['document', 'map_location', 'ecommerce', 'rich_media', 'bi', 'external_form', 'form', 'social', 'replit'].forEach(t => {
+                delete el[t];
+            });
+        }
+
+        saveState();
+        if (window.pyodide) { generatePreview(); }
+    });
+}
+
+// A11y & Media
+if (btnApplyA11yMedia) {
+    btnApplyA11yMedia.addEventListener('click', () => {
+        const id = propA11yElementId.value.trim();
+        if (!id) return alert('Please specify a target element ID.');
+
+        if (!builderState.currentConfig.elements[id]) builderState.currentConfig.elements[id] = {};
+        const el = builderState.currentConfig.elements[id];
+
+        if (propA11yMarker.value) el.marker = propA11yMarker.value; else delete el.marker;
+        if (propA11yVideo.value) el.video = propA11yVideo.value; else delete el.video;
+        if (propA11yAudio.value) el.audio = propA11yAudio.value; else delete el.audio;
+        if (propA11yMarkdown.value) el.markdown = propA11yMarkdown.value; else delete el.markdown;
+        if (propA11yGallery.value) el.gallery = propA11yGallery.value.split(',').map(s => s.trim()); else delete el.gallery;
+        if (propA11yEmbedSvg.value) el.embed_svg = propA11yEmbedSvg.value; else delete el.embed_svg;
+        if (propA11yLottie.value) el.lottie = propA11yLottie.value; else delete el.lottie;
+        if (propA11yMorph.value) el.morph_to_path = propA11yMorph.value; else delete el.morph_to_path;
+        if (propA11yClip.value) el.clip_image_url = propA11yClip.value; else delete el.clip_image_url;
+        if (propA11yTransform.value) el.transform = propA11yTransform.value; else delete el.transform;
+        if (propA11yExplode.checked) el.explode = true; else delete el.explode;
+        if (propA11yConfetti.checked) el.confetti = true; else delete el.confetti;
+        if (propA11yLoading.checked) el.loading = true; else delete el.loading;
+        if (propA11yZoomTo.value) el.zoom_to = propA11yZoomTo.value; else delete el.zoom_to;
+
+        saveState();
+        if (window.pyodide) { generatePreview(); }
+    });
+}
+
+// Global Styles
+if (btnApplyGlobalStyle) {
+    btnApplyGlobalStyle.addEventListener('click', () => {
+        if (!builderState.currentConfig.globalSettings) builderState.currentConfig.globalSettings = {};
+        const gs = builderState.currentConfig.globalSettings;
+
+        gs.theme = propGlobalTheme.value;
+        gs.ambient_effect = propGlobalAmbient.value;
+        gs.default_panel_position = propGlobalPanelPos.value;
+        gs.background_image_url = propGlobalBgImg.value;
+        gs.svg_background_image_url = propGlobalSvgBgImg.value;
+        gs.border_image_url = propGlobalBorderImg.value;
+        gs.custom_css = propGlobalCss.value;
+        gs.custom_js = propGlobalJs.value;
+
+        saveState();
+        if (window.pyodide) { generatePreview(); }
+    });
+}
+
+
 btnNewProject.addEventListener('click', () => {
    // Switch tab to annotator or prompt for SVG
    if (window.switchTab) {

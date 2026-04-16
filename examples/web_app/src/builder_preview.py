@@ -32,6 +32,13 @@ try:
             app = sivo.Sivo.from_string(f'<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40">Error loading template {template_path}: {str(e)}</text></svg>')
 
     # Apply Canvas Settings
+    gs = config.get("globalSettings", {})
+    if gs.get("theme"): app.theme = gs["theme"]
+    if gs.get("ambient_effect"): app.ambient_effect = gs["ambient_effect"]
+    if gs.get("default_panel_position"): app.default_panel_position = gs["default_panel_position"]
+    if gs.get("background_image_url"): app.background_image_url = gs["background_image_url"]
+    if gs.get("svg_background_image_url"): app.svg_background_image_url = gs["svg_background_image_url"]
+    if gs.get("border_image_url"): app.border_image_url = gs["border_image_url"]
     if bg_image:
          app.background_image_url = bg_image
 
@@ -192,6 +199,27 @@ try:
             # Prevent hover effects
             theme.hover_color = el_cfg.get('fill')
 
+
+        # Integrations
+        for t in ['document', 'map_location', 'ecommerce', 'rich_media', 'bi', 'external_form', 'form', 'social', 'replit']:
+            if el_cfg.get(t):
+                kwargs[t] = {'url': el_cfg[t]}
+
+        # A11y & Media
+        if el_cfg.get('marker'): kwargs['marker'] = el_cfg['marker']
+        if el_cfg.get('video'): kwargs['video'] = el_cfg['video']
+        if el_cfg.get('audio'): kwargs['audio'] = el_cfg['audio']
+        if el_cfg.get('markdown'): kwargs['markdown'] = el_cfg['markdown']
+        if el_cfg.get('gallery'): kwargs['gallery'] = el_cfg['gallery']
+        if el_cfg.get('embed_svg'): kwargs['embed_svg'] = el_cfg['embed_svg']
+        if el_cfg.get('lottie'): kwargs['lottie'] = el_cfg['lottie']
+        if el_cfg.get('morph_to_path'): kwargs['morph_to_path'] = el_cfg['morph_to_path']
+        if el_cfg.get('transform'): kwargs['transform'] = el_cfg['transform']
+        if el_cfg.get('explode'): kwargs['explode'] = True
+        if el_cfg.get('confetti'): kwargs['confetti'] = True
+        if el_cfg.get('loading'): kwargs['loading'] = True
+        if el_cfg.get('zoom_to'): kwargs['zoom_to'] = el_cfg['zoom_to']
+
         fetch_url = el_cfg.get('fetchUrl')
         if fetch_url:
             kwargs['fetch_url'] = fetch_url
@@ -312,6 +340,15 @@ try:
         if presentation_notes:
             app.presentation_speaker_notes_element = presentation_notes
 
+    # Apply Custom CSS / JS to the final output
+    gs = config.get("globalSettings", {})
+    to_html_kwargs = {"build_js": False}
+
+    if gs.get("custom_css"):
+        to_html_kwargs["custom_css"] = gs["custom_css"]
+    if gs.get("custom_js"):
+        to_html_kwargs["custom_js"] = gs["custom_js"]
+
     dashboard_blocks = config.get("dashboardBlocks", [])
     if dashboard_blocks:
         dashboard = sivo.SivoDashboard(app, theme="light")
@@ -319,9 +356,9 @@ try:
             title = block.get("title", "Metric")
             value = block.get("value", "0")
             dashboard.add_html_block(f"<h3>{title}</h3><h2>{value}</h2>")
-        html_output = dashboard.to_html(build_js=False)
+        html_output = dashboard.to_html(**to_html_kwargs)
     else:
-        html_output = app.to_html(build_js=False)
+        html_output = app.to_html(**to_html_kwargs)
 
 except Exception as main_e:
     html_output = f'<div style="color:red;"><pre>{traceback.format_exc()}</pre></div>'
