@@ -220,7 +220,15 @@ else:
                 <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="fullscreen">Fullscreen</button>
             </div>
 
-            <div class="space-x-2">
+            <div class="space-x-2 flex items-center">
+                <div class="flex space-x-1 mr-2 border-r border-slate-200 pr-2">
+                    <button id="btn-undo" class="px-2 py-1 text-sm bg-white border border-slate-200 rounded text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50" disabled title="Undo (Ctrl+Z)">
+                        &#x21B6; Undo
+                    </button>
+                    <button id="btn-redo" class="px-2 py-1 text-sm bg-white border border-slate-200 rounded text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50" disabled title="Redo (Ctrl+Y)">
+                        &#x21B7; Redo
+                    </button>
+                </div>
                 <button id="btn-preview-refresh" class="px-3 py-1 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200">
                     Refresh
                 </button>
@@ -2678,7 +2686,14 @@ function saveState() {
     }
 
     builderState.history.push(JSON.parse(JSON.stringify(builderState.currentConfig)));
-    builderState.historyIndex++;
+
+    // Cap history length to avoid memory bloat
+    if (builderState.history.length > 50) {
+        builderState.history.shift();
+    } else {
+        builderState.historyIndex++;
+    }
+
     updateHistoryButtons();
 }
 
@@ -2694,6 +2709,20 @@ btnUndo.addEventListener('click', () => {
         updateHistoryButtons();
         refreshPropertiesPanel();
         generatePreview();
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    // Only capture if we are visible/active tab
+    const viewBuilder = document.getElementById('view-builder');
+    if (!viewBuilder || !viewBuilder.classList.contains('active')) return;
+
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        btnUndo.click();
+    } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) {
+        e.preventDefault();
+        btnRedo.click();
     }
 });
 
@@ -2731,6 +2760,10 @@ jsonUploadLocal.addEventListener('change', (e) => {
             const config = JSON.parse(evt.target.result);
             builderState.currentConfig = config;
 
+            // Ensure missing defaults are populated
+            if (!builderState.currentConfig.elements) builderState.currentConfig.elements = {};
+            if (!builderState.currentConfig.dashboardBlocks) builderState.currentConfig.dashboardBlocks = [];
+
             // Sync Canvas Settings UI
             propCustomSvg.value = config.customSvg || '';
             propBgImage.value = config.bgImage || '';
@@ -2745,6 +2778,8 @@ jsonUploadLocal.addEventListener('change', (e) => {
         }
     };
     reader.readAsText(file);
+    // Reset file input so the same file can be loaded again if needed
+    e.target.value = '';
 });
 
 btnImportJsonIdbfs.addEventListener('click', () => {
@@ -2754,6 +2789,10 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             const data = window.pyodide.FS.readFile(`${mountDir}/${filename}`, { encoding: 'utf8' });
             const config = JSON.parse(data);
             builderState.currentConfig = config;
+
+            // Ensure missing defaults are populated
+            if (!builderState.currentConfig.elements) builderState.currentConfig.elements = {};
+            if (!builderState.currentConfig.dashboardBlocks) builderState.currentConfig.dashboardBlocks = [];
 
             // Sync Canvas Settings UI
             propCustomSvg.value = config.customSvg || '';

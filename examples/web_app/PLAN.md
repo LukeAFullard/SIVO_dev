@@ -368,12 +368,12 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 ### Phase 2: The No-Code UI Foundation (Weeks 3-4)
 - [x] Build the "App Builder" tab alongside "Annotator Studio" and "Python Workspace" using the new Tailwind/Shadcn design system.
-- [ ] Implement Preview Modes: Full screen preview mode, Mobile preview, and iPad/tablet preview.
+- [x] Implement Preview Modes: Full screen preview mode, Mobile preview, and iPad/tablet preview.
 - [x] Implement the Visual Template Selector (reading from SIVO's built-in `src/sivo/templates`) for launching **Built-in SVG Templates**.
 - [x] Implement the Interactive Preview Pane (renders via `app.to_html()`).
 - [x] Build the Property Inspector panel (colors, text, hover states, Rich HTML Tooltips, Interactive Callbacks, **Hover Callbacks**, **Contextual Footnotes**, and Dynamic State Transitions via `ToggleImageAction`), and add the **Selective ECharts Hover Effects** toggle and **ECharts Tooltip Z-Index Enforcement**.
-- [ ] Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
-- [ ] **State Management:** Integrate an **Undo/Redo History Engine** to safely manage configuration states during visual editing.
+- [x] Implement Declarative JSON Import to allow full project state hydration using `Sivo.from_config()`.
+- [x] **State Management:** Integrate an **Undo/Redo History Engine** to safely manage configuration states during visual editing.
 - [x] **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)

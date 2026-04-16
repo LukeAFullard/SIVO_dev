@@ -75,7 +75,14 @@ function saveState() {
     }
 
     builderState.history.push(JSON.parse(JSON.stringify(builderState.currentConfig)));
-    builderState.historyIndex++;
+
+    // Cap history length to avoid memory bloat
+    if (builderState.history.length > 50) {
+        builderState.history.shift();
+    } else {
+        builderState.historyIndex++;
+    }
+
     updateHistoryButtons();
 }
 
@@ -91,6 +98,20 @@ btnUndo.addEventListener('click', () => {
         updateHistoryButtons();
         refreshPropertiesPanel();
         generatePreview();
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    // Only capture if we are visible/active tab
+    const viewBuilder = document.getElementById('view-builder');
+    if (!viewBuilder || !viewBuilder.classList.contains('active')) return;
+
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        btnUndo.click();
+    } else if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) {
+        e.preventDefault();
+        btnRedo.click();
     }
 });
 
@@ -128,6 +149,10 @@ jsonUploadLocal.addEventListener('change', (e) => {
             const config = JSON.parse(evt.target.result);
             builderState.currentConfig = config;
 
+            // Ensure missing defaults are populated
+            if (!builderState.currentConfig.elements) builderState.currentConfig.elements = {};
+            if (!builderState.currentConfig.dashboardBlocks) builderState.currentConfig.dashboardBlocks = [];
+
             // Sync Canvas Settings UI
             propCustomSvg.value = config.customSvg || '';
             propBgImage.value = config.bgImage || '';
@@ -142,6 +167,8 @@ jsonUploadLocal.addEventListener('change', (e) => {
         }
     };
     reader.readAsText(file);
+    // Reset file input so the same file can be loaded again if needed
+    e.target.value = '';
 });
 
 btnImportJsonIdbfs.addEventListener('click', () => {
@@ -151,6 +178,10 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             const data = window.pyodide.FS.readFile(`${mountDir}/${filename}`, { encoding: 'utf8' });
             const config = JSON.parse(data);
             builderState.currentConfig = config;
+
+            // Ensure missing defaults are populated
+            if (!builderState.currentConfig.elements) builderState.currentConfig.elements = {};
+            if (!builderState.currentConfig.dashboardBlocks) builderState.currentConfig.dashboardBlocks = [];
 
             // Sync Canvas Settings UI
             propCustomSvg.value = config.customSvg || '';
