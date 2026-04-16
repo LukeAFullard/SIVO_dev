@@ -93,6 +93,19 @@ const validationResults = document.getElementById("validation-results");
 const propFootnoteContainer = document.getElementById('prop-footnote-container');
 const propToggleImageContainer = document.getElementById('prop-toggle-image-container');
 
+// Phase 4 Live Data & Fetch Elements
+const propLiveWsUrl = document.getElementById('prop-live-ws-url');
+const propLiveWsTopic = document.getElementById('prop-live-ws-topic');
+const propLiveApiUrl = document.getElementById('prop-live-api-url');
+const propLiveApiInterval = document.getElementById('prop-live-api-interval');
+const propLiveApiPath = document.getElementById('prop-live-api-path');
+const btnApplyLiveData = document.getElementById('btn-apply-live-data');
+
+const propFetchElementId = document.getElementById('prop-fetch-element-id');
+const propFetchUrl = document.getElementById('prop-fetch-url');
+const propFetchDataPath = document.getElementById('prop-fetch-data-path');
+const btnApplyFetchProps = document.getElementById('btn-apply-fetch-props');
+
 
 // --- State Management (Undo/Redo) ---
 function saveState() {
@@ -341,6 +354,7 @@ window.addEventListener('message', (event) => {
         // Set the active element and refresh
         builderState.currentConfig.activeElementId = id;
         propElementId.value = id;
+        propFetchElementId.value = id;
 
         refreshPropertiesPanel();
         generatePreview();
@@ -384,6 +398,12 @@ function refreshPropertiesPanel() {
     propDataOriginCol.value = builderState.currentConfig.dataOriginCol || "origin";
     propDataDestCol.value = builderState.currentConfig.dataDestCol || "destination";
 
+    propLiveWsUrl.value = builderState.currentConfig.liveWsUrl || "";
+    propLiveWsTopic.value = builderState.currentConfig.liveWsTopic || "";
+    propLiveApiUrl.value = builderState.currentConfig.liveApiUrl || "";
+    propLiveApiInterval.value = builderState.currentConfig.liveApiInterval || "";
+    propLiveApiPath.value = builderState.currentConfig.liveApiPath || "";
+
     updateDataMapUI();
 
     renderDashboardBlocks();
@@ -392,6 +412,8 @@ function refreshPropertiesPanel() {
     propGraphElementId.value = id;
 
     if (!id || !builderState.currentConfig.elements[id]) {
+        propFetchUrl.value = "";
+        propFetchDataPath.value = "";
         // Reset defaults
         propFillColor.value = '#3b82f6';
         propFillColorText.value = '#3b82f6';
@@ -423,6 +445,9 @@ function refreshPropertiesPanel() {
     propHoverCallback.value = elConfig.hoverCallback || 'none';
 
     propGraphType.value = elConfig.graphType || 'none';
+
+    propFetchUrl.value = elConfig.fetchUrl || '';
+    propFetchDataPath.value = elConfig.fetchDataPath || '';
 
     // Refresh dynamic fields
     propClickCallback.dispatchEvent(new Event('change'));
@@ -540,6 +565,35 @@ btnApplyGraphProps.addEventListener('click', () => {
     }
     let elConfig = builderState.currentConfig.elements[activeId];
     elConfig.graphType = propGraphType.value;
+
+    saveState();
+    generatePreview();
+});
+
+// --- Phase 4 Live Data & Fetch Action Logic ---
+btnApplyLiveData.addEventListener('click', () => {
+    builderState.currentConfig.liveWsUrl = propLiveWsUrl.value.trim();
+    builderState.currentConfig.liveWsTopic = propLiveWsTopic.value.trim();
+    builderState.currentConfig.liveApiUrl = propLiveApiUrl.value.trim();
+    builderState.currentConfig.liveApiInterval = propLiveApiInterval.value.trim();
+    builderState.currentConfig.liveApiPath = propLiveApiPath.value.trim();
+    saveState();
+    generatePreview();
+});
+
+btnApplyFetchProps.addEventListener('click', () => {
+    let activeId = propFetchElementId.value.trim();
+    if (!activeId) {
+        alert("Please select or enter a Target Element ID first.");
+        return;
+    }
+
+    if (!builderState.currentConfig.elements[activeId]) {
+        builderState.currentConfig.elements[activeId] = {};
+    }
+    let elConfig = builderState.currentConfig.elements[activeId];
+    elConfig.fetchUrl = propFetchUrl.value.trim();
+    elConfig.fetchDataPath = propFetchDataPath.value.trim();
 
     saveState();
     generatePreview();
