@@ -119,21 +119,18 @@
         </div>
     </div>
 
-    <!-- Right Sidebar: Property Inspector -->
+    <!-- Right Sidebar: Sub-Tabs -->
     <div class="w-80 border-l border-slate-200 bg-white flex flex-col">
-        <div class="p-4 border-b border-slate-200 bg-slate-100 font-semibold text-slate-700">
-            Property Inspector
+        <div class="flex border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 text-xs">
+            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white" data-tab="design">Design</button>
+            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="data">Data</button>
+            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="dashboard">Dashboard</button>
+            <button class="builder-tab-btn flex-1 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="graphs">Graphs</button>
         </div>
+
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
 
-            <!-- Element Selection -->
-            <div>
-                <label class="block text-sm font-bold text-slate-500 mb-1">Selected Element ID</label>
-                <input type="text" id="prop-element-id" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-
-            <!-- Diagnostics / Validation -->
+            <!-- Validation Tool (Always visible at top) -->
             <div>
                 <button id="btn-validate-project" class="w-full px-3 py-2 text-sm bg-yellow-100 border border-yellow-300 rounded hover:bg-yellow-200 text-yellow-800 transition-colors">
                     Validate Project (Diagnostics)
@@ -141,7 +138,15 @@
                 <div id="validation-results" class="hidden mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto"></div>
             </div>
 
-            <!-- Appearance -->
+            <!-- TAB: Design (Property Inspector) -->
+            <div id="builder-tab-design" class="builder-tab-content space-y-6 block">
+                <!-- Element Selection -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-500 mb-1">Selected Element ID</label>
+                    <input type="text" id="prop-element-id" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Appearance -->
             <div>
                 <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Appearance</h3>
                 <div class="space-y-3">
@@ -183,45 +188,114 @@
                 </div>
             </div>
 
-            <!-- Actions & Callbacks -->
-            <div>
-                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Actions</h3>
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs text-slate-600 mb-1">On Click Callback (Interactive)</label>
-                        <select id="prop-click-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="none">None</option>
-                            <option value="zoom">Zoom to Element</option>
-                            <option value="toggle_image">Toggle Image Action</option>
-                            <option value="footnote">Show Contextual Footnote</option>
-                        </select>
-                    </div>
+                <!-- Actions & Callbacks -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Actions</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">On Click Callback (Interactive)</label>
+                            <select id="prop-click-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="none">None</option>
+                                <option value="zoom">Zoom to Element</option>
+                                <option value="toggle_image">Toggle Image Action</option>
+                                <option value="footnote">Show Contextual Footnote</option>
+                            </select>
+                        </div>
 
-                    <div id="prop-footnote-container" class="hidden mt-2">
-                         <label class="block text-xs text-slate-600 mb-1">Contextual Footnote Text</label>
-                         <input type="text" id="prop-footnote-text" placeholder="Citation or note..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
-                    </div>
+                        <div id="prop-footnote-container" class="hidden mt-2">
+                             <label class="block text-xs text-slate-600 mb-1">Contextual Footnote Text</label>
+                             <input type="text" id="prop-footnote-text" placeholder="Citation or note..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                        </div>
 
-                    <div id="prop-toggle-image-container" class="hidden mt-2">
-                        <label class="block text-xs text-slate-600 mb-1">Image URLs (comma separated)</label>
-                        <input type="text" id="prop-toggle-image-urls" placeholder="img1.png, img2.png" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
-                    </div>
+                        <div id="prop-toggle-image-container" class="hidden mt-2">
+                            <label class="block text-xs text-slate-600 mb-1">Image URLs (comma separated)</label>
+                            <input type="text" id="prop-toggle-image-urls" placeholder="img1.png, img2.png" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                        </div>
 
-                    <div>
-                        <label class="block text-xs text-slate-600 mb-1">Hover Callback</label>
-                        <select id="prop-hover-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="none">None</option>
-                            <option value="update_panel">Update Context Panel</option>
-                            <option value="custom">Custom JS Callback</option>
-                        </select>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Hover Callback</label>
+                            <select id="prop-hover-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="none">None</option>
+                                <option value="update_panel">Update Context Panel</option>
+                                <option value="custom">Custom JS Callback</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apply Button -->
+                <button id="btn-apply-props" class="w-full mt-4 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
+                    Apply Design Changes
+                </button>
+            </div>
+
+            <!-- TAB: Data (Data Binding Wizard) -->
+            <div id="builder-tab-data" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Data Binding (Choropleth)</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">CSV File Path (IDBFS)</label>
+                            <input type="text" id="prop-data-file" placeholder="e.g. data.csv" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                            <button id="btn-select-data-file" class="mt-1 w-full px-2 py-1 text-xs bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-600">Select File</button>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">ID Column Name</label>
+                            <input type="text" id="prop-data-id-col" placeholder="e.g. id" value="id" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Value Column Name</label>
+                            <input type="text" id="prop-data-value-col" placeholder="e.g. value" value="value" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2 italic">Map the ID column from your CSV to SVG IDs to instantly generate a Choropleth map.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Apply Button -->
-            <button id="btn-apply-props" class="w-full mt-4 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
-                Apply Changes
-            </button>
+            <!-- TAB: Dashboard (Dashboard Mode) -->
+            <div id="builder-tab-dashboard" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Dashboard Blocks</h3>
+                    <div class="space-y-3">
+                        <div id="dashboard-blocks-container" class="space-y-2">
+                            <!-- Dynamic dashboard blocks will be rendered here -->
+                        </div>
+                        <button id="btn-add-dashboard-block" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors">
+                            + Add Dashboard Block
+                        </button>
+                        <p class="text-xs text-slate-400 mt-2 italic">Wraps the SVG map in a `SivoDashboard` grid layout to show metrics.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Graphs (Graph Generation) -->
+            <div id="builder-tab-graphs" class="builder-tab-content space-y-6 hidden">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Nested ECharts Graphs</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Target Element ID</label>
+                            <input type="text" id="prop-graph-element-id" placeholder="e.g. state-ny" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Graph Type on Click</label>
+                            <select id="prop-graph-type" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="none">None</option>
+                                <option value="bar">Bar Chart</option>
+                                <option value="line">Line Chart</option>
+                                <option value="pie">Pie Chart</option>
+                                <option value="scatter">Scatter Plot</option>
+                                <option value="boxplot">Boxplot</option>
+                            </select>
+                        </div>
+                        <button id="btn-apply-graph-props" class="w-full mt-2 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
+                            Apply Graph Binding
+                        </button>
+                        <p class="text-xs text-slate-400 mt-2 italic">Uses your bound CSV file to plot the top 5 values relative to this element when clicked.</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

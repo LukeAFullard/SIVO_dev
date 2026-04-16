@@ -45,6 +45,24 @@ try:
         app.custom_css += f"\\n svg #{active_element_id} {{ stroke: #ef4444 !important; stroke-width: 3px !important; stroke-dasharray: 5,5; animation: dash 1s linear infinite; }}"
         app.custom_css += "\\n @keyframes dash { to { stroke-dashoffset: -10; } }"
 
+    # Phase 3: Data Binding (Choropleth)
+    data_file = config.get("dataFile")
+    data_id_col = config.get("dataIdCol", "id")
+    data_value_col = config.get("dataValueCol", "value")
+
+    if data_file:
+        try:
+            import pandas as pd
+            # Use IDBFS mount path
+            df = pd.read_csv(f"/sivo_workspace/{data_file}")
+            # If specified columns exist, apply choropleth
+            if data_id_col in df.columns and data_value_col in df.columns:
+                data_map = dict(zip(df[data_id_col].astype(str), df[data_value_col]))
+                app.apply_choropleth(data_map, min_color="#e2e8f0", max_color="#3b82f6")
+        except Exception as e:
+            error_msg = json.dumps(f"Error loading data file {data_file}: {str(e)}")
+            app.custom_js += f"console.error({error_msg});"
+
     # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs
     app.custom_js += """
     document.addEventListener('DOMContentLoaded', () => {
@@ -108,9 +126,46 @@ try:
             kwargs['hover_callback_event'] = hover_cb
             kwargs['hover_callback_payload'] = {"element": el_id, "action": hover_cb}
 
+        graph_type = el_cfg.get("graphType")
+        if graph_type and graph_type != "none":
+            # Real implementation using parsed CSV logic
+            data_file = config.get("dataFile")
+            data_id_col = config.get("dataIdCol", "id")
+            data_value_col = config.get("dataValueCol", "value")
+            if data_file:
+                try:
+                    import pandas as pd
+                    df = pd.read_csv(f"/sivo_workspace/{data_file}")
+                    # If columns exist
+                    if data_id_col in df.columns and data_value_col in df.columns:
+                        # Extract data for this particular element or generally
+                        # Since we want to show a graph, let's plot the top 5 values for bar/pie or a trend
+                        # Coerce values to numeric first
+                        df[data_value_col] = pd.to_numeric(df[data_value_col], errors='coerce')
+                        top_df = df.nlargest(5, data_value_col)
+                        names = top_df[data_id_col].astype(str).tolist()
+                        values = top_df[data_value_col].tolist()
+                        if graph_type == "bar":
+                            kwargs["bar_chart"] = {"x": names, "y": values}
+                        elif graph_type == "line":
+                            kwargs["line_chart"] = {"x": names, "y": values}
+                        elif graph_type == "pie":
+                            kwargs["pie_chart"] = {"data": [{"name": str(n), "value": float(v)} for n, v in zip(names, values)]}
+                except Exception as e:
+                    pass
+
         app.map(el_id, **kwargs)
 
-    html_output = app.to_html(build_js=False)
+    dashboard_blocks = config.get("dashboardBlocks", [])
+    if dashboard_blocks:
+        dashboard = sivo.SivoDashboard(app, theme="light")
+        for block in dashboard_blocks:
+            title = block.get("title", "Metric")
+            value = block.get("value", "0")
+            dashboard.add_html_block(f"<h3>{title}</h3><h2>{value}</h2>")
+        html_output = dashboard.to_html(build_js=False)
+    else:
+        html_output = app.to_html(build_js=False)
 
 except Exception as main_e:
     html_output = f'<div style="color:red;"><pre>{traceback.format_exc()}</pre></div>'

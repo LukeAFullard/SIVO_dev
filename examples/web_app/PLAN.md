@@ -377,10 +377,10 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [x] **Project Initialization & Annotation:** Integrate the "New Project" scaffolding logic (`sivo init` equivalent) and visual element inspection (`sivo annotate` equivalent) into the primary workspace.
 
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
-- [ ] **Data Binding Tab:** Split the Data Binding Wizard into its own dedicated UI tab to map CSV columns to SVG IDs for instant Choropleths.
-- [ ] **Dashboard Mode Tab:** Split Dashboard Mode into its own dedicated UI tab to manage `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
-- [ ] **Graph Generation Tab:** Split Graph Generation into its own dedicated UI tab to configure SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap, graph, sankey, sunburst, parallel, theme river, word cloud, pictorial bar, effect scatter, lines, funnel, tree, trendline, and nested maps), adding support for **Nested ECharts Actions** configuration.
-- [ ] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
+- [x] **Data Binding Tab:** Split the Data Binding Wizard into its own dedicated UI tab to map CSV columns to SVG IDs for instant Choropleths.
+- [x] **Dashboard Mode Tab:** Split Dashboard Mode into its own dedicated UI tab to manage `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
+- [x] **Graph Generation Tab:** Split Graph Generation into its own dedicated UI tab to configure SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap, graph, sankey, sunburst, parallel, theme river, word cloud, pictorial bar, effect scatter, lines, funnel, tree, trendline, and nested maps), adding support for **Nested ECharts Actions** configuration.
+- [x] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
