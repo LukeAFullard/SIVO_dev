@@ -345,7 +345,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 *   **Undo/Redo History Engine:** Implement a robust state history manager, allowing users to experiment freely without fear of breaking their layouts or configurations.
 *   **"Pre-Flight" Assistant & Auto-Fixes:** Expand standard validation into a friendly publishing checklist that not only flags missing configurations (e.g., "Choropleth mapped but no color gradient selected") but offers one-click "Auto-Fix" solutions.
 *   **Preset & Community Recipe Library:** Beyond basic templates, allow users to browse and import pre-configured "recipes" or UI blocks for common dashboard patterns, accelerating the path to a polished product.
-*   **Progressive Disclosure:** By default, the Property Inspector will only show basic settings (e.g., Tooltip Text, Color, Hover Color). Complex configurations like Interactive Callbacks, Custom CSS Injection, and E2E Testing scaffolding must be hidden behind an "Advanced Settings" toggle or a collapsible accordion to reduce visual clutter.
+*   **Progressive Disclosure:** By default, the Property Inspector will only show basic settings (e.g., Tooltip Text, Color, Hover Color). Complex configurations like Interactive Callbacks, Custom CSS Injection, and E2E Testing scaffolding must be hidden behind an "Advanced Settings" toggle or a collapsible accordion to reduce visual clutter. *(Completed via CSS Accordion integration in UI)*
 *   **Contextual Tooling:** Features should only appear when relevant. For example, the "Map Types" drawer (Choropleth, Hexbin) should only activate when a dataset is successfully linked to an SVG. Data binding options should not be visible when editing purely cosmetic elements like SVGs or Images.
 *   **Task-Based Workspaces:** Instead of one massive editor, the UI should be divided into distinct modes:
     *   **Design Mode:** Focuses on layout, SVG normalization, theming, and aesthetics.
@@ -379,8 +379,8 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 ### Phase 3: Advanced No-Code Features (Weeks 5-6)
 - [x] **Data Binding Tab:** Split the Data Binding Wizard into its own dedicated UI tab to map CSV columns to SVG IDs for instant Choropleths.
 - [x] **Dashboard Mode Tab:** Split Dashboard Mode into its own dedicated UI tab to manage `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
-- [x] **Graph Generation Tab:** Split Graph Generation into its own dedicated UI tab to configure SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap, graph, sankey, sunburst, parallel, theme river, word cloud, pictorial bar, effect scatter, lines, funnel, tree, trendline, and nested maps), adding support for **Nested ECharts Actions** configuration.
-- [x] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) as a **"Pre-Flight" Assistant & Auto-Fixes** engine to check for missing nodes or bad mappings, alongside **Runtime Debugging & State Inspection**.
+- [x] **Graph Generation Tab:** Split Graph Generation into its own dedicated UI tab to configure SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap), adding support for **Nested ECharts Actions** configuration.
+- [x] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) executing real Python backend logic via Pyodide alongside pandas mapping integrity checks.
 
 
 ### Phase 4: Advanced Mapping, Live Data, & Integrations (Weeks 7-8)
@@ -397,7 +397,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 
 ### Phase 6: Geocoding, Multi-View, & Advanced Export (Weeks 11-12)
 - [x] **Geocoding & Legends:** Integrate Mapbox/Google geocoding UI, Auto-Generated Legends, and **Geographic Coordinate Mapping**.
-- [x] **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures, including **Drill-Through Page Transitions**.
+- [x] **Multi-View Projects:** Implement the overarching `SivoProject` manager for comprehensive multi-view structures, including **Drill-Through Page Transitions** with proper target view resolution.
 - [x] **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities, and expose **Watermarks & Attribution** and **Export & Sharing Overlays**.
 - [x] **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
 - [x] Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.

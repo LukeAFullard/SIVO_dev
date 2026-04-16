@@ -156,9 +156,9 @@
                 </div>
 
                 <!-- Appearance -->
-            <div>
-                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Appearance</h3>
-                <div class="space-y-3">
+            <div class="border border-slate-200 rounded bg-white">
+                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded');">Appearance</h3>
+                <div class="space-y-3 px-3 pb-3 accordion-content expanded">
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Fill Color</label>
                         <div class="flex space-x-2">
@@ -177,9 +177,9 @@
             </div>
 
             <!-- Interactivity & Tooltips -->
-            <div>
-                <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Interactivity</h3>
-                <div class="space-y-4">
+            <div class="border border-slate-200 rounded bg-white">
+                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded');">Interactivity & Tooltips</h3>
+                <div class="space-y-4 px-3 pb-3 accordion-content">
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Rich HTML Tooltip</label>
                         <textarea id="prop-tooltip" rows="3" placeholder="<strong>Value:</strong> 100" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
@@ -198,9 +198,9 @@
             </div>
 
                 <!-- Actions & Callbacks -->
-                <div>
-                    <h3 class="text-sm font-bold text-slate-500 border-b border-slate-200 pb-1 mb-3">Actions</h3>
-                    <div class="space-y-3">
+                <div class="border border-slate-200 rounded bg-white">
+                    <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded');">Actions & Callbacks</h3>
+                    <div class="space-y-3 px-3 pb-3 accordion-content">
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">On Click Callback (Interactive)</label>
                             <select id="prop-click-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -345,12 +345,18 @@
                                 <option value="pie">Pie Chart</option>
                                 <option value="scatter">Scatter Plot</option>
                                 <option value="boxplot">Boxplot</option>
+                                <option value="candlestick">Candlestick</option>
+                                <option value="heatmap">Heatmap</option>
                             </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Data Title (Optional)</label>
+                            <input type="text" id="prop-graph-title" placeholder="e.g. Sales Data" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <button id="btn-apply-graph-props" class="w-full mt-2 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
                             Apply Graph Binding
                         </button>
-                        <p class="text-xs text-slate-400 mt-2 italic">Uses your bound CSV file to plot the top 5 values relative to this element when clicked.</p>
+                        <p class="text-xs text-slate-400 mt-2 italic">Uses your bound CSV file to plot values based on the column mapping relative to this element when clicked.</p>
                     </div>
                 </div>
             </div>

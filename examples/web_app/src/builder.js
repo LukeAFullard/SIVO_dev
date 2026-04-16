@@ -121,6 +121,7 @@ const dashboardBlocksContainer = document.getElementById('dashboard-blocks-conta
 const btnAddDashboardBlock = document.getElementById('btn-add-dashboard-block');
 const propGraphElementId = document.getElementById('prop-graph-element-id');
 const propGraphType = document.getElementById('prop-graph-type');
+const propGraphTitle = document.getElementById('prop-graph-title');
 const btnApplyGraphProps = document.getElementById('btn-apply-graph-props');
 const btnValidateProject = document.getElementById("btn-validate-project");
 const validationResults = document.getElementById("validation-results");
@@ -318,7 +319,7 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             previewOverlay.classList.add('hidden');
             generatePreview();
         } catch(err) {
-            console.error(err);
+            showToast(err, "error"); console.error(err);
             alert("Failed to load JSON: " + err.message);
         }
     });
@@ -390,7 +391,7 @@ function showIdbfsModal(title, extension, callback) {
 
         idbfsModal.classList.remove('hidden');
     } catch (err) {
-        console.error("Error reading IDBFS:", err);
+        showToast("Error reading IDBFS:", err, "error"); console.error("Error reading IDBFS:", err);
         alert("Error reading IDBFS: " + err.message);
     }
 }
@@ -566,6 +567,7 @@ function refreshPropertiesPanel() {
         propHoverCallback.value = 'none';
 
         propGraphType.value = 'none';
+        propGraphTitle.value = '';
 
         propFootnoteContainer.classList.add('hidden');
         propToggleImageContainer.classList.add('hidden');
@@ -585,6 +587,7 @@ function refreshPropertiesPanel() {
     propHoverCallback.value = elConfig.hoverCallback || 'none';
 
     propGraphType.value = elConfig.graphType || 'none';
+    propGraphTitle.value = elConfig.graphTitle || '';
 
 
     propFetchUrl.value = elConfig.fetchUrl || '';
@@ -673,7 +676,7 @@ async function generatePreview() {
         previewFrame.srcdoc = resultHtml;
         previewOverlay.classList.add('hidden');
     } catch (err) {
-        console.error("Preview Generation Error:", err);
+        showToast("Preview Generation Error:", err, "error"); console.error("Preview Generation Error:", err);
         previewOverlay.innerHTML = `<div class="text-red-500 font-bold">Error generating preview</div><div class="text-xs text-red-400 p-4 overflow-auto">${err.message}</div>`;
     }
 }
@@ -798,6 +801,7 @@ btnApplyGraphProps.addEventListener('click', () => {
     }
     let elConfig = builderState.currentConfig.elements[activeId];
     elConfig.graphType = propGraphType.value;
+    elConfig.graphTitle = propGraphTitle.value;
 
     saveState();
     generatePreview();
@@ -1014,7 +1018,7 @@ btnSelectDataFile.addEventListener("click", () => {
                 }
             }
         } catch(e) {
-            console.error(e);
+            showToast(e, "error"); console.error(e);
         }
 
         saveState();
@@ -1245,32 +1249,93 @@ btnAddDashboardBlock.addEventListener("click", () => {
     generatePreview();
 });
 
-btnValidateProject.addEventListener("click", () => {
-    // Basic validation
+btnValidateProject.addEventListener("click", async () => {
     validationResults.classList.remove("hidden");
-    let errors = [];
-    if (!builderState.currentConfig.template && !builderState.currentConfig.customSvg) {
-        errors.push("No template or custom SVG selected.");
-    }
+    validationResults.innerHTML = "Validating...";
+    validationResults.className = "mt-2 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded p-2 max-h-32 overflow-y-auto";
 
-    if (Object.keys(builderState.currentConfig.elements || {}).length === 0 && !builderState.currentConfig.dataFile) {
-        errors.push("No interactive elements or data bindings configured.");
-    }
-
-    if (builderState.currentConfig.dataFile) {
-        if (!builderState.currentConfig.dataIdCol) {
-            errors.push("Data file is bound but ID Column Name is missing.");
-        }
-        if (!builderState.currentConfig.dataValueCol) {
-            errors.push("Data file is bound but Value Column Name is missing.");
-        }
-    }
-
-    if (errors.length > 0) {
-        validationResults.innerHTML = "<b>Validation Issues:</b><br/>" + errors.join("<br/>");
+    if (!window.pyodide) {
+        validationResults.innerHTML = "Pyodide not loaded yet.";
         validationResults.className = "mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto";
-    } else {
-        validationResults.innerHTML = "Project is valid!";
-        validationResults.className = "mt-2 text-xs text-green-600 bg-green-50 border border-green-200 rounded p-2 max-h-32 overflow-y-auto";
+        return;
+    }
+
+    window.builderConfigJson = JSON.stringify(builderState.currentConfig);
+    const pythonCode = `
+import json
+import traceback
+
+def validate_project():
+    try:
+        import sivo
+        import js
+        config = json.loads(js.window.builderConfigJson)
+
+        template_path = config.get('template')
+        custom_svg = config.get('customSvg')
+
+        app = None
+        if custom_svg:
+            if custom_svg.startswith('http'):
+                 app = sivo.Sivo.from_svg(custom_svg)
+            elif custom_svg.startswith('<svg'):
+                 app = sivo.Sivo.from_string(custom_svg)
+            else:
+                 with open('/sivo_workspace/' + custom_svg.replace('/sivo_workspace/',''), 'r') as f:
+                     app = sivo.Sivo.from_string(f.read())
+        elif template_path and template_path != 'blank':
+             app = sivo.Sivo.from_template(template_path)
+        else:
+             app = sivo.Sivo.from_string('<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#f8fafc"/></svg>')
+
+        if hasattr(app, "validate"):
+             errors, warnings = app.validate()
+        else:
+             errors, warnings = [], []
+
+        if config.get("dataFile"):
+             df = None
+             data_file = config.get("dataFile")
+             try:
+                 import pandas as pd
+                 with open('/sivo_workspace/' + data_file.replace('/sivo_workspace/',''), 'r') as f:
+                     if data_file.endswith('.csv'):
+                         df = pd.read_csv(f)
+                     else:
+                         df = pd.read_json(f)
+             except Exception as e:
+                 errors.append(f"Could not load dataFile {data_file}: {e}")
+
+             if df is not None:
+                 if config.get("dataIdCol") and config.get("dataIdCol") not in df.columns:
+                     errors.append(f"Data mapping missing ID column: {config.get('dataIdCol')}")
+                 if config.get("dataValueCol") and config.get("dataValueCol") not in df.columns:
+                     errors.append(f"Data mapping missing Value column: {config.get('dataValueCol')}")
+
+        return json.dumps({"errors": errors, "warnings": warnings})
+
+    except Exception as e:
+        return json.dumps({"errors": [f"Validation failed: {str(e)}"], "warnings": []})
+
+validate_project()
+`;
+
+    try {
+        const resultRaw = await window.pyodide.runPythonAsync(pythonCode);
+        const result = JSON.parse(resultRaw);
+
+        if (result.errors.length > 0) {
+            validationResults.innerHTML = "<b>Validation Errors:</b><br/>" + result.errors.join("<br/>");
+            validationResults.className = "mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto";
+        } else if (result.warnings.length > 0) {
+            validationResults.innerHTML = "<b>Validation Warnings:</b><br/>" + result.warnings.join("<br/>");
+            validationResults.className = "mt-2 text-xs text-yellow-600 bg-yellow-50 border border-yellow-200 rounded p-2 max-h-32 overflow-y-auto";
+        } else {
+            validationResults.innerHTML = "Project is valid!";
+            validationResults.className = "mt-2 text-xs text-green-600 bg-green-50 border border-green-200 rounded p-2 max-h-32 overflow-y-auto";
+        }
+    } catch(e) {
+        validationResults.innerHTML = "<b>Validation Script Error:</b><br/>" + e.message;
+        validationResults.className = "mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto";
     }
 });

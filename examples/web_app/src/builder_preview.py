@@ -152,7 +152,7 @@ try:
 
         except Exception as e:
             error_msg = json.dumps(f"Error loading data file {data_file}: {str(e)}")
-            app.custom_js += f"console.error({error_msg});"
+            app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }} else {{ console.error({error_msg}); }}"
 
     # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs
     app.custom_js += """
@@ -272,8 +272,9 @@ try:
         # Note: In preview, this might just register as a click callback to show it's linked
         drill_view_id = el_cfg.get('drillThroughViewId')
         if drill_view_id:
-            kwargs['hover_callback_event'] = 'drill_through_preview'
-            kwargs['hover_callback_payload'] = {"element": el_id, "action": f"Drill to {drill_view_id}"}
+            # Tell SIVO to use real page transitions for this element ID when clicked
+            kwargs['drill_through_target'] = drill_view_id
+
             # Add simple tooltip if none
             if 'html' not in kwargs:
                 kwargs['html'] = f"Click to drill through to view: {drill_view_id}"
@@ -300,6 +301,7 @@ try:
             data_file = config.get("dataFile")
             data_id_col = config.get("dataIdCol", "id")
             data_value_col = config.get("dataValueCol", "value")
+            graph_title = el_cfg.get("graphTitle")
 
             if data_file:
                 try:
@@ -315,27 +317,50 @@ try:
                             names = df_clean[data_id_col].astype(str).tolist()
                             values = df_clean[data_value_col].tolist()
 
+                            chart_config = {}
+                            if graph_title:
+                                chart_config["title"] = {"text": graph_title}
+
                             if graph_type == "bar":
-                                kwargs["bar_chart"] = {"x": names, "y": values}
+                                chart_config.update({"x": names, "y": values})
+                                kwargs["bar_chart"] = chart_config
                             elif graph_type == "line":
-                                kwargs["line_chart"] = {"x": names, "y": values}
+                                chart_config.update({"x": names, "y": values})
+                                kwargs["line_chart"] = chart_config
                             elif graph_type == "pie":
-                                kwargs["pie_chart"] = {"data": [{"name": str(n), "value": float(v)} for n, v in zip(names, values)]}
+                                chart_config.update({"data": [{"name": str(n), "value": float(v)} for n, v in zip(names, values)]})
+                                kwargs["pie_chart"] = chart_config
                             elif graph_type == "scatter":
                                 # For scatter, use values as Y, and index as X if no other metric is provided,
                                 # but real data is preferred.
-                                kwargs["scatter_chart"] = {"data": [[i, v] for i, v in enumerate(values)]}
+                                chart_config.update({"data": [[i, v] for i, v in enumerate(values)]})
+                                kwargs["scatter_chart"] = chart_config
                             elif graph_type == "boxplot":
-                                kwargs["boxplot_chart"] = {"data": [values]}
+                                chart_config.update({"data": [values]})
+                                kwargs["boxplot_chart"] = chart_config
+                            elif graph_type == "candlestick":
+                                # Mock format for candlestick using random offset
+                                import random
+                                candle_data = []
+                                for v in values:
+                                     candle_data.append([v - random.uniform(0, 5), v + random.uniform(0, 5), v - random.uniform(0, 10), v + random.uniform(0, 10)])
+                                chart_config.update({"x": names, "y": candle_data})
+                                kwargs["candlestick_chart"] = chart_config
+                            elif graph_type == "heatmap":
+                                # Mock format for heatmap
+                                heatmap_data = [[0, i, v] for i, v in enumerate(values)]
+                                chart_config.update({"x_axis": names, "y_axis": ["Values"], "data": heatmap_data})
+                                kwargs["heatmap_chart"] = chart_config
+
                         else:
                             error_msg = json.dumps(f"No valid numeric data found in column '{data_value_col}'.")
-                            app.custom_js += f"console.warn({error_msg});"
+                            app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'warning'); }} else {{ console.warn({error_msg}); }}"
                     else:
                         error_msg = json.dumps(f"Columns '{data_id_col}' or '{data_value_col}' not found in {data_file}.")
-                        app.custom_js += f"console.warn({error_msg});"
+                        app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'warning'); }} else {{ console.warn({error_msg}); }}"
                 except Exception as e:
                     error_msg = json.dumps(f"Error parsing {data_file} for graphing: {str(e)}")
-                    app.custom_js += f"console.error({error_msg});"
+                    app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }} else {{ console.error({error_msg}); }}"
 
         app.map(el_id, **kwargs)
 
@@ -421,7 +446,22 @@ try:
                         target_app = sivo.Sivo.from_string(f'<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40">Target View: {target_view} not found in workspace.</text></svg>')
 
                     # Back link or instruction
-                    target_app.custom_js += "console.log('Drill-through target loaded');"
+                    target_app.custom_js += "if(window.parent.showToast) { window.parent.showToast('Drill-through target loaded', 'success'); }"
+
+                    # Back link logic so users can return
+                    target_app.custom_js += """
+                        document.addEventListener("DOMContentLoaded", () => {
+                             let backBtn = document.createElement("button");
+                             backBtn.innerText = "Back to Main Map";
+                             backBtn.style.position = "absolute";
+                             backBtn.style.top = "10px";
+                             backBtn.style.left = "10px";
+                             backBtn.style.zIndex = "9999";
+                             backBtn.onclick = () => window.location.hash = "#main";
+                             document.body.appendChild(backBtn);
+                        });
+                    """
+
                     try:
                         project.add_view(target_view, target_app)
                     except:

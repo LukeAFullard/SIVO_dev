@@ -17,6 +17,9 @@ def build():
     with open(os.path.join(src_dir, 'app.css'), 'r', encoding='utf-8') as f:
         app_css = f.read()
 
+    with open(os.path.join(src_dir, 'toast.js'), 'r', encoding='utf-8') as f:
+        toast_js = f.read()
+
     with open(os.path.join(src_dir, 'app.js'), 'r', encoding='utf-8') as f:
         app_js = f.read()
 
@@ -47,7 +50,7 @@ def build():
 
     # Combine app.js and builder.js
     builder_js = builder_js.replace('BUILDER_PREVIEW_PY_PLACEHOLDER', json.dumps(builder_preview_py))
-    combined_js = app_js + "\n\n" + builder_js
+    combined_js = toast_js + "\n\n" + app_js + "\n\n" + builder_js
     output_html = output_html.replace('        // APP_JS_PLACEHOLDER', combined_js)
 
     output_html = output_html.replace('        <!-- ANNOTATOR_TEMPLATE_PLACEHOLDER -->', annotator)
