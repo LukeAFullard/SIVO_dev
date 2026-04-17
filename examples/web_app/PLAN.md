@@ -438,3 +438,7 @@ To further enhance the developer and no-code experience, an intelligent AI Copil
 *   [x] **Implement Timeline Binding:** Add `bind_timeline` configuration parsing to `builder_preview.py`.
 *   [x] **Enhance Graph Support:** Expand the `builder_preview.py` parsing logic to natively utilize SIVO's `map_bar_chart`, `map_line_chart`, etc. (Note: Evaluated and confirmed fully mapped via `kwargs`).
 *   [x] **Remove Orphaned CSS:** Delete `src/accordion.css` since its rules are already present in `src/app.css` and it isn't utilized by the build script.
+
+### Phase 6.8: Post-Audit Fixes
+*   [x] **Fix Programmatic Panel Dismissal Mapping:** Update `builder_preview.py` to properly map `ctrlPanelDismiss` configuration state (e.g. inject an onClick event listener to trigger `closePanel()`).
+*   [x] **Fix URL Navigation Mapping:** Update `builder_preview.py` to map `ctrlUrlNavId` and `ctrlUrlNavUrl` parameters via the core SIVO `app.map(id, url=url)` logic, restoring full visual navigation behavior.

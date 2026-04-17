@@ -59,6 +59,10 @@ try:
         app.enable_search = True
     if config.get("ctrlLayerToggle"):
         app.add_layer_toggle(config.get("ctrlLayerToggle"), label="Toggle Layer")
+    if config.get("ctrlPanelDismiss"):
+        app.custom_js += f"\n document.addEventListener('DOMContentLoaded', () => {{ let el = document.getElementById('{config.get('ctrlPanelDismiss')}'); if (el) {{ el.addEventListener('click', () => {{ if (typeof closePanel !== 'undefined') closePanel(); }}); }} }});"
+    if config.get("ctrlUrlNavId") and config.get("ctrlUrlNavUrl"):
+        app.map(config.get("ctrlUrlNavId"), url=config.get("ctrlUrlNavUrl"))
 
     # Phase 6: Geocoding & Export Globals
     if config.get("geocodeEnable"):
