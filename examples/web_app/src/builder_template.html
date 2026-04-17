@@ -85,10 +85,10 @@
 
             <!-- Preview Modes -->
             <div class="flex space-x-1 items-center border border-slate-200 rounded p-1 bg-slate-50">
-                <button class="preview-mode-btn px-2 py-1 text-xs rounded bg-white shadow-sm border border-slate-200" data-mode="desktop">Desktop</button>
-                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="tablet">Tablet</button>
-                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="mobile">Mobile</button>
-                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="fullscreen">Fullscreen</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded bg-white shadow-sm border border-slate-200" data-mode="desktop" aria-label="Desktop preview" role="button" tabindex="0">Desktop</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="tablet" aria-label="Tablet preview" role="button" tabindex="0">Tablet</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="mobile" aria-label="Mobile preview" role="button" tabindex="0">Mobile</button>
+                <button class="preview-mode-btn px-2 py-1 text-xs rounded hover:bg-slate-200 text-slate-600" data-mode="fullscreen" aria-label="Fullscreen preview" role="button" tabindex="0">Fullscreen</button>
             </div>
 
             <div class="space-x-2 flex items-center">
@@ -122,19 +122,19 @@
     <!-- Right Sidebar: Sub-Tabs -->
     <div class="w-80 border-l border-slate-200 bg-white flex flex-col">
         <div class="flex border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 text-xs overflow-x-auto whitespace-nowrap hide-scrollbar">
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white" data-tab="design">Design</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="data">Data</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="dashboard">Dashboard</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="graphs">Graphs</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="live">Live Data</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="timeline">Timeline</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="overlays">Regions & Overlays</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="integrations">Integrations</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="a11y">A11y & Styling</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="controls">Controls</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="geocoding">Geocoding & Legends</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="multiview">Multi-View</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" data-tab="export">Export & Testing</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white" role="tab" tabindex="0" data-tab="design">Design</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="data">Data</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="dashboard">Dashboard</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="graphs">Graphs</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="live">Live Data</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="timeline">Timeline</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="overlays">Regions & Overlays</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="integrations">Integrations</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="a11y">A11y & Styling</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="controls">Controls</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="geocoding">Geocoding & Legends</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="multiview">Multi-View</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="export">Export & Testing</button>
         </div>
 
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
@@ -157,7 +157,7 @@
 
                 <!-- Appearance -->
             <div class="border border-slate-200 rounded bg-white">
-                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded');">Appearance</h3>
+                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" role="button" tabindex="0" aria-expanded="true" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded'); this.setAttribute('aria-expanded', this.classList.contains('active'));">Appearance</h3>
                 <div class="space-y-3 px-3 pb-3 accordion-content expanded">
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Fill Color</label>
@@ -178,7 +178,7 @@
 
             <!-- Interactivity & Tooltips -->
             <div class="border border-slate-200 rounded bg-white">
-                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded');">Interactivity & Tooltips</h3>
+                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded'); this.setAttribute('aria-expanded', this.classList.contains('active'));">Interactivity & Tooltips</h3>
                 <div class="space-y-4 px-3 pb-3 accordion-content">
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Rich HTML Tooltip</label>
@@ -199,7 +199,7 @@
 
                 <!-- Actions & Callbacks -->
                 <div class="border border-slate-200 rounded bg-white">
-                    <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded');">Actions & Callbacks</h3>
+                    <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded'); this.setAttribute('aria-expanded', this.classList.contains('active'));">Actions & Callbacks</h3>
                     <div class="space-y-3 px-3 pb-3 accordion-content">
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">On Click Callback (Interactive)</label>
@@ -593,6 +593,15 @@
                             <label class="block text-xs text-slate-600 mb-1">Target Element ID</label>
                             <input type="text" id="prop-a11y-element-id" placeholder="e.g. region-1" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">ARIA Label (Accessibility)</label>
+                            <input type="text" id="prop-a11y-aria-label" placeholder="e.g. Map Region 1" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Tab Index</label>
+                            <input type="number" id="prop-a11y-tabindex" placeholder="e.g. 0" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                        </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Marker (HTML)</label>
                             <input type="text" id="prop-a11y-marker" placeholder="e.g. <div class='marker'>📍</div>" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
@@ -707,7 +716,7 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Custom JS Injection</label>
-                            <textarea id="prop-global-js" rows="2" placeholder="e.g. console.log('Map Loaded');" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
+                            <textarea id="prop-global-js" rows="2" placeholder="// Inject custom JavaScript" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
                         </div>
 
                         <button id="btn-apply-global-style" class="w-full mt-2 px-3 py-2 text-sm bg-pink-500 text-white rounded hover:bg-pink-600 font-medium shadow-sm transition-colors">

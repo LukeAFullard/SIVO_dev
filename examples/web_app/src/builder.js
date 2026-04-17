@@ -34,6 +34,8 @@ const btnApplyIntegrations = document.getElementById('btn-apply-integrations');
 
 // A11y & Media
 const propA11yElementId = document.getElementById('prop-a11y-element-id');
+const propA11yAriaLabel = document.getElementById('prop-a11y-aria-label');
+const propA11yTabindex = document.getElementById('prop-a11y-tabindex');
 const propA11yMarker = document.getElementById('prop-a11y-marker');
 const propA11yVideo = document.getElementById('prop-a11y-video');
 const propA11yAudio = document.getElementById('prop-a11y-audio');
@@ -305,7 +307,7 @@ jsonUploadLocal.addEventListener('change', (e) => {
             previewOverlay.classList.add('hidden');
             generatePreview();
         } catch (err) {
-            alert("Invalid JSON configuration file.");
+            showToast("Invalid JSON configuration file.");
         }
     };
     reader.readAsText(file);
@@ -336,7 +338,7 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             generatePreview();
         } catch(err) {
             showToast(err, "error")
-            alert("Failed to load JSON: " + err.message);
+            showToast("Failed to load JSON: " + err.message);
         }
     });
 });
@@ -353,7 +355,7 @@ btnApplyCanvasSettings.addEventListener('click', async () => {
         try {
             const stat = window.pyodide.FS.stat(builderState.currentConfig.customSvg);
             if (stat.size > 5 * 1024 * 1024) { // 5MB
-                alert("Warning: The selected SVG file is very large (" + (stat.size / 1024 / 1024).toFixed(2) + " MB). This might cause browser memory issues or crashes during generation. We recommend optimizing the SVG.");
+                showToast("Warning: The selected SVG file is very large (" + (stat.size / 1024 / 1024).toFixed(2) + " MB). This might cause browser memory issues or crashes during generation. We recommend optimizing the SVG.");
             }
         } catch(e) {
              // File might not exist yet or is URL, ignore
@@ -375,7 +377,7 @@ let idbfsCallback = null;
 
 function showIdbfsModal(title, extension, callback) {
     if (!window.pyodide || !window.pyodide.FS) {
-        alert("Pyodide File System is not ready yet.");
+        showToast("Pyodide File System is not ready yet.");
         return;
     }
     const mountDir = "/sivo_workspace";
@@ -408,7 +410,7 @@ function showIdbfsModal(title, extension, callback) {
         idbfsModal.classList.remove('hidden');
     } catch (err) {
         showToast("Error reading IDBFS:", err, "error")
-        alert("Error reading IDBFS: " + err.message);
+        showToast("Error reading IDBFS: " + err.message);
     }
 }
 
@@ -565,6 +567,24 @@ function refreshPropertiesPanel() {
 
         // Phase 5 Reset
         propOverlayElementId.value = "";
+        propA11yElementId.value = "";
+
+        if (propA11yAriaLabel) propA11yAriaLabel.value = "";
+        if (propA11yTabindex) propA11yTabindex.value = "";
+        if (propA11yMarker) propA11yMarker.value = "";
+        if (propA11yVideo) propA11yVideo.value = "";
+        if (propA11yAudio) propA11yAudio.value = "";
+        if (propA11yMarkdown) propA11yMarkdown.value = "";
+        if (propA11yGallery) propA11yGallery.value = "";
+        if (propA11yEmbedSvg) propA11yEmbedSvg.value = "";
+        if (propA11yLottie) propA11yLottie.value = "";
+        if (propA11yMorph) propA11yMorph.value = "";
+        if (propA11yClip) propA11yClip.value = "";
+        if (propA11yTransform) propA11yTransform.value = "";
+        if (propA11yExplode) propA11yExplode.checked = false;
+        if (propA11yConfetti) propA11yConfetti.checked = false;
+        if (propA11yLoading) propA11yLoading.checked = false;
+        if (propA11yZoomTo) propA11yZoomTo.value = "";
         propOverlayFillZone.value = "";
         propOverlayClipHtml.value = "";
         propOverlayShapeType.value = "none";
@@ -615,6 +635,25 @@ function refreshPropertiesPanel() {
 
     // Phase 5 Element Config
     propOverlayElementId.value = id;
+    propA11yElementId.value = id;
+
+    // A11y fields
+    if (propA11yAriaLabel) propA11yAriaLabel.value = elConfig.ariaLabel || '';
+    if (propA11yTabindex) propA11yTabindex.value = elConfig.tabindex !== undefined ? elConfig.tabindex : '';
+    if (propA11yMarker) propA11yMarker.value = elConfig.marker || '';
+    if (propA11yVideo) propA11yVideo.value = elConfig.video || '';
+    if (propA11yAudio) propA11yAudio.value = elConfig.audio || '';
+    if (propA11yMarkdown) propA11yMarkdown.value = elConfig.markdown || '';
+    if (propA11yGallery) propA11yGallery.value = elConfig.gallery ? elConfig.gallery.join(', ') : '';
+    if (propA11yEmbedSvg) propA11yEmbedSvg.value = elConfig.embed_svg || '';
+    if (propA11yLottie) propA11yLottie.value = elConfig.lottie || '';
+    if (propA11yMorph) propA11yMorph.value = elConfig.morph_to_path || '';
+    if (propA11yClip) propA11yClip.value = elConfig.clip_image_url || '';
+    if (propA11yTransform) propA11yTransform.value = elConfig.transform || '';
+    if (propA11yExplode) propA11yExplode.checked = !!elConfig.explode;
+    if (propA11yConfetti) propA11yConfetti.checked = !!elConfig.confetti;
+    if (propA11yLoading) propA11yLoading.checked = !!elConfig.loading;
+    if (propA11yZoomTo) propA11yZoomTo.value = elConfig.zoom_to || '';
     propOverlayFillZone.value = elConfig.fillZone || '';
     propOverlayClipHtml.value = elConfig.clipHtml || '';
     propOverlayShapeType.value = elConfig.shapeType || 'none';
@@ -644,7 +683,7 @@ propElementId.addEventListener('input', (e) => {
 
 btnApplyProps.addEventListener('click', () => {
     const id = propElementId.value.trim();
-    if (!id) return alert("Please enter an Element ID first.");
+    if (!id) return showToast("Please enter an Element ID first.");
 
     if (!builderState.currentConfig.elements[id]) {
         builderState.currentConfig.elements[id] = {};
@@ -707,7 +746,7 @@ async function generatePreview() {
 if (btnApplyIntegrations) {
     btnApplyIntegrations.addEventListener('click', () => {
         const id = propIntegElementId.value.trim();
-        if (!id) return alert('Please specify a target element ID.');
+        if (!id) return showToast('Please specify a target element ID.');
 
         if (!builderState.currentConfig.elements[id]) builderState.currentConfig.elements[id] = {};
         const el = builderState.currentConfig.elements[id];
@@ -732,11 +771,13 @@ if (btnApplyIntegrations) {
 if (btnApplyA11yMedia) {
     btnApplyA11yMedia.addEventListener('click', () => {
         const id = propA11yElementId.value.trim();
-        if (!id) return alert('Please specify a target element ID.');
+        if (!id) return showToast('Please specify a target element ID.');
 
         if (!builderState.currentConfig.elements[id]) builderState.currentConfig.elements[id] = {};
         const el = builderState.currentConfig.elements[id];
 
+                if (propA11yAriaLabel.value) el.ariaLabel = propA11yAriaLabel.value; else delete el.ariaLabel;
+        if (propA11yTabindex.value !== '') el.tabindex = parseInt(propA11yTabindex.value); else delete el.tabindex;
         if (propA11yMarker.value) el.marker = propA11yMarker.value; else delete el.marker;
         if (propA11yVideo.value) el.video = propA11yVideo.value; else delete el.video;
         if (propA11yAudio.value) el.audio = propA11yAudio.value; else delete el.audio;
@@ -812,7 +853,7 @@ btnAnnotateInspect.addEventListener('click', () => {
 btnApplyGraphProps.addEventListener('click', () => {
     let activeId = propGraphElementId.value.trim();
     if (!activeId) {
-        alert("Please select or enter a Target Element ID first.");
+        showToast("Please select or enter a Target Element ID first.");
         return;
     }
 
@@ -846,7 +887,7 @@ btnApplyLiveData.addEventListener('click', () => {
 btnApplyFetchProps.addEventListener('click', () => {
     let activeId = propFetchElementId.value.trim();
     if (!activeId) {
-        alert("Please select or enter a Target Element ID first.");
+        showToast("Please select or enter a Target Element ID first.");
         return;
     }
 
@@ -1059,7 +1100,7 @@ propDataFile.addEventListener("change", (e) => {
         try {
             const stat = window.pyodide.FS.stat("/sivo_workspace/" + builderState.currentConfig.dataFile);
             if (stat.size > 10 * 1024 * 1024) { // 10MB
-                alert("Warning: The selected data file is very large (" + (stat.size / 1024 / 1024).toFixed(2) + " MB). Mapping this dataset might consume significant memory and crash the browser tab.");
+                showToast("Warning: The selected data file is very large (" + (stat.size / 1024 / 1024).toFixed(2) + " MB). Mapping this dataset might consume significant memory and crash the browser tab.");
             }
         } catch(err) {
             // Ignore if file stat fails

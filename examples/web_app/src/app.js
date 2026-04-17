@@ -189,7 +189,7 @@ window.addEventListener('unhandledrejection', function(event) {
                 const url = URL.createObjectURL(blob);
                 window.open(url, '_blank');
             } catch (err) {
-                alert("Error viewing file: " + err.message);
+                showToast("Error viewing file: " + err.message);
             }
         };
 
@@ -208,7 +208,7 @@ window.addEventListener('unhandledrejection', function(event) {
                 });
                 updateFileList();
             } catch (err) {
-                alert("Error deleting file: " + err.message);
+                showToast("Error deleting file: " + err.message);
             }
         };
 
@@ -245,7 +245,7 @@ window.addEventListener('unhandledrejection', function(event) {
                 updateFileList();
             } catch (err) {
                 showToast("Error saving file to IDBFS:", err, "error")
-                alert("Error saving file: " + err.message);
+                showToast("Error saving file: " + err.message);
             }
         }
 
@@ -314,7 +314,7 @@ window.addEventListener('unhandledrejection', function(event) {
                 urlInput.value = '';
             } catch (err) {
                 showToast("Error fetching URL:", err, "error")
-                alert("Failed to fetch URL: " + err.message);
+                showToast("Failed to fetch URL: " + err.message);
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
