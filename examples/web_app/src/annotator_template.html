@@ -109,6 +109,20 @@
         </div>
     </div>
 
+
+    <!-- Save Project Modal -->
+    <div id="save-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div class="modal-content" style="background: white; padding: 20px; border-radius: 8px; width: 400px; display: flex; flex-direction: column;">
+            <h2 style="margin-top: 0;">Save Project to Pyodide FS</h2>
+            <label style="font-size: 0.875rem; color: #4b5563; margin-top: 10px;">Filename:</label>
+            <input type="text" id="save-project-filename" value="sivo_project.json" style="padding: 8px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 4px; width: 100%;">
+            <div class="modal-actions" style="margin-top: 15px; text-align: right; display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="close-save-modal" class="secondary" style="margin: 0;">Cancel</button>
+                <button id="confirm-save-project" class="secondary" style="border-color: #10b981; color: #10b981; margin: 0;">Save</button>
+            </div>
+        </div>
+    </div>
+
     <div id="load-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
         <div class="modal-content" style="background: white; padding: 20px; border-radius: 8px; width: 400px; max-height: 80vh; display: flex; flex-direction: column;">
             <h2 style="margin-top: 0;">Load File from Pyodide FS</h2>

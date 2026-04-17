@@ -237,6 +237,9 @@ try:
             theme.hover_color = el_cfg.get('fill')
 
 
+
+        if el_cfg.get('ariaLabel'): kwargs['aria_label'] = el_cfg['ariaLabel']
+        if el_cfg.get('tabindex') is not None: kwargs['tabindex'] = el_cfg['tabindex']
         # Integrations
         for t in ['document', 'map_location', 'ecommerce', 'rich_media', 'bi', 'external_form', 'form', 'social', 'replit']:
             if el_cfg.get(t):

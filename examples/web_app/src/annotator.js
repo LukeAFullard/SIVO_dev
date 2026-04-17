@@ -1590,19 +1590,29 @@
                 saveState();
             } catch (e) {
                 window.parent.showToast("Failed to load project state: " + e.message, "error");
-                alert("Failed to load project file. Invalid format.");
+                showToast("Failed to load project file. Invalid format.");
             }
         }
 
         saveProjectBtn.addEventListener('click', () => {
-            const data = serializeProject();
             const pyodideInst = getPyodideInstance();
             if (pyodideInst && pyodideInst.FS) {
-                const filename = prompt("Enter project filename to save to Pyodide FS:", "sivo_project.json");
-                if (!filename) return;
-                try {
-                    const mountDir = "/sivo_workspace";
-                    pyodideInst.FS.writeFile(`${mountDir}/${filename}`, data);
+                const saveModal = document.getElementById('save-modal');
+                saveModal.style.display = 'flex';
+
+                document.getElementById('close-save-modal').onclick = () => {
+                    saveModal.style.display = 'none';
+                };
+
+                document.getElementById('confirm-save-project').onclick = () => {
+                    const filename = document.getElementById('save-project-filename').value;
+                    saveModal.style.display = 'none';
+                    if (!filename) return;
+
+                    const data = serializeProject();
+                    try {
+                        const mountDir = "/sivo_workspace";
+                        pyodideInst.FS.writeFile(`${mountDir}/${filename}`, data);
 
                     // Also save the background image if we have one
                     if (bgImage.src && bgImage.src.startsWith('data:image')) {
@@ -1626,18 +1636,20 @@
                     }
 
                     pyodideInst.FS.syncfs(false, function(err) {
-                        if (err) alert("Sync error: " + err);
+                        if (err) (window.parent.showToast || window.showToast || alert)("Sync error: " + err, "error");
                         else {
-                            alert("Saved to Pyodide Virtual File System: " + filename + (bgImage.src ? " (and background image)" : ""));
+                            (window.parent.showToast || window.showToast || alert)("Saved to Pyodide Virtual File System: " + filename + (bgImage.src ? " (and background image)" : ""), "success");
                             if (window.parent && window.parent.updateFileList) {
                                 window.parent.updateFileList();
                             }
                         }
                     });
                 } catch (err) {
-                    alert("Error saving: " + err);
+                    (window.parent.showToast || window.showToast || alert)("Error saving: " + err, "error");
                 }
+                };
             } else {
+                const data = serializeProject();
                 // Standard browser download
                 const blob = new Blob([data], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
@@ -1658,7 +1670,7 @@
                 try {
                     const files = pyodideInst.FS.readdir(mountDir).filter(f => f !== '.' && f !== '..');
                     if (files.length === 0) {
-                        alert("No files found in Pyodide FS.");
+                        showToast("No files found in Pyodide FS.");
                         return;
                     }
 
@@ -1679,7 +1691,7 @@
                                 loadProjectState(data);
                                 loadModal.style.display = 'none';
                             } catch (err) {
-                                alert(`Error loading ${f}: ` + err);
+                                showToast(`Error loading ${f}: ` + err);
                             }
                         });
                         li.addEventListener('mouseenter', () => {
@@ -1693,7 +1705,7 @@
 
                     loadModal.style.display = 'flex';
                 } catch (err) {
-                    alert("Error reading directory: " + err);
+                    showToast("Error reading directory: " + err);
                 }
             } else {
                 loadProjectFile.click();
@@ -1743,7 +1755,7 @@
                 pyodideInstance.FS.syncfs(false, function (err) {
                     if (err) {
                         window.parent.showToast('Error syncing IDBFS: ' + err, 'error');
-                        alert('Failed to sync to IndexedDB: ' + err);
+                        showToast('Failed to sync to IndexedDB: ' + err);
                     } else {
                         const originalText = saveIdbfsBtn.innerText;
                         saveIdbfsBtn.innerText = 'Saved!';
@@ -1759,6 +1771,6 @@
                 });
             } catch (err) {
                 window.parent.showToast('Error writing to Pyodide FS: ' + err, 'error');
-                alert('Failed to write to virtual file system: ' + err);
+                showToast('Failed to write to virtual file system: ' + err);
             }
         });
