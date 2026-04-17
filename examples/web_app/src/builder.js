@@ -89,6 +89,7 @@ const templateBtns = document.querySelectorAll('.template-btn');
 // Preview Pane
 const previewFrame = document.getElementById('builder-preview-frame');
 const previewOverlay = document.getElementById('builder-preview-overlay');
+const loadingOverlay = document.getElementById('builder-loading-overlay');
 const btnPreviewRefresh = document.getElementById('btn-preview-refresh');
 const btnPreviewGenerate = document.getElementById('btn-preview-generate');
 const previewModeBtns = document.querySelectorAll('.preview-mode-btn');
@@ -276,7 +277,7 @@ templateBtns.forEach(btn => {
         builderState.currentConfig.template = templatePath;
         builderState.currentConfig.elements = {}; // Reset elements
         saveState();
-        previewOverlay.classList.add('hidden');
+        if (previewOverlay) previewOverlay.classList.add('hidden');
         await generatePreview();
     });
 });
@@ -304,7 +305,7 @@ jsonUploadLocal.addEventListener('change', (e) => {
             propDataFile.value = config.dataFile || "";
 
             saveState();
-            previewOverlay.classList.add('hidden');
+            if (previewOverlay) previewOverlay.classList.add('hidden');
             generatePreview();
         } catch (err) {
             showToast("Invalid JSON configuration file.");
@@ -334,7 +335,7 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             propDataFile.value = config.dataFile || "";
 
             saveState();
-            previewOverlay.classList.add('hidden');
+            if (previewOverlay) previewOverlay.classList.add('hidden');
             generatePreview();
         } catch(err) {
             showToast(err, "error")
@@ -368,7 +369,7 @@ btnApplyCanvasSettings.addEventListener('click', async () => {
     }
 
     saveState();
-    previewOverlay.classList.add('hidden');
+    if (previewOverlay) previewOverlay.classList.add('hidden');
     generatePreview();
 });
 
@@ -718,12 +719,12 @@ async function generatePreview() {
         return;
     }
 
-    previewOverlay.innerHTML = 'Generating...';
-    previewOverlay.classList.remove('hidden');
+    if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+    if (previewOverlay) previewOverlay.classList.add('hidden'); // Ensure the welcome overlay hides
 
     try {
         // Unmount existing iframe document to aid browser GC before injecting massive new HTML string
-        previewFrame.srcdoc = "<html><body>Loading...</body></html>";
+        previewFrame.srcdoc = "<html><body></body></html>";
 
         // Expose the JSON state to the Python context
         window.builderConfigJson = JSON.stringify(builderState.currentConfig);
@@ -733,10 +734,12 @@ async function generatePreview() {
 
         const resultHtml = await window.pyodide.runPythonAsync(pyCode);
         previewFrame.srcdoc = resultHtml;
-        previewOverlay.classList.add('hidden');
+        if (loadingOverlay) loadingOverlay.classList.add('hidden');
     } catch (err) {
         showToast("Preview Generation Error:", err, "error")
-        previewOverlay.innerHTML = `<div class="text-red-500 font-bold">Error generating preview</div><div class="text-xs text-red-400 p-4 overflow-auto">${err.message}</div>`;
+        if (loadingOverlay) {
+            loadingOverlay.innerHTML = `<div class="text-red-500 font-bold mb-2">Error compiling output</div><div class="text-xs text-slate-700 bg-white p-4 rounded border border-red-200 overflow-auto max-w-lg shadow-sm">${err.message}</div><button onclick="document.getElementById('builder-loading-overlay').classList.add('hidden')" class="mt-4 px-3 py-1 bg-slate-200 rounded text-slate-700 text-sm hover:bg-slate-300">Dismiss</button>`;
+        }
     }
 }
 
@@ -1130,10 +1133,24 @@ propDataMapType.addEventListener("change", (e) => {
     generatePreview();
 });
 
+
 function updateDataMapUI() {
     const mapType = propDataMapType.value;
+    const hasDataFile = !!builderState.currentConfig.dataFile;
+
+    // Contextual tooling: disable MapType interactions if no data file
+    if (!hasDataFile) {
+        propDataMapType.disabled = true;
+        propDataMapType.title = "Select a CSV data file first";
+        propDataMapType.classList.add("cursor-not-allowed", "opacity-50");
+    } else {
+        propDataMapType.disabled = false;
+        propDataMapType.title = "";
+        propDataMapType.classList.remove("cursor-not-allowed", "opacity-50");
+    }
 
     // Hide all
+
     dataColsIdContainer.classList.add('hidden');
     dataColsValueContainer.classList.add('hidden');
     dataColsBivariate.classList.add('hidden');
@@ -1405,3 +1422,32 @@ validate_project()
         validationResults.className = "mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto";
     }
 });
+
+
+
+// Advanced Mode Toggle
+const advancedModeToggle = document.getElementById('advanced-mode-toggle');
+const advancedToggleBg = document.getElementById('advanced-toggle-bg');
+const advancedToggleDot = document.getElementById('advanced-toggle-dot');
+const advancedFeatures = document.querySelectorAll('.advanced-feature');
+
+if (advancedModeToggle) {
+    advancedModeToggle.addEventListener('change', (e) => {
+        const isAdvanced = e.target.checked;
+        if (isAdvanced) {
+            advancedToggleBg.classList.replace('bg-slate-300', 'bg-blue-500');
+            advancedToggleDot.classList.add('translate-x-3');
+            advancedFeatures.forEach(el => el.classList.remove('hidden'));
+        } else {
+            advancedToggleBg.classList.replace('bg-blue-500', 'bg-slate-300');
+            advancedToggleDot.classList.remove('translate-x-3');
+            advancedFeatures.forEach(el => el.classList.add('hidden'));
+
+            // If the currently active tab is an advanced one, switch back to 'design'
+            const activeTab = document.querySelector('.builder-tab-btn.bg-white');
+            if (activeTab && activeTab.classList.contains('advanced-feature')) {
+                document.querySelector('.builder-tab-btn[data-tab="design"]').click();
+            }
+        }
+    });
+}
