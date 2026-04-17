@@ -319,7 +319,7 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             previewOverlay.classList.add('hidden');
             generatePreview();
         } catch(err) {
-            showToast(err, "error"); console.error(err);
+            showToast(err, "error")
             alert("Failed to load JSON: " + err.message);
         }
     });
@@ -391,7 +391,7 @@ function showIdbfsModal(title, extension, callback) {
 
         idbfsModal.classList.remove('hidden');
     } catch (err) {
-        showToast("Error reading IDBFS:", err, "error"); console.error("Error reading IDBFS:", err);
+        showToast("Error reading IDBFS:", err, "error")
         alert("Error reading IDBFS: " + err.message);
     }
 }
@@ -652,7 +652,7 @@ btnPreviewGenerate.addEventListener('click', generatePreview);
 
 async function generatePreview() {
     if (!window.pyodide) {
-        console.warn("Pyodide not loaded yet.");
+        showToast("Pyodide not loaded yet.", "warning");
         return;
     }
     if (!builderState.currentConfig.template) {
@@ -676,7 +676,7 @@ async function generatePreview() {
         previewFrame.srcdoc = resultHtml;
         previewOverlay.classList.add('hidden');
     } catch (err) {
-        showToast("Preview Generation Error:", err, "error"); console.error("Preview Generation Error:", err);
+        showToast("Preview Generation Error:", err, "error")
         previewOverlay.innerHTML = `<div class="text-red-500 font-bold">Error generating preview</div><div class="text-xs text-red-400 p-4 overflow-auto">${err.message}</div>`;
     }
 }
@@ -1018,7 +1018,7 @@ btnSelectDataFile.addEventListener("click", () => {
                 }
             }
         } catch(e) {
-            showToast(e, "error"); console.error(e);
+            showToast(e, "error")
         }
 
         saveState();
