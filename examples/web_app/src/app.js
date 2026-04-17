@@ -120,12 +120,7 @@ window.addEventListener('unhandledrejection', function(event) {
                         }, { once: true });
                     });
                 }
-);
-                            modal.style.display = 'none';
-                            resolve();
-                        }, { once: true });
-                    });
-                }
+
 
                 updateFileList();
 

@@ -24,7 +24,8 @@
         button.action-btn:hover { background: #2563eb; }
         button.action-btn:disabled { background: #94a3b8; cursor: not-allowed; }
         #status { font-size: 14px; color: #94a3b8; }
-        .dropzone-active { background: #e0f2fe !important; border: 2px dashed #38bdf8 !important; }
+        .dropzone-active { background: #e0f2fe !important; border: 2px dashed #38bdf8 !important; box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.2); transform: scale(0.99); transition: all 0.2s ease-in-out; }
+        #file-manager-dropzone { transition: all 0.2s ease-in-out; }
 .accordion-header {
     cursor: pointer;
     user-select: none;
@@ -271,7 +272,7 @@ else:
             <!-- Element Annotation Tool (Annotate equivalent) -->
             <div>
                  <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Inspect</h3>
-                 <button id="btn-annotate-inspect" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors">
+                 <button id="btn-annotate-inspect" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors" title="Select elements visually to view their IDs">
                     Inspect Elements (Annotate)
                 </button>
             </div>
@@ -312,8 +313,20 @@ else:
             <!-- Interactive iframe area -->
             <div id="preview-container" class="w-full h-full bg-white shadow-md transition-all duration-300 flex items-center justify-center relative">
                  <iframe id="builder-preview-frame" class="w-full h-full border-0"></iframe>
-                 <div id="builder-preview-overlay" class="absolute inset-0 bg-white/80 flex items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10">
-                     Select a template or generate output to preview.
+                 <div id="builder-preview-overlay" class="absolute inset-0 bg-white/90 flex flex-col items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10 transition-opacity duration-300">
+                     <div class="mb-4 text-4xl">✨</div>
+                     <h3 class="text-xl text-slate-700 font-bold mb-2">Welcome to the SIVO App Builder</h3>
+                     <p class="text-sm text-slate-500 text-center max-w-sm mb-6">Select a pre-configured template from the left sidebar to begin, or upload your own SVG file.</p>
+                     <div class="flex space-x-4">
+                         <button class="px-4 py-2 bg-blue-600 text-white rounded shadow-sm hover:bg-blue-700 transition" onclick="document.querySelector('[data-template=\'16_10/gis_digital_twin_dashboard_2026.svg\']').click()">Start with Dashboard</button>
+                         <button class="px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded shadow-sm hover:bg-slate-50 transition" onclick="document.getElementById('btn-new-project').click()">Start Blank</button>
+                     </div>
+                 </div>
+
+                 <!-- Skeletal Loading State overlay -->
+                 <div id="builder-loading-overlay" class="hidden absolute inset-0 bg-slate-50/80 flex flex-col items-center justify-center z-20 backdrop-blur-sm transition-opacity duration-300">
+                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+                     <span class="text-slate-600 font-medium tracking-wide">Compiling WASM Output...</span>
                  </div>
             </div>
         </div>
@@ -321,20 +334,32 @@ else:
 
     <!-- Right Sidebar: Sub-Tabs -->
     <div class="w-80 border-l border-slate-200 bg-white flex flex-col">
+
+        <div class="flex items-center justify-between p-3 border-b border-slate-200 bg-slate-50">
+            <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Builder Tools</span>
+            <label class="flex items-center cursor-pointer" title="Enable advanced features like Live Data, Timelines, Geocoding, and Custom Code">
+                <div class="relative">
+                    <input type="checkbox" id="advanced-mode-toggle" class="sr-only">
+                    <div class="block bg-slate-300 w-8 h-5 rounded-full transition-colors duration-300" id="advanced-toggle-bg"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform duration-300" id="advanced-toggle-dot"></div>
+                </div>
+                <div class="ml-2 text-xs font-medium text-slate-600">Advanced Mode</div>
+            </label>
+        </div>
         <div class="flex border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 text-xs overflow-x-auto whitespace-nowrap hide-scrollbar">
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white" role="tab" tabindex="0" data-tab="design">Design</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="data">Data</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="dashboard">Dashboard</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="graphs">Graphs</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="live">Live Data</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="timeline">Timeline</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="overlays">Regions & Overlays</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="integrations">Integrations</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="live">Live Data</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="timeline">Timeline</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="overlays">Regions & Overlays</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="integrations">Integrations</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="a11y">A11y & Styling</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="controls">Controls</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="geocoding">Geocoding & Legends</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="multiview">Multi-View</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="export">Export & Testing</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="controls">Controls</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="geocoding">Geocoding & Legends</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="multiview">Multi-View</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="export">Export & Testing</button>
         </div>
 
         <div class="flex-1 overflow-y-auto p-4 space-y-6">
@@ -3254,12 +3279,7 @@ window.addEventListener('unhandledrejection', function(event) {
                         }, { once: true });
                     });
                 }
-);
-                            modal.style.display = 'none';
-                            resolve();
-                        }, { once: true });
-                    });
-                }
+
 
                 updateFileList();
 
@@ -3578,6 +3598,7 @@ const templateBtns = document.querySelectorAll('.template-btn');
 // Preview Pane
 const previewFrame = document.getElementById('builder-preview-frame');
 const previewOverlay = document.getElementById('builder-preview-overlay');
+const loadingOverlay = document.getElementById('builder-loading-overlay');
 const btnPreviewRefresh = document.getElementById('btn-preview-refresh');
 const btnPreviewGenerate = document.getElementById('btn-preview-generate');
 const previewModeBtns = document.querySelectorAll('.preview-mode-btn');
@@ -3765,7 +3786,7 @@ templateBtns.forEach(btn => {
         builderState.currentConfig.template = templatePath;
         builderState.currentConfig.elements = {}; // Reset elements
         saveState();
-        previewOverlay.classList.add('hidden');
+        if (previewOverlay) previewOverlay.classList.add('hidden');
         await generatePreview();
     });
 });
@@ -3793,7 +3814,7 @@ jsonUploadLocal.addEventListener('change', (e) => {
             propDataFile.value = config.dataFile || "";
 
             saveState();
-            previewOverlay.classList.add('hidden');
+            if (previewOverlay) previewOverlay.classList.add('hidden');
             generatePreview();
         } catch (err) {
             showToast("Invalid JSON configuration file.");
@@ -3823,7 +3844,7 @@ btnImportJsonIdbfs.addEventListener('click', () => {
             propDataFile.value = config.dataFile || "";
 
             saveState();
-            previewOverlay.classList.add('hidden');
+            if (previewOverlay) previewOverlay.classList.add('hidden');
             generatePreview();
         } catch(err) {
             showToast(err, "error")
@@ -3857,7 +3878,7 @@ btnApplyCanvasSettings.addEventListener('click', async () => {
     }
 
     saveState();
-    previewOverlay.classList.add('hidden');
+    if (previewOverlay) previewOverlay.classList.add('hidden');
     generatePreview();
 });
 
@@ -4207,12 +4228,12 @@ async function generatePreview() {
         return;
     }
 
-    previewOverlay.innerHTML = 'Generating...';
-    previewOverlay.classList.remove('hidden');
+    if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+    if (previewOverlay) previewOverlay.classList.add('hidden'); // Ensure the welcome overlay hides
 
     try {
         // Unmount existing iframe document to aid browser GC before injecting massive new HTML string
-        previewFrame.srcdoc = "<html><body>Loading...</body></html>";
+        previewFrame.srcdoc = "<html><body></body></html>";
 
         // Expose the JSON state to the Python context
         window.builderConfigJson = JSON.stringify(builderState.currentConfig);
@@ -4222,10 +4243,12 @@ async function generatePreview() {
 
         const resultHtml = await window.pyodide.runPythonAsync(pyCode);
         previewFrame.srcdoc = resultHtml;
-        previewOverlay.classList.add('hidden');
+        if (loadingOverlay) loadingOverlay.classList.add('hidden');
     } catch (err) {
         showToast("Preview Generation Error:", err, "error")
-        previewOverlay.innerHTML = `<div class="text-red-500 font-bold">Error generating preview</div><div class="text-xs text-red-400 p-4 overflow-auto">${err.message}</div>`;
+        if (loadingOverlay) {
+            loadingOverlay.innerHTML = `<div class="text-red-500 font-bold mb-2">Error compiling output</div><div class="text-xs text-slate-700 bg-white p-4 rounded border border-red-200 overflow-auto max-w-lg shadow-sm">${err.message}</div><button onclick="document.getElementById('builder-loading-overlay').classList.add('hidden')" class="mt-4 px-3 py-1 bg-slate-200 rounded text-slate-700 text-sm hover:bg-slate-300">Dismiss</button>`;
+        }
     }
 }
 
@@ -4619,10 +4642,24 @@ propDataMapType.addEventListener("change", (e) => {
     generatePreview();
 });
 
+
 function updateDataMapUI() {
     const mapType = propDataMapType.value;
+    const hasDataFile = !!builderState.currentConfig.dataFile;
+
+    // Contextual tooling: disable MapType interactions if no data file
+    if (!hasDataFile) {
+        propDataMapType.disabled = true;
+        propDataMapType.title = "Select a CSV data file first";
+        propDataMapType.classList.add("cursor-not-allowed", "opacity-50");
+    } else {
+        propDataMapType.disabled = false;
+        propDataMapType.title = "";
+        propDataMapType.classList.remove("cursor-not-allowed", "opacity-50");
+    }
 
     // Hide all
+
     dataColsIdContainer.classList.add('hidden');
     dataColsValueContainer.classList.add('hidden');
     dataColsBivariate.classList.add('hidden');
@@ -4894,6 +4931,35 @@ validate_project()
         validationResults.className = "mt-2 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-2 max-h-32 overflow-y-auto";
     }
 });
+
+
+
+// Advanced Mode Toggle
+const advancedModeToggle = document.getElementById('advanced-mode-toggle');
+const advancedToggleBg = document.getElementById('advanced-toggle-bg');
+const advancedToggleDot = document.getElementById('advanced-toggle-dot');
+const advancedFeatures = document.querySelectorAll('.advanced-feature');
+
+if (advancedModeToggle) {
+    advancedModeToggle.addEventListener('change', (e) => {
+        const isAdvanced = e.target.checked;
+        if (isAdvanced) {
+            advancedToggleBg.classList.replace('bg-slate-300', 'bg-blue-500');
+            advancedToggleDot.classList.add('translate-x-3');
+            advancedFeatures.forEach(el => el.classList.remove('hidden'));
+        } else {
+            advancedToggleBg.classList.replace('bg-blue-500', 'bg-slate-300');
+            advancedToggleDot.classList.remove('translate-x-3');
+            advancedFeatures.forEach(el => el.classList.add('hidden'));
+
+            // If the currently active tab is an advanced one, switch back to 'design'
+            const activeTab = document.querySelector('.builder-tab-btn.bg-white');
+            if (activeTab && activeTab.classList.contains('advanced-feature')) {
+                document.querySelector('.builder-tab-btn[data-tab="design"]').click();
+            }
+        }
+    });
+}
 
     </script>
 </body>

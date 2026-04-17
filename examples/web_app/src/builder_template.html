@@ -71,7 +71,7 @@
             <!-- Element Annotation Tool (Annotate equivalent) -->
             <div>
                  <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Inspect</h3>
-                 <button id="btn-annotate-inspect" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors">
+                 <button id="btn-annotate-inspect" class="w-full px-3 py-2 text-sm bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 text-slate-700 transition-colors" title="Select elements visually to view their IDs">
                     Inspect Elements (Annotate)
                 </button>
             </div>
@@ -112,8 +112,20 @@
             <!-- Interactive iframe area -->
             <div id="preview-container" class="w-full h-full bg-white shadow-md transition-all duration-300 flex items-center justify-center relative">
                  <iframe id="builder-preview-frame" class="w-full h-full border-0"></iframe>
-                 <div id="builder-preview-overlay" class="absolute inset-0 bg-white/80 flex items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10">
-                     Select a template or generate output to preview.
+                 <div id="builder-preview-overlay" class="absolute inset-0 bg-white/90 flex flex-col items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10 transition-opacity duration-300">
+                     <div class="mb-4 text-4xl">✨</div>
+                     <h3 class="text-xl text-slate-700 font-bold mb-2">Welcome to the SIVO App Builder</h3>
+                     <p class="text-sm text-slate-500 text-center max-w-sm mb-6">Select a pre-configured template from the left sidebar to begin, or upload your own SVG file.</p>
+                     <div class="flex space-x-4">
+                         <button class="px-4 py-2 bg-blue-600 text-white rounded shadow-sm hover:bg-blue-700 transition" onclick="document.querySelector('[data-template=\'16_10/gis_digital_twin_dashboard_2026.svg\']').click()">Start with Dashboard</button>
+                         <button class="px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded shadow-sm hover:bg-slate-50 transition" onclick="document.getElementById('btn-new-project').click()">Start Blank</button>
+                     </div>
+                 </div>
+
+                 <!-- Skeletal Loading State overlay -->
+                 <div id="builder-loading-overlay" class="hidden absolute inset-0 bg-slate-50/80 flex flex-col items-center justify-center z-20 backdrop-blur-sm transition-opacity duration-300">
+                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+                     <span class="text-slate-600 font-medium tracking-wide">Compiling WASM Output...</span>
                  </div>
             </div>
         </div>
@@ -121,20 +133,32 @@
 
     <!-- Right Sidebar: Sub-Tabs -->
     <div class="w-80 border-l border-slate-200 bg-white flex flex-col">
+
+        <div class="flex items-center justify-between p-3 border-b border-slate-200 bg-slate-50">
+            <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Builder Tools</span>
+            <label class="flex items-center cursor-pointer" title="Enable advanced features like Live Data, Timelines, Geocoding, and Custom Code">
+                <div class="relative">
+                    <input type="checkbox" id="advanced-mode-toggle" class="sr-only">
+                    <div class="block bg-slate-300 w-8 h-5 rounded-full transition-colors duration-300" id="advanced-toggle-bg"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-transform duration-300" id="advanced-toggle-dot"></div>
+                </div>
+                <div class="ml-2 text-xs font-medium text-slate-600">Advanced Mode</div>
+            </label>
+        </div>
         <div class="flex border-b border-slate-200 bg-slate-100 font-semibold text-slate-700 text-xs overflow-x-auto whitespace-nowrap hide-scrollbar">
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-blue-600 text-blue-600 bg-white" role="tab" tabindex="0" data-tab="design">Design</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="data">Data</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="dashboard">Dashboard</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="graphs">Graphs</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="live">Live Data</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="timeline">Timeline</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="overlays">Regions & Overlays</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="integrations">Integrations</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="live">Live Data</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="timeline">Timeline</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="overlays">Regions & Overlays</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="integrations">Integrations</button>
             <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="a11y">A11y & Styling</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="controls">Controls</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="geocoding">Geocoding & Legends</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="multiview">Multi-View</button>
-            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50" role="tab" tabindex="0" data-tab="export">Export & Testing</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="controls">Controls</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="geocoding">Geocoding & Legends</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="multiview">Multi-View</button>
+            <button class="builder-tab-btn flex-none px-3 py-3 text-center border-b-2 border-transparent hover:text-blue-600 hover:bg-slate-50 advanced-feature hidden" role="tab" tabindex="0" data-tab="export">Export & Testing</button>
         </div>
 
         <div class="flex-1 overflow-y-auto p-4 space-y-6">

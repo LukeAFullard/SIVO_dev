@@ -15,7 +15,8 @@
         button.action-btn:hover { background: #2563eb; }
         button.action-btn:disabled { background: #94a3b8; cursor: not-allowed; }
         #status { font-size: 14px; color: #94a3b8; }
-        .dropzone-active { background: #e0f2fe !important; border: 2px dashed #38bdf8 !important; }
+        .dropzone-active { background: #e0f2fe !important; border: 2px dashed #38bdf8 !important; box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.2); transform: scale(0.99); transition: all 0.2s ease-in-out; }
+        #file-manager-dropzone { transition: all 0.2s ease-in-out; }
 .accordion-header {
     cursor: pointer;
     user-select: none;
