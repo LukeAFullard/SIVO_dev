@@ -432,3 +432,9 @@ To further enhance the developer and no-code experience, an intelligent AI Copil
 ### Phase 6.6: Post-Audit Polish & UX Enhancements (Weeks 13)
 - [x] **Input Placeholder Review:** Review the extensive list of input `placeholder` attributes in `builder_template.html` (e.g., `<input placeholder="<div style='background:red;'>...</div>">`) to ensure they provide maximum clarity and actionable examples to non-technical users.
 - [x] **Enhance Error Boundaries:** While the `showToast` system catches most standard errors, add deeper fallback error handling within the core Vanilla JS components to gracefully manage unexpected Pyodide memory exhaustion or catastrophic WASM crashes without silently failing.
+
+### Phase 6.7: Post-Audit Recommendations
+*   [x] **Implement Missing Actions:** Update `builder_preview.py` to map the `LottieAction`, `FetchAction`, and `ToggleImageAction` kwargs correctly based on the JSON configuration payload. (Note: Audit correctly found these already supported via declarative mapping `kwargs` in `builder_preview.py`).
+*   [x] **Implement Timeline Binding:** Add `bind_timeline` configuration parsing to `builder_preview.py`.
+*   [x] **Enhance Graph Support:** Expand the `builder_preview.py` parsing logic to natively utilize SIVO's `map_bar_chart`, `map_line_chart`, etc. (Note: Evaluated and confirmed fully mapped via `kwargs`).
+*   [x] **Remove Orphaned CSS:** Delete `src/accordion.css` since its rules are already present in `src/app.css` and it isn't utilized by the build script.
