@@ -69,7 +69,7 @@
                 // For this example to work locally, we zip the src directory and install it
                 // In production, you would build a .whl file and host it statically: `await micropip.install('./sivo-0.1.0-py3-none-any.whl')`
                 if (window.location.protocol === 'file:') {
-                    showToast('Running from file:// protocol. Loading local Python wheels via micropip.install("./sivo.whl") will fail due to browser CORS policies. Please start a local HTTP server to fully test the SIVO Python backend.', "warning"); console.warn('Running from file:// protocol. Loading local Python wheels via micropip.install("./sivo.whl") will fail due to browser CORS policies. Please start a local HTTP server to fully test the SIVO Python backend.');
+                    showToast('Running from file:// protocol. Loading local Python wheels via micropip.install("./sivo.whl") will fail due to browser CORS policies. Please start a local HTTP server to fully test the SIVO Python backend.', "warning");
                 }
 
                 statusEl.innerText = 'Ready!';
@@ -77,7 +77,7 @@
 
             } catch (err) {
                 showToast(err, "error")
-                statusEl.innerText = 'Error: Check console.';
+                statusEl.innerText = 'Error during initialization.';
                 statusEl.style.color = '#ef4444';
             }
         }

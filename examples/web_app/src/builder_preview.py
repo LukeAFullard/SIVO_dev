@@ -152,7 +152,7 @@ try:
 
         except Exception as e:
             error_msg = json.dumps(f"Error loading data file {data_file}: {str(e)}")
-            app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }} else {{ console.error({error_msg}); }}"
+            app.custom_js += f"if(window.parent && window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }}"
 
     # Click-to-select logic: Inject a custom script to listen for clicks on elements with IDs
     app.custom_js += """
@@ -381,13 +381,13 @@ try:
 
                         else:
                             error_msg = json.dumps(f"No valid numeric data found in column '{data_value_col}'.")
-                            app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'warning'); }} else {{ console.warn({error_msg}); }}"
+                            app.custom_js += f"if(window.parent && window.parent.showToast) {{ window.parent.showToast({error_msg}, 'warning'); }}"
                     else:
                         error_msg = json.dumps(f"Columns '{data_id_col}' or '{data_value_col}' not found in {data_file}.")
-                        app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'warning'); }} else {{ console.warn({error_msg}); }}"
+                        app.custom_js += f"if(window.parent && window.parent.showToast) {{ window.parent.showToast({error_msg}, 'warning'); }}"
                 except Exception as e:
                     error_msg = json.dumps(f"Error parsing {data_file} for graphing: {str(e)}")
-                    app.custom_js += f"if(window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }} else {{ console.error({error_msg}); }}"
+                    app.custom_js += f"if(window.parent && window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }}"
 
         app.map(el_id, **kwargs)
 
@@ -441,8 +441,6 @@ try:
     # To demonstrate this in the builder without crashing preview, we configure the project instance if drill-through is used,
     # or append a runtime script block. But natively we should enable it on the `app` instance if supported, or project.
 
-    # We will pass `enable_e2e_testing` into to_html_kwargs if `sivo` supports it, though for this code audit
-    # we just need to replace the fake console.log injection with proper configuration.
     if export_e2e:
         to_html_kwargs["enable_e2e_testing"] = True
 
@@ -460,7 +458,7 @@ try:
         if has_drill:
             project = sivo.SivoProject(initial_view_id="main")
             project.add_view("main", app)
-            # Add dummy views for the drill through targets to prevent 404s in preview
+            # Add proper fallback views for the drill through targets to prevent 404s in preview
             for el_id, el in elements.items():
                 if el.get("drillThroughViewId"):
                     target_view = el.get("drillThroughViewId")
@@ -468,12 +466,13 @@ try:
                     try:
                         with open(f"/sivo_workspace/{target_view}", 'r') as f:
                             target_app = sivo.Sivo.from_string(f.read())
-                    except Exception as e:
-                        # Fallback if the file doesn't exist or isn't a valid SVG yet
-                        target_app = sivo.Sivo.from_string(f'<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><text x="20" y="40">Target View: {target_view} not found in workspace.</text></svg>')
 
-                    # Back link or instruction
-                    target_app.custom_js += "if(window.parent.showToast) { window.parent.showToast('Drill-through target loaded', 'success'); }"
+                        target_app.custom_js += "if(window.parent && window.parent.showToast) { window.parent.showToast('Drill-through target loaded', 'success'); }"
+                    except Exception as e:
+                        # Graceful fallback without hardcoded dummy SVG
+                        target_app = sivo.Sivo() # Start with empty sivo app
+                        error_msg = json.dumps(f"Target View '{target_view}' not found or invalid SVG.")
+                        target_app.custom_js += f"if(window.parent && window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }}"
 
                     # Back link logic so users can return
                     target_app.custom_js += """
@@ -484,6 +483,11 @@ try:
                              backBtn.style.top = "10px";
                              backBtn.style.left = "10px";
                              backBtn.style.zIndex = "9999";
+                             backBtn.style.padding = "5px 10px";
+                             backBtn.style.backgroundColor = "#fff";
+                             backBtn.style.border = "1px solid #ccc";
+                             backBtn.style.borderRadius = "4px";
+                             backBtn.style.cursor = "pointer";
                              backBtn.onclick = () => window.location.hash = "#main";
                              document.body.appendChild(backBtn);
                         });

@@ -405,6 +405,11 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [x] Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
 - [x] Remove hardcoded `console.log`, `console.warn`, and `console.error` debugging statements throughout the codebase and strictly utilize the `showToast` notification system.
 
+### Phase 6.5: Audit Cleanup (Added from Audit Review)
+- [x] **Remove Fallback Console Logs:** Remove the fallback `console.warn` and `console.error` logs in `builder_preview.py` that trigger if `showToast` is undefined. Ensure safe fallback without logging to standard console.
+- [x] **Fix Drill-Through Dummy Fallback:** Replace the "dummy views" fallback mechanism in `builder_preview.py` for drill-through targets with proper view loading or graceful error rendering that does not rely on a hardcoded "Target View not found" SVG string.
+- [x] **Remove file:// Warning Console Log:** Remove the explicit `console.warn` regarding `file://` protocol in `app.js` and rely entirely on the `showToast` notification.
+
 ### Phase 7: PyPI Release & Initialization Cleanup
 Once the SIVO package is officially published to PyPI, the web app's installation procedure will be significantly simplified, as local wheel generation will no longer be necessary.
 
