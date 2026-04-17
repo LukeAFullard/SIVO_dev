@@ -80,12 +80,34 @@ window.addEventListener('unhandledrejection', function(event) {
                     legalAccepted = false;
                 }
 
+
                 if (!legalAccepted) {
                     const modal = document.getElementById('legal-modal');
+                    const acceptBtn = document.getElementById('accept-legal-btn');
+                    const declineBtn = document.getElementById('decline-legal-btn');
+                    const checkbox = document.getElementById('legal-consent-checkbox');
+
                     modal.style.display = 'flex';
 
+                    checkbox.addEventListener('change', (e) => {
+                        if (e.target.checked) {
+                            acceptBtn.disabled = false;
+                            acceptBtn.style.backgroundColor = '#3b82f6';
+                            acceptBtn.style.cursor = 'pointer';
+                        } else {
+                            acceptBtn.disabled = true;
+                            acceptBtn.style.backgroundColor = '#94a3b8';
+                            acceptBtn.style.cursor = 'not-allowed';
+                        }
+                    });
+
+                    declineBtn.addEventListener('click', () => {
+                        document.body.innerHTML = '<div style="display:flex; height:100vh; align-items:center; justify-content:center; flex-direction:column; font-family:sans-serif; color:#334155; background:#f8fafc;"><h2>Access Denied</h2><p>You must accept the Legal Liability Waiver to use the SIVO Serverless Browser App.</p><button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#3b82f6; color:white; border:none; border-radius:5px; cursor:pointer;">Reload Page</button></div>';
+                    });
+
                     await new Promise((resolve) => {
-                        document.getElementById('accept-legal-btn').addEventListener('click', async () => {
+                        acceptBtn.addEventListener('click', async () => {
+                            if (!checkbox.checked) return;
                             pyodide.FS.writeFile(legalFile, 'accepted');
                             await new Promise((res, rej) => {
                                 pyodide.FS.syncfs(false, function(err) {
@@ -93,6 +115,12 @@ window.addEventListener('unhandledrejection', function(event) {
                                     else res();
                                 });
                             });
+                            modal.style.display = 'none';
+                            resolve();
+                        }, { once: true });
+                    });
+                }
+);
                             modal.style.display = 'none';
                             resolve();
                         }, { once: true });

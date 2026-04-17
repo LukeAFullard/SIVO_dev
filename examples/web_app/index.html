@@ -3074,16 +3074,26 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
     <div id="legal-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <h2>Legal Liability Waiver</h2>
+
             <div class="modal-body">
                 <p>By using the SIVO Serverless Browser App, you agree to the following terms and conditions:</p>
-                <p>1. <strong>No Warranty:</strong> This software is provided "as is" without warranty of any kind, either express or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose.</p>
-                <p>2. <strong>Limitation of Liability:</strong> In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.</p>
-                <p>3. <strong>Data Privacy and Security:</strong> All processing is done locally within your browser. You are solely responsible for the data you process using this application.</p>
-                <p>4. <strong>Copyright and Licensing:</strong> The underlying SIVO engine is distributed under the MIT License. The SIVO Serverless Browser App is currently provided free of charge; however, the creators reserve the right to modify these terms and may require commercial or corporate licensing fees for the use of this application in the future.</p>
+                <p>1. <strong>No Warranty:</strong> This software is provided "as is" without warranty of any kind, either express or implied, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. The entire risk as to the quality and performance of the software is with you.</p>
+                <p>2. <strong>Limitation of Liability:</strong> In no event shall the authors, copyright holders, or contributors be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.</p>
+                <p>3. <strong>Data Privacy and Security:</strong> All processing is done locally within your browser using WebAssembly and IndexedDB. No data is sent to or stored on external servers by the core application. You are solely responsible for the legality, security, and privacy of the data you process, generate, or publish using this application.</p>
+                <p>4. <strong>User-Generated Content:</strong> You represent and warrant that you own or have the necessary rights and permissions to use any data, images, or files you upload. You agree not to upload or process any content that is illegal, defamatory, or infringes on third-party intellectual property rights.</p>
+                <p>5. <strong>Copyright and Licensing:</strong> The underlying SIVO engine is distributed under the MIT License. The SIVO Serverless Browser App UI is currently provided free of charge; however, the creators reserve the right to modify these terms, introduce corporate or commercial licensing fees, or revoke access at any time in the future.</p>
+                <p>6. <strong>Legal Capacity:</strong> You represent that you are of legal age to form a binding contract in your jurisdiction.</p>
+                <hr style="margin: 15px 0; border: none; border-top: 1px solid #e2e8f0;" />
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                    <input type="checkbox" id="legal-consent-checkbox" style="width: 16px; height: 16px; cursor: pointer;">
+                    <label for="legal-consent-checkbox" style="font-weight: bold; cursor: pointer;">I have read, understood, and agree to the Legal Liability Waiver.</label>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button id="accept-legal-btn" class="action-btn">I Accept</button>
+            <div class="modal-footer" style="gap: 10px;">
+                <button id="decline-legal-btn" class="action-btn" style="background-color: #64748b; color: white;">Decline</button>
+                <button id="accept-legal-btn" class="action-btn" style="background-color: #94a3b8; cursor: not-allowed;" disabled>I Accept</button>
             </div>
+
         </div>
     </div>
 
@@ -3204,12 +3214,34 @@ window.addEventListener('unhandledrejection', function(event) {
                     legalAccepted = false;
                 }
 
+
                 if (!legalAccepted) {
                     const modal = document.getElementById('legal-modal');
+                    const acceptBtn = document.getElementById('accept-legal-btn');
+                    const declineBtn = document.getElementById('decline-legal-btn');
+                    const checkbox = document.getElementById('legal-consent-checkbox');
+
                     modal.style.display = 'flex';
 
+                    checkbox.addEventListener('change', (e) => {
+                        if (e.target.checked) {
+                            acceptBtn.disabled = false;
+                            acceptBtn.style.backgroundColor = '#3b82f6';
+                            acceptBtn.style.cursor = 'pointer';
+                        } else {
+                            acceptBtn.disabled = true;
+                            acceptBtn.style.backgroundColor = '#94a3b8';
+                            acceptBtn.style.cursor = 'not-allowed';
+                        }
+                    });
+
+                    declineBtn.addEventListener('click', () => {
+                        document.body.innerHTML = '<div style="display:flex; height:100vh; align-items:center; justify-content:center; flex-direction:column; font-family:sans-serif; color:#334155; background:#f8fafc;"><h2>Access Denied</h2><p>You must accept the Legal Liability Waiver to use the SIVO Serverless Browser App.</p><button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#3b82f6; color:white; border:none; border-radius:5px; cursor:pointer;">Reload Page</button></div>';
+                    });
+
                     await new Promise((resolve) => {
-                        document.getElementById('accept-legal-btn').addEventListener('click', async () => {
+                        acceptBtn.addEventListener('click', async () => {
+                            if (!checkbox.checked) return;
                             pyodide.FS.writeFile(legalFile, 'accepted');
                             await new Promise((res, rej) => {
                                 pyodide.FS.syncfs(false, function(err) {
@@ -3217,6 +3249,12 @@ window.addEventListener('unhandledrejection', function(event) {
                                     else res();
                                 });
                             });
+                            modal.style.display = 'none';
+                            resolve();
+                        }, { once: true });
+                    });
+                }
+);
                             modal.style.display = 'none';
                             resolve();
                         }, { once: true });
