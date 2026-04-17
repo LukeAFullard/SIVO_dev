@@ -69,6 +69,36 @@ window.addEventListener('unhandledrejection', function(event) {
                         else resolve();
                     });
                 });
+
+                // Check Legal Agreement
+                const legalFile = `${mountDir}/.legal_accepted`;
+                let legalAccepted = false;
+                try {
+                    pyodide.FS.stat(legalFile);
+                    legalAccepted = true;
+                } catch (e) {
+                    legalAccepted = false;
+                }
+
+                if (!legalAccepted) {
+                    const modal = document.getElementById('legal-modal');
+                    modal.style.display = 'flex';
+
+                    await new Promise((resolve) => {
+                        document.getElementById('accept-legal-btn').addEventListener('click', async () => {
+                            pyodide.FS.writeFile(legalFile, 'accepted');
+                            await new Promise((res, rej) => {
+                                pyodide.FS.syncfs(false, function(err) {
+                                    if (err) rej(err);
+                                    else res();
+                                });
+                            });
+                            modal.style.display = 'none';
+                            resolve();
+                        }, { once: true });
+                    });
+                }
+
                 updateFileList();
 
                 statusEl.innerText = 'Installing SIVO...';
