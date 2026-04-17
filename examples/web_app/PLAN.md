@@ -428,3 +428,7 @@ To further enhance the developer and no-code experience, an intelligent AI Copil
     *   When the user prompts (e.g., "Make a hexbin map using this dataset"), `Transformers.js` streams the generated SIVO Python code.
     *   The generated code block is passed directly to `pyodide.runPythonAsync(code)`.
     *   Pyodide reads any user data from IDBFS, generates the interactive map, and instantly renders the result in the UI iframe.
+
+### Phase 6.6: Post-Audit Polish & UX Enhancements (Weeks 13)
+- [x] **Input Placeholder Review:** Review the extensive list of input `placeholder` attributes in `builder_template.html` (e.g., `<input placeholder="<div style='background:red;'>...</div>">`) to ensure they provide maximum clarity and actionable examples to non-technical users.
+- [x] **Enhance Error Boundaries:** While the `showToast` system catches most standard errors, add deeper fallback error handling within the core Vanilla JS components to gracefully manage unexpected Pyodide memory exhaustion or catastrophic WASM crashes without silently failing.

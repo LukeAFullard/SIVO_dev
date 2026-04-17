@@ -1,3 +1,18 @@
+
+window.addEventListener('error', function(event) {
+    if (event.message && (event.message.includes('out of memory') || event.message.includes('OOM'))) {
+        showToast("CRITICAL: Browser ran out of memory. Please reload the page and use a smaller dataset.", "error");
+    } else if (event.filename && event.filename.includes('pyodide')) {
+        showToast("Pyodide Engine Error: " + event.message, "error");
+    }
+});
+
+window.addEventListener('unhandledrejection', function(event) {
+    if (event.reason && event.reason.message && event.reason.message.includes('memory')) {
+        showToast("CRITICAL: Out of memory executing WASM.", "error");
+    }
+});
+
         // Inject the Annotator UI safely into the iframe
         const template = document.getElementById('annotator-template').innerHTML;
         const iframe = document.getElementById('annotator-frame');

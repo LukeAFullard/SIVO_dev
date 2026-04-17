@@ -1,3 +1,14 @@
+
+// Safe JSON Parsing fallback
+function safeJSONParse(str, fallback = {}) {
+    try {
+        return JSON.parse(str);
+    } catch (e) {
+        showToast("Error parsing JSON configuration.", "error");
+        return fallback;
+    }
+}
+
 // Builder State Management
 let builderState = {
     history: [],

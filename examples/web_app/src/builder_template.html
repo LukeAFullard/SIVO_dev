@@ -17,7 +17,7 @@
                     </div>
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Background Image (URL)</label>
-                        <input type="text" id="prop-bg-image" placeholder="https://..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="prop-bg-image" placeholder="e.g. https://api.example.com" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     <div class="flex items-center justify-between">
                         <label class="text-xs text-slate-600" title="Lightly shade all mapped elements">Highlight Elements</label>
@@ -371,11 +371,11 @@
                             <div class="space-y-2">
                                 <div>
                                     <label class="block text-xs text-slate-600 mb-1">WebSocket URL</label>
-                                    <input type="text" id="prop-live-ws-url" placeholder="wss://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                    <input type="text" id="prop-live-ws-url" placeholder="e.g. wss://ws.example.com/live" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-xs text-slate-600 mb-1">Topic</label>
-                                    <input type="text" id="prop-live-ws-topic" placeholder="e.g. updates" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                    <input type="text" id="prop-live-ws-topic" placeholder="e.g. price_updates" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
                                 </div>
                             </div>
                         </div>
@@ -385,7 +385,7 @@
                             <div class="space-y-2">
                                 <div>
                                     <label class="block text-xs text-slate-600 mb-1">API URL</label>
-                                    <input type="text" id="prop-live-api-url" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                    <input type="text" id="prop-live-api-url" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-xs text-slate-600 mb-1">Polling Interval (ms)</label>
@@ -393,7 +393,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs text-slate-600 mb-1">Data Path (dot notation)</label>
-                                    <input type="text" id="prop-live-api-path" placeholder="data.results" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
+                                    <input type="text" id="prop-live-api-path" placeholder="e.g. data.items" class="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none">
                                 </div>
                             </div>
                         </div>
@@ -416,7 +416,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Fetch Data Path</label>
-                            <input type="text" id="prop-fetch-data-path" placeholder="user.name" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none">
+                            <input type="text" id="prop-fetch-data-path" placeholder="e.g. user.profile.name" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none">
                         </div>
                         <button id="btn-apply-fetch-props" class="w-full mt-2 px-3 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 font-medium shadow-sm transition-colors">
                             Apply Fetch Action
@@ -481,7 +481,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Clip HTML to Shape</label>
-                            <textarea id="prop-overlay-clip-html" rows="2" placeholder="<div style='background:red;'>...</div>" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textarea>
+                            <textarea id="prop-overlay-clip-html" rows="2" placeholder="e.g. <div style='background:red;'>Alert</div>" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textarea>
                         </div>
                     </div>
                 </div>
@@ -514,7 +514,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Absolute Image Overlay (URL)</label>
-                            <input type="text" id="prop-overlay-image-url" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-overlay-image-url" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div class="flex items-center justify-between">
                             <label class="text-xs text-slate-600">Scratchoff Reveal Layer</label>
@@ -554,7 +554,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">URL / Embed Code</label>
-                            <input type="text" id="prop-integ-url" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-integ-url" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <button id="btn-apply-integrations" class="w-full mt-2 px-3 py-2 text-sm bg-indigo-500 text-white rounded hover:bg-indigo-600 font-medium shadow-sm transition-colors">
                             Apply Integration
@@ -574,15 +574,15 @@
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Marker (HTML)</label>
-                            <input type="text" id="prop-a11y-marker" placeholder="<div class='marker'>📍</div>" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-marker" placeholder="e.g. <div class='marker'>📍</div>" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Video URL</label>
-                            <input type="text" id="prop-a11y-video" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-video" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Audio URL</label>
-                            <input type="text" id="prop-a11y-audio" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-audio" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Markdown Rendering</label>
@@ -591,15 +591,15 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Gallery Action (Comma-separated URLs)</label>
-                            <input type="text" id="prop-a11y-gallery" placeholder="img1.jpg, img2.jpg" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-gallery" placeholder="e.g. photo1.jpg, photo2.jpg" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Embedded SVG Injection (embed_svg URL)</label>
-                            <input type="text" id="prop-a11y-embed-svg" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-embed-svg" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Lottie Animation URL</label>
-                            <input type="text" id="prop-a11y-lottie" placeholder="https://.../data.json" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-lottie" placeholder="e.g. https://domain.com/anim.json" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Path Morphing (morph_to_path ID)</label>
@@ -607,11 +607,11 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Image Shape Clipping (URL)</label>
-                            <input type="text" id="prop-a11y-clip" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-clip" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">SVG Affine Transform (e.g. translate(10 10))</label>
-                            <input type="text" id="prop-a11y-transform" placeholder="rotate(45)" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-a11y-transform" placeholder="e.g. rotate(45deg) scale(1.5)" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div class="flex items-center justify-between">
                             <label class="text-xs text-slate-600">Explode UI Transition</label>
@@ -670,23 +670,23 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Canvas Background Image (URL)</label>
-                            <input type="text" id="prop-global-bg-img" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-global-bg-img" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Embedded SVG Background Image (URL)</label>
-                            <input type="text" id="prop-global-svg-bg-img" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-global-svg-bg-img" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Canvas Border Image (URL)</label>
-                            <input type="text" id="prop-global-border-img" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-global-border-img" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Custom CSS Injection</label>
-                            <textarea id="prop-global-css" rows="2" placeholder=".my-class { ... }" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
+                            <textarea id="prop-global-css" rows="2" placeholder="e.g. .custom-tooltip { color: red; }" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Custom JS Injection</label>
-                            <textarea id="prop-global-js" rows="2" placeholder="/* Custom JS */" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
+                            <textarea id="prop-global-js" rows="2" placeholder="e.g. console.log('Map Loaded');" class="w-full px-2 py-1 text-xs border border-slate-200 rounded font-mono"></textarea>
                         </div>
 
                         <button id="btn-apply-global-style" class="w-full mt-2 px-3 py-2 text-sm bg-pink-500 text-white rounded hover:bg-pink-600 font-medium shadow-sm transition-colors">
@@ -731,11 +731,11 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                         <p class="text-xs text-slate-500">Configure Drill-Through Page Transitions (requires SivoProject export).</p>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Target Element ID for Drill-Through</label>
-                            <input type="text" id="prop-mv-element-id" placeholder="element-id" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-mv-element-id" placeholder="e.g. map-region-1" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Destination View ID</label>
-                            <input type="text" id="prop-mv-view-id" placeholder="view-id" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-mv-view-id" placeholder="e.g. detailed-view" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <button id="btn-apply-multiview" class="w-full mt-2 px-3 py-2 text-sm bg-teal-500 text-white rounded hover:bg-teal-600 font-medium shadow-sm transition-colors">
                             Apply Transition
@@ -803,19 +803,19 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Add Layer Toggle (Selector)</label>
-                            <input type="text" id="prop-ctrl-layer-toggle" placeholder=".layer-class" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-ctrl-layer-toggle" placeholder="e.g. .roads-layer" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">Programmatic Panel Dismissal (Element ID)</label>
-                            <input type="text" id="prop-ctrl-panel-dismiss" placeholder="close-btn" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-ctrl-panel-dismiss" placeholder="e.g. modal-close-button" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">URL Navigation (Target ID)</label>
-                            <input type="text" id="prop-ctrl-url-nav-id" placeholder="button-id" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-ctrl-url-nav-id" placeholder="e.g. external-link-btn" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <div>
                             <label class="block text-xs text-slate-600 mb-1">URL Navigation (Destination URL)</label>
-                            <input type="text" id="prop-ctrl-url-nav-url" placeholder="https://..." class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
+                            <input type="text" id="prop-ctrl-url-nav-url" placeholder="e.g. https://api.example.com" class="w-full px-2 py-1 text-xs border border-slate-200 rounded">
                         </div>
                         <button id="btn-apply-controls" class="w-full mt-2 px-3 py-2 text-sm bg-orange-500 text-white rounded hover:bg-orange-600 font-medium shadow-sm transition-colors">
                             Apply Controls
