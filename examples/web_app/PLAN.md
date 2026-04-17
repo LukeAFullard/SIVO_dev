@@ -445,7 +445,12 @@ To further enhance the developer and no-code experience, an intelligent AI Copil
 
 ### Phase 6.9: Architecture & UI/UX Audit Discoveries
 *   [x] **Legal Liability Waiver:** Enhanced the legal modal to include explicit clauses for User-Generated Content, Legal Capacity, and strict data processing. Implemented active consent via a required checkbox and added a "Decline" fallback flow.
-*   [ ] **Refactor Alerts:** Replace all instances of `alert()` and `prompt()` in `app.js`, `builder.js`, and `annotator.js` with `showToast()` or custom Tailwind modal components to improve the UX.
-*   [ ] **A11y Compliance:** Inject `aria-label`, `role="button"`, and `tabindex="0"` into interactive elements in `builder_template.html` (specifically tabs, accordions, and custom buttons).
-*   [ ] **A11y Property Inputs:** Add UI input fields in `builder_template.html` (under the A11y tab) to allow users to set `aria_label` and `tabindex` per element, mapping these in `builder_preview.py`.
-*   [ ] **Placeholder Cleanup:** Remove or rewrite the `console.log` placeholder example in `builder_template.html` to reflect a more professional, system-appropriate script.
+*   [x] **Refactor Alerts:** Replace all instances of `alert()` and `prompt()` in `app.js`, `builder.js`, and `annotator.js` with `showToast()` or custom Tailwind modal components to improve the UX.
+*   [x] **A11y Compliance:** Inject `aria-label`, `role="button"`, and `tabindex="0"` into interactive elements in `builder_template.html` (specifically tabs, accordions, and custom buttons).
+*   [x] **A11y Property Inputs:** Add UI input fields in `builder_template.html` (under the A11y tab) to allow users to set `aria_label` and `tabindex` per element, mapping these in `builder_preview.py`.
+*   [x] **Placeholder Cleanup:** Remove or rewrite the `console.log` placeholder example in `builder_template.html` to reflect a more professional, system-appropriate script.
+
+### Phase 6.10: Top 3 UX Prioritization
+*   [ ] **Reduce Cognitive Load (Contextual Tooling & Progressive Disclosure):** Hide complex features (WebSockets, API Polling, Advanced Maps) by default or under an "Advanced Settings" toggle. Only display contextual tools (e.g., Map Types drawer) *after* a prerequisite action (e.g., linking a valid CSV dataset) has been completed.
+*   [ ] **Improve Onboarding & Empty States:** Create guided interactive tooltips for first-time users upon landing on the blank canvas. Offer pre-configured, best-practice template presets in the "New Project" wizard to prevent users from starting from scratch without direction.
+*   [ ] **Enhance Immediate Visual Feedback & Drag-and-Drop Polish:** Implement fluid animations and clear visual drop zones (dashed borders, highlighting) for file uploads and Dashboard Layout modes. Add skeletal loading screens during heavy Pyodide/WASM generation phases to prevent the UI from appearing frozen.
