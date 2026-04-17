@@ -444,6 +444,7 @@ To further enhance the developer and no-code experience, an intelligent AI Copil
 *   [x] **Fix URL Navigation Mapping:** Update `builder_preview.py` to map `ctrlUrlNavId` and `ctrlUrlNavUrl` parameters via the core SIVO `app.map(id, url=url)` logic, restoring full visual navigation behavior.
 
 ### Phase 6.9: Architecture & UI/UX Audit Discoveries
+*   [x] **Legal Liability Waiver:** Enhanced the legal modal to include explicit clauses for User-Generated Content, Legal Capacity, and strict data processing. Implemented active consent via a required checkbox and added a "Decline" fallback flow.
 *   [ ] **Refactor Alerts:** Replace all instances of `alert()` and `prompt()` in `app.js`, `builder.js`, and `annotator.js` with `showToast()` or custom Tailwind modal components to improve the UX.
 *   [ ] **A11y Compliance:** Inject `aria-label`, `role="button"`, and `tabindex="0"` into interactive elements in `builder_template.html` (specifically tabs, accordions, and custom buttons).
 *   [ ] **A11y Property Inputs:** Add UI input fields in `builder_template.html` (under the A11y tab) to allow users to set `aria_label` and `tabindex` per element, mapping these in `builder_preview.py`.
