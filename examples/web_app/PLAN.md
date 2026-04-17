@@ -362,6 +362,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [x] Implement the drag-and-drop / URL fetcher in JS that streams directly to Pyodide IDBFS.
 - [x] Add memory cleanup routines to ensure large files are flushed from RAM after saving to IDBFS.
 - [x] Implement CSV/XLSX to IDBFS parsing utility.
+- [x] Implement client-side SheetJS to convert XLSX to CSV before uploading to IDBFS to save Python memory.
 - [x] **Complex SVG Normalization:** Integrate SIVO's `SVGParser` to properly flatten groups, support `<use>` references, and preserve native styling for incoming files.
 - [x] **XXE Security Mitigation:** Ensure all uploaded XML/SVG parsing relies securely on `resolve_entities=False` and `no_network=True` to prevent injection attacks.
 - [x] **JSON Serialization XSS Mitigation:** Integrate the safe escaping logic for injected JSON `views_data` to secure templates from cross-site scripting natively.
@@ -380,6 +381,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [x] **Data Binding Tab:** Split the Data Binding Wizard into its own dedicated UI tab to map CSV columns to SVG IDs for instant Choropleths.
 - [x] **Dashboard Mode Tab:** Split Dashboard Mode into its own dedicated UI tab to manage `SivoDashboard` blocks, integrating **Dashboard Details & Metrics Panels**.
 - [x] **Graph Generation Tab:** Split Graph Generation into its own dedicated UI tab to configure SIVO's native ECharts injection for custom graphs (including advanced ECharts types like boxplot, candlestick, heatmap), adding support for **Nested ECharts Actions** configuration.
+- [x] Replace mock/fake data generation for Candlestick and Heatmap charts inside `builder_preview.py` with real pandas dataframe logic.
 - [x] **Project Validation:** Introduce the "Validate Project" diagnostics tool (`sivo validate` equivalent) executing real Python backend logic via Pyodide alongside pandas mapping integrity checks.
 
 
@@ -401,6 +403,7 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 - [x] **Export/Share Expansion:** Implement the "Export & Publish" wizard to allow downloading standalone HTML, Offline HTML (`build_js=True`), PDF, Image, JSON exports, or Streamlit integration snippets with **Streamlit Bidirectional Communication** capabilities, and expose **Watermarks & Attribution** and **Export & Sharing Overlays**.
 - [x] **Automated E2E Testing Scaffolding:** Expose the `enable_e2e_testing` configuration parameter to support generating scaffolded tests for the output dashboards.
 - [x] Extensive memory profiling to guarantee the browser does not crash on high-resolution SVGs or large datasets.
+- [x] Remove hardcoded `console.log`, `console.warn`, and `console.error` debugging statements throughout the codebase and strictly utilize the `showToast` notification system.
 
 ### Phase 7: PyPI Release & Initialization Cleanup
 Once the SIVO package is officially published to PyPI, the web app's installation procedure will be significantly simplified, as local wheel generation will no longer be necessary.

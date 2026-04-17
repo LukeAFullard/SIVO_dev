@@ -76,7 +76,7 @@
                 runBtn.disabled = false;
 
             } catch (err) {
-                showToast(err, "error"); console.error(err);
+                showToast(err, "error")
                 statusEl.innerText = 'Error: Check console.';
                 statusEl.style.color = '#ef4444';
             }
@@ -93,7 +93,7 @@
                 // Run the Python code
                 await pyodide.runPythonAsync(codeInput.value);
             } catch (err) {
-                showToast(err, "error"); console.error(err);
+                showToast(err, "error")
                 outputFrame.srcdoc = `<html><body><pre style='color:red; padding:20px; white-space:pre-wrap;'>${err.message}</pre></body></html>`;
             } finally {
                 runBtn.disabled = false;
@@ -120,7 +120,7 @@
                         </div>`).join('');
                 }
             } catch (err) {
-                showToast("Error reading directory", err, "error"); console.error("Error reading directory", err);
+                showToast("Error reading directory", err, "error")
             }
         }
 
@@ -170,11 +170,26 @@
         async function saveBufferToFS(filename, buffer) {
             try {
                 const mountDir = "/sivo_workspace";
+                let finalFilename = filename;
+                let finalData = new Uint8Array(buffer);
 
-                // If it's an XLSX, ideally we would convert to CSV here to save Python memory,
-                // but for now we'll write the raw file or handle it directly in Python if the user has openpyxl.
-                // We'll write the raw bytes to IDBFS
-                pyodide.FS.writeFile(`${mountDir}/${filename}`, new Uint8Array(buffer));
+                // If it's an XLSX, convert to CSV here to save Python memory
+                if (filename.toLowerCase().endsWith('.xlsx') && window.XLSX) {
+                    try {
+                        const workbook = window.XLSX.read(finalData, { type: 'array' });
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        const csvText = window.XLSX.utils.sheet_to_csv(worksheet);
+
+                        finalFilename = filename.replace(/\.xlsx$/i, '.csv');
+                        finalData = new TextEncoder().encode(csvText);
+                        showToast(`Converted ${filename} to ${finalFilename}`, "success");
+                    } catch (e) {
+                        showToast(`Failed to parse XLSX, saving raw file: ${e.message}`, "warning");
+                    }
+                }
+
+                pyodide.FS.writeFile(`${mountDir}/${finalFilename}`, finalData);
 
                 await new Promise((resolve, reject) => {
                     pyodide.FS.syncfs(false, function(err) {
@@ -184,7 +199,7 @@
                 });
                 updateFileList();
             } catch (err) {
-                showToast("Error saving file to IDBFS:", err, "error"); console.error("Error saving file to IDBFS:", err);
+                showToast("Error saving file to IDBFS:", err, "error")
                 alert("Error saving file: " + err.message);
             }
         }
@@ -253,7 +268,7 @@
                 buffer = null; // Memory cleanup
                 urlInput.value = '';
             } catch (err) {
-                showToast("Error fetching URL:", err, "error"); console.error("Error fetching URL:", err);
+                showToast("Error fetching URL:", err, "error")
                 alert("Failed to fetch URL: " + err.message);
             } finally {
                 btn.innerText = originalText;

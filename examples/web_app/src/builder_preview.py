@@ -339,17 +339,44 @@ try:
                                 chart_config.update({"data": [values]})
                                 kwargs["boxplot_chart"] = chart_config
                             elif graph_type == "candlestick":
-                                # Mock format for candlestick using random offset
-                                import random
+                                # Assume data is provided as Open, Close, Lowest, Highest
+                                # if additional columns exist, otherwise fallback to simple calculation
+                                # Since we only mapped one `data_value_col`, we will try to find others or use an educated guess from DataFrame
+                                # for real candlestick mapping. If the user only provided one column, we duplicate it but it's real data.
                                 candle_data = []
-                                for v in values:
-                                     candle_data.append([v - random.uniform(0, 5), v + random.uniform(0, 5), v - random.uniform(0, 10), v + random.uniform(0, 10)])
+                                open_col = data_value_col
+                                close_col = [c for c in df.columns if 'close' in c.lower()]
+                                low_col = [c for c in df.columns if 'low' in c.lower()]
+                                high_col = [c for c in df.columns if 'high' in c.lower()]
+
+                                for idx, row in df_clean.iterrows():
+                                    op = float(row[open_col]) if not pd.isna(row[open_col]) else 0
+                                    cl = float(row[close_col[0]]) if close_col and not pd.isna(row[close_col[0]]) else op
+                                    lo = float(row[low_col[0]]) if low_col and not pd.isna(row[low_col[0]]) else min(op, cl)
+                                    hi = float(row[high_col[0]]) if high_col and not pd.isna(row[high_col[0]]) else max(op, cl)
+                                    candle_data.append([op, cl, lo, hi])
+
                                 chart_config.update({"x": names, "y": candle_data})
                                 kwargs["candlestick_chart"] = chart_config
                             elif graph_type == "heatmap":
-                                # Mock format for heatmap
-                                heatmap_data = [[0, i, v] for i, v in enumerate(values)]
-                                chart_config.update({"x_axis": names, "y_axis": ["Values"], "data": heatmap_data})
+                                # For a heatmap we typically need 3 dimensions (X, Y, Value).
+                                # Use ID col for X, other numeric columns for Y
+                                numeric_cols = df_clean.select_dtypes(include=['number']).columns.tolist()
+                                if data_value_col in numeric_cols:
+                                    numeric_cols.remove(data_value_col)
+                                numeric_cols.insert(0, data_value_col) # Ensure primary value col is first
+
+                                heatmap_data = []
+                                y_axis_names = numeric_cols[:5] # limit to 5 categories to prevent overflow
+
+                                for x_idx, row in df_clean.iterrows():
+                                    # the actual index in the `names` list
+                                    actual_x_idx = list(df_clean.index).index(x_idx)
+                                    for y_idx, col in enumerate(y_axis_names):
+                                        val = float(row[col]) if pd.notna(row[col]) else 0
+                                        heatmap_data.append([actual_x_idx, y_idx, val])
+
+                                chart_config.update({"x_axis": names, "y_axis": y_axis_names, "data": heatmap_data})
                                 kwargs["heatmap_chart"] = chart_config
 
                         else:

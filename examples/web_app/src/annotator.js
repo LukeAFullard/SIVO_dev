@@ -321,7 +321,7 @@
                 } else if (e.data.type === 'segmented') {
                     handleSamSegmentation(e.data.mask, e.data.w, e.data.h, e.data.origW, e.data.origH);
                 } else if (e.data.type === 'error') {
-                    console.error("SAM Worker Error:", e.data.message);
+                    window.parent.showToast("SAM Worker Error: " + e.data.message, "error");
                     samStatusText.innerText = "SAM Error";
                     samProgressContainer.style.display = 'none';
                     setTimeout(() => { samLoadingDiv.style.display = 'none'; }, 3000);
@@ -1589,7 +1589,7 @@
                 }
                 saveState();
             } catch (e) {
-                console.error("Failed to load project state", e);
+                window.parent.showToast("Failed to load project state: " + e.message, "error");
                 alert("Failed to load project file. Invalid format.");
             }
         }
@@ -1742,7 +1742,7 @@
                 // Sync the virtual file system back to IndexedDB
                 pyodideInstance.FS.syncfs(false, function (err) {
                     if (err) {
-                        console.error('Error syncing IDBFS:', err);
+                        window.parent.showToast('Error syncing IDBFS: ' + err, 'error');
                         alert('Failed to sync to IndexedDB: ' + err);
                     } else {
                         const originalText = saveIdbfsBtn.innerText;
@@ -1758,7 +1758,7 @@
                     }
                 });
             } catch (err) {
-                console.error('Error writing to Pyodide FS:', err);
+                window.parent.showToast('Error writing to Pyodide FS: ' + err, 'error');
                 alert('Failed to write to virtual file system: ' + err);
             }
         });
