@@ -190,6 +190,25 @@ try:
         live_api_path = config.get("liveApiPath")
         app.bind_api(live_api_url, polling_interval_ms=interval_ms, data_path=live_api_path if live_api_path else None)
 
+    timeline_csv = config.get("timelineCsvFile")
+    if timeline_csv:
+        try:
+            import pandas as pd
+            import io
+            with open(f"/sivo_workspace/{timeline_csv}", 'r') as f:
+                df = pd.read_csv(io.StringIO(f.read()))
+
+            time_col = config.get("timelineTimeCol", "date")
+            map_type = config.get("timelineMapType", "choropleth")
+
+            if time_col in df.columns:
+                 # Standardize to list of dicts for simple mapping
+                 timeline_data = df.to_dict(orient="records")
+                 app.bind_timeline(timeline_data, time_column=time_col, map_type=map_type)
+        except Exception as e:
+            error_msg = json.dumps(str(e))
+            app.custom_js += f"if(window.parent && window.parent.showToast) {{ window.parent.showToast({error_msg}, 'error'); }}"
+
     # Apply Element Configurations
     elements = config.get('elements', {})
     for el_id, el_cfg in elements.items():

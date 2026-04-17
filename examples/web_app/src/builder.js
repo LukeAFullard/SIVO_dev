@@ -147,6 +147,11 @@ const propLiveWsTopic = document.getElementById('prop-live-ws-topic');
 const propLiveApiUrl = document.getElementById('prop-live-api-url');
 const propLiveApiInterval = document.getElementById('prop-live-api-interval');
 const propLiveApiPath = document.getElementById('prop-live-api-path');
+
+const propTimelineCsvFile = document.getElementById('prop-timeline-csv-file');
+const propTimelineTimeCol = document.getElementById('prop-timeline-time-col');
+const propTimelineMapType = document.getElementById('prop-timeline-map-type');
+
 const btnApplyLiveData = document.getElementById('btn-apply-live-data');
 
 const propFetchElementId = document.getElementById('prop-fetch-element-id');
@@ -514,6 +519,10 @@ function refreshPropertiesPanel() {
 
     propLiveApiPath.value = builderState.currentConfig.liveApiPath || "";
 
+    propTimelineCsvFile.value = builderState.currentConfig.timelineCsvFile || "";
+    propTimelineTimeCol.value = builderState.currentConfig.timelineTimeCol || "";
+    propTimelineMapType.value = builderState.currentConfig.timelineMapType || "choropleth";
+
     // Phase 5 Globals
     propPresentationAutoplay.value = builderState.currentConfig.presentationAutoplay || "";
     propPresentationProgress.checked = !!builderState.currentConfig.presentationProgress;
@@ -825,6 +834,11 @@ btnApplyLiveData.addEventListener('click', () => {
     builderState.currentConfig.liveApiUrl = propLiveApiUrl.value.trim();
     builderState.currentConfig.liveApiInterval = propLiveApiInterval.value.trim();
     builderState.currentConfig.liveApiPath = propLiveApiPath.value.trim();
+
+    builderState.currentConfig.timelineCsvFile = propTimelineCsvFile.value.trim();
+    builderState.currentConfig.timelineTimeCol = propTimelineTimeCol.value.trim();
+    builderState.currentConfig.timelineMapType = propTimelineMapType.value.trim();
+
     saveState();
     generatePreview();
 });
