@@ -446,6 +446,10 @@ Following the comprehensive UX/UI architecture audit, the following highly-prior
 - [x] **Refactored Progressive Disclosure (Basic vs Advanced):** Reorganize the Property Inspector so that *only* Color, Hover, Tooltip, and Click Action are visible initially. All other complex toggles must be pushed into a unified, collapsible "Advanced Settings" view.
 - [x] **Premium Loading Feedback:** Replace the current WASM spinner with a Skeleton Loader over the map preview or a blurred state transition to make Pyodide rendering cycles feel smooth and responsive rather than blocking.
 - [x] **Command Palette (Cmd+K):** Implement a global keyboard-accessible palette to allow power users rapid access to deeply nested tools (like WebSocket connections) without navigating the UI tree.
+- [ ] **Guided Contextual Tooltips:** For first-time users, integrate a lightweight tour library to highlight the exact next step (e.g., a pulsing blue dot over the element selector after uploading an SVG).
+- [ ] **Predictive Workflows:** Enhance the Data Binding Wizard to automatically pre-select common identifier columns (like `fips`, `id`, `state`, or `country`) when a dataset is loaded.
+- [ ] **Conflict Resolution Warnings:** Dynamically disable conflicting actions or display contextual warnings (e.g., "Navigation takes precedence over click animations") when incompatible settings are chosen.
+- [ ] **Advanced Error Boundaries:** Polish error handling by replacing raw Pyodide stack traces with actionable inline alert banners or non-blocking toast notifications (e.g., "Failed to parse CSV. Ensure the file has a header row").
 
 ### Phase 6.6: Post-Audit Polish & UX Enhancements (Weeks 13)
 - [x] **Input Placeholder Review:** Review the extensive list of input `placeholder` attributes in `builder_template.html` (e.g., `<input placeholder="<div style='background:red;'>...</div>">`) to ensure they provide maximum clarity and actionable examples to non-technical users.
