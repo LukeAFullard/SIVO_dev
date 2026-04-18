@@ -87,22 +87,32 @@ window.addEventListener('unhandledrejection', function(event) {
                     const declineBtn = document.getElementById('decline-legal-btn');
                     const checkbox = document.getElementById('legal-consent-checkbox');
 
-                    modal.style.display = 'flex';
+                    modal.classList.remove('hidden');
 
                     checkbox.addEventListener('change', (e) => {
                         if (e.target.checked) {
                             acceptBtn.disabled = false;
-                            acceptBtn.style.backgroundColor = '#3b82f6';
-                            acceptBtn.style.cursor = 'pointer';
+                            acceptBtn.classList.remove('bg-slate-300', 'cursor-not-allowed');
+                            acceptBtn.classList.add('bg-blue-600', 'hover:bg-blue-700', 'hover:shadow-md');
                         } else {
                             acceptBtn.disabled = true;
-                            acceptBtn.style.backgroundColor = '#94a3b8';
-                            acceptBtn.style.cursor = 'not-allowed';
+                            acceptBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700', 'hover:shadow-md');
+                            acceptBtn.classList.add('bg-slate-300', 'cursor-not-allowed');
                         }
                     });
 
                     declineBtn.addEventListener('click', () => {
-                        document.body.innerHTML = '<div style="display:flex; height:100vh; align-items:center; justify-content:center; flex-direction:column; font-family:sans-serif; color:#334155; background:#f8fafc;"><h2>Access Denied</h2><p>You must accept the Legal Liability Waiver to use the SIVO Serverless Browser App.</p><button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#3b82f6; color:white; border:none; border-radius:5px; cursor:pointer;">Reload Page</button></div>';
+                        document.body.innerHTML = `
+                        <div class="flex h-screen items-center justify-center flex-col font-sans bg-slate-50 text-slate-800">
+                            <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 text-center max-w-md">
+                                <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                </div>
+                                <h2 class="text-2xl font-bold mb-2 text-slate-900">Access Denied</h2>
+                                <p class="text-slate-500 mb-6">You must accept the Legal Liability Waiver to use the SIVO Serverless Browser App.</p>
+                                <button onclick="location.reload()" class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm">Return & Reload</button>
+                            </div>
+                        </div>`;
                     });
 
                     await new Promise((resolve) => {
@@ -115,7 +125,7 @@ window.addEventListener('unhandledrejection', function(event) {
                                     else res();
                                 });
                             });
-                            modal.style.display = 'none';
+                            modal.classList.add('hidden');
                             resolve();
                         }, { once: true });
                     });
