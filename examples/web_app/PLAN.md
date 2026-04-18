@@ -345,13 +345,22 @@ With a feature set this extensive, a core product risk is overwhelming non-techn
 *   **Undo/Redo History Engine:** Implement a robust state history manager, allowing users to experiment freely without fear of breaking their layouts or configurations.
 *   **"Pre-Flight" Assistant & Auto-Fixes:** Expand standard validation into a friendly publishing checklist that not only flags missing configurations (e.g., "Choropleth mapped but no color gradient selected") but offers one-click "Auto-Fix" solutions.
 *   **Preset & Community Recipe Library:** Beyond basic templates, allow users to browse and import pre-configured "recipes" or UI blocks for common dashboard patterns, accelerating the path to a polished product.
-*   **Progressive Disclosure:** By default, the Property Inspector will only show basic settings (e.g., Tooltip Text, Color, Hover Color). Complex configurations like Interactive Callbacks, Custom CSS Injection, and E2E Testing scaffolding must be hidden behind an "Advanced Settings" toggle or a collapsible accordion to reduce visual clutter. *(Completed via CSS Accordion integration in UI)*
-*   **Contextual Tooling:** Features should only appear when relevant. For example, the "Map Types" drawer (Choropleth, Hexbin) should only activate when a dataset is successfully linked to an SVG. Data binding options should not be visible when editing purely cosmetic elements like SVGs or Images.
+*   **Progressive Disclosure (80/20 Rule):**
+    *   By default, the core Property Inspector must only show the top 20% of tools (Fill, Hover, Tooltip, basic Click Action).
+    *   Complex configurations must be hidden behind an "Advanced Settings" toggle that transforms the inspector rather than just unhiding tabs.
+    *   Nested accordions should display their current active state summaries in the header (e.g., `[+] Interactivity (Tooltip active)`). *(Completed via CSS Accordion integration in UI)*
+*   **Contextual & Predictive Tooling:** Features should only appear when contextually relevant.
+    *   *Type-Aware:* If an `<image>` overlay is selected, hide vector "Fill Color" inputs.
+    *   *Data-Aware:* The "Map Types" drawer (Choropleth, Hexbin) should only activate when a dataset is successfully linked to an SVG. If a CSV has no numerical columns, disable Choropleth.
+    *   *Predictive Binding:* Auto-select `id`, `state`, or `fips` columns for IDs when a dataset is loaded.
+*   **Onboarding & Empty States ("Time to Value"):** Maximize immediate gratification.
+    *   *1-Click Sandbox:* The initial blank canvas should feature a massive pulsing dropzone or a "Try the Demo" button that instantly loads a template and dataset, achieving an "Aha!" moment in < 10 seconds.
+    *   *Zero-Error First Run:* Gracefully handle malformed initial uploads with helpful prompts rather than throwing raw Pyodide parsing errors.
 *   **Task-Based Workspaces:** Instead of one massive editor, the UI should be divided into distinct modes:
     *   **Design Mode:** Focuses on layout, SVG normalization, theming, and aesthetics.
     *   **Data Mode:** Focuses on the CSV binding wizard, live data connections, and multi-view project linking.
     *   **Publish Mode:** Focuses on accessibility, E2E testing, geocoding API keys, and export formats.
-*   **Command Palette (Cmd+K):** A quick-action search bar will allow power users to bypass the UI to find specific tools (e.g., "Add Timeline", "Validate Project") instantly without deep menu navigation.
+*   **Command Palette (Cmd+K):** A quick-action search bar will allow power users to bypass the UI to find specific tools (e.g., "Add Timeline", "WebSocket Binding") instantly without deep menu navigation, keeping the main UI pristine.
 *   **Opinionated Defaults & Templates:** The "New Project" wizard should offer pre-configured, best-practice templates (e.g., "Basic Sales Dashboard", "Scrollytelling Map") that automatically wire up standard interactions, rather than presenting a blank canvas.
 *   **Interactive Previews & Pre-generation:** Complex state changes (like adding a custom CSS animation, testing a hover callback, or simulating an auto-play presentation) should include an on-demand "Preview" action within their configuration panels, allowing the user to view the isolated effect before applying it to the entire canvas.
 
@@ -428,6 +437,15 @@ To further enhance the developer and no-code experience, an intelligent AI Copil
     *   When the user prompts (e.g., "Make a hexbin map using this dataset"), `Transformers.js` streams the generated SIVO Python code.
     *   The generated code block is passed directly to `pyodide.runPythonAsync(code)`.
     *   Pyodide reads any user data from IDBFS, generates the interactive map, and instantly renders the result in the UI iframe.
+
+### Phase 9: SaaS UX & "Time to Value" Optimization
+Following the comprehensive UX/UI architecture audit, the following highly-prioritized items focus on bridging the gap between raw functionality and a premium SaaS onboarding experience.
+
+- [ ] **"1-Click Sandbox" Onboarding:** Replace the initial empty state with an interactive dropzone and a "Try the Demo" button that instantly loads the GIS template and pre-maps a sample dataset in under 10 seconds.
+- [ ] **Contextual Property Hiding:** Implement JavaScript logic in the Property Inspector to dynamically hide irrelevant inputs (e.g., hide Vector Fill if an Image overlay is selected; hide Map Types if no dataset is linked).
+- [ ] **Refactored Progressive Disclosure (Basic vs Advanced):** Reorganize the Property Inspector so that *only* Color, Hover, Tooltip, and Click Action are visible initially. All other complex toggles must be pushed into a unified, collapsible "Advanced Settings" view.
+- [ ] **Premium Loading Feedback:** Replace the current WASM spinner with a Skeleton Loader over the map preview or a blurred state transition to make Pyodide rendering cycles feel smooth and responsive rather than blocking.
+- [ ] **Command Palette (Cmd+K):** Implement a global keyboard-accessible palette to allow power users rapid access to deeply nested tools (like WebSocket connections) without navigating the UI tree.
 
 ### Phase 6.6: Post-Audit Polish & UX Enhancements (Weeks 13)
 - [x] **Input Placeholder Review:** Review the extensive list of input `placeholder` attributes in `builder_template.html` (e.g., `<input placeholder="<div style='background:red;'>...</div>">`) to ensure they provide maximum clarity and actionable examples to non-technical users.
