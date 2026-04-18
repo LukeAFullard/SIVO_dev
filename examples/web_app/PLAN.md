@@ -472,3 +472,9 @@ Following the comprehensive UX/UI architecture audit, the following highly-prior
 *   [x] **Reduce Cognitive Load (Contextual Tooling & Progressive Disclosure):** Hide complex features (WebSockets, API Polling, Advanced Maps) by default or under an "Advanced Settings" toggle. Only display contextual tools (e.g., Map Types drawer) *after* a prerequisite action (e.g., linking a valid CSV dataset) has been completed.
 *   [x] **Improve Onboarding & Empty States:** Create guided interactive tooltips for first-time users upon landing on the blank canvas. Offer pre-configured, best-practice template presets in the "New Project" wizard to prevent users from starting from scratch without direction.
 *   [x] **Enhance Immediate Visual Feedback & Drag-and-Drop Polish:** Implement fluid animations and clear visual drop zones (dashed borders, highlighting) for file uploads and Dashboard Layout modes. Add skeletal loading screens during heavy Pyodide/WASM generation phases to prevent the UI from appearing frozen.
+
+### Phase 6.11: UX Polish
+*   [x] **Code Generation Tab:** When the app is generated, also add the code in the Python tab so that advanced users can see the exact code.
+*   [x] **Tab Descriptions:** In all tabs, have an initial text which describes what the purpose of the tab is.
+*   [x] **Python Tab Font Color:** Fix the Python tab font color so it's readable.
+*   [x] **Template Categorization:** Templates should not be in a long list but should be categorized and easily selectable. Split up into infographics and dashboards.
