@@ -441,11 +441,11 @@ To further enhance the developer and no-code experience, an intelligent AI Copil
 ### Phase 9: SaaS UX & "Time to Value" Optimization
 Following the comprehensive UX/UI architecture audit, the following highly-prioritized items focus on bridging the gap between raw functionality and a premium SaaS onboarding experience.
 
-- [ ] **"1-Click Sandbox" Onboarding:** Replace the initial empty state with an interactive dropzone and a "Try the Demo" button that instantly loads the GIS template and pre-maps a sample dataset in under 10 seconds.
-- [ ] **Contextual Property Hiding:** Implement JavaScript logic in the Property Inspector to dynamically hide irrelevant inputs (e.g., hide Vector Fill if an Image overlay is selected; hide Map Types if no dataset is linked).
-- [ ] **Refactored Progressive Disclosure (Basic vs Advanced):** Reorganize the Property Inspector so that *only* Color, Hover, Tooltip, and Click Action are visible initially. All other complex toggles must be pushed into a unified, collapsible "Advanced Settings" view.
-- [ ] **Premium Loading Feedback:** Replace the current WASM spinner with a Skeleton Loader over the map preview or a blurred state transition to make Pyodide rendering cycles feel smooth and responsive rather than blocking.
-- [ ] **Command Palette (Cmd+K):** Implement a global keyboard-accessible palette to allow power users rapid access to deeply nested tools (like WebSocket connections) without navigating the UI tree.
+- [x] **"1-Click Sandbox" Onboarding:** Replace the initial empty state with an interactive dropzone and a "Try the Demo" button that instantly loads the GIS template and pre-maps a sample dataset in under 10 seconds.
+- [x] **Contextual Property Hiding:** Implement JavaScript logic in the Property Inspector to dynamically hide irrelevant inputs (e.g., hide Vector Fill if an Image overlay is selected; hide Map Types if no dataset is linked).
+- [x] **Refactored Progressive Disclosure (Basic vs Advanced):** Reorganize the Property Inspector so that *only* Color, Hover, Tooltip, and Click Action are visible initially. All other complex toggles must be pushed into a unified, collapsible "Advanced Settings" view.
+- [x] **Premium Loading Feedback:** Replace the current WASM spinner with a Skeleton Loader over the map preview or a blurred state transition to make Pyodide rendering cycles feel smooth and responsive rather than blocking.
+- [x] **Command Palette (Cmd+K):** Implement a global keyboard-accessible palette to allow power users rapid access to deeply nested tools (like WebSocket connections) without navigating the UI tree.
 
 ### Phase 6.6: Post-Audit Polish & UX Enhancements (Weeks 13)
 - [x] **Input Placeholder Review:** Review the extensive list of input `placeholder` attributes in `builder_template.html` (e.g., `<input placeholder="<div style='background:red;'>...</div>">`) to ensure they provide maximum clarity and actionable examples to non-technical users.

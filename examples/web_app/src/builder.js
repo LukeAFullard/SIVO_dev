@@ -26,6 +26,8 @@ let builderState = {
 
 // --- DOM Elements ---
 
+const btnTryDemo = document.getElementById('btn-try-demo');
+
 // Integrations
 const propIntegElementId = document.getElementById('prop-integ-element-id');
 const propIntegType = document.getElementById('prop-integ-type');
@@ -251,6 +253,13 @@ document.addEventListener('keydown', (e) => {
     const viewBuilder = document.getElementById('view-builder');
     if (!viewBuilder || !viewBuilder.classList.contains('active')) return;
 
+    // Command Palette (Cmd/Ctrl + K)
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        openCommandPalette();
+        return;
+    }
+
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z') {
         e.preventDefault();
         btnUndo.click();
@@ -259,6 +268,72 @@ document.addEventListener('keydown', (e) => {
         btnRedo.click();
     }
 });
+
+// --- Command Palette Logic ---
+const cmdPaletteModal = document.getElementById('command-palette-modal');
+const cmdPaletteInput = document.getElementById('command-palette-input');
+const cmdPaletteResults = document.getElementById('command-palette-results');
+
+const commands = [
+    { name: "Enable Advanced Mode", keywords: "advanced mode toggle complex", action: () => { advancedModeToggle.checked = true; advancedModeToggle.dispatchEvent(new Event('change')); } },
+    { name: "Disable Advanced Mode", keywords: "advanced mode basic simple", action: () => { advancedModeToggle.checked = false; advancedModeToggle.dispatchEvent(new Event('change')); } },
+    { name: "Open Data Binding", keywords: "data csv map binding choropleth", action: () => document.querySelector('.builder-tab-btn[data-tab="data"]').click() },
+    { name: "Open Live Data (WebSockets / API)", keywords: "live data websocket api polling", action: () => { advancedModeToggle.checked = true; advancedModeToggle.dispatchEvent(new Event('change')); document.querySelector('.builder-tab-btn[data-tab="live"]').click(); } },
+    { name: "Open Timeline / Presentation", keywords: "timeline presentation scrollytelling steps", action: () => { advancedModeToggle.checked = true; advancedModeToggle.dispatchEvent(new Event('change')); document.querySelector('.builder-tab-btn[data-tab="timeline"]').click(); } },
+    { name: "Validate Project Diagnostics", keywords: "validate errors diagnostics check", action: () => btnValidateProject.click() },
+    { name: "Export & Settings", keywords: "export download watermark e2e", action: () => { advancedModeToggle.checked = true; advancedModeToggle.dispatchEvent(new Event('change')); document.querySelector('.builder-tab-btn[data-tab="export"]').click(); } }
+];
+
+function openCommandPalette() {
+    cmdPaletteModal.classList.remove('hidden');
+    cmdPaletteInput.value = '';
+    renderCommandResults('');
+    cmdPaletteInput.focus();
+}
+
+function closeCommandPalette() {
+    cmdPaletteModal.classList.add('hidden');
+}
+
+cmdPaletteModal.addEventListener('click', closeCommandPalette);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !cmdPaletteModal.classList.contains('hidden')) {
+        closeCommandPalette();
+    }
+});
+
+cmdPaletteInput.addEventListener('input', (e) => {
+    renderCommandResults(e.target.value.toLowerCase());
+});
+
+function renderCommandResults(query) {
+    cmdPaletteResults.innerHTML = '';
+    let filtered = commands;
+
+    if (query) {
+        filtered = commands.filter(cmd =>
+            cmd.name.toLowerCase().includes(query) ||
+            cmd.keywords.includes(query)
+        );
+    }
+
+    if (filtered.length === 0) {
+        cmdPaletteResults.innerHTML = '<div class="px-4 py-3 text-sm text-slate-500 italic">No matching commands.</div>';
+        return;
+    }
+
+    filtered.forEach(cmd => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors border-b border-slate-50 focus:bg-slate-100 outline-none flex items-center justify-between';
+        btn.innerHTML = `<span>${cmd.name}</span> <span class="text-xs text-slate-400 opacity-0 group-hover:opacity-100">Jump To</span>`;
+        btn.onclick = () => {
+            cmd.action();
+            closeCommandPalette();
+        };
+        cmdPaletteResults.appendChild(btn);
+    });
+}
 
 btnRedo.addEventListener('click', () => {
     if (builderState.historyIndex < builderState.history.length - 1) {
@@ -461,6 +536,7 @@ previewModeBtns.forEach(btn => {
 window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'sivo_element_clicked') {
         const id = event.data.id;
+        const tagName = event.data.tagName || 'path';
 
         // Auto-enable highlighting to show the selection visually if not already enabled
         if (!builderState.currentConfig.highlightElements) {
@@ -470,6 +546,7 @@ window.addEventListener('message', (event) => {
 
         // Set the active element and refresh
         builderState.currentConfig.activeElementId = id;
+        builderState.currentConfig.activeElementTagName = tagName.toLowerCase();
         propElementId.value = id;
         propFetchElementId.value = id;
 
@@ -497,6 +574,17 @@ propClickCallback.addEventListener('change', (e) => {
 });
 
 function refreshPropertiesPanel() {
+
+    // Contextual Property Hiding
+    const appearanceContainer = document.getElementById('prop-fill-color').closest('.accordion-content');
+    const appearanceSection = appearanceContainer ? appearanceContainer.closest('.border') : null;
+
+    if (builderState.currentConfig.activeElementTagName === 'image') {
+        // Hide the entire appearance section for images since they don't use vector fills
+        if (appearanceSection) appearanceSection.classList.add('hidden');
+    } else {
+        if (appearanceSection) appearanceSection.classList.remove('hidden');
+    }
 
     // Sync globals
     propCustomSvg.value = builderState.currentConfig.customSvg || "";
@@ -1016,8 +1104,72 @@ builderTabBtns.forEach(btn => {
 // Initialize state
 saveState();
 
+// --- 1-Click Demo Sandbox ---
+if (btnTryDemo) {
+    btnTryDemo.addEventListener('click', async () => {
+        if (!window.pyodide || !window.pyodide.FS) {
+            showToast("Pyodide File System is not ready yet.", "warning");
+            return;
+        }
 
+        const originalText = btnTryDemo.innerText;
+        btnTryDemo.innerText = "Loading Sandbox...";
+        btnTryDemo.disabled = true;
 
+        try {
+            // Write a sample CSV to IDBFS
+            const sampleCsvData = `id,value
+US-NY,100
+US-CA,200
+US-TX,150
+US-FL,80
+US-IL,120`;
+            window.pyodide.FS.writeFile('/sivo_workspace/sample_data.csv', sampleCsvData);
+
+            // Wait for sync
+            await new Promise((resolve, reject) => {
+                window.pyodide.FS.syncfs(false, function(err) {
+                    if (err) reject(err);
+                    else resolve();
+                });
+            });
+
+            // Update builder state
+            builderState.currentConfig.template = '16_10/gis_digital_twin_dashboard_2026.svg';
+            builderState.currentConfig.dataFile = 'sample_data.csv';
+            builderState.currentConfig.dataMapType = 'choropleth';
+            builderState.currentConfig.dataIdCol = 'id';
+            builderState.currentConfig.dataValueCol = 'value';
+
+            // Set some default elements for the map
+            builderState.currentConfig.elements = {
+                'US-NY': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '<strong>New York</strong><br/>Value: 100' },
+                'US-CA': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '<strong>California</strong><br/>Value: 200' },
+                'US-TX': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '<strong>Texas</strong><br/>Value: 150' },
+                'US-FL': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '<strong>Florida</strong><br/>Value: 80' },
+                'US-IL': { fill: '#3b82f6', hover: '#60a5fa', tooltip: '<strong>Illinois</strong><br/>Value: 120' }
+            };
+
+            propDataFile.value = 'sample_data.csv';
+            propDataMapType.value = 'choropleth';
+
+            saveState();
+            refreshPropertiesPanel();
+            if (previewOverlay) previewOverlay.classList.add('hidden');
+            await generatePreview();
+
+            showToast("Demo Sandbox Loaded Successfully!", "success");
+
+            // Switch to Data tab to show the mapping
+            document.querySelector('.builder-tab-btn[data-tab="data"]').click();
+
+        } catch(err) {
+            showToast("Failed to load demo sandbox: " + err.message, "error");
+            btnTryDemo.innerText = originalText;
+            btnTryDemo.disabled = false;
+        }
+    });
+}
 
 // --- Phase 3 Features ---
 btnSelectDataFile.addEventListener("click", () => {
@@ -1138,15 +1290,11 @@ function updateDataMapUI() {
     const mapType = propDataMapType.value;
     const hasDataFile = !!builderState.currentConfig.dataFile;
 
-    // Contextual tooling: disable MapType interactions if no data file
+    // Contextual tooling: Hide Map Types entirely if no dataset is linked
     if (!hasDataFile) {
-        propDataMapType.disabled = true;
-        propDataMapType.title = "Select a CSV data file first";
-        propDataMapType.classList.add("cursor-not-allowed", "opacity-50");
+        propDataMapType.parentElement.classList.add('hidden');
     } else {
-        propDataMapType.disabled = false;
-        propDataMapType.title = "";
-        propDataMapType.classList.remove("cursor-not-allowed", "opacity-50");
+        propDataMapType.parentElement.classList.remove('hidden');
     }
 
     // Hide all

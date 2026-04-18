@@ -112,20 +112,27 @@
             <!-- Interactive iframe area -->
             <div id="preview-container" class="w-full h-full bg-white shadow-md transition-all duration-300 flex items-center justify-center relative">
                  <iframe id="builder-preview-frame" class="w-full h-full border-0"></iframe>
-                 <div id="builder-preview-overlay" class="absolute inset-0 bg-white/90 flex flex-col items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10 transition-opacity duration-300">
-                     <div class="mb-4 text-4xl">✨</div>
-                     <h3 class="text-xl text-slate-700 font-bold mb-2">Welcome to the SIVO App Builder</h3>
-                     <p class="text-sm text-slate-500 text-center max-w-sm mb-6">Select a pre-configured template from the left sidebar to begin, or upload your own SVG file.</p>
+                 <div id="builder-preview-overlay" class="absolute inset-0 bg-slate-50/95 flex flex-col items-center justify-center text-slate-500 font-medium border-2 border-dashed border-slate-300 z-10 transition-all duration-300 backdrop-blur-sm">
+                     <div class="mb-4 text-5xl animate-bounce">✨</div>
+                     <h3 class="text-2xl text-slate-800 font-bold mb-2">Welcome to the SIVO App Builder</h3>
+                     <p class="text-base text-slate-500 text-center max-w-md mb-8">Drag & Drop an SVG or CSV file here to begin, or start with a 1-click sandbox.</p>
                      <div class="flex space-x-4">
-                         <button class="px-4 py-2 bg-blue-600 text-white rounded shadow-sm hover:bg-blue-700 transition" onclick="document.querySelector('[data-template=\'16_10/gis_digital_twin_dashboard_2026.svg\']').click()">Start with Dashboard</button>
-                         <button class="px-4 py-2 bg-white text-slate-700 border border-slate-200 rounded shadow-sm hover:bg-slate-50 transition" onclick="document.getElementById('btn-new-project').click()">Start Blank</button>
+                         <button id="btn-try-demo" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">🚀 Try the Demo (1-Click)</button>
+                         <button class="px-6 py-3 bg-white text-slate-700 font-medium border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors" onclick="document.getElementById('btn-new-project').click()">Start Blank</button>
                      </div>
                  </div>
 
                  <!-- Skeletal Loading State overlay -->
-                 <div id="builder-loading-overlay" class="hidden absolute inset-0 bg-slate-50/80 flex flex-col items-center justify-center z-20 backdrop-blur-sm transition-opacity duration-300">
-                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-                     <span class="text-slate-600 font-medium tracking-wide">Compiling WASM Output...</span>
+                 <div id="builder-loading-overlay" class="hidden absolute inset-0 bg-white/60 flex flex-col items-center justify-center z-20 backdrop-blur-md transition-all duration-300">
+                     <div class="flex flex-col items-center space-y-4">
+                         <div class="relative w-24 h-24">
+                             <div class="absolute inset-0 border-4 border-blue-200 rounded-full animate-pulse"></div>
+                             <div class="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+                         </div>
+                         <div class="bg-white/80 px-6 py-2 rounded-full shadow-sm border border-slate-200 backdrop-blur-sm">
+                             <span class="text-slate-600 font-medium tracking-wide animate-pulse">Rendering Map...</span>
+                         </div>
+                     </div>
                  </div>
             </div>
         </div>
@@ -202,13 +209,39 @@
 
             <!-- Interactivity & Tooltips -->
             <div class="border border-slate-200 rounded bg-white">
-                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded'); this.setAttribute('aria-expanded', this.classList.contains('active'));">Interactivity & Tooltips</h3>
-                <div class="space-y-4 px-3 pb-3 accordion-content">
+                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" role="button" tabindex="0" aria-expanded="true" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded'); this.setAttribute('aria-expanded', this.classList.contains('active'));">Interactivity</h3>
+                <div class="space-y-4 px-3 pb-3 accordion-content expanded">
                     <div>
                         <label class="block text-xs text-slate-600 mb-1">Rich HTML Tooltip</label>
                         <textarea id="prop-tooltip" rows="3" placeholder="<strong>Value:</strong> 100" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
 
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">On Click Callback</label>
+                        <select id="prop-click-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="zoom">Zoom to Element</option>
+                            <option value="toggle_image">Toggle Image Action</option>
+                            <option value="footnote">Show Contextual Footnote</option>
+                        </select>
+                    </div>
+
+                    <div id="prop-footnote-container" class="hidden mt-2">
+                         <label class="block text-xs text-slate-600 mb-1">Contextual Footnote Text</label>
+                         <input type="text" id="prop-footnote-text" placeholder="Citation or note..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                    </div>
+
+                    <div id="prop-toggle-image-container" class="hidden mt-2">
+                        <label class="block text-xs text-slate-600 mb-1">Image URLs (comma separated)</label>
+                        <input type="text" id="prop-toggle-image-urls" placeholder="img1.png, img2.png" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="border border-slate-200 rounded bg-white">
+                <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded'); this.setAttribute('aria-expanded', this.classList.contains('active'));">Advanced Settings</h3>
+                <div class="space-y-3 px-3 pb-3 accordion-content">
                     <div class="flex items-center justify-between">
                         <label class="text-xs text-slate-600" title="Enforce Tooltip Z-Index">Enforce Tooltip Z-Index</label>
                         <input type="checkbox" id="prop-tooltip-zindex" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
@@ -218,43 +251,17 @@
                         <label class="text-xs text-slate-600" title="Selective ECharts Hover Effects">Selective Hover Effects</label>
                         <input type="checkbox" id="prop-hover-effects" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" checked>
                     </div>
-                </div>
-            </div>
 
-                <!-- Actions & Callbacks -->
-                <div class="border border-slate-200 rounded bg-white">
-                    <h3 class="text-sm font-bold text-slate-500 bg-slate-50 p-2 rounded-t accordion-header active" role="button" tabindex="0" aria-expanded="false" onclick="this.classList.toggle('active'); this.nextElementSibling.classList.toggle('expanded'); this.setAttribute('aria-expanded', this.classList.contains('active'));">Actions & Callbacks</h3>
-                    <div class="space-y-3 px-3 pb-3 accordion-content">
-                        <div>
-                            <label class="block text-xs text-slate-600 mb-1">On Click Callback (Interactive)</label>
-                            <select id="prop-click-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="none">None</option>
-                                <option value="zoom">Zoom to Element</option>
-                                <option value="toggle_image">Toggle Image Action</option>
-                                <option value="footnote">Show Contextual Footnote</option>
-                            </select>
-                        </div>
-
-                        <div id="prop-footnote-container" class="hidden mt-2">
-                             <label class="block text-xs text-slate-600 mb-1">Contextual Footnote Text</label>
-                             <input type="text" id="prop-footnote-text" placeholder="Citation or note..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
-                        </div>
-
-                        <div id="prop-toggle-image-container" class="hidden mt-2">
-                            <label class="block text-xs text-slate-600 mb-1">Image URLs (comma separated)</label>
-                            <input type="text" id="prop-toggle-image-urls" placeholder="img1.png, img2.png" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:bg-white focus:outline-none">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs text-slate-600 mb-1">Hover Callback</label>
-                            <select id="prop-hover-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="none">None</option>
-                                <option value="update_panel">Update Context Panel</option>
-                                <option value="custom">Custom JS Callback</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-xs text-slate-600 mb-1">Hover Callback</label>
+                        <select id="prop-hover-callback" class="w-full px-3 py-2 text-sm border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="none">None</option>
+                            <option value="update_panel">Update Context Panel</option>
+                            <option value="custom">Custom JS Callback</option>
+                        </select>
                     </div>
                 </div>
+            </div>
 
                 <!-- Apply Button -->
                 <button id="btn-apply-props" class="w-full mt-4 px-3 py-2 text-sm bg-emerald-500 text-white rounded hover:bg-emerald-600 font-medium shadow-sm transition-colors">
@@ -878,6 +885,20 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Command Palette (Cmd+K) -->
+<div id="command-palette-modal" class="hidden fixed inset-0 z-[60] flex items-start justify-center bg-slate-900/40 backdrop-blur-sm pt-24">
+    <div class="bg-white rounded-xl shadow-2xl w-[500px] max-w-full flex flex-col overflow-hidden border border-slate-200" onclick="event.stopPropagation()">
+        <div class="flex items-center px-4 py-3 border-b border-slate-100">
+            <svg class="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="command-palette-input" placeholder="Search tools or commands (e.g. 'Live Data')..." class="w-full text-sm bg-transparent border-none focus:outline-none text-slate-800 placeholder-slate-400">
+            <div class="text-xs text-slate-400 px-2 py-1 bg-slate-100 rounded border border-slate-200">ESC</div>
+        </div>
+        <div class="max-h-[300px] overflow-y-auto" id="command-palette-results">
+            <!-- Results injected here -->
         </div>
     </div>
 </div>

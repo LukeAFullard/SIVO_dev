@@ -169,7 +169,7 @@ try:
             let target = e.target;
             while (target && target !== svgElement) {
                 if (target.id) {
-                    window.parent.postMessage({ type: 'sivo_element_clicked', id: target.id }, '*');
+                    window.parent.postMessage({ type: 'sivo_element_clicked', id: target.id, tagName: target.tagName }, '*');
                     e.preventDefault();
                     e.stopPropagation();
                     return;
