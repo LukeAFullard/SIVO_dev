@@ -34,9 +34,21 @@
                 <h3 class="text-sm font-bold text-slate-500 mb-2 uppercase tracking-wider">Templates</h3>
                 <div class="space-y-2" id="template-selector">
                     <!-- Templates will be populated here -->
-                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/gis_digital_twin_dashboard_2026.svg">GIS Digital Twin</button>
-                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/premium_timeline_2026.svg">Premium Timeline</button>
-                    <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="other/tall_vertical_scrollytelling_template.svg">Vertical Scrollytelling</button>
+                    <details class="group bg-white border border-slate-200 rounded" open>
+                        <summary class="cursor-pointer font-medium text-sm text-slate-700 px-3 py-2 bg-slate-50 hover:bg-slate-100 rounded group-open:rounded-b-none border-b border-slate-200">Dashboards</summary>
+                        <div class="p-2 space-y-2">
+                            <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/gis_digital_twin_dashboard_2026.svg">GIS Digital Twin</button>
+                        </div>
+                    </details>
+
+                    <details class="group bg-white border border-slate-200 rounded">
+                        <summary class="cursor-pointer font-medium text-sm text-slate-700 px-3 py-2 bg-slate-50 hover:bg-slate-100 rounded group-open:rounded-b-none border-b border-slate-200">Infographics</summary>
+                        <div class="p-2 space-y-2">
+                            <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="16_10/premium_timeline_2026.svg">Premium Timeline</button>
+                            <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="other/tall_vertical_scrollytelling_template.svg">Vertical Scrollytelling</button>
+                        </div>
+                    </details>
+
                     <button class="template-btn w-full text-left px-3 py-2 text-sm border border-slate-200 rounded hover:bg-slate-50 hover:border-blue-400 transition-colors" data-template="blank">Blank Canvas</button>
                 </div>
             </div>

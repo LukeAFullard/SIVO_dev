@@ -27,7 +27,10 @@
 
     <!-- View 1: Annotator -->
     <div id="view-annotator" class="main-content active">
-        <div class="panel" style="flex: 1;">
+        <div class="panel" style="flex: 1; display: flex; flex-direction: column;">
+            <div style="background: #e0f2fe; border-bottom: 1px solid #bae6fd; padding: 12px 20px; color: #0369a1; font-size: 14px; line-height: 1.5;">
+                <strong>Annotator Studio:</strong> This tab allows you to visually inspect or create custom SVG templates. You can upload existing SVG images, draw new vector shapes over them, and extract their underlying element IDs. Click "Save to Pyodide FS" when you are done to use the SVG in the other tabs.
+            </div>
             <div class="panel-header">
                 1. Draw SVG Template
                 <span style="font-size: 12px; font-weight: normal; color: #64748b;">(Click "Save to Pyodide FS" to make your template available to the Python Workspace)</span>
@@ -39,6 +42,11 @@
 
     <!-- View 2: Python Workspace -->
     <div id="view-workspace" class="main-content">
+        <div style="width: 100%; display: flex; flex-direction: column;">
+            <div style="background: #e0f2fe; border-bottom: 1px solid #bae6fd; padding: 12px 20px; color: #0369a1; font-size: 14px; line-height: 1.5;">
+                <strong>Python Workspace:</strong> This tab provides a fully functional Python IDE running entirely in your browser using Pyodide (WebAssembly). Write custom Python scripts using the `sivo` library to generate highly complex mapping applications. Use the File Manager on the left to upload datasets (CSV, JSON) and SVGs, then write Python code to bind the data and map visual elements.
+            </div>
+            <div style="display: flex; flex: 1; overflow: hidden;">
         <!-- Pane 1.5: File Manager Sidebar -->
         <div class="panel" style="flex: 0.5; max-width: 250px; background: #f1f5f9;">
             <div class="panel-header" style="background: #cbd5e1;">
@@ -81,13 +89,19 @@ EDITOR_BOILERPLATE_PLACEHOLDER
             </div>
             <iframe id="output-frame"></iframe>
         </div>
+            </div>
+        </div>
     </div>
 
 
     <!-- View 3: App Builder -->
-    <div id="view-builder" class="main-content">
+    <div id="view-builder" class="main-content" style="flex-direction: column;">
+        <div style="background: #e0f2fe; border-bottom: 1px solid #bae6fd; padding: 12px 20px; color: #0369a1; font-size: 14px; line-height: 1.5; flex-shrink: 0;">
+            <strong>App Builder:</strong> This is a powerful No-Code visual editor for building SIVO applications. Start by selecting a pre-built template or your custom SVG, upload a dataset, and use the Property Inspector on the right to configure colors, tooltips, graphs, data bindings, and layouts without writing a single line of code. Equivalent Python code is automatically generated and sent to the Python Workspace.
+        </div>
+        <div style="display: flex; flex: 1; overflow: hidden;">
         <!-- APP_BUILDER_PLACEHOLDER -->
-
+        </div>
     </div>
 
     <template id="annotator-template">

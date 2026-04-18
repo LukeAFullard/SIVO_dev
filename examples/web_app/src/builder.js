@@ -798,6 +798,131 @@ btnApplyProps.addEventListener('click', () => {
 btnPreviewRefresh.addEventListener('click', generatePreview);
 btnPreviewGenerate.addEventListener('click', generatePreview);
 
+// --- Python Code Generation ---
+function generatePythonCodeFromState(state) {
+    let code = "import sivo\n\n";
+
+    if (state.customSvg) {
+        if (state.customSvg.startsWith('http')) {
+            code += `app = sivo.Sivo.from_svg("${state.customSvg}")\n\n`;
+        } else if (state.customSvg.startsWith('<svg')) {
+            code += `app = sivo.Sivo.from_string("""${state.customSvg}""")\n\n`;
+        } else {
+            code += `with open("/sivo_workspace/" + "${state.customSvg}".replace("/sivo_workspace/", ""), "r") as f:\n`;
+            code += `    app = sivo.Sivo.from_string(f.read())\n\n`;
+        }
+    } else if (state.template && state.template !== 'blank') {
+        code += `app = sivo.Sivo.from_template("${state.template}")\n\n`;
+    } else {
+        code += `app = sivo.Sivo.from_string('<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="#f8fafc"/></svg>')\n\n`;
+    }
+
+    if (state.globalSettings) {
+        const gs = state.globalSettings;
+        if (gs.theme) code += `app.theme = "${gs.theme}"\n`;
+        if (gs.ambient_effect) code += `app.ambient_effect = "${gs.ambient_effect}"\n`;
+        if (gs.default_panel_position) code += `app.default_panel_position = "${gs.default_panel_position}"\n`;
+        if (gs.background_image_url) code += `app.background_image_url = "${gs.background_image_url}"\n`;
+        if (gs.svg_background_image_url) code += `app.svg_background_image_url = "${gs.svg_background_image_url}"\n`;
+        if (gs.border_image_url) code += `app.border_image_url = "${gs.border_image_url}"\n`;
+    }
+    if (state.bgImage) {
+        code += `app.background_image_url = "${state.bgImage}"\n`;
+    }
+
+    if (state.elements) {
+        for (const [id, el] of Object.entries(state.elements)) {
+            let mapArgs = [];
+            if (el.fill) mapArgs.push(`color="${el.fill}"`);
+            if (el.hover) mapArgs.push(`hover_color="${el.hover}"`);
+            if (el.tooltip) mapArgs.push(`tooltip="""${el.tooltip}"""`);
+            if (el.enforceZIndex) mapArgs.push(`enforce_z_index=True`);
+            if (el.selectiveHover === false) mapArgs.push(`selective_hover=False`);
+
+            if (el.clickCallback === 'zoom') mapArgs.push(`zoom_on_click=True`);
+            if (el.clickCallback === 'footnote' && el.footnoteText) mapArgs.push(`footnote="${el.footnoteText}"`);
+            if (el.clickCallback === 'toggle_image' && el.toggleImageUrls) mapArgs.push(`toggle_image=[u.strip() for u in "${el.toggleImageUrls}".split(',')]`);
+            if (el.hoverCallback === 'update_panel') mapArgs.push(`hover_update_panel=True`);
+            if (el.hoverCallback === 'custom') mapArgs.push(`hover_custom_js=True`);
+
+            if (el.graphType && el.graphType !== 'none') {
+                code += `app.map_${el.graphType}_chart("${id}", title="${el.graphTitle || ''}")\n`;
+            }
+
+            if (el.fetchUrl) mapArgs.push(`fetch_url="${el.fetchUrl}"`);
+            if (el.fetchDataPath) mapArgs.push(`fetch_data_path="${el.fetchDataPath}"`);
+
+            if (el.ariaLabel) mapArgs.push(`aria_label="${el.ariaLabel}"`);
+            if (el.tabindex !== undefined && el.tabindex !== '') mapArgs.push(`tabindex=${el.tabindex}`);
+            if (el.marker) mapArgs.push(`marker="""${el.marker}"""`);
+            if (el.video) mapArgs.push(`video="${el.video}"`);
+            if (el.audio) mapArgs.push(`audio="${el.audio}"`);
+            if (el.markdown) mapArgs.push(`markdown="""${el.markdown}"""`);
+            if (el.gallery) mapArgs.push(`gallery=[${(el.gallery || []).map(g => '"'+g+'"').join(', ')}]`);
+            if (el.embed_svg) mapArgs.push(`embed_svg="${el.embed_svg}"`);
+            if (el.lottie) mapArgs.push(`lottie="${el.lottie}"`);
+            if (el.morph_to_path) mapArgs.push(`morph_to_path="${el.morph_to_path}"`);
+            if (el.clip_image_url) mapArgs.push(`clip_image_url="${el.clip_image_url}"`);
+            if (el.transform) mapArgs.push(`transform="${el.transform}"`);
+            if (el.explode) mapArgs.push(`explode=True`);
+            if (el.confetti) mapArgs.push(`confetti=True`);
+            if (el.loading) mapArgs.push(`loading=True`);
+            if (el.zoom_to) mapArgs.push(`zoom_to="${el.zoom_to}"`);
+
+            // Integrations
+            ['document', 'map_location', 'ecommerce', 'rich_media', 'bi', 'external_form', 'form', 'social', 'replit'].forEach(t => {
+                if (el[t]) mapArgs.push(`${t}={'url': '${el[t]}'}`);
+            });
+
+            if (mapArgs.length > 0) {
+                code += `app.map("${id}", ${mapArgs.join(", ")})\n`;
+            }
+
+            if (el.fillZone) code += `app.fill_template_zone("${id}", """${el.fillZone}""")\n`;
+            if (el.clipHtml) code += `app.clip_html_to_shape("${id}", """${el.clipHtml}""")\n`;
+            if (el.shapeType && el.shapeType !== 'none') code += `app.add_shape("${id}", "${el.shapeType}")\n`;
+            if (el.absoluteImageUrl) code += `app.add_absolute_image_overlay("${id}", "${el.absoluteImageUrl}")\n`;
+            if (el.scratchoff) code += `app.add_scratchoff_layer("${id}")\n`;
+        }
+    }
+
+    if (state.connections) {
+        state.connections.forEach(c => {
+            code += `app.add_connection("${c.from}", "${c.to}")\n`;
+        });
+    }
+
+    if (state.dataFile) {
+        code += `import pandas as pd\n`;
+        code += `df = pd.read_csv('/sivo_workspace/${state.dataFile}')\n`;
+
+        let mapType = state.dataMapType || 'choropleth';
+        if (['choropleth', 'categorical', 'dot_density', 'proportional_symbols', 'spike_map'].includes(mapType)) {
+            code += `data_map = dict(zip(df['${state.dataIdCol}'], df['${state.dataValueCol}']))\n`;
+            code += `app.apply_${mapType}(data_map)\n`;
+        } else if (mapType === 'value_by_alpha') {
+            code += `base_data_map = dict(zip(df['${state.dataIdCol}'], df['${state.dataBaseCol}']))\n`;
+            code += `alpha_data_map = dict(zip(df['${state.dataIdCol}'], df['${state.dataAlphaCol}']))\n`;
+            code += `app.apply_value_by_alpha(base_data_map, alpha_data_map)\n`;
+        } else if (mapType === 'hexbin') {
+            code += `points = df[['${state.dataXCol}', '${state.dataYCol}']].values.tolist()\n`;
+            code += `app.apply_hexbin(points)\n`;
+        } else if (mapType === 'flow_map') {
+            code += `flows = [{'origin': row['${state.dataOriginCol}'], 'destination': row['${state.dataDestCol}']} for index, row in df.iterrows()]\n`;
+            code += `app.apply_flow_map(flows)\n`;
+        }
+    }
+
+    code += `\nhtml_output = app.to_html()\n`;
+    code += `import js\n`;
+    code += `js.renderOutput(html_output)\n`;
+
+    const pythonCodeTextarea = document.getElementById('python-code');
+    if (pythonCodeTextarea) {
+        pythonCodeTextarea.value = code;
+    }
+}
+
 async function generatePreview() {
     if (!window.pyodide) {
         showToast("Pyodide not loaded yet.", "warning");
@@ -816,6 +941,9 @@ async function generatePreview() {
 
         // Expose the JSON state to the Python context
         window.builderConfigJson = JSON.stringify(builderState.currentConfig);
+
+        // Update the Python tab with the generated code
+        generatePythonCodeFromState(builderState.currentConfig);
 
         // Load the Python script generated by build.py
         const pyCode = BUILDER_PREVIEW_PY_PLACEHOLDER;
