@@ -1,3 +1,21 @@
+# New Integrations Example
+
+This example demonstrates how to integrate external media and forms directly into a Sivo interactive graphic. The embedded integrations showcase the ability to seamlessly connect third-party platforms directly to SVG elements, allowing for rich interactivity.
+
+## What is being shown
+The example contains an SVG (`example.svg`) with six distinct rectangular interactive areas mapped to a specific platform. Clicking on any of the corresponding elements will trigger an embedded view of that service in a side/overlay panel.
+
+The integrations being showcased are:
+- **Replit**: Embedded code workspace.
+- **Twitch**: Live stream embed.
+- **Pinterest**: Pin embed.
+- **Apple Music**: Embedded music player.
+- **Reddit**: Embedded post.
+- **Google Forms**: Embedded user form.
+
+## Key Code Snippets
+
+```python
 import os
 from sivo import Sivo
 
@@ -57,7 +75,6 @@ def main():
 
     # Google Forms embed
     # A generic public form URL that exists, rather than a fake 1FAIpQL... sequence
-    # E.g., the standard public Google Forms survey about colors
     app.map(
         "google_forms_box",
         external_form={"provider": "google_forms", "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScyqrSjG4Q-g2l6g57j_S3O7d92oN-5D4D5O8r_mR00_O2SgA/viewform?embedded=true"},
@@ -71,3 +88,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
+
+## Running the Example
+From the root directory, simply run:
+
+```bash
+python3 examples/media/new_integrations/main.py
+```
+
+This will read the `example.svg` file, apply the configured integrations, and output a fully interactive `index.html` file into this directory. Open `index.html` in your browser to experience the integrations.
