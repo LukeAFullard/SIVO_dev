@@ -315,6 +315,8 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             view_dict["scratchoff"] = view_obj["scratchoff"]
         if "proportional_symbols" in view_obj:
             view_dict["proportional_symbols"] = view_obj["proportional_symbols"]
+        if "spike_map" in view_obj:
+            view_dict["spike_map"] = view_obj["spike_map"]
         if "hexbin" in view_obj:
             view_dict["hexbin"] = view_obj["hexbin"]
         if "dot_density" in view_obj:
