@@ -63,7 +63,6 @@ def main():
         title="Interactive Europe Map Over Time",
         subtitle="Animating GeoDataFrames by Year",
         theme="light",
-        enable_minimap=True,
         disable_zoom_controls=False
     )
 
@@ -90,7 +89,8 @@ def main():
         sivo_app.map(
             element_id=country_id,
             tooltip=country_name,
-            html=f"<h3>{country_name}</h3><p>Appears in: {row['discovery_year']}</p>"
+            html=f"<h3>{country_name}</h3><p>Appears in: {row['discovery_year']}</p>",
+            panel_position="right"
         )
 
     # 2. Sidebar Animation (Nested Map):
