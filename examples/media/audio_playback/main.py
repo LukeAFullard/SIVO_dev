@@ -12,6 +12,8 @@ def main():
         element_id="play_button",
         tooltip="Click to hear a sound",
         audio="https://actions.google.com/sounds/v1/alarms/beep_short.ogg",
+        html="<h2>Audio Playback Example</h2><p>You clicked the button and should hear a short beep.</p>",
+        panel_position="right",
         hover_color="#32a852",
         glow=True
     )
