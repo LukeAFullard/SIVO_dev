@@ -12,9 +12,10 @@ def main():
     app.map(
         "dashboard_btn",
         tooltip="View Live Sales Data",
+        panel_position="right",
         bi={
-            "provider": "metabase",
-            "dashboard_url": "https://metabase.example.com/public/dashboard/xyz123"
+            "provider": "tableau",
+            "dashboard_url": "https://public.tableau.com/views/SuperSampleSuperstore/SuperDescriptive?:showVizHome=no&:embed=true"
         }
     )
 
@@ -22,6 +23,7 @@ def main():
     app.map(
         "music_btn",
         tooltip="Listen to the Theme Song",
+        panel_position="right",
         rich_media={
             "provider": "spotify",
             "media_url": "https://open.spotify.com/embed/track/3n3Ppam7vgaVa1iaRUc9Lp"
@@ -32,6 +34,7 @@ def main():
     app.map(
         "video_btn",
         tooltip="Watch Intro Video",
+        panel_position="right",
         rich_media={
             "provider": "vimeo",
             "media_url": "https://vimeo.com/76979871"
