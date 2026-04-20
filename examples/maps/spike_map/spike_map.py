@@ -25,7 +25,7 @@ def create_example():
         title="Spike Map Demo",
         subtitle="COVID-19 Case Density Representation",
         theme="light",
-        disable_panel=True
+        default_panel_position="none"
     )
 
     # Base styling
@@ -43,11 +43,13 @@ def create_example():
 
     print("Applying Spike Map...")
     # Map proportional heights and constant width.
-    # For Unprojected GeoDataFrames, Echarts api.coord will translate log_coords perfectly to physical pixels,
-    # but pixel offsets are required for drawing custom shapes properly, so max_height should be large enough (e.g. 100-200px)
-    app.apply_spike_map(spike_data, max_height=100.0, base_width=20.0, color="rgba(220, 38, 38, 0.8)")
+    # Because Echarts maps the logical bounding coordinates (0-20) to the physical screen width/height,
+    # the max_height and base_width should be in logical units relative to the GeoDataFrame's total bounds.
+    # Since the total width/height of the grid is 20 units, a max height of 10.0 and base width of 2.0
+    # will appear proportional on the canvas without blowing up out of bounds.
+    app.apply_spike_map(spike_data, max_height=8.0, base_width=2.0, color="rgba(220, 38, 38, 0.8)")
 
-    html_output = "examples/67_spike_map/spike_map.html"
+    html_output = "examples/maps/spike_map/spike_map.html"
     app.to_html(html_output)
     print(f"Successfully generated {html_output}")
 
