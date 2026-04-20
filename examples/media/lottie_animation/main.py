@@ -2,15 +2,16 @@ import os
 from sivo import Sivo
 
 def main():
-    svg_path = os.path.join(os.path.dirname(__file__), "..", "01_hello_world", "sample.svg")
+    svg_path = os.path.join(os.path.dirname(__file__), "sample.svg")
 
     sivo_app = Sivo.from_svg(svg_path, title="Lottie Animation Embed")
 
     sivo_app.map(
         "river",
         tooltip="Cafeteria",
+        panel_position="right",
         lottie={
-            "lottie_url": "https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json", # A sample lottie
+            "lottie_url": "animation.json", # A sample lottie
             "loop": True,
             "autoplay": True
         },
