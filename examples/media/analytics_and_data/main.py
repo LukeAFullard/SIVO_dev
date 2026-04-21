@@ -14,6 +14,7 @@ def main():
         "box1",
         tooltip="Click to track event",
         html="<h3>Google Analytics</h3><p>Clicking this fires a Google Analytics event (if gtag is loaded).</p>",
+        panel_position="right",
         analytics={
             "provider": "google_analytics",
             "event_name": "clicked_box1",
@@ -25,6 +26,7 @@ def main():
     app.map(
         "circle1",
         tooltip="Click to fetch live data",
+        panel_position="right",
         datasource={
             "provider": "google_sheets",
             "api_endpoint": "https://jsonplaceholder.typicode.com/users/1"
