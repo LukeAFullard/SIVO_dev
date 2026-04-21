@@ -7,6 +7,7 @@ def main():
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <rect id="block1" x="10" y="10" width="30" height="30" fill="blue" />
         <rect id="block2" x="60" y="10" width="30" height="30" fill="green" />
+        <rect id="block3" x="35" y="60" width="30" height="30" fill="red" />
     </svg>
     """
 
@@ -25,6 +26,13 @@ def main():
     app.map(
         "block2",
         html="<h1>Block 2</h1><p>Here is another block opening the overlay.</p>"
+    )
+
+    # We can also override the default panel position per element
+    app.map(
+        "block3",
+        panel_position="right",
+        html="<h1>Block 3</h1><p>This block opens a standard right side panel.</p>"
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "overlay_sidebar_example.html")
