@@ -5,7 +5,8 @@ from sivo import Sivo, ProjectConfig, ElementConfig
 base_dir = os.path.dirname(__file__)
 
 # Use a generic simple map from another example
-svg_path = os.path.join(base_dir, "..", "01_hello_world", "sample.svg")
+# Avoid relative paths with .. because Infographic.from_svg() prevents path traversal
+svg_path = os.path.abspath(os.path.join(base_dir, "..", "..", "basic", "hello_world", "sample.svg"))
 
 if not os.path.exists(svg_path):
     print(f"Warning: Ensure {svg_path} exists to run this example.")
@@ -19,7 +20,8 @@ for season in seasons:
         ambient_effect=season,
         title=f"{season.capitalize()} Ambient Effect",
         subtitle="SIVO Custom Ambient Effects",
-        theme="dark" if season in ["summer", "winter"] else "light"
+        theme="dark" if season in ["summer", "winter"] else "light",
+        default_panel_position="none"
     )
 
     sivo_app = Sivo.from_config(config)
