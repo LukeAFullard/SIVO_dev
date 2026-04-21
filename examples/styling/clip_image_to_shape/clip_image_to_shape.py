@@ -15,7 +15,8 @@ svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
 """
 
 # Initialize Sivo directly from the SVG string
-app = Sivo.from_string(svg_content, default_panel_position="right", title="Image Clipping Example")
+# Using default_panel_position="none" so we don't open an empty side panel when shapes are clicked
+app = Sivo.from_string(svg_content, default_panel_position="none", title="Image Clipping Example")
 
 # 2. Clip a square image to the circular shape
 app.clip_image_to_shape(
