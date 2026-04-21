@@ -6,7 +6,7 @@ def run():
     # 1. 1:1 Aspect Ratio (Home View)
     home_app = Sivo.from_svg(
         os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
             "src", "sivo", "templates", "1_1", "large_node_to_4_nodes.svg"
         ),
         layout_size="95%",
@@ -38,7 +38,7 @@ def run():
     # 2. 3:2 Aspect Ratio View
     app_3_2 = Sivo.from_svg(
         os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
             "src", "sivo", "templates", "3_2", "bento_grid_template.svg"
         ),
         layout_size="95%",
@@ -63,7 +63,7 @@ def run():
     # 3. 4:3 Aspect Ratio View
     app_4_3 = Sivo.from_svg(
         os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
             "src", "sivo", "templates", "4_3", "sleek_bento_grid_2026.svg"
         ),
         layout_size="95%",
@@ -80,7 +80,7 @@ def run():
     # 4. 16:10 Aspect Ratio View
     app_16_10 = Sivo.from_svg(
         os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
             "src", "sivo", "templates", "16_10", "gis_digital_twin_dashboard_2026.svg"
         ),
         layout_size="95%",
@@ -96,7 +96,7 @@ def run():
     # 5. 4:7 Mobile Portrait Aspect Ratio View
     app_4_7 = Sivo.from_svg(
         os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
             "src", "sivo", "templates", "4_7", "mobile_app_dashboard_2026.svg"
         ),
         layout_size="95%",

@@ -4,8 +4,8 @@ import lxml.etree as etree
 
 def run():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "timeline_5_nodes_template.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "src", "sivo", "templates", "other", "timeline_5_nodes_template.svg"
     )
 
     app = Sivo.from_svg(
@@ -104,7 +104,7 @@ def run():
     app.add_scalable_text("node_5_card", "EST. PEAK SALES", left="5%", top="75%", width="50%", height="15%", font_size="10%", font_weight="700", color="#64748b")
     app.add_scalable_text("node_5_card", "$3.4B", left="55%", top="70%", width="40%", height="25%", font_size="25%", font_weight="900", color="#ef4444")
 
-    output_path = os.path.join(os.path.dirname(__file__), "05_timeline.html")
+    output_path = os.path.join(os.path.dirname(__file__), "timeline.html")
     app.to_html(output_path)
     print(f"Generated: {output_path}")
 

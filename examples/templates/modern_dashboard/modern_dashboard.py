@@ -4,8 +4,8 @@ import lxml.etree as etree
 
 def run():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "dashboard_template.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "src", "sivo", "templates", "3_2", "dashboard_template.svg"
     )
 
     app = Sivo.from_svg(
@@ -157,7 +157,7 @@ def run():
         "scale_with_zoom": False
     }
 
-    output_path = os.path.join(os.path.dirname(__file__), "03_modern_dashboard.html")
+    output_path = os.path.join(os.path.dirname(__file__), "modern_dashboard.html")
     app.to_html(output_path)
     print(f"Generated: {output_path}")
 

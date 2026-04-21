@@ -74,7 +74,7 @@
 
     <!-- Node 4: Retention (Upcoming) -->
     <g id="node-4-retention">
-        <rect x="600" y="160" width="240" height="180" class="card-hover" />
+        <rect id="node-4-card" x="600" y="160" width="240" height="180" class="card-hover" />
         <circle cx="720" cy="280" r="16" class="node-circle" />
 
         <rect id="node-4-step-placeholder" x="620" y="215" width="90" height="20" class="placeholder-text-step" />
@@ -84,7 +84,7 @@
 
     <!-- Node 5: Advocacy (Upcoming) -->
     <g id="node-5-advocacy">
-        <rect x="940" y="120" width="200" height="200" class="card-hover" />
+        <rect id="node-5-card" x="940" y="120" width="200" height="200" class="card-hover" />
         <circle cx="1040" cy="240" r="16" class="node-circle" />
 
         <rect id="node-5-step-placeholder" x="960" y="175" width="80" height="20" class="placeholder-text-step" />
