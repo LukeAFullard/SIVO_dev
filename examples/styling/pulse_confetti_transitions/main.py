@@ -1,6 +1,6 @@
 import os
 from sivo import Sivo
-from sivo.runtime.bundle_generator import generate_echarts_html
+from sivo.core.project import SivoProject
 
 svg_content1 = """
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
@@ -8,7 +8,7 @@ svg_content1 = """
   <text x="500" y="50" font-size="24" text-anchor="middle" font-weight="bold">Global Monitoring Dashboard</text>
 
   <path id="region_a" d="M 100 100 L 400 100 L 400 400 L 100 400 Z" fill="#e2e8f0" stroke="#94a3b8" />
-  <text x="250" y="250" font-size="18" text-anchor="middle">Click to drill down</text>
+  <text x="250" y="250" font-size="18" text-anchor="middle">Click to drill through</text>
 
   <path id="region_b" d="M 500 100 L 900 100 L 900 400 L 500 400 Z" fill="#e2e8f0" stroke="#94a3b8" />
   <text x="700" y="250" font-size="18" text-anchor="middle">Click for Confetti!</text>
@@ -30,36 +30,37 @@ svg_content2 = """
 </svg>
 """
 
+# Create the first SIVO app from the first SVG
 sivo_app = Sivo.from_string(svg_content1)
 
-# Map Drilldown to a new SVG (should show smooth fade in/out)
-sivo_app.map("region_a", drill_to="region_a_details")
+# Map Drill Through to a new view ID. This tells SIVO to transition to "region_a_details" when "region_a" is clicked.
+sivo_app.map("region_a", drill_through="region_a_details", drill_transition="zoom")
 
-# Map Confetti Gamification
-sivo_app.map("region_b", confetti={"particle_count": 200, "spread": 90}, tooltip="Goal Reached!")
+# Map Confetti Gamification. When "region_b" is clicked, it will trigger a confetti animation.
+sivo_app.map("region_b", confetti={"particle_count": 200, "spread": 90}, tooltip="Goal Reached!", panel_position="right", html="<h1>Goal Reached!</h1><p>You have triggered the confetti gamification!</p>")
 
-# Add Pulse Markers (Live Telemetry)
+# Add Pulse Markers (Live Telemetry). Overlays proportional symbols with pulse animation enabled.
 live_data = {
     "node_1": 100,
     "node_2": {"value": 50, "color": "#3b82f6"}, # Blue marker
     "node_3": {"value": 75, "color": "#10b981"}  # Green marker
 }
 
-sivo_app.apply_proportional_symbols(live_data, min_size=15, max_size=30, color="#ef4444", is_pulse=True) # Red is default
+sivo_app.apply_proportional_symbols(live_data, min_size=15, max_size=30, color="#ef4444", is_pulse=True)
 
-# Generate HTML
-html1 = sivo_app._get_view_data()
-
-# Process second view
+# Create the second SIVO app for the drilled-through view
 sivo_app2 = Sivo.from_string(svg_content2)
-# Back button will automatically show in UI when navigating to view 2
-html2 = sivo_app2._get_view_data()
 
-views_data = {
-    "default_view": html1,
-    "region_a_details": html2
-}
+# Create a SivoProject, specifying the initial view ID
+project = SivoProject("default_view")
 
+# Add the views to the project
+project.add_view("default_view", sivo_app)
+project.add_view("region_a_details", sivo_app2)
+
+# Set the output path relative to this script
 output_path = os.path.join(os.path.dirname(__file__), "pulse_confetti.html")
-generate_echarts_html(views_data, "default_view", output_path)
+
+# Generate the standalone HTML file encompassing all views
+project.to_html(output_path=output_path)
 print(f"Generated {output_path}")
