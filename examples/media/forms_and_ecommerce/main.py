@@ -13,6 +13,7 @@ def main():
         "product1",
         tooltip="Buy Now",
         html="<h3>Special Product</h3><p>Price: $99.99</p>",
+        panel_position="right",
         ecommerce={
             "provider": "stripe",
             "checkout_url": "https://buy.stripe.com/test_abcdefg"
@@ -23,6 +24,7 @@ def main():
     app.map(
         "survey1",
         tooltip="Take our Survey",
+        panel_position="right",
         external_form={
             "provider": "typeform",
             "form_url": "https://form.typeform.com/to/demo_form"
