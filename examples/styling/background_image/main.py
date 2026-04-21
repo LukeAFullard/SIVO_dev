@@ -5,15 +5,15 @@ def main():
     # 1. Initialize Sivo with a standard SVG template
     # We will use the bento grid template to demonstrate a background that peers through
     app = Sivo.from_svg(
-        os.path.join("src", "sivo", "templates", "bento_grid_template.svg"),
+        os.path.join("src", "sivo", "templates", "3_2", "bento_grid_template.svg"),
         title="Bento Grid with Astronomical Background"
     )
 
     # 2. Add some dummy interactions to demonstrate standard functionality
-    app.map("bento-hero-data", tooltip="Primary metric overview.")
-    app.map("bento-metric-1-data", tooltip="Secondary metric breakdown.")
-    app.map("bento-sidebar-data", tooltip="Geospatial distribution.")
-    app.map("bento-main-chart-data", tooltip="Performance analysis.")
+    app.map("bento-hero-data", tooltip="Primary metric overview.", html="<h1>Hero Data</h1><p>More details here.</p>", panel_position="right")
+    app.map("bento-metric-1-data", tooltip="Secondary metric breakdown.", html="<h1>Metric 1</h1><p>Secondary metrics here.</p>", panel_position="left")
+    app.map("bento-sidebar-data", tooltip="Geospatial distribution.", html="<h1>Sidebar</h1><p>Geospatial analysis.</p>", panel_position="bottom")
+    app.map("bento-main-chart-data", tooltip="Performance analysis.", html="<h1>Main Chart</h1><p>Detailed performance analysis.</p>", panel_position="overlay")
 
     # 3. Add the new background image feature
     # A beautiful public domain astronomy image from NASA/Unsplash as a dramatic backdrop
