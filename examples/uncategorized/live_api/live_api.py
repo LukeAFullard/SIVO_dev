@@ -32,7 +32,8 @@ def main():
     sivo_app.bind_api(
         url=mock_api_url,
         polling_interval_ms=3000,
-        method="GET"
+        method="GET",
+        max_retries=5
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "live_api_example.html")

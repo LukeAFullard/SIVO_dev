@@ -871,7 +871,7 @@ class Infographic:
             auth_token=auth_token
         )
 
-    def bind_api(self, url: str, polling_interval_ms: int = 5000, method: str = "GET", headers: Optional[Dict[str, str]] = None, payload: Optional[dict] = None, data_path: Optional[str] = None):
+    def bind_api(self, url: str, polling_interval_ms: int = 5000, method: str = "GET", headers: Optional[Dict[str, str]] = None, payload: Optional[dict] = None, data_path: Optional[str] = None, max_retries: Optional[int] = None):
         """Binds an API endpoint for live UI updates via polling in the frontend runtime."""
         from .config import ApiBindingConfig
         self.api_binding = ApiBindingConfig(
@@ -880,7 +880,8 @@ class Infographic:
             method=method,
             headers=headers,
             payload=payload,
-            data_path=data_path
+            data_path=data_path,
+            max_retries=max_retries
         ).model_dump()
 
     def bind_scrollytelling(self, steps: list[Dict]):

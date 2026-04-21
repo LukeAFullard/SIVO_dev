@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws: data:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
 
@@ -1664,7 +1664,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 100\"\u003e\n        \u003c!-- Status Indicator Dot --\u003e\n        \u003ccircle id=\"status_dot\" cx=\"30\" cy=\"50\" r=\"15\" fill=\"#9ca3af\" name=\"status_dot\"/\u003e\n\n        \u003c!-- Static Label --\u003e\n        \u003ctext x=\"60\" y=\"55\" font-family=\"Arial\" font-size=\"16\" fill=\"#374151\" pointer-events=\"none\"\u003eSystem Status Connection\u003c/text\u003e\n    \u003c/svg\u003e","echarts_data":[{"name":"status_dot","value":1,"tooltip":"Waiting for live connection...","itemStyle":{"areaColor":"#9ca3af"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"status_dot":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Waiting for live connection..."},{"action_type":"tooltip","content":"\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e","title":"Waiting for live connection...","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"status_dot","type":"circle","bbox":[15.0,35.0,45.0,65.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":"Live API Binding Test","subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[300.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"status_dot":{"id":"status_dot","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Waiting for live connection..."},{"action_type":"tooltip","content":"\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e","title":"Waiting for live connection...","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#9ca3af","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":false,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}},"api_binding":{"url":"data:application/json,%5B%7B%22id%22%3A%22status_dot%22%2C%22color%22%3A%22%2310b981%22%2C%22tooltip%22%3A%22Connected%3A%20Data%20successfully%20received%20and%20processed.%22%7D%5D","polling_interval_ms":3000,"method":"GET","headers":null,"payload":null,"data_path":null}}};
+        var viewsData = {"default_view":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 100\"\u003e\n        \u003c!-- Status Indicator Dot --\u003e\n        \u003ccircle id=\"status_dot\" cx=\"30\" cy=\"50\" r=\"15\" fill=\"#9ca3af\" name=\"status_dot\"/\u003e\n\n        \u003c!-- Static Label --\u003e\n        \u003ctext x=\"60\" y=\"55\" font-family=\"Arial\" font-size=\"16\" fill=\"#374151\" pointer-events=\"none\"\u003eSystem Status Connection\u003c/text\u003e\n    \u003c/svg\u003e","echarts_data":[{"name":"status_dot","value":1,"tooltip":"Waiting for live connection...","itemStyle":{"areaColor":"#9ca3af"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"status_dot":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Waiting for live connection..."},{"action_type":"tooltip","content":"\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e","title":"Waiting for live connection...","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"status_dot","type":"circle","bbox":[15.0,35.0,45.0,65.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":"Live API Binding Test","subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[300.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"status_dot":{"id":"status_dot","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Waiting for live connection..."},{"action_type":"tooltip","content":"\u003ch3\u003eWaiting for live connection...\u003c/h3\u003e","title":"Waiting for live connection...","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#9ca3af","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":false,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}},"api_binding":{"url":"data:application/json,%5B%7B%22id%22%3A%22status_dot%22%2C%22color%22%3A%22%2310b981%22%2C%22tooltip%22%3A%22Connected%3A%20Data%20successfully%20received%20and%20processed.%22%7D%5D","polling_interval_ms":3000,"method":"GET","headers":null,"payload":null,"data_path":null,"max_retries":5}}};
         var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
@@ -3354,7 +3354,16 @@
                 window.sivoApiPollingInterval = null;
             }
             if (apiBinding) {
+                var apiFailureCount = 0;
+                var maxRetries = apiBinding.max_retries !== undefined && apiBinding.max_retries !== null ? apiBinding.max_retries : null;
+
                 window.sivoApiPollingInterval = setInterval(() => {
+                    if (maxRetries !== null && apiFailureCount >= maxRetries) {
+                        console.warn("[SIVO] Maximum API retries reached. Stopping polling.");
+                        clearInterval(window.sivoApiPollingInterval);
+                        return;
+                    }
+
                     var fetchOptions = {
                         method: apiBinding.method || 'GET',
                         headers: apiBinding.headers || {}
@@ -3365,8 +3374,14 @@
                     }
 
                     fetch(apiBinding.url, fetchOptions)
-                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error("HTTP " + res.status);
+                            }
+                            return res.json();
+                        })
                         .then(data => {
+                            apiFailureCount = 0; // reset on success
                             var targetData = data;
                             if (apiBinding.data_path) {
                                 var parts = apiBinding.data_path.split('.');
@@ -3499,7 +3514,10 @@
                             } else {
                             }
                         })
-                        .catch(err => console.error("[SIVO] API binding fetch error:", err));
+                        .catch(err => {
+                            apiFailureCount++;
+                            console.error(`[SIVO] API binding fetch error (${apiFailureCount} failures):`, err);
+                        });
                 }, apiBinding.polling_interval_ms || 5000);
             }
 
