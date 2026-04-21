@@ -10,9 +10,12 @@ svg_string = """
 sivo_app = Sivo.from_string(svg_string)
 
 # Map a linear gradient to the rectangle
+# We set panel_position to "right" and add HTML to demonstrate the interaction
 sivo_app.map(
     element_id="gradientRect",
     tooltip="This rectangle uses a linear gradient",
+    html="<h3>Gradient Rectangle</h3><p>This rectangle features a linear gradient applied via SIVO.</p>",
+    panel_position="right",
     fill_gradient={
         "type": "linear",
         "x": 0, "y": 0, "x2": 1, "y2": 1,
@@ -24,12 +27,14 @@ sivo_app.map(
 )
 
 # Map an image pattern to the circle
-# We use a placeholder image URL for the pattern
+# We set panel_position to "left" and add HTML to demonstrate the interaction
 pattern_image_url = "https://www.transparenttextures.com/patterns/cubes.png"
 
 sivo_app.map(
     element_id="patternCircle",
     tooltip="This circle uses an image pattern",
+    html="<h3>Pattern Circle</h3><p>This circle features an image pattern applied via SIVO.</p>",
+    panel_position="left",
     fill_pattern={
         "image": pattern_image_url,
         "repeat": "repeat"
