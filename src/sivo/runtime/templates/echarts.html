@@ -4665,11 +4665,12 @@ if (originalId) {
                                 } catch (e) {
                                     // Not JSON, keep as text
                                 }
-                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                // Must query within the shadow DOM since panel content is isolated
+                                var container = infoContent.querySelector(`#sivo-datasource-container-${name}`);
                                 if (container) container.innerHTML = sanitizeHTML(data);
                             })
                             .catch(err => {
-                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                var container = infoContent.querySelector(`#sivo-datasource-container-${name}`);
                                 if (container) container.innerHTML = `<span style="color:red">Failed to fetch data from ${action.provider}</span>`;
                             });
                     } else if (action.action_type === 'external_form') {
