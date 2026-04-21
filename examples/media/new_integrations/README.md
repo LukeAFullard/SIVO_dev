@@ -68,7 +68,7 @@ def main():
     # The native 'reddit' provider type natively swaps /comments/ for /embed/.
     app.map(
         "reddit_box",
-        social={"provider": "reddit", "url": "https://embed.reddit.com/r/Python/comments/1f8z9r/why_is_python_so_popular/"},
+        social={"provider": "website", "url": "https://embed.reddit.com/r/place/comments/txvk2d/rplace_datasets_april_fools_2022/"},
         panel_position="right",
         color="#ff7b4d"
     )
