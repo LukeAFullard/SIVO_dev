@@ -5035,25 +5035,26 @@ if (originalId) {
                 resizer.className = 'sivo-resizer active';
 
                 // On mobile we force bottom layout in CSS, so logic mostly just applies classes.
+                var container = document.getElementById('sivo-app-container');
                 if (position === 'left') {
-                    document.body.style.flexDirection = 'row-reverse';
+                    container.style.flexDirection = 'row-reverse';
                     infoPanel.classList.add('pos-left');
                     resizer.classList.add('resizer-horizontal');
                 } else if (position === 'bottom') {
-                    document.body.style.flexDirection = 'column';
+                    container.style.flexDirection = 'column';
                     infoPanel.classList.add('pos-bottom');
                     resizer.classList.add('resizer-vertical');
                 } else if (position === 'top') {
-                    document.body.style.flexDirection = 'column-reverse';
+                    container.style.flexDirection = 'column-reverse';
                     infoPanel.classList.add('pos-top');
                     resizer.classList.add('resizer-vertical');
                 } else if (position === 'overlay') {
-                    document.body.style.flexDirection = 'row';
+                    container.style.flexDirection = 'row';
                     infoPanel.classList.add('pos-overlay');
                     resizer.classList.remove('active'); // No resizer in overlay mode
                 } else {
                     // default right
-                    document.body.style.flexDirection = 'row';
+                    container.style.flexDirection = 'row';
                     infoPanel.classList.add('pos-right');
                     resizer.classList.add('resizer-horizontal');
                 }
@@ -5378,7 +5379,7 @@ if (originalId) {
                 infoPanel.style.transform = '';
                 var resizer = document.getElementById('sivo-resizer');
                 if (resizer) resizer.className = 'sivo-resizer';
-                document.body.style.flexDirection = 'row';
+                document.getElementById('sivo-app-container').style.flexDirection = 'row';
 
                 // Clear dynamic css
                 var dynamicStyleEl = document.getElementById('sivo-panel-dynamic-css');
@@ -5413,7 +5414,7 @@ if (originalId) {
 
             resizer.addEventListener('mousedown', function(e) {
                 isResizing = true;
-                currentLayout = document.body.style.flexDirection;
+                currentLayout = document.getElementById('sivo-app-container').style.flexDirection || 'row';
                 lastDownX = e.clientX;
                 lastDownY = e.clientY;
                 startWidth = panel.getBoundingClientRect().width;
