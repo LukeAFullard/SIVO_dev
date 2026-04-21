@@ -4,8 +4,8 @@ import lxml.etree as etree
 
 def run():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "bento_grid_dashboard_2026.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "src", "sivo", "templates", "3_2", "bento_grid_dashboard_2026.svg"
     )
 
     app = Sivo.from_svg(
@@ -150,7 +150,7 @@ def run():
     """
     app.add_overlay("card-satisfaction", gauge_html)
 
-    output_path = os.path.join(os.path.dirname(__file__), "02_bento_grid.html")
+    output_path = os.path.join(os.path.dirname(__file__), "bento_grid.html")
     app.to_html(output_path)
     print(f"Generated: {output_path}")
 

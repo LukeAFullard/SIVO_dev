@@ -4,8 +4,8 @@ import lxml.etree as etree
 
 def run():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "minimalist_journey_flow_2026.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "src", "sivo", "templates", "3_2", "minimalist_journey_flow_2026.svg"
     )
 
     app = Sivo.from_svg(
@@ -91,7 +91,7 @@ def run():
     app.add_scalable_text("node-4-step-placeholder", "118.2%", left="0%", top="300%", width="100%", height="200%", font_size="180%", font_weight="900", color="#8b5cf6", align="left")
 
     # Note: For node-4, we can't easily overlay onto step-placeholder because it's tiny. We'll map the tooltip only.
-    app.map("node-4-step-placeholder", tooltip="<b>Phase 4:</b> Customer Success drives upsells and cross-sells, increasing customer lifetime value.", hover_color="#f8fafc")
+    app.map("node-4-card", tooltip="<b>Phase 4:</b> Customer Success drives upsells and cross-sells, increasing customer lifetime value.", hover_color="#f8fafc")
 
 
     # Node 5: Renewals
@@ -101,7 +101,7 @@ def run():
 
     # Map side panel action just for demonstration of both approaches
     app.map_pie_chart(
-        element_id="node-5-step-placeholder",
+        element_id="node-5-card", panel_position="overlay",
         title="Account Status",
         data=[
             {"name": "Renewed", "value": 85},
@@ -119,9 +119,9 @@ def run():
             "backgroundColor": "transparent"
         }
     )
-    app.map("node-5-step-placeholder", tooltip="<b>Phase 5:</b> Renewal rates are strong. At-risk accounts are actively managed by the CS team.<br/><i>(Click to view details in panel)</i>", hover_color="#f8fafc")
+    app.map("node-5-card", tooltip="<b>Phase 5:</b> Renewal rates are strong. At-risk accounts are actively managed by the CS team.<br/><i>(Click to view details in panel)</i>", hover_color="#f8fafc")
 
-    output_path = os.path.join(os.path.dirname(__file__), "01_minimalist_journey.html")
+    output_path = os.path.join(os.path.dirname(__file__), "minimalist_journey.html")
     app.to_html(output_path)
     print(f"Generated: {output_path}")
 

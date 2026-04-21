@@ -4,8 +4,8 @@ import lxml.etree as etree
 
 def run():
     template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "src", "sivo", "templates", "pyramid_hierarchy_template.svg"
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+        "src", "sivo", "templates", "3_2", "pyramid_hierarchy_template.svg"
     )
 
     app = Sivo.from_svg(
@@ -75,7 +75,7 @@ def run():
     app.add_scalable_text("info-panel-data", "System Load & Latency Metrics", left="0%", top="0%", width="100%", height="10%", font_size="20%", font_weight="800", color="#1e293b")
 
     # Side panel chart mapping
-    app.map_bar_chart(
+    app.map_bar_chart( panel_position="overlay",
         element_id="info-panel-data",
         title="",
         categories=["Ingest", "Storage", "Compute", "App"],
@@ -91,7 +91,7 @@ def run():
         }
     )
 
-    output_path = os.path.join(os.path.dirname(__file__), "04_org_chart.html")
+    output_path = os.path.join(os.path.dirname(__file__), "org_chart.html")
     app.to_html(output_path)
     print(f"Generated: {output_path}")
 
