@@ -10,7 +10,7 @@ class SivoDashboard:
     Manages a multi-block responsive dashboard layout (using CSS Grid/Flexbox)
     instead of a monolithic single SVG. Maps specific Sivo instances to layout blocks.
     """
-    def __init__(self, title: str = "Dashboard", columns: int = 3, template: str = "default", background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, lock_canvas: bool = False, theme: str = "light"):
+    def __init__(self, title: str = "Dashboard", columns: int = 3, template: str = "default", background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, lock_canvas: bool = False, theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right'):
         """
         Initializes the dashboard.
         :param template: The name of the HTML layout template to use (e.g., 'default', 'sidebar_left', 'hero_top').
@@ -25,6 +25,8 @@ class SivoDashboard:
         self.background_image_opacity = background_image_opacity
         self.lock_canvas = lock_canvas
         self.theme = theme
+        self.navigation_menu = navigation_menu
+        self.navigation_menu_position = navigation_menu_position
         self.blocks: Dict[str, Sivo] = {}
         self.html_blocks: Dict[str, str] = {}
         self.details_panels: Dict[str, Dict] = {}
@@ -105,6 +107,8 @@ class SivoDashboard:
             background_image_url=self.background_image_url,
             background_image_opacity=self.background_image_opacity,
             theme=self.theme,
+            navigation_menu=self.navigation_menu,
+            navigation_menu_position=self.navigation_menu_position,
             output_path=output_path,
             custom_js=custom_js
         )
