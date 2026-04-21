@@ -20,7 +20,7 @@ def main():
     print("Building Fade Unselected Example...")
 
     # Initialize Sivo with fade_unselected=True
-    sivo_app = Sivo.from_string(svg_content, fade_unselected=True)
+    sivo_app = Sivo.from_string(svg_content, fade_unselected=True, default_panel_position="right")
 
     # Map a few elements
     sivo_app.map(
