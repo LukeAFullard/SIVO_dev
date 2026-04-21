@@ -113,6 +113,7 @@ def main():
         <p><b>Load:</b> 45%</p>
         <p><b>Temp:</b> 42°C</p>
         """,
+        panel_position="right",
         color="#bae6fd", # Light blue highlight
         hover_color="#7dd3fc",
         glow=True
@@ -128,6 +129,7 @@ def main():
         <p><b>Load:</b> 92%</p>
         <p><b>Temp:</b> 75°C</p>
         """,
+        panel_position="right",
         color="#fecaca", # Light red highlight
         hover_color="#fca5a5",
         glow=True
