@@ -1,11 +1,12 @@
+import os
 from sivo import Sivo
 
 def create_border_image_example():
     # Simple SVG template
     svg_str = '''
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect id="main_content" x="20" y="20" width="60" height="60" fill="rgba(255, 255, 255, 0.5)" rx="5"/>
-        <text x="50" y="55" font-size="8" text-anchor="middle" font-family="sans-serif">Example SVG Content</text>
+        <rect id="main_content" x="20" y="20" width="60" height="60" fill="rgba(255, 255, 255, 0.5)" rx="5" cursor="pointer"/>
+        <text x="50" y="55" font-size="8" text-anchor="middle" font-family="sans-serif" pointer-events="none">Click Me!</text>
     </svg>
     '''
 
@@ -28,8 +29,18 @@ def create_border_image_example():
         grayscale=False
     )
 
-    # Save to HTML
-    output_path = "border_image_demo.html"
+    # Map click event to open a side panel
+    # Note: Default panel_position is None, so we must explicitly set it to 'right' (or 'left', 'bottom', etc.)
+    app.map(
+        element_id="main_content",
+        html="<h2>Panel Content</h2><p>This side panel was opened by clicking the main content area.</p>",
+        panel_position="right",
+        tooltip="Click to open panel"
+    )
+
+    # Save to HTML in the same directory as this script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_path = os.path.join(script_dir, "border_image_demo.html")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(app.to_html())
 
