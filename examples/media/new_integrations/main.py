@@ -32,7 +32,7 @@ def main():
     # Sivo inserts URLs directly into iframes. Pinterest's iframe-compatible embed format is:
     app.map(
         "pinterest_box",
-        social={"provider": "pinterest", "url": "https://assets.pinterest.com/ext/embed.html?id=18577346586820541"},
+        social={"provider": "pinterest", "url": "https://assets.pinterest.com/ext/embed.html?id=244812929739519212"},
         panel_position="right",
         color="#ff4d6a"
     )
@@ -50,7 +50,7 @@ def main():
     # The native 'reddit' provider type natively swaps /comments/ for /embed/.
     app.map(
         "reddit_box",
-        social={"provider": "reddit", "url": "https://embed.reddit.com/r/programming/comments/1814v9n/an_interactive_guide_to_css_grid/"},
+        social={"provider": "reddit", "url": "https://embed.reddit.com/r/Python/comments/1f8z9r/why_is_python_so_popular/"},
         panel_position="right",
         color="#ff7b4d"
     )
