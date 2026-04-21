@@ -822,11 +822,11 @@ class Sivo:
         """
         self.infographic.bind_live(url, topic, auth_token)
 
-    def bind_api(self, url: str, polling_interval_ms: int = 5000, method: str = "GET", headers: Optional[Dict[str, str]] = None, payload: Optional[dict] = None, data_path: Optional[str] = None):
+    def bind_api(self, url: str, polling_interval_ms: int = 5000, method: str = "GET", headers: Optional[Dict[str, str]] = None, payload: Optional[dict] = None, data_path: Optional[str] = None, max_retries: Optional[int] = None):
         """
         Binds an API endpoint for live UI updates via polling.
         """
-        self.infographic.bind_api(url, polling_interval_ms, method, headers, payload, data_path)
+        self.infographic.bind_api(url, polling_interval_ms, method, headers, payload, data_path, max_retries)
 
     def bind_scrollytelling(self, steps: list[Dict]):
         """

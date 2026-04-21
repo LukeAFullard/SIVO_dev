@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws: data:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
     {% if build_js %}
@@ -3380,7 +3380,16 @@
                 window.sivoApiPollingInterval = null;
             }
             if (apiBinding) {
+                var apiFailureCount = 0;
+                var maxRetries = apiBinding.max_retries !== undefined && apiBinding.max_retries !== null ? apiBinding.max_retries : null;
+
                 window.sivoApiPollingInterval = setInterval(() => {
+                    if (maxRetries !== null && apiFailureCount >= maxRetries) {
+                        console.warn("[SIVO] Maximum API retries reached. Stopping polling.");
+                        clearInterval(window.sivoApiPollingInterval);
+                        return;
+                    }
+
                     var fetchOptions = {
                         method: apiBinding.method || 'GET',
                         headers: apiBinding.headers || {}
@@ -3391,8 +3400,14 @@
                     }
 
                     fetch(apiBinding.url, fetchOptions)
-                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error("HTTP " + res.status);
+                            }
+                            return res.json();
+                        })
                         .then(data => {
+                            apiFailureCount = 0; // reset on success
                             var targetData = data;
                             if (apiBinding.data_path) {
                                 var parts = apiBinding.data_path.split('.');
@@ -3525,7 +3540,10 @@
                             } else {
                             }
                         })
-                        .catch(err => console.error("[SIVO] API binding fetch error:", err));
+                        .catch(err => {
+                            apiFailureCount++;
+                            console.error(`[SIVO] API binding fetch error (${apiFailureCount} failures):`, err);
+                        });
                 }, apiBinding.polling_interval_ms || 5000);
             }
 
