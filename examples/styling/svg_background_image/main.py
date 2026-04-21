@@ -5,7 +5,7 @@ import os
 
 def main():
     # Use the sample SVG map
-    sample_svg = "examples/sample.svg"
+    sample_svg = os.path.join(os.path.dirname(__file__), "sample.svg")
 
     app = Sivo.from_svg(sample_svg, theme="dark", lock_zoom_out=True)
 
