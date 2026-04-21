@@ -18,7 +18,8 @@ def main():
         tooltip="Click to watch video",
         video=video_url,
         hover_color="#CC0000",
-        glow=True
+        glow=True,
+        panel_position="overlay"
     )
 
     sivo_app.map(
@@ -26,7 +27,8 @@ def main():
         tooltip="Click to watch video",
         video=video_url,
         hover_color="#f0f0f0",
-        glow=True
+        glow=True,
+        panel_position="overlay"
     )
 
     output_path = os.path.join(os.path.dirname(__file__), "output.html")
