@@ -3848,7 +3848,7 @@
         function sanitizeHTML(str) {
             if (typeof DOMPurify !== 'undefined') {
                 return DOMPurify.sanitize(str, {
-                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player', 'style'],
+                    ADD_TAGS: ['form', 'input', 'textarea', 'button', 'lottie-player', 'style', 'pre', 'code'],
                     ADD_ATTR: ['onsubmit', 'required', 'type', 'name', 'src', 'background', 'speed', 'style', 'loop', 'autoplay', 'min', 'max', 'value'],
                     FORCE_BODY: true, // Needed for DOMPurify to allow <style> tags at root
                     CUSTOM_ELEMENT_HANDLING: {
@@ -4667,11 +4667,12 @@ if (originalId) {
                                 } catch (e) {
                                     // Not JSON, keep as text
                                 }
-                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                // Must query within the shadow DOM since panel content is isolated
+                                var container = infoContent.querySelector(`#sivo-datasource-container-${name}`);
                                 if (container) container.innerHTML = sanitizeHTML(data);
                             })
                             .catch(err => {
-                                var container = document.getElementById(`sivo-datasource-container-${name}`);
+                                var container = infoContent.querySelector(`#sivo-datasource-container-${name}`);
                                 if (container) container.innerHTML = `<span style="color:red">Failed to fetch data from ${action.provider}</span>`;
                             });
                     } else if (action.action_type === 'external_form') {
