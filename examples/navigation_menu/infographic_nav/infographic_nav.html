@@ -871,6 +871,38 @@
             color: #0f172a;
         }
 
+
+        .sivo-nav-subitem {
+            padding: 8px 20px 8px 40px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .sivo-nav-subitem:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem {
+            color: #94a3b8;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem:hover {
+            background: #334155;
+            color: #f8fafc;
+        }
+        .sivo-nav-header {
+            padding: 10px 20px 5px 20px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        body.sivo-theme-dark .sivo-nav-header {
+            color: #64748b;
+        }
         /* Dark Theme Support */
         body.sivo-theme-dark .sivo-nav-btn {
             background: #1e293b;
@@ -1752,7 +1784,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"main_view":{"svg_string":"\u003csvg width=\"100%\" height=\"100%\" viewBox=\"0 0 100 100\"\u003e\u003crect width=\"100\" height=\"100\" fill=\"#f8fafc\"/\u003e\u003ctext x=\"50\" y=\"50\" font-family=\"Arial\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#334155\"\u003eMain View\u003c/text\u003e\u003c/svg\u003e","echarts_data":[],"actions_manifest":{},"overlays":{},"metadata":{"objects":[]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":[{"label":"SIVO Homepage","url":"https://sivo.dev"},{"label":"Go to Detail View","view_id":"detail_view"}],"navigation_menu_position":"top-left","mappings":{}},"detail_view":{"svg_string":"\u003csvg width=\"100%\" height=\"100%\" viewBox=\"0 0 100 100\"\u003e\u003crect width=\"100\" height=\"100\" fill=\"#e2e8f0\"/\u003e\u003ctext x=\"50\" y=\"50\" font-family=\"Arial\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#0f172a\"\u003eDetail View\u003c/text\u003e\u003c/svg\u003e","echarts_data":[],"actions_manifest":{},"overlays":{},"metadata":{"objects":[]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":[{"label":"Back to Main","view_id":"main_view"}],"navigation_menu_position":"top-left","mappings":{}}};
+        var viewsData = {"main_view":{"svg_string":"\u003csvg width=\"100%\" height=\"100%\" viewBox=\"0 0 100 100\"\u003e\u003crect width=\"100\" height=\"100\" fill=\"#f8fafc\"/\u003e\u003ctext x=\"50\" y=\"50\" font-family=\"Arial\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#334155\"\u003eMain View\u003c/text\u003e\u003c/svg\u003e","echarts_data":[],"actions_manifest":{},"overlays":{},"metadata":{"objects":[]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":[{"label":"SIVO Homepage","url":"https://sivo.dev"},{"label":"GitHub Resources","sublinks":[{"label":"Examples","url":"https://github.com/LukeAFullard/sivo/tree/main/examples"},{"label":"Documentation","url":"https://github.com/LukeAFullard/sivo/blob/main/README.md"},{"label":"Code","url":"https://github.com/LukeAFullard/sivo/tree/main/src/sivo"}]},{"label":"Go to Detail View","view_id":"detail_view"}],"navigation_menu_position":"top-left","mappings":{}},"detail_view":{"svg_string":"\u003csvg width=\"100%\" height=\"100%\" viewBox=\"0 0 100 100\"\u003e\u003crect width=\"100\" height=\"100\" fill=\"#e2e8f0\"/\u003e\u003ctext x=\"50\" y=\"50\" font-family=\"Arial\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#0f172a\"\u003eDetail View\u003c/text\u003e\u003c/svg\u003e","echarts_data":[],"actions_manifest":{},"overlays":{},"metadata":{"objects":[]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":[{"label":"Back to Main","view_id":"main_view"}],"navigation_menu_position":"top-left","mappings":{}}};
         var currentViewId = "main_view";
 
         // Check if we are in Compare Mode
@@ -6940,10 +6972,11 @@ function tourNext() {
                     menu.style.right = padding;
                 }
 
-                // Populate items
-                view.navigation_menu.forEach(function(item) {
-                    var el = document.createElement('a');
-                    el.className = 'sivo-nav-item';
+
+                // Helper to create link elements
+                function createLink(item, isSub) {
+                    var el = document.createElement(item.url || item.view_id ? 'a' : 'div');
+                    el.className = isSub ? 'sivo-nav-subitem' : (item.url || item.view_id ? 'sivo-nav-item' : 'sivo-nav-header');
                     el.innerText = item.label;
                     if (item.url) {
                         el.href = item.url;
@@ -6955,8 +6988,19 @@ function tourNext() {
                             menu.classList.remove('active');
                         };
                     }
-                    menu.appendChild(el);
+                    return el;
+                }
+
+                // Populate items
+                view.navigation_menu.forEach(function(item) {
+                    menu.appendChild(createLink(item, false));
+                    if (item.sublinks && item.sublinks.length > 0) {
+                        item.sublinks.forEach(function(sub) {
+                            menu.appendChild(createLink(sub, true));
+                        });
+                    }
                 });
+
             } else {
                 container.style.display = 'none';
             }
