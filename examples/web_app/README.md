@@ -1,4 +1,4 @@
-# Serverless SIVO (WebAssembly Browser App)
+# InfoG Live (WebAssembly Browser App)
 
 This example demonstrates how to build a 100% serverless, zero-backend web application using SIVO, Pyodide, and IndexedDB.
 
