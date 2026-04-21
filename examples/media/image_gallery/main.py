@@ -11,10 +11,11 @@ def main():
         element_id="play_button",
         tooltip="Click to view photo gallery",
         gallery=[
-            "https://images.unsplash.com/photo-1506744626753-1fa44df14d28?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=1200&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1200&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200&auto=format&fit=crop"
         ],
+        panel_position="none", # Default is none. The gallery opens in its own built-in modal overlay.
         hover_color="#0066cc",
         glow=True
     )
