@@ -574,7 +574,7 @@ class Infographic:
             mapping.actions.append(LottieAction(lottie_url=lottie['lottie_url'], loop=lottie.get('loop', True), autoplay=lottie.get('autoplay', True), panel_position=panel_position or self.default_panel_position))
 
         if compare and 'before_image' in compare and 'after_image' in compare:
-            mapping.actions.append(CompareAction(before_image=compare['before_image'], after_image=compare['after_image'], label_before=compare.get('label_before', 'Before'), label_after=compare.get('label_after', 'After'), panel_position=panel_position or self.default_panel_position))
+            mapping.actions.append(CompareAction(before_image=compare['before_image'], after_image=compare['after_image'], label_before=compare.get('label_before', 'Before'), label_after=compare.get('label_after', 'After'), reverse=compare.get('reverse', False), panel_position=panel_position or self.default_panel_position))
 
         if progress_bar and 'title' in progress_bar and 'progress' in progress_bar:
             mapping.actions.append(ProgressBarAction(title=progress_bar['title'], progress=progress_bar['progress'], color=progress_bar.get('color', '#38bdf8'), panel_position=panel_position or self.default_panel_position))
