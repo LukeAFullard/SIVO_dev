@@ -15,7 +15,8 @@ def main():
         subtitle="Testing the 'snow' ambient effect overlay",
         theme="dark",
         ambient_effect="snow",
-        disable_panel=True
+        default_panel_position="none", # Explicitly declaring none
+        disable_panel=True             # Since this example is non-interactive, panel is disabled
     )
 
     sivo_app.map("mountain", tooltip="Peak 1")
