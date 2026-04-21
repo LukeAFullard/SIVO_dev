@@ -18,7 +18,15 @@ dashboard = SivoDashboard(
     columns=2,
     navigation_menu=[
         {"label": "Documentation", "url": "https://sivo.dev/docs"},
-        {"label": "GitHub", "url": "https://github.com/LukeAFullard/sivo"}
+        {
+            "label": "GitHub",
+            "url": "https://github.com/LukeAFullard/sivo",
+            "sublinks": [
+                {"label": "Examples", "url": "https://github.com/LukeAFullard/sivo/tree/main/examples"},
+                {"label": "Documentation", "url": "https://github.com/LukeAFullard/sivo/blob/main/README.md"},
+                {"label": "Code", "url": "https://github.com/LukeAFullard/sivo/tree/main/src/sivo"}
+            ]
+        }
     ],
     navigation_menu_position="top-right"
 )

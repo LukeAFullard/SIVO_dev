@@ -897,6 +897,38 @@
             color: #0f172a;
         }
 
+
+        .sivo-nav-subitem {
+            padding: 8px 20px 8px 40px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .sivo-nav-subitem:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem {
+            color: #94a3b8;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem:hover {
+            background: #334155;
+            color: #f8fafc;
+        }
+        .sivo-nav-header {
+            padding: 10px 20px 5px 20px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        body.sivo-theme-dark .sivo-nav-header {
+            color: #64748b;
+        }
         /* Dark Theme Support */
         body.sivo-theme-dark .sivo-nav-btn {
             background: #1e293b;
@@ -6966,10 +6998,11 @@ function tourNext() {
                     menu.style.right = padding;
                 }
 
-                // Populate items
-                view.navigation_menu.forEach(function(item) {
-                    var el = document.createElement('a');
-                    el.className = 'sivo-nav-item';
+
+                // Helper to create link elements
+                function createLink(item, isSub) {
+                    var el = document.createElement(item.url || item.view_id ? 'a' : 'div');
+                    el.className = isSub ? 'sivo-nav-subitem' : (item.url || item.view_id ? 'sivo-nav-item' : 'sivo-nav-header');
                     el.innerText = item.label;
                     if (item.url) {
                         el.href = item.url;
@@ -6981,8 +7014,19 @@ function tourNext() {
                             menu.classList.remove('active');
                         };
                     }
-                    menu.appendChild(el);
+                    return el;
+                }
+
+                // Populate items
+                view.navigation_menu.forEach(function(item) {
+                    menu.appendChild(createLink(item, false));
+                    if (item.sublinks && item.sublinks.length > 0) {
+                        item.sublinks.forEach(function(sub) {
+                            menu.appendChild(createLink(sub, true));
+                        });
+                    }
                 });
+
             } else {
                 container.style.display = 'none';
             }

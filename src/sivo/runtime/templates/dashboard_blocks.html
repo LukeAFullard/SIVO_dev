@@ -304,6 +304,38 @@
             color: #0f172a;
         }
 
+
+        .sivo-nav-subitem {
+            padding: 8px 20px 8px 40px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .sivo-nav-subitem:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem {
+            color: #94a3b8;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem:hover {
+            background: #334155;
+            color: #f8fafc;
+        }
+        .sivo-nav-header {
+            padding: 10px 20px 5px 20px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        body.sivo-theme-dark .sivo-nav-header {
+            color: #64748b;
+        }
         /* Dark Theme Support */
         body.sivo-theme-dark .sivo-nav-btn {
             background: #1e293b;
@@ -341,6 +373,18 @@
                     <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}">{{ item.label }}</a>
                 {% elif item.view_id %}
                     <a class="sivo-nav-item" href="#{{ item.view_id }}">{{ item.label }}</a>
+                {% else %}
+                    <div class="sivo-nav-header">{{ item.label }}</div>
+                {% endif %}
+
+                {% if item.sublinks %}
+                    {% for sub in item.sublinks %}
+                        {% if sub.url %}
+                            <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}">{{ sub.label }}</a>
+                        {% elif sub.view_id %}
+                            <a class="sivo-nav-subitem" href="#{{ sub.view_id }}">{{ sub.label }}</a>
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
             {% endfor %}
         </div>
