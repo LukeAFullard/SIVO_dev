@@ -6,47 +6,21 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws: data:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
-    {% if build_js %}
-    <!-- Locally Bundled JS (ECharts, DOMPurify, Marked) -->
-    <script>
-    {{ bundled_js_content | safe }}
-    </script>
-    {% else %}
+
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    {% if echarts_stat %}
-    <!-- Include echarts-stat -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-stat@1.2.0/dist/ecStat.min.js"></script>
-    {% endif %}
-    {% if echarts_wordcloud %}
-    <!-- Include echarts-wordcloud -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2.1.0/dist/echarts-wordcloud.min.js"></script>
-    {% endif %}
-    {% if echarts_liquidfill %}
-    <!-- Include echarts-liquidfill -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts-liquidfill@3.1.0/dist/echarts-liquidfill.min.js"></script>
-    {% endif %}
+
+
+
 
     <!-- Include DOMPurify unconditionally for core security -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
-    {% if marked %}
-    <!-- Include marked.js for Markdown Action -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
-    {% if lottie %}
-    <!-- Include lottie-player for Lottie animations -->
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    {% endif %}
-    {% if confetti %}
-    <!-- Include canvas-confetti for gamification effects -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    {% endif %}
-    {% if jspdf %}
-    <!-- Include jsPDF for PDF export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    {% endif %}
-    {% endif %}
+
+
+
+
+
 
     <style>
         body {
@@ -1778,8 +1752,8 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {{ views_data | safe }};
-        var currentViewId = {{ initial_view | safe }};
+        var viewsData = {"main_view":{"svg_string":"\u003csvg width=\"100%\" height=\"100%\" viewBox=\"0 0 100 100\"\u003e\u003crect width=\"100\" height=\"100\" fill=\"#f8fafc\"/\u003e\u003ctext x=\"50\" y=\"50\" font-family=\"Arial\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#334155\"\u003eMain View\u003c/text\u003e\u003c/svg\u003e","echarts_data":[],"actions_manifest":{},"overlays":{},"metadata":{"objects":[]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":[{"label":"SIVO Homepage","url":"https://sivo.dev"},{"label":"Go to Detail View","view_id":"detail_view"}],"navigation_menu_position":"top-left","mappings":{}},"detail_view":{"svg_string":"\u003csvg width=\"100%\" height=\"100%\" viewBox=\"0 0 100 100\"\u003e\u003crect width=\"100\" height=\"100\" fill=\"#e2e8f0\"/\u003e\u003ctext x=\"50\" y=\"50\" font-family=\"Arial\" font-size=\"10\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#0f172a\"\u003eDetail View\u003c/text\u003e\u003c/svg\u003e","echarts_data":[],"actions_manifest":{},"overlays":{},"metadata":{"objects":[]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":[{"label":"Back to Main","view_id":"main_view"}],"navigation_menu_position":"top-left","mappings":{}}};
+        var currentViewId = "main_view";
 
         // Check if we are in Compare Mode
         var isCompareMode = currentViewId === "compare_mode";
@@ -7691,8 +7665,8 @@ function tourNext() {
 
     <!-- Custom injected assets placeholder -->
     <style id="sivo-panel-dynamic-css"></style>
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
-    <script id="custom-js">{{ custom_js | safe if custom_js else '' }}</script>
+    <style id="custom-css"></style>
+    <script id="custom-js"></script>
 
     <!-- SIVO Built-in Gallery Modal -->
     <style>

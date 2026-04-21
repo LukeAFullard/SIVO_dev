@@ -469,3 +469,11 @@ class ProjectConfig(BaseModel):
         default=False,
         description="If True, hides the strokes/borders of all mapped SVG elements in the template."
     )
+    navigation_menu: Optional[List[Dict[str, str]]] = Field(
+        default=None,
+        description="Optional list of navigation menu items. Each item is a dictionary with 'label' and either 'url' or 'view_id', and an optional 'target'."
+    )
+    navigation_menu_position: str = Field(
+        default="top-right",
+        description="Position of the navigation menu ('top-left', 'top-right', 'bottom-left', 'bottom-right')."
+    )

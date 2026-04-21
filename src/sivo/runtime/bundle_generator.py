@@ -299,6 +299,8 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             "svg_background_image_grayscale": view_obj.get("svg_background_image_grayscale", False),
             "svg_background_image_insert_after": view_obj.get("svg_background_image_insert_after", None),
             "transparent_template_lines": view_obj.get("transparent_template_lines", False),
+            "navigation_menu": view_obj.get("navigation_menu", None),
+            "navigation_menu_position": view_obj.get("navigation_menu_position", "top-right"),
             "mappings": safe_mappings
         }
         if "data_binding" in view_obj:
