@@ -4443,14 +4443,16 @@ if (originalId) {
                         var galleryModal = document.getElementById('sivo-gallery-modal');
                         var galleryWrapper = document.getElementById('sivo-gallery-wrapper');
                         if (galleryModal && galleryWrapper && action.images && action.images.length > 0) {
+                            window.sivoCurrentGalleryImages = action.images;
+                            window.sivoCurrentGalleryIndex = 0;
                             var firstImg = action.images[0] ? action.images[0] : '';
                             var imgHtml = `<img src="${firstImg}" style="max-width:100%; max-height:80vh; border-radius:4px;" />`;
 
                             // If multiple images, add simple navigation
                             if (action.images.length > 1) {
-                                imgHtml += `<div style="text-align:center; margin-top:10px; color:white;">`;
+                                imgHtml += `<div class="sivo-gallery-dots" style="text-align:center; margin-top:10px; color:white;">`;
                                 action.images.forEach((img, idx) => {
-                                    imgHtml += `<span style="display:inline-block; width:10px; height:10px; background:${idx===0?'white':'#555'}; border-radius:50%; margin:0 5px; cursor:pointer;" onclick="sivoUpdateGallery('${img}', this)"></span>`;
+                                    imgHtml += `<span class="sivo-gallery-dot" style="display:inline-block; width:10px; height:10px; background:${idx===0?'white':'#555'}; border-radius:50%; margin:0 5px; cursor:pointer;" onclick="sivoUpdateGalleryIndex(${idx})"></span>`;
                                 });
                                 imgHtml += `</div>`;
                             }
@@ -7669,7 +7671,44 @@ function tourNext() {
             }, duration);
         }
 
-        // Helper to update gallery image
+        // Helper to update gallery image by index
+        function sivoUpdateGalleryIndex(index) {
+            if (!window.sivoCurrentGalleryImages || window.sivoCurrentGalleryImages.length === 0) return;
+            if (index < 0) index = window.sivoCurrentGalleryImages.length - 1;
+            if (index >= window.sivoCurrentGalleryImages.length) index = 0;
+
+            window.sivoCurrentGalleryIndex = index;
+            var src = window.sivoCurrentGalleryImages[index];
+
+            var wrapper = document.getElementById('sivo-gallery-wrapper');
+            if(wrapper) {
+                var img = wrapper.querySelector('img');
+                if(img) img.src = src;
+
+                // update dots
+                var dots = wrapper.querySelectorAll('.sivo-gallery-dot');
+                if (dots.length > 0) {
+                    dots.forEach(d => d.style.background = '#555');
+                    if (dots[index]) dots[index].style.background = 'white';
+                }
+            }
+        }
+
+        // Add keyboard navigation for gallery
+        document.addEventListener('keydown', function(e) {
+            var sivoGalleryModal = document.getElementById('sivo-gallery-modal');
+            if (sivoGalleryModal && sivoGalleryModal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    sivoUpdateGalleryIndex(window.sivoCurrentGalleryIndex - 1);
+                } else if (e.key === 'ArrowRight') {
+                    sivoUpdateGalleryIndex(window.sivoCurrentGalleryIndex + 1);
+                } else if (e.key === 'Escape') {
+                    if (typeof closeSivoGalleryModal === 'function') closeSivoGalleryModal();
+                }
+            }
+        });
+
+        // Helper to update gallery image (legacy signature for safety)
         function sivoUpdateGallery(src, dotEl) {
             var wrapper = document.getElementById('sivo-gallery-wrapper');
             if(wrapper) {
@@ -7679,7 +7718,7 @@ function tourNext() {
                 // update dots
                 var dots = wrapper.querySelectorAll('span');
                 dots.forEach(d => d.style.background = '#555');
-                dotEl.style.background = 'white';
+                if (dotEl) dotEl.style.background = 'white';
             }
         }
 
