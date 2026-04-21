@@ -4782,15 +4782,21 @@ if (originalId) {
                     } else if (action.action_type === 'compare') {
                         hasInteraction = true;
                         var compareId = 'sivo-compare-' + name + '-' + Math.random().toString(36).substr(2, 9);
+
+                        var baseImg = action.reverse ? action.after_image : action.before_image;
+                        var overlayImg = action.reverse ? action.before_image : action.after_image;
+                        var leftLabel = action.reverse ? action.label_before : action.label_after;
+                        var rightLabel = action.reverse ? action.label_after : action.label_before;
+
                         var compareHtml = `
                         <div style="position:relative; width:100%; height:300px; overflow:hidden; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-                            <img src="${action.before_image}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" />
-                            <div id="${compareId}-after" style="position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; border-right:2px solid white; box-shadow: 2px 0 5px rgba(0,0,0,0.3);">
-                                <img src="${action.after_image}" style="position:absolute; top:0; left:0; width:200%; height:100%; object-fit:cover;" />
+                            <img src="${baseImg}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" />
+                            <div id="${compareId}-overlay" style="position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; border-right:2px solid white; box-shadow: 2px 0 5px rgba(0,0,0,0.3);">
+                                <img src="${overlayImg}" style="position:absolute; top:0; left:0; width:200%; height:100%; object-fit:cover;" />
                             </div>
-                            <input type="range" class="sivo-compare-slider" data-target="${compareId}-after" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:ew-resize;" />
-                            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_after}</div>
-                            <div style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_before}</div>
+                            <input type="range" class="sivo-compare-slider" data-target="${compareId}-overlay" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:ew-resize;" />
+                            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${leftLabel}</div>
+                            <div style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${rightLabel}</div>
                         </div>`;
                         htmlContent += compareHtml;
                     } else if (action.action_type === 'progress_bar') {

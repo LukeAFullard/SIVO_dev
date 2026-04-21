@@ -15,7 +15,8 @@ def main():
             "before_image": "https://picsum.photos/id/10/800/600",
             "after_image": "https://picsum.photos/id/11/800/600",
             "label_before": "1990",
-            "label_after": "2024"
+            "label_after": "2024",
+            "reverse": True
         },
         html="<p>Slide to compare the old and new building designs.</p>",
         panel_position="left"

@@ -209,6 +209,7 @@ class CompareAction(BaseAction):
     after_image: str = Field(description="URL of the 'after' image")
     label_before: str = Field(default="Before", description="Label for the before image")
     label_after: str = Field(default="After", description="Label for the after image")
+    reverse: bool = Field(default=False, description="Whether to reverse the left/right position of the before/after images")
     panel_position: Literal["right", "left", "bottom", "top", "overlay", "none"] = Field(default="none", description="Position of the info panel")
 
 class ProgressBarAction(BaseAction):
