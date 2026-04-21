@@ -33,7 +33,8 @@ sivo_app.map_line_chart(
     uncertainty_color="rgba(59, 130, 246, 0.2)",
     color="#3b82f6",
     smooth=True,
-    tooltip="Approval Rating"
+    tooltip="Approval Rating",
+    panel_position="overlay"
 )
 
 # Generate HTML
