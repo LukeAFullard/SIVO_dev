@@ -1,3 +1,14 @@
+# SIVO Layout Size Example
+
+This example demonstrates how to use the `layout_size` attribute in SIVO to create a responsive, scalable graphic that automatically adapts to the container size, preventing massive blank borders.
+
+## What is being shown
+- Setting the `layout_size` parameter in `Sivo.from_string()` to allow the graphic to fill a percentage of the screen dimensions automatically.
+- Mapping an interactive side panel to display HTML content, demonstrating the need to set the `panel_position` parameter, as its default value is `"none"`.
+
+## Code Example
+
+```python
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'src')))
@@ -35,5 +46,13 @@ app.map(
 output_path = os.path.join(os.path.dirname(__file__), "layout_demo.html")
 with open(output_path, "w") as f:
     f.write(app.to_html())
+```
 
-print(f"Successfully created {output_path}! Open this file in your browser to see the responsive layout in action.")
+## Running the example
+
+Run the script to generate the HTML file:
+```bash
+python app.py
+```
+
+Open the generated `layout_demo.html` in your web browser to see the results.
