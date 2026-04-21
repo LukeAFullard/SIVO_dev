@@ -29,16 +29,15 @@ def main():
     )
 
     # Pinterest embed
-    # Uses a real Pinterest pin ID
+    # Sivo inserts URLs directly into iframes. Pinterest's iframe-compatible embed format is:
     app.map(
         "pinterest_box",
-        social={"provider": "pinterest", "url": "https://www.pinterest.com/pin/18577346586820541/"},
+        social={"provider": "pinterest", "url": "https://assets.pinterest.com/ext/embed.html?id=18577346586820541"},
         panel_position="right",
         color="#ff4d6a"
     )
 
     # Apple Music embed
-    # This one was reported as working by the user
     app.map(
         "apple_music_box",
         social={"provider": "apple_music", "url": "https://music.apple.com/us/album/thriller/269572838"},
@@ -47,20 +46,20 @@ def main():
     )
 
     # Reddit embed
-    # Needs a real, valid Reddit post URL that isn't deleted or locked
+    # By using `embed.reddit.com`, the iframe respects embeddings without returning 403.
+    # The native 'reddit' provider type natively swaps /comments/ for /embed/.
     app.map(
         "reddit_box",
-        social={"provider": "reddit", "url": "https://www.reddit.com/r/programming/comments/1814v9n/an_interactive_guide_to_css_grid/"},
+        social={"provider": "reddit", "url": "https://embed.reddit.com/r/programming/comments/1814v9n/an_interactive_guide_to_css_grid/"},
         panel_position="right",
         color="#ff7b4d"
     )
 
     # Google Forms embed
-    # A generic public form URL that exists, rather than a fake 1FAIpQL... sequence
-    # E.g., the standard public Google Forms survey about colors
+    # A generic public form URL that exists, bypassing the 'file does not exist' error.
     app.map(
         "google_forms_box",
-        external_form={"provider": "google_forms", "form_url": "https://docs.google.com/forms/d/e/1FAIpQLScyqrSjG4Q-g2l6g57j_S3O7d92oN-5D4D5O8r_mR00_O2SgA/viewform?embedded=true"},
+        external_form={"provider": "google_forms", "form_url": "https://docs.google.com/forms/d/e/1FAIpQLSeZr6hSDJXdfbnNQ2omeMYLd0SpLwABU3BYUK0mpEzuILdcBQ/viewform?embedded=true"},
         panel_position="right",
         color="#9873d3"
     )
