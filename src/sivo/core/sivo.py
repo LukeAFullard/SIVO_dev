@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 from .config import ProjectConfig
 from .infographic import Infographic
+from .a11y_audit import audit_tap_target, audit_contrast
 
 class Sivo:
     """
@@ -2925,11 +2926,69 @@ class Sivo:
             view_data["dot_density"] = self.infographic.dot_density
         return view_data
 
+    def audit_a11y(self) -> None:
+        """
+        Runs an accessibility audit on the mapped elements of this SIVO instance,
+        checking for tap target sizes and color contrast against WCAG 2.2 guidelines.
+        Warnings are logged to the console.
+        """
+        if not self.infographic or not self.infographic.parser:
+            return
+
+        # Attempt to determine a base background color from the layout
+        bg_color = "#ffffff"  # Default to white
+        if self.infographic.theme == "dark":
+            bg_color = "#121212" # Echarts dark theme default background
+
+        logger.info("Running SIVO Accessibility (A11y) Audit...")
+        warnings_found = 0
+
+        # We need the parsed SVG elements to get bounding boxes and colors
+        # The parser tree should already be built
+        parser = self.infographic.parser
+
+        for elem in parser.root.iter():
+            elem_id = elem.get('id')
+            elem_name = elem.get('name')
+
+            # Check if this element is mapped and interactive
+            target_id = elem_name if elem_name else elem_id
+
+            if target_id and target_id in self.infographic.mappings:
+                mapping = self.infographic.mappings[target_id]
+
+                # Check if it has any interactive actions (clicks, hovers, etc)
+                is_interactive = len([a for a in mapping.actions if a.action_type not in ('a11y', 'tooltip')]) > 0
+
+                if is_interactive:
+                    from ..svg.metadata import get_bounding_box
+                    bbox = get_bounding_box(elem)
+
+                    # 1. Check Tap Target Size
+                    tap_warnings = audit_tap_target(target_id, bbox)
+                    for w in tap_warnings:
+                        logger.warning(w)
+                        warnings_found += 1
+
+                    # 2. Check Color Contrast
+                    contrast_warnings = audit_contrast(target_id, elem, bg_color)
+                    for w in contrast_warnings:
+                        logger.warning(w)
+                        warnings_found += 1
+
+        if warnings_found == 0:
+            logger.info("✅ A11y Audit Passed: No WCAG 2.2 violations detected for interactive elements.")
+        else:
+            logger.warning(f"⚠️ A11y Audit Completed: {warnings_found} warning(s) found.")
+
     def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
         Generates the interactive HTML string (bundle) containing the ECharts map,
         Jinja2 template, and mapped behaviors. Optionally saves to a file.
         """
+        if getattr(self.infographic, 'enable_a11y', False):
+            self.audit_a11y()
+
         from ..runtime.bundle_generator import generate_echarts_html
 
         # Wrap the single view in a dictionary to reuse the multi-view bundle generator
