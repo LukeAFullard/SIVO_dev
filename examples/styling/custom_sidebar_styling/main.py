@@ -35,7 +35,8 @@ def main():
         svg_string,
         title="Custom Sidebar Styling",
         subtitle="Click Region A (global style) or Region B (element-specific override)",
-        panel_css=global_panel_css # Apply the global CSS
+        panel_css=global_panel_css, # Apply the global CSS
+        default_panel_position="right"
     )
 
     # 4. Map Region A. It will inherit the global panel CSS.
