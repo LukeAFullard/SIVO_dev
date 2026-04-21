@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
 
@@ -4137,12 +4137,12 @@ if (originalId) {
 
         // Handle click events
         myChart.on('click', function (params) {
-            window.triggerElementClick(params.name);
+            window.triggerElementClick(params.name, params);
         });
 
         window.sivoCurrentPanelElement = null;
 
-        window.triggerElementClick = function(name) {
+        window.triggerElementClick = function(name, params) {
             if (presentationOrder && presentationOrder.length > 0) {
                 var idx = presentationOrder.indexOf(name);
                 if (idx !== -1) {
@@ -4878,7 +4878,7 @@ if (originalId) {
                         if (typeof confetti === 'function') {
                             // Convert map coordinates to window coordinates for confetti origin
                             var x = 0.5, y = 0.5; // default center
-                            if (params.event && params.event.event) {
+                            if (params && params.event && params.event.event) {
                                 var e = params.event.event;
                                 var clientX = e.clientX;
                                 var clientY = e.clientY;
