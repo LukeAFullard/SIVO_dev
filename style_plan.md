@@ -30,11 +30,19 @@ The foundation of any successful infographic is its structural architecture. In 
 *   **Visual Hierarchy:** A dense, circular structure expanding outward from a central core. Inner rings represent broad categories, while outer rings slice into highly specific micro-data.
 *   **The Data-Story:** The ultimate layout for **complex taxonomies, market segmentations, and nested hierarchical data**. It allows viewers to see the "whole pie" while also tracking specific lineages from the core category out to the granular details.
 
+### 7. Spatial / 3D Mapping Architecture
+*   **Visual Hierarchy:** An immersive, multi-dimensional canvas where data is plotted along X, Y, and Z axes. Elements are sized, layered, or colored based on proximity to the viewer or importance, often utilizing parallax scrolling to reveal deeper layers.
+*   **The Data-Story:** Perfect for **geospatial data, architectural breakdowns, and immersive storytelling**. It allows users to physically "explore" the data landscape, understanding complex spatial relationships and relative scales that flat 2D maps fail to capture.
+
+### 8. Network / Node-Link Graph Architecture
+*   **Visual Hierarchy:** A decentralized web of interconnected nodes (circles or icons) tied together by varied edges (lines). The cluster density and line thickness immediately communicate the strength and frequency of relationships, with core hubs acting as visual anchors.
+*   **The Data-Story:** Essential for **social network analysis, ecosystem mapping, and unearthing hidden correlations**. It excels at showing *how* disparate entities interact, moving the narrative away from individual metrics toward systemic relationships and influence mapping.
+
 ---
 
 ## Deliverable 2: Aesthetic Themes (The "Style" Kits)
 
-Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 7 leading themes:
+Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 9 leading themes:
 
 ### 1. Strategic Minimalism (The "Quiet Luxury" of Data)
 A reaction against data fatigue; this theme strips away everything that isn't the core message, relying on extreme white space.
@@ -77,6 +85,18 @@ Fusing high-tech data visualization with organic, nature-inspired elements to cr
 *   **Typography:** Elegant, fluid serif fonts combined with highly legible humanist sans-serifs (e.g., *Optima*, *Larken*).
 *   **Color Palette:** Fluid gradients inspired by nature (Moss Green, Ocean Deep Blue, Sunrise Peach, Petal Pink). Soft, non-harsh contrast.
 *   **Visual Accents:** Organic, amoeba-like fluid shapes framing data points, subtle grain textures, soft light leaks, and visualizations that mimic natural patterns (like mycelium networks or topographic maps).
+
+### 8. High-Contrast Maximalism (The "Sensory Overload" Style)
+A deliberate rejection of safe, minimal design, this style uses overwhelming visual stimuli to create an energetic, chaotic, yet highly engineered narrative.
+*   **Typography:** A cacophony of contrasting fonts. Acidic, stretched serifs mixed with ultra-bold, condensed sans-serifs and erratic script fonts to create deliberate tension.
+*   **Color Palette:** Clashing, hyper-saturated neon palettes (Acid Yellow, Hot Magenta, Electric Violet, Cyber Cyan) used simultaneously, completely abandoning traditional color harmony rules.
+*   **Visual Accents:** Densely packed compositions with zero negative space, overlapping elements, sticker-bombing aesthetics, aggressive gradients, and kinetic typography that constantly shifts to demand absolute attention.
+
+### 9. Hyper-Tactile Skeuomorphism (The "Physical World" Return)
+Moving past the flat digital landscape, this trend brings realistic, tangible textures and physics back to UI and data, creating highly interactive, "touchable" experiences.
+*   **Typography:** Robust, classic serifs and slab serifs (e.g., *Clarendon*, *Rockwell*) that feel deeply rooted in print history and physical media.
+*   **Color Palette:** Rich, authentic material colors. Matte plastics (Off-White, Slate), brushed metals (Aluminum, Bronze), and soft leathers (Cognac, Deep Charcoal).
+*   **Visual Accents:** Ultra-realistic 3D rendering with ray-traced shadows, interactive elements that depress like mechanical buttons, simulated physics on data points (e.g., charts that bounce or slide with weight), and detailed material textures like brushed metal or coarse paper.
 
 ---
 
