@@ -1,0 +1,195 @@
+/*
+ * Theme: Neo-Brutalism (The "Unapologetic" System)
+ * Description: Raw, bold, and intentionally unpolished. It rejects traditional corporate slickness in favor of high-impact, immediate communication.
+ * Typography: Oversized, condensed grotesque sans-serifs (e.g., Tungsten, Druk) that demand attention. Body copy is often large and stark.
+ * Color Palette: High-contrast, web-safe colors. Think stark white, harsh black, paired with un-muted primary colors (Electric Yellow, Pure Cyan, Magentas).
+ * Visual Accents: Hard black outlines on shapes, harsh drop shadows with no blur (solid offset shadows), visible grid lines, and raw, pixelated graphics mixed with sharp vectors.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;700&display=swap');
+
+:root {
+  /* Color Palette */
+  --sivo-bg-primary: #FFFFFF;
+  --sivo-bg-secondary: #E0E0E0;
+  --sivo-text-primary: #000000;
+  --sivo-text-secondary: #000000;
+  --sivo-accent: #FFFF00; /* Electric Yellow */
+  --sivo-accent-alt1: #00FFFF; /* Pure Cyan */
+  --sivo-accent-alt2: #FF00FF; /* Magenta */
+
+  /* Neo-Brutalism Specifics */
+  --nb-border-width: 4px;
+  --nb-border-color: #000000;
+  --nb-shadow: 6px 6px 0px 0px #000000;
+  --nb-shadow-hover: 2px 2px 0px 0px #000000;
+
+  /* Typography */
+  --sivo-font-family-display: 'Anton', 'Impact', sans-serif; /* Condensed grotesque alternative */
+  --sivo-font-family-body: 'Space Grotesk', sans-serif;
+}
+
+body {
+  background-color: var(--sivo-bg-primary);
+  color: var(--sivo-text-primary);
+  font-family: var(--sivo-font-family-body);
+  /* Visible grid lines effect */
+  background-image: linear-gradient(to right, var(--sivo-bg-secondary) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--sivo-bg-secondary) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--sivo-font-family-display);
+  text-transform: uppercase;
+  margin-top: 0;
+  color: var(--sivo-text-primary);
+  letter-spacing: 1px;
+}
+
+h1 {
+  font-size: 4rem;
+  line-height: 1.1;
+  text-shadow: 4px 4px 0px var(--sivo-accent);
+}
+
+h2 {
+  font-size: 3rem;
+  text-shadow: 3px 3px 0px var(--sivo-accent-alt1);
+}
+
+p {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+/* SIVO App Container overrides */
+#sivo-app-container {
+  border: var(--nb-border-width) solid var(--nb-border-color);
+  box-shadow: var(--nb-shadow);
+  background-color: var(--sivo-bg-primary);
+}
+
+/* Side Panels & Modals */
+.sivo-panel, .sivo-modal, .sivo-tooltip, #info-panel {
+  background-color: var(--sivo-bg-primary);
+  border: var(--nb-border-width) solid var(--nb-border-color);
+  box-shadow: var(--nb-shadow);
+  color: var(--sivo-text-primary);
+  font-family: var(--sivo-font-family-body);
+  border-radius: 0; /* Hard corners */
+}
+
+/* Override standard Sivo panel styles that might have soft shadows or rounded corners */
+#info-panel {
+  border-radius: 0 !important;
+  box-shadow: var(--nb-shadow) !important;
+  border: var(--nb-border-width) solid var(--nb-border-color) !important;
+}
+
+/* Headers within panels */
+.sivo-panel h1, .sivo-panel h2, .sivo-panel h3,
+#info-panel h1, #info-panel h2, #info-panel h3 {
+  border-bottom: var(--nb-border-width) solid var(--nb-border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Buttons and Interactive Elements */
+button, .sivo-button, .sivo-action-btn {
+  background-color: var(--sivo-accent);
+  color: var(--sivo-text-primary);
+  font-family: var(--sivo-font-family-display);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  border: var(--nb-border-width) solid var(--nb-border-color);
+  box-shadow: var(--nb-shadow);
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  border-radius: 0;
+}
+
+button:hover, .sivo-button:hover, .sivo-action-btn:hover {
+  background-color: var(--sivo-accent-alt1);
+  transform: translate(4px, 4px);
+  box-shadow: var(--nb-shadow-hover);
+}
+
+button:active, .sivo-button:active, .sivo-action-btn:active {
+  background-color: var(--sivo-accent-alt2);
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px 0px var(--nb-border-color);
+}
+
+/* Links */
+a {
+  color: var(--sivo-text-primary);
+  text-decoration: none;
+  background-color: var(--sivo-accent-alt1);
+  border: 2px solid var(--nb-border-color);
+  padding: 2px 4px;
+  font-weight: bold;
+  box-shadow: 2px 2px 0px 0px var(--nb-border-color);
+  transition: all 0.1s;
+}
+
+a:hover {
+  background-color: var(--sivo-accent);
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px 0px var(--nb-border-color);
+}
+
+/* Forms and Inputs */
+input, textarea, select {
+  font-family: var(--sivo-font-family-body);
+  font-size: 1.2rem;
+  border: var(--nb-border-width) solid var(--nb-border-color);
+  padding: 0.5rem;
+  background-color: var(--sivo-bg-primary);
+  border-radius: 0;
+  box-shadow: var(--nb-shadow);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  background-color: var(--sivo-accent);
+}
+
+/* Tooltips */
+.echarts-tooltip {
+  background-color: var(--sivo-bg-primary) !important;
+  border: var(--nb-border-width) solid var(--nb-border-color) !important;
+  box-shadow: var(--nb-shadow) !important;
+  color: var(--sivo-text-primary) !important;
+  border-radius: 0 !important;
+  font-family: var(--sivo-font-family-body) !important;
+  font-weight: bold;
+  font-size: 1rem !important;
+}
+
+/* Markdown Content Areas */
+.sivo-markdown {
+  font-family: var(--sivo-font-family-body);
+}
+
+.sivo-markdown p {
+  margin-bottom: 1rem;
+}
+
+.sivo-markdown img {
+  border: var(--nb-border-width) solid var(--nb-border-color);
+  box-shadow: var(--nb-shadow);
+  max-width: 100%;
+}
+
+.sivo-markdown blockquote {
+  border-left: var(--nb-border-width) solid var(--sivo-accent-alt2);
+  margin: 1.5rem 0;
+  padding: 0.5rem 1rem;
+  background-color: var(--sivo-bg-primary);
+  font-style: italic;
+  font-weight: 700;
+  box-shadow: var(--nb-shadow);
+}
