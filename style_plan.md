@@ -238,7 +238,7 @@ Brings a human, handcrafted touch to rigid data, appealing to empathy and organi
 *   **Color Palette:** Earthy, grounded tones. Clay, Terracotta, Forest Green, and Ochre, offset by warm off-white (parchment) backgrounds.
 *   **Visual Accents:** "Controlled imperfection." Hand-drawn style annotations, textured grain filters that mimic recycled paper or risograph printing, and slightly asymmetrical organic shapes rather than perfect circles or rectangles.
 *   **Implementation Status:**
-    *   [ ] Theme implemented
+    *   [x] Theme implemented
 
 ### 5. Kinetic Typography & Code-Art (The "Algorithmic" Vibe)
 A data-native aesthetic that celebrates the source material. It looks like a beautiful terminal window or a raw data feed turned into art.

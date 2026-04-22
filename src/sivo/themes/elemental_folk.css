@@ -1,0 +1,265 @@
+/*
+ * Elemental Folk (The "Tactile" Data Story) Theme
+ *
+ * Brings a human, handcrafted touch to rigid data, appealing to empathy and organic storytelling.
+ * Typography: Warm serif headers (Ogg, Recoleta) and clean sans-serif body copy.
+ * Color Palette: Earthy, grounded tones. Clay, Terracotta, Forest Green, Ochre on warm off-white (parchment).
+ * Visual Accents: "Controlled imperfection." Hand-drawn style annotations, textured grain filters, slightly asymmetrical organic shapes.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Recoleta:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+/* Base Theme Variables */
+:root {
+  /* Color Palette - Earthy, Grounded Tones */
+  --ef-bg-parchment: #F8F5EE;       /* Warm off-white */
+  --ef-clay: #C28B75;             /* Clay */
+  --ef-terracotta: #A54636;       /* Terracotta */
+  --ef-forest-green: #2B5B43;     /* Forest Green */
+  --ef-ochre: #DAA03D;            /* Ochre */
+  --ef-text-primary: #332B25;     /* Dark earthy brown for text */
+  --ef-text-secondary: #6B5A4E;   /* Lighter earthy brown */
+
+  /* Typography */
+  --ef-font-header: 'Recoleta', 'Georgia', serif;
+  --ef-font-body: 'Inter', system-ui, sans-serif;
+
+  /* Textures & Effects */
+  --ef-grain-filter: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>');
+  --ef-border-radius: 16px 24px 12px 20px; /* Asymmetrical organic shapes */
+  --ef-border-style: solid;
+  --ef-border-width: 2px;
+  --ef-border-color: var(--ef-terracotta);
+}
+
+/* Base Body Styles */
+body.sivo-theme-light,
+body {
+    background-color: var(--ef-bg-parchment);
+    color: var(--ef-text-primary);
+    font-family: var(--ef-font-body);
+    /* Apply grainy texture to the background */
+    background-image: var(--ef-grain-filter);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6,
+#sivo-title,
+.info-panel-content h1,
+.info-panel-content h2,
+.info-panel-content h3 {
+    font-family: var(--ef-font-header);
+    color: var(--ef-text-primary);
+    font-weight: 700;
+}
+
+#sivo-subtitle,
+.info-panel-content p {
+    color: var(--ef-text-secondary);
+}
+
+/* Info Panel Styling */
+#info-panel {
+    background-color: var(--ef-bg-parchment);
+    color: var(--ef-text-primary);
+    border-radius: var(--ef-border-radius); /* Asymmetrical */
+    border: var(--ef-border-width) var(--ef-border-style) var(--ef-terracotta);
+    background-image: var(--ef-grain-filter);
+    box-shadow: 4px 6px 12px rgba(43, 91, 67, 0.1); /* Subtle forest green shadow */
+}
+
+/* Remove default harsh borders */
+#info-panel.pos-right, #info-panel.pos-left, #info-panel.pos-top, #info-panel.pos-bottom {
+    border: var(--ef-border-width) var(--ef-border-style) var(--ef-clay);
+    border-radius: var(--ef-border-radius);
+    margin: 8px; /* Give some breathing room to see the organic border */
+}
+
+.info-panel-header {
+    background: transparent;
+    border-bottom: 1px dashed var(--ef-clay);
+}
+
+/* Close Button - Organic feel */
+.close-btn {
+    background: transparent;
+    border: 2px solid var(--ef-forest-green);
+    color: var(--ef-forest-green);
+    border-radius: 50% 40% 60% 40%; /* Asymmetrical pill */
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: var(--ef-forest-green);
+    color: var(--ef-bg-parchment);
+    transform: rotate(-5deg) scale(1.05);
+}
+
+/* Zoom Controls - Handcrafted buttons */
+.zoom-btn {
+    background: var(--ef-bg-parchment);
+    color: var(--ef-text-primary);
+    border: 2px solid var(--ef-clay);
+    border-radius: 40% 60% 50% 50%; /* Organic pebble shapes */
+    box-shadow: 2px 3px 0px rgba(165, 70, 54, 0.2); /* Terracotta shadow */
+    transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+    background: var(--ef-clay);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 2px 5px 0px rgba(165, 70, 54, 0.3);
+}
+
+/* Scrollytelling Cards */
+.scrolly-step-card {
+    background-color: rgba(248, 245, 238, 0.95); /* Slightly transparent parchment */
+    border: 2px solid var(--ef-ochre);
+    border-radius: var(--ef-border-radius);
+    box-shadow: 3px 5px 0px rgba(218, 160, 61, 0.2);
+    backdrop-filter: blur(4px);
+    background-image: var(--ef-grain-filter);
+}
+
+/* Search Container */
+#sivo-search-container, #sivo-geocoder-container {
+    background-color: var(--ef-bg-parchment);
+    border: 2px solid var(--ef-forest-green);
+    border-radius: 30px 20px 25px 20px;
+    box-shadow: 3px 4px 0px rgba(43, 91, 67, 0.15);
+}
+
+#sivo-search-input, #sivo-geocoder-input {
+    color: var(--ef-text-primary);
+    font-family: var(--ef-font-body);
+}
+
+/* Search Results */
+#sivo-search-results, #sivo-geocoder-results {
+    background-color: var(--ef-bg-parchment);
+    border: 2px solid var(--ef-clay);
+    border-radius: var(--ef-border-radius);
+}
+
+.sivo-search-result-item {
+    border-bottom: 1px dashed var(--ef-clay);
+}
+.sivo-search-result-item:hover {
+    background-color: rgba(194, 139, 117, 0.1); /* Light clay tint */
+}
+.sivo-search-result-title {
+    color: var(--ef-forest-green);
+    font-family: var(--ef-font-header);
+}
+
+/* Tour Controls */
+#tour-container {
+    background-color: var(--ef-bg-parchment);
+    border: 2px solid var(--ef-terracotta);
+    border-radius: var(--ef-border-radius);
+    background-image: var(--ef-grain-filter);
+}
+
+.tour-btn {
+    background: var(--ef-forest-green);
+    color: white;
+    border: none;
+    border-radius: 8px 12px 6px 10px;
+    font-family: var(--ef-font-body);
+}
+.tour-btn:hover {
+    background: var(--ef-terracotta);
+}
+
+/* Navigation Menu */
+.sivo-nav-btn {
+    background: var(--ef-bg-parchment);
+    border: 2px solid var(--ef-clay);
+    border-radius: 40% 60% 50% 50%;
+}
+.sivo-nav-menu {
+    background: var(--ef-bg-parchment);
+    border: 2px solid var(--ef-clay);
+    border-radius: var(--ef-border-radius);
+}
+.sivo-nav-item:hover {
+    background-color: rgba(194, 139, 117, 0.1);
+}
+
+/* Tooltips (Echarts overriding) */
+/* Note: ECharts styles tooltips inline mostly, but we can override via !important if needed, though SIVO injects SIVO styles via JS. We can provide a hook if they use standard classes, but SIVO sets extraCssText. */
+
+/* SVG Path Overrides (if renderMode is svg) */
+/* Add subtle imperfect outlines to paths */
+svg path {
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+/* ECharts Chart Container Background */
+#chart-container {
+    background-color: transparent !important; /* Let parchment show through */
+}
+
+/* SVG Text elements */
+text {
+    font-family: var(--ef-font-body) !important;
+}
+
+/* Echarts Canvas - Grain overlay (pointer events none so it doesn't block interaction) */
+#chart-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background-image: var(--ef-grain-filter);
+    z-index: 50; /* Above chart, below tooltips/UI */
+}
+
+/* Dark Mode Fallbacks (Though Elemental Folk is primarily light/warm) */
+body.sivo-theme-dark {
+    background-color: #2D2622; /* Dark earth */
+    color: #E8E0D5;
+}
+body.sivo-theme-dark #info-panel,
+body.sivo-theme-dark .scrolly-step-card,
+body.sivo-theme-dark #sivo-search-container,
+body.sivo-theme-dark #tour-container {
+    background-color: #38302A;
+    border-color: var(--ef-clay);
+}
+body.sivo-theme-dark h1,
+body.sivo-theme-dark h2,
+body.sivo-theme-dark h3,
+body.sivo-theme-dark .info-panel-content h1,
+body.sivo-theme-dark .info-panel-content h2,
+body.sivo-theme-dark .info-panel-content h3 {
+    color: #E8E0D5;
+}
+body.sivo-theme-dark p,
+body.sivo-theme-dark #sivo-subtitle {
+    color: #B5A89A;
+}
+
+/* Form Elements inside Info Panels */
+input[type="text"], input[type="email"], textarea, select {
+    background-color: rgba(255,255,255,0.5);
+    border: 2px solid var(--ef-clay);
+    border-radius: 8px 12px 8px 12px;
+    font-family: var(--ef-font-body);
+}
+
+button {
+    font-family: var(--ef-font-header);
+    background-color: var(--ef-terracotta);
+    color: white;
+    border: none;
+    border-radius: 12px 8px 12px 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+button:hover {
+    background-color: var(--ef-ochre);
+}
