@@ -3163,6 +3163,9 @@
             var nav = document.createElement('nav');
             nav.setAttribute('aria-label', 'Interactive map regions');
             var ul = document.createElement('ul');
+            ul.style.listStyle = 'none';
+            ul.style.padding = '0';
+            ul.style.margin = '0';
             nav.appendChild(ul);
 
             Object.keys(actionsManifest).forEach(function(elementId) {
