@@ -1,0 +1,133 @@
+/*
+ * Theme: Strategic Minimalism (The "Quiet Luxury" of Data)
+ *
+ * A reaction against data fatigue; this theme strips away everything that isn't the core message,
+ * relying on extreme white space.
+ *
+ * Typography: Geometric sans-serifs (Inter, Aeonik) for headers, monospaced fonts for data.
+ * Color Palette: Monochromatic/low-contrast (Alabaster, Soft Ash, Slate Grey) with a high-saturation
+ * indicator color (Signal Orange/Azure Blue).
+ * Visual Accents: Razor-thin hairlines (0.5pt), micro-interactions, negative space.
+ */
+
+/* Import fonts if needed (Inter and a monospace font like Roboto Mono) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Color Palette */
+  --sivo-bg-color: #F8F9FA; /* Alabaster */
+  --sivo-text-color: #343A40; /* Slate Grey / Dark Ash */
+  --sivo-secondary-bg: #E9ECEF; /* Soft Ash */
+  --sivo-border-color: #DEE2E6; /* Light Grey for hairlines */
+
+  /* High-saturation indicator color */
+  --sivo-accent-color: #FF5722; /* Signal Orange */
+  --sivo-accent-hover: #F4511E;
+
+  /* Typography */
+  --sivo-font-family-headers: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --sivo-font-family-data: 'Roboto Mono', 'Courier New', Courier, monospace;
+  --sivo-font-family-body: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* Layout & Spacing (Extreme white space) */
+  --sivo-spacing-base: 2rem;
+  --sivo-spacing-large: 4rem;
+
+  /* Visual Accents */
+  --sivo-hairline-width: 0.5px;
+}
+
+/* Global Application Styling */
+body, #sivo-app-container {
+  background-color: var(--sivo-bg-color);
+  color: var(--sivo-text-color);
+  font-family: var(--sivo-font-family-body);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6, .sivo-header {
+  font-family: var(--sivo-font-family-headers);
+  font-weight: 600;
+  color: var(--sivo-text-color);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--sivo-spacing-base);
+}
+
+/* Data Points / Numbers */
+.sivo-data-point, .sivo-value, .sivo-metric, code {
+  font-family: var(--sivo-font-family-data);
+  font-weight: 500;
+  color: var(--sivo-text-color);
+}
+
+/* The Highlight/Accent */
+.sivo-highlight, .sivo-active, .sivo-selected {
+  color: var(--sivo-accent-color);
+}
+
+/* Razor-thin hairlines */
+hr, .sivo-divider, .sivo-separator {
+  border: none;
+  border-top: var(--sivo-hairline-width) solid var(--sivo-border-color);
+  margin: var(--sivo-spacing-base) 0;
+}
+
+/* Panels / Cards */
+.sivo-panel, #info-panel, .sivo-card {
+  background-color: var(--sivo-bg-color);
+  border: var(--sivo-hairline-width) solid var(--sivo-border-color);
+  border-radius: 0; /* Minimalist, sharp edges */
+  padding: var(--sivo-spacing-base);
+  box-shadow: none; /* No drop shadows in minimalism */
+  margin-bottom: var(--sivo-spacing-base);
+  transition: border-color 0.3s ease;
+}
+
+/* Micro-interactions */
+.sivo-panel:hover, #info-panel:hover, .sivo-interactive:hover {
+  border-color: var(--sivo-accent-color);
+}
+
+/* Buttons */
+button, .sivo-btn {
+  background-color: transparent;
+  color: var(--sivo-text-color);
+  font-family: var(--sivo-font-family-headers);
+  font-weight: 400;
+  border: var(--sivo-hairline-width) solid var(--sivo-border-color);
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+button:hover, .sivo-btn:hover {
+  border-color: var(--sivo-accent-color);
+  color: var(--sivo-accent-color);
+}
+
+/* Tooltips */
+.sivo-tooltip {
+  background-color: var(--sivo-bg-color);
+  border: var(--sivo-hairline-width) solid var(--sivo-border-color);
+  color: var(--sivo-text-color);
+  font-family: var(--sivo-font-family-body);
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* SVG Chart Elements - Minimalist overrides if needed */
+.sivo-axis line, .sivo-axis path {
+  stroke: var(--sivo-border-color);
+  stroke-width: var(--sivo-hairline-width);
+}
+
+.sivo-axis text {
+  font-family: var(--sivo-font-family-data);
+  fill: var(--sivo-text-color);
+  font-size: 0.75rem;
+}
