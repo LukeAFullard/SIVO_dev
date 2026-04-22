@@ -55,11 +55,23 @@ The foundation of any successful infographic is its structural architecture. In 
 *   **Visual Hierarchy:** A localized, horizontally-scrolling or swipeable sequence embedded within a larger static page. It creates a self-contained "story within a story" where a specific chart evolves across a few frames without dominating the entire viewport.
 *   **The Data-Story:** Best suited for **explaining a specific methodology, zooming into a micro-trend, or illustrating a short sequence**. It provides deep context on a single data point without disrupting the broader flow of the overarching document.
 
+### 13. The Dynamic Digital Twin
+*   **Visual Hierarchy:** A highly interactive, 2D or 3D replica of a physical system or environment, positioned centrally. Peripheral data panels dynamically update in real-time as the user selects different components of the "twin".
+*   **The Data-Story:** Ideal for **manufacturing pipelines, smart city overviews, and IoT network monitoring**. It bridges the gap between abstract data and the physical reality it represents, providing instant context to performance metrics and anomalies.
+
+### 14. The Conversational/AI-Driven Canvas
+*   **Visual Hierarchy:** An adaptive layout built around a central search or chat interface. Instead of a static presentation, charts and data modules appear, resize, and reconfigure themselves organically based on user prompts or contextual flow.
+*   **The Data-Story:** Essential for **democratized data analysis, self-serve business intelligence, and complex exploratory research**. It allows non-technical users to "talk to their data", moving the narrative from a pre-authored script to a customized, dynamic dialogue.
+
+### 15. The Gamified Progression Map
+*   **Visual Hierarchy:** Modeled after video game skill trees or level maps, utilizing branching paths and unlockable "nodes." The layout forces the user to actively click or progress through foundational data before revealing advanced insights.
+*   **The Data-Story:** Perfect for **onboarding flows, educational data, and long-term goal tracking**. It incentivizes engagement and ensures the user understands the prerequisites of a complex system before diving into granular complexities.
+
 ---
 
 ## Deliverable 2: Aesthetic Themes (The "Style" Kits)
 
-Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 13 leading themes:
+Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 16 leading themes:
 
 ### 1. Strategic Minimalism (The "Quiet Luxury" of Data)
 A reaction against data fatigue; this theme strips away everything that isn't the core message, relying on extreme white space.
@@ -139,6 +151,24 @@ A purist return to Edward Tufte's core principles, updated for modern digital en
 *   **Typography:** Classic, understated serifs (e.g., *Garamond*, *Baskerville*) paired with extremely neutral, legible sans-serifs, entirely avoiding decorative or display fonts.
 *   **Color Palette:** A strictly monochromatic base (pure black on pure white) with a single, highly muted accent color (like a dusty brick red or soft steel blue) used solely to indicate the most critical data point.
 *   **Visual Accents:** Complete removal of borders, background colors, drop shadows, and 3D effects. Axes and gridlines are either invisible or rendered in the faintest possible grey. The data itself is the only visual feature.
+
+### 14. Hyper-Polished AI Surrealism
+An aesthetic born from generative AI art, blending impossible, dreamlike visuals with hyper-realistic rendering techniques to frame complex data.
+*   **Typography:** Elegant, fluid display serifs that feel almost liquid, combined with crisp sans-serifs to anchor the wild visuals.
+*   **Color Palette:** Rich, cinematic palettes featuring deep jewel tones (Emerald, Sapphire, Amethyst) paired with impossible, glowing synthetic colors that don't exist in nature.
+*   **Visual Accents:** Backgrounds that look like abstract, 3D-rendered dreamscapes, impossible glass structures, morphing fluid dynamics, and a heavy reliance on macro-photography-style depth of field.
+
+### 15. The New Memphis / Abstract Geometry
+A mature, highly refined evolution of the 80s Memphis design movement, using stark, playful geometric primitives as functional containers rather than just decoration.
+*   **Typography:** Bold, tightly kerned sans-serifs that feel architectural and structural.
+*   **Color Palette:** A highly curated, sophisticated pastel palette (Lilac, Mint, Peach) disrupted by sudden, sharp injections of primary colors (Cobalt Blue, Cadmium Red) and stark black.
+*   **Visual Accents:** Data housed inside perfect circles, sharp triangles, and pill shapes. Heavy use of offset, solid-color drop shadows, squiggly connector lines, and subtle grainy textures to soften the sharp geometry.
+
+### 16. Immersive Dark Mode Maximalism
+Taking standard dark mode to its logical, high-energy extreme, this theme uses profound darkness as a canvas for explosions of vivid color and dense information.
+*   **Typography:** Aggressive, extended sans-serifs mixed with highly technical, almost microscopic monospace fonts for secondary data.
+*   **Color Palette:** Pitch black (true #000000) backgrounds illuminated by a kaleidoscope of hyper-saturated neon colors (Electric Pink, Acid Green, Neon Orange) applied generously to every data point.
+*   **Visual Accents:** Intense glowing effects, densely packed chart areas that resemble starry galaxies, overlapping translucent shapes, and continuous, subtle motion that keeps the entirely dark screen feeling alive and energetic.
 
 ---
 
