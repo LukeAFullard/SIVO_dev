@@ -47,11 +47,19 @@ The foundation of any successful infographic is its structural architecture. In 
 *   **Visual Hierarchy:** A borderless, dynamic space where boundaries between charts dissolve. Core metrics shift and morph organically from one shape into another as the user scrolls or interacts, avoiding static, hard-edged containers.
 *   **The Data-Story:** Ideal for **predictive modeling, continuous data streams, and organic growth trajectories**. It emphasizes that data is constantly evolving and interconnected, moving away from rigid, disconnected snapshot charts toward a fluid continuum.
 
+### 11. The Dashboard Command Center (HUD Architecture)
+*   **Visual Hierarchy:** A dense, grid-based interface reminiscent of a heads-up display (HUD). It prioritizes real-time metrics at the top, with deeper analytical charts arrayed below in a balanced, highly functional symmetry.
+*   **The Data-Story:** Perfect for **live-tracking, operational overviews, and executive summaries**. It allows the user to monitor a complex ecosystem at a glance, acting as a control room rather than a sequential narrative.
+
+### 12. The Micro-Scrollytelling Vignette
+*   **Visual Hierarchy:** A localized, horizontally-scrolling or swipeable sequence embedded within a larger static page. It creates a self-contained "story within a story" where a specific chart evolves across a few frames without dominating the entire viewport.
+*   **The Data-Story:** Best suited for **explaining a specific methodology, zooming into a micro-trend, or illustrating a short sequence**. It provides deep context on a single data point without disrupting the broader flow of the overarching document.
+
 ---
 
 ## Deliverable 2: Aesthetic Themes (The "Style" Kits)
 
-Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 11 leading themes:
+Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 13 leading themes:
 
 ### 1. Strategic Minimalism (The "Quiet Luxury" of Data)
 A reaction against data fatigue; this theme strips away everything that isn't the core message, relying on extreme white space.
@@ -119,6 +127,18 @@ A highly functional, empathetic design language prioritizing absolute clarity, l
 *   **Typography:** Hyper-legible sans-serifs engineered specifically for screen readability and dyslexia support (e.g., *Atkinson Hyperlegible*, *FS Me*).
 *   **Color Palette:** High-contrast, colorblind-safe palettes avoiding red/green reliance. Muted pastels paired with deep, dark navy or forest green text to reduce eye strain.
 *   **Visual Accents:** Heavy use of iconography and universal symbols alongside data, distinct pattern fills (dots, stripes) on charts instead of just colors, and soft, non-distracting animations.
+
+### 12. Ethereal / Holographic Glow
+A futuristic, lightweight aesthetic that uses light and translucency to suggest highly advanced, AI-driven data processing.
+*   **Typography:** Ultra-thin, geometric sans-serifs (e.g., *Montserrat* Light, *Futura* Thin) that feel weightless and precise.
+*   **Color Palette:** Pearlescent, shimmering gradients (Opalescent White, Soft Cyan, Aurora Pink) against either stark white or deep black backgrounds, mimicking the diffraction of light.
+*   **Visual Accents:** Soft, blooming glows around key data points, translucent floating planes, subtle light trails, and delicate wireframe mesh structures.
+
+### 13. Data-Ink Minimalism (Tufte Revivalism)
+A purist return to Edward Tufte's core principles, updated for modern digital environments, where every pixel that does not represent data is aggressively removed.
+*   **Typography:** Classic, understated serifs (e.g., *Garamond*, *Baskerville*) paired with extremely neutral, legible sans-serifs, entirely avoiding decorative or display fonts.
+*   **Color Palette:** A strictly monochromatic base (pure black on pure white) with a single, highly muted accent color (like a dusty brick red or soft steel blue) used solely to indicate the most critical data point.
+*   **Visual Accents:** Complete removal of borders, background colors, drop shadows, and 3D effects. Axes and gridlines are either invisible or rendered in the faintest possible grey. The data itself is the only visual feature.
 
 ---
 
