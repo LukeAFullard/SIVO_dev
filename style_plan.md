@@ -22,11 +22,19 @@ The foundation of any successful infographic is its structural architecture. In 
 *   **Visual Hierarchy:** A central focal point (the core concept) surrounded by sequential, connected nodes. Often utilizes isometric or 3D perspectives in 2026 to add depth to the loop.
 *   **The Data-Story:** Built for **feedback loops, supply chain life cycles, and iterative methodologies** (like Agile or DevOps). It communicates that the process has no definitive end, emphasizing sustainability or continuous improvement.
 
+### 5. The Layered Pyramid / Funnel Architecture
+*   **Visual Hierarchy:** A rigid top-down (or bottom-up) triangular structure. The width of each tier corresponds to volume, while the vertical position denotes hierarchy or progression.
+*   **The Data-Story:** Essential for **sales conversions, organizational hierarchies, or filtering processes**. It visually reinforces how a large starting volume distills down to a core result or how foundational elements support a pinnacle achievement.
+
+### 6. The Radial / Concentric Burst (Sunburst) Architecture
+*   **Visual Hierarchy:** A dense, circular structure expanding outward from a central core. Inner rings represent broad categories, while outer rings slice into highly specific micro-data.
+*   **The Data-Story:** The ultimate layout for **complex taxonomies, market segmentations, and nested hierarchical data**. It allows viewers to see the "whole pie" while also tracking specific lineages from the core category out to the granular details.
+
 ---
 
 ## Deliverable 2: Aesthetic Themes (The "Style" Kits)
 
-Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 5 leading themes:
+Aesthetics in 2026 are heavily polarized—balancing hyper-digital precision with a craving for tactile, organic warmth. Here are the 7 leading themes:
 
 ### 1. Strategic Minimalism (The "Quiet Luxury" of Data)
 A reaction against data fatigue; this theme strips away everything that isn't the core message, relying on extreme white space.
@@ -57,6 +65,18 @@ A data-native aesthetic that celebrates the source material. It looks like a bea
 *   **Typography:** Exclusively monospace or highly technical fonts (e.g., *Fira Code*, *JetBrains Mono*, *Space Grotesk*).
 *   **Color Palette:** High-contrast terminal aesthetics. Very dark backgrounds (Pitch Black, Deep Charcoal) with data points highlighted in "Syntax Highlighting" colors—Electric Lime, Hot Pink, and Cyan.
 *   **Visual Accents:** Data is visualized using ASCII art influences, dot-matrix patterns, visible data structures (like JSON brackets framing text), and glitch or static textures to imply live data streams.
+
+### 6. Retro-Futurism & Y2K Revival (The "Nostalgic Chrome" Look)
+A blend of nostalgic early-internet optimism with ultra-modern rendering techniques.
+*   **Typography:** Bold, expanded or stretched sans-serifs, often with a slight italic slant (e.g., *Eurostile*, *Syncopate*). Pixel fonts are sometimes used for micro-copy.
+*   **Color Palette:** Liquid silver/chrome metallic finishes paired with high-saturation holographic gradients (Iridescent Pearl, Liquid Lavender, Cyber Silver).
+*   **Visual Accents:** Metallic reflections, starburst icons, wireframe globes, halftone dot patterns, and heavy use of 3D primitives (spheres, toruses) rendered with glossy materials.
+
+### 7. Biophilic Design / Eco-Tech (The "Living Data" Aesthetic)
+Fusing high-tech data visualization with organic, nature-inspired elements to create a soothing, sustainable vibe.
+*   **Typography:** Elegant, fluid serif fonts combined with highly legible humanist sans-serifs (e.g., *Optima*, *Larken*).
+*   **Color Palette:** Fluid gradients inspired by nature (Moss Green, Ocean Deep Blue, Sunrise Peach, Petal Pink). Soft, non-harsh contrast.
+*   **Visual Accents:** Organic, amoeba-like fluid shapes framing data points, subtle grain textures, soft light leaks, and visualizations that mimic natural patterns (like mycelium networks or topographic maps).
 
 ---
 
