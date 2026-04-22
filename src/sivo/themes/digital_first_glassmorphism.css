@@ -1,0 +1,321 @@
+/*
+ * Theme: Digital-First Glassmorphism (The "Deep UI" Look)
+ * Architecture Concept: Borrowing heavily from modern OS interfaces and spatial computing (AR/VR),
+ * this theme implies layered depth through translucency.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap');
+
+:root {
+  /* Color Palette */
+  --sivo-bg-dark: #0a0f1d; /* Midnight Blue */
+  --sivo-bg-obsidian: #050810; /* Obsidian */
+  --sivo-bg-card-glass: rgba(15, 23, 42, 0.6);
+  --sivo-bg-card-glass-hover: rgba(25, 33, 52, 0.75);
+
+  --sivo-accent-neon-purple: #9d4edd; /* Cyber Purple */
+  --sivo-accent-neon-green: #39ff14; /* Acid Green */
+
+  --sivo-text-main: #f8f9fa;
+  --sivo-text-muted: #adb5bd;
+
+  /* Typography */
+  --sivo-font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --sivo-font-family-display: 'Space Grotesk', system-ui, sans-serif;
+
+  /* Borders and Glows */
+  --sivo-border-glass: 1px solid rgba(255, 255, 255, 0.1);
+  --sivo-glow-neon: 0 0 15px rgba(157, 78, 221, 0.4), 0 0 5px rgba(157, 78, 221, 0.8);
+  --sivo-glow-neon-green: 0 0 15px rgba(57, 255, 20, 0.4), 0 0 5px rgba(57, 255, 20, 0.8);
+  --sivo-shadow-elevation: 0 10px 30px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Base Body and App Container */
+body {
+  background-color: var(--sivo-bg-obsidian);
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(157, 78, 221, 0.15), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(57, 255, 20, 0.1), transparent 40%);
+  color: var(--sivo-text-main);
+  font-family: var(--sivo-font-family-sans);
+}
+
+#sivo-app-container {
+  background-color: transparent;
+}
+
+/* Titles and Headers */
+#sivo-title-container {
+  background: var(--sivo-bg-card-glass) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: var(--sivo-border-glass) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--sivo-shadow-elevation) !important;
+}
+
+#sivo-title,
+.info-panel-header h2,
+.sivo-subtitle,
+.scrolly-step-card h3 {
+  font-family: var(--sivo-font-family-display);
+  font-weight: 800;
+  color: var(--sivo-text-main) !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+  letter-spacing: -0.02em;
+}
+
+#sivo-title {
+  background: linear-gradient(90deg, var(--sivo-text-main), var(--sivo-accent-neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+}
+
+#sivo-subtitle {
+  color: var(--sivo-text-muted) !important;
+  font-weight: 400;
+  font-family: var(--sivo-font-family-sans);
+}
+
+/* Info Panel (Glassmorphism Core) */
+#info-panel {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--sivo-border-glass);
+  border-radius: 16px;
+  box-shadow: var(--sivo-shadow-elevation);
+  color: var(--sivo-text-main);
+}
+
+#info-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.info-panel-header {
+  border-bottom: var(--sivo-border-glass);
+  background: transparent;
+}
+
+.close-btn {
+  color: var(--sivo-text-muted);
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--sivo-accent-neon-purple);
+  text-shadow: var(--sivo-glow-neon);
+}
+
+.info-panel-content {
+  font-family: var(--sivo-font-family-sans);
+  color: var(--sivo-text-main);
+}
+
+/* Scrollytelling Cards */
+.scrolly-step-card {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--sivo-border-glass);
+  border-radius: 12px;
+  box-shadow: var(--sivo-shadow-elevation);
+  color: var(--sivo-text-main);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scrolly-step-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(157, 78, 221, 0.4);
+  box-shadow: var(--sivo-glow-neon), var(--sivo-shadow-elevation);
+}
+
+/* Modals & Popups (Gallery / Video / Forms) */
+#sivo-gallery-modal,
+#sivo-video-modal {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: var(--sivo-border-glass);
+  border-radius: 16px;
+  box-shadow: var(--sivo-shadow-elevation);
+}
+
+/* Buttons and Controls */
+.sivo-nav-btn,
+.zoom-btn,
+.tour-btn,
+.sivo-drawing-btn,
+#export-btn,
+#share-btn,
+#fullscreen-btn,
+#download-data-btn {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: var(--sivo-border-glass);
+  border-radius: 8px;
+  color: var(--sivo-text-main);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.sivo-nav-btn:hover,
+.zoom-btn:hover,
+.tour-btn:hover,
+.sivo-drawing-btn:hover,
+#export-btn:hover,
+#share-btn:hover,
+#fullscreen-btn:hover,
+#download-data-btn:hover {
+  background: var(--sivo-bg-card-glass-hover);
+  border-color: var(--sivo-accent-neon-green);
+  color: var(--sivo-accent-neon-green);
+  box-shadow: var(--sivo-glow-neon-green), var(--sivo-shadow-elevation);
+}
+
+.sivo-drawing-btn.active {
+  background: rgba(157, 78, 221, 0.2);
+  border-color: var(--sivo-accent-neon-purple);
+  color: var(--sivo-accent-neon-purple);
+  box-shadow: var(--sivo-glow-neon);
+}
+
+/* Search and Geocoder Inputs */
+#sivo-search-input,
+#sivo-geocoder-input {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: var(--sivo-border-glass);
+  color: var(--sivo-text-main);
+  border-radius: 8px;
+  padding-left: 36px;
+  transition: all 0.3s ease;
+}
+
+#sivo-search-input:focus,
+#sivo-geocoder-input:focus {
+  outline: none;
+  border-color: var(--sivo-accent-neon-purple);
+  box-shadow: var(--sivo-glow-neon);
+  background: var(--sivo-bg-card-glass-hover);
+}
+
+#sivo-search-input::placeholder,
+#sivo-geocoder-input::placeholder {
+  color: var(--sivo-text-muted);
+}
+
+#sivo-search-container .sivo-search-icon,
+#sivo-geocoder-container .sivo-geocoder-icon {
+  color: var(--sivo-text-muted);
+}
+
+/* Search Results Dropdown */
+#sivo-search-results,
+#sivo-geocoder-results {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--sivo-border-glass);
+  border-radius: 8px;
+  box-shadow: var(--sivo-shadow-elevation);
+}
+
+.sivo-search-result-item {
+  color: var(--sivo-text-main);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.sivo-search-result-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--sivo-accent-neon-green);
+}
+
+.sivo-search-result-title {
+  font-weight: 600;
+  font-family: var(--sivo-font-family-display);
+}
+
+.sivo-search-result-subtitle {
+  color: var(--sivo-text-muted);
+}
+
+/* Context Menu */
+#sivo-context-menu {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--sivo-border-glass);
+  border-radius: 8px;
+  box-shadow: var(--sivo-shadow-elevation);
+}
+
+#sivo-context-menu div {
+  color: var(--sivo-text-main);
+}
+
+#sivo-context-menu div:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--sivo-accent-neon-purple);
+}
+
+/* Tour Content */
+#tour-content {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--sivo-border-glass);
+  border-radius: 12px;
+  box-shadow: var(--sivo-shadow-elevation);
+  color: var(--sivo-text-main);
+}
+
+/* Minimap */
+#minimap-container {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: var(--sivo-border-glass);
+  border-radius: 8px;
+  box-shadow: var(--sivo-shadow-elevation);
+}
+
+#minimap-viewport {
+  border: 1px solid var(--sivo-accent-neon-green);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+  background: rgba(57, 255, 20, 0.1);
+}
+
+/* Resizer Handle */
+#sivo-resizer {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#sivo-resizer:hover, #sivo-resizer:active {
+  background: var(--sivo-accent-neon-purple);
+  box-shadow: var(--sivo-glow-neon);
+}
+
+/* Echarts Tooltips overrides */
+.echarts-tooltip {
+  background: var(--sivo-bg-card-glass) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: var(--sivo-border-glass) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--sivo-shadow-elevation) !important;
+  color: var(--sivo-text-main) !important;
+  font-family: var(--sivo-font-family-sans) !important;
+}
