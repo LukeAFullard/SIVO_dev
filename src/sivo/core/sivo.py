@@ -17,6 +17,43 @@ class Sivo:
     hiding JavaScript complexity and managing the Infographic lifecycle.
     """
 
+
+    @staticmethod
+    def get_theme_css(theme_name: str) -> str:
+        """
+        Reads a custom theme CSS file from src/sivo/themes based on the theme name.
+        Prevents path traversal attacks.
+        Returns empty string if theme doesn't exist or on error.
+        """
+        import os
+
+        if not theme_name or theme_name in ['light', 'dark']:
+            return ""
+
+        try:
+            # Prevent path traversal
+            safe_theme_name = os.path.basename(theme_name)
+            if not safe_theme_name.endswith('.css'):
+                safe_theme_name += '.css'
+
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            themes_dir = os.path.abspath(os.path.join(current_dir, '..', 'themes'))
+
+            target_path = os.path.abspath(os.path.join(themes_dir, safe_theme_name))
+
+            # Additional safety check
+            if os.path.commonpath([themes_dir, target_path]) != themes_dir:
+                logger.warning(f"Path traversal attempt detected for theme: {theme_name}")
+                return ""
+
+            if os.path.exists(target_path):
+                with open(target_path, 'r', encoding='utf-8') as f:
+                    return f.read()
+            return ""
+        except Exception as e:
+            logger.error(f"Error loading custom theme CSS '{theme_name}': {e}")
+            return ""
+
     @staticmethod
     def fetch_image_base64(url: str) -> str:
         """
