@@ -36,14 +36,14 @@ The foundation of any successful infographic is its structural architecture. In 
 *   **Visual Hierarchy:** A rigid 50/50 or 40/60 vertical or horizontal divide. Uses contrasting background colors to immediately signal dichotomy. Typography and chart styles mirror each other across the divide to emphasize direct comparison.
 *   **The Data-Story:** Ideal for **"Before/After", "Expectation vs. Reality", or "Competitor vs. Us"** narratives. It forces the viewer's brain to immediately weigh two opposing or complementary datasets against one another.
 *   **Implementation Status:**
-    *   [ ] Template created for `16_10`
-    *   [ ] Template created for `1_1`
-    *   [ ] Template created for `3_2`
-    *   [ ] Template created for `4_3`
-    *   [ ] Template created for `4_7`
-    *   [ ] Template created for `other`
-    *   [ ] Dashboard template created
-    *   [ ] Example added in `examples/templates`
+    *   [x] Template created for `16_10`
+    *   [x] Template created for `1_1`
+    *   [x] Template created for `3_2`
+    *   [x] Template created for `4_3`
+    *   [x] Template created for `4_7`
+    *   [x] Template created for `other`
+    *   [x] Dashboard template created
+    *   [x] Example added in `examples/templates`
 
 ### 4. The Cyclical Process Flow (Hub-and-Spoke / Continuous Loop)
 *   **Visual Hierarchy:** A central focal point (the core concept) surrounded by sequential, connected nodes. Often utilizes isometric or 3D perspectives in 2026 to add depth to the loop.
