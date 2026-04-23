@@ -75,14 +75,14 @@ The foundation of any successful infographic is its structural architecture. In 
 *   **Visual Hierarchy:** A dense, circular structure expanding outward from a central core. Inner rings represent broad categories, while outer rings slice into highly specific micro-data.
 *   **The Data-Story:** The ultimate layout for **complex taxonomies, market segmentations, and nested hierarchical data**. It allows viewers to see the "whole pie" while also tracking specific lineages from the core category out to the granular details.
 *   **Implementation Status:**
-    *   [ ] Template created for `16_10`
-    *   [ ] Template created for `1_1`
-    *   [ ] Template created for `3_2`
-    *   [ ] Template created for `4_3`
-    *   [ ] Template created for `4_7`
+    *   [x] Template created for `16_10`
+    *   [x] Template created for `1_1`
+    *   [x] Template created for `3_2`
+    *   [x] Template created for `4_3`
+    *   [x] Template created for `4_7`
     *   [ ] Template created for `other`
-    *   [ ] Dashboard template created
-    *   [ ] Example added in `examples/templates`
+    *   [x] Dashboard template created
+    *   [x] Example added in `examples/templates`
 
 ### 7. Spatial / 3D Mapping Architecture
 *   **Visual Hierarchy:** An immersive, multi-dimensional canvas where data is plotted along X, Y, and Z axes. Elements are sized, layered, or colored based on proximity to the viewer or importance, often utilizing parallax scrolling to reveal deeper layers.

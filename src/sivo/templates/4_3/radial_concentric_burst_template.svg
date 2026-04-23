@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #f1f5f9; }
+            .orbit-ring { fill: none; stroke: #cbd5e1; stroke-width: 2; stroke-dasharray: 8 8; }
+            .center-orb { fill: #3b82f6; filter: drop-shadow(0 15px 30px rgba(59,130,246,0.3)); }
+            .orb-text { fill: #ffffff; font-family: system-ui, sans-serif; font-size: 27px; font-weight: 800; text-anchor: middle; alignment-baseline: middle; }
+            .satellite-card {
+                fill: rgba(255, 255, 255, 0.7);
+                rx: 45;
+                ry: 45;
+                stroke: rgba(255, 255, 255, 0.5);
+                stroke-width: 1.5;
+                filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.1)) drop-shadow(0 10px 10px rgba(0, 0, 0, 0));
+                transition: transform 0.3s; cursor: pointer;
+            }
+            .satellite-title { fill: #374151; font-family: system-ui, sans-serif; font-size: 18px; font-weight: 700; text-anchor: middle; alignment-baseline: middle; }
+            .satellite-metric { fill: #3b82f6; font-family: system-ui, sans-serif; font-size: 22px; font-weight: 800; text-anchor: middle; alignment-baseline: middle; }
+        </style>
+
+        <!-- Soft Mesh Gradient Blob Background for Glassmorphism effect -->
+        <filter id="blurFilter">
+            <feGaussianBlur stdDeviation="80" />
+        </filter>
+        <radialGradient id="meshGradient1" cx="30%" cy="30%" r="50%">
+            <stop offset="0%" stop-color="#bfdbfe" />
+            <stop offset="100%" stop-color="transparent" />
+        </radialGradient>
+        <radialGradient id="meshGradient2" cx="70%" cy="70%" r="50%">
+            <stop offset="0%" stop-color="#e9d5ff" />
+            <stop offset="100%" stop-color="transparent" />
+        </radialGradient>
+    </defs>
+
+    <rect id="background" class="bg" width="1200" height="900" />
+    <circle cx="300" cy="225" r="450" fill="url(#meshGradient1)" filter="url(#blurFilter)" opacity="0.8" />
+    <circle cx="900" cy="675" r="450" fill="url(#meshGradient2)" filter="url(#blurFilter)" opacity="0.6" />
+
+    <!-- Orbit Rings -->
+    <circle class="orbit-ring" cx="600" cy="450" r="225" />
+    <circle class="orbit-ring" cx="600" cy="450" r="360" />
+
+    <!-- Center Hub -->
+    <g id="radial-center">
+        <circle class="center-orb" cx="600" cy="450" r="90" />
+        <text id="text_hub" class="orb-text" x="600" y="450"></text>
+        <circle cx="600" cy="450" r="81" fill="transparent" id="radial-center-data" />
+    </g>
+
+    <g id="sat-inner-1">
+        <circle class="satellite-card" cx="600" cy="225" r="72" />
+        <text id="text_sys_a" class="satellite-title" x="600" y="216"></text>
+        <text id="val_sys_a" class="satellite-metric" x="600" y="243"></text>
+        <circle cx="600" cy="225" r="64.8" fill="transparent" id="sat-inner-1-data"/>
+    </g>
+    <g id="sat-inner-2">
+        <circle class="satellite-card" cx="794.9" cy="562.5" r="72" />
+        <text id="text_sys_b" class="satellite-title" x="794.9" y="553.5"></text>
+        <text id="val_sys_b" class="satellite-metric" x="794.9" y="580.5"></text>
+        <circle cx="794.9" cy="562.5" r="64.8" fill="transparent" id="sat-inner-2-data"/>
+    </g>
+    <g id="sat-inner-3">
+        <circle class="satellite-card" cx="405.1" cy="562.5" r="72" />
+        <text id="text_sys_c" class="satellite-title" x="405.1" y="553.5"></text>
+        <text id="val_sys_c" class="satellite-metric" x="405.1" y="580.5"></text>
+        <circle cx="405.1" cy="562.5" r="64.8" fill="transparent" id="sat-inner-3-data"/>
+    </g>
+    <g id="sat-outer-1">
+        <circle class="satellite-card" cx="600" cy="90" r="54" />
+        <text id="text_ext_1" class="satellite-title" x="600" y="85.5"></text>
+        <text id="val_ext_1" class="satellite-metric" x="600" y="103.5"></text>
+        <rect fill="transparent" x="546" y="36" width="108" height="108" id="sat-outer-1-data"/>
+    </g>
+    <g id="sat-outer-2">
+        <circle class="satellite-card" cx="911.8" cy="270" r="54" />
+        <text id="text_ext_2" class="satellite-title" x="911.8" y="265.5"></text>
+        <text id="val_ext_2" class="satellite-metric" x="911.8" y="283.5"></text>
+        <rect fill="transparent" x="857.8" y="216" width="108" height="108" id="sat-outer-2-data"/>
+    </g>
+    <g id="sat-outer-3">
+        <circle class="satellite-card" cx="911.8" cy="630" r="54" />
+        <text id="text_ext_3" class="satellite-title" x="911.8" y="625.5"></text>
+        <text id="val_ext_3" class="satellite-metric" x="911.8" y="643.5"></text>
+        <rect fill="transparent" x="857.8" y="576" width="108" height="108" id="sat-outer-3-data"/>
+    </g>
+    <g id="sat-outer-4">
+        <circle class="satellite-card" cx="600" cy="810" r="54" />
+        <text id="text_ext_4" class="satellite-title" x="600" y="805.5"></text>
+        <text id="val_ext_4" class="satellite-metric" x="600" y="823.5"></text>
+        <rect fill="transparent" x="546" y="756" width="108" height="108" id="sat-outer-4-data"/>
+    </g>
+    <g id="sat-outer-5">
+        <circle class="satellite-card" cx="288.2" cy="630" r="54" />
+        <text id="text_ext_5" class="satellite-title" x="288.2" y="625.5"></text>
+        <text id="val_ext_5" class="satellite-metric" x="288.2" y="643.5"></text>
+        <rect fill="transparent" x="234.2" y="576" width="108" height="108" id="sat-outer-5-data"/>
+    </g>
+    <g id="sat-outer-6">
+        <circle class="satellite-card" cx="288.2" cy="270" r="54" />
+        <text id="text_ext_6" class="satellite-title" x="288.2" y="265.5"></text>
+        <text id="val_ext_6" class="satellite-metric" x="288.2" y="283.5"></text>
+        <rect fill="transparent" x="234.2" y="216" width="108" height="108" id="sat-outer-6-data"/>
+    </g>
+</svg>
