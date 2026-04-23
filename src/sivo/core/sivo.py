@@ -498,7 +498,11 @@ class Sivo:
         transform: Optional[str] = None,
         odometer_value: Optional[float] = None,
         odometer_duration_ms: Optional[int] = 2000,
-        odometer_format: Optional[str] = None
+        odometer_format: Optional[str] = None,
+        fade_in: bool = False,
+        fade_start_time_ms: int = 0,
+        fade_duration_ms: int = 5000,
+        fade_pulse: bool = False
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -582,7 +586,11 @@ class Sivo:
             transform=transform,
             odometer_value=odometer_value,
             odometer_duration_ms=odometer_duration_ms,
-            odometer_format=odometer_format
+            odometer_format=odometer_format,
+            fade_in=fade_in,
+            fade_start_time_ms=fade_start_time_ms,
+            fade_duration_ms=fade_duration_ms,
+            fade_pulse=fade_pulse
         )
 
     def apply_template_style(self, style_name: str):

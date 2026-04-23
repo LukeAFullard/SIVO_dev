@@ -262,6 +262,10 @@ class ThemeOverride(BaseModel):
     odometer_value: Optional[float] = None
     odometer_duration_ms: Optional[int] = 2000
     odometer_format: Optional[str] = None
+    fade_in: Optional[bool] = False
+    fade_start_time_ms: Optional[int] = 0
+    fade_duration_ms: Optional[int] = 5000
+    fade_pulse: Optional[bool] = False
 
 ActionType = Annotated[Union[ExplodeAction, ConfettiAction, LoadingAction, LottieAction, CompareAction, ProgressBarAction, TooltipAction, FootnoteAction, URLAction, DrillDownAction, DrillThroughAction, CallbackAction, HoverCallbackAction, VideoAction, GalleryAction, AudioAction, MarkdownAction, FetchAction, FormAction, SocialAction, DocumentAction, MapAction, AnalyticsAction, DataSourceAction, ExternalFormAction, EcommerceAction, RichMediaAction, BIAction, ReplitAction, EchartsAction, ZoomAction, A11yAction, ToggleImageAction], Field(discriminator='action_type')]
 

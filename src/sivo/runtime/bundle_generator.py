@@ -43,6 +43,30 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             if mapping_dict.get('open_by_default'):
                 data_item['open_by_default'] = True
 
+            theme = mapping_dict.get('theme', {})
+            if isinstance(theme, dict):
+                if theme.get('fade_in'):
+                    if theme.get('fade_pulse'):
+                        data_item['animation_class'] = 'fade_pulse'
+                    else:
+                        data_item['animation_class'] = 'fade_in'
+                    data_item['fade_start_time_ms'] = theme.get('fade_start_time_ms', 0)
+                    data_item['fade_duration_ms'] = theme.get('fade_duration_ms', 5000)
+                elif theme.get('animation'):
+                    data_item['animation_class'] = theme.get('animation')
+                    data_item['animation_duration_ms'] = theme.get('animation_duration_ms')
+            elif hasattr(theme, 'fade_in'):
+                if getattr(theme, 'fade_in', False):
+                    if getattr(theme, 'fade_pulse', False):
+                        data_item['animation_class'] = 'fade_pulse'
+                    else:
+                        data_item['animation_class'] = 'fade_in'
+                    data_item['fade_start_time_ms'] = getattr(theme, 'fade_start_time_ms', 0)
+                    data_item['fade_duration_ms'] = getattr(theme, 'fade_duration_ms', 5000)
+                elif getattr(theme, 'animation', None):
+                    data_item['animation_class'] = getattr(theme, 'animation')
+                    data_item['animation_duration_ms'] = getattr(theme, 'animation_duration_ms')
+
             if mapping_dict.get('draggable'):
                 data_item['draggable'] = True
 
@@ -174,8 +198,11 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             if transparent_lines:
                 item_style['borderColor'] = 'transparent'
 
-            if theme.get('animation'):
+            if theme.get('animation') and 'animation_class' not in data_item:
                 data_item['animation_class'] = theme.get('animation')
+
+            if data_item.get('animation_class') in ['fade_in', 'fade_pulse']:
+                item_style['opacity'] = 0
 
             # Prevent double-drawing if native SVG features are used
             if view_obj.get("render_mode", "canvas") == "svg":

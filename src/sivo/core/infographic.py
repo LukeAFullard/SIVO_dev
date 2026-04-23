@@ -443,7 +443,11 @@ class Infographic:
         transform: Optional[str] = None,
         odometer_value: Optional[float] = None,
         odometer_duration_ms: Optional[int] = 2000,
-        odometer_format: Optional[str] = None
+        odometer_format: Optional[str] = None,
+        fade_in: bool = False,
+        fade_start_time_ms: int = 0,
+        fade_duration_ms: int = 5000,
+        fade_pulse: bool = False
     ):
         """
         Maps an SVG element id (or name) to actions or visual themes.
@@ -666,6 +670,12 @@ class Infographic:
             mapping.theme.odometer_value = odometer_value
             mapping.theme.odometer_duration_ms = odometer_duration_ms
             mapping.theme.odometer_format = odometer_format
+
+        if fade_in:
+            mapping.theme.fade_in = fade_in
+            mapping.theme.fade_start_time_ms = fade_start_time_ms
+            mapping.theme.fade_duration_ms = fade_duration_ms
+            mapping.theme.fade_pulse = fade_pulse
 
 
     def embed_svg(self, element_id: str, filepath_or_string: str, is_file: bool = False, preserve_aspect_ratio: bool = True, keep_target: bool = False, scale_multiplier: float = 1.0):
