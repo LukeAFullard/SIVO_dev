@@ -1,0 +1,322 @@
+/*
+ * Theme: Hyper-Polished AI Surrealism
+ * Architecture Concept: Born from generative AI art, blending impossible, dreamlike visuals
+ * with hyper-realistic rendering techniques to frame complex data.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+  /* Color Palette */
+  --sivo-bg-surreal-dark: #0a0b12; /* Deep cinematic darkness */
+  --sivo-bg-card-glass: rgba(18, 20, 32, 0.45);
+  --sivo-bg-card-glass-hover: rgba(28, 30, 48, 0.65);
+
+  /* Jewel Tones & Impossible Synthetic Colors */
+  --sivo-accent-emerald: #00FFCC; /* Glowing synthetic cyan/emerald */
+  --sivo-accent-sapphire: #0066FF;
+  --sivo-accent-amethyst: #FF00FF; /* Impossible glowing magenta */
+
+  --sivo-text-main: #ffffff;
+  --sivo-text-muted: rgba(255, 255, 255, 0.6);
+
+  /* Typography */
+  --sivo-font-family-sans: 'Inter', system-ui, sans-serif;
+  --sivo-font-family-display: 'Cinzel', 'Playfair Display', serif;
+
+  /* Borders and Glassmorphism */
+  --sivo-border-glass: 1px solid rgba(255, 255, 255, 0.15);
+  --sivo-border-highlight: 1px solid rgba(0, 255, 204, 0.4);
+
+  /* Depth of Field / Glow Effects */
+  --sivo-glow-primary: 0 0 20px rgba(0, 255, 204, 0.5), 0 0 40px rgba(0, 255, 204, 0.2);
+  --sivo-glow-secondary: 0 0 20px rgba(255, 0, 255, 0.4), 0 0 40px rgba(255, 0, 255, 0.1);
+  --sivo-shadow-deep: 0 20px 40px rgba(0, 0, 0, 0.8), 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Base Body and App Container */
+body {
+  background-color: var(--sivo-bg-surreal-dark);
+  /* Abstract dreamscape gradient mimicking lighting/fluid dynamics */
+  background-image:
+    radial-gradient(ellipse at 20% 80%, rgba(0, 102, 255, 0.15), transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.15), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 204, 0.05), transparent 70%);
+  color: var(--sivo-text-main);
+  font-family: var(--sivo-font-family-sans);
+}
+
+#sivo-app-container {
+  background-color: transparent;
+}
+
+/* Titles and Headers */
+#sivo-title-container {
+  background: var(--sivo-bg-card-glass) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+  border: var(--sivo-border-glass) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--sivo-shadow-deep) !important;
+}
+
+#sivo-title,
+.info-panel-header h2,
+.sivo-subtitle,
+.scrolly-step-card h3 {
+  font-family: var(--sivo-font-family-display);
+  font-weight: 600;
+  color: var(--sivo-text-main) !important;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7) !important;
+  letter-spacing: 0.02em;
+}
+
+#sivo-title {
+  background: linear-gradient(135deg, #ffffff, var(--sivo-accent-emerald), var(--sivo-accent-amethyst));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+}
+
+#sivo-subtitle {
+  color: var(--sivo-text-muted) !important;
+  font-weight: 300;
+  font-family: var(--sivo-font-family-sans);
+}
+
+/* Info Panel (Impossible Glass Structure) */
+#info-panel {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: var(--sivo-border-glass);
+  border-radius: 24px;
+  box-shadow: var(--sivo-shadow-deep);
+  color: var(--sivo-text-main);
+  /* Macro-photography depth effect */
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-panel-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+}
+
+.close-btn {
+  color: var(--sivo-text-muted);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.close-btn:hover {
+  color: var(--sivo-accent-emerald);
+  text-shadow: var(--sivo-glow-primary);
+}
+
+.info-panel-content {
+  font-family: var(--sivo-font-family-sans);
+  color: var(--sivo-text-main);
+  line-height: 1.6;
+}
+
+/* Scrollytelling Cards */
+.scrolly-step-card {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: var(--sivo-border-glass);
+  border-radius: 16px;
+  box-shadow: var(--sivo-shadow-deep);
+  color: var(--sivo-text-main);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.scrolly-step-card:hover {
+  transform: scale(1.02) translateY(-4px);
+  border-color: rgba(255, 0, 255, 0.5);
+  box-shadow: var(--sivo-glow-secondary), var(--sivo-shadow-deep);
+}
+
+/* Modals & Popups (Gallery / Video / Forms) */
+#sivo-gallery-modal,
+#sivo-video-modal {
+  background: rgba(10, 11, 18, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(0, 255, 204, 0.2);
+  border-radius: 20px;
+  box-shadow: var(--sivo-shadow-deep), inset 0 0 40px rgba(0, 255, 204, 0.05);
+}
+
+/* Buttons and Controls */
+.sivo-nav-btn,
+.zoom-btn,
+.tour-btn,
+.sivo-drawing-btn,
+#export-btn,
+#share-btn,
+#fullscreen-btn,
+#download-data-btn {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--sivo-border-glass);
+  border-radius: 12px;
+  color: var(--sivo-text-main);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.sivo-nav-btn:hover,
+.zoom-btn:hover,
+.tour-btn:hover,
+.sivo-drawing-btn:hover,
+#export-btn:hover,
+#share-btn:hover,
+#fullscreen-btn:hover,
+#download-data-btn:hover {
+  background: var(--sivo-bg-card-glass-hover);
+  border-color: var(--sivo-accent-emerald);
+  color: var(--sivo-accent-emerald);
+  box-shadow: var(--sivo-glow-primary), var(--sivo-shadow-deep);
+  transform: translateY(-2px);
+}
+
+.sivo-drawing-btn.active {
+  background: rgba(255, 0, 255, 0.15);
+  border-color: var(--sivo-accent-amethyst);
+  color: var(--sivo-accent-amethyst);
+  box-shadow: var(--sivo-glow-secondary);
+}
+
+/* Search and Geocoder Inputs */
+#sivo-search-input,
+#sivo-geocoder-input {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--sivo-border-glass);
+  color: var(--sivo-text-main);
+  border-radius: 12px;
+  padding-left: 36px;
+  transition: all 0.4s ease;
+}
+
+#sivo-search-input:focus,
+#sivo-geocoder-input:focus {
+  outline: none;
+  border-color: var(--sivo-accent-amethyst);
+  box-shadow: var(--sivo-glow-secondary);
+  background: rgba(255, 0, 255, 0.05);
+}
+
+#sivo-search-input::placeholder,
+#sivo-geocoder-input::placeholder {
+  color: var(--sivo-text-muted);
+}
+
+#sivo-search-container .sivo-search-icon,
+#sivo-geocoder-container .sivo-geocoder-icon {
+  color: var(--sivo-text-muted);
+}
+
+/* Search Results Dropdown */
+#sivo-search-results,
+#sivo-geocoder-results {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: var(--sivo-border-glass);
+  border-radius: 12px;
+  box-shadow: var(--sivo-shadow-deep);
+}
+
+.sivo-search-result-item {
+  color: var(--sivo-text-main);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sivo-search-result-item:hover {
+  background: rgba(0, 255, 204, 0.1);
+  color: var(--sivo-accent-emerald);
+}
+
+.sivo-search-result-title {
+  font-weight: 600;
+  font-family: var(--sivo-font-family-display);
+}
+
+.sivo-search-result-subtitle {
+  color: var(--sivo-text-muted);
+}
+
+/* Context Menu */
+#sivo-context-menu {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: var(--sivo-border-glass);
+  border-radius: 12px;
+  box-shadow: var(--sivo-shadow-deep);
+}
+
+#sivo-context-menu div {
+  color: var(--sivo-text-main);
+  transition: all 0.2s ease;
+}
+
+#sivo-context-menu div:hover {
+  background: rgba(255, 0, 255, 0.15);
+  color: var(--sivo-accent-amethyst);
+}
+
+/* Tour Content */
+#tour-content {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: var(--sivo-border-glass);
+  border-radius: 16px;
+  box-shadow: var(--sivo-shadow-deep);
+  color: var(--sivo-text-main);
+}
+
+/* Minimap */
+#minimap-container {
+  background: var(--sivo-bg-card-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--sivo-border-glass);
+  border-radius: 12px;
+  box-shadow: var(--sivo-shadow-deep);
+}
+
+#minimap-viewport {
+  border: 1px solid var(--sivo-accent-emerald);
+  box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2), 0 0 15px rgba(0, 255, 204, 0.3);
+  background: rgba(0, 255, 204, 0.1);
+}
+
+/* Resizer Handle */
+#sivo-resizer {
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+#sivo-resizer:hover, #sivo-resizer:active {
+  background: var(--sivo-accent-amethyst);
+  box-shadow: var(--sivo-glow-secondary);
+}
+
+/* Echarts Tooltips overrides */
+.echarts-tooltip {
+  background: rgba(18, 20, 32, 0.75) !important;
+  backdrop-filter: blur(20px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+  border: 1px solid rgba(0, 255, 204, 0.3) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--sivo-shadow-deep), 0 0 20px rgba(0, 255, 204, 0.1) !important;
+  color: var(--sivo-text-main) !important;
+  font-family: var(--sivo-font-family-sans) !important;
+}
