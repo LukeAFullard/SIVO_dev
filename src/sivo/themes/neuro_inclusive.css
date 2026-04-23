@@ -1,0 +1,160 @@
+/*
+ * Theme: Neuro-Inclusive / Accessible First
+ *
+ * A highly functional, empathetic design language prioritizing absolute clarity, low cognitive load,
+ * and WCAG 3.0+ compliance without sacrificing modern appeal.
+ *
+ * Typography: Hyper-legible sans-serifs engineered specifically for screen readability and dyslexia
+ * support (Atkinson Hyperlegible).
+ * Color Palette: High-contrast, colorblind-safe palettes avoiding red/green reliance. Muted pastels
+ * paired with deep, dark navy or forest green text to reduce eye strain.
+ * Visual Accents: Heavy use of iconography and universal symbols alongside data, distinct pattern
+ * fills (dots, stripes) on charts instead of just colors, and soft, non-distracting animations.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+  /* Color Palette - High Contrast, Low Strain */
+  --sivo-bg-color: #FDFDFD; /* Very soft off-white to prevent glare */
+  --sivo-text-color: #0A192F; /* Deep Navy for primary text (High contrast) */
+  --sivo-secondary-bg: #E8F0FE; /* Muted pastel blue */
+  --sivo-border-color: #0A192F; /* High contrast borders */
+
+  /* Additional text color option */
+  --sivo-text-alt: #0D3B2E; /* Forest Green for secondary but high contrast text */
+
+  /* Pastel / Colorblind-safe Highlights */
+  --sivo-accent-color: #FFB347; /* Soft but visible Orange */
+  --sivo-accent-hover: #E59400; /* Darker orange for hover states */
+  --sivo-accent-secondary: #B19CD9; /* Pastel purple */
+
+  /* Typography */
+  --sivo-font-family-body: 'Atkinson Hyperlegible', sans-serif;
+  --sivo-font-family-headers: 'Atkinson Hyperlegible', sans-serif;
+  --sivo-font-family-data: 'Atkinson Hyperlegible', sans-serif; /* Keep consistent for clarity */
+
+  /* Layout & Spacing */
+  --sivo-spacing-base: 1.5rem;
+  --sivo-spacing-large: 3rem;
+
+  /* Borders & Focus Rings (Crucial for accessibility) */
+  --sivo-border-width: 2px;
+  --sivo-focus-ring: 3px solid #FFB347;
+}
+
+/* Global Typography and Reset */
+body, #sivo-app-container {
+  background-color: var(--sivo-bg-color);
+  color: var(--sivo-text-color);
+  font-family: var(--sivo-font-family-body);
+  font-size: 18px; /* Slightly larger base font size for readability */
+  line-height: 1.6;
+  letter-spacing: 0.03em; /* Slightly increased tracking for readability */
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6, .sivo-header {
+  font-family: var(--sivo-font-family-headers);
+  font-weight: 700;
+  color: var(--sivo-text-color);
+  margin-bottom: var(--sivo-spacing-base);
+  line-height: 1.3;
+}
+
+/* Links and Interactive Elements */
+a, .sivo-link {
+  color: var(--sivo-text-color);
+  text-decoration: underline; /* Always underline links for clarity */
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+a:hover, a:focus, .sivo-link:hover, .sivo-link:focus {
+  color: var(--sivo-text-alt);
+  background-color: var(--sivo-accent-color);
+  text-decoration: none;
+}
+
+/* Focus States (Critical for Keyboard Navigation) */
+:focus {
+  outline: var(--sivo-focus-ring) !important;
+  outline-offset: 4px !important;
+}
+
+/* Panels / Cards */
+.sivo-panel, #info-panel, .sivo-card {
+  background-color: var(--sivo-secondary-bg);
+  border: var(--sivo-border-width) solid var(--sivo-border-color);
+  border-radius: 8px; /* Softened corners */
+  padding: var(--sivo-spacing-base);
+  margin-bottom: var(--sivo-spacing-base);
+  box-shadow: 4px 4px 0px var(--sivo-border-color); /* Distinct, non-blurry drop shadow */
+}
+
+/* Buttons */
+button, .sivo-btn {
+  background-color: var(--sivo-bg-color);
+  color: var(--sivo-text-color);
+  font-family: var(--sivo-font-family-body);
+  font-weight: 700;
+  font-size: 1rem;
+  border: var(--sivo-border-width) solid var(--sivo-border-color);
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px var(--sivo-border-color);
+  transition: transform 0.1s ease, box-shadow 0.1s ease; /* Soft, fast animation */
+}
+
+button:hover, .sivo-btn:hover {
+  background-color: var(--sivo-accent-color);
+}
+
+button:active, .sivo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px var(--sivo-border-color);
+}
+
+/* Tooltips */
+.sivo-tooltip {
+  background-color: var(--sivo-text-color);
+  color: var(--sivo-bg-color);
+  font-family: var(--sivo-font-family-body);
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--sivo-bg-color);
+}
+
+/* Utility Classes for Patterns (To be used via JS/SVG fills if applicable) */
+.sivo-pattern-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    var(--sivo-border-color) 10px,
+    var(--sivo-border-color) 12px
+  );
+}
+
+.sivo-pattern-dots {
+  background-image: radial-gradient(var(--sivo-border-color) 2px, transparent 2px);
+  background-size: 10px 10px;
+}
+
+/* Data Points */
+.sivo-data-point, .sivo-value, .sivo-metric {
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+/* Reduced Motion (Media Query) */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
