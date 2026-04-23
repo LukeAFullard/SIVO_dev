@@ -11,14 +11,12 @@ def main():
     # The 'digital_first_glassmorphism' theme gives a highly sophisticated, translucent layered depth look
     app = Sivo.from_template("16_10/radial_concentric_burst", theme="digital_first_glassmorphism", title="Ecosystem Map")
 
-    # Map the background to be transparent, allowing the theme to shine through if desired
-    app.map("background", color="transparent", border_color="transparent")
+    # Map the background to enable interaction or target it, letting the new transparent default take effect
+    app.map("background")
 
     # Map data to the center hub
     app.map("text_hub", "CORE")
-    app.map("radial-center-data",
-            tooltip="Central Hub: The primary command node of the ecosystem.",
-            border_color="transparent")
+    app.map("radial-center-data", tooltip="Central Hub: The primary command node of the ecosystem.")
 
     # Map inner satellites
     inner_data = [
@@ -31,8 +29,7 @@ def main():
         app.map(f"val_sys_{key.lower()}", metric)
         app.map(f"sat-inner-{i+1}-data",
                 html=f"<h3>{title} Status</h3><p>Current Uptime: {metric}</p><p>All services are functioning normally within {title}.</p>",
-                panel_position="right",
-                border_color="transparent")
+                panel_position="right")
 
     # Map outer satellites
     outer_data = [
@@ -50,8 +47,7 @@ def main():
         # Configure the interaction to show more detail in a side panel
         app.map(f"sat-outer-{key}-data",
                 markdown=f"## {title}\n**Status:** {metric}\n\nDetailed logs and monitoring data for the external node {title}. Notice the status state and check recent alerts.",
-                panel_position="right",
-                border_color="transparent")
+                panel_position="right")
 
     # Generate the output HTML bundle
     output_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'radial_sunburst_example_output.html'))
