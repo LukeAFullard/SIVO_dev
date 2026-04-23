@@ -327,7 +327,7 @@ A mature, highly refined evolution of the 80s Memphis design movement, using sta
 *   **Color Palette:** A highly curated, sophisticated pastel palette (Lilac, Mint, Peach) disrupted by sudden, sharp injections of primary colors (Cobalt Blue, Cadmium Red) and stark black.
 *   **Visual Accents:** Data housed inside perfect circles, sharp triangles, and pill shapes. Heavy use of offset, solid-color drop shadows, squiggly connector lines, and subtle grainy textures to soften the sharp geometry.
 *   **Implementation Status:**
-    *   [ ] Theme implemented
+    *   [x] Theme implemented
 
 ### 16. Immersive Dark Mode Maximalism
 Taking standard dark mode to its logical, high-energy extreme, this theme uses profound darkness as a canvas for explosions of vivid color and dense information.
