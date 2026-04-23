@@ -1,0 +1,132 @@
+/* Immersive Dark Mode Maximalism */
+/* Taking standard dark mode to its logical, high-energy extreme */
+
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=JetBrains+Mono:wght@100..800&display=swap');
+
+:root {
+    /* Color Palette: Pitch black canvas with hyper-saturated neons */
+    --sivo-bg: #000000;          /* Pitch black */
+    --sivo-electric-pink: #FF00FF;
+    --sivo-acid-green: #39FF14;
+    --sivo-neon-orange: #FF5E00;
+
+    /* Typography */
+    --sivo-font-heading: 'Syncopate', sans-serif; /* Aggressive, extended sans-serif */
+    --sivo-font-body: 'JetBrains Mono', monospace; /* Highly technical monospace */
+}
+
+/* Base Canvas & Continuous Motion */
+body, #sivo-app-container {
+    background-color: var(--sivo-bg);
+    color: #FFFFFF;
+    font-family: var(--sivo-font-body);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    /* Subtle continuous motion background */
+    background-image: radial-gradient(circle at 50% 50%, rgba(255, 0, 255, 0.05) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(57, 255, 20, 0.05) 0%, transparent 40%),
+                      radial-gradient(circle at 20% 80%, rgba(255, 94, 0, 0.05) 0%, transparent 40%);
+    background-size: 200% 200%;
+    animation: galaxyDrift 15s ease-in-out infinite alternate;
+}
+
+@keyframes galaxyDrift {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 100%; }
+}
+
+/* Typography Rules */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--sivo-font-heading);
+    text-transform: uppercase;
+    color: #FFFFFF;
+    /* Intense glowing effects */
+    text-shadow: 0 0 10px var(--sivo-electric-pink), 0 0 20px var(--sivo-electric-pink);
+    letter-spacing: 2px;
+    margin: 0 0 5px 0;
+    line-height: 1.1;
+    z-index: 10;
+    position: relative;
+    /* Subtle pulsing for text */
+    animation: neonPulse 3s infinite alternate;
+}
+
+h1 { color: var(--sivo-electric-pink); text-shadow: 0 0 10px var(--sivo-electric-pink), 0 0 20px var(--sivo-electric-pink); }
+h2 { color: var(--sivo-acid-green); text-shadow: 0 0 10px var(--sivo-acid-green), 0 0 20px var(--sivo-acid-green); }
+h3 { color: var(--sivo-neon-orange); text-shadow: 0 0 10px var(--sivo-neon-orange), 0 0 20px var(--sivo-neon-orange); }
+
+@keyframes neonPulse {
+    0% { opacity: 0.9; filter: brightness(1); }
+    100% { opacity: 1; filter: brightness(1.2); }
+}
+
+p, span, div, text {
+    font-family: var(--sivo-font-body);
+    font-size: 0.75rem; /* Almost microscopic monospace fonts for secondary data */
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.2;
+}
+
+/* Densely packed layout and overlapping translucent shapes */
+.sivo-panel, #info-panel, .sivo-overlay {
+    background: rgba(0, 0, 0, 0.7); /* Translucent */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), inset 0 0 10px rgba(255, 0, 255, 0.2);
+    backdrop-filter: blur(10px);
+    margin: -10px; /* Overlapping */
+    padding: 10px; /* Densely packed */
+    z-index: 100;
+    position: relative;
+    mix-blend-mode: screen; /* Overlapping interactions */
+}
+
+/* Interactive Elements (Buttons, Links) */
+a, button, .sivo-button, .sivo-link {
+    font-family: var(--sivo-font-heading);
+    font-size: 0.8rem;
+    color: var(--sivo-bg);
+    background-color: var(--sivo-acid-green);
+    border: none;
+    padding: 5px 10px;
+    margin: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px var(--sivo-acid-green);
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+}
+
+a:hover, button:hover, .sivo-button:hover, .sivo-link:hover {
+    background-color: var(--sivo-electric-pink);
+    color: var(--sivo-bg);
+    box-shadow: 0 0 20px var(--sivo-electric-pink), 0 0 40px var(--sivo-electric-pink);
+    transform: scale(1.05);
+}
+
+/* Charts / Canvas - "Starry galaxies" */
+svg, canvas {
+    /* Intense glowing effects */
+    filter: drop-shadow(0 0 8px var(--sivo-neon-orange)) drop-shadow(0 0 15px var(--sivo-electric-pink));
+    mix-blend-mode: screen;
+    animation: gentleFloat 6s ease-in-out infinite alternate;
+}
+
+@keyframes gentleFloat {
+    0% { transform: translateY(0px) scale(1); }
+    100% { transform: translateY(-5px) scale(1.01); }
+}
+
+/* Tooltips */
+.echarts-tooltip, .sivo-tooltip {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    border: 1px solid var(--sivo-electric-pink) !important;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.6) !important;
+    color: var(--sivo-acid-green) !important;
+    font-family: var(--sivo-font-body) !important;
+    font-size: 0.75rem !important;
+    backdrop-filter: blur(5px);
+    border-radius: 0 !important;
+    padding: 5px !important;
+    text-shadow: 0 0 5px var(--sivo-acid-green) !important;
+}
