@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1750" width="100%" height="100%">
+    <defs>
+        <style>
+            .bg { fill: #0f172a; }
+            .tier { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.2); stroke-width: 2px; transition: all 0.3s ease; cursor: pointer; }
+            .tier:hover { fill: rgba(255,255,255,0.15); stroke: rgba(57, 255, 20, 0.8); }
+            .bento { fill: rgba(15,23,42,0.6); stroke: rgba(255,255,255,0.1); stroke-width: 1px; rx: 12px; }
+            .text-main { fill: #f8fafc; font-family: sans-serif; font-size: 20px; font-weight: bold; text-anchor: middle; alignment-baseline: middle; }
+        </style>
+    </defs>
+
+    <!-- Background -->
+    <rect class="bg" width="100%" height="100%"/>
+
+    <!-- Title Area -->
+    <text x="500.0" y="140.0" class="text-main" font-size="40px" id="main-title">Layered Pyramid Architecture</text>
+    <text x="500.0" y="210.0" class="text-main" font-size="20px" fill="#94a3b8" id="sub-title">Data Funnel &amp; Conversions</text>
+
+    <!-- Bento Boxes -->
+    <rect id="bento-1" class="bento" x="100.0" y="87.5" width="350.0" height="262.5" />
+    <rect id="bento-2" class="bento" x="550.0" y="87.5" width="350.0" height="262.5" />
+    <rect id="bento-3" class="bento" x="100.0" y="1400.0" width="350.0" height="262.5" />
+    <rect id="bento-4" class="bento" x="550.0" y="1400.0" width="350.0" height="262.5" />
+
+    <!-- Pyramid Tiers -->
+    <polygon id="tier-1" class="tier" points="500.0,525.0 500.0,525.0 587.5,700.0 412.5,700.0" />
+    <polygon id="tier-2" class="tier" points="412.5,700.0 587.5,700.0 675.0,875.0 325.0,875.0" />
+    <polygon id="tier-3" class="tier" points="325.0,875.0 675.0,875.0 762.5,1050.0 237.5,1050.0" />
+    <polygon id="tier-4" class="tier" points="237.5,1050.0 762.5,1050.0 850.0,1225.0 150.0,1225.0" />
+
+    <!-- Text overlays on pyramid -->
+    <text x="500.0" y="630.0" class="text-main" id="text-tier-1">Tier 1</text>
+    <text x="500.0" y="787.5" class="text-main" id="text-tier-2">Tier 2</text>
+    <text x="500.0" y="962.5" class="text-main" id="text-tier-3">Tier 3</text>
+    <text x="500.0" y="1137.5" class="text-main" id="text-tier-4">Tier 4</text>
+</svg>

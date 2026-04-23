@@ -62,14 +62,14 @@ The foundation of any successful infographic is its structural architecture. In 
 *   **Visual Hierarchy:** A rigid top-down (or bottom-up) triangular structure. The width of each tier corresponds to volume, while the vertical position denotes hierarchy or progression.
 *   **The Data-Story:** Essential for **sales conversions, organizational hierarchies, or filtering processes**. It visually reinforces how a large starting volume distills down to a core result or how foundational elements support a pinnacle achievement.
 *   **Implementation Status:**
-    *   [ ] Template created for `16_10`
-    *   [ ] Template created for `1_1`
-    *   [ ] Template created for `3_2`
-    *   [ ] Template created for `4_3`
-    *   [ ] Template created for `4_7`
-    *   [ ] Template created for `other`
-    *   [ ] Dashboard template created
-    *   [ ] Example added in `examples/templates`
+    *   [x] Template created for `16_10`
+    *   [x] Template created for `1_1`
+    *   [x] Template created for `3_2`
+    *   [x] Template created for `4_3`
+    *   [x] Template created for `4_7`
+    *   [x] Template created for `other`
+    *   [x] Dashboard template created
+    *   [x] Example added in `examples/templates`
 
 ### 6. The Radial / Concentric Burst (Sunburst) Architecture
 *   **Visual Hierarchy:** A dense, circular structure expanding outward from a central core. Inner rings represent broad categories, while outer rings slice into highly specific micro-data.
