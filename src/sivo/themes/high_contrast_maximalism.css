@@ -1,0 +1,160 @@
+/* High-Contrast Maximalism (The "Sensory Overload" Style) */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Oswald:wght@900&family=Permanent+Marker&display=swap');
+
+:root {
+    /* Clashing, hyper-saturated neon palettes */
+    --sivo-bg: #ff00ff; /* Hot Magenta */
+    --sivo-text: #00ffff; /* Cyber Cyan */
+    --sivo-accent1: #ccff00; /* Acid Yellow */
+    --sivo-accent2: #8a2be2; /* Electric Violet */
+    --sivo-accent3: #ff0055; /* Hot Pink */
+
+    /* Typography: contrasting fonts */
+    --sivo-font-heading: 'Cinzel', serif; /* Acidic, stretched serifs */
+    --sivo-font-body: 'Oswald', sans-serif; /* Ultra-bold, condensed sans-serifs */
+    --sivo-font-accent: 'Permanent Marker', cursive; /* Erratic script fonts */
+}
+
+/* Sensory Overload Base with Aggressive Gradients */
+body, #sivo-app-container {
+    background: linear-gradient(45deg, var(--sivo-bg), var(--sivo-accent1), var(--sivo-accent2), var(--sivo-text), var(--sivo-accent3));
+    background-size: 400% 400%;
+    animation: gradientShift 3s ease infinite;
+    color: var(--sivo-text);
+    font-family: var(--sivo-font-body);
+    font-weight: 900;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Kinetic Typography and Constant Shifting */
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseNeon {
+    0% { text-shadow: 0 0 5px var(--sivo-accent1), 0 0 10px var(--sivo-accent1); }
+    50% { text-shadow: 0 0 15px var(--sivo-accent2), 0 0 30px var(--sivo-accent2); }
+    100% { text-shadow: 0 0 5px var(--sivo-accent1), 0 0 10px var(--sivo-accent1); }
+}
+
+/* Densely packed compositions with zero negative space */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--sivo-font-heading);
+    color: var(--sivo-accent1);
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    transform: scaleY(1.3) rotate(-2deg);
+    margin-top: -10px;
+    margin-bottom: -15px; /* Overlapping elements */
+    z-index: 10;
+    position: relative;
+    mix-blend-mode: difference;
+    animation: pulseNeon 1.5s infinite, shake 4s infinite;
+    line-height: 0.8;
+}
+
+p, span, div, text {
+    font-family: var(--sivo-font-body);
+    font-size: 1.2rem;
+    line-height: 0.9; /* Deliberate tension */
+}
+
+/* Sticker-bombing aesthetics */
+.sivo-panel, #info-panel, .sivo-overlay {
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--sivo-bg),
+      var(--sivo-bg) 15px,
+      var(--sivo-accent2) 15px,
+      var(--sivo-accent2) 30px
+    );
+    border: 8px solid var(--sivo-accent1);
+    box-shadow: -20px 20px 0px var(--sivo-text);
+    transform: rotate(3deg);
+    padding: 5px; /* Almost no negative space */
+    margin: -15px; /* Overlapping */
+    z-index: 100;
+    color: var(--sivo-accent1);
+    text-shadow: 2px 2px 0 var(--sivo-bg);
+}
+
+/* Erratic script fonts for links and buttons to create tension */
+a, button, .sivo-button, .sivo-link {
+    font-family: var(--sivo-font-accent);
+    color: var(--sivo-bg);
+    background-color: var(--sivo-accent1);
+    font-size: 1.8rem;
+    border: 4px dashed var(--sivo-text);
+    text-decoration: underline wavy var(--sivo-accent3) 4px;
+    display: inline-block;
+    transform: rotate(-5deg);
+    transition: all 0.1s;
+    box-shadow: 5px 5px 0 var(--sivo-accent2);
+    margin: -5px; /* Overlapping elements */
+}
+
+a:hover, button:hover, .sivo-button:hover, .sivo-link:hover {
+    color: var(--sivo-accent1);
+    background-color: var(--sivo-text);
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 25px var(--sivo-accent1);
+    border: 4px solid var(--sivo-accent3);
+}
+
+/* Aggressive Gradients and Overlapping for Canvas / SVG */
+svg, canvas {
+    border: 10px solid var(--sivo-accent3);
+    box-shadow: inset 0 0 50px var(--sivo-bg), 15px 15px 0 var(--sivo-accent1);
+    filter: contrast(150%) saturate(200%) hue-rotate(45deg);
+    transform: rotate(-1deg) scale(1.02);
+    margin: -10px;
+}
+
+/* Tooltips */
+.echarts-tooltip, .sivo-tooltip {
+    background-color: var(--sivo-accent3) !important;
+    color: var(--sivo-accent1) !important;
+    font-family: var(--sivo-font-body) !important;
+    border: 6px solid var(--sivo-text) !important;
+    border-radius: 0 !important;
+    font-size: 24px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    box-shadow: 15px 15px 0 var(--sivo-bg) !important;
+    animation: pulseNeon 0.5s infinite !important;
+    transform: rotate(2deg) !important;
+}
+
+/* Sticker bomb style classes */
+.sticker {
+    font-family: var(--sivo-font-accent);
+    background: var(--sivo-text);
+    color: var(--sivo-bg);
+    border-radius: 50%;
+    border: 5px dotted var(--sivo-accent2);
+    padding: 15px;
+    position: absolute;
+    box-shadow: 8px 8px 0px rgba(0,0,0,1);
+    transform: rotate(15deg);
+    animation: shake 1.5s infinite;
+    z-index: 999;
+}
