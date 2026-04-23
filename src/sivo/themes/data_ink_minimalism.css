@@ -1,0 +1,118 @@
+/*
+ * Theme: Data-Ink Minimalism (Tufte Revivalism)
+ *
+ * A purist return to Edward Tufte's core principles, updated for modern digital
+ * environments, where every pixel that does not represent data is aggressively removed.
+ *
+ * Typography: Classic, understated serifs (e.g., Garamond, Baskerville) paired with
+ *             extremely neutral, legible sans-serifs, entirely avoiding decorative or display fonts.
+ * Color Palette: A strictly monochromatic base (pure black on pure white) with a single,
+ *                highly muted accent color (like a dusty brick red or soft steel blue)
+ *                used solely to indicate the most critical data point.
+ * Visual Accents: Complete removal of borders, background colors, drop shadows, and 3D effects.
+ *                 Axes and gridlines are either invisible or rendered in the faintest possible grey.
+ *                 The data itself is the only visual feature.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500&display=swap');
+
+:root {
+  /* Color Palette: Pure monochrome */
+  --sivo-bg-color: #FFFFFF; /* Pure White */
+  --sivo-text-color: #000000; /* Pure Black */
+
+  /* Highly muted accent color: Dusty Brick Red */
+  --sivo-accent-color: #A35E5A;
+
+  /* Faintest possible grey for axes/gridlines when absolutely necessary */
+  --sivo-faint-grey: #F0F0F0;
+
+  /* Typography */
+  --sivo-font-family-serif: 'EB Garamond', Garamond, Baskerville, 'Times New Roman', serif;
+  --sivo-font-family-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Global Application Styling */
+body, #sivo-app-container {
+  background-color: var(--sivo-bg-color);
+  color: var(--sivo-text-color);
+  font-family: var(--sivo-font-family-serif);
+  font-weight: 400;
+  line-height: 1.5;
+  /* Removal of all shadows and borders */
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6, .sivo-header {
+  font-family: var(--sivo-font-family-sans);
+  font-weight: 500;
+  color: var(--sivo-text-color);
+  margin-bottom: 1rem;
+}
+
+/* Data Points / Numbers */
+.sivo-data-point, .sivo-value, .sivo-metric, code {
+  font-family: var(--sivo-font-family-sans);
+  font-weight: 400;
+  color: var(--sivo-text-color);
+}
+
+/* The Highlight/Accent: Solely for critical data */
+.sivo-highlight, .sivo-active, .sivo-selected {
+  color: var(--sivo-accent-color) !important;
+  fill: var(--sivo-accent-color) !important;
+  stroke: var(--sivo-accent-color) !important;
+}
+
+/* Aggressive Removal of Non-Data Ink */
+/* Panels, Cards, Tooltips */
+.sivo-panel, #info-panel, .sivo-card, .sivo-tooltip {
+  background-color: var(--sivo-bg-color) !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 1rem;
+}
+
+/* Remove decorative borders, lines, backgrounds */
+hr, .sivo-divider, .sivo-separator {
+  display: none !important;
+}
+
+/* Buttons: Extreme minimalism */
+button, .sivo-btn {
+  background-color: transparent !important;
+  color: var(--sivo-text-color) !important;
+  font-family: var(--sivo-font-family-sans);
+  border: none !important;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: none !important;
+  text-decoration: underline; /* Standard, native interaction cue */
+}
+
+button:hover, .sivo-btn:hover {
+  color: var(--sivo-accent-color) !important;
+}
+
+/* SVG Chart Elements - Tufte Principles */
+/* Invisible or faint axes/gridlines */
+.sivo-axis line, .sivo-axis path, .sivo-grid line {
+  stroke: var(--sivo-faint-grey) !important;
+  stroke-width: 1px !important;
+}
+
+.sivo-axis text {
+  font-family: var(--sivo-font-family-sans);
+  fill: var(--sivo-text-color);
+  font-size: 0.8rem;
+}
+
+/* Remove all 3D effects, gradients, filters */
+* {
+  text-shadow: none !important;
+  box-shadow: none !important;
+  background-image: none !important; /* Removes gradients */
+  filter: none !important;
+}
