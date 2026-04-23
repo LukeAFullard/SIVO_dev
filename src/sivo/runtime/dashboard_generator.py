@@ -31,7 +31,20 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
     formatted_views = format_views_data(views_data)
     deps = determine_dependencies(formatted_views)
 
+    # Fetch custom theme CSS if applicable
+    if theme not in ["light", "dark"]:
+        from ..core.sivo import Sivo
+        theme_css = Sivo.get_theme_css(theme)
+        if theme_css:
+            # Note: We append it to a separate custom_css variable to pass to Jinja
+            custom_css_payload = theme_css
+        else:
+            custom_css_payload = None
+    else:
+        custom_css_payload = None
+
     html_output = template_obj.render(
+        custom_css=custom_css_payload,
         views_data=json.dumps(formatted_views, separators=(',', ':')).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"),
         layout_order=layout_order,
         html_blocks=html_blocks,

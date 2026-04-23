@@ -370,6 +370,14 @@ def generate_echarts_html(views_data: Dict[str, Dict], initial_view: str, output
 
     deps = determine_dependencies(formatted_views)
 
+    # Fetch custom theme CSS if applicable
+    theme_name = formatted_views.get(initial_view, {}).get("theme", "light")
+    if theme_name not in ["light", "dark"]:
+        from ..core.sivo import Sivo
+        theme_css = Sivo.get_theme_css(theme_name)
+        if theme_css:
+            custom_css = (custom_css or "") + "\n" + theme_css
+
     # Check for locally bundled JS
     build_js = False
     bundled_js_content = ""
