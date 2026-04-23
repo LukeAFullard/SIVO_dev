@@ -335,7 +335,7 @@ Taking standard dark mode to its logical, high-energy extreme, this theme uses p
 *   **Color Palette:** Pitch black (true #000000) backgrounds illuminated by a kaleidoscope of hyper-saturated neon colors (Electric Pink, Acid Green, Neon Orange) applied generously to every data point.
 *   **Visual Accents:** Intense glowing effects, densely packed chart areas that resemble starry galaxies, overlapping translucent shapes, and continuous, subtle motion that keeps the entirely dark screen feeling alive and energetic.
 *   **Implementation Status:**
-    *   [ ] Theme implemented
+    *   [x] Theme implemented
 
 ---
 
