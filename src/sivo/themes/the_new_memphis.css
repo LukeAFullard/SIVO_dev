@@ -1,0 +1,210 @@
+/*
+ * Theme: The New Memphis / Abstract Geometry
+ * Description: A mature, highly refined evolution of the 80s Memphis design movement, using stark, playful geometric primitives as functional containers.
+ * Typography: Bold, tightly kerned sans-serifs that feel architectural and structural.
+ * Color Palette: A highly curated, sophisticated pastel palette (Lilac, Mint, Peach) disrupted by sudden, sharp injections of primary colors (Cobalt Blue, Cadmium Red) and stark black.
+ * Visual Accents: Data housed inside perfect circles, sharp triangles, and pill shapes. Heavy use of offset, solid-color drop shadows, squiggly connector lines, and subtle grainy textures.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;700;800&display=swap');
+
+:root {
+  /* Pastel Palette */
+  --sivo-lilac: #D8B4E2;
+  --sivo-mint: #A8E6CF;
+  --sivo-peach: #FFD3B6;
+
+  /* Primary Disruptors */
+  --sivo-cobalt: #0047AB;
+  --sivo-cadmium: #E30022;
+
+  /* Core Colors */
+  --sivo-black: #1A1A1A;
+  --sivo-white: #FAF9F6; /* Off-white for a softer canvas */
+
+  /* Structural variables */
+  --sivo-bg-primary: var(--sivo-white);
+  --sivo-bg-secondary: var(--sivo-peach);
+  --sivo-text-primary: var(--sivo-black);
+
+  /* Border & Shadows */
+  --memphis-border: 3px solid var(--sivo-black);
+  --memphis-shadow-color: var(--sivo-black);
+  --memphis-shadow: 6px 6px 0px 0px var(--memphis-shadow-color);
+  --memphis-shadow-hover: 2px 2px 0px 0px var(--memphis-shadow-color);
+  --memphis-shadow-blue: 6px 6px 0px 0px var(--sivo-cobalt);
+  --memphis-shadow-red: 6px 6px 0px 0px var(--sivo-cadmium);
+
+  /* Typography */
+  --sivo-font-family-display: 'Archivo Black', sans-serif;
+  --sivo-font-family-body: 'Manrope', sans-serif;
+}
+
+body {
+  background-color: var(--sivo-bg-primary);
+  color: var(--sivo-text-primary);
+  font-family: var(--sivo-font-family-body);
+  /* Subtle grainy texture via SVG filter/base64 noise */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--sivo-font-family-display);
+  color: var(--sivo-text-primary);
+  margin-top: 0;
+  letter-spacing: -0.02em; /* Tightly kerned */
+}
+
+h1 {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+p {
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* SIVO App Container */
+#sivo-app-container {
+  border: var(--memphis-border);
+  box-shadow: var(--memphis-shadow);
+  background-color: var(--sivo-bg-primary);
+  border-radius: 24px; /* Pill-like rounded corners */
+  overflow: hidden;
+  position: relative;
+}
+
+/* Side Panels & Modals */
+.sivo-panel, .sivo-modal, .sivo-tooltip, #info-panel {
+  background-color: var(--sivo-lilac);
+  border: var(--memphis-border);
+  box-shadow: var(--memphis-shadow);
+  color: var(--sivo-text-primary);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+/* Override standard Sivo panel styles */
+#info-panel {
+  background-color: var(--sivo-mint) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--memphis-shadow) !important;
+  border: var(--memphis-border) !important;
+}
+
+/* Headers within panels */
+.sivo-panel h1, .sivo-panel h2, #info-panel h1, #info-panel h2 {
+  border-bottom: 3px solid var(--sivo-black);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Buttons and Interactive Elements */
+button, .sivo-button, .sivo-action-btn {
+  background-color: var(--sivo-peach);
+  color: var(--sivo-text-primary);
+  font-family: var(--sivo-font-family-body);
+  font-weight: 800;
+  font-size: 1.1rem;
+  border: var(--memphis-border);
+  box-shadow: var(--memphis-shadow-blue);
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  border-radius: 50px; /* Pill shape */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+button:hover, .sivo-button:hover, .sivo-action-btn:hover {
+  background-color: var(--sivo-mint);
+  transform: translate(4px, 4px);
+  box-shadow: var(--memphis-shadow-hover);
+}
+
+button:active, .sivo-button:active, .sivo-action-btn:active {
+  background-color: var(--sivo-lilac);
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px 0px var(--memphis-shadow-color);
+}
+
+/* Links */
+a {
+  color: var(--sivo-cobalt);
+  text-decoration: none;
+  font-weight: 800;
+  border-bottom: 3px solid var(--sivo-cadmium);
+  transition: all 0.2s;
+}
+
+a:hover {
+  background-color: var(--sivo-cadmium);
+  color: var(--sivo-white);
+  border-bottom-color: var(--sivo-black);
+}
+
+/* Forms and Inputs */
+input, textarea, select {
+  font-family: var(--sivo-font-family-body);
+  font-weight: 700;
+  font-size: 1rem;
+  border: var(--memphis-border);
+  padding: 0.75rem 1rem;
+  background-color: var(--sivo-white);
+  border-radius: 50px; /* Pill shape */
+  box-shadow: 4px 4px 0px 0px var(--sivo-black);
+  transition: all 0.2s;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  background-color: var(--sivo-lilac);
+  box-shadow: 2px 2px 0px 0px var(--sivo-black);
+  transform: translate(2px, 2px);
+}
+
+/* Tooltips */
+.echarts-tooltip {
+  background-color: var(--sivo-white) !important;
+  border: var(--memphis-border) !important;
+  box-shadow: var(--memphis-shadow-red) !important;
+  color: var(--sivo-black) !important;
+  border-radius: 12px !important;
+  font-family: var(--sivo-font-family-body) !important;
+  font-weight: 700 !important;
+}
+
+/* Decorative structural accents */
+.sivo-panel::before, #info-panel::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--sivo-cadmium);
+  border: 2px solid var(--sivo-black);
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.sivo-panel::after, #info-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 20px solid var(--sivo-cobalt);
+  z-index: 10;
+  filter: drop-shadow(2px 2px 0px var(--sivo-black));
+}
