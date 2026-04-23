@@ -1,0 +1,330 @@
+/*
+ * Theme: Ethereal / Holographic Glow
+ * Architecture Concept: A futuristic, lightweight aesthetic that uses light and translucency to suggest highly advanced, AI-driven data processing.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400&family=Futura:wght@200;300&display=swap');
+
+:root {
+  /* Color Palette */
+  --sivo-bg-deep-black: #020205; /* Deep Void Black */
+
+  /* Pearlescent gradients / accents */
+  --sivo-accent-opalescent-white: #f0f8ff;
+  --sivo-accent-soft-cyan: #00e5ff;
+  --sivo-accent-aurora-pink: #ff00ea;
+
+  /* Translucency */
+  --sivo-bg-card-holo: rgba(2, 2, 5, 0.4); /* Translucent floating plane */
+  --sivo-bg-card-holo-hover: rgba(20, 20, 30, 0.6);
+
+  --sivo-text-main: #f0f8ff;
+  --sivo-text-muted: #8899aa;
+
+  /* Typography */
+  --sivo-font-family-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --sivo-font-family-display: 'Futura', 'Montserrat', system-ui, sans-serif;
+
+  /* Borders and Glows */
+  --sivo-border-holo: 1px solid rgba(255, 255, 255, 0.05);
+  --sivo-border-mesh: 1px solid rgba(0, 229, 255, 0.15); /* Delicate wireframe mesh hint */
+
+  /* Soft blooming glows */
+  --sivo-glow-cyan: 0 0 20px rgba(0, 229, 255, 0.3), 0 0 10px rgba(0, 229, 255, 0.6);
+  --sivo-glow-pink: 0 0 20px rgba(255, 0, 234, 0.3), 0 0 10px rgba(255, 0, 234, 0.6);
+  --sivo-glow-white: 0 0 15px rgba(240, 248, 255, 0.2), 0 0 5px rgba(240, 248, 255, 0.5);
+
+  --sivo-shadow-float: 0 15px 35px rgba(0, 0, 0, 0.8), 0 5px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Base Body and App Container */
+body {
+  background-color: var(--sivo-bg-deep-black);
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(255, 0, 234, 0.05), transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 229, 255, 0.05), transparent 50%);
+  color: var(--sivo-text-main);
+  font-family: var(--sivo-font-family-sans);
+  font-weight: 300;
+}
+
+#sivo-app-container {
+  background-color: transparent;
+}
+
+/* Titles and Headers */
+#sivo-title-container {
+  background: var(--sivo-bg-card-holo) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: var(--sivo-border-holo) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--sivo-shadow-float) !important;
+}
+
+#sivo-title,
+.info-panel-header h2,
+.sivo-subtitle,
+.scrolly-step-card h3 {
+  font-family: var(--sivo-font-family-display);
+  font-weight: 200; /* Ultra-thin */
+  color: var(--sivo-text-main) !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+#sivo-title {
+  /* Pearlescent text effect */
+  background: linear-gradient(135deg, var(--sivo-accent-opalescent-white), var(--sivo-accent-soft-cyan), var(--sivo-accent-aurora-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: var(--sivo-glow-white);
+}
+
+#sivo-subtitle {
+  color: var(--sivo-text-muted) !important;
+  font-weight: 300;
+  font-family: var(--sivo-font-family-sans);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Info Panel (Translucent floating plane) */
+#info-panel {
+  background: var(--sivo-bg-card-holo);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--sivo-border-mesh);
+  border-radius: 8px;
+  box-shadow: var(--sivo-shadow-float);
+  color: var(--sivo-text-main);
+}
+
+.info-panel-header {
+  border-bottom: var(--sivo-border-holo);
+  background: transparent;
+}
+
+.close-btn {
+  color: var(--sivo-text-muted);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+  font-weight: 200;
+}
+
+.close-btn:hover {
+  color: var(--sivo-accent-soft-cyan);
+  text-shadow: var(--sivo-glow-cyan);
+}
+
+.info-panel-content {
+  font-family: var(--sivo-font-family-sans);
+  color: var(--sivo-text-main);
+  font-weight: 300;
+}
+
+/* Scrollytelling Cards */
+.scrolly-step-card {
+  background: var(--sivo-bg-card-holo);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: var(--sivo-border-mesh);
+  border-radius: 8px;
+  box-shadow: var(--sivo-shadow-float);
+  color: var(--sivo-text-main);
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.scrolly-step-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 229, 255, 0.5);
+  box-shadow: var(--sivo-glow-cyan), var(--sivo-shadow-float);
+}
+
+/* Modals & Popups */
+#sivo-gallery-modal,
+#sivo-video-modal {
+  background: var(--sivo-bg-card-holo);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--sivo-border-mesh);
+  border-radius: 8px;
+  box-shadow: var(--sivo-shadow-float);
+}
+
+/* Buttons and Controls */
+.sivo-nav-btn,
+.zoom-btn,
+.tour-btn,
+.sivo-drawing-btn,
+#export-btn,
+#share-btn,
+#fullscreen-btn,
+#download-data-btn {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: var(--sivo-border-holo);
+  border-radius: 4px;
+  color: var(--sivo-text-main);
+  font-family: var(--sivo-font-family-sans);
+  font-weight: 300;
+  transition: all 0.3s ease;
+}
+
+.sivo-nav-btn:hover,
+.zoom-btn:hover,
+.tour-btn:hover,
+.sivo-drawing-btn:hover,
+#export-btn:hover,
+#share-btn:hover,
+#fullscreen-btn:hover,
+#download-data-btn:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: var(--sivo-accent-soft-cyan);
+  color: var(--sivo-accent-opalescent-white);
+  box-shadow: var(--sivo-glow-cyan);
+}
+
+.sivo-drawing-btn.active {
+  background: rgba(255, 0, 234, 0.15);
+  border-color: var(--sivo-accent-aurora-pink);
+  color: var(--sivo-accent-opalescent-white);
+  box-shadow: var(--sivo-glow-pink);
+}
+
+/* Search and Geocoder Inputs */
+#sivo-search-input,
+#sivo-geocoder-input {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: var(--sivo-border-holo);
+  color: var(--sivo-text-main);
+  border-radius: 4px;
+  padding-left: 36px;
+  font-weight: 300;
+  transition: all 0.4s ease;
+}
+
+#sivo-search-input:focus,
+#sivo-geocoder-input:focus {
+  outline: none;
+  border-color: var(--sivo-accent-soft-cyan);
+  box-shadow: var(--sivo-glow-cyan);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+#sivo-search-input::placeholder,
+#sivo-geocoder-input::placeholder {
+  color: var(--sivo-text-muted);
+  font-weight: 200;
+}
+
+#sivo-search-container .sivo-search-icon,
+#sivo-geocoder-container .sivo-geocoder-icon {
+  color: var(--sivo-text-muted);
+}
+
+/* Search Results Dropdown */
+#sivo-search-results,
+#sivo-geocoder-results {
+  background: var(--sivo-bg-card-holo);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--sivo-border-mesh);
+  border-radius: 4px;
+  box-shadow: var(--sivo-shadow-float);
+}
+
+.sivo-search-result-item {
+  color: var(--sivo-text-main);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  font-weight: 300;
+}
+
+.sivo-search-result-item:hover {
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--sivo-accent-opalescent-white);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+.sivo-search-result-title {
+  font-weight: 400;
+  font-family: var(--sivo-font-family-display);
+}
+
+.sivo-search-result-subtitle {
+  color: var(--sivo-text-muted);
+  font-weight: 200;
+}
+
+/* Context Menu */
+#sivo-context-menu {
+  background: var(--sivo-bg-card-holo);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--sivo-border-mesh);
+  border-radius: 4px;
+  box-shadow: var(--sivo-shadow-float);
+}
+
+#sivo-context-menu div {
+  color: var(--sivo-text-main);
+  font-weight: 300;
+}
+
+#sivo-context-menu div:hover {
+  background: rgba(255, 0, 234, 0.1);
+  color: var(--sivo-accent-opalescent-white);
+  text-shadow: 0 0 8px rgba(255, 0, 234, 0.4);
+}
+
+/* Tour Content */
+#tour-content {
+  background: var(--sivo-bg-card-holo);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--sivo-border-mesh);
+  border-radius: 8px;
+  box-shadow: var(--sivo-shadow-float);
+  color: var(--sivo-text-main);
+}
+
+/* Minimap */
+#minimap-container {
+  background: var(--sivo-bg-card-holo);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: var(--sivo-border-mesh);
+  border-radius: 4px;
+  box-shadow: var(--sivo-shadow-float);
+}
+
+#minimap-viewport {
+  border: 1px solid var(--sivo-accent-soft-cyan);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+/* Resizer Handle */
+#sivo-resizer {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+#sivo-resizer:hover, #sivo-resizer:active {
+  background: var(--sivo-accent-soft-cyan);
+  box-shadow: var(--sivo-glow-cyan);
+}
+
+/* Echarts Tooltips overrides */
+.echarts-tooltip {
+  background: var(--sivo-bg-card-holo) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: var(--sivo-border-mesh) !important;
+  border-radius: 4px !important;
+  box-shadow: var(--sivo-shadow-float) !important;
+  color: var(--sivo-text-main) !important;
+  font-family: var(--sivo-font-family-sans) !important;
+  font-weight: 300 !important;
+}
