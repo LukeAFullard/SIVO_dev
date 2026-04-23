@@ -1,0 +1,119 @@
+/*
+  Theme: Hyper-Tactile Skeuomorphism (The "Physical World" Return)
+  Description: Moving past the flat digital landscape, this trend brings realistic, tangible textures and physics back to UI and data, creating highly interactive, "touchable" experiences.
+*/
+
+:root {
+  /* Color Palette: Matte plastics, brushed metals, and soft leathers */
+  --sivo-bg: #EAE8E3; /* Matte Off-White */
+  --sivo-panel-bg: #32353A; /* Deep Charcoal / Soft Leather */
+  --sivo-text-color: #1A1C1E; /* Very Dark Slate */
+  --sivo-panel-text: #EAE8E3; /* Off-White for contrast in dark panels */
+
+  --sivo-accent-1: #C5A082; /* Cognac Leather */
+  --sivo-accent-2: #848B91; /* Slate Matte */
+  --sivo-accent-3: #B3B0A5; /* Aluminum / Brushed Metal */
+  --sivo-accent-4: #8F6948; /* Bronze */
+
+  /* Typography: Robust, classic serifs and slab serifs */
+  --sivo-font-family: "Clarendon", "Rockwell", "Courier New", serif;
+  --sivo-font-family-headers: "Rockwell", "Clarendon", serif;
+
+  /* Textures and Shadows: 3D realistic accents */
+  --sivo-shadow-base: 4px 4px 10px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.2), inset -1px -1px 2px rgba(0,0,0,0.3);
+  --sivo-shadow-pressed: inset 3px 3px 6px rgba(0,0,0,0.5), inset -1px -1px 2px rgba(255,255,255,0.1);
+  --sivo-shadow-floating: 8px 12px 20px rgba(0,0,0,0.3), inset 1px 1px 3px rgba(255,255,255,0.3), inset -1px -1px 3px rgba(0,0,0,0.4);
+}
+
+/* Global Background with slight coarse paper/matte texture */
+body {
+  background-color: var(--sivo-bg);
+  background-image:
+    url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>'),
+    linear-gradient(135deg, #FDFDFD 0%, var(--sivo-bg) 100%);
+  color: var(--sivo-text-color);
+  font-family: var(--sivo-font-family);
+}
+
+/* Panel styling mimicking physical containers */
+#info-panel, .sivo-panel {
+  background-color: var(--sivo-panel-bg);
+  color: var(--sivo-panel-text);
+  border-radius: 8px;
+  border: 2px solid #232528;
+  box-shadow: var(--sivo-shadow-floating);
+
+  /* Soft leather/charcoal texture */
+  background-image:
+    url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.04"/></svg>'),
+    linear-gradient(to bottom right, #3C4045, #2B2E32);
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6, .sivo-title {
+  font-family: var(--sivo-font-family-headers);
+  font-weight: bold;
+  text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+}
+
+#info-panel h1, #info-panel h2, #info-panel h3, #info-panel .sivo-title {
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Interactive elements mimicking mechanical buttons */
+.sivo-interactive, button, .sivo-button {
+  background-color: var(--sivo-accent-3);
+  color: var(--sivo-text-color);
+  border: 1px solid #999589;
+  border-radius: 4px;
+  box-shadow: var(--sivo-shadow-base);
+  font-family: var(--sivo-font-family-headers);
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+
+  /* Brushed metal gradient */
+  background-image: linear-gradient(180deg, #D4D1C7 0%, #B3B0A5 50%, #9C988D 100%);
+}
+
+.sivo-interactive:hover, button:hover, .sivo-button:hover {
+  background-image: linear-gradient(180deg, #E2DFC5 0%, #C4C1B6 50%, #ACA89D 100%);
+  transform: translateY(-1px);
+  box-shadow: 5px 6px 12px rgba(0,0,0,0.35), inset 1px 1px 2px rgba(255,255,255,0.4), inset -1px -1px 2px rgba(0,0,0,0.3);
+}
+
+.sivo-interactive:active, button:active, .sivo-button:active, .sivo-button.active {
+  box-shadow: var(--sivo-shadow-pressed);
+  transform: translateY(2px);
+  background-image: linear-gradient(180deg, #9C988D 0%, #A8A59C 50%, #B3B0A5 100%);
+}
+
+/* Tooltip styles */
+.sivo-tooltip {
+  background-color: var(--sivo-accent-1);
+  color: var(--sivo-text-color);
+  border: 2px solid #A47D5E;
+  box-shadow: var(--sivo-shadow-floating);
+  font-family: var(--sivo-font-family);
+  border-radius: 2px;
+
+  /* Cognac leather slight gradient */
+  background-image: linear-gradient(to bottom, #D0A786, #B99275);
+}
+
+/* SVG specific overrides */
+svg .sivo-path {
+  filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.4));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease-in-out;
+}
+
+svg .sivo-path:hover {
+  transform: translateY(-2px) scale(1.02);
+  filter: drop-shadow(4px 6px 8px rgba(0,0,0,0.3)) brightness(1.1);
+}
+
+svg .sivo-path.selected {
+  transform: translateY(1px);
+  filter: drop-shadow(inset 2px 2px 4px rgba(0,0,0,0.5));
+}
