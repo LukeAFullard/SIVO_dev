@@ -250,6 +250,10 @@ class ThemeOverride(BaseModel):
     transparent_lines: Optional[bool] = None
     glow: Optional[bool] = None
     animation: Optional[str] = None
+    fade_in: Optional[bool] = False
+    fade_pulse: Optional[bool] = False
+    fade_start_time_ms: Optional[int] = 0
+    fade_duration_ms: Optional[int] = 5000
     morph_to_path: Optional[str] = None
     morph_duration_ms: Optional[int] = 1000
     morph_delay_ms: Optional[int] = 0
