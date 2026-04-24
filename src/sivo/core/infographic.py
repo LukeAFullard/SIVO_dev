@@ -432,6 +432,10 @@ class Infographic:
         glow: Optional[bool] = None,
         animation: Optional[str] = None,
         animation_duration_ms: Optional[int] = 1000,
+        fade_in: bool = False,
+        fade_pulse: bool = False,
+        fade_start_time_ms: int = 0,
+        fade_duration_ms: int = 5000,
         morph_to_path: Optional[str] = None,
         morph_duration_ms: Optional[int] = 1000,
         morph_delay_ms: Optional[int] = 0,
@@ -634,6 +638,16 @@ class Infographic:
         if animation:
             mapping.theme.animation = animation
             mapping.theme.animation_duration_ms = animation_duration_ms
+
+        if fade_in:
+            mapping.theme.fade_in = fade_in
+            mapping.theme.fade_start_time_ms = fade_start_time_ms
+            mapping.theme.fade_duration_ms = fade_duration_ms
+
+        if fade_pulse:
+            mapping.theme.fade_pulse = fade_pulse
+            mapping.theme.fade_start_time_ms = fade_start_time_ms
+            mapping.theme.fade_duration_ms = fade_duration_ms
 
         if morph_to_path:
             mapping.theme.morph_to_path = morph_to_path

@@ -176,6 +176,15 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
 
             if theme.get('animation'):
                 data_item['animation_class'] = theme.get('animation')
+            elif theme.get('fade_in'):
+                data_item['animation_class'] = 'fade_in'
+            elif theme.get('fade_pulse'):
+                data_item['animation_class'] = 'fade_pulse'
+
+            if theme.get('fade_in') or theme.get('fade_pulse'):
+                data_item['fade_start_time_ms'] = theme.get('fade_start_time_ms', 0)
+                data_item['fade_duration_ms'] = theme.get('fade_duration_ms', 5000)
+                item_style['opacity'] = 0
 
             # Prevent double-drawing if native SVG features are used
             if view_obj.get("render_mode", "canvas") == "svg":
