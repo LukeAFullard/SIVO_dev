@@ -686,6 +686,22 @@
                                 if (!item.itemStyle) item.itemStyle = {};
                                 if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
                                     item.itemStyle.opacity = opacity;
+                                    var domNodes = document.querySelectorAll(`[id="${item.name}"], [name="${item.name}"]`);
+                                    domNodes.forEach(domNode => {
+                                        if (domNode && domNode.tagName) {
+                                            domNode.setAttribute('opacity', opacity);
+                                            var tag = domNode.tagName.toLowerCase();
+                                            if (true) {
+                                                domNode.setAttribute('fill-opacity', opacity);
+
+                                                var textChildren = domNode.querySelectorAll('text, tspan');
+                                                textChildren.forEach(child => {
+                                                    child.setAttribute('opacity', opacity);
+                                                    child.setAttribute('fill-opacity', opacity);
+                                                });
+                                            }
+                                        }
+                                    });
                                     updated = true;
                                 }
                             }
@@ -700,6 +716,22 @@
                                 if (!item.itemStyle) item.itemStyle = {};
                                 if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
                                     item.itemStyle.opacity = opacity;
+                                    var domNodes = document.querySelectorAll(`[id="${item.name}"], [name="${item.name}"]`);
+                                    domNodes.forEach(domNode => {
+                                        if (domNode && domNode.tagName) {
+                                            domNode.setAttribute('opacity', opacity);
+                                            var tag = domNode.tagName.toLowerCase();
+                                            if (true) {
+                                                domNode.setAttribute('fill-opacity', opacity);
+
+                                                var textChildren = domNode.querySelectorAll('text, tspan');
+                                                textChildren.forEach(child => {
+                                                    child.setAttribute('opacity', opacity);
+                                                    child.setAttribute('fill-opacity', opacity);
+                                                });
+                                            }
+                                        }
+                                    });
                                     updated = true;
                                 }
                             }

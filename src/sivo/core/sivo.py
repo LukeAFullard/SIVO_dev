@@ -2528,7 +2528,7 @@ class Sivo:
             image_url = self.fetch_image_base64(image_url)
         self.infographic.clip_image_to_shape(element_id, image_url, scale, rotate, opacity, preserve_aspect_ratio, offset_x, offset_y, translate_x, translate_y, use_html_overlay)
 
-    def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True, interactive: bool = False):
+    def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True, interactive: bool = False, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
         Automatically generates a perfectly scaled, native SVG text element relative to the bounding box
         of a target element, eliminating the need to manually compute absolute x, y, and font sizes.
@@ -2602,10 +2602,14 @@ class Sivo:
             align=align,
             vertical_align=vertical_align,
             auto_shrink=auto_shrink,
-            interactive=interactive
+            interactive=interactive,
+            fade_in=fade_in,
+            fade_pulse=fade_pulse,
+            fade_start_time_ms=fade_start_time_ms,
+            fade_duration_ms=fade_duration_ms
         )
 
-    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True, interactive: bool = False):
+    def fill_template_zone(self, element_id: str, text: str, font_size: str | float | int = 24.0, font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True, interactive: bool = False, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
         Replaces a placeholder SVG element (like a <rect>) with native, perfectly-scaled SVG text.
         This ensures text scales naturally with the viewBox on all devices (mobile/desktop)
@@ -2804,8 +2808,22 @@ class Sivo:
                     node.set("opacity", "0")
                     node.set("pointer-events", "none")
                     node.set("silent", "true")
+                    # Remove ID from placeholder so the text element is the only one
+                    if "id" in node.attrib:
+                        del node.attrib["id"]
+                    if "name" in node.attrib:
+                        del node.attrib["name"]
 
-                    # 2. Construct text element
+                    # 2. Construct wrapper group and text element
+                    g_qname = f"{{{ns}}}g"
+                    wrapper_elem = etree.Element(g_qname)
+                    wrapper_elem.set("name", element_id)
+                    wrapper_elem.set("id", element_id)
+                    wrapper_elem.set("class", "sivo-template-text-group")
+
+                    if fade_in or fade_pulse:
+                        wrapper_elem.set("opacity", "0")
+
                     text_elem = etree.Element(qname)
                     text_elem.set("x", str(x))
                     text_elem.set("y", str(start_y))
@@ -2829,17 +2847,19 @@ class Sivo:
                         tspan.text = line_text
                         text_elem.append(tspan)
 
+                    wrapper_elem.append(text_elem)
+
                     # 3. Append as an immediate sibling to inherit exact transform logic
                     parent = node.getparent()
                     if parent is not None:
                         # Insert right after the placeholder
                         idx = parent.index(node)
-                        parent.insert(idx + 1, text_elem)
+                        parent.insert(idx + 1, wrapper_elem)
                     else:
                         # Fallback to root
-                        self.infographic.parser.root.append(text_elem)
+                        self.infographic.parser.root.append(wrapper_elem)
 
-        if not interactive:
+        if not interactive and not fade_in and not fade_pulse:
             # Remove from mappings so it does not become an interactive ECharts region
             self.infographic.mappings.pop(element_id, None)
 
@@ -2850,6 +2870,9 @@ class Sivo:
                         del node.attrib["id"]
                     if "name" in node.attrib:
                         del node.attrib["name"]
+
+        if fade_in or fade_pulse:
+            self.map(element_id, fade_in=fade_in, fade_pulse=fade_pulse, fade_start_time_ms=fade_start_time_ms, fade_duration_ms=fade_duration_ms, color=color, hover_color="transparent" if not interactive else None)
 
     def add_overlay(self, element_id: str, html: str, offset_x: int = 0, offset_y: int = 0, scale_with_zoom: bool = False):
         """Adds a custom HTML overlay over a specific SVG element's center coordinate."""

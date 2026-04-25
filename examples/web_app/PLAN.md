@@ -474,6 +474,7 @@ Following the comprehensive UX/UI architecture audit, the following highly-prior
 *   [x] **Enhance Immediate Visual Feedback & Drag-and-Drop Polish:** Implement fluid animations and clear visual drop zones (dashed borders, highlighting) for file uploads and Dashboard Layout modes. Add skeletal loading screens during heavy Pyodide/WASM generation phases to prevent the UI from appearing frozen.
 
 ### Phase 6.11: UX Polish
+- [ ] **Fading Configuration:** Expose `fade_in`, `fade_pulse`, `fade_start_time_ms`, and `fade_duration_ms` animation properties in the visual builder UI (e.g. under an Animations or Advanced tab) so users can easily add fade animations to their map elements without writing code.
 - [ ] **Navigation Menu Configuration:** Expose the `navigation_menu` and `navigation_menu_position` options within the visual builder UI, allowing users to define global app links and customize their placement without writing code.
 *   [x] **Code Generation Tab:** When the app is generated, also add the code in the Python tab so that advanced users can see the exact code.
 *   [x] **Tab Descriptions:** In all tabs, have an initial text which describes what the purpose of the tab is.
