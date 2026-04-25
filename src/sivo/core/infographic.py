@@ -14,7 +14,7 @@ from .config import ProjectConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "none", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_scroll_bounds: bool = True, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = True, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False, navigation_menu: Optional[list[dict]] = None, navigation_menu_position: str = 'top-right'):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "none", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_scroll_bounds: bool = True, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = True, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, background_image_fade_in: bool = False, background_image_fade_pulse: bool = False, background_image_fade_start_time_ms: int = 0, background_image_fade_duration_ms: int = 5000, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False, navigation_menu: Optional[list[dict]] = None, navigation_menu_position: str = 'top-right'):
         self.parser = parser
         self.navigation_menu = navigation_menu
         self.navigation_menu_position = navigation_menu_position
@@ -60,6 +60,10 @@ class Infographic:
         self.background_image_url = background_image_url
         self.background_image_opacity = background_image_opacity
         self.background_image_grayscale = background_image_grayscale
+        self.background_image_fade_in = background_image_fade_in
+        self.background_image_fade_pulse = background_image_fade_pulse
+        self.background_image_fade_start_time_ms = background_image_fade_start_time_ms
+        self.background_image_fade_duration_ms = background_image_fade_duration_ms
         self.svg_background_image_url = svg_background_image_url
         self.svg_background_image_opacity = svg_background_image_opacity
         self.svg_background_image_grayscale = svg_background_image_grayscale
@@ -177,6 +181,10 @@ class Infographic:
         infographic.background_image_url = getattr(cfg, "background_image_url", None)
         infographic.background_image_opacity = getattr(cfg, "background_image_opacity", 1.0)
         infographic.background_image_grayscale = getattr(cfg, "background_image_grayscale", False)
+        infographic.background_image_fade_in = getattr(cfg, "background_image_fade_in", False)
+        infographic.background_image_fade_pulse = getattr(cfg, "background_image_fade_pulse", False)
+        infographic.background_image_fade_start_time_ms = getattr(cfg, "background_image_fade_start_time_ms", 0)
+        infographic.background_image_fade_duration_ms = getattr(cfg, "background_image_fade_duration_ms", 5000)
         infographic.svg_background_image_url = getattr(cfg, "svg_background_image_url", None)
         infographic.svg_background_image_opacity = getattr(cfg, "svg_background_image_opacity", 1.0)
         infographic.svg_background_image_grayscale = getattr(cfg, "svg_background_image_grayscale", False)
@@ -360,6 +368,14 @@ class Infographic:
                     insert_idx = list(root).index(root.find(f'{{{ns}}}defs')) + 1
 
                 root.insert(insert_idx, img_tag)
+
+            # Register it in element lookup so it can be mapped
+            elem_data = {'id': 'sivo-svg-bg-image', 'name': 'sivo-svg-bg-image', 'tag': 'image'}
+            self.elements.append(elem_data)
+            from .actions import InteractionMapping
+            if 'sivo-svg-bg-image' not in self.mappings:
+                self.mappings['sivo-svg-bg-image'] = InteractionMapping(id='sivo-svg-bg-image')
+            self._element_lookup['sivo-svg-bg-image'] = elem_data
 
         except Exception as e:
             logger.warning(f"Warning: Failed to inject SVG background image: {e}")
@@ -1534,7 +1550,7 @@ class Infographic:
         self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom=True)
 
 
-    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0, use_html_overlay: bool = True):
+    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0, use_html_overlay: bool = True, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
         Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
         It creates a perfectly-sized HTML overlay that uses the exact SVG path as a CSS mask. This guarantees pixel-perfect clipping that seamlessly scales during pan/zoom in the ECharts canvas.
@@ -1577,13 +1593,13 @@ class Infographic:
                 "width": str(bbox_width),
                 "height": str(bbox_height),
                 "preserveAspectRatio": preserve_aspect_ratio,
-                "opacity": str(opacity),
+                "opacity": "0" if (fade_in or fade_pulse) else str(opacity),
                 "pointer-events": "none",
                 "silent": "true"
             }
 
             self.add_shape("image", shape_opts)
-            return
+            return base_id
 
         root = self.parser.root
 
@@ -1629,18 +1645,50 @@ class Infographic:
 
         # 3. Build the HTML overlay
         # We set pointer-events: none so that the underlying ECharts SVG shape continues to capture all mouse events (tooltips, drilldowns, etc)
+        animation_css = ""
+        initial_opacity = opacity
+        if fade_in:
+            animation_name = f"sivo-fade-in-{uuid.uuid4().hex[:8]}"
+            animation_css = f"""
+            <style>
+                @keyframes {animation_name} {{
+                    0% {{ opacity: 0; }}
+                    100% {{ opacity: {opacity}; }}
+                }}
+            </style>
+            """
+            animation_style = f"animation: {animation_name} {fade_duration_ms}ms ease-in forwards; animation-delay: {fade_start_time_ms}ms;"
+            initial_opacity = 0
+        elif fade_pulse:
+            animation_name = f"sivo-fade-pulse-{uuid.uuid4().hex[:8]}"
+            animation_css = f"""
+            <style>
+                @keyframes {animation_name} {{
+                    0% {{ opacity: {opacity * 0.2}; }}
+                    50% {{ opacity: {opacity}; }}
+                    100% {{ opacity: {opacity * 0.2}; }}
+                }}
+            </style>
+            """
+            animation_style = f"animation: {animation_name} {fade_duration_ms}ms infinite ease-in-out; animation-delay: {fade_start_time_ms}ms;"
+            initial_opacity = opacity * 0.2
+        else:
+            animation_style = ""
+
         html = f"""
+        {animation_css}
         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none;
                     mask-image: url('{mask_url}'); -webkit-mask-image: url('{mask_url}');
                     mask-size: 100% 100%; -webkit-mask-size: 100% 100%;
                     mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat;
                     mask-position: center; -webkit-mask-position: center;">
-            <img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; transform: translate({translate_x}px, {translate_y}px) scale({scale}) rotate({rotate}deg); opacity: {opacity};" />
+            <img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; transform: translate({translate_x}px, {translate_y}px) scale({scale}) rotate({rotate}deg); opacity: {initial_opacity}; {animation_style}" />
         </div>
         """
 
         # 4. Inject the overlay exactly over the element's bounding box
         self.add_overlay(element_id, html, offset_x, offset_y, scale_with_zoom=True)
+        return None
 
         # 5. We deliberately DO NOT make the original SVG shape transparent here!
         # Keeping its original fill allows ECharts to natively cast 'glow' (shadowBlur)
@@ -2073,6 +2121,10 @@ class Infographic:
             "background_image_url": self.background_image_url,
             "background_image_opacity": self.background_image_opacity,
             "background_image_grayscale": self.background_image_grayscale,
+            "background_image_fade_in": self.background_image_fade_in,
+            "background_image_fade_pulse": self.background_image_fade_pulse,
+            "background_image_fade_start_time_ms": self.background_image_fade_start_time_ms,
+            "background_image_fade_duration_ms": self.background_image_fade_duration_ms,
             "svg_background_image_url": self.svg_background_image_url,
             "svg_background_image_opacity": self.svg_background_image_opacity,
             "svg_background_image_grayscale": self.svg_background_image_grayscale,
