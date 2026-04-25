@@ -397,7 +397,7 @@ class Sivo:
         self.infographic.border_image_opacity = opacity
         self.infographic.border_image_grayscale = grayscale
 
-    def add_background_image(self, url: str, opacity: float = 1.0, grayscale: bool = False):
+    def add_background_image(self, url: str, opacity: float = 1.0, grayscale: bool = False, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
         Adds a background image to the SVG canvas.
         The image will be rendered beneath all SVG elements.
@@ -405,8 +405,12 @@ class Sivo:
         self.infographic.background_image_url = url
         self.infographic.background_image_opacity = opacity
         self.infographic.background_image_grayscale = grayscale
+        self.infographic.background_image_fade_in = fade_in
+        self.infographic.background_image_fade_pulse = fade_pulse
+        self.infographic.background_image_fade_start_time_ms = fade_start_time_ms
+        self.infographic.background_image_fade_duration_ms = fade_duration_ms
 
-    def add_svg_background_image(self, url: str, opacity: float = 1.0, grayscale: bool = False, insert_after: Optional[str] = None, encode_base64: bool = False):
+    def add_svg_background_image(self, url: str, opacity: float = 1.0, grayscale: bool = False, insert_after: Optional[str] = None, encode_base64: bool = False, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
         Adds a background image specifically to the SVG, which pans and zooms with the SVG elements.
         The image is injected into the SVG at the lowest z-index level, or directly after the node with ID `insert_after`.
@@ -418,6 +422,9 @@ class Sivo:
         self.infographic.svg_background_image_grayscale = grayscale
         self.infographic.svg_background_image_insert_after = insert_after
         self.infographic._inject_svg_background_image()
+
+        if fade_in or fade_pulse:
+            self.map("sivo-svg-bg-image", fade_in=fade_in, fade_pulse=fade_pulse, fade_start_time_ms=fade_start_time_ms, fade_duration_ms=fade_duration_ms)
 
     def map(
         self,
@@ -2505,7 +2512,7 @@ class Sivo:
         """
         self.infographic.clip_html_to_shape(element_id, html, pointer_events, offset_x, offset_y)
 
-    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0, use_html_overlay: bool = True, encode_base64: bool = False):
+    def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0, use_html_overlay: bool = True, encode_base64: bool = False, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
         Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
         The image perfectly scales and pans natively with the ECharts vector renderer.
@@ -2526,7 +2533,9 @@ class Sivo:
         """
         if encode_base64 and image_url.startswith('http'):
             image_url = self.fetch_image_base64(image_url)
-        self.infographic.clip_image_to_shape(element_id, image_url, scale, rotate, opacity, preserve_aspect_ratio, offset_x, offset_y, translate_x, translate_y, use_html_overlay)
+        base_id = self.infographic.clip_image_to_shape(element_id, image_url, scale, rotate, opacity, preserve_aspect_ratio, offset_x, offset_y, translate_x, translate_y, use_html_overlay, fade_in=fade_in, fade_pulse=fade_pulse, fade_start_time_ms=fade_start_time_ms, fade_duration_ms=fade_duration_ms)
+        if base_id and (fade_in or fade_pulse):
+            self.map(base_id, fade_in=fade_in, fade_pulse=fade_pulse, fade_start_time_ms=fade_start_time_ms, fade_duration_ms=fade_duration_ms)
 
     def add_scalable_text(self, target_id: str, text: str, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "20%", font_size: str = "10%", font_weight: str = "normal", font_family: str = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: str = "#000000", align: str = "left", vertical_align: str = "middle", auto_shrink: bool = True, interactive: bool = False, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
@@ -2957,6 +2966,10 @@ class Sivo:
             "border_image_grayscale": getattr(self.infographic, "border_image_grayscale", False),
             "background_image_opacity": getattr(self.infographic, "background_image_opacity", 1.0),
             "background_image_grayscale": getattr(self.infographic, "background_image_grayscale", False),
+            "background_image_fade_in": getattr(self.infographic, "background_image_fade_in", False),
+            "background_image_fade_pulse": getattr(self.infographic, "background_image_fade_pulse", False),
+            "background_image_fade_start_time_ms": getattr(self.infographic, "background_image_fade_start_time_ms", 0),
+            "background_image_fade_duration_ms": getattr(self.infographic, "background_image_fade_duration_ms", 5000),
             "svg_background_image_url": getattr(self.infographic, "svg_background_image_url", None),
             "svg_background_image_opacity": getattr(self.infographic, "svg_background_image_opacity", 1.0),
             "svg_background_image_grayscale": getattr(self.infographic, "svg_background_image_grayscale", False),
