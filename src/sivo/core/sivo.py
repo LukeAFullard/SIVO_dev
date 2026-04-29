@@ -201,16 +201,22 @@ class Sivo:
 
         # Determine the subdirectory if template_name contains it
         if "/" in template_name:
-            filepath = os.path.join(template_dir, f"{template_name}_template.svg")
+            # Try plain .svg first, then fallback to _template.svg
+            filepath = os.path.join(template_dir, f"{template_name}.svg")
+            if not os.path.exists(filepath):
+                filepath = os.path.join(template_dir, f"{template_name}_template.svg")
         else:
             # Fallback for old template names without subdirectory
             filepath = None
             for root, dirs, files in os.walk(template_dir):
-                if f"{template_name}_template.svg" in files:
+                if f"{template_name}.svg" in files:
+                    filepath = os.path.join(root, f"{template_name}.svg")
+                    break
+                elif f"{template_name}_template.svg" in files:
                     filepath = os.path.join(root, f"{template_name}_template.svg")
                     break
             if not filepath:
-                filepath = os.path.join(template_dir, f"{template_name}_template.svg") # trigger FileNotFoundError
+                filepath = os.path.join(template_dir, f"{template_name}.svg") # trigger FileNotFoundError
 
         if not os.path.exists(filepath):
             raise FileNotFoundError(f"Template '{template_name}' not found. Looked in {template_dir}")

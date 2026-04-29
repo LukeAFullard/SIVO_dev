@@ -2,12 +2,9 @@ from sivo import Sivo
 import os
 
 def run():
-    template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-        "src", "sivo", "templates", "16_10", "layered_pyramid_2026.svg"
-    )
+    template_path = "16_10/layered_pyramid_2026"
 
-    app = Sivo.from_svg(
+    app = Sivo.from_template(
         template_path,
         disable_zoom_controls=False,
         lock_canvas=True,

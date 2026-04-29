@@ -3,12 +3,9 @@ import os
 import lxml.etree as etree
 
 def run():
-    template_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-        "src", "sivo", "templates", "3_2", "dashboard_template.svg"
-    )
+    template_path = "3_2/dashboard_template"
 
-    app = Sivo.from_svg(
+    app = Sivo.from_template(
         template_path,
         disable_zoom_controls=False,
         lock_canvas=True,
