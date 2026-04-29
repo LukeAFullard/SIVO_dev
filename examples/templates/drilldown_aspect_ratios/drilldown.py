@@ -4,11 +4,8 @@ from sivo.core.sivo import Sivo
 
 def run():
     # 1. 1:1 Aspect Ratio (Home View)
-    home_app = Sivo.from_svg(
-        os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "src", "sivo", "templates", "1_1", "large_node_to_4_nodes.svg"
-        ),
+    home_app = Sivo.from_template(
+        "1_1/large_node_to_4_nodes",
         layout_size="95%",
         disable_zoom_controls=False,
         lock_zoom_out=True,
@@ -36,11 +33,8 @@ def run():
     home_app.map("node_4_card", drill_to="view_4_7", tooltip="Drilldown to a 4:7 Mobile layout.", hover_color="rgba(0,0,0,0.05)", glow=True)
 
     # 2. 3:2 Aspect Ratio View
-    app_3_2 = Sivo.from_svg(
-        os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "src", "sivo", "templates", "3_2", "bento_grid_template.svg"
-        ),
+    app_3_2 = Sivo.from_template(
+        "3_2/bento_grid_template",
         layout_size="95%",
         lock_zoom_out=True,
         default_panel_position="overlay",
@@ -61,11 +55,8 @@ def run():
     app_3_2.map("bento-hero-click-area", drill_to="home", tooltip="Go back home", glow=True, hover_color="rgba(0,0,0,0.05)")
 
     # 3. 4:3 Aspect Ratio View
-    app_4_3 = Sivo.from_svg(
-        os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "src", "sivo", "templates", "4_3", "sleek_bento_grid_2026.svg"
-        ),
+    app_4_3 = Sivo.from_template(
+        "4_3/sleek_bento_grid_2026",
         layout_size="95%",
         lock_zoom_out=True,
         default_panel_position="overlay",
@@ -78,11 +69,8 @@ def run():
     app_4_3.map("background", drill_to="home", tooltip="Go back home", hover_color="#e2e8f0", glow=True)
 
     # 4. 16:10 Aspect Ratio View
-    app_16_10 = Sivo.from_svg(
-        os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "src", "sivo", "templates", "16_10", "gis_digital_twin_dashboard_2026.svg"
-        ),
+    app_16_10 = Sivo.from_template(
+        "16_10/gis_digital_twin_dashboard_2026",
         layout_size="95%",
         lock_zoom_out=True,
         default_panel_position="overlay",
@@ -94,11 +82,8 @@ def run():
     app_16_10.map("map-container-main", drill_to="home", tooltip="Go back home", hover_color="#334155", glow=True)
 
     # 5. 4:7 Mobile Portrait Aspect Ratio View
-    app_4_7 = Sivo.from_svg(
-        os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "src", "sivo", "templates", "4_7", "mobile_app_dashboard_2026.svg"
-        ),
+    app_4_7 = Sivo.from_template(
+        "4_7/mobile_app_dashboard_2026",
         layout_size="95%",
         lock_zoom_out=True,
         default_panel_position="overlay",
