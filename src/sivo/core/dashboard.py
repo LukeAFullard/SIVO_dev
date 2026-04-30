@@ -43,6 +43,22 @@ class SivoDashboard:
         self.html_blocks[block_id] = html_content
         self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
 
+    def add_image_block(self, block_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0.75rem", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
+        """
+        Adds an image block to the dashboard layout.
+
+        Args:
+            block_id: Unique identifier for the block.
+            image_url: URL or path to the image.
+            object_fit: CSS object-fit property (e.g., 'cover', 'contain', 'fill'). Default is 'cover'.
+            border_radius: CSS border-radius property. Default is '0.75rem'.
+            col_span: Number of columns the block should span.
+            slot: The layout slot.
+            grid_area: The CSS grid-area string.
+        """
+        html_content = f'<img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; border-radius: {border_radius};" />'
+        self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area)
+
     def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders

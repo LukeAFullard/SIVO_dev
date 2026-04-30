@@ -2518,6 +2518,33 @@ class Sivo:
         """
         self.infographic.clip_html_to_shape(element_id, html, pointer_events, offset_x, offset_y)
 
+    def add_image_rect(self, element_id: str, image_url: str, x: str = "0", y: str = "0", width: str = "100", height: str = "100", preserve_aspect_ratio: str = "xMidYMid slice", opacity: float = 1.0):
+        """
+        Dynamically adds a rectangular `<image>` tag to the SVG canvas. This allows the user to easily inject an image
+        at a specific coordinate or size without needing an existing path in the template.
+
+        Args:
+            element_id: The ID to assign to the new image element.
+            image_url: URL or path to the image.
+            x: X coordinate (can be string like '10%' or absolute pixels like '100').
+            y: Y coordinate.
+            width: Width of the image.
+            height: Height of the image.
+            preserve_aspect_ratio: SVG preserveAspectRatio attribute (default "xMidYMid slice" for cover).
+            opacity: Opacity of the image (0.0 to 1.0).
+        """
+        attributes = {
+            "id": element_id,
+            "href": image_url,
+            "x": str(x),
+            "y": str(y),
+            "width": str(width),
+            "height": str(height),
+            "preserveAspectRatio": preserve_aspect_ratio,
+            "opacity": str(opacity)
+        }
+        self.add_shape("image", attributes)
+
     def clip_image_to_shape(self, element_id: str, image_url: str, scale: float = 1.0, rotate: float = 0.0, opacity: float = 1.0, preserve_aspect_ratio: str = "xMidYMid slice", offset_x: float = 0.0, offset_y: float = 0.0, translate_x: float = 0.0, translate_y: float = 0.0, use_html_overlay: bool = True, encode_base64: bool = False, fade_in: bool = False, fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
         """
         Clips an image directly to the exact shape of a target SVG element (e.g., a circle, complex path).
