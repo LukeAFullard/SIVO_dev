@@ -288,7 +288,11 @@ try:
 
         abs_img = el_cfg.get('absoluteImageUrl')
         if abs_img:
-            app.add_image_overlay(el_id, abs_img)
+            # Check if this element actually exists. If not, use the new add_image_rect
+            if el_id not in app.infographic._element_lookup:
+                app.add_image_rect(el_id, abs_img, x="0", y="0", width="100%", height="100%")
+            else:
+                app.add_image_overlay(el_id, abs_img)
 
         scratchoff = el_cfg.get('scratchoff')
         if scratchoff:
@@ -475,7 +479,11 @@ try:
         for block in dashboard_blocks:
             title = block.get("title", "Metric")
             value = block.get("value", "0")
-            dashboard.add_html_block(f"<h3>{title}</h3><h2>{value}</h2>")
+            img_url = block.get("imageUrl")
+            if img_url:
+                dashboard.add_image_block(title.replace(" ", "_").lower(), img_url)
+            else:
+                dashboard.add_html_block(title.replace(" ", "_").lower(), f"<h3>{title}</h3><h2>{value}</h2>")
         html_output = dashboard.to_html(**to_html_kwargs)
     else:
         # Check if there are drill-through elements, and if so, use SivoProject for the preview
