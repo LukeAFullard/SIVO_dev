@@ -290,7 +290,16 @@ try:
         if abs_img:
             # Check if this element actually exists. If not, use the new add_image_rect
             if el_id not in app.infographic._element_lookup:
-                app.add_image_rect(el_id, abs_img, x="0", y="0", width="100%", height="100%")
+                # Get the canvas width/height based on the view box to use absolute values
+                # (since ECharts doesn't support % natively for inline image nodes)
+                canvas_width = 1600
+                canvas_height = 900
+                if app.infographic.view_box:
+                    try:
+                        _, _, canvas_width, canvas_height = app.infographic.view_box
+                    except:
+                        pass
+                app.add_image_rect(el_id, abs_img, x="0", y="0", width=str(canvas_width), height=str(canvas_height))
             else:
                 app.add_image_overlay(el_id, abs_img)
 
