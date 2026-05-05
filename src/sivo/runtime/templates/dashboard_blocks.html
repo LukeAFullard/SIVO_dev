@@ -419,9 +419,11 @@
     {% endif %}
 
 
+    {% if title %}
     <header>
         <h1>{{ title }}</h1>
     </header>
+    {% endif %}
 
     <div class="dashboard-container" id="dashboard-container">
         {% for block in layout_order %}
@@ -1044,6 +1046,15 @@
         {% if custom_js %}
             {{ custom_js | safe }}
         {% endif %}
-    </script>
+
+        // Handle back/forward cache (bfcache) restoration
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Remove transition classes from body if they exist
+                document.body.classList.remove('page-turn-enter');
+                // You can add other transition classes here if added in the future
+            }
+        });
+</script>
 </body>
 </html>

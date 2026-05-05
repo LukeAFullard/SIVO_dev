@@ -8247,7 +8247,17 @@ function tourNext() {
                 }
             });
         }
-    </script>
+
+        // Handle back/forward cache (bfcache) restoration
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Remove transition classes from body if they exist
+                document.body.classList.remove('sivo-view-transition-page-turn-out');
+                // General cleanup of transition classes just in case
+                document.body.className = document.body.className.replace(/\b(sivo-view-transition-[^\s]+)\b/g, '');
+            }
+        });
+</script>
 
 </body>
 </html>
