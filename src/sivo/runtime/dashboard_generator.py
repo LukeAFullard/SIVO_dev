@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .bundle_generator import format_views_data, determine_dependencies
 
-def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right', output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
+def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_size: str = "cover", gap: str = "1.5rem", width: str = "100%", mobile_width: str = "100%", theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right', output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
     import warnings
     if template != "default":
         warnings.warn(f"Dashboard templates are deprecated. The '{template}' template parameter is ignored in favor of the modular CSS Grid Builder layout.", DeprecationWarning)
@@ -55,7 +55,8 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
         desktop_grid=desktop_grid,
         mobile_grid=mobile_grid,
         mobile_grid_cols=mobile_grid_cols,
-        background_image_url=background_image_url, background_image_opacity=background_image_opacity,
+        background_image_url=background_image_url, background_image_opacity=background_image_opacity, background_image_size=background_image_size,
+        gap=gap, width=width, mobile_width=mobile_width,
         theme=theme,
         navigation_menu=navigation_menu,
         navigation_menu_position=navigation_menu_position,

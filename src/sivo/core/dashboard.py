@@ -10,11 +10,15 @@ class SivoDashboard:
     Manages a multi-block responsive dashboard layout (using CSS Grid/Flexbox)
     instead of a monolithic single SVG. Maps specific Sivo instances to layout blocks.
     """
-    def __init__(self, title: str = "Dashboard", columns: int = 3, template: str = "default", background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, lock_canvas: bool = False, theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right'):
+    def __init__(self, title: str = "Dashboard", columns: int = 3, template: str = "default", background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_size: str = "cover", gap: str = "1.5rem", width: str = "100%", mobile_width: str = "100%", lock_canvas: bool = False, theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right'):
         """
         Initializes the dashboard.
         :param template: The name of the HTML layout template to use (e.g., 'default', 'sidebar_left', 'hero_top').
         :param background_image_url: URL to a background image for the dashboard body.
+        :param background_image_size: CSS background-size property. Default is 'cover'.
+        :param gap: CSS gap property for the dashboard grid. Default is '1.5rem'.
+        :param width: CSS max-width for the dashboard container. Default is '100%'.
+        :param mobile_width: CSS max-width for the dashboard container on mobile devices. Default is '100%'.
         """
         self.desktop_grid: Optional[str] = None
         self.mobile_grid: Optional[str] = None
@@ -23,6 +27,10 @@ class SivoDashboard:
         self.template_name = template
         self.background_image_url = background_image_url
         self.background_image_opacity = background_image_opacity
+        self.background_image_size = background_image_size
+        self.gap = gap
+        self.width = width
+        self.mobile_width = mobile_width
         self.lock_canvas = lock_canvas
         self.theme = theme
         self.navigation_menu = navigation_menu
@@ -43,7 +51,7 @@ class SivoDashboard:
         self.html_blocks[block_id] = html_content
         self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
 
-    def add_image_block(self, block_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0.75rem", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
+    def add_image_block(self, block_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0.75rem", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, url: Optional[str] = None, url_transition: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500):
         """
         Adds an image block to the dashboard layout.
 
@@ -55,8 +63,26 @@ class SivoDashboard:
             col_span: Number of columns the block should span.
             slot: The layout slot.
             grid_area: The CSS grid-area string.
+            url: A URL to link the image to.
+            url_transition: A CSS class name to apply to the body before navigating to the URL.
+            fade_in: Whether to animate a fade-in on load.
+            fade_start_time_ms: Delay in ms before starting the fade-in animation.
+            fade_duration_ms: Duration in ms of the fade-in animation.
         """
-        html_content = f'<img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; border-radius: {border_radius};" />'
+        img_tag = f'<img src="{image_url}" style="width: 100%; height: 100%; object-fit: {object_fit}; border-radius: {border_radius};" />'
+        if url:
+            if url_transition:
+                html_content = f'<a href="{url}" onclick="event.preventDefault(); document.body.classList.add(\'{url_transition}\'); setTimeout(() => window.location.href = \'{url}\', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;">{img_tag}</a>'
+            else:
+                html_content = f'<a href="{url}" style="display: block; width: 100%; height: 100%;">{img_tag}</a>'
+        else:
+            html_content = img_tag
+
+        if fade_in:
+            fade_style = f"opacity: 0; animation: sivo-fade-in-card {fade_duration_ms/1000.0}s ease-in-out forwards; animation-delay: {fade_start_time_ms/1000.0}s;"
+            # We wrap the content in a div to cleanly apply the fade without breaking a-tags or img-tags styling
+            html_content = f'<div style="width: 100%; height: 100%; {fade_style}">{html_content}</div>'
+
         self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area)
 
     def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
@@ -122,6 +148,10 @@ class SivoDashboard:
             mobile_grid=self.mobile_grid,
             background_image_url=self.background_image_url,
             background_image_opacity=self.background_image_opacity,
+            background_image_size=self.background_image_size,
+            gap=self.gap,
+            width=self.width,
+            mobile_width=self.mobile_width,
             theme=self.theme,
             navigation_menu=self.navigation_menu,
             navigation_menu_position=self.navigation_menu_position,
