@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
-    <title>{{ title }}</title>
+    <title></title>
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    {% if confetti %}
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    {% endif %}
+
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
@@ -37,7 +35,7 @@
             max-width: 100vw;
         }
 
-        {% if background_image_url %}
+
         body::before {
             content: "";
             position: fixed;
@@ -47,13 +45,13 @@
             height: 100vh;
             max-width: 100%;
             max-height: 100%;
-            background-image: url('{{ background_image_url | safe }}');
-            background-size: {{ background_image_size | default('cover') }};
+            background-image: url('fish-green.png');
+            background-size: 100%;
             background-position: center;
-            opacity: {{ background_image_opacity if background_image_opacity is defined else 1.0 }};
+            opacity: 1.0;
             z-index: -1;
         }
-        {% endif %}
+
 
         header {
             background-color: var(--card-bg);
@@ -71,17 +69,20 @@
 
         .dashboard-container {
             display: grid;
-            gap: {{ gap | default('1.5rem') }};
+            gap: 0.25rem;
             padding: 1.5rem;
             flex: 1;
             margin: 0 auto;
             width: 100%;
-            max-width: {{ width | default('100%') }};
+            max-width: 70%;
             /* Remove overflow: hidden so body can scroll if needed */
-            grid-template-columns: repeat({{ columns }}, 1fr);
-            {% if desktop_grid %}
-            grid-template-areas: {{ desktop_grid | safe }};
-            {% endif %}
+            grid-template-columns: repeat(2, 1fr);
+
+            grid-template-areas:
+'env air'
+'land water'
+;
+
         }
 
         .sivo-card {
@@ -107,15 +108,15 @@
             overflow: hidden;
         }
 
-        {% if background_image_url %}
+
         .sivo-card, .html-card, header {
             background-color: rgba(255, 255, 255, 0.85) !important;
             backdrop-filter: blur(10px);
         }
-        {% endif %}
 
 
-        {% if theme == 'transparent' %}
+
+
         .sivo-card, .html-card, header {
             background-color: transparent !important;
             border: none !important;
@@ -125,7 +126,7 @@
         .card-header {
             display: none !important;
         }
-        {% endif %}
+
 
         .sivo-container {
             flex: 1 1 0;
@@ -207,26 +208,21 @@
                 /* Responsive Design */
         @media (max-width: 900px) {
             .dashboard-container {
-                max-width: {{ mobile_width | default('100%') }};
-                {% if mobile_grid %}
-                grid-template-areas: {{ mobile_grid | safe }};
-                {% if mobile_grid_cols %}
-                grid-template-columns: repeat({{ mobile_grid_cols }}, minmax(0, 1fr));
-                {% else %}
-                grid-template-columns: unset;
-                {% endif %}
-                {% else %}
-                display: flex;
-                flex-direction: column;
-                grid-template-columns: unset;
-                {% endif %}
+                max-width: 85%;
+
+                grid-template-areas:
+'env'
+'air'
+'land'
+'water'
+;
+
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+
+
             }
 
-            {% if not mobile_grid %}
-            .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel {
-                width: 100%;
-            }
-            {% endif %}
+
             .sivo-card {
                 min-height: 500px;
             }
@@ -248,17 +244,9 @@
             color: #475569;
             z-index: 1002;
             transition: all 0.2s ease;
-            {% if navigation_menu_position == 'top-left' %}
-            top: 20px; left: 20px;
-            {% elif navigation_menu_position == 'top-right' %}
+
             top: 20px; right: 20px;
-            {% elif navigation_menu_position == 'bottom-left' %}
-            bottom: 20px; left: 20px;
-            {% elif navigation_menu_position == 'bottom-right' %}
-            bottom: 20px; right: 20px;
-            {% else %}
-            top: 20px; right: 20px;
-            {% endif %}
+
         }
         .sivo-nav-btn:hover {
             background: #f8fafc;
@@ -277,17 +265,9 @@
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.2s ease, transform 0.2s ease;
-            {% if navigation_menu_position == 'top-left' %}
-            top: 70px; left: 20px; transform: translateY(-10px);
-            {% elif navigation_menu_position == 'top-right' %}
+
             top: 70px; right: 20px; transform: translateY(-10px);
-            {% elif navigation_menu_position == 'bottom-left' %}
-            bottom: 70px; left: 20px; transform: translateY(10px);
-            {% elif navigation_menu_position == 'bottom-right' %}
-            bottom: 70px; right: 20px; transform: translateY(10px);
-            {% else %}
-            top: 70px; right: 20px; transform: translateY(-10px);
-            {% endif %}
+
         }
         .sivo-nav-menu.active {
             display: flex;
@@ -384,91 +364,71 @@
         }
 
     </style>
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
+    <style id="custom-css"></style>
 </head>
 <body>
 
-    {% if navigation_menu %}
-    <!-- Navigation Menu -->
-    <div id="sivo-nav-container">
-        <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </div>
-        <div id="sivo-nav-menu" class="sivo-nav-menu">
-            {% for item in navigation_menu %}
-                {% if item.url %}
-                    <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}">{{ item.label }}</a>
-                {% elif item.view_id %}
-                    <a class="sivo-nav-item" href="#{{ item.view_id }}">{{ item.label }}</a>
-                {% else %}
-                    <div class="sivo-nav-header">{{ item.label }}</div>
-                {% endif %}
 
-                {% if item.sublinks %}
-                    {% for sub in item.sublinks %}
-                        {% if sub.url %}
-                            <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}">{{ sub.label }}</a>
-                        {% elif sub.view_id %}
-                            <a class="sivo-nav-subitem" href="#{{ sub.view_id }}">{{ sub.label }}</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 
 
     <header>
-        <h1>{{ title }}</h1>
+        <h1></h1>
     </header>
 
     <div class="dashboard-container" id="dashboard-container">
-        {% for block in layout_order %}
-            {% set grid_style = '' %}
-            {% if desktop_grid and block.grid_area %}
-                {% set grid_style = 'grid-area: ' ~ block.grid_area ~ ';' %}
-            {% elif not desktop_grid and block.col_span %}
-                {% set grid_style = 'grid-column: span ' ~ block.col_span ~ ';' %}
-            {% endif %}
 
-            {% if block.type == "sivo" %}
-            <div class="sivo-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ block.id | title }}</div>
-                <div class="sivo-container" id="container-{{ block.id }}">
-                    <div id="chart-{{ block.id }}" style="width: 100%; height: 100%;"></div>
-                    <div id="overlay-{{ block.id }}" class="sivo-native-overlay-svg-container"></div>
+
+
+
+
+
+
+            <div class="html-card" id="card-env" style="grid-area: env;">
+                <div class="card-content" id="container-env">
+                    <img src="OurEnvironment.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" />
                 </div>
             </div>
-            {% elif block.type == "html" %}
-            <div class="html-card" id="card-{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-content" id="container-{{ block.id }}">
-                    {{ html_blocks[block.id] | safe }}
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-air" style="grid-area: air;">
+                <div class="card-content" id="container-air">
+                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 1.0s ease-in-out forwards; animation-delay: 0.3s;"><a href="subpage/air/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/air/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="Air.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
                 </div>
             </div>
-            {% elif block.type == "details" %}
-            <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ details_panels[block.id].title }}</div>
-                <div class="card-content sivo-details-content" id="container-{{ block.id }}">
-                    <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-land" style="grid-area: land;">
+                <div class="card-content" id="container-land">
+                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 1.0s ease-in-out forwards; animation-delay: 0.6s;"><a href="subpage/land/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/land/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="Land.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
                 </div>
             </div>
-            {% elif block.type == "metrics" %}
-            <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
-                <div class="card-header">{{ metrics_panels[block.id].title }}</div>
-                <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        {% for metric in metrics_panels[block.id].metrics %}
-                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
-                            <strong>{{ metric | title }}:</strong>
-                            <span class="metric-value" data-metric-key="{{ metric }}" style="font-weight: bold; color: var(--primary-color);">---</span>
-                        </div>
-                        {% endfor %}
-                    </div>
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-water" style="grid-area: water;">
+                <div class="card-content" id="container-water">
+                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 1.0s ease-in-out forwards; animation-delay: 0.9s;"><a href="subpage/water/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/water/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="Water.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
                 </div>
             </div>
-            {% endif %}
-        {% endfor %}
+
+
     </div>
 
     <!-- Global Sliding Sidebar Overlay -->
@@ -503,7 +463,7 @@
         });
 
         // SIVO passes `views_data` directly to this template
-        const viewsData = {{ views_data | safe }};
+        const viewsData = {};
         const activeCharts = {};
         window.sivoToggleImageState = window.sivoToggleImageState || {};
 
@@ -1041,9 +1001,7 @@
         }
 
         // Inject Custom JS if provided
-        {% if custom_js %}
-            {{ custom_js | safe }}
-        {% endif %}
+
     </script>
 </body>
 </html>
