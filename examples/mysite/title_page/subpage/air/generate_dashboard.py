@@ -51,24 +51,36 @@ dashboard.add_text_block(
     block_id="issues",
     text="What are the issues?",
     url="issues/index.html",
+    url_transition="page-turn-enter",
     col_span=1,
-    grid_area="issues"
+    grid_area="issues",
+    fade_in=True,
+    fade_start_time_ms=300,
+    fade_duration_ms=2000
 )
 
 dashboard.add_text_block(
     block_id="science",
     text="What does the science say?",
     url="science/index.html",
+    url_transition="page-turn-enter",
     col_span=1,
-    grid_area="science"
+    grid_area="science",
+    fade_in=True,
+    fade_start_time_ms=600,
+    fade_duration_ms=2000
 )
 
 dashboard.add_text_block(
     block_id="help",
     text="What can we do to help?",
     url="help/index.html",
+    url_transition="page-turn-enter",
     col_span=1,
-    grid_area="help"
+    grid_area="help",
+    fade_in=True,
+    fade_start_time_ms=900,
+    fade_duration_ms=2000
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
