@@ -85,6 +85,47 @@ class SivoDashboard:
 
         self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area)
 
+    def add_text_block(self, block_id: str, text: str, font_family: str = "Arial, sans-serif", font_size: str = "36px", font_weight: str = "bold", text_color: str = "#333", background_color: str = "#f0f8ff", border: str = "2px solid #87cefa", border_radius: str = "15px", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, url: Optional[str] = None, url_transition: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500):
+        """
+        Adds a pre-styled text block to the dashboard layout.
+
+        Args:
+            block_id: Unique identifier for the block.
+            text: The text to display.
+            font_family: CSS font-family string.
+            font_size: CSS font-size string.
+            font_weight: CSS font-weight string.
+            text_color: CSS color for the text.
+            background_color: CSS background color for the block.
+            border: CSS border property.
+            border_radius: CSS border-radius property.
+            col_span: Number of columns the block should span.
+            slot: The layout slot.
+            grid_area: The CSS grid-area string.
+            url: Optional URL to link to.
+            url_transition: A CSS class name to apply to the body before navigating.
+            fade_in: Whether to animate a fade-in on load.
+            fade_start_time_ms: Delay in ms before starting the fade-in animation.
+            fade_duration_ms: Duration in ms of the fade-in animation.
+        """
+        style = f"display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: {font_family}; font-size: {font_size}; font-weight: {font_weight}; color: {text_color}; background-color: {background_color}; border: {border}; border-radius: {border_radius}; text-align: center; box-sizing: border-box;"
+
+        inner_content = f'<div style="{style}">{text}</div>'
+
+        if url:
+            if url_transition:
+                html_content = f'<a href="{url}" onclick="event.preventDefault(); document.body.classList.add(\'{url_transition}\'); setTimeout(() => window.location.href = \'{url}\', 600);" style="display: block; width: 100%; height: 100%; text-decoration: none; cursor: pointer;">{inner_content}</a>'
+            else:
+                html_content = f'<a href="{url}" style="display: block; width: 100%; height: 100%; text-decoration: none;">{inner_content}</a>'
+        else:
+            html_content = inner_content
+
+        if fade_in:
+            fade_style = f"opacity: 0; animation: sivo-fade-in-card {fade_duration_ms/1000.0}s ease-in-out forwards; animation-delay: {fade_start_time_ms/1000.0}s;"
+            html_content = f'<div style="width: 100%; height: 100%; {fade_style}">{html_content}</div>'
+
+        self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area)
+
     def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
