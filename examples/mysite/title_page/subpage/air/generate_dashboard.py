@@ -52,7 +52,10 @@ dashboard.add_text_block(
     text="What are the issues?",
     url="issues/index.html",
     col_span=1,
-    grid_area="issues"
+    grid_area="issues",
+    fade_in=True,
+    fade_start_time_ms=300,
+    fade_duration_ms=2000
 )
 
 dashboard.add_text_block(
@@ -60,7 +63,10 @@ dashboard.add_text_block(
     text="What does the science say?",
     url="science/index.html",
     col_span=1,
-    grid_area="science"
+    grid_area="science",
+    fade_in=True,
+    fade_start_time_ms=600,
+    fade_duration_ms=2000
 )
 
 dashboard.add_text_block(
@@ -68,7 +74,10 @@ dashboard.add_text_block(
     text="What can we do to help?",
     url="help/index.html",
     col_span=1,
-    grid_area="help"
+    grid_area="help",
+    fade_in=True,
+    fade_start_time_ms=900,
+    fade_duration_ms=2000
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
