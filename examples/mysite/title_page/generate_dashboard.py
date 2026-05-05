@@ -10,6 +10,7 @@ dashboard = SivoDashboard(
     title="",
     columns=2,
     background_image_url="fish-green.png",
+    background_image_opacity=0.25,
     background_image_size="100%",
     gap="0.25rem",
     width="70%",
@@ -51,7 +52,7 @@ dashboard.add_image_block(
     url_transition="page-turn-enter",
     fade_in=True,
     fade_start_time_ms=300,
-    fade_duration_ms=1000
+    fade_duration_ms=2000
 )
 dashboard.add_image_block(
     block_id="land",
@@ -64,7 +65,7 @@ dashboard.add_image_block(
     url_transition="page-turn-enter",
     fade_in=True,
     fade_start_time_ms=600,
-    fade_duration_ms=1000
+    fade_duration_ms=2000
 )
 dashboard.add_image_block(
     block_id="water",
@@ -77,7 +78,7 @@ dashboard.add_image_block(
     url_transition="page-turn-enter",
     fade_in=True,
     fade_start_time_ms=900,
-    fade_duration_ms=1000
+    fade_duration_ms=2000
 )
 
 # Generate HTML
