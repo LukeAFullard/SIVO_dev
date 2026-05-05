@@ -6,6 +6,18 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 from src.sivo.core.dashboard import SivoDashboard
 from src.sivo.core.sivo import Sivo
 
+nav_menu = [
+    {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
+    {"label": "Home", "url": "../../index.html"},
+    {"label": "Air", "sublinks": [
+        {"label": "Issues", "url": "issues/index.html"},
+        {"label": "Science", "url": "science/index.html"},
+        {"label": "How to help", "url": "help/index.html"}
+    ]},
+    {"label": "Land", "url": "../land/index.html"},
+    {"label": "Water", "url": "../water/index.html"}
+]
+
 dashboard = SivoDashboard(
     title="",
     columns=1,
@@ -13,7 +25,8 @@ dashboard = SivoDashboard(
     background_image_opacity=0.25,
     background_image_size="100%",
     theme="transparent",
-    gap="1rem"
+    gap="1rem",
+    navigation_menu=nav_menu
 )
 
 desktop_grid = """
