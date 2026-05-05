@@ -7166,6 +7166,15 @@ function tourNext() {
                     if (item.url) {
                         el.href = item.url;
                         el.target = item.target || '_self';
+                        if (item.url_transition) {
+                            el.onclick = function(e) {
+                                e.preventDefault();
+                                document.body.classList.add(item.url_transition);
+                                setTimeout(function() {
+                                    window.location.href = item.url;
+                                }, 600);
+                            };
+                        }
                     } else if (item.view_id) {
                         el.onclick = function(e) {
                             e.preventDefault();

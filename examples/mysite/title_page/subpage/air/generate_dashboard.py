@@ -8,14 +8,14 @@ from src.sivo.core.sivo import Sivo
 
 nav_menu = [
     {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
-    {"label": "Home", "url": "../../index.html"},
+    {"label": "Home", "url": "../../index.html", "url_transition": "page-turn-enter"},
     {"label": "Air", "sublinks": [
-        {"label": "Issues", "url": "issues/index.html"},
-        {"label": "Science", "url": "science/index.html"},
-        {"label": "How to help", "url": "help/index.html"}
+        {"label": "Issues", "url": "issues/index.html", "url_transition": "page-turn-enter"},
+        {"label": "Science", "url": "science/index.html", "url_transition": "page-turn-enter"},
+        {"label": "How to help", "url": "help/index.html", "url_transition": "page-turn-enter"}
     ]},
-    {"label": "Land", "url": "../land/index.html"},
-    {"label": "Water", "url": "../water/index.html"}
+    {"label": "Land", "url": "../land/index.html", "url_transition": "page-turn-enter"},
+    {"label": "Water", "url": "../water/index.html", "url_transition": "page-turn-enter"}
 ]
 
 dashboard = SivoDashboard(
