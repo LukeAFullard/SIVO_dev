@@ -419,9 +419,11 @@
     {% endif %}
 
 
+    {% if title %}
     <header>
         <h1>{{ title }}</h1>
     </header>
+    {% endif %}
 
     <div class="dashboard-container" id="dashboard-container">
         {% for block in layout_order %}
