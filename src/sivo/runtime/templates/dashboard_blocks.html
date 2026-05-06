@@ -13,6 +13,10 @@
     {% endif %}
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    {% if marked %}
+    <!-- Include marked -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    {% endif %}
 
     <style>
         :root {
@@ -1005,9 +1009,21 @@
                         }
                     });
 
-                    const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
-                    if (tooltipAction && tooltipAction.content) {
-                        tooltipContent = tooltipAction.content;
+                    const markdownAction = elementActions.find(a => a.action_type === 'markdown');
+                    if (markdownAction && markdownAction.markdown_text) {
+                        // Include marked.js to render markdown properly, or just use raw for now?
+                        // Assuming Sivo uses marked.js or it's raw HTML injected.
+                        // We will set tooltipContent to markdown if available, else fallback to tooltip
+                        if (typeof marked !== 'undefined' && marked.parse) {
+                            tooltipContent = marked.parse(markdownAction.markdown_text);
+                        } else {
+                            tooltipContent = markdownAction.markdown_text;
+                        }
+                    } else {
+                        const tooltipAction = elementActions.find(a => a.action_type === 'tooltip');
+                        if (tooltipAction && tooltipAction.content) {
+                            tooltipContent = tooltipAction.content;
+                        }
                     }
 
                     const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);

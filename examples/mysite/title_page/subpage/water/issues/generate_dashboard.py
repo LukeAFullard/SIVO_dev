@@ -70,15 +70,20 @@ dashboard.add_text_block(
     font_size="24px"
 )
 
-# Define icons and their tooltips/markdown content
+# Define icons and their tooltips/markdown content files
 icons = [
-    {"id": "icon1", "img": "20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md": "## E. coli\n\nPlaceholder text about E. coli issues."},
-    {"id": "icon2", "img": "20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md": "## Suspended sediment\n\nPlaceholder text about suspended sediment issues."},
-    {"id": "icon3", "img": "20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md": "## Nitrogen\n\nPlaceholder text about nitrogen issues."},
-    {"id": "icon4", "img": "20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md": "## Phosphorus\n\nPlaceholder text about phosphorus issues."},
-    {"id": "icon5", "img": "20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md": "## Algae\n\nPlaceholder text about algae issues."},
-    {"id": "icon6", "img": "20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md": "## Invertebrates\n\nPlaceholder text about aquatic life issues."}
+    {"id": "icon1", "img": "20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_file": "md/ecoli.md"},
+    {"id": "icon2", "img": "20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_file": "md/suspended_sediment.md"},
+    {"id": "icon3", "img": "20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_file": "md/nitrogen.md"},
+    {"id": "icon4", "img": "20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_file": "md/phosphorus.md"},
+    {"id": "icon5", "img": "20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_file": "md/algae.md"},
+    {"id": "icon6", "img": "20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_file": "md/invertebrates.md"}
 ]
+
+for icon in icons:
+    md_path = os.path.join(os.path.dirname(__file__), icon["md_file"])
+    with open(md_path, "r", encoding="utf-8") as f:
+        icon["md"] = f.read()
 
 for icon in icons:
     sivo_app = Sivo.from_string(
