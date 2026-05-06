@@ -128,7 +128,7 @@ for icon in icons:
         glow=True                         # Shadow/glow on hover
     )
 
-    dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"])
+    dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True)
 
 # Left details panel (4 columns now)
 dashboard.add_details_panel(
@@ -149,13 +149,5 @@ dashboard.add_image_block(
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
-custom_css = """
-.sivo-card {
-    overflow: visible !important;
-}
-.sivo-card:hover {
-    z-index: 10;
-}
-"""
-dashboard.to_html(output_path=output_file, custom_css=custom_css)
+dashboard.to_html(output_path=output_file)
 print(f"Dashboard generated at {output_file}")

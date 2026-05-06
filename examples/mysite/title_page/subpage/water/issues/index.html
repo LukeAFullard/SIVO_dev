@@ -99,6 +99,14 @@
             min-height: 400px; /* Base height for all blocks */
         }
 
+        .sivo-card-visible-overflow {
+            overflow: visible !important;
+        }
+
+        .sivo-card-visible-overflow:hover {
+            z-index: 10;
+        }
+
         .html-card {
             background-color: var(--card-bg);
             border-radius: 0.75rem;
@@ -369,14 +377,7 @@
         }
 
     </style>
-    <style id="custom-css">
-.sivo-card {
-    overflow: visible !important;
-}
-.sivo-card:hover {
-    z-index: 10;
-}
-</style>
+    <style id="custom-css"></style>
 </head>
 <body>
 
@@ -461,11 +462,15 @@
 
 
 
+
+
             <div class="html-card" id="card-banner" style="grid-area: banner;">
                 <div class="card-content" id="container-banner">
                     <img src="../water_banner.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0px;" />
                 </div>
             </div>
+
+
 
 
 
@@ -487,7 +492,9 @@
 
 
 
-            <div class="sivo-card" id="card-icon1" style="grid-area: icon1;">
+
+
+            <div class="sivo-card sivo-card-visible-overflow" id="card-icon1" style="grid-area: icon1;">
                 <div class="card-header">Icon1</div>
                 <div class="sivo-container" id="container-icon1">
                     <div id="chart-icon1" style="width: 100%; height: 100%;"></div>
@@ -502,7 +509,9 @@
 
 
 
-            <div class="sivo-card" id="card-icon2" style="grid-area: icon2;">
+
+
+            <div class="sivo-card sivo-card-visible-overflow" id="card-icon2" style="grid-area: icon2;">
                 <div class="card-header">Icon2</div>
                 <div class="sivo-container" id="container-icon2">
                     <div id="chart-icon2" style="width: 100%; height: 100%;"></div>
@@ -517,7 +526,9 @@
 
 
 
-            <div class="sivo-card" id="card-icon3" style="grid-area: icon3;">
+
+
+            <div class="sivo-card sivo-card-visible-overflow" id="card-icon3" style="grid-area: icon3;">
                 <div class="card-header">Icon3</div>
                 <div class="sivo-container" id="container-icon3">
                     <div id="chart-icon3" style="width: 100%; height: 100%;"></div>
@@ -532,7 +543,9 @@
 
 
 
-            <div class="sivo-card" id="card-icon4" style="grid-area: icon4;">
+
+
+            <div class="sivo-card sivo-card-visible-overflow" id="card-icon4" style="grid-area: icon4;">
                 <div class="card-header">Icon4</div>
                 <div class="sivo-container" id="container-icon4">
                     <div id="chart-icon4" style="width: 100%; height: 100%;"></div>
@@ -547,7 +560,9 @@
 
 
 
-            <div class="sivo-card" id="card-icon5" style="grid-area: icon5;">
+
+
+            <div class="sivo-card sivo-card-visible-overflow" id="card-icon5" style="grid-area: icon5;">
                 <div class="card-header">Icon5</div>
                 <div class="sivo-container" id="container-icon5">
                     <div id="chart-icon5" style="width: 100%; height: 100%;"></div>
@@ -562,7 +577,9 @@
 
 
 
-            <div class="sivo-card" id="card-icon6" style="grid-area: icon6;">
+
+
+            <div class="sivo-card sivo-card-visible-overflow" id="card-icon6" style="grid-area: icon6;">
                 <div class="card-header">Icon6</div>
                 <div class="sivo-container" id="container-icon6">
                     <div id="chart-icon6" style="width: 100%; height: 100%;"></div>
@@ -577,12 +594,16 @@
 
 
 
+
+
             <div class="html-card sivo-details-panel" id="card-details" data-block-id="details" style="grid-area: details;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-details">
                     <p class="placeholder-text" style="color: #64748b;">Select an issue above to learn more.</p>
                 </div>
             </div>
+
+
 
 
 
