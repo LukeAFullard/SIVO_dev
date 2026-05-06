@@ -603,8 +603,21 @@
             <div class="html-card sivo-details-panel" id="card-details" data-block-id="details" style="grid-area: details;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-details">
-                    <p class="placeholder-text" style="color: #64748b;">Select an issue above to learn more.</p>
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-details">## Water Quality Issues
+
+Select an issue above to learn more about how it affects the Horizons region.</p>
                 </div>
+                <script>
+                    (function() {
+                        const rawPlaceholder = "## Water Quality Issues\n\nSelect an issue above to learn more about how it affects the Horizons region.";
+                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
+                            const container = document.getElementById('container-details');
+                            if (container) {
+                                container.innerHTML = marked.parse(rawPlaceholder);
+                            }
+                        }
+                    })();
+                </script>
             </div>
 
 
