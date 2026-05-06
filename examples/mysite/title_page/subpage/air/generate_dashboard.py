@@ -20,7 +20,7 @@ nav_menu = [
 
 dashboard = SivoDashboard(
     title="",
-    columns=1,
+    columns=2,
     background_image_url="air_bg.png",
     background_image_opacity=0.25,
     background_image_size="100%",
@@ -30,19 +30,36 @@ dashboard = SivoDashboard(
 )
 
 desktop_grid = """
+'banner banner'
+'issues leaves'
+'science leaves'
+'help leaves'
+"""
+
+mobile_grid = """
 'banner'
 'issues'
 'science'
 'help'
+'leaves'
 """
 
-dashboard.set_grid_layout(desktop=desktop_grid, mobile=desktop_grid)
+dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 
 dashboard.add_image_block(
     block_id="banner",
     image_url="air_banner.png",
-    col_span=1,
+    col_span=2,
     grid_area="banner",
+    object_fit="contain",
+    border_radius="0px"
+)
+
+dashboard.add_image_block(
+    block_id="leaves",
+    image_url="leaves.png",
+    col_span=1,
+    grid_area="leaves",
     object_fit="contain",
     border_radius="0px"
 )
