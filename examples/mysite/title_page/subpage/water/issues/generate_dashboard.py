@@ -78,8 +78,21 @@ icons = [
 
 for icon in icons:
     # We will create a tiny Sivo app for each icon
-    sivo_app = Sivo.from_string('<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect id="rect" width="100" height="100" fill="transparent"/></svg>')
-    sivo_app.add_image_rect(element_id="img", image_url=icon["img"], width="100", height="100")
+    sivo_app = Sivo.from_string(
+        '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>',
+        lock_canvas=True,
+        disable_resizer=True,
+        disable_zoom_controls=True,
+        lock_zoom_out=True,
+        lock_scroll_bounds=True
+    )
+    sivo_app.add_image_rect(
+        element_id="img",
+        image_url=icon["img"],
+        width="100",
+        height="100",
+        preserve_aspect_ratio="xMidYMid meet"
+    )
     sivo_app.map("img", tooltip=icon["hover"], markdown=icon["md"])
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"])
 
