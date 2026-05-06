@@ -19,9 +19,12 @@ nav_menu = [
     ]}
 ]
 
+# The rest of the dashboard should be fully wide, but the icon row thinner.
+# We go to 8 columns and have an empty icon on each end.
 dashboard = SivoDashboard(
     title="",
-    columns=6,
+    columns=8,
+    width="100%",
     background_image_url="../water_bg.png",
     background_image_opacity=0.25,
     background_image_size="100%",
@@ -31,12 +34,13 @@ dashboard = SivoDashboard(
 )
 
 desktop_grid = """
-'banner banner banner banner banner banner'
-'subtitle subtitle subtitle subtitle subtitle subtitle'
-'icon1 icon2 icon3 icon4 icon5 icon6'
-'details details details image image image'
+'banner banner banner banner banner banner banner banner'
+'subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle'
+'. icon1 icon2 icon3 icon4 icon5 icon6 .'
+'details details details details image image image image'
 """
 
+# For mobile, we probably still want 2 columns for icons
 mobile_grid = """
 'banner banner'
 'subtitle subtitle'
@@ -52,7 +56,7 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 dashboard.add_image_block(
     block_id="banner",
     image_url="../water_banner.png",
-    col_span=6,
+    col_span=8,
     grid_area="banner",
     object_fit="contain",
     border_radius="0px"
@@ -61,7 +65,7 @@ dashboard.add_image_block(
 dashboard.add_text_block(
     block_id="subtitle",
     text="Issues with Water Quality in the region",
-    col_span=6,
+    col_span=8,
     grid_area="subtitle",
     font_size="24px"
 )
@@ -77,7 +81,6 @@ icons = [
 ]
 
 for icon in icons:
-    # We will create a tiny Sivo app for each icon
     sivo_app = Sivo.from_string(
         '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>',
         lock_canvas=True,
@@ -86,30 +89,61 @@ for icon in icons:
         lock_zoom_out=True,
         lock_scroll_bounds=True
     )
+
+    size = 75
+    offset = (100 - size) / 2
+
     sivo_app.add_image_rect(
-        element_id="img",
+        element_id="img_vis",
         image_url=icon["img"],
-        width="100",
-        height="100",
+        width=str(size),
+        height=str(size),
+        x=str(offset),
+        y=str(offset),
         preserve_aspect_ratio="xMidYMid meet"
     )
-    sivo_app.map("img", tooltip=icon["hover"], markdown=icon["md"])
+
+    # Add an invisible but hit-testable rectangle on top for interaction and outline
+    sivo_app.add_shape("rect", {
+        "id": "img_interact",
+        "name": "img_interact",
+        "x": str(offset),
+        "y": str(offset),
+        "width": str(size),
+        "height": str(size),
+        "fill": "rgba(255,255,255,0.01)", # ECharts hit testing requires non-transparent!
+        "rx": "5",
+        "ry": "5"
+    })
+
+    # Map the interactive layer, adding a bold border and glow on hover
+    sivo_app.map(
+        "img_interact",
+        tooltip=icon["hover"],
+        markdown=icon["md"],
+        color="rgba(255,255,255,0.01)",   # Keep it mostly invisible but hit-testable
+        border_color="transparent",       # No border by default
+        border_width=3,                   # Give it thickness so hover is visible
+        hover_color="rgba(0,0,0,0.05)",   # Slight tint on hover
+        glow=True                         # Shadow/glow on hover
+    )
+
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"])
 
-# Left details panel
+# Left details panel (4 columns now)
 dashboard.add_details_panel(
     block_id="details",
     title="",
     placeholder="Select an issue above to learn more.",
-    col_span=3,
+    col_span=4,
     grid_area="details"
 )
 
-# Right image
+# Right image (4 columns now)
 dashboard.add_image_block(
     block_id="image",
     image_url="koura-blue.png",
-    col_span=3,
+    col_span=4,
     grid_area="image",
     object_fit="contain"
 )
