@@ -474,8 +474,19 @@
             <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">
                 <div class="card-header">{{ details_panels[block.id].title }}</div>
                 <div class="card-content sivo-details-content" id="container-{{ block.id }}">
-                    <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-{{ block.id }}">{{ details_panels[block.id].placeholder }}</p>
                 </div>
+                <script>
+                    (function() {
+                        const rawPlaceholder = {{ details_panels[block.id].placeholder | tojson }};
+                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
+                            const container = document.getElementById('container-{{ block.id }}');
+                            if (container) {
+                                container.innerHTML = marked.parse(rawPlaceholder);
+                            }
+                        }
+                    })();
+                </script>
             </div>
             {% elif block.type == "metrics" %}
             <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }}">

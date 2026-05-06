@@ -139,10 +139,14 @@ for icon in icons:
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True)
 
 # Left details panel (4 columns now)
+placeholder_path = os.path.join(os.path.dirname(__file__), "md/placeholder.md")
+with open(placeholder_path, "r", encoding="utf-8") as f:
+    placeholder_text = f.read()
+
 dashboard.add_details_panel(
     block_id="details",
     title="",
-    placeholder="Select an issue above to learn more.",
+    placeholder=placeholder_text,
     col_span=4,
     grid_area="details"
 )
