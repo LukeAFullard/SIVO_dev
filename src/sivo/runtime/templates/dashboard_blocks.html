@@ -603,6 +603,8 @@
                         roam: viewData.lock_canvas ? false : true,
                         label: { show: false },
                         emphasis: { disabled: true },
+                        selectedMode: false,
+                        select: { disabled: true },
                         boundingCoords: viewData.bounding_coords || undefined,
                         layoutCenter: ['50%', '50%'],
                         layoutSize: calculateLayoutSize(viewData, dom),
