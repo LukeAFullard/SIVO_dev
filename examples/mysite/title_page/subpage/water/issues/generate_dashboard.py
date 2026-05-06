@@ -103,10 +103,14 @@ for icon in icons:
         preserve_aspect_ratio="xMidYMid meet"
     )
 
+    # Use the plain text from the tooltip for the 'name' attribute, so that when clicked
+    # it displays cleanly in the Details Panel (no HTML tags, no default "img_interact" name).
+    plain_name = icon["hover"].replace("<i>", "").replace("</i>", "")
+
     # Add an invisible but hit-testable rectangle on top for interaction and outline
     sivo_app.add_shape("rect", {
         "id": "img_interact",
-        "name": "img_interact",
+        "name": plain_name,
         "x": str(offset),
         "y": str(offset),
         "width": str(size),
@@ -116,16 +120,16 @@ for icon in icons:
         "ry": "5"
     })
 
-    # Map the interactive layer, adding a bold border and glow on hover
+    # Map the interactive layer, using the clean name. Set hover_color to transparent to disable highlight.
     sivo_app.map(
-        "img_interact",
+        plain_name,
         tooltip=icon["hover"],
         markdown=icon["md"],
         color="rgba(255,255,255,0.01)",   # Keep it mostly invisible but hit-testable
         border_color="transparent",       # No border by default
         border_width=3,                   # Give it thickness so hover is visible
-        hover_color="rgba(0,0,0,0.05)",   # Slight tint on hover
-        glow=True                         # Shadow/glow on hover
+        hover_color="transparent",        # No highlight on hover
+        glow=False                        # No shadow/glow on hover to prevent highlight
     )
 
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True)
