@@ -149,5 +149,13 @@ dashboard.add_image_block(
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
-dashboard.to_html(output_path=output_file)
+custom_css = """
+.sivo-card {
+    overflow: visible !important;
+}
+.sivo-card:hover {
+    z-index: 10;
+}
+"""
+dashboard.to_html(output_path=output_file, custom_css=custom_css)
 print(f"Dashboard generated at {output_file}")

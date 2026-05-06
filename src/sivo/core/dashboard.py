@@ -160,7 +160,7 @@ class SivoDashboard:
         self.desktop_grid = desktop
         self.mobile_grid = mobile
 
-    def to_html(self, output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
+    def to_html(self, output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
         """
         Generates a responsive HTML dashboard containing the assigned blocks.
         Optionally saves to a file.
@@ -197,5 +197,6 @@ class SivoDashboard:
             navigation_menu=self.navigation_menu,
             navigation_menu_position=self.navigation_menu_position,
             output_path=output_path,
+            custom_css=custom_css,
             custom_js=custom_js
         )
