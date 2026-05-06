@@ -29,7 +29,7 @@ dashboard = SivoDashboard(
     background_image_opacity=0.25,
     background_image_size="100%",
     theme="transparent",
-    gap="super tight",
+    gap="tight",
     navigation_menu=nav_menu
 )
 
