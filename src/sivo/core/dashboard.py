@@ -41,17 +41,17 @@ class SivoDashboard:
         self.metrics_panels: Dict[str, Dict] = {}
         self.layout_order: List[Dict[str, str]] = []
 
-    def add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
+    def add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False):
         """Adds a Sivo instance to a specific block/slot in the dashboard layout."""
         self.blocks[block_id] = sivo_app
-        self.layout_order.append({"type": "sivo", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
+        self.layout_order.append({"type": "sivo", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible})
 
-    def add_html_block(self, block_id: str, html_content: str, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
+    def add_html_block(self, block_id: str, html_content: str, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False):
         """Adds raw HTML content to a specific block/slot in the dashboard layout."""
         self.html_blocks[block_id] = html_content
-        self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
+        self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible})
 
-    def add_image_block(self, block_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0.75rem", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, url: Optional[str] = None, url_transition: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500):
+    def add_image_block(self, block_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0.75rem", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, url: Optional[str] = None, url_transition: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500, overflow_visible: bool = False):
         """
         Adds an image block to the dashboard layout.
 
@@ -83,9 +83,9 @@ class SivoDashboard:
             # We wrap the content in a div to cleanly apply the fade without breaking a-tags or img-tags styling
             html_content = f'<div style="width: 100%; height: 100%; {fade_style}">{html_content}</div>'
 
-        self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area)
+        self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area, overflow_visible=overflow_visible)
 
-    def add_text_block(self, block_id: str, text: str, font_family: str = "Arial, sans-serif", font_size: str = "36px", font_weight: str = "bold", text_color: str = "#333", background_color: str = "#f0f8ff", border: str = "2px solid #87cefa", border_radius: str = "15px", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, url: Optional[str] = None, url_transition: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500):
+    def add_text_block(self, block_id: str, text: str, font_family: str = "Arial, sans-serif", font_size: str = "36px", font_weight: str = "bold", text_color: str = "#333", background_color: str = "#f0f8ff", border: str = "2px solid #87cefa", border_radius: str = "15px", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, url: Optional[str] = None, url_transition: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500, overflow_visible: bool = False):
         """
         Adds a pre-styled text block to the dashboard layout.
 
@@ -124,9 +124,9 @@ class SivoDashboard:
             fade_style = f"opacity: 0; animation: sivo-fade-in-card {fade_duration_ms/1000.0}s ease-in-out forwards; animation-delay: {fade_start_time_ms/1000.0}s;"
             html_content = f'<div style="width: 100%; height: 100%; {fade_style}">{html_content}</div>'
 
-        self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area)
+        self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area, overflow_visible=overflow_visible)
 
-    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
+    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the clicked element's `html` (tooltip content) mapping.
@@ -135,9 +135,9 @@ class SivoDashboard:
             "title": title,
             "placeholder": placeholder
         }
-        self.layout_order.append({"type": "details", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
+        self.layout_order.append({"type": "details", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible})
 
-    def add_metrics_panel(self, block_id: str, title: str = "Metrics", metrics: List[str] = None, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None):
+    def add_metrics_panel(self, block_id: str, title: str = "Metrics", metrics: List[str] = None, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the specified keys from the clicked element's `callback_payload` mapping.
@@ -148,7 +148,7 @@ class SivoDashboard:
             "title": title,
             "metrics": metrics
         }
-        self.layout_order.append({"type": "metrics", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area})
+        self.layout_order.append({"type": "metrics", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible})
 
 
     def set_grid_layout(self, desktop: str, mobile: Optional[str] = None):
