@@ -36,7 +36,15 @@ desktop_grid = """
 'help eels'
 """
 
-dashboard.set_grid_layout(desktop=desktop_grid, mobile=desktop_grid)
+mobile_grid = """
+'banner'
+'issues'
+'science'
+'help'
+'eels'
+"""
+
+dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 
 dashboard.add_image_block(
     block_id="banner",
