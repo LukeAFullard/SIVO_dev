@@ -29,7 +29,7 @@ dashboard = SivoDashboard(
     background_image_opacity=0.25,
     background_image_size="100%",
     theme="transparent",
-    gap="1rem",
+    gap="super tight",
     navigation_menu=nav_menu
 )
 
@@ -67,7 +67,8 @@ dashboard.add_text_block(
     text="Issues with Water Quality in the region",
     col_span=8,
     grid_area="subtitle",
-    font_size="24px"
+    font_size="24px",
+    min_height="auto"
 )
 
 # Define icons and their tooltips/markdown content
@@ -131,7 +132,7 @@ for icon in icons:
         glow=False                        # No shadow/glow on hover to prevent highlight
     )
 
-    dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True)
+    dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
 
 # Left details panel (4 columns now)
 dashboard.add_details_panel(
