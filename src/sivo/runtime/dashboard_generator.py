@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .bundle_generator import format_views_data, determine_dependencies
 
-def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_size: str = "cover", gap: str = "1.5rem", width: str = "100%", mobile_width: str = "100%", theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right', output_path: Optional[str] = None, custom_js: Optional[str] = None) -> str:
+def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_size: str = "cover", gap: str = "1.5rem", width: str = "100%", mobile_width: str = "100%", theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right', output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None) -> str:
     import warnings
     if template != "default":
         warnings.warn(f"Dashboard templates are deprecated. The '{template}' template parameter is ignored in favor of the modular CSS Grid Builder layout.", DeprecationWarning)
@@ -37,11 +37,11 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
         theme_css = Sivo.get_theme_css(theme)
         if theme_css:
             # Note: We append it to a separate custom_css variable to pass to Jinja
-            custom_css_payload = theme_css
+            custom_css_payload = theme_css + "\n" + (custom_css or "")
         else:
-            custom_css_payload = None
+            custom_css_payload = custom_css
     else:
-        custom_css_payload = None
+        custom_css_payload = custom_css
 
     html_output = template_obj.render(
         custom_css=custom_css_payload,
