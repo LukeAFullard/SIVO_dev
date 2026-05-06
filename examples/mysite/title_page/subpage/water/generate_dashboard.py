@@ -20,7 +20,7 @@ nav_menu = [
 
 dashboard = SivoDashboard(
     title="",
-    columns=1,
+    columns=2,
     background_image_url="water_bg.png",
     background_image_opacity=0.25,
     background_image_size="100%",
@@ -30,10 +30,10 @@ dashboard = SivoDashboard(
 )
 
 desktop_grid = """
-'banner'
-'issues'
-'science'
-'help'
+'banner banner'
+'issues eels'
+'science eels'
+'help eels'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=desktop_grid)
@@ -41,7 +41,7 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=desktop_grid)
 dashboard.add_image_block(
     block_id="banner",
     image_url="water_banner.png",
-    col_span=1,
+    col_span=2,
     grid_area="banner",
     object_fit="contain",
     border_radius="0px"
@@ -80,6 +80,18 @@ dashboard.add_text_block(
     grid_area="help",
     fade_in=True,
     fade_start_time_ms=900,
+    fade_duration_ms=2000
+)
+
+dashboard.add_image_block(
+    block_id="eels",
+    image_url="eels.png",
+    col_span=1,
+    grid_area="eels",
+    object_fit="contain",
+    border_radius="10px",
+    fade_in=True,
+    fade_start_time_ms=1200,
     fade_duration_ms=2000
 )
 
