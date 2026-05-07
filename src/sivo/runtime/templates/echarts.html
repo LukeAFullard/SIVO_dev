@@ -7031,11 +7031,31 @@ function tourNext() {
                                             overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${val}</span></div>`;
                                             document.body.appendChild(overlay);
                                         }
+
+                                        // Try to trigger an ECharts highlight action if the mapped element exists
+                                        try {
+                                            myChart.dispatchAction({
+                                                type: 'highlight',
+                                                seriesIndex: 0,
+                                                name: val
+                                            });
+                                        } catch (e) {
+                                            console.log("Could not highlight element named " + val, e);
+                                        }
+
                                         found = true;
                                         break;
                                     }
                                 }
                                 if (!found) {
+                                    // Make sure we unhighlight all if not found
+                                    try {
+                                        myChart.dispatchAction({
+                                            type: 'downplay',
+                                            seriesIndex: 0
+                                        });
+                                    } catch(e) {}
+
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');
                                     if (existing) existing.remove();
 
