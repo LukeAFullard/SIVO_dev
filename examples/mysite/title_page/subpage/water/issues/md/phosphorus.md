@@ -17,4 +17,4 @@ Phosphorus enters our waterways through both natural processes and human activit
 *   **Soil Erosion:** Phosphorus binds very tightly to dirt particles. When soil washes into rivers during heavy rain, it carries this trapped phosphorus with it. 
 *   **Fertiliser Run-off:** Excess agricultural fertiliser applied to the land can wash directly into rivers and streams during storms.
 
-For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/phosphorus) or the [Horizons State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
+For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/phosphorus) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
