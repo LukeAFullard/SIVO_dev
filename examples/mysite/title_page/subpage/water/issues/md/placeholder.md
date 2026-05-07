@@ -1,5 +1,3 @@
-## Water Quality Issues
-
 # Protecting Our Waterways
 
 Water is a fundamental part of the Horizons Region, sustaining our physical well-being and natural ecosystems. When our rivers, lakes, and streams are healthy, their life force, or *mauri*, thrives and supports both people and wildlife.
