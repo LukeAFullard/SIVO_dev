@@ -21,4 +21,4 @@ Certain insects, like mayflies and stoneflies, are highly sensitive to pollution
 **A Shift in the Ecosystem**
 When water quality drops, only tough, pollution-tolerant bugs like worms and snails can survive. A healthy stream needs a wide variety of insect life. If scientists only find worms and snails, it is a clear warning sign that the waterway is degraded and struggling.
 
-For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/benthic-macroinvertebrates) or the [Horizons State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
+For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/benthic-macroinvertebrates) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
