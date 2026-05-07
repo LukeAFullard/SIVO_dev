@@ -19,4 +19,4 @@ Nitrogen is highly soluble, meaning it easily dissolves in water and travels qui
 *   Animal waste, particularly cow urine, soaking through the soil and into groundwater.
 *   Direct discharges from wastewater treatment plants and leaky septic systems.
 
-For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/nitrogen) or the [Horizons State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
+For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/nitrogen) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
