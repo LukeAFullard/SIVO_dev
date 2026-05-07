@@ -279,6 +279,8 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             "theme": view_obj.get("theme", "light"),
             "enable_search": view_obj.get("enable_search", False),
             "enable_geocoder": view_obj.get("enable_geocoder", False),
+            "geocoder_intersection": view_obj.get("geocoder_intersection", None),
+            "geocode_country_codes": view_obj.get("geocode_country_codes", None),
             "geocode_provider": view_obj.get("geocode_provider", "nominatim"),
             "geocode_api_key": view_obj.get("geocode_api_key", None),
             "watermark": view_obj.get("watermark", None),
@@ -316,6 +318,11 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             "navigation_menu_position": view_obj.get("navigation_menu_position", "top-right"),
             "mappings": safe_mappings
         }
+
+        if "geocoder_intersection" in view_obj:
+            view_dict["geocoder_intersection"] = view_obj["geocoder_intersection"]
+        if "geocode_country_codes" in view_obj:
+            view_dict["geocode_country_codes"] = view_obj["geocode_country_codes"]
         if "data_binding" in view_obj:
             view_dict["data_binding"] = view_obj["data_binding"]
         if "timeline_binding" in view_obj:
