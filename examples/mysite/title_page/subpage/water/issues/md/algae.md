@@ -15,4 +15,4 @@ Some specific types of algae, known scientifically as cyanobacteria, can produce
 **Danger to Dogs and Humans**
 Touching or swallowing water that contains toxic algae can make people seriously ill. It is especially dangerous for dogs, who are naturally attracted to the musty smell of the dried mats. Eating even a tiny piece of toxic algae the size of a 50-cent coin can be fatal for a dog. 
 
-For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/can-i-swim-here/toxic-algae) or the [Horizons State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
+For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/can-i-swim-here/toxic-algae) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
