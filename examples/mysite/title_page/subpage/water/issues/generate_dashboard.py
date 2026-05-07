@@ -150,7 +150,10 @@ dashboard.add_details_panel(
     title="",
     placeholder=placeholder_text,
     col_span=4,
-    grid_area="details"
+    grid_area="details",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px"
 )
 
 # Right image (4 columns now)
@@ -163,5 +166,6 @@ dashboard.add_image_block(
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
+
 dashboard.to_html(output_path=output_file)
 print(f"Dashboard generated at {output_file}")
