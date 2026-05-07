@@ -13,4 +13,4 @@ High levels of dirt in the water can physically harm aquatic life. The fine part
 **Smothering Riverbeds**
 As the water current slows down, the suspended dirt eventually sinks to the bottom of the river. This settling dirt fills in the tiny gaps between rocks and gravel, completely smothering the natural habitats where fish and vital water bugs live.
 
-For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/water-clarity) or the [Horizons State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
+For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/water-clarity) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
