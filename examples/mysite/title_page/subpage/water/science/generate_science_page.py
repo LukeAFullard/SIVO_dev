@@ -52,6 +52,10 @@ app.bind_geocoder_intersection(
     no_result_text="Address not found in any FMU zone."
 )
 
+# Read the markdown
+with open(os.path.join(os.path.dirname(__file__), "placeholder.md"), "r", encoding="utf-8") as f:
+    md_content = f.read()
+
 for fmu in fmus:
     slug = fmu.lower().replace(" ", "-").replace("ā", "a").replace("ī", "i")
     app.map(
@@ -59,7 +63,8 @@ for fmu in fmus:
         url=f"fmu/{slug}/index.html",
         hover_color="lightgray",
         tooltip=fmu,
-        glow=True
+        glow=True,
+        markdown=md_content
     )
 
 nav_menu = [
@@ -110,10 +115,6 @@ dashboard.add_image_block(
     object_fit="contain",
     border_radius="0px"
 )
-
-# Read the markdown
-with open(os.path.join(os.path.dirname(__file__), "placeholder.md"), "r", encoding="utf-8") as f:
-    md_content = f.read()
 
 dashboard.add_details_panel(
     block_id="markdown",
