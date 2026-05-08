@@ -236,11 +236,583 @@
 
 
             .sivo-card {
-                min-height: 500px;
+                min-height: 300px;
             }
         }
 
         /* Navigation Menu Styles */
+        #sivo-geocoder-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            max-width: 90%;
+            z-index: 1000;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, top 0.3s ease;
+            cursor: text;
+        }
+
+        #sivo-geocoder-container:focus-within {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #38bdf8;
+        }
+
+        #sivo-geocoder-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 12px 20px 12px 40px;
+            font-size: 15px;
+            color: #334155;
+            outline: none;
+            border-radius: 24px;
+            box-sizing: border-box;
+        }
+
+        .sivo-geocoder-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .sivo-geocoder-spinner {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #38bdf8;
+            border-radius: 50%;
+            animation: sivo-spin 1s linear infinite;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-geocoder-results {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 9998;
+        }
+
+
+
+        #sivo-geocoder-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            max-width: 90%;
+            z-index: 1000;
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, top 0.3s ease;
+            cursor: text;
+        }
+
+        #sivo-geocoder-container:focus-within {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #38bdf8;
+        }
+
+        #sivo-geocoder-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 12px 20px 12px 40px;
+            font-size: 15px;
+            color: #334155;
+            outline: none;
+            border-radius: 24px;
+            box-sizing: border-box;
+        }
+
+        .sivo-geocoder-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .sivo-geocoder-spinner {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #38bdf8;
+            border-radius: 50%;
+            animation: sivo-spin 1s linear infinite;
+            display: none;
+            pointer-events: none;
+        }
+
+        #sivo-geocoder-results {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 9998;
+        }
+
+
+        #sivo-watermark-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+            opacity: 0.8;
+            pointer-events: auto;
+            transition: opacity 0.3s;
+            cursor: move;
+        }
+
+        #sivo-watermark-container:hover {
+            opacity: 1.0;
+        }
+
+        #layer-legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #334155;
+            font-size: 14px;
+            cursor: move;
+        }
+
+        /* Layer Switch Styles */
+        .layer-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+            user-select: none;
+            justify-content: space-between;
+        }
+        .layer-toggle input {
+            display: none;
+        }
+        .sivo-switch {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            background-color: #cbd5e1;
+            border-radius: 20px;
+            transition: 0.3s;
+            margin-left: 12px;
+        }
+        .sivo-switch::before {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            background-color: white;
+            transition: 0.3s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .layer-toggle input:checked + .sivo-switch {
+            background-color: #3b82f6;
+        }
+        .layer-toggle input:checked + .sivo-switch::before {
+            transform: translateX(16px);
+        }
+
+        #info-panel {
+            background: #ffffff;
+            display: none;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            font-size: 15px;
+            color: #334155;
+            line-height: 1.6;
+            z-index: 1000;
+        }
+        #info-panel.active {
+            display: flex;
+        }
+
+        .info-panel-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .info-panel-content {
+            padding: 32px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Improved typography inside info panel content */
+        .info-panel-content h1, .info-panel-content h2, .info-panel-content h3 {
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .info-panel-content h3 {
+            font-size: 1.25rem;
+        }
+
+        .info-panel-content p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        /* Layout modifiers for info-panel */
+        #info-panel.pos-right {
+            width: 360px;
+            height: 100%;
+            border-left: 1px solid #e2e8f0;
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        #info-panel.pos-left {
+            width: 360px;
+            height: 100%;
+            border-right: 1px solid #e2e8f0;
+            box-shadow: 10px 0 25px -5px rgba(0, 0, 0, 0.05);
+        }
+        #info-panel.pos-bottom {
+            width: 100%;
+            height: 300px;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        #info-panel.pos-top {
+            width: 100%;
+            height: 300px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        #info-panel.pos-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 90%;
+            z-index: 1050;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sivo-overlay-roll-in {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(-15deg) translateY(10%);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) translateY(0);
+            }
+        }
+
+        @keyframes sivo-overlay-roll-out {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) perspective(1500px) rotateX(-15deg) translateY(10%);
+            }
+        }
+
+        #info-panel.pos-overlay.active {
+            animation: sivo-overlay-roll-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        #info-panel.pos-overlay.closing {
+            animation: sivo-overlay-roll-out 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+
+        /* Navigation Menu Styles */
+        .sivo-nav-btn {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            color: #475569;
+            z-index: 9999;
+            transition: all 0.2s ease;
+        }
+        .sivo-nav-btn:hover {
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+        .sivo-nav-menu {
+            position: absolute;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 8px 0;
+            min-width: 200px;
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .sivo-nav-menu.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .sivo-nav-item {
+            padding: 10px 20px;
+            color: #334155;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .sivo-nav-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+
+        .sivo-nav-subitem {
+            padding: 8px 20px 8px 40px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .sivo-nav-subitem:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+
+        .sivo-nav-header {
+            padding: 10px 20px 5px 20px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Dark Theme Support */
+
+
+
+
+
+
+        /* Responsive Layout Overrides */
+        .mobile-handle {
+            display: none;
+            width: 40px;
+            height: 4px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            margin: 8px auto 0;
+        }
+        @media (max-width: 768px) {
+            .mobile-handle {
+                display: block !important;
+            }
+            body, #sivo-app-container {
+                flex-direction: column !important;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            #scrollytelling-container {
+                width: 100% !important;
+                height: 40vh !important;
+                order: 2 !important; /* Put text below map on mobile */
+                border-top: 1px solid #ddd;
+            }
+            #chart-wrapper {
+                height: auto !important; /* Let flex take over to fill remaining space */
+                flex: 1 !important;
+                order: 1 !important;     /* Map stays at the top */
+                min-height: 40vh;
+            }
+            .scrolly-step {
+                padding: 10vh 20px !important;
+            }
+            #tour-container {
+                width: 80% !important;
+                left: 10% !important;
+                transform: none !important;
+                bottom: 20px !important;
+                padding: 10px 15px !important;
+                font-size: 14px;
+            }
+            #minimap-container {
+                width: 80px !important;
+                height: 80px !important;
+                top: 10px !important;  /* Move minimap to top on mobile so it doesn't overlap zoom controls */
+                left: 10px !important;
+                bottom: auto !important;
+            }
+            #layer-legend {
+                max-width: 120px !important;
+                font-size: 12px !important;
+                padding: 5px !important;
+                top: 10px !important;
+                right: 10px !important;
+            }
+
+        .zoom-controls {
+                right: 10px !important;
+                bottom: 40px !important;
+                z-index: 1001 !important;
+            }
+            .zoom-btn {
+                width: 25px !important;
+                height: 25px !important;
+                font-size: 14px !important;
+            }
+            #info-panel.active:not(.pos-overlay) {
+                width: 100% !important;
+                height: 45vh !important; /* Give fixed part of the screen to info panel */
+                flex: none !important;
+                order: 3 !important;     /* Ensure it is BELOW the chart */
+                border: none !important;
+                border-top: 1px solid #ddd !important;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1) !important;
+            }
+            #info-panel.pos-overlay.active {
+                /* Let the overlay dictate its own dimensions on mobile via JS/CSS */
+            }
+            .sivo-resizer {
+                display: none !important;
+            }
+            .sivo-gallery-close, .sivo-video-close {
+                top: 15px !important;
+                right: 20px !important;
+                font-size: 30px !important;
+            }
+            .info-panel-header {
+                padding: 8px 10px !important;
+            }
+            .close-btn {
+                width: 30px !important;
+                height: 30px !important;
+            }
+        }
+
+        /* Dark Mode Support (Via OS Preference or Explicit Class) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         .sivo-nav-btn {
             position: absolute;
             background: #ffffff;
@@ -314,13 +886,8 @@
             background: #f1f5f9;
             color: #0f172a;
         }
-        body.sivo-theme-dark .sivo-nav-subitem {
-            color: #94a3b8;
-        }
-        body.sivo-theme-dark .sivo-nav-subitem:hover {
-            background: #334155;
-            color: #f8fafc;
-        }
+
+
         .sivo-nav-header {
             padding: 10px 20px 5px 20px;
             color: #64748b;
@@ -329,29 +896,13 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        body.sivo-theme-dark .sivo-nav-header {
-            color: #64748b;
-        }
+
         /* Dark Theme Support */
-        body.sivo-theme-dark .sivo-nav-btn {
-            background: #1e293b;
-            border-color: #334155;
-            color: #cbd5e1;
-        }
-        body.sivo-theme-dark .sivo-nav-btn:hover {
-            background: #334155;
-        }
-        body.sivo-theme-dark .sivo-nav-menu {
-            background: #1e293b;
-            border-color: #334155;
-        }
-        body.sivo-theme-dark .sivo-nav-item {
-            color: #cbd5e1;
-        }
-        body.sivo-theme-dark .sivo-nav-item:hover {
-            background: #334155;
-            color: #f8fafc;
-        }
+
+
+
+
+
 
         /* Native Animations */
         .page-turn-enter {
@@ -380,6 +931,13 @@
 </head>
 <body>
 
+    <div id="sivo-geocoder-container" style="display:none;">
+        <svg class="sivo-geocoder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <input type="text" id="sivo-geocoder-input" placeholder="Search address or place..." autocomplete="off">
+        <div class="sivo-geocoder-spinner" id="sivo-geocoder-spinner"></div>
+        <div id="sivo-geocoder-results"></div>
+        <div id="sivo-geocoder-attribution" style="display:none; font-size: 10px; color: #64748b; text-align: center; padding-top: 4px;">Data © OpenStreetMap contributors, ODbL 1.0.</div>
+    </div>
 
 
 
@@ -1040,13 +1598,390 @@
 
 
         // Handle back/forward cache (bfcache) restoration
+
+        function initGeocoder() {
+            // Look for the first sivo block config that has geocoder enabled
+            var view = null;
+            var chartKeys = Object.keys(viewsData);
+            for (var i = 0; i < chartKeys.length; i++) {
+                if (viewsData[chartKeys[i]].enable_geocoder) {
+                    view = viewsData[chartKeys[i]];
+                    break;
+                }
+            }
+            window.sivoCharts = activeCharts;
+
+            if (!view) return;
+            var geocoderContainer = document.getElementById('sivo-geocoder-container');
+            if (!geocoderContainer) return;
+
+            if (view.enable_geocoder) {
+                geocoderContainer.style.display = 'block';
+                if (view.geocode_provider === 'nominatim') {
+                    var att = document.getElementById('sivo-geocoder-attribution');
+                    if (att) att.style.display = 'block';
+                }
+
+                var gPos = view.geocoder_position || 'top-center';
+                if (gPos === 'top-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'top-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-center') {
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
+                } else {
+                    // default top-center
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
+                }
+
+                if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
+                    geocoderContainer.style.top = '70px';
+                } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
+                    geocoderContainer.style.top = '20px';
+                }
+
+                var geocodeInput = document.getElementById('sivo-geocoder-input');
+                var geocodeResults = document.getElementById('sivo-geocoder-results');
+                var geocodeSpinner = document.getElementById('sivo-geocoder-spinner');
+                var debounceTimer = null;
+
+                window.sivoSelectGeocodeResult = function(lat, lon, displayName) {
+                    geocodeInput.value = displayName;
+                    geocodeResults.style.display = 'none';
+                    geocodeInput.blur();
+
+                    var plotLat = lat;
+                    if (view && view.bounding_coords) {
+                        var minLat = view.bounding_coords[0][1];
+                        var maxLat = view.bounding_coords[1][1];
+                        plotLat = (maxLat + minLat) - lat; // INVERT LATITUDE
+                    }
+
+                    // Skip camera zoom and marker if we are only doing an intersection (no map desired)
+                    if (view.geocoder_intersection) {
+                        var intersectUrl = view.geocoder_intersection.geojson_url;
+                        var displayId = view.geocoder_intersection.display_element_id;
+                        var propName = view.geocoder_intersection.property_name;
+                        var noResText = view.geocoder_intersection.no_result_text;
+
+                        // Very basic ray-casting PIP for 2D coords
+                        function pointInPolygon(point, vs) {
+                            var x = point[0], y = point[1];
+                            var inside = false;
+                            for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+                                var xi = vs[i][0], yi = vs[i][1];
+                                var xj = vs[j][0], yj = vs[j][1];
+                                var intersect = ((yi > y) != (yj > y))
+                                    && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                                if (intersect) inside = !inside;
+                            }
+                            return inside;
+                        }
+
+                        function checkFeature(feature, point) {
+                            function getPolygons(geom) {
+                                if (geom.type === 'Polygon') return [geom.coordinates];
+                                if (geom.type === 'MultiPolygon') return geom.coordinates;
+                                return [];
+                            }
+
+                            var polys = getPolygons(feature.geometry);
+                            for (var i=0; i<polys.length; i++) {
+                                var rings = polys[i];
+                                // Check exterior ring
+                                if (pointInPolygon(point, rings[0])) {
+                                    // Check holes
+                                    var inHole = false;
+                                    for (var h=1; h<rings.length; h++) {
+                                        if (pointInPolygon(point, rings[h])) {
+                                            inHole = true; break;
+                                        }
+                                    }
+                                    if (!inHole) return true;
+                                }
+                            }
+                            return false;
+                        }
+
+                        var targetEl = document.getElementById(displayId);
+                        if (!targetEl && window.parent) {
+                            targetEl = window.parent.document.getElementById(displayId);
+                        }
+
+                        if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                            targetEl.innerHTML = "Calculating zone...";
+                        } else {
+                            var existing = document.getElementById('sivo-geocoder-overlay-result');
+                            if (existing) existing.remove();
+                            var overlay = document.createElement('div');
+                            overlay.id = 'sivo-geocoder-overlay-result';
+                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #3b82f6; border: 2px solid #3b82f6;">Calculating zone...</div>`;
+                            document.body.appendChild(overlay);
+                        }
+
+                        fetch(intersectUrl)
+                            .then(res => res.json())
+                            .then(data => {
+                                var found = false;
+                                var features = data.features || [];
+                                for (var i=0; i<features.length; i++) {
+                                    if (checkFeature(features[i], [lon, lat])) {
+                                        var val = features[i].properties[propName];
+
+                                        var existing = document.getElementById('sivo-geocoder-overlay-result');
+                                        if (existing) existing.remove();
+
+                                        // Ensure val is safely escaped
+                                        var safeVal = String(val).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                                        if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                                            targetEl.innerHTML = safeVal;
+                                        } else {
+                                            var overlay = document.createElement('div');
+                                            overlay.id = 'sivo-geocoder-overlay-result';
+                                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${safeVal}</span></div>`;
+                                            document.body.appendChild(overlay);
+                                        }
+
+                                        // Try to trigger an ECharts highlight action if the mapped element exists on any dashboard chart
+                                        for (var cid in window.sivoCharts) {
+                                            var c = window.sivoCharts[cid];
+                                            try {
+                                                c.dispatchAction({ type: 'downplay', seriesIndex: 0 });
+                                                c.dispatchAction({ type: 'unselect', seriesIndex: 0 });
+                                                // ECharts needs the exact name match to highlight the SVG region
+                                                c.dispatchAction({ type: 'highlight', seriesIndex: 0, name: val });
+                                                c.dispatchAction({ type: 'select', seriesIndex: 0, name: val });
+                                                // Force re-render to ensure visual update immediately
+                                                c.resize();
+                                            } catch (e) {}
+                                        }
+
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    // Make sure we unhighlight all if not found
+                                    for (var cid in window.sivoCharts) {
+                                        try {
+                                            window.sivoCharts[cid].dispatchAction({ type: 'downplay', seriesIndex: 0 });
+                                            window.sivoCharts[cid].dispatchAction({ type: 'unselect', seriesIndex: 0 });
+                                        } catch (e) {}
+                                    }
+
+                                    var existing = document.getElementById('sivo-geocoder-overlay-result');
+                                    if (existing) existing.remove();
+
+                                    if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                                        targetEl.innerHTML = noResText;
+                                    } else {
+                                        var overlay = document.createElement('div');
+                                        overlay.id = 'sivo-geocoder-overlay-result';
+                                        overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">${noResText}</div>`;
+                                        document.body.appendChild(overlay);
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Error intersecting geocoder point with geojson:", err);
+                                var existing = document.getElementById('sivo-geocoder-overlay-result');
+                                if (existing) existing.remove();
+
+                                if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                                    targetEl.innerHTML = "Error";
+                                } else {
+                                    var overlay = document.createElement('div');
+                                    overlay.id = 'sivo-geocoder-overlay-result';
+                                    overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">Error intersecting point</div>`;
+                                    document.body.appendChild(overlay);
+                                }
+                            });
+                    } else {
+                    // Camera Zoom and Marker Placement
+                    var opt = myChart.getOption();
+                    var newOpt = {};
+
+                    // Update camera zoom for geo or series
+                    if (opt.geo && opt.geo.length > 0) {
+                        newOpt.geo = [{
+                            center: [lon, plotLat],
+                            zoom: 15
+                        }];
+                    } else if (opt.series && opt.series.length > 0) {
+                        newOpt.series = [{
+                            center: [lon, plotLat],
+                            zoom: 15
+                        }];
+                    }
+
+                    myChart.setOption(newOpt);
+
+                    // Pulsing Marker Placement
+                    // Using an HTML overlay ensures the marker sits on top of everything (z-index)
+                    // and perfectly tracks the coordinate dynamically without native geo scale distortions.
+                    var htmlPulse = `
+                    <div style="position: relative; width: 0; height: 0;">
+                        <!-- Pulsing Base -->
+                        <div style="position: absolute; left: -20px; top: -20px; width: 40px; height: 40px; background: rgba(239, 68, 68, 0.4); border-radius: 50%; animation: sivo-geocoder-pulse-anim 2s infinite ease-in-out; pointer-events: none;"></div>
+                        <!-- Static Pin Icon -->
+                        <div style="position: absolute; left: -12px; top: -24px; font-size: 24px; color: #ef4444; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5)); pointer-events: none;">📍</div>
+                    </div>
+                    <style>
+                        @keyframes sivo-geocoder-pulse-anim {
+                            0% { transform: scale(0.5); opacity: 1; }
+                            100% { transform: scale(2.0); opacity: 0; }
+                        }
+                    </style>
+                    `;
+
+                    overlaysData['sivo-geocoder-pulse-overlay'] = {
+                        html: htmlPulse,
+                        coord: [lon, plotLat],
+                        offset: [0, 0], // True center, the HTML shifts its own children
+                        scale_with_zoom: false
+                    };
+                    initOverlays();
+                    updateOverlaysPosition();
+                    } // end skip map actions
+                };
+
+                geocodeInput.oninput = function(e) {
+                    var query = e.target.value;
+                    if (debounceTimer) {
+                        clearTimeout(debounceTimer);
+                    }
+
+                    if (query.length < 3) {
+                        geocodeResults.style.display = 'none';
+                        geocodeSpinner.style.display = 'none';
+                        return;
+                    }
+
+                    debounceTimer = setTimeout(function() {
+                        geocodeSpinner.style.display = 'block';
+
+                        var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`;
+
+                        var cCodes = view.geocode_country_codes;
+                        var cCodeStr = "";
+                        if (cCodes) {
+                            if (Array.isArray(cCodes)) {
+                                cCodeStr = cCodes.join(',');
+                            } else {
+                                cCodeStr = cCodes;
+                            }
+                        }
+
+                        if (view.geocode_provider === 'google' && view.geocode_api_key) {
+                            url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${view.geocode_api_key}`;
+                            if (cCodeStr) {
+                                var gCodes = cCodeStr.split(',').map(c => 'country:' + c.trim()).join('|');
+                                url += `&components=${gCodes}`;
+                            }
+                        } else if (view.geocode_provider === 'mapbox' && view.geocode_api_key) {
+                            url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${view.geocode_api_key}`;
+                            if (cCodeStr) {
+                                url += `&country=${cCodeStr}`;
+                            }
+                        } else {
+                            if (cCodeStr) {
+                                url += `&countrycodes=${cCodeStr}`;
+                            }
+                        }
+
+                        fetch(url, {
+                            headers: {
+                                'Accept-Language': 'en-US,en;q=0.9'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            geocodeSpinner.style.display = 'none';
+
+                            if (!data || data.length === 0) {
+                                geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                                geocodeResults.style.display = 'block';
+                                return;
+                            }
+
+                            geocodeResults.innerHTML = '';
+                            var resultsArr = data;
+                            if (view.geocode_provider === 'google' && data.results) {
+                                resultsArr = data.results.map(r => ({
+                                    display_name: r.formatted_address,
+                                    lat: r.geometry.location.lat,
+                                    lon: r.geometry.location.lng
+                                }));
+                            } else if (view.geocode_provider === 'mapbox' && data.features) {
+                                resultsArr = data.features.map(f => ({
+                                    display_name: f.place_name,
+                                    lat: f.center[1],
+                                    lon: f.center[0]
+                                }));
+                            }
+
+                            resultsArr.forEach(function(item) {
+                                var el = document.createElement('div');
+                                el.className = 'sivo-search-result-item';
+                                var nameHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.display_name) : item.display_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                                el.innerHTML = `<div class="sivo-search-result-title">${nameHtml}</div>`;
+
+                                el.addEventListener('mousedown', function(e) {
+                                    e.preventDefault();
+                                    window.sivoSelectGeocodeResult(parseFloat(item.lat), parseFloat(item.lon), item.display_name);
+                                });
+
+                                geocodeResults.appendChild(el);
+                            });
+                            geocodeResults.style.display = 'block';
+                        })
+                        .catch(error => {
+                            console.error('Error fetching geocode results:', error);
+                            geocodeSpinner.style.display = 'none';
+                            geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle" style="color: red;">Error fetching results</span></div>';
+                            geocodeResults.style.display = 'block';
+                        });
+                    }, 500);
+                };
+
+                geocodeInput.onblur = function(e) {
+                    setTimeout(() => geocodeResults.style.display = 'none', 200);
+                };
+
+            } else {
+                geocoderContainer.style.display = 'none';
+            }
+        }
+
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
-                // Remove transition classes from body if they exist
                 document.body.classList.remove('page-turn-enter');
-                // You can add other transition classes here if added in the future
             }
         });
+
+        // Initialize geocoder once everything is loaded
+        if (typeof initGeocoder === 'function') {
+            initGeocoder();
+        }
 </script>
 </body>
 </html>
