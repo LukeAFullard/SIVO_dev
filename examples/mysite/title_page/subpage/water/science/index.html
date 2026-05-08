@@ -1097,8 +1097,13 @@ Click on any of the management zones to read a detailed scientific breakdown for
 
 
 
-            <div class="html-card sivo-geocoder-panel sivo-card-visible-overflow" id="card-search" data-block-id="search" style="grid-area: search; min-height: 50px !important; display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none;">
-                <div class="card-content" id="container-search" style="width: 100%; height: 100%; padding: 0;">
+            <div class="html-card sivo-geocoder-panel sivo-card-visible-overflow" id="card-search" data-block-id="search" style="grid-area: search; min-height: 50px !important; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; box-shadow: none; position: relative;">
+
+                <div class="sivo-geocoder-text" style="width: 100%; margin-bottom: 0.5rem; text-align: left; font-weight: 500; color: #333;">
+                    Search for your address to find your FMU
+                </div>
+
+                <div class="card-content" id="container-search" style="width: 100%; padding: 0; position: relative;">
                 </div>
             </div>
 
@@ -1860,8 +1865,19 @@ Click on any of the management zones to read a detailed scientific breakdown for
                             if (existing) existing.remove();
                             var overlay = document.createElement('div');
                             overlay.id = 'sivo-geocoder-overlay-result';
-                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #3b82f6; border: 2px solid #3b82f6;">Calculating zone...</div>`;
-                            document.body.appendChild(overlay);
+                            overlay.style.position = 'absolute';
+                            overlay.style.top = '100%';
+                            overlay.style.left = '50%';
+                            overlay.style.transform = 'translateX(-50%)';
+                            overlay.style.marginTop = '10px';
+                            overlay.style.zIndex = '1000';
+                            overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #3b82f6; border: 2px solid #3b82f6;">Calculating zone...<button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                            var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                            if (geocoderContainer && geocoderContainer.parentElement) {
+                                geocoderContainer.parentElement.appendChild(overlay);
+                            } else {
+                                document.body.appendChild(overlay);
+                            }
                         }
 
                         fetch(intersectUrl)
@@ -1884,8 +1900,19 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                         } else {
                                             var overlay = document.createElement('div');
                                             overlay.id = 'sivo-geocoder-overlay-result';
-                                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${safeVal}</span></div>`;
-                                            document.body.appendChild(overlay);
+                                            overlay.style.position = 'absolute';
+                                            overlay.style.top = '100%';
+                                            overlay.style.left = '50%';
+                                            overlay.style.transform = 'translateX(-50%)';
+                                            overlay.style.marginTop = '10px';
+                                            overlay.style.zIndex = '1000';
+                                            overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${safeVal}</span><button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                                            var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                                            if (geocoderContainer && geocoderContainer.parentElement) {
+                                                geocoderContainer.parentElement.appendChild(overlay);
+                                            } else {
+                                                document.body.appendChild(overlay);
+                                            }
                                         }
 
                                         // Try to trigger an ECharts highlight action if the mapped element exists on any dashboard chart
@@ -1923,8 +1950,19 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                     } else {
                                         var overlay = document.createElement('div');
                                         overlay.id = 'sivo-geocoder-overlay-result';
-                                        overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">${noResText}</div>`;
-                                        document.body.appendChild(overlay);
+                                        overlay.style.position = 'absolute';
+                                        overlay.style.top = '100%';
+                                        overlay.style.left = '50%';
+                                        overlay.style.transform = 'translateX(-50%)';
+                                        overlay.style.marginTop = '10px';
+                                        overlay.style.zIndex = '1000';
+                                        overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #ef4444; border: 2px solid #ef4444;">${noResText}<button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                                        var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                                        if (geocoderContainer && geocoderContainer.parentElement) {
+                                            geocoderContainer.parentElement.appendChild(overlay);
+                                        } else {
+                                            document.body.appendChild(overlay);
+                                        }
                                     }
                                 }
                             })
@@ -1938,8 +1976,19 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                 } else {
                                     var overlay = document.createElement('div');
                                     overlay.id = 'sivo-geocoder-overlay-result';
-                                    overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">Error intersecting point</div>`;
-                                    document.body.appendChild(overlay);
+                                    overlay.style.position = 'absolute';
+                                    overlay.style.top = '100%';
+                                    overlay.style.left = '50%';
+                                    overlay.style.transform = 'translateX(-50%)';
+                                    overlay.style.marginTop = '10px';
+                                    overlay.style.zIndex = '1000';
+                                    overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #ef4444; border: 2px solid #ef4444;">Error intersecting point<button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                                    var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                                    if (geocoderContainer && geocoderContainer.parentElement) {
+                                        geocoderContainer.parentElement.appendChild(overlay);
+                                    } else {
+                                        document.body.appendChild(overlay);
+                                    }
                                 }
                             });
                     } else {
