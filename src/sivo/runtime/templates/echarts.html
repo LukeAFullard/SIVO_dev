@@ -6926,9 +6926,40 @@ function tourNext() {
 
             if (view.enable_geocoder) {
                 geocoderContainer.style.display = 'block';
-                if (view.enable_search) {
-                    geocoderContainer.style.top = '70px';
+
+                var gPos = view.geocoder_position || 'top-center';
+                if (gPos === 'top-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'top-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-center') {
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
                 } else {
+                    // default top-center
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
+                }
+
+                if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
+                    geocoderContainer.style.top = '70px';
+                } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
                     geocoderContainer.style.top = '20px';
                 }
 

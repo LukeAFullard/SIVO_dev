@@ -36,7 +36,8 @@ app = Sivo.from_string(
     svg_content,
     enable_geocoder=True,
     geocode_provider="nominatim",
-    geocode_country_codes="nz"
+    geocode_country_codes="nz",
+    geocoder_position="top-left"
 )
 
 app.bind_geocoder_intersection(
@@ -106,14 +107,18 @@ dashboard.add_image_block(
 with open(os.path.join(os.path.dirname(__file__), "placeholder.md"), "r", encoding="utf-8") as f:
     md_content = f.read()
 
-dashboard.add_text_block(
+dashboard.add_details_panel(
     block_id="markdown",
-    text=md_content,
+    title="",
+    placeholder=md_content,
     col_span=1,
-    grid_area="markdown"
+    grid_area="markdown",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px"
 )
 
-dashboard.add_sivo_block("map", app)
+dashboard.add_sivo_block("map", app, col_span=2, grid_area="map", min_height="500px")
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.to_html(output_path=output_file)
