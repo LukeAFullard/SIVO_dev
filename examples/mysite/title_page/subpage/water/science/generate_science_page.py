@@ -57,7 +57,8 @@ for fmu in fmus:
     app.map(
         element_id=fmu,
         url=f"fmu/{slug}/index.html",
-        hover_color="rgba(255, 255, 255, 0.5)",
+        hover_color="lightgray",
+        tooltip=fmu,
         glow=True
     )
 
