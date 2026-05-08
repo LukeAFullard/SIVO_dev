@@ -14,7 +14,7 @@ from .config import ProjectConfig, DataBindingConfig, TimelineBindingConfig
 from ..runtime.bundle_generator import generate_echarts_html
 
 class Infographic:
-    def __init__(self, parser: SVGParser, default_panel_position: str = "none", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_scroll_bounds: bool = True, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = True, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, geocode_country_codes: Optional[Union[str, List[str]]] = None, watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, background_image_fade_in: bool = False, background_image_fade_pulse: bool = False, background_image_fade_start_time_ms: int = 0, background_image_fade_duration_ms: int = 5000, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False, navigation_menu: Optional[list[dict]] = None, navigation_menu_position: str = 'top-right'):
+    def __init__(self, parser: SVGParser, default_panel_position: str = "none", disable_panel: bool = False, panel_width: Optional[str] = None, panel_height: Optional[str] = None, panel_css: Optional[str] = None, disable_resizer: bool = False, disable_tooltips: bool = False, disable_zoom_controls: bool = False, lock_scroll_bounds: bool = True, lock_zoom_out: bool = False, starting_zoom: float = 1.0, lock_canvas: bool = False, enable_a11y: bool = True, render_mode: str = "canvas", enable_minimap: bool = False, enable_export: bool = False, fade_unselected: bool = False, theme: str = "light", enable_search: bool = False, enable_geocoder: bool = False, geocode_provider: str = "nominatim", geocode_api_key: Optional[str] = None, geocode_country_codes: Optional[Union[str, List[str]]] = None, geocoder_position: str = "top-center", watermark: Optional[str] = None, enable_brush_selection: bool = False, title: Optional[str] = None, subtitle: Optional[str] = None, attribution: Optional[str] = None, enable_fullscreen: bool = False, enable_share: bool = False, enable_data_download: bool = False, enable_drawing_tools: bool = False, ambient_effect: Optional[str] = None, bounding_coords: Optional[list[list[float]]] = None, graphic: Optional[list[dict]] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_grayscale: bool = False, background_image_fade_in: bool = False, background_image_fade_pulse: bool = False, background_image_fade_start_time_ms: int = 0, background_image_fade_duration_ms: int = 5000, svg_background_image_url: Optional[str] = None, svg_background_image_opacity: float = 1.0, svg_background_image_grayscale: bool = False, svg_background_image_insert_after: Optional[str] = None, transparent_template_lines: bool = False, navigation_menu: Optional[list[dict]] = None, navigation_menu_position: str = 'top-right'):
         self.parser = parser
         self.navigation_menu = navigation_menu
         self.navigation_menu_position = navigation_menu_position
@@ -46,6 +46,7 @@ class Infographic:
         self.geocode_provider = geocode_provider
         self.geocode_api_key = geocode_api_key
         self.geocode_country_codes = geocode_country_codes
+        self.geocoder_position = geocoder_position
         self.geocoder_intersection = None
         self.watermark = watermark
         self.enable_brush_selection = enable_brush_selection
@@ -169,6 +170,7 @@ class Infographic:
         infographic.geocode_provider = getattr(cfg, "geocode_provider", "nominatim")
         infographic.geocode_api_key = getattr(cfg, "geocode_api_key", None)
         infographic.geocode_country_codes = getattr(cfg, "geocode_country_codes", None)
+        infographic.geocoder_position = getattr(cfg, "geocoder_position", "top-center")
         infographic.watermark = getattr(cfg, "watermark", None)
         infographic.enable_brush_selection = getattr(cfg, "enable_brush_selection", False)
         infographic.title = getattr(cfg, "title", None)
@@ -2117,6 +2119,8 @@ class Infographic:
             "enable_geocoder": self.enable_geocoder,
             "geocode_provider": self.geocode_provider,
             "geocode_api_key": self.geocode_api_key,
+            "geocode_country_codes": self.geocode_country_codes,
+            "geocoder_position": self.geocoder_position,
             "watermark": self.watermark,
             "enable_brush_selection": self.enable_brush_selection,
             "title": self.title,
