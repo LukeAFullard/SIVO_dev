@@ -235,13 +235,13 @@
 
 
             .sivo-card {
-                min-height: 500px;
+                min-height: 300px;
             }
         }
 
         /* Navigation Menu Styles */
         #sivo-geocoder-container {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
@@ -320,7 +320,7 @@
 
 
         #sivo-geocoder-container {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
@@ -1091,14 +1091,15 @@
 </head>
 <body>
 
+    <div id="sivo-geocoder-container" style="display:none;">
+        <svg class="sivo-geocoder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <input type="text" id="sivo-geocoder-input" placeholder="Search address or place..." autocomplete="off">
+        <div class="sivo-geocoder-spinner" id="sivo-geocoder-spinner"></div>
+        <div id="sivo-geocoder-results"></div>
+    </div>
 
     <!-- Navigation Menu -->
-<div id="sivo-geocoder-container">
-                <svg class="sivo-geocoder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.242-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <input type="text" id="sivo-geocoder-input" placeholder="Search address or place..." autocomplete="off">
-                <div class="sivo-geocoder-spinner" id="sivo-geocoder-spinner"></div>
-                <div id="sivo-geocoder-results"></div>
-            </div>
+
 
     <div id="sivo-nav-container">
         <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
@@ -1845,12 +1846,14 @@ Click on any of the management zones to read a detailed scientific breakdown for
         function initGeocoder() {
             // Look for the first sivo block config that has geocoder enabled
             var view = null;
-            for (var i = 0; i < sivoBlocksConfig.length; i++) {
-                if (sivoBlocksConfig[i].enable_geocoder) {
-                    view = sivoBlocksConfig[i];
+            var chartKeys = Object.keys(viewsData);
+            for (var i = 0; i < chartKeys.length; i++) {
+                if (viewsData[chartKeys[i]].enable_geocoder) {
+                    view = viewsData[chartKeys[i]];
                     break;
                 }
             }
+            window.sivoCharts = activeCharts;
 
             if (!view) return;
             var geocoderContainer = document.getElementById('sivo-geocoder-container');
@@ -2123,17 +2126,96 @@ Click on any of the management zones to read a detailed scientific breakdown for
                         }
 
                         if (view.geocode_provider === 'google' && view.geocode_api_key) {
+                            url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${view.geocode_api_key}`;
+                            if (cCodeStr) {
+                                var gCodes = cCodeStr.split(',').map(c => 'country:' + c.trim()).join('|');
+                                url += `&components=${gCodes}`;
+                            }
+                        } else if (view.geocode_provider === 'mapbox' && view.geocode_api_key) {
+                            url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${view.geocode_api_key}`;
+                            if (cCodeStr) {
+                                url += `&country=${cCodeStr}`;
+                            }
+                        } else {
+                            if (cCodeStr) {
+                                url += `&countrycodes=${cCodeStr}`;
+                            }
+                        }
 
+                        fetch(url, {
+                            headers: {
+                                'Accept-Language': 'en-US,en;q=0.9'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            geocodeSpinner.style.display = 'none';
+
+                            if (!data || data.length === 0) {
+                                geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle">No results found</span></div>';
+                                geocodeResults.style.display = 'block';
+                                return;
+                            }
+
+                            geocodeResults.innerHTML = '';
+                            var resultsArr = data;
+                            if (view.geocode_provider === 'google' && data.results) {
+                                resultsArr = data.results.map(r => ({
+                                    display_name: r.formatted_address,
+                                    lat: r.geometry.location.lat,
+                                    lon: r.geometry.location.lng
+                                }));
+                            } else if (view.geocode_provider === 'mapbox' && data.features) {
+                                resultsArr = data.features.map(f => ({
+                                    display_name: f.place_name,
+                                    lat: f.center[1],
+                                    lon: f.center[0]
+                                }));
+                            }
+
+                            resultsArr.forEach(function(item) {
+                                var el = document.createElement('div');
+                                el.className = 'sivo-search-result-item';
+                                var nameHtml = window.DOMPurify ? window.DOMPurify.sanitize(item.display_name) : item.display_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                                el.innerHTML = `<div class="sivo-search-result-title">${nameHtml}</div>`;
+
+                                el.addEventListener('mousedown', function(e) {
+                                    e.preventDefault();
+                                    window.sivoSelectGeocodeResult(parseFloat(item.lat), parseFloat(item.lon), item.display_name);
+                                });
+
+                                geocodeResults.appendChild(el);
+                            });
+                            geocodeResults.style.display = 'block';
+                        })
+                        .catch(error => {
+                            console.error('Error fetching geocode results:', error);
+                            geocodeSpinner.style.display = 'none';
+                            geocodeResults.innerHTML = '<div class="sivo-search-result-item"><span class="sivo-search-result-subtitle" style="color: red;">Error fetching results</span></div>';
+                            geocodeResults.style.display = 'block';
+                        });
+                    }, 500);
+                };
+
+                geocodeInput.onblur = function(e) {
+                    setTimeout(() => geocodeResults.style.display = 'none', 200);
+                };
+
+            } else {
+                geocoderContainer.style.display = 'none';
+            }
         }
-
 
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
-                // Remove transition classes from body if they exist
                 document.body.classList.remove('page-turn-enter');
-                // You can add other transition classes here if added in the future
             }
         });
+
+        // Initialize geocoder once everything is loaded
+        if (typeof initGeocoder === 'function') {
+            initGeocoder();
+        }
 </script>
 </body>
 </html>
