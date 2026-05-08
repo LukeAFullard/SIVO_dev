@@ -37,7 +37,12 @@ app = Sivo.from_string(
     enable_geocoder=True,
     geocode_provider="nominatim",
     geocode_country_codes="nz",
-    geocoder_position="top-left"
+    geocoder_position="top-left",
+    disable_zoom_controls=True,
+    lock_canvas=True,
+    disable_resizer=True,
+    lock_zoom_out=True,
+    lock_scroll_bounds=True
 )
 
 app.bind_geocoder_intersection(
@@ -83,14 +88,14 @@ dashboard = SivoDashboard(
 
 desktop_grid = """
 'banner banner banner'
-'markdown map map'
 'search map map'
+'markdown map map'
 """
 
 mobile_grid = """
 'banner'
-'markdown'
 'search'
+'markdown'
 'map'
 """
 
@@ -124,7 +129,8 @@ dashboard.add_geocoder_block(
     block_id="search",
     col_span=1,
     grid_area="search",
-    min_height="50px"
+    min_height="50px",
+    overflow_visible=True
 )
 
 dashboard.add_sivo_block("map", app, col_span=2, grid_area="map", min_height="500px")
