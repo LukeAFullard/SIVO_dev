@@ -60,7 +60,8 @@ for fmu in fmus:
     slug = fmu.lower().replace(" ", "-").replace("ā", "a").replace("ī", "i")
     app.map(
         element_id=fmu,
-        url=f"fmu/{slug}/index.html",
+        drill_through=f"fmu/{slug}/index.html",
+        drill_transition="page-turn-enter",
         hover_color="lightgray",
         tooltip=fmu,
         glow=True,
