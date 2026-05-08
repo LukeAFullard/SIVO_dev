@@ -961,6 +961,14 @@
         <div id="sivo-geocoder-results"></div>
         <div id="sivo-geocoder-attribution" style="display:none; font-size: 10px; color: #64748b; text-align: center; padding-top: 4px;">Data © OpenStreetMap contributors, ODbL 1.0.</div>
     </div>
+
+    <!-- Geocoder Block HTML Template -->
+    <template id="sivo-geocoder-block-template">
+        <div class="sivo-geocoder-block-content" style="width: 100%; height: 100%; position: relative; min-height: 50px;">
+            <!-- It will be moved here -->
+        </div>
+    </template>
+
     {% if navigation_menu %}
     <!-- Navigation Menu -->
 
@@ -1064,6 +1072,11 @@
                         </div>
                         {% endfor %}
                     </div>
+                </div>
+            </div>
+            {% elif block.type == "geocoder" %}
+            <div class="html-card sivo-geocoder-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none;">
+                <div class="card-content" id="container-{{ block.id }}" style="width: 100%; height: 100%; padding: 0;">
                 </div>
             </div>
             {% endif %}
@@ -1683,40 +1696,55 @@
                     if (att) att.style.display = 'block';
                 }
 
-                var gPos = view.geocoder_position || 'top-center';
-                if (gPos === 'top-left') {
-                    geocoderContainer.style.left = '20px';
-                    geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'top-right') {
+                // Check if a geocoder block exists in the layout
+                var geocoderPanels = document.querySelectorAll('.sivo-geocoder-panel .card-content');
+                if (geocoderPanels.length > 0) {
+                    var panelContent = geocoderPanels[0];
+                    geocoderContainer.style.position = 'relative';
                     geocoderContainer.style.left = 'auto';
-                    geocoderContainer.style.right = '20px';
-                    geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'bottom-left') {
-                    geocoderContainer.style.left = '20px';
                     geocoderContainer.style.top = 'auto';
-                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.right = 'auto';
+                    geocoderContainer.style.bottom = 'auto';
                     geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'bottom-right') {
-                    geocoderContainer.style.left = 'auto';
-                    geocoderContainer.style.right = '20px';
-                    geocoderContainer.style.top = 'auto';
-                    geocoderContainer.style.bottom = '20px';
-                    geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'bottom-center') {
-                    geocoderContainer.style.left = '50%';
-                    geocoderContainer.style.top = 'auto';
-                    geocoderContainer.style.bottom = '20px';
-                    geocoderContainer.style.transform = 'translateX(-50%)';
+                    geocoderContainer.style.width = '100%';
+                    geocoderContainer.style.maxWidth = '100%';
+                    panelContent.appendChild(geocoderContainer);
                 } else {
-                    // default top-center
-                    geocoderContainer.style.left = '50%';
-                    geocoderContainer.style.transform = 'translateX(-50%)';
-                }
+                    var gPos = view.geocoder_position || 'top-center';
+                    if (gPos === 'top-left') {
+                        geocoderContainer.style.left = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'top-right') {
+                        geocoderContainer.style.left = 'auto';
+                        geocoderContainer.style.right = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'bottom-left') {
+                        geocoderContainer.style.left = '20px';
+                        geocoderContainer.style.top = 'auto';
+                        geocoderContainer.style.bottom = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'bottom-right') {
+                        geocoderContainer.style.left = 'auto';
+                        geocoderContainer.style.right = '20px';
+                        geocoderContainer.style.top = 'auto';
+                        geocoderContainer.style.bottom = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'bottom-center') {
+                        geocoderContainer.style.left = '50%';
+                        geocoderContainer.style.top = 'auto';
+                        geocoderContainer.style.bottom = '20px';
+                        geocoderContainer.style.transform = 'translateX(-50%)';
+                    } else {
+                        // default top-center
+                        geocoderContainer.style.left = '50%';
+                        geocoderContainer.style.transform = 'translateX(-50%)';
+                    }
 
-                if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
-                    geocoderContainer.style.top = '70px';
-                } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
-                    geocoderContainer.style.top = '20px';
+                    if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
+                        geocoderContainer.style.top = '70px';
+                    } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
+                        geocoderContainer.style.top = '20px';
+                    }
                 }
 
                 var geocodeInput = document.getElementById('sivo-geocoder-input');

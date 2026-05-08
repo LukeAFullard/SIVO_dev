@@ -84,11 +84,13 @@ dashboard = SivoDashboard(
 desktop_grid = """
 'banner banner banner'
 'markdown map map'
+'search map map'
 """
 
 mobile_grid = """
 'banner'
 'markdown'
+'search'
 'map'
 """
 
@@ -116,6 +118,13 @@ dashboard.add_details_panel(
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
     padding="10px"
+)
+
+dashboard.add_geocoder_block(
+    block_id="search",
+    col_span=1,
+    grid_area="search",
+    min_height="50px"
 )
 
 dashboard.add_sivo_block("map", app, col_span=2, grid_area="map", min_height="500px")
