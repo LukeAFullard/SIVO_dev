@@ -31,6 +31,10 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
     formatted_views = format_views_data(views_data)
     deps = determine_dependencies(formatted_views)
 
+    # If there's a details panel, we need marked for markdown processing
+    if details_panels:
+        deps['marked'] = True
+
     # Fetch custom theme CSS if applicable
     if theme not in ["light", "dark"]:
         from ..core.sivo import Sivo

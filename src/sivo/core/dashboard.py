@@ -169,6 +169,12 @@ class SivoDashboard:
         }
         self.layout_order.append({"type": "metrics", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
 
+    def add_geocoder_block(self, block_id: str, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
+        """
+        Adds a pre-built panel that displays the geocoder search input for location search.
+        """
+        self.layout_order.append({"type": "geocoder", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
+
 
     def set_grid_layout(self, desktop: str, mobile: Optional[str] = None):
         """
