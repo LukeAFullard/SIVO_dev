@@ -1713,6 +1713,7 @@
                 <input type="text" id="sivo-geocoder-input" placeholder="Search address or place..." autocomplete="off">
                 <div class="sivo-geocoder-spinner" id="sivo-geocoder-spinner"></div>
                 <div id="sivo-geocoder-results"></div>
+                <div id="sivo-geocoder-attribution" style="display:none; font-size: 10px; color: #64748b; text-align: center; padding-top: 4px;">Data © OpenStreetMap contributors, ODbL 1.0.</div>
             </div>
 
             <div id="sivo-title-container">
@@ -6926,6 +6927,10 @@ function tourNext() {
 
             if (view.enable_geocoder) {
                 geocoderContainer.style.display = 'block';
+                if (view.geocode_provider === 'nominatim') {
+                    var att = document.getElementById('sivo-geocoder-attribution');
+                    if (att) att.style.display = 'block';
+                }
 
                 var gPos = view.geocoder_position || 'top-center';
                 if (gPos === 'top-left') {
