@@ -1287,10 +1287,18 @@
                 const li = document.createElement('li');
                 li.className = 'shape-item';
                 li.style.borderLeft = selectedShapeIndices.has(index) ? '3px solid #3b82f6' : '3px solid transparent';
+                li.style.position = 'relative';
 
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.value = shape.id;
+
+                // Force input to be front and accessible
+                input.style.position = 'relative';
+                input.style.zIndex = '1000';
+                input.style.pointerEvents = 'auto';
+                input.style.userSelect = 'auto';
+
                 input.addEventListener('input', (e) => {
                     shapes[index].id = e.target.value;
                 });
