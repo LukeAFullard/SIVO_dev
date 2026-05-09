@@ -7084,6 +7084,16 @@ function tourNext() {
                                                 seriesIndex: 0,
                                                 name: val
                                             });
+
+                                            // Fallback for names that might have been mapped with underscores instead of spaces
+                                            if (val.indexOf(' ') !== -1) {
+                                                var valUnderscored = val.replace(/ /g, '_');
+                                                myChart.dispatchAction({
+                                                    type: 'highlight',
+                                                    seriesIndex: 0,
+                                                    name: valUnderscored
+                                                });
+                                            }
                                         } catch (e) {
                                             console.log("Could not highlight element named " + val, e);
                                         }
