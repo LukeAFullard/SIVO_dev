@@ -1284,9 +1284,7 @@
             shapes.forEach((shape, index) => {
                 const li = document.createElement('li');
                 li.className = 'shape-item';
-                if (selectedShapeIndices.has(index)) {
-                    li.style.borderLeft = '3px solid #3b82f6';
-                }
+                li.style.borderLeft = selectedShapeIndices.has(index) ? '3px solid #3b82f6' : '3px solid transparent';
 
                 const input = document.createElement('input');
                 input.type = 'text';
@@ -1295,7 +1293,13 @@
                 input.addEventListener('focus', () => {
                     selectedShapeIndices.clear();
                     selectedShapeIndices.add(index);
-                    updateShapeList();
+
+                    // Update selection visually without recreating DOM elements
+                    const items = document.querySelectorAll('.shape-item');
+                    items.forEach((item, i) => {
+                        item.style.borderLeft = selectedShapeIndices.has(i) ? '3px solid #3b82f6' : '3px solid transparent';
+                    });
+
                     redraw();
                 });
 
