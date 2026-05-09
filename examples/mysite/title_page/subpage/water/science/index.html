@@ -1907,6 +1907,41 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                             } catch (e) {}
                                         }
 
+                                        // Ensure previous element is restored
+                                        if (window.sivoGeocoderPulsedNodes) {
+                                            window.sivoGeocoderPulsedNodes.forEach(function(n) {
+                                                n.classList.remove('sivo-anim-fade-pulse-highlight');
+                                            });
+                                        }
+                                        window.sivoGeocoderPulsedNodes = [];
+
+                                        var possibleNames = [val];
+                                        if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+
+                                        // Pulse via CSS animation on the underlying SVG DOM nodes
+                                        possibleNames.forEach(function(n) {
+                                            document.querySelectorAll(`[id="${n}"], [name="${n}"]`).forEach(function(node) {
+                                                node.classList.add('sivo-anim-fade-pulse-highlight');
+                                                window.sivoGeocoderPulsedNodes.push(node);
+                                            });
+                                        });
+
+                                        // Ensure styles are added once
+                                        if (!document.getElementById('sivo-geocoder-pulse-style')) {
+                                            var styleEl = document.createElement('style');
+                                            styleEl.id = 'sivo-geocoder-pulse-style';
+                                            styleEl.innerHTML = `
+                                            @keyframes sivo-highlight-pulse {
+                                                0% { opacity: 0.4; }
+                                                50% { opacity: 1.0; }
+                                                100% { opacity: 0.4; }
+                                            }
+                                            .sivo-anim-fade-pulse-highlight {
+                                                animation: sivo-highlight-pulse 2s infinite ease-in-out !important;
+                                            }`;
+                                            document.head.appendChild(styleEl);
+                                        }
+
                                         found = true;
                                         break;
                                     }
@@ -1918,6 +1953,13 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                             window.sivoCharts[cid].dispatchAction({ type: 'downplay', seriesIndex: 0 });
                                             window.sivoCharts[cid].dispatchAction({ type: 'unselect', seriesIndex: 0 });
                                         } catch (e) {}
+                                    }
+
+                                    if (window.sivoGeocoderPulsedNodes) {
+                                        window.sivoGeocoderPulsedNodes.forEach(function(n) {
+                                            n.classList.remove('sivo-anim-fade-pulse-highlight');
+                                        });
+                                        window.sivoGeocoderPulsedNodes = [];
                                     }
 
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');
