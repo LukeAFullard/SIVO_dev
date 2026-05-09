@@ -1889,6 +1889,13 @@
                                                 // ECharts needs the exact name match to highlight the SVG region
                                                 c.dispatchAction({ type: 'highlight', seriesIndex: 0, name: val });
                                                 c.dispatchAction({ type: 'select', seriesIndex: 0, name: val });
+
+                                                // Fallback for names that might have been mapped with underscores instead of spaces
+                                                if (val.indexOf(' ') !== -1) {
+                                                    var valUnderscored = val.replace(/ /g, '_');
+                                                    c.dispatchAction({ type: 'highlight', seriesIndex: 0, name: valUnderscored });
+                                                    c.dispatchAction({ type: 'select', seriesIndex: 0, name: valUnderscored });
+                                                }
                                                 // Force re-render to ensure visual update immediately
                                                 c.resize();
                                             } catch (e) {}
