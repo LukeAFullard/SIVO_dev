@@ -88,8 +88,13 @@ for icon in icons:
         icon["md"] = f.read()
 
 for icon in icons:
+    size = 75
+    offset = (100 - size) / 2
+
+    svg_str = f'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g id="img_vis_group" name="img_vis_group"><image id="img_vis" href="{icon["img"]}" x="{offset}" y="{offset}" width="{size}" height="{size}" preserveAspectRatio="xMidYMid meet" /></g></svg>'
+
     sivo_app = Sivo.from_string(
-        '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>',
+        svg_str,
         lock_canvas=True,
         disable_resizer=True,
         disable_zoom_controls=True,
@@ -97,18 +102,6 @@ for icon in icons:
         lock_scroll_bounds=True
     )
 
-    size = 75
-    offset = (100 - size) / 2
-
-    sivo_app.add_image_rect(
-        element_id="img_vis",
-        image_url=icon["img"],
-        width=str(size),
-        height=str(size),
-        x=str(offset),
-        y=str(offset),
-        preserve_aspect_ratio="xMidYMid meet"
-    )
 
     # Add an invisible but hit-testable rectangle on top for interaction and outline.
     # Set the name to " " so that the Details Panel header appears blank, as requested.
@@ -149,9 +142,9 @@ for icon in icons:
         **fade_params
     )
 
-    # Also apply fade into the image directly so we can see it load in
+    # Also apply fade into the image directly so we can see it load in. We animate the group.
     sivo_app.map(
-        "img_vis",
+        "img_vis_group",
         **fade_params
     )
 
