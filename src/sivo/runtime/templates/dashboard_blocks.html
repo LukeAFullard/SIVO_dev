@@ -1416,6 +1416,28 @@
                             } else {
                                 window.location.href = action.url;
                             }
+                        } else if (action.action_type === 'drill_through') {
+                            if (action.target === '_blank') {
+                                window.open(action.url, '_blank');
+                            } else {
+                                if (action.transition) {
+                                    var transitionClassBase = 'sivo-view-transition-' + action.transition;
+                                    chartDom.classList.add(transitionClassBase + '-out');
+
+                                    var overlayContainer = document.querySelector('.sivo-native-overlay-svg-container');
+                                    if (overlayContainer) {
+                                        overlayContainer.style.transition = 'all 0.5s ease-in-out';
+                                        overlayContainer.style.opacity = '0';
+                                    }
+
+                                    setTimeout(function() {
+                                        var separator = action.url.indexOf('?') !== -1 ? '&' : '?';
+                                        window.location.href = action.url + separator + 'sivo_transition_in=' + action.transition;
+                                    }, 500);
+                                } else {
+                                    window.location.href = action.url;
+                                }
+                            }
                         } else if (action.action_type === 'zoom') {
                             var opt = chart.getOption();
                             var startZoom = (opt && opt.series && opt.series[0] && opt.series[0].zoom) ? opt.series[0].zoom : 1.0;
