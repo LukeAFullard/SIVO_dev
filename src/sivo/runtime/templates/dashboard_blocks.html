@@ -1394,7 +1394,12 @@
                 if(!params.name) return;
 
                 const viewData = viewsData[chartId];
+                if (!viewData || !viewData.actions_manifest) return;
+
+                // bundle_generator.py stores an array of actions directly at viewData.actions_manifest[params.name]
+                // and NOT a config object containing an .actions property.
                 const elementActions = viewData.actions_manifest[params.name];
+                if (!elementActions) return;
 
                 let tooltipContent = null;
                 let payloadData = null;
