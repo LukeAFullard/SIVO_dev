@@ -88,13 +88,8 @@ for icon in icons:
         icon["md"] = f.read()
 
 for icon in icons:
-    size = 75
-    offset = (100 - size) / 2
-
-    svg_str = f'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g id="img_vis_group" name="img_vis_group"><image id="img_vis" href="{icon["img"]}" x="{offset}" y="{offset}" width="{size}" height="{size}" preserveAspectRatio="xMidYMid meet" /></g></svg>'
-
     sivo_app = Sivo.from_string(
-        svg_str,
+        '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>',
         lock_canvas=True,
         disable_resizer=True,
         disable_zoom_controls=True,
@@ -102,6 +97,18 @@ for icon in icons:
         lock_scroll_bounds=True
     )
 
+    size = 75
+    offset = (100 - size) / 2
+
+    sivo_app.add_image_rect(
+        element_id="img_vis",
+        image_url=icon["img"],
+        width=str(size),
+        height=str(size),
+        x=str(offset),
+        y=str(offset),
+        preserve_aspect_ratio="xMidYMid meet"
+    )
 
     # Add an invisible but hit-testable rectangle on top for interaction and outline.
     # Set the name to " " so that the Details Panel header appears blank, as requested.
@@ -119,16 +126,6 @@ for icon in icons:
         "ry": "5"
     })
 
-    # Add specific fade properties based on icon index
-    fade_params = {}
-    idx = int(icon["id"].replace("icon", "")) - 1
-    if idx < 2:
-        fade_params = {"fade_in": True, "fade_start_time_ms": 0, "fade_duration_ms": 1300}
-    elif idx < 4:
-        fade_params = {"fade_in": True, "fade_start_time_ms": 600, "fade_duration_ms": 1300}
-    else:
-        fade_params = {"fade_in": True, "fade_start_time_ms": 1200, "fade_duration_ms": 1300}
-
     # Map the interactive layer using the blank name. Set hover_color to transparent.
     sivo_app.map(
         blank_name,
@@ -138,14 +135,7 @@ for icon in icons:
         border_color="transparent",       # No border by default
         border_width=3,                   # Give it thickness so hover is visible
         hover_color="transparent",        # No highlight on hover
-        glow=False,                       # No shadow/glow on hover to prevent highlight
-        **fade_params
-    )
-
-    # Also apply fade into the image directly so we can see it load in. We animate the group.
-    sivo_app.map(
-        "img_vis_group",
-        **fade_params
+        glow=False                        # No shadow/glow on hover to prevent highlight
     )
 
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
@@ -163,10 +153,7 @@ dashboard.add_details_panel(
     grid_area="details",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
-    padding="10px",
-    fade_in=True,
-    fade_start_time_ms=1200,
-    fade_duration_ms=1300
+    padding="10px"
 )
 
 # Right image (4 columns now)
@@ -175,10 +162,7 @@ dashboard.add_image_block(
     image_url="koura-blue.png",
     col_span=4,
     grid_area="image",
-    object_fit="contain",
-    fade_in=True,
-    fade_start_time_ms=1200,
-    fade_duration_ms=1300
+    object_fit="contain"
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
