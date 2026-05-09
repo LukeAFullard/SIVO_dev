@@ -2616,18 +2616,41 @@ Text" class="w-full px-2 py-1 text-xs border border-slate-200 rounded"></textare
             shapes.forEach((shape, index) => {
                 const li = document.createElement('li');
                 li.className = 'shape-item';
-                if (selectedShapeIndices.has(index)) {
-                    li.style.borderLeft = '3px solid #3b82f6';
-                }
+                li.style.borderLeft = selectedShapeIndices.has(index) ? '3px solid #3b82f6' : '3px solid transparent';
+                li.style.position = 'relative';
 
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.value = shape.id;
+
+                // Force input to be front and accessible
+                input.style.position = 'relative';
+                input.style.zIndex = '1000';
+                input.style.pointerEvents = 'auto';
+                input.style.userSelect = 'auto';
+
+                input.addEventListener('input', (e) => {
+                    shapes[index].id = e.target.value;
+                });
                 input.addEventListener('change', (e) => updateShapeId(index, e.target.value));
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.target.blur();
+                    }
+                    e.stopPropagation();
+                });
+                input.addEventListener('mousedown', (e) => e.stopPropagation());
+                input.addEventListener('click', (e) => e.stopPropagation());
                 input.addEventListener('focus', () => {
                     selectedShapeIndices.clear();
                     selectedShapeIndices.add(index);
-                    updateShapeList();
+
+                    // Update selection visually without recreating DOM elements
+                    const items = document.querySelectorAll('.shape-item');
+                    items.forEach((item, i) => {
+                        item.style.borderLeft = selectedShapeIndices.has(i) ? '3px solid #3b82f6' : '3px solid transparent';
+                    });
+
                     redraw();
                 });
 
