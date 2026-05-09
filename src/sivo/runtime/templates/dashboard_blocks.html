@@ -969,45 +969,7 @@
         </div>
     </template>
 
-    {% if navigation_menu %}
-    <!-- Navigation Menu -->
 
-
-    <div id="sivo-nav-container">
-        <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </div>
-        <div id="sivo-nav-menu" class="sivo-nav-menu">
-            {% for item in navigation_menu %}
-                {% if item.url %}
-                    {% if item.url_transition %}
-                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ item.url_transition }}'); setTimeout(() => window.location.href = '{{ item.url }}', 600);">{{ item.label }}</a>
-                    {% else %}
-                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}">{{ item.label }}</a>
-                    {% endif %}
-                {% elif item.view_id %}
-                    <a class="sivo-nav-item" href="#{{ item.view_id }}">{{ item.label }}</a>
-                {% else %}
-                    <div class="sivo-nav-header">{{ item.label }}</div>
-                {% endif %}
-
-                {% if item.sublinks %}
-                    {% for sub in item.sublinks %}
-                        {% if sub.url %}
-                            {% if sub.url_transition %}
-                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ sub.url_transition }}'); setTimeout(() => window.location.href = '{{ sub.url }}', 600);">{{ sub.label }}</a>
-                            {% else %}
-                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}">{{ sub.label }}</a>
-                            {% endif %}
-                        {% elif sub.view_id %}
-                            <a class="sivo-nav-subitem" href="#{{ sub.view_id }}">{{ sub.label }}</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 
 
     {% if title %}
@@ -2121,5 +2083,45 @@
             initGeocoder();
         }
 </script>
+
+    {% if navigation_menu %}
+    <!-- Navigation Menu -->
+
+
+    <div id="sivo-nav-container">
+        <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
+        <div id="sivo-nav-menu" class="sivo-nav-menu">
+            {% for item in navigation_menu %}
+                {% if item.url %}
+                    {% if item.url_transition %}
+                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ item.url_transition }}'); setTimeout(() => window.location.href = '{{ item.url }}', 600);">{{ item.label }}</a>
+                    {% else %}
+                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}">{{ item.label }}</a>
+                    {% endif %}
+                {% elif item.view_id %}
+                    <a class="sivo-nav-item" href="#{{ item.view_id }}">{{ item.label }}</a>
+                {% else %}
+                    <div class="sivo-nav-header">{{ item.label }}</div>
+                {% endif %}
+
+                {% if item.sublinks %}
+                    {% for sub in item.sublinks %}
+                        {% if sub.url %}
+                            {% if sub.url_transition %}
+                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ sub.url_transition }}'); setTimeout(() => window.location.href = '{{ sub.url }}', 600);">{{ sub.label }}</a>
+                            {% else %}
+                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}">{{ sub.label }}</a>
+                            {% endif %}
+                        {% elif sub.view_id %}
+                            <a class="sivo-nav-subitem" href="#{{ sub.view_id }}">{{ sub.label }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </body>
 </html>
