@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 
 def test():
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto("http://localhost:8080/annotator_template.html")
         page.evaluate('''
@@ -11,13 +11,11 @@ def test():
         page.click("summary", force=True)
         page.wait_for_timeout(500)
 
-        # We will trigger the actual file upload with a mock image file
         import base64
         mock_png = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==")
         with open("mock.png", "wb") as f:
             f.write(mock_png)
 
-        # Force display of tools to be absolutely sure
         page.evaluate('''
             document.getElementById('tools').style.display = 'block';
             document.getElementById('canvas-container').style.display = 'block';
@@ -38,16 +36,18 @@ def test():
         page.wait_for_selector(".shape-item input")
         input_box = page.locator(".shape-item input").first
 
-        # Focus and type one character at a time using keyboard to simulate real user
-        input_box.focus()
-        # Delete default text first
+        # PHYSICAL CLICK
+        print("Clicking input box...")
+        input_box.click()
+        page.wait_for_timeout(200)
+
         input_box.press("Control+A")
         input_box.press("Backspace")
 
-        page.keyboard.type("abc")
+        page.keyboard.type("xyz")
         page.wait_for_timeout(200)
 
         val = input_box.input_value()
-        print(f"Text box value is: '{val}'")
+        print(f"Text box value after click and type is: '{val}'")
 
 test()
