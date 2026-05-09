@@ -2130,7 +2130,7 @@
                     },
                     formatter: function (params) {
                         var dataIndex = echartsData.findIndex(item => item.name === params.name);
-                        var tooltipContent = params.name;
+                        var tooltipContent = "";
 
                         if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
                             tooltipContent = echartsData[dataIndex].tooltip;
@@ -2139,8 +2139,13 @@
                         if (dataBinding && dataBinding.data && dataBinding.data[params.name]) {
                             var val = dataBinding.data[params.name][dataBinding.key];
                             if (val !== undefined) {
+                                if (!tooltipContent) tooltipContent = params.name;
                                 tooltipContent += '<br/>' + dataBinding.key + ': <b>' + val + '</b>';
                             }
+                        }
+
+                        if (!tooltipContent) {
+                            return "";
                         }
 
                         return tooltipContent;
@@ -2154,8 +2159,8 @@
                         roam: view.lock_canvas ? false : true, // Enable zoom and pan
                         label: { show: false },
                         itemStyle: {
-                            borderColor: '#cbd5e1', // Sleek slate-300
-                            borderWidth: 1,
+                            borderColor: view.transparent_template_lines ? 'transparent' : '#cbd5e1', // Sleek slate-300
+                            borderWidth: view.transparent_template_lines ? 0 : 1,
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {

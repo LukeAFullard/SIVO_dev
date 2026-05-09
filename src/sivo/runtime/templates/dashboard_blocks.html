@@ -1155,7 +1155,31 @@
                 echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
 
                 const option = {
-                    tooltip: { trigger: 'item' },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            var dataIndex = viewData.echarts_data.findIndex(item => item.name === params.name);
+                            var tooltipContent = "";
+
+                            if (dataIndex !== -1 && viewData.echarts_data[dataIndex].tooltip) {
+                                tooltipContent = viewData.echarts_data[dataIndex].tooltip;
+                            }
+
+                            if (viewData.data_binding && viewData.data_binding.data && viewData.data_binding.data[params.name]) {
+                                var val = viewData.data_binding.data[params.name][viewData.data_binding.key];
+                                if (val !== undefined) {
+                                    if (!tooltipContent) tooltipContent = params.name;
+                                    tooltipContent += '<br/>' + viewData.data_binding.key + ': <b>' + val + '</b>';
+                                }
+                            }
+
+                            if (!tooltipContent) {
+                                return "";
+                            }
+
+                            return tooltipContent;
+                        }
+                    },
                     series: [{
                         type: 'map',
                         map: 'sivoMap_' + blockId,
