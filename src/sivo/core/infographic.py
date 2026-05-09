@@ -395,6 +395,7 @@ class Infographic:
         html: Optional[str] = None,
         url: Optional[str] = None,
         url_target: str = "_blank",
+        url_transition: Optional[str] = None,
         drill_to: Optional[str] = None,
         drill_through: Optional[str] = None,
         drill_transition: Optional[str] = None,
@@ -530,7 +531,7 @@ class Infographic:
             ))
 
         if url:
-            mapping.actions.append(URLAction(url=url, target=url_target))
+            mapping.actions.append(URLAction(url=url, target=url_target, transition=url_transition))
 
         if drill_to:
             mapping.actions.append(DrillDownAction(target_svg=drill_to, transition=drill_transition))

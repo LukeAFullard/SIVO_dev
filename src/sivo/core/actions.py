@@ -32,6 +32,7 @@ class URLAction(BaseAction):
     action_type: Literal["url"] = "url"
     url: str = Field(description="External URL to navigate to")
     target: Literal["_blank", "_self"] = Field(default="_blank")
+    transition: Optional[str] = Field(default=None, description="Optional transition class name (e.g., 'page-turn-enter')")
 
 class DrillDownAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
