@@ -7088,6 +7088,68 @@ function tourNext() {
                                                 type: 'unselect',
                                                 seriesIndex: 0
                                             });
+
+                                            var possibleNames = [val];
+                                            if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+
+                                            // Clear previous interval if any
+                                            if (window.sivoGeocoderPulseInterval) {
+                                                clearInterval(window.sivoGeocoderPulseInterval);
+                                                window.sivoGeocoderPulseInterval = null;
+                                            }
+
+                                            // Restore previous opacity
+                                            if (window.sivoGeocoderOriginalOpacity) {
+                                                window.sivoGeocoderOriginalOpacity.forEach(function(item) {
+                                                    try {
+                                                        var c = item.chart;
+                                                        var currentOption = c.getOption();
+                                                        var series = currentOption.series[item.seriesIndex];
+                                                        if (series && series.data) {
+                                                            for (var i = 0; i < series.data.length; i++) {
+                                                                if (series.data[i].name === item.name) {
+                                                                    if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
+                                                                    series.data[i].itemStyle.opacity = item.originalOpacity;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        c.setOption({series: currentOption.series});
+                                                    } catch(e) {}
+                                                });
+                                            }
+                                            window.sivoGeocoderOriginalOpacity = [];
+
+                                            var targetedItems = [];
+
+                                            var currentOption = myChart.getOption();
+                                            var series = currentOption.series[0];
+                                            if (series && series.data) {
+                                                possibleNames.forEach(function(pn) {
+                                                    for (var i = 0; i < series.data.length; i++) {
+                                                        if (series.data[i].name === pn) {
+                                                            var currentOpacity = 1.0;
+                                                            if (series.data[i].itemStyle && series.data[i].itemStyle.opacity !== undefined) {
+                                                                currentOpacity = series.data[i].itemStyle.opacity;
+                                                            }
+
+                                                            window.sivoGeocoderOriginalOpacity.push({
+                                                                chart: myChart,
+                                                                seriesIndex: 0,
+                                                                name: pn,
+                                                                originalOpacity: currentOpacity
+                                                            });
+
+                                                            targetedItems.push({
+                                                                chart: myChart,
+                                                                seriesIndex: 0,
+                                                                name: pn
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                            }
+
                                             myChart.dispatchAction({
                                                 type: 'highlight',
                                                 seriesIndex: 0,
@@ -7099,7 +7161,6 @@ function tourNext() {
                                                 name: val
                                             });
 
-                                            // Fallback for names that might have been mapped with underscores instead of spaces
                                             if (val.indexOf(' ') !== -1) {
                                                 var valUnderscored = val.replace(/ /g, '_');
                                                 myChart.dispatchAction({
@@ -7114,39 +7175,31 @@ function tourNext() {
                                                 });
                                             }
 
-                                            // Ensure previous element is restored
-                                            if (window.sivoGeocoderPulsedNodes) {
-                                                window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                                    n.classList.remove('sivo-anim-fade-pulse-highlight');
-                                                });
-                                            }
-                                            window.sivoGeocoderPulsedNodes = [];
+                                            // Start new pulse interval using setOption
+                                            if (targetedItems.length > 0) {
+                                                var t = 0;
+                                                window.sivoGeocoderPulseInterval = setInterval(function() {
+                                                    t += 0.05;
+                                                    var opacity = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(t)); // 0.4 to 1.0
 
-                                            var possibleNames = [val];
-                                            if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
-
-                                            // Pulse via CSS animation on the underlying SVG DOM nodes
-                                            possibleNames.forEach(function(n) {
-                                                document.querySelectorAll(`[id="${n}"], [name="${n}"]`).forEach(function(node) {
-                                                    node.classList.add('sivo-anim-fade-pulse-highlight');
-                                                    window.sivoGeocoderPulsedNodes.push(node);
-                                                });
-                                            });
-
-                                            // Ensure styles are added once
-                                            if (!document.getElementById('sivo-geocoder-pulse-style')) {
-                                                var styleEl = document.createElement('style');
-                                                styleEl.id = 'sivo-geocoder-pulse-style';
-                                                styleEl.innerHTML = `
-                                                @keyframes sivo-highlight-pulse {
-                                                    0% { opacity: 0.4; }
-                                                    50% { opacity: 1.0; }
-                                                    100% { opacity: 0.4; }
-                                                }
-                                                .sivo-anim-fade-pulse-highlight {
-                                                    animation: sivo-highlight-pulse 2s infinite ease-in-out !important;
-                                                }`;
-                                                document.head.appendChild(styleEl);
+                                                    targetedItems.forEach(function(item) {
+                                                        try {
+                                                            var c = item.chart;
+                                                            var currentOption = c.getOption();
+                                                            var series = currentOption.series[item.seriesIndex];
+                                                            if (series && series.data) {
+                                                                for (var i = 0; i < series.data.length; i++) {
+                                                                    if (series.data[i].name === item.name) {
+                                                                        if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
+                                                                        series.data[i].itemStyle.opacity = opacity;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                            c.setOption({series: currentOption.series});
+                                                        } catch(e) {}
+                                                    });
+                                                }, 50);
                                             }
                                         } catch (e) {
                                             console.log("Could not highlight element named " + val, e);
@@ -7169,12 +7222,31 @@ function tourNext() {
                                         });
                                     } catch(e) {}
 
-                                    if (window.sivoGeocoderPulsedNodes) {
-                                        window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                            n.classList.remove('sivo-anim-fade-pulse-highlight');
-                                        });
-                                        window.sivoGeocoderPulsedNodes = [];
+                                    // Clear interval if not found
+                                    if (window.sivoGeocoderPulseInterval) {
+                                        clearInterval(window.sivoGeocoderPulseInterval);
+                                        window.sivoGeocoderPulseInterval = null;
                                     }
+                                    if (window.sivoGeocoderOriginalOpacity) {
+                                        window.sivoGeocoderOriginalOpacity.forEach(function(item) {
+                                            try {
+                                                var c = item.chart;
+                                                var currentOption = c.getOption();
+                                                var series = currentOption.series[item.seriesIndex];
+                                                if (series && series.data) {
+                                                    for (var i = 0; i < series.data.length; i++) {
+                                                        if (series.data[i].name === item.name) {
+                                                            if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
+                                                            series.data[i].itemStyle.opacity = item.originalOpacity;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                c.setOption({series: currentOption.series});
+                                            } catch(e) {}
+                                        });
+                                    }
+                                    window.sivoGeocoderOriginalOpacity = [];
 
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');
                                     if (existing) existing.remove();
