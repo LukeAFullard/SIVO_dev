@@ -604,7 +604,7 @@
 
         /* Navigation Menu Styles */
         .sivo-nav-btn {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -624,7 +624,7 @@
             transform: translateY(-1px);
         }
         .sivo-nav-menu {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -818,7 +818,7 @@
 
 
         .sivo-nav-btn {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -841,7 +841,7 @@
             transform: translateY(-1px);
         }
         .sivo-nav-menu {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -951,76 +951,6 @@
     </template>
 
 
-    <!-- Navigation Menu -->
-
-
-    <div id="sivo-nav-container">
-        <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </div>
-        <div id="sivo-nav-menu" class="sivo-nav-menu">
-
-
-
-                        <a class="sivo-nav-item" href="https://www.horizons.govt.nz/" target="_self">Horizons Regional Council</a>
-
-
-
-
-
-
-
-                        <a class="sivo-nav-item" href="../../../index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../../../index.html', 600);">Home</a>
-
-
-
-
-
-
-
-                        <a class="sivo-nav-item" href="../../air/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../../air/index.html', 600);">Air</a>
-
-
-
-
-
-
-
-                        <a class="sivo-nav-item" href="../../land/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../../land/index.html', 600);">Land</a>
-
-
-
-
-
-
-                    <div class="sivo-nav-header">Water</div>
-
-
-
-
-
-
-                                <a class="sivo-nav-subitem" href="../issues/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../issues/index.html', 600);">Issues</a>
-
-
-
-
-
-                                <a class="sivo-nav-subitem" href="index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'index.html', 600);">Science</a>
-
-
-
-
-
-                                <a class="sivo-nav-subitem" href="../help/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../help/index.html', 600);">How to help</a>
-
-
-
-
-
-        </div>
-    </div>
-
 
 
 
@@ -1052,7 +982,7 @@
 
 
 
-            <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px;">
+            <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; ">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
                     <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Water Science
@@ -1665,6 +1595,9 @@ Click on any of the management zones to read a detailed scientific breakdown for
                     }
                 }
 
+                // Get the details panels config
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 500, "fade_in": false, "fade_start_time_ms": 0, "padding": "10px", "placeholder": "# Water Science\n## What does the science say?\n\nUnderstanding our water quality requires comprehensive testing and scientific analysis. This helps us ensure the health of our waterways for future generations.\n\nUse the map on the right to discover which Freshwater Management Unit (FMU) you are in. Search your address in the top left of the graphic.\n\nOur 7 Management Zones:\n* Puketoi ki Tai\n* Manawat\u016b\n* Rangit\u012bkei-Turakina\n* Waiopehu\n* Kai Iwi\n* Whangaehu\n* Whanganui\n\nClick on any of the management zones to read a detailed scientific breakdown for that area!\n", "show_element_name": false, "title": ""}};
+
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
@@ -1674,20 +1607,24 @@ Click on any of the management zones to read a detailed scientific breakdown for
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
+                        const blockId = panel.getAttribute('data-block-id');
+                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        container.innerHTML = `<h3>${safeName}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                        container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
+                        const blockId = panel.getAttribute('data-block-id');
+                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         if (tooltipContent) {
                             var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
-                            container.innerHTML = `<h3>${safeName}</h3>${safeTooltip}`;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeTooltip}`;
                         } else {
-                            container.innerHTML = `<h3>${safeName}</h3><p>No additional details mapped.</p>`;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
                         }
                     });
                 }
@@ -2159,5 +2096,77 @@ Click on any of the management zones to read a detailed scientific breakdown for
             initGeocoder();
         }
 </script>
+
+
+    <!-- Navigation Menu -->
+
+
+    <div id="sivo-nav-container">
+        <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
+        <div id="sivo-nav-menu" class="sivo-nav-menu">
+
+
+
+                        <a class="sivo-nav-item" href="https://www.horizons.govt.nz/" target="_self">Horizons Regional Council</a>
+
+
+
+
+
+
+
+                        <a class="sivo-nav-item" href="../../../index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../../../index.html', 600);">Home</a>
+
+
+
+
+
+
+
+                        <a class="sivo-nav-item" href="../../air/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../../air/index.html', 600);">Air</a>
+
+
+
+
+
+
+
+                        <a class="sivo-nav-item" href="../../land/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../../land/index.html', 600);">Land</a>
+
+
+
+
+
+
+                    <div class="sivo-nav-header">Water</div>
+
+
+
+
+
+
+                                <a class="sivo-nav-subitem" href="../issues/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../issues/index.html', 600);">Issues</a>
+
+
+
+
+
+                                <a class="sivo-nav-subitem" href="index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'index.html', 600);">Science</a>
+
+
+
+
+
+                                <a class="sivo-nav-subitem" href="../help/index.html" target="_self" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = '../help/index.html', 600);">How to help</a>
+
+
+
+
+
+        </div>
+    </div>
+
 </body>
 </html>
