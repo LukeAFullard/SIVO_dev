@@ -173,6 +173,7 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
 
             if transparent_lines:
                 item_style['borderColor'] = 'transparent'
+                item_style['borderWidth'] = 0
 
             if theme.get('animation'):
                 data_item['animation_class'] = theme.get('animation')
