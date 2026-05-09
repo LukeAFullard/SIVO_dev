@@ -814,6 +814,7 @@
 
         // --- Keyboard Events for Panning ---
         window.addEventListener('keydown', (e) => {
+            if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'text') return;
             if (e.code === 'Space' && !isSpacePressed) {
                 isSpacePressed = true;
                 canvas.style.cursor = 'grab';
@@ -822,6 +823,7 @@
         });
 
         window.addEventListener('keyup', (e) => {
+            if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'text') return;
             if (e.code === 'Space') {
                 isSpacePressed = false;
                 isPanning = false;
@@ -1285,11 +1287,30 @@
                 const li = document.createElement('li');
                 li.className = 'shape-item';
                 li.style.borderLeft = selectedShapeIndices.has(index) ? '3px solid #3b82f6' : '3px solid transparent';
+                li.style.position = 'relative';
 
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.value = shape.id;
+
+                // Force input to be front and accessible
+                input.style.position = 'relative';
+                input.style.zIndex = '1000';
+                input.style.pointerEvents = 'auto';
+                input.style.userSelect = 'auto';
+
+                input.addEventListener('input', (e) => {
+                    shapes[index].id = e.target.value;
+                });
                 input.addEventListener('change', (e) => updateShapeId(index, e.target.value));
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.target.blur();
+                    }
+                    e.stopPropagation();
+                });
+                input.addEventListener('mousedown', (e) => e.stopPropagation());
+                input.addEventListener('click', (e) => e.stopPropagation());
                 input.addEventListener('focus', () => {
                     selectedShapeIndices.clear();
                     selectedShapeIndices.add(index);

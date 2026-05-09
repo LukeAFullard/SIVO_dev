@@ -1751,15 +1751,6 @@
                 </div>
             </div>
 
-
-            <!-- Navigation Menu -->
-            <div id="sivo-nav-container" style="display: none;">
-                <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                </div>
-                <div id="sivo-nav-menu" class="sivo-nav-menu"></div>
-            </div>
-
             <div class="zoom-controls">
                 <div class="zoom-btn" onclick="toggleFullscreen()" id="fullscreen-btn" style="display: none;" title="Toggle Fullscreen">
                     <svg style="width:16px; height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
@@ -4577,7 +4568,18 @@ if (originalId) {
                             </div>
                         </div>`;
                     } else if (action.action_type === 'url') {
-                        window.open(action.url, action.target);
+                        if (action.target === '_blank') {
+                            window.open(action.url, '_blank');
+                        } else {
+                            if (action.transition) {
+                                document.body.classList.add(action.transition);
+                                setTimeout(function() {
+                                    window.location.href = action.url;
+                                }, 600);
+                            } else {
+                                window.location.href = action.url;
+                            }
+                        }
                     } else if (action.action_type === 'drill_through') {
                         if (action.target === '_blank') {
                             window.open(action.url, '_blank');
@@ -8469,5 +8471,15 @@ function tourNext() {
         });
 </script>
 
+
+
+
+            <!-- Navigation Menu -->
+            <div id="sivo-nav-container" style="display: none;">
+                <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </div>
+                <div id="sivo-nav-menu" class="sivo-nav-menu"></div>
+            </div>
 </body>
 </html>

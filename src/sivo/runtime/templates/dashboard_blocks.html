@@ -969,45 +969,7 @@
         </div>
     </template>
 
-    {% if navigation_menu %}
-    <!-- Navigation Menu -->
 
-
-    <div id="sivo-nav-container">
-        <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </div>
-        <div id="sivo-nav-menu" class="sivo-nav-menu">
-            {% for item in navigation_menu %}
-                {% if item.url %}
-                    {% if item.url_transition %}
-                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ item.url_transition }}'); setTimeout(() => window.location.href = '{{ item.url }}', 600);">{{ item.label }}</a>
-                    {% else %}
-                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}">{{ item.label }}</a>
-                    {% endif %}
-                {% elif item.view_id %}
-                    <a class="sivo-nav-item" href="#{{ item.view_id }}">{{ item.label }}</a>
-                {% else %}
-                    <div class="sivo-nav-header">{{ item.label }}</div>
-                {% endif %}
-
-                {% if item.sublinks %}
-                    {% for sub in item.sublinks %}
-                        {% if sub.url %}
-                            {% if sub.url_transition %}
-                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ sub.url_transition }}'); setTimeout(() => window.location.href = '{{ sub.url }}', 600);">{{ sub.label }}</a>
-                            {% else %}
-                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}">{{ sub.label }}</a>
-                            {% endif %}
-                        {% elif sub.view_id %}
-                            <a class="sivo-nav-subitem" href="#{{ sub.view_id }}">{{ sub.label }}</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 
 
     {% if title %}
@@ -1432,7 +1394,12 @@
                 if(!params.name) return;
 
                 const viewData = viewsData[chartId];
+                if (!viewData || !viewData.actions_manifest) return;
+
+                // bundle_generator.py stores an array of actions directly at viewData.actions_manifest[params.name]
+                // and NOT a config object containing an .actions property.
                 const elementActions = viewData.actions_manifest[params.name];
+                if (!elementActions) return;
 
                 let tooltipContent = null;
                 let payloadData = null;
@@ -1452,7 +1419,36 @@
                             if (action.target === '_blank') {
                                 window.open(action.url, '_blank');
                             } else {
-                                window.location.href = action.url;
+                                if (action.transition) {
+                                    document.body.classList.add(action.transition);
+                                    setTimeout(function() {
+                                        window.location.href = action.url;
+                                    }, 600);
+                                } else {
+                                    window.location.href = action.url;
+                                }
+                            }
+                        } else if (action.action_type === 'drill_through') {
+                            if (action.target === '_blank') {
+                                window.open(action.url, '_blank');
+                            } else {
+                                if (action.transition) {
+                                    var transitionClassBase = 'sivo-view-transition-' + action.transition;
+                                    chartDom.classList.add(transitionClassBase + '-out');
+
+                                    var overlayContainer = document.querySelector('.sivo-native-overlay-svg-container');
+                                    if (overlayContainer) {
+                                        overlayContainer.style.transition = 'all 0.5s ease-in-out';
+                                        overlayContainer.style.opacity = '0';
+                                    }
+
+                                    setTimeout(function() {
+                                        var separator = action.url.indexOf('?') !== -1 ? '&' : '?';
+                                        window.location.href = action.url + separator + 'sivo_transition_in=' + action.transition;
+                                    }, 500);
+                                } else {
+                                    window.location.href = action.url;
+                                }
                             }
                         } else if (action.action_type === 'zoom') {
                             var opt = chart.getOption();
@@ -1625,6 +1621,9 @@
                     }
                 }
 
+                // Get the details panels config
+                const detailsConfig = {{ details_panels | tojson }};
+
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
@@ -1634,20 +1633,24 @@
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
+                        const blockId = panel.getAttribute('data-block-id');
+                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        container.innerHTML = `<h3>${safeName}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                        container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
+                        const blockId = panel.getAttribute('data-block-id');
+                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         if (tooltipContent) {
                             var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
-                            container.innerHTML = `<h3>${safeName}</h3>${safeTooltip}`;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeTooltip}`;
                         } else {
-                            container.innerHTML = `<h3>${safeName}</h3><p>No additional details mapped.</p>`;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
                         }
                     });
                 }
@@ -2121,5 +2124,45 @@
             initGeocoder();
         }
 </script>
+
+    {% if navigation_menu %}
+    <!-- Navigation Menu -->
+
+
+    <div id="sivo-nav-container">
+        <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
+        <div id="sivo-nav-menu" class="sivo-nav-menu">
+            {% for item in navigation_menu %}
+                {% if item.url %}
+                    {% if item.url_transition %}
+                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ item.url_transition }}'); setTimeout(() => window.location.href = '{{ item.url }}', 600);">{{ item.label }}</a>
+                    {% else %}
+                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}">{{ item.label }}</a>
+                    {% endif %}
+                {% elif item.view_id %}
+                    <a class="sivo-nav-item" href="#{{ item.view_id }}">{{ item.label }}</a>
+                {% else %}
+                    <div class="sivo-nav-header">{{ item.label }}</div>
+                {% endif %}
+
+                {% if item.sublinks %}
+                    {% for sub in item.sublinks %}
+                        {% if sub.url %}
+                            {% if sub.url_transition %}
+                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ sub.url_transition }}'); setTimeout(() => window.location.href = '{{ sub.url }}', 600);">{{ sub.label }}</a>
+                            {% else %}
+                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}">{{ sub.label }}</a>
+                            {% endif %}
+                        {% elif sub.view_id %}
+                            <a class="sivo-nav-subitem" href="#{{ sub.view_id }}">{{ sub.label }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </body>
 </html>

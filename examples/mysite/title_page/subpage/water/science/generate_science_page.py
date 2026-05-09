@@ -60,8 +60,9 @@ for fmu in fmus:
     slug = fmu.lower().replace(" ", "-").replace("ā", "a").replace("ī", "i")
     app.map(
         element_id=fmu,
-        drill_through=f"fmu/{slug}/index.html",
-        drill_transition="page-turn-enter",
+        url=f"fmu/{slug}/index.html",
+        url_target="_self",
+        url_transition="page-turn-enter",
         hover_color="lightgray",
         tooltip=fmu,
         glow=True,
@@ -125,7 +126,8 @@ dashboard.add_details_panel(
     grid_area="markdown",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
-    padding="10px"
+    padding="10px",
+    show_element_name=False
 )
 
 dashboard.add_geocoder_block(
