@@ -1301,6 +1301,8 @@
                     }
                     e.stopPropagation();
                 });
+                input.addEventListener('mousedown', (e) => e.stopPropagation());
+                input.addEventListener('click', (e) => e.stopPropagation());
                 input.addEventListener('focus', () => {
                     selectedShapeIndices.clear();
                     selectedShapeIndices.add(index);
