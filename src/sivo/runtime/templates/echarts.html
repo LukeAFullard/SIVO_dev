@@ -7080,7 +7080,16 @@ function tourNext() {
                                                 seriesIndex: 0
                                             });
                                             myChart.dispatchAction({
+                                                type: 'unselect',
+                                                seriesIndex: 0
+                                            });
+                                            myChart.dispatchAction({
                                                 type: 'highlight',
+                                                seriesIndex: 0,
+                                                name: val
+                                            });
+                                            myChart.dispatchAction({
+                                                type: 'select',
                                                 seriesIndex: 0,
                                                 name: val
                                             });
@@ -7090,6 +7099,11 @@ function tourNext() {
                                                 var valUnderscored = val.replace(/ /g, '_');
                                                 myChart.dispatchAction({
                                                     type: 'highlight',
+                                                    seriesIndex: 0,
+                                                    name: valUnderscored
+                                                });
+                                                myChart.dispatchAction({
+                                                    type: 'select',
                                                     seriesIndex: 0,
                                                     name: valUnderscored
                                                 });
@@ -7107,6 +7121,10 @@ function tourNext() {
                                     try {
                                         myChart.dispatchAction({
                                             type: 'downplay',
+                                            seriesIndex: 0
+                                        });
+                                        myChart.dispatchAction({
+                                            type: 'unselect',
                                             seriesIndex: 0
                                         });
                                     } catch(e) {}
