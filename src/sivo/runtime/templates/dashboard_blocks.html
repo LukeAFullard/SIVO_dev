@@ -1419,7 +1419,14 @@
                             if (action.target === '_blank') {
                                 window.open(action.url, '_blank');
                             } else {
-                                window.location.href = action.url;
+                                if (action.transition) {
+                                    document.body.classList.add(action.transition);
+                                    setTimeout(function() {
+                                        window.location.href = action.url;
+                                    }, 600);
+                                } else {
+                                    window.location.href = action.url;
+                                }
                             }
                         } else if (action.action_type === 'drill_through') {
                             if (action.target === '_blank') {

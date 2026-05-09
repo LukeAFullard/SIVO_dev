@@ -62,7 +62,8 @@ for fmu in fmus:
         element_id=fmu,
         url=f"fmu/{slug}/index.html",
         url_target="_self",
-                hover_color="lightgray",
+        url_transition="page-turn-enter",
+        hover_color="lightgray",
         tooltip=fmu,
         glow=True,
         markdown=md_content
