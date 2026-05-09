@@ -17,23 +17,8 @@ fmus = [
     "Whanganui"
 ]
 
-# Generate a placeholder SVG with 7 rectangles side-by-side
-rects = []
-colors = ["#fca5a5", "#fdba74", "#fcd34d", "#86efac", "#67e8f9", "#93c5fd", "#d8b4fe"]
-for i, fmu in enumerate(fmus):
-    x = 50 + (i % 3) * 220
-    y = 50 + (i // 3) * 150
-    rects.append(f'<rect id="{fmu}" name="{fmu}" x="{x}" y="{y}" width="200" height="120" fill="{colors[i]}" stroke="#333" stroke-width="2"/>')
-    rects.append(f'<text x="{x + 100}" y="{y + 60}" text-anchor="middle" dominant-baseline="middle" font-size="16" fill="#000">{fmu}</text>')
-
-svg_content = f"""<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-    <rect width="800" height="600" fill="#f8fafc" />
-    <text x="400" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">Freshwater Management Units (Placeholder)</text>
-    {''.join(rects)}
-</svg>"""
-
-app = Sivo.from_string(
-    svg_content,
+app = Sivo.from_svg(
+    os.path.join(os.path.dirname(__file__), "sivo_template.svg"),
     enable_geocoder=True,
     geocode_provider="nominatim",
     geocode_country_codes="nz",
@@ -43,6 +28,11 @@ app = Sivo.from_string(
     disable_resizer=True,
     lock_zoom_out=True,
     lock_scroll_bounds=True
+)
+
+app.add_svg_background_image(
+    "nz_comms_map_04_zoomed_detailed.png",
+    insert_after="background"
 )
 
 app.bind_geocoder_intersection(
@@ -58,8 +48,9 @@ with open(os.path.join(os.path.dirname(__file__), "placeholder.md"), "r", encodi
 
 for fmu in fmus:
     slug = fmu.lower().replace(" ", "-").replace("ā", "a").replace("ī", "i")
+    element_id = fmu.replace(" ", "_")
     app.map(
-        element_id=fmu,
+        element_id=element_id,
         url=f"fmu/{slug}/index.html",
         url_target="_self",
         url_transition="page-turn-enter",
