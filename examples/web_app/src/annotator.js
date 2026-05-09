@@ -814,6 +814,7 @@
 
         // --- Keyboard Events for Panning ---
         window.addEventListener('keydown', (e) => {
+            if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'text') return;
             if (e.code === 'Space' && !isSpacePressed) {
                 isSpacePressed = true;
                 canvas.style.cursor = 'grab';
@@ -822,6 +823,7 @@
         });
 
         window.addEventListener('keyup', (e) => {
+            if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'text') return;
             if (e.code === 'Space') {
                 isSpacePressed = false;
                 isPanning = false;
@@ -1289,7 +1291,16 @@
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.value = shape.id;
+                input.addEventListener('input', (e) => {
+                    shapes[index].id = e.target.value;
+                });
                 input.addEventListener('change', (e) => updateShapeId(index, e.target.value));
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.target.blur();
+                    }
+                    e.stopPropagation();
+                });
                 input.addEventListener('focus', () => {
                     selectedShapeIndices.clear();
                     selectedShapeIndices.add(index);
