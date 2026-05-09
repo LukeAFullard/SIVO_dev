@@ -226,14 +226,14 @@
                     </div>
                 </div>
                 {% elif block.type == "details" %}
-                <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+                <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}" style="grid-column: span {{ block.col_span }};">
                     <div class="card-header">{{ details_panels[block.id].title }}</div>
                     <div class="card-content sivo-details-content" id="container-{{ block.id }}">
                         <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
                     </div>
                 </div>
                 {% elif block.type == "metrics" %}
-                <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+                <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}" style="grid-column: span {{ block.col_span }};">
                     <div class="card-header">{{ metrics_panels[block.id].title }}</div>
                     <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
                         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -268,14 +268,14 @@
                     </div>
                 </div>
                 {% elif block.type == "details" %}
-                <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}">
+                <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}">
                     <div class="card-header">{{ details_panels[block.id].title }}</div>
                     <div class="card-content sivo-details-content" id="container-{{ block.id }}">
                         <p class="placeholder-text" style="color: #64748b;">{{ details_panels[block.id].placeholder }}</p>
                     </div>
                 </div>
                 {% elif block.type == "metrics" %}
-                <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}">
+                <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}">
                     <div class="card-header">{{ metrics_panels[block.id].title }}</div>
                     <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
                         <div style="display: flex; flex-direction: column; gap: 0.75rem;">

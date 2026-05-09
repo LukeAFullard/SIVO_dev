@@ -225,7 +225,7 @@
                     </div>
                 </div>
                 {% elif block.type == "details" %}
-                <div class="card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}">
+                <div class="card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}">
                     <div class="card-header">{{ details_panels[block.id].title }}</div>
                     <div class="card-content sivo-details-content" id="container-{{ block.id }}">
                         <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-style: italic; text-align: center;">
@@ -234,7 +234,7 @@
                     </div>
                 </div>
                 {% elif block.type == "metrics" %}
-                <div class="card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}">
+                <div class="card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}">
                     <div class="card-header">{{ metrics_panels[block.id].title }}</div>
                     <div class="card-content sivo-metrics-content" id="container-{{ block.id }}" style="display: flex; flex-direction: column; justify-content: center;">
                         {% for metric in metrics_panels[block.id].metrics %}
@@ -545,16 +545,20 @@
                     document.getElementById('sivo-sliding-sidebar').classList.add('active');
 
                     detailsPanels.forEach(panel => {
+                        const showName = panel.getAttribute('data-show-name') !== 'false';
+                        const headerHtml = showName ? `<h3 style="margin-top:0; color:var(--text-color); font-size:1.25rem;">${params.name}</h3>` : '';
                         const container = panel.querySelector('.sivo-details-content');
-                        container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color); font-size:1.25rem;">${params.name}</h3><p style="color: #94a3b8; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                        container.innerHTML = `${headerHtml}<p style="color: #94a3b8; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     detailsPanels.forEach(panel => {
+                        const showName = panel.getAttribute('data-show-name') !== 'false';
+                        const headerHtml = showName ? `<h3 style="margin-top:0; color:var(--text-color); font-size:1.25rem;">${params.name}</h3>` : '';
                         const container = panel.querySelector('.sivo-details-content');
                         if (tooltipContent) {
-                            container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color); font-size:1.25rem;">${params.name}</h3>${tooltipContent}`;
+                            container.innerHTML = `${headerHtml}${tooltipContent}`;
                         } else {
-                            container.innerHTML = `<h3 style="margin-top:0; color:var(--text-color); font-size:1.25rem;">${params.name}</h3><p style="color: var(--text-muted);">No additional details mapped.</p>`;
+                            container.innerHTML = `${headerHtml}<p style="color: var(--text-muted);">No additional details mapped.</p>`;
                         }
                     });
                 }

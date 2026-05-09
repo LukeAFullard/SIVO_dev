@@ -280,7 +280,7 @@
                 </div>
             </div>
             {% elif block.type == "details" %}
-            <div class="minimal-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+            <div class="minimal-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}" style="grid-column: span {{ block.col_span }};">
                 <div class="card-header">{{ details_panels[block.id].title }}</div>
                 <div class="card-content sivo-details-content" id="container-{{ block.id }}">
                     <div class="placeholder-content" style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-muted); font-style: italic; text-align: center;">
@@ -289,7 +289,7 @@
                 </div>
             </div>
             {% elif block.type == "metrics" %}
-            <div class="minimal-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="grid-column: span {{ block.col_span }};">
+            <div class="minimal-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-show-name="{{ 'true' if details_panels[block.id].show_element_name else 'false' }}" style="grid-column: span {{ block.col_span }};">
                 <div class="card-header">{{ metrics_panels[block.id].title }}</div>
                 <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
                     {% for metric in metrics_panels[block.id].metrics %}

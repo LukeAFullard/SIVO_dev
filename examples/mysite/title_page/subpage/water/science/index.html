@@ -604,7 +604,7 @@
 
         /* Navigation Menu Styles */
         .sivo-nav-btn {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -624,7 +624,7 @@
             transform: translateY(-1px);
         }
         .sivo-nav-menu {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -818,7 +818,7 @@
 
 
         .sivo-nav-btn {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -841,7 +841,7 @@
             transform: translateY(-1px);
         }
         .sivo-nav-menu {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -1052,7 +1052,7 @@
 
 
 
-            <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px;">
+            <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" data-show-name="false" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
                     <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Water Science
@@ -1674,20 +1674,24 @@ Click on any of the management zones to read a detailed scientific breakdown for
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
+                        const showName = panel.getAttribute('data-show-name') !== 'false';
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        container.innerHTML = `<h3>${safeName}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                        var headerHtml = showName ? `<h3>${safeName}</h3>` : '';
+                        container.innerHTML = `${headerHtml}<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
+                        const showName = panel.getAttribute('data-show-name') !== 'false';
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        var headerHtml = showName ? `<h3>${safeName}</h3>` : '';
                         if (tooltipContent) {
                             var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
-                            container.innerHTML = `<h3>${safeName}</h3>${safeTooltip}`;
+                            container.innerHTML = `${headerHtml}${safeTooltip}`;
                         } else {
-                            container.innerHTML = `<h3>${safeName}</h3><p>No additional details mapped.</p>`;
+                            container.innerHTML = `${headerHtml}<p>No additional details mapped.</p>`;
                         }
                     });
                 }
