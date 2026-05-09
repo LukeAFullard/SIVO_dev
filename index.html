@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
-    <title>{{ title }}</title>
+    <title>Test Navigation Menu</title>
 
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    {% if confetti %}
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
-    {% endif %}
+
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-    {% if marked %}
-    <!-- Include marked -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    {% endif %}
+
 
     <style>
         :root {
@@ -41,23 +36,7 @@
             max-width: 100vw;
         }
 
-        {% if background_image_url %}
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            max-width: 100%;
-            max-height: 100%;
-            background-image: url('{{ background_image_url | safe }}');
-            background-size: {{ background_image_size | default('cover') }};
-            background-position: center;
-            opacity: {{ background_image_opacity if background_image_opacity is defined else 1.0 }};
-            z-index: -1;
-        }
-        {% endif %}
+
 
         header {
             background-color: var(--card-bg);
@@ -75,17 +54,15 @@
 
         .dashboard-container {
             display: grid;
-            gap: {{ gap | default('1.5rem') }};
+            gap: 1.5rem;
             padding: 1.5rem;
             flex: 1;
             margin: 0 auto;
             width: 100%;
-            max-width: {{ width | default('100%') }};
+            max-width: 100%;
             /* Remove overflow: hidden so body can scroll if needed */
-            grid-template-columns: repeat({{ columns }}, 1fr);
-            {% if desktop_grid %}
-            grid-template-areas: {{ desktop_grid | safe }};
-            {% endif %}
+            grid-template-columns: repeat(3, 1fr);
+
         }
 
         .sivo-card {
@@ -119,25 +96,10 @@
             overflow: hidden;
         }
 
-        {% if background_image_url %}
-        .sivo-card, .html-card, header {
-            background-color: rgba(255, 255, 255, 0.85) !important;
-            backdrop-filter: blur(10px);
-        }
-        {% endif %}
 
 
-        {% if theme == 'transparent' %}
-        .sivo-card, .html-card, header {
-            background-color: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            backdrop-filter: none !important;
-        }
-        .card-header {
-            display: none !important;
-        }
-        {% endif %}
+
+
 
         .sivo-container {
             flex: 1 1 0;
@@ -219,29 +181,22 @@
                 /* Responsive Design */
         @media (max-width: 900px) {
             .dashboard-container {
-                max-width: {{ mobile_width | default('100%') }};
-                {% if mobile_gap %}
-                gap: {{ mobile_gap }};
-                {% endif %}
-                {% if mobile_grid %}
-                grid-template-areas: {{ mobile_grid | safe }};
-                {% if mobile_grid_cols %}
-                grid-template-columns: repeat({{ mobile_grid_cols }}, minmax(0, 1fr));
-                {% else %}
-                grid-template-columns: unset;
-                {% endif %}
-                {% else %}
+                max-width: 100%;
+
+                gap: 1rem;
+
+
                 display: flex;
                 flex-direction: column;
                 grid-template-columns: unset;
-                {% endif %}
+
             }
 
-            {% if not mobile_grid %}
+
             .sivo-card, .html-card, .sivo-details-panel, .sivo-metrics-panel {
                 width: 100%;
             }
-            {% endif %}
+
             .sivo-card {
                 min-height: 300px;
             }
@@ -835,17 +790,9 @@
             color: #475569;
             z-index: 1002;
             transition: all 0.2s ease;
-            {% if navigation_menu_position == 'top-left' %}
-            top: 20px; left: 20px;
-            {% elif navigation_menu_position == 'top-right' %}
+
             top: 20px; right: 20px;
-            {% elif navigation_menu_position == 'bottom-left' %}
-            bottom: 20px; left: 20px;
-            {% elif navigation_menu_position == 'bottom-right' %}
-            bottom: 20px; right: 20px;
-            {% else %}
-            top: 20px; right: 20px;
-            {% endif %}
+
         }
         .sivo-nav-btn:hover {
             background: #f8fafc;
@@ -864,17 +811,9 @@
             flex-direction: column;
             opacity: 0;
             transition: opacity 0.2s ease, transform 0.2s ease;
-            {% if navigation_menu_position == 'top-left' %}
-            top: 70px; left: 20px; transform: translateY(-10px);
-            {% elif navigation_menu_position == 'top-right' %}
+
             top: 70px; right: 20px; transform: translateY(-10px);
-            {% elif navigation_menu_position == 'bottom-left' %}
-            bottom: 70px; left: 20px; transform: translateY(10px);
-            {% elif navigation_menu_position == 'bottom-right' %}
-            bottom: 70px; right: 20px; transform: translateY(10px);
-            {% else %}
-            top: 70px; right: 20px; transform: translateY(-10px);
-            {% endif %}
+
         }
         .sivo-nav-menu.active {
             display: flex;
@@ -950,7 +889,7 @@
         }
 
     </style>
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
+    <style id="custom-css"></style>
 </head>
 <body>
 
@@ -969,7 +908,7 @@
         </div>
     </template>
 
-    {% if navigation_menu %}
+
     <!-- Navigation Menu -->
 
 
@@ -978,114 +917,212 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </div>
         <div id="sivo-nav-menu" class="sivo-nav-menu">
-            {% for item in navigation_menu %}
-                {% if item.url %}
-                    {% if item.url_transition %}
-                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ item.url_transition }}'); setTimeout(() => window.location.href = '{{ item.url }}', 600);">{{ item.label }}</a>
-                    {% else %}
-                        <a class="sivo-nav-item" href="{{ item.url }}" target="{{ item.target | default('_self') }}">{{ item.label }}</a>
-                    {% endif %}
-                {% elif item.view_id %}
-                    <a class="sivo-nav-item" href="#{{ item.view_id }}">{{ item.label }}</a>
-                {% else %}
-                    <div class="sivo-nav-header">{{ item.label }}</div>
-                {% endif %}
 
-                {% if item.sublinks %}
-                    {% for sub in item.sublinks %}
-                        {% if sub.url %}
-                            {% if sub.url_transition %}
-                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}" onclick="event.preventDefault(); document.body.classList.add('{{ sub.url_transition }}'); setTimeout(() => window.location.href = '{{ sub.url }}', 600);">{{ sub.label }}</a>
-                            {% else %}
-                                <a class="sivo-nav-subitem" href="{{ sub.url }}" target="{{ sub.target | default('_self') }}">{{ sub.label }}</a>
-                            {% endif %}
-                        {% elif sub.view_id %}
-                            <a class="sivo-nav-subitem" href="#{{ sub.view_id }}">{{ sub.label }}</a>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
+
+
+                        <a class="sivo-nav-item" href="#" target="_self">Home</a>
+
+
+
+
+
+
+
+                        <a class="sivo-nav-item" href="#" target="_self">About</a>
+
+
+
+
+
         </div>
     </div>
-    {% endif %}
 
 
-    {% if title %}
+
+
     <header>
-        <h1>{{ title }}</h1>
+        <h1>Test Navigation Menu</h1>
     </header>
-    {% endif %}
+
 
     <div class="dashboard-container" id="dashboard-container">
-        {% for block in layout_order %}
-            {% set grid_style = '' %}
-            {% if desktop_grid and block.grid_area %}
-                {% set grid_style = 'grid-area: ' ~ block.grid_area ~ ';' %}
-            {% elif not desktop_grid and block.col_span %}
-                {% set grid_style = 'grid-column: span ' ~ block.col_span ~ ';' %}
-            {% endif %}
 
-            {% set overflow_class = "sivo-card-visible-overflow" if block.overflow_visible else "" %}
-            {% set inline_min_height = "min-height: " ~ block.min_height ~ " !important;" if block.min_height else "" %}
 
-            {% if block.type == "sivo" %}
-            <div class="sivo-card {{ overflow_class }}" id="card-{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }}">
-                <div class="card-header">{{ block.id | title }}</div>
-                <div class="sivo-container" id="container-{{ block.id }}">
-                    <div id="chart-{{ block.id }}" style="width: 100%; height: 100%;"></div>
-                    <div id="overlay-{{ block.id }}" class="sivo-native-overlay-svg-container"></div>
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Hello this is a test. We should be able to scroll to see the fixed navigation menu.</div>
                 </div>
             </div>
-            {% elif block.type == "html" %}
-            <div class="html-card" id="card-{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }}">
-                <div class="card-content" id="container-{{ block.id }}">
-                    {{ html_blocks[block.id] | safe }}
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_0" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_0">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
                 </div>
             </div>
-            {% elif block.type == "details" %}
-            <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} {% if details_panels[block.id].background_color %}background-color: {{ details_panels[block.id].background_color }} !important;{% endif %} {% if details_panels[block.id].border_radius %}border-radius: {{ details_panels[block.id].border_radius }};{% endif %} {% if details_panels[block.id].padding %}padding: {{ details_panels[block.id].padding }};{% endif %}">
-                <div class="card-header">{{ details_panels[block.id].title }}</div>
-                <div class="card-content sivo-details-content" id="container-{{ block.id }}">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-{{ block.id }}">{{ details_panels[block.id].placeholder }}</p>
-                </div>
-                <script>
-                    (function() {
-                        const rawPlaceholder = {{ details_panels[block.id].placeholder | tojson }};
-                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
-                            const container = document.getElementById('container-{{ block.id }}');
-                            if (container) {
-                                container.innerHTML = marked.parse(rawPlaceholder);
-                            }
-                        }
-                    })();
-                </script>
-            </div>
-            {% elif block.type == "metrics" %}
-            <div class="html-card sivo-metrics-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }}">
-                <div class="card-header">{{ metrics_panels[block.id].title }}</div>
-                <div class="card-content sivo-metrics-content" id="container-{{ block.id }}">
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        {% for metric in metrics_panels[block.id].metrics %}
-                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 0.5rem;">
-                            <strong>{{ metric | title }}:</strong>
-                            <span class="metric-value" data-metric-key="{{ metric }}" style="font-weight: bold; color: var(--primary-color);">---</span>
-                        </div>
-                        {% endfor %}
-                    </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_1" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_1">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
                 </div>
             </div>
-            {% elif block.type == "geocoder" %}
-            <div class="html-card sivo-geocoder-panel {{ overflow_class }}" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; box-shadow: none; position: relative;">
-                {% if block.text %}
-                <div class="sivo-geocoder-text" style="width: 100%; margin-bottom: 0.5rem; text-align: left; font-weight: 500; color: #333;">
-                    {{ block.text }}
-                </div>
-                {% endif %}
-                <div class="card-content" id="container-{{ block.id }}" style="width: 100%; padding: 0; position: relative;">
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_2" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_2">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
                 </div>
             </div>
-            {% endif %}
-        {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_3" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_3">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_4" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_4">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_5" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_5">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_6" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_6">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_7" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_7">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_8" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_8">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card" id="card-text_block_9" style="grid-column: span 1; ">
+                <div class="card-content" id="container-text_block_9">
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text Placeholder text </div>
+                </div>
+            </div>
+
+
     </div>
 
     <!-- Global Sliding Sidebar Overlay -->
@@ -1120,7 +1157,7 @@
         });
 
         // SIVO passes `views_data` directly to this template
-        const viewsData = {{ views_data | safe }};
+        const viewsData = {};
         const activeCharts = {};
         window.sivoToggleImageState = window.sivoToggleImageState || {};
 
@@ -1672,9 +1709,7 @@
         }
 
         // Inject Custom JS if provided
-        {% if custom_js %}
-            {{ custom_js | safe }}
-        {% endif %}
+
 
         // Handle back/forward cache (bfcache) restoration
 
