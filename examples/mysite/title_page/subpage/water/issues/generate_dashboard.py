@@ -126,6 +126,16 @@ for icon in icons:
         "ry": "5"
     })
 
+    # Add specific fade properties based on icon index
+    fade_params = {}
+    idx = int(icon["id"].replace("icon", "")) - 1
+    if idx < 2:
+        fade_params = {"fade_in": True, "fade_start_time_ms": 0, "fade_duration_ms": 1300}
+    elif idx < 4:
+        fade_params = {"fade_in": True, "fade_start_time_ms": 600, "fade_duration_ms": 1300}
+    else:
+        fade_params = {"fade_in": True, "fade_start_time_ms": 1200, "fade_duration_ms": 1300}
+
     # Map the interactive layer using the blank name. Set hover_color to transparent.
     sivo_app.map(
         blank_name,
@@ -135,7 +145,14 @@ for icon in icons:
         border_color="transparent",       # No border by default
         border_width=3,                   # Give it thickness so hover is visible
         hover_color="transparent",        # No highlight on hover
-        glow=False                        # No shadow/glow on hover to prevent highlight
+        glow=False,                       # No shadow/glow on hover to prevent highlight
+        **fade_params
+    )
+
+    # Also apply fade into the image directly so we can see it load in
+    sivo_app.map(
+        "img_vis",
+        **fade_params
     )
 
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
@@ -153,7 +170,10 @@ dashboard.add_details_panel(
     grid_area="details",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
-    padding="10px"
+    padding="10px",
+    fade_in=True,
+    fade_start_time_ms=1200,
+    fade_duration_ms=1300
 )
 
 # Right image (4 columns now)
@@ -162,7 +182,10 @@ dashboard.add_image_block(
     image_url="koura-blue.png",
     col_span=4,
     grid_area="image",
-    object_fit="contain"
+    object_fit="contain",
+    fade_in=True,
+    fade_start_time_ms=1200,
+    fade_duration_ms=1300
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")

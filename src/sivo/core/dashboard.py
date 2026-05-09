@@ -142,7 +142,7 @@ class SivoDashboard:
 
         self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area, overflow_visible=overflow_visible, min_height=min_height)
 
-    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, background_color: Optional[str] = None, border_radius: Optional[str] = None, padding: Optional[str] = None):
+    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, background_color: Optional[str] = None, border_radius: Optional[str] = None, padding: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the clicked element's `html` (tooltip content) mapping.
@@ -152,7 +152,10 @@ class SivoDashboard:
             "placeholder": placeholder,
             "background_color": background_color,
             "border_radius": border_radius,
-            "padding": padding
+            "padding": padding,
+            "fade_in": fade_in,
+            "fade_start_time_ms": fade_start_time_ms,
+            "fade_duration_ms": fade_duration_ms
         }
         self.layout_order.append({"type": "details", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
 

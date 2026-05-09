@@ -1043,7 +1043,7 @@
                 </div>
             </div>
             {% elif block.type == "details" %}
-            <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} {% if details_panels[block.id].background_color %}background-color: {{ details_panels[block.id].background_color }} !important;{% endif %} {% if details_panels[block.id].border_radius %}border-radius: {{ details_panels[block.id].border_radius }};{% endif %} {% if details_panels[block.id].padding %}padding: {{ details_panels[block.id].padding }};{% endif %}">
+            <div class="html-card sivo-details-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} {% if details_panels[block.id].background_color %}background-color: {{ details_panels[block.id].background_color }} !important;{% endif %} {% if details_panels[block.id].border_radius %}border-radius: {{ details_panels[block.id].border_radius }};{% endif %} {% if details_panels[block.id].padding %}padding: {{ details_panels[block.id].padding }};{% endif %} {% if details_panels[block.id].fade_in %}opacity: 0; animation: sivo-fade-in-card {{ details_panels[block.id].fade_duration_ms / 1000.0 }}s ease-in-out forwards; animation-delay: {{ details_panels[block.id].fade_start_time_ms / 1000.0 }}s;{% endif %}">
                 <div class="card-header">{{ details_panels[block.id].title }}</div>
                 <div class="card-content sivo-details-content" id="container-{{ block.id }}">
                     <p class="placeholder-text" style="color: #64748b;" id="placeholder-{{ block.id }}">{{ details_panels[block.id].placeholder }}</p>
