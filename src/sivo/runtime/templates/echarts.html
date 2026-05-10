@@ -7109,7 +7109,13 @@ function tourNext() {
                                                             for (var i = 0; i < series.data.length; i++) {
                                                                 if (series.data[i].name === item.name) {
                                                                     if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
+                                                                    if (!series.data[i].select) series.data[i].select = { itemStyle: {} };
+                                                                    if (!series.data[i].select.itemStyle) series.data[i].select.itemStyle = {};
+                                                                    if (!series.data[i].emphasis) series.data[i].emphasis = { itemStyle: {} };
+                                                                    if (!series.data[i].emphasis.itemStyle) series.data[i].emphasis.itemStyle = {};
                                                                     series.data[i].itemStyle.opacity = item.originalOpacity;
+                                                                    series.data[i].select.itemStyle.opacity = item.originalOpacity;
+                                                                    series.data[i].emphasis.itemStyle.opacity = item.originalOpacity;
                                                                     break;
                                                                 }
                                                             }
@@ -7191,7 +7197,13 @@ function tourNext() {
                                                                 for (var i = 0; i < series.data.length; i++) {
                                                                     if (series.data[i].name === item.name) {
                                                                         if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
+                                                                        if (!series.data[i].select) series.data[i].select = { itemStyle: {} };
+                                                                        if (!series.data[i].select.itemStyle) series.data[i].select.itemStyle = {};
+                                                                        if (!series.data[i].emphasis) series.data[i].emphasis = { itemStyle: {} };
+                                                                        if (!series.data[i].emphasis.itemStyle) series.data[i].emphasis.itemStyle = {};
                                                                         series.data[i].itemStyle.opacity = opacity;
+                                                                        series.data[i].select.itemStyle.opacity = opacity;
+                                                                        series.data[i].emphasis.itemStyle.opacity = opacity;
                                                                         break;
                                                                     }
                                                                 }
