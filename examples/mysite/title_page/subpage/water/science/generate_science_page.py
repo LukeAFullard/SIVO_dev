@@ -29,7 +29,8 @@ app = Sivo.from_svg(
     lock_zoom_out=True,
     lock_scroll_bounds=True,
     transparent_template_lines=True,
-    layout_size="80%"
+    layout_size="120%",
+    mobile_layout_size="100%"
 )
 
 app.add_svg_background_image(
