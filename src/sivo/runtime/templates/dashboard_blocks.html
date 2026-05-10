@@ -1905,123 +1905,59 @@
                                         }
 
                                         // Try to trigger an ECharts highlight action if the mapped element exists on any dashboard chart
-                                        var possibleNames = [val];
-                                        if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
-
-                                        // Clear previous interval if any
-                                        if (window.sivoGeocoderPulseInterval) {
-                                            clearInterval(window.sivoGeocoderPulseInterval);
-                                            window.sivoGeocoderPulseInterval = null;
-                                        }
-
-                                        // Restore previous opacity
-                                        if (window.sivoGeocoderOriginalOpacity) {
-                                            window.sivoGeocoderOriginalOpacity.forEach(function(item) {
-                                                try {
-                                                    var c = item.chart;
-                                                    var currentOption = c.getOption();
-                                                    var series = currentOption.series[item.seriesIndex];
-                                                    if (series && series.data) {
-                                                        for (var i = 0; i < series.data.length; i++) {
-                                                            if (series.data[i].name === item.name) {
-                                                                if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
-                                                                if (!series.data[i].select) series.data[i].select = { itemStyle: {} };
-                                                                if (!series.data[i].select.itemStyle) series.data[i].select.itemStyle = {};
-                                                                if (!series.data[i].emphasis) series.data[i].emphasis = { itemStyle: {} };
-                                                                if (!series.data[i].emphasis.itemStyle) series.data[i].emphasis.itemStyle = {};
-                                                                series.data[i].itemStyle.opacity = item.originalOpacity;
-                                                                series.data[i].select.itemStyle.opacity = item.originalOpacity;
-                                                                series.data[i].emphasis.itemStyle.opacity = item.originalOpacity;
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                    c.setOption({series: currentOption.series});
-                                                } catch(e) {}
-                                            });
-                                        }
-                                        window.sivoGeocoderOriginalOpacity = [];
-
-                                        var targetedItems = [];
-
                                         for (var cid in window.sivoCharts) {
                                             var c = window.sivoCharts[cid];
                                             try {
                                                 c.dispatchAction({ type: 'downplay', seriesIndex: 0 });
                                                 c.dispatchAction({ type: 'unselect', seriesIndex: 0 });
-
-                                                var currentOption = c.getOption();
-                                                var series = currentOption.series[0];
-                                                if (series && series.data) {
-                                                    possibleNames.forEach(function(pn) {
-                                                        for (var i = 0; i < series.data.length; i++) {
-                                                            if (series.data[i].name === pn) {
-                                                                var currentOpacity = 1.0;
-                                                                if (series.data[i].itemStyle && series.data[i].itemStyle.opacity !== undefined) {
-                                                                    currentOpacity = series.data[i].itemStyle.opacity;
-                                                                }
-
-                                                                // Store original state
-                                                                window.sivoGeocoderOriginalOpacity.push({
-                                                                    chart: c,
-                                                                    seriesIndex: 0,
-                                                                    name: pn,
-                                                                    originalOpacity: currentOpacity
-                                                                });
-
-                                                                targetedItems.push({
-                                                                    chart: c,
-                                                                    seriesIndex: 0,
-                                                                    name: pn
-                                                                });
-                                                            }
-                                                        }
-                                                    });
-                                                }
-
+                                                // ECharts needs the exact name match to highlight the SVG region
                                                 c.dispatchAction({ type: 'highlight', seriesIndex: 0, name: val });
                                                 c.dispatchAction({ type: 'select', seriesIndex: 0, name: val });
 
+                                                // Fallback for names that might have been mapped with underscores instead of spaces
                                                 if (val.indexOf(' ') !== -1) {
                                                     var valUnderscored = val.replace(/ /g, '_');
                                                     c.dispatchAction({ type: 'highlight', seriesIndex: 0, name: valUnderscored });
                                                     c.dispatchAction({ type: 'select', seriesIndex: 0, name: valUnderscored });
                                                 }
+                                                // Force re-render to ensure visual update immediately
                                                 c.resize();
                                             } catch (e) {}
                                         }
 
-                                        // Start new pulse interval using setOption
-                                        if (targetedItems.length > 0) {
-                                            var t = 0;
-                                            window.sivoGeocoderPulseInterval = setInterval(function() {
-                                                t += 0.05;
-                                                var opacity = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(t)); // 0.4 to 1.0
+                                        // Ensure previous element is restored
+                                        if (window.sivoGeocoderPulsedNodes) {
+                                            window.sivoGeocoderPulsedNodes.forEach(function(n) {
+                                                n.classList.remove('sivo-anim-fade-pulse-highlight');
+                                            });
+                                        }
+                                        window.sivoGeocoderPulsedNodes = [];
 
-                                                targetedItems.forEach(function(item) {
-                                                    try {
-                                                        var c = item.chart;
-                                                        var currentOption = c.getOption();
-                                                        var series = currentOption.series[item.seriesIndex];
-                                                        if (series && series.data) {
-                                                            for (var i = 0; i < series.data.length; i++) {
-                                                                if (series.data[i].name === item.name) {
-                                                                    if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
-                                                                    if (!series.data[i].select) series.data[i].select = { itemStyle: {} };
-                                                                    if (!series.data[i].select.itemStyle) series.data[i].select.itemStyle = {};
-                                                                    if (!series.data[i].emphasis) series.data[i].emphasis = { itemStyle: {} };
-                                                                    if (!series.data[i].emphasis.itemStyle) series.data[i].emphasis.itemStyle = {};
-                                                                    series.data[i].itemStyle.opacity = opacity;
-                                                                    series.data[i].select.itemStyle.opacity = opacity;
-                                                                    series.data[i].emphasis.itemStyle.opacity = opacity;
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
-                                                        c.setOption({series: currentOption.series});
-                                                    } catch(e) {}
-                                                });
-                                            }, 50);
+                                        var possibleNames = [val];
+                                        if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+
+                                        // Pulse via CSS animation on the underlying SVG DOM nodes
+                                        possibleNames.forEach(function(n) {
+                                            document.querySelectorAll(`[id="${n}"], [name="${n}"]`).forEach(function(node) {
+                                                node.classList.add('sivo-anim-fade-pulse-highlight');
+                                                window.sivoGeocoderPulsedNodes.push(node);
+                                            });
+                                        });
+
+                                        // Ensure styles are added once
+                                        if (!document.getElementById('sivo-geocoder-pulse-style')) {
+                                            var styleEl = document.createElement('style');
+                                            styleEl.id = 'sivo-geocoder-pulse-style';
+                                            styleEl.innerHTML = `
+                                            @keyframes sivo-highlight-pulse {
+                                                0% { opacity: 0.4; }
+                                                50% { opacity: 1.0; }
+                                                100% { opacity: 0.4; }
+                                            }
+                                            .sivo-anim-fade-pulse-highlight {
+                                                animation: sivo-highlight-pulse 2s infinite ease-in-out !important;
+                                            }`;
+                                            document.head.appendChild(styleEl);
                                         }
 
                                         found = true;
@@ -2037,31 +1973,12 @@
                                         } catch (e) {}
                                     }
 
-                                    // Clear interval if not found
-                                    if (window.sivoGeocoderPulseInterval) {
-                                        clearInterval(window.sivoGeocoderPulseInterval);
-                                        window.sivoGeocoderPulseInterval = null;
-                                    }
-                                    if (window.sivoGeocoderOriginalOpacity) {
-                                        window.sivoGeocoderOriginalOpacity.forEach(function(item) {
-                                            try {
-                                                var c = item.chart;
-                                                var currentOption = c.getOption();
-                                                var series = currentOption.series[item.seriesIndex];
-                                                if (series && series.data) {
-                                                    for (var i = 0; i < series.data.length; i++) {
-                                                        if (series.data[i].name === item.name) {
-                                                            if (!series.data[i].itemStyle) series.data[i].itemStyle = {};
-                                                            series.data[i].itemStyle.opacity = item.originalOpacity;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                                c.setOption({series: currentOption.series});
-                                            } catch(e) {}
+                                    if (window.sivoGeocoderPulsedNodes) {
+                                        window.sivoGeocoderPulsedNodes.forEach(function(n) {
+                                            n.classList.remove('sivo-anim-fade-pulse-highlight');
                                         });
+                                        window.sivoGeocoderPulsedNodes = [];
                                     }
-                                    window.sivoGeocoderOriginalOpacity = [];
 
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');
                                     if (existing) existing.remove();
