@@ -1110,7 +1110,7 @@
 
 
 
-            <div class="html-card sivo-details-panel" id="card-details" data-block-id="details" style="grid-area: details;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px;">
+            <div class="html-card sivo-details-panel" id="card-details" data-block-id="details" style="grid-area: details;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-details">
                     <p class="placeholder-text" style="color: #64748b;" id="placeholder-details"># Protecting Our Waterways
@@ -1302,6 +1302,11 @@ For more information you may be interested to read our [State of Environment Rep
                         map: 'sivoMap_' + blockId,
                         roam: viewData.lock_canvas ? false : true,
                         label: { show: false },
+                        itemStyle: {
+                            borderColor: viewData.transparent_template_lines ? 'transparent' : '#cbd5e1',
+                            borderWidth: viewData.transparent_template_lines ? 0 : 1,
+                            areaColor: (viewData.theme === 'transparent' || viewData.transparent_template_lines) ? 'transparent' : '#f1f5f9'
+                        },
                         emphasis: { disabled: false },
                         selectedMode: false,
                         select: { disabled: true },
@@ -2051,18 +2056,18 @@ For more information you may be interested to read our [State of Environment Rep
                                                 try {
                                                     var opts = c.getOption();
                                                     if (opts && opts.series && opts.series[0] && opts.series[0].data) {
-                                                        var restoreData = [];
+                                                        var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
                                                         window.sivoGeocoderPulsedNames.forEach(function(pn) {
-                                                            var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
                                                             if (existingItem) {
-                                                                var newItem = JSON.parse(JSON.stringify(existingItem));
-                                                                if (newItem.itemStyle) newItem.itemStyle.opacity = 1.0;
-                                                                if (newItem.emphasis && newItem.emphasis.itemStyle) newItem.emphasis.itemStyle.opacity = 1.0;
-                                                                if (newItem.select && newItem.select.itemStyle) newItem.select.itemStyle.opacity = 1.0;
-                                                                restoreData.push(newItem);
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
                                                             }
                                                         });
-                                                        if (restoreData.length > 0) {
+                                                        if (hasUpdate) {
                                                             c.setOption({ animation: false, series: [{ data: restoreData }] });
                                                         }
                                                     }
@@ -2085,26 +2090,26 @@ For more information you may be interested to read our [State of Environment Rep
                                                 try {
                                                     var opts = c.getOption();
                                                     if (opts && opts.series && opts.series[0] && opts.series[0].data) {
-                                                        var updateData = [];
+                                                        var updateData = opts.series[0].data;
+                                                        var hasUpdate = false;
                                                         window.sivoGeocoderPulsedNames.forEach(function(pn) {
-                                                            var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
+                                                            var existingItem = updateData.find(function(d) { return d.name === pn; });
                                                             if (existingItem) {
-                                                                var newItem = JSON.parse(JSON.stringify(existingItem));
-                                                                if (!newItem.itemStyle) newItem.itemStyle = {};
-                                                                newItem.itemStyle.opacity = opacity;
+                                                                if (!existingItem.itemStyle) existingItem.itemStyle = {};
+                                                                existingItem.itemStyle.opacity = opacity;
 
-                                                                if (!newItem.emphasis) newItem.emphasis = {};
-                                                                if (!newItem.emphasis.itemStyle) newItem.emphasis.itemStyle = {};
-                                                                newItem.emphasis.itemStyle.opacity = opacity;
+                                                                if (!existingItem.emphasis) existingItem.emphasis = {};
+                                                                if (!existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle = {};
+                                                                existingItem.emphasis.itemStyle.opacity = opacity;
 
-                                                                if (!newItem.select) newItem.select = {};
-                                                                if (!newItem.select.itemStyle) newItem.select.itemStyle = {};
-                                                                newItem.select.itemStyle.opacity = opacity;
+                                                                if (!existingItem.select) existingItem.select = {};
+                                                                if (!existingItem.select.itemStyle) existingItem.select.itemStyle = {};
+                                                                existingItem.select.itemStyle.opacity = opacity;
 
-                                                                updateData.push(newItem);
+                                                                hasUpdate = true;
                                                             }
                                                         });
-                                                        if (updateData.length > 0) {
+                                                        if (hasUpdate) {
                                                             c.setOption({ animation: false, series: [{ data: updateData }] });
                                                         }
                                                     }
@@ -2136,20 +2141,20 @@ For more information you may be interested to read our [State of Environment Rep
                                             try {
                                                 var opts = c.getOption();
                                                 if (opts && opts.series && opts.series[0] && opts.series[0].data) {
-                                                    var restoreData = [];
-                                                    window.sivoGeocoderPulsedNames.forEach(function(pn) {
-                                                        var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
-                                                        if (existingItem) {
-                                                            var newItem = JSON.parse(JSON.stringify(existingItem));
-                                                            if (newItem.itemStyle) newItem.itemStyle.opacity = 1.0;
-                                                            if (newItem.emphasis && newItem.emphasis.itemStyle) newItem.emphasis.itemStyle.opacity = 1.0;
-                                                            if (newItem.select && newItem.select.itemStyle) newItem.select.itemStyle.opacity = 1.0;
-                                                            restoreData.push(newItem);
+                                                    var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            c.setOption({ animation: false, series: [{ data: restoreData }] });
                                                         }
-                                                    });
-                                                    if (restoreData.length > 0) {
-                                                        c.setOption({ animation: false, series: [{ data: restoreData }] });
-                                                    }
                                                 }
                                             } catch (e) {}
                                         }
