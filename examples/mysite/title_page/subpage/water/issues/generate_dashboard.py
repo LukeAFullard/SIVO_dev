@@ -153,7 +153,10 @@ dashboard.add_details_panel(
     grid_area="details",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
-    padding="10px"
+    padding="10px",
+    fade_in=True,
+    fade_start_time_ms=300,
+    fade_duration_ms=2000
 )
 
 # Right image (4 columns now)
