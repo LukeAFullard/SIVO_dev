@@ -818,7 +818,7 @@
 
         /* Navigation Menu Styles */
         .sivo-nav-btn {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -838,7 +838,7 @@
             transform: translateY(-1px);
         }
         .sivo-nav-menu {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -1687,6 +1687,7 @@
                 <input type="text" id="sivo-geocoder-input" placeholder="Search address or place..." autocomplete="off">
                 <div class="sivo-geocoder-spinner" id="sivo-geocoder-spinner"></div>
                 <div id="sivo-geocoder-results"></div>
+                <div id="sivo-geocoder-attribution" style="display:none; font-size: 10px; color: #64748b; text-align: center; padding-top: 4px;">Data © OpenStreetMap contributors, ODbL 1.0.</div>
             </div>
 
             <div id="sivo-title-container">
@@ -1722,15 +1723,6 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </button>
                 </div>
-            </div>
-
-
-            <!-- Navigation Menu -->
-            <div id="sivo-nav-container" style="display: none;">
-                <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                </div>
-                <div id="sivo-nav-menu" class="sivo-nav-menu"></div>
             </div>
 
             <div class="zoom-controls">
@@ -2112,7 +2104,7 @@
                     },
                     formatter: function (params) {
                         var dataIndex = echartsData.findIndex(item => item.name === params.name);
-                        var tooltipContent = params.name;
+                        var tooltipContent = "";
 
                         if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
                             tooltipContent = echartsData[dataIndex].tooltip;
@@ -2121,8 +2113,13 @@
                         if (dataBinding && dataBinding.data && dataBinding.data[params.name]) {
                             var val = dataBinding.data[params.name][dataBinding.key];
                             if (val !== undefined) {
+                                if (!tooltipContent) tooltipContent = params.name;
                                 tooltipContent += '<br/>' + dataBinding.key + ': <b>' + val + '</b>';
                             }
+                        }
+
+                        if (!tooltipContent) {
+                            return "";
                         }
 
                         return tooltipContent;
@@ -2136,8 +2133,8 @@
                         roam: view.lock_canvas ? false : true, // Enable zoom and pan
                         label: { show: false },
                         itemStyle: {
-                            borderColor: '#cbd5e1', // Sleek slate-300
-                            borderWidth: 1,
+                            borderColor: view.transparent_template_lines ? 'transparent' : '#cbd5e1', // Sleek slate-300
+                            borderWidth: view.transparent_template_lines ? 0 : 1,
                             areaColor: '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
@@ -4550,7 +4547,18 @@ if (originalId) {
                             </div>
                         </div>`;
                     } else if (action.action_type === 'url') {
-                        window.open(action.url, action.target);
+                        if (action.target === '_blank') {
+                            window.open(action.url, '_blank');
+                        } else {
+                            if (action.transition) {
+                                document.body.classList.add(action.transition);
+                                setTimeout(function() {
+                                    window.location.href = action.url;
+                                }, 600);
+                            } else {
+                                window.location.href = action.url;
+                            }
+                        }
                     } else if (action.action_type === 'drill_through') {
                         if (action.target === '_blank') {
                             window.open(action.url, '_blank');
@@ -6900,9 +6908,44 @@ function tourNext() {
 
             if (view.enable_geocoder) {
                 geocoderContainer.style.display = 'block';
-                if (view.enable_search) {
-                    geocoderContainer.style.top = '70px';
+                if (view.geocode_provider === 'nominatim') {
+                    var att = document.getElementById('sivo-geocoder-attribution');
+                    if (att) att.style.display = 'block';
+                }
+
+                var gPos = view.geocoder_position || 'top-center';
+                if (gPos === 'top-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'top-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-center') {
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
                 } else {
+                    // default top-center
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
+                }
+
+                if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
+                    geocoderContainer.style.top = '70px';
+                } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
                     geocoderContainer.style.top = '20px';
                 }
 
@@ -6997,19 +7040,168 @@ function tourNext() {
                                         var existing = document.getElementById('sivo-geocoder-overlay-result');
                                         if (existing) existing.remove();
 
+                                        // Ensure val is safely escaped
+                                        var safeVal = String(val).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
                                         if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
-                                            targetEl.innerHTML = val;
+                                            targetEl.innerHTML = safeVal;
                                         } else {
                                             var overlay = document.createElement('div');
                                             overlay.id = 'sivo-geocoder-overlay-result';
-                                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${val}</span></div>`;
+                                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${safeVal}</span></div>`;
                                             document.body.appendChild(overlay);
                                         }
+
+                                        // Try to trigger an ECharts highlight action if the mapped element exists
+                                        try {
+                                            myChart.dispatchAction({
+                                                type: 'downplay',
+                                                seriesIndex: 0
+                                            });
+                                            myChart.dispatchAction({
+                                                type: 'unselect',
+                                                seriesIndex: 0
+                                            });
+                                            myChart.dispatchAction({
+                                                type: 'highlight',
+                                                seriesIndex: 0,
+                                                name: val
+                                            });
+                                            myChart.dispatchAction({
+                                                type: 'select',
+                                                seriesIndex: 0,
+                                                name: val
+                                            });
+
+                                            // Fallback for names that might have been mapped with underscores instead of spaces
+                                            if (val.indexOf(' ') !== -1) {
+                                                var valUnderscored = val.replace(/ /g, '_');
+                                                myChart.dispatchAction({
+                                                    type: 'highlight',
+                                                    seriesIndex: 0,
+                                                    name: valUnderscored
+                                                });
+                                                myChart.dispatchAction({
+                                                    type: 'select',
+                                                    seriesIndex: 0,
+                                                    name: valUnderscored
+                                                });
+                                            }
+
+                                            if (window.sivoGeocoderPulseInterval) {
+                                                clearInterval(window.sivoGeocoderPulseInterval);
+                                                window.sivoGeocoderPulseInterval = null;
+                                            }
+
+                                            if (window.sivoGeocoderPulsedNames) {
+                                                try {
+                                                    var opts = myChart.getOption();
+                                                    if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                        var restoreData = [];
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                var newItem = JSON.parse(JSON.stringify(existingItem));
+                                                                if (newItem.itemStyle) newItem.itemStyle.opacity = 1.0;
+                                                                if (newItem.emphasis && newItem.emphasis.itemStyle) newItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (newItem.select && newItem.select.itemStyle) newItem.select.itemStyle.opacity = 1.0;
+                                                                restoreData.push(newItem);
+                                                            }
+                                                        });
+                                                        if (restoreData.length > 0) {
+                                                            myChart.setOption({ animation: false, series: [{ data: restoreData }] });
+                                                        }
+                                                    }
+                                                } catch (e) {}
+                                            }
+
+                                            var possibleNames = [val];
+                                            if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+                                            window.sivoGeocoderPulsedNames = possibleNames;
+
+                                            var startTime = Date.now();
+                                            window.sivoGeocoderPulseInterval = setInterval(function() {
+                                                var elapsed = Date.now() - startTime;
+                                                var progress = (elapsed % 2000) / 2000;
+                                                var opacity = 0.4 + 0.6 * (0.5 - 0.5 * Math.cos(progress * Math.PI * 2));
+
+                                                try {
+                                                    var opts = myChart.getOption();
+                                                    if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                        var updateData = [];
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                var newItem = JSON.parse(JSON.stringify(existingItem));
+                                                                if (!newItem.itemStyle) newItem.itemStyle = {};
+                                                                newItem.itemStyle.opacity = opacity;
+
+                                                                if (!newItem.emphasis) newItem.emphasis = {};
+                                                                if (!newItem.emphasis.itemStyle) newItem.emphasis.itemStyle = {};
+                                                                newItem.emphasis.itemStyle.opacity = opacity;
+
+                                                                if (!newItem.select) newItem.select = {};
+                                                                if (!newItem.select.itemStyle) newItem.select.itemStyle = {};
+                                                                newItem.select.itemStyle.opacity = opacity;
+
+                                                                updateData.push(newItem);
+                                                            }
+                                                        });
+                                                        if (updateData.length > 0) {
+                                                            myChart.setOption({ animation: false, series: [{ data: updateData }] });
+                                                        }
+                                                    }
+                                                } catch (e) {}
+                                            }, 100);
+                                        } catch (e) {
+                                            console.log("Could not highlight element named " + val, e);
+                                        }
+
                                         found = true;
                                         break;
                                     }
                                 }
                                 if (!found) {
+                                    // Make sure we unhighlight all if not found
+                                    try {
+                                        myChart.dispatchAction({
+                                            type: 'downplay',
+                                            seriesIndex: 0
+                                        });
+                                        myChart.dispatchAction({
+                                            type: 'unselect',
+                                            seriesIndex: 0
+                                        });
+                                    } catch(e) {}
+
+                                    if (window.sivoGeocoderPulseInterval) {
+                                        clearInterval(window.sivoGeocoderPulseInterval);
+                                        window.sivoGeocoderPulseInterval = null;
+                                    }
+
+                                    if (window.sivoGeocoderPulsedNames) {
+                                        try {
+                                            var opts = myChart.getOption();
+                                            if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                var restoreData = [];
+                                                window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                    var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
+                                                    if (existingItem) {
+                                                        var newItem = JSON.parse(JSON.stringify(existingItem));
+                                                        if (newItem.itemStyle) newItem.itemStyle.opacity = 1.0;
+                                                        if (newItem.emphasis && newItem.emphasis.itemStyle) newItem.emphasis.itemStyle.opacity = 1.0;
+                                                        if (newItem.select && newItem.select.itemStyle) newItem.select.itemStyle.opacity = 1.0;
+                                                        restoreData.push(newItem);
+                                                    }
+                                                });
+                                                if (restoreData.length > 0) {
+                                                    myChart.setOption({ animation: false, series: [{ data: restoreData }] });
+                                                }
+                                            }
+                                        } catch (e) {}
+                                        window.sivoGeocoderPulsedNames = [];
+                                    }
+
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');
                                     if (existing) existing.remove();
 
@@ -8380,5 +8572,15 @@ function tourNext() {
         });
 </script>
 
+
+
+
+            <!-- Navigation Menu -->
+            <div id="sivo-nav-container" style="display: none;">
+                <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </div>
+                <div id="sivo-nav-menu" class="sivo-nav-menu"></div>
+            </div>
 </body>
 </html>
