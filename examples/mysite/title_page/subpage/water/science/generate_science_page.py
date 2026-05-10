@@ -119,7 +119,10 @@ dashboard.add_details_panel(
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
     padding="10px",
-    show_element_name=False
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=300,
+    fade_duration_ms=2000
 )
 
 dashboard.add_geocoder_block(
