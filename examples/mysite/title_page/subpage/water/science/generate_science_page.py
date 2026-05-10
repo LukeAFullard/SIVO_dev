@@ -29,7 +29,7 @@ app = Sivo.from_svg(
     lock_zoom_out=True,
     lock_scroll_bounds=True,
     transparent_template_lines=True,
-    layout_size="120%",
+    layout_size="140%",
     mobile_layout_size="100%"
 )
 
