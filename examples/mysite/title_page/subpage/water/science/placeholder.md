@@ -1,17 +1,19 @@
-# Water Science
-## What does the science say?
+# The Science of Our Water
 
-Understanding our water quality requires comprehensive testing and scientific analysis. This helps us ensure the health of our waterways for future generations.
+Understanding the health of our rivers, lakes, and streams requires careful monitoring and scientific analysis. Tracking water quality and water use helps us protect these vital ecosystems for future generations.
 
-Use the map on the right to discover which Freshwater Management Unit (FMU) you are in. Search your address in the top left of the graphic.
+To manage our waterways effectively, the region is divided into specific geographic areas known as Freshwater Management Units (FMUs). 
 
-Our 7 Management Zones:
-* Puketoi ki Tai
-* Manawatū
-* Rangitīkei-Turakina
-* Waiopehu
-* Kai Iwi
-* Whangaehu
-* Whanganui
+**Find Your Local Waterway**
+Use the map on the right or search for your address in the search-bar above to discover which FMU you live in.
 
-Click on any of the management zones to read a detailed scientific breakdown for that area!
+**Our 7 Management Zones:**
+*   Puketoi ki Tai
+*   Manawatū
+*   Rangitīkei-Turakina
+*   Waiopehu
+*   Kai Iwi
+*   Whangaehu
+*   Whanganui
+
+**Click on any of the management zones in the map to explore a breakdown for your area.**
