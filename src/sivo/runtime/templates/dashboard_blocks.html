@@ -1185,6 +1185,11 @@
                         map: 'sivoMap_' + blockId,
                         roam: viewData.lock_canvas ? false : true,
                         label: { show: false },
+                        itemStyle: {
+                            borderColor: viewData.transparent_template_lines ? 'transparent' : '#cbd5e1',
+                            borderWidth: viewData.transparent_template_lines ? 0 : 1,
+                            areaColor: (viewData.theme === 'transparent' || viewData.transparent_template_lines) ? 'transparent' : '#f1f5f9'
+                        },
                         emphasis: { disabled: false },
                         selectedMode: false,
                         select: { disabled: true },
