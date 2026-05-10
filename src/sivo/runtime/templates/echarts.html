@@ -2161,7 +2161,7 @@
                         itemStyle: {
                             borderColor: view.transparent_template_lines ? 'transparent' : '#cbd5e1', // Sleek slate-300
                             borderWidth: view.transparent_template_lines ? 0 : 1,
-                            areaColor: '#f1f5f9' // Subtle slate-100
+                            areaColor: (view.theme === 'transparent' || view.transparent_template_lines) ? 'transparent' : '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
                             disabled: false
