@@ -1925,40 +1925,103 @@
                                             } catch (e) {}
                                         }
 
-                                        // Ensure previous element is restored
-                                        if (window.sivoGeocoderPulsedNodes) {
-                                            window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                                n.classList.remove('sivo-anim-fade-pulse-highlight');
-                                            });
+                                        // Clear previous interval if any
+                                        if (window.sivoGeocoderPulseInterval) {
+                                            clearInterval(window.sivoGeocoderPulseInterval);
+                                            window.sivoGeocoderPulseInterval = null;
                                         }
-                                        window.sivoGeocoderPulsedNodes = [];
+
+                                        // Restore opacity of previously pulsed elements
+                                        if (window.sivoGeocoderPulsedNames && window.sivoGeocoderPulsedNames.length > 0) {
+                                            for (var cid in window.sivoCharts) {
+                                                var c = window.sivoCharts[cid];
+                                                try {
+                                                    var seriesData = [];
+                                                    var currentData = c.getOption().series[0].data;
+                                                    window.sivoGeocoderPulsedNames.forEach(function(n) {
+                                                        var existingItem = currentData.find(d => d.name === n);
+                                                        if (existingItem) {
+                                                            if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                            if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                            if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+
+                                                            seriesData.push({
+                                                                name: n,
+                                                                itemStyle: existingItem.itemStyle,
+                                                                emphasis: existingItem.emphasis,
+                                                                select: existingItem.select
+                                                            });
+                                                        } else {
+                                                            seriesData.push({
+                                                                name: n,
+                                                                itemStyle: { opacity: 1.0 },
+                                                                emphasis: { itemStyle: { opacity: 1.0 } },
+                                                                select: { itemStyle: { opacity: 1.0 } }
+                                                            });
+                                                        }
+                                                    });
+                                                    c.setOption({
+                                                        animation: false,
+                                                        series: [{ data: seriesData }]
+                                                    });
+                                                } catch(e) {}
+                                            }
+                                        }
 
                                         var possibleNames = [val];
                                         if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+                                        window.sivoGeocoderPulsedNames = possibleNames;
 
-                                        // Pulse via CSS animation on the underlying SVG DOM nodes
-                                        possibleNames.forEach(function(n) {
-                                            document.querySelectorAll(`[id="${n}"], [name="${n}"]`).forEach(function(node) {
-                                                node.classList.add('sivo-anim-fade-pulse-highlight');
-                                                window.sivoGeocoderPulsedNodes.push(node);
-                                            });
-                                        });
+                                        // Pulse via ECharts setOption
+                                        var pulseStartTime = Date.now();
+                                        // Using 100ms interval to balance smoothness and performance
+                                        window.sivoGeocoderPulseInterval = setInterval(function() {
+                                            var elapsed = Date.now() - pulseStartTime;
+                                            var progress = (elapsed % 2000) / 2000;
+                                            // Oscillate opacity between 0.4 and 1.0
+                                            var opacity = 0.4 + 0.6 * (0.5 - 0.5 * Math.cos(progress * Math.PI * 2));
 
-                                        // Ensure styles are added once
-                                        if (!document.getElementById('sivo-geocoder-pulse-style')) {
-                                            var styleEl = document.createElement('style');
-                                            styleEl.id = 'sivo-geocoder-pulse-style';
-                                            styleEl.innerHTML = `
-                                            @keyframes sivo-highlight-pulse {
-                                                0% { opacity: 0.4; }
-                                                50% { opacity: 1.0; }
-                                                100% { opacity: 0.4; }
+                                            for (var cid in window.sivoCharts) {
+                                                var c = window.sivoCharts[cid];
+                                                try {
+                                                    var seriesData = [];
+                                                    var currentData = c.getOption().series[0].data;
+                                                    possibleNames.forEach(function(n) {
+                                                        var existingItem = currentData.find(d => d.name === n);
+                                                        if (existingItem) {
+                                                            if (!existingItem.itemStyle) existingItem.itemStyle = {};
+                                                            existingItem.itemStyle.opacity = opacity;
+                                                            if (!existingItem.emphasis) existingItem.emphasis = {};
+                                                            if (!existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle = {};
+                                                            existingItem.emphasis.itemStyle.opacity = opacity;
+                                                            if (!existingItem.select) existingItem.select = {};
+                                                            if (!existingItem.select.itemStyle) existingItem.select.itemStyle = {};
+                                                            existingItem.select.itemStyle.opacity = opacity;
+
+                                                            seriesData.push({
+                                                                name: n,
+                                                                itemStyle: existingItem.itemStyle,
+                                                                emphasis: existingItem.emphasis,
+                                                                select: existingItem.select
+                                                            });
+                                                        } else {
+                                                            seriesData.push({
+                                                                name: n,
+                                                                itemStyle: { opacity: opacity },
+                                                                emphasis: { itemStyle: { opacity: opacity } },
+                                                                select: { itemStyle: { opacity: opacity } }
+                                                            });
+                                                        }
+                                                    });
+                                                    c.setOption({
+                                                        animation: false,
+                                                        series: [{
+                                                            data: seriesData
+                                                        }]
+                                                    });
+                                                } catch(e) {}
                                             }
-                                            .sivo-anim-fade-pulse-highlight {
-                                                animation: sivo-highlight-pulse 2s infinite ease-in-out !important;
-                                            }`;
-                                            document.head.appendChild(styleEl);
-                                        }
+                                        }, 100);
 
                                         found = true;
                                         break;
@@ -1973,11 +2036,45 @@
                                         } catch (e) {}
                                     }
 
-                                    if (window.sivoGeocoderPulsedNodes) {
-                                        window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                            n.classList.remove('sivo-anim-fade-pulse-highlight');
-                                        });
-                                        window.sivoGeocoderPulsedNodes = [];
+                                    if (window.sivoGeocoderPulseInterval) {
+                                        clearInterval(window.sivoGeocoderPulseInterval);
+                                        window.sivoGeocoderPulseInterval = null;
+                                    }
+                                    if (window.sivoGeocoderPulsedNames && window.sivoGeocoderPulsedNames.length > 0) {
+                                        for (var cid in window.sivoCharts) {
+                                            var c = window.sivoCharts[cid];
+                                            try {
+                                                var seriesData = [];
+                                                var currentData = c.getOption().series[0].data;
+                                                window.sivoGeocoderPulsedNames.forEach(function(n) {
+                                                    var existingItem = currentData.find(d => d.name === n);
+                                                    if (existingItem) {
+                                                        if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                        if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                        if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+
+                                                        seriesData.push({
+                                                            name: n,
+                                                            itemStyle: existingItem.itemStyle,
+                                                            emphasis: existingItem.emphasis,
+                                                            select: existingItem.select
+                                                        });
+                                                    } else {
+                                                        seriesData.push({
+                                                            name: n,
+                                                            itemStyle: { opacity: 1.0 },
+                                                            emphasis: { itemStyle: { opacity: 1.0 } },
+                                                            select: { itemStyle: { opacity: 1.0 } }
+                                                        });
+                                                    }
+                                                });
+                                                c.setOption({
+                                                    animation: false,
+                                                    series: [{ data: seriesData }]
+                                                });
+                                            } catch(e) {}
+                                        }
+                                        window.sivoGeocoderPulsedNames = [];
                                     }
 
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');

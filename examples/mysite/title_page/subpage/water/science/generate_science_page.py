@@ -4,8 +4,8 @@ import textwrap
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../../..')))
 
-from src.sivo.core.dashboard import SivoDashboard
-from src.sivo.core.sivo import Sivo
+from sivo.core.dashboard import SivoDashboard
+from sivo.core.sivo import Sivo
 
 fmus = [
     "Puketoi ki Tai",
