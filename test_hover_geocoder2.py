@@ -32,15 +32,15 @@ def test_water_science_dashboard():
             json=[{
                 "lat": "5",
                 "lon": "5",
-                "display_name": "Test Address"
+                "display_name": "Manawatū"
             }]
         ))
 
-        page.fill("#sivo-geocoder-input", "Test Address")
+        page.fill("#sivo-geocoder-input", "Manawatū")
         page.keyboard.press("Enter")
 
         # Wait for the overlay result saying "Zone Found"
-        # overlay test logic replaced by manual visual verification in video
+        page.wait_for_selector("#sivo-geocoder-overlay-result", state="visible", timeout=10000)
 
         # Verify if ECharts updated. ECharts will render "select" or "highlight" styles onto the canvas.
         # We can hover over "Manawatū" and check tooltip text.
