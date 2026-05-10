@@ -7231,13 +7231,28 @@ function tourNext() {
                                     if (window.sivoGeocoderPulsedNames && window.sivoGeocoderPulsedNames.length > 0) {
                                         try {
                                             var seriesData = [];
+                                            var currentData = myChart.getOption().series[0].data;
                                             window.sivoGeocoderPulsedNames.forEach(function(n) {
-                                                seriesData.push({
-                                                    name: n,
-                                                    itemStyle: { opacity: 1.0 },
-                                                    emphasis: { itemStyle: { opacity: 1.0 } },
-                                                    select: { itemStyle: { opacity: 1.0 } }
-                                                });
+                                                var existingItem = currentData.find(d => d.name === n);
+                                                if (existingItem) {
+                                                    if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                    if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                    if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+
+                                                    seriesData.push({
+                                                        name: n,
+                                                        itemStyle: existingItem.itemStyle,
+                                                        emphasis: existingItem.emphasis,
+                                                        select: existingItem.select
+                                                    });
+                                                } else {
+                                                    seriesData.push({
+                                                        name: n,
+                                                        itemStyle: { opacity: 1.0 },
+                                                        emphasis: { itemStyle: { opacity: 1.0 } },
+                                                        select: { itemStyle: { opacity: 1.0 } }
+                                                    });
+                                                }
                                             });
                                             myChart.setOption({
                                                 animation: false,
