@@ -1886,7 +1886,35 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                             }
                                         }
 
-                                        // Try to trigger an ECharts highlight action if the mapped element exists on any dashboard chart
+                                                                                                                        // Try to trigger an ECharts highlight action if the mapped element exists on any dashboard chart
+                                        if (window.sivoGeocoderPulseTimer) {
+                                            clearInterval(window.sivoGeocoderPulseTimer);
+                                            window.sivoGeocoderPulseTimer = null;
+                                        }
+
+                                        // Make sure any previous pulsed elements are restored
+                                        if (window.sivoGeocoderPulsedCharts) {
+                                            window.sivoGeocoderPulsedCharts.forEach(function(cObj) {
+                                                try {
+                                                    var currentOpt = cObj.chart.getOption();
+                                                    var seriesData = currentOpt.series[0] ? currentOpt.series[0].data : [];
+                                                    cObj.indices.forEach(function(idxObj) {
+                                                        if (seriesData[idxObj.idx]) {
+                                                            if (!seriesData[idxObj.idx].itemStyle) seriesData[idxObj.idx].itemStyle = {};
+                                                            seriesData[idxObj.idx].itemStyle.opacity = idxObj.origOpacity;
+                                                        }
+                                                    });
+                                                    cObj.chart.setOption({ series: [{ data: seriesData, animationDurationUpdate: 0 }] });
+                                                } catch (e) {}
+                                            });
+                                            window.sivoGeocoderPulsedCharts = [];
+                                        }
+
+                                        var possibleNames = [val];
+                                        if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+
+                                        var chartsWithPulsing = [];
+
                                         for (var cid in window.sivoCharts) {
                                             var c = window.sivoCharts[cid];
                                             try {
@@ -1904,42 +1932,57 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                                 }
                                                 // Force re-render to ensure visual update immediately
                                                 c.resize();
+
+                                                var opt = c.getOption();
+                                                if (opt && opt.series && opt.series.length > 0) {
+                                                    var seriesData = opt.series[0].data;
+                                                    var indicesToPulse = [];
+                                                    for (var idx = 0; idx < seriesData.length; idx++) {
+                                                        var itemName = seriesData[idx].name;
+                                                        if (possibleNames.indexOf(itemName) !== -1) {
+                                                            var currentOpac = (seriesData[idx].itemStyle && seriesData[idx].itemStyle.opacity !== undefined) ? seriesData[idx].itemStyle.opacity : 1.0;
+                                                            indicesToPulse.push({ idx: idx, origOpacity: currentOpac });
+                                                        }
+                                                    }
+                                                    if (indicesToPulse.length > 0) {
+                                                        chartsWithPulsing.push({ chart: c, indices: indicesToPulse });
+                                                    }
+                                                }
                                             } catch (e) {}
                                         }
 
-                                        // Ensure previous element is restored
-                                        if (window.sivoGeocoderPulsedNodes) {
-                                            window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                                n.classList.remove('sivo-anim-fade-pulse-highlight');
-                                            });
-                                        }
-                                        window.sivoGeocoderPulsedNodes = [];
+                                        window.sivoGeocoderPulsedCharts = chartsWithPulsing;
 
-                                        var possibleNames = [val];
-                                        if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+                                        if (chartsWithPulsing.length > 0) {
+                                            var pulseStartTime = Date.now();
+                                            // Slower interval so we don't spam ECharts update loop
+                                            window.sivoGeocoderPulseTimer = setInterval(function() {
+                                                var elapsed = Date.now() - pulseStartTime;
+                                                var pulseVal = (Math.sin(elapsed / 200) + 1) / 2 * 0.6 + 0.4;
 
-                                        // Pulse via CSS animation on the underlying SVG DOM nodes
-                                        possibleNames.forEach(function(n) {
-                                            document.querySelectorAll(`[id="${n}"], [name="${n}"]`).forEach(function(node) {
-                                                node.classList.add('sivo-anim-fade-pulse-highlight');
-                                                window.sivoGeocoderPulsedNodes.push(node);
-                                            });
-                                        });
+                                                chartsWithPulsing.forEach(function(cObj) {
+                                                    try {
+                                                        var c = cObj.chart;
+                                                        var currentOpt = c.getOption();
+                                                        if (!currentOpt.series[0]) return;
+                                                        var newData = currentOpt.series[0].data;
 
-                                        // Ensure styles are added once
-                                        if (!document.getElementById('sivo-geocoder-pulse-style')) {
-                                            var styleEl = document.createElement('style');
-                                            styleEl.id = 'sivo-geocoder-pulse-style';
-                                            styleEl.innerHTML = `
-                                            @keyframes sivo-highlight-pulse {
-                                                0% { opacity: 0.4; }
-                                                50% { opacity: 1.0; }
-                                                100% { opacity: 0.4; }
-                                            }
-                                            .sivo-anim-fade-pulse-highlight {
-                                                animation: sivo-highlight-pulse 2s infinite ease-in-out !important;
-                                            }`;
-                                            document.head.appendChild(styleEl);
+                                                        cObj.indices.forEach(function(idxObj) {
+                                                            if (newData[idxObj.idx]) {
+                                                                if (!newData[idxObj.idx].itemStyle) newData[idxObj.idx].itemStyle = {};
+                                                                newData[idxObj.idx].itemStyle.opacity = pulseVal;
+                                                            }
+                                                        });
+
+                                                        c.setOption({
+                                                            series: [{
+                                                                data: newData,
+                                                                animationDurationUpdate: 0
+                                                            }]
+                                                        });
+                                                    } catch (e) {}
+                                                });
+                                            }, 100);
                                         }
 
                                         found = true;
@@ -1947,7 +1990,7 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                     }
                                 }
                                 if (!found) {
-                                    // Make sure we unhighlight all if not found
+                                                                                                            // Make sure we unhighlight all if not found
                                     for (var cid in window.sivoCharts) {
                                         try {
                                             window.sivoCharts[cid].dispatchAction({ type: 'downplay', seriesIndex: 0 });
@@ -1955,11 +1998,31 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                         } catch (e) {}
                                     }
 
-                                    if (window.sivoGeocoderPulsedNodes) {
-                                        window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                            n.classList.remove('sivo-anim-fade-pulse-highlight');
+                                    if (window.sivoGeocoderPulseTimer) {
+                                        clearInterval(window.sivoGeocoderPulseTimer);
+                                        window.sivoGeocoderPulseTimer = null;
+                                    }
+
+                                    // Make sure any previous pulsed elements are restored
+                                    if (window.sivoGeocoderPulsedCharts) {
+                                        window.sivoGeocoderPulsedCharts.forEach(function(cObj) {
+                                            try {
+                                                var currentOpt = cObj.chart.getOption();
+                                                var seriesData = currentOpt.series[0] ? currentOpt.series[0].data : [];
+                                                cObj.indices.forEach(function(idxObj) {
+                                                    if (seriesData[idxObj.idx]) {
+                                                        if (!seriesData[idxObj.idx].itemStyle) seriesData[idxObj.idx].itemStyle = {};
+                                                        seriesData[idxObj.idx].itemStyle.opacity = idxObj.origOpacity;
+                                                    }
+                                                });
+                                                cObj.chart.setOption({ series: [{ data: seriesData, animationDurationUpdate: 0 }] });
+                                            } catch (e) {}
                                         });
-                                        window.sivoGeocoderPulsedNodes = [];
+                                        window.sivoGeocoderPulsedCharts = [];
+                                    }
+                                    if (window.sivoGeocoderPulseHighlightOverlay) {
+                                        window.sivoGeocoderPulseHighlightOverlay.remove();
+                                        window.sivoGeocoderPulseHighlightOverlay = null;
                                     }
 
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');

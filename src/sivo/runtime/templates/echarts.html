@@ -7073,7 +7073,7 @@ function tourNext() {
                                             document.body.appendChild(overlay);
                                         }
 
-                                        // Try to trigger an ECharts highlight action if the mapped element exists
+                                                                                                                        // Try to trigger an ECharts highlight action if the mapped element exists
                                         try {
                                             myChart.dispatchAction({
                                                 type: 'downplay',
@@ -7109,39 +7109,68 @@ function tourNext() {
                                                 });
                                             }
 
-                                            // Ensure previous element is restored
-                                            if (window.sivoGeocoderPulsedNodes) {
-                                                window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                                    n.classList.remove('sivo-anim-fade-pulse-highlight');
-                                                });
+                                            // Handle native ECharts ItemStyle Opacity pulsing
+                                            if (window.sivoGeocoderPulseTimer) {
+                                                clearInterval(window.sivoGeocoderPulseTimer);
+                                                window.sivoGeocoderPulseTimer = null;
                                             }
-                                            window.sivoGeocoderPulsedNodes = [];
+
+                                            // Make sure any previous pulsed elements are restored
+                                            if (window.sivoGeocoderPulsedIndices && window.sivoGeocoderPulsedIndices.length > 0) {
+                                                var currentOpt = myChart.getOption();
+                                                var seriesData = currentOpt.series[0] ? currentOpt.series[0].data : [];
+                                                window.sivoGeocoderPulsedIndices.forEach(function(idxObj) {
+                                                    if (seriesData[idxObj.idx]) {
+                                                        if (!seriesData[idxObj.idx].itemStyle) seriesData[idxObj.idx].itemStyle = {};
+                                                        seriesData[idxObj.idx].itemStyle.opacity = idxObj.origOpacity;
+                                                    }
+                                                });
+                                                myChart.setOption({ series: [{ data: seriesData, animationDurationUpdate: 0 }] });
+                                                window.sivoGeocoderPulsedIndices = [];
+                                            }
 
                                             var possibleNames = [val];
                                             if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
 
-                                            // Pulse via CSS animation on the underlying SVG DOM nodes
-                                            possibleNames.forEach(function(n) {
-                                                document.querySelectorAll(`[id="${n}"], [name="${n}"]`).forEach(function(node) {
-                                                    node.classList.add('sivo-anim-fade-pulse-highlight');
-                                                    window.sivoGeocoderPulsedNodes.push(node);
-                                                });
-                                            });
+                                            var opt = myChart.getOption();
+                                            var seriesData = opt.series[0] ? opt.series[0].data : [];
+                                            var indicesToPulse = [];
 
-                                            // Ensure styles are added once
-                                            if (!document.getElementById('sivo-geocoder-pulse-style')) {
-                                                var styleEl = document.createElement('style');
-                                                styleEl.id = 'sivo-geocoder-pulse-style';
-                                                styleEl.innerHTML = `
-                                                @keyframes sivo-highlight-pulse {
-                                                    0% { opacity: 0.4; }
-                                                    50% { opacity: 1.0; }
-                                                    100% { opacity: 0.4; }
+                                            for (var idx = 0; idx < seriesData.length; idx++) {
+                                                var itemName = seriesData[idx].name;
+                                                if (possibleNames.indexOf(itemName) !== -1) {
+                                                    var currentOpac = (seriesData[idx].itemStyle && seriesData[idx].itemStyle.opacity !== undefined) ? seriesData[idx].itemStyle.opacity : 1.0;
+                                                    indicesToPulse.push({ idx: idx, origOpacity: currentOpac });
                                                 }
-                                                .sivo-anim-fade-pulse-highlight {
-                                                    animation: sivo-highlight-pulse 2s infinite ease-in-out !important;
-                                                }`;
-                                                document.head.appendChild(styleEl);
+                                            }
+
+                                            window.sivoGeocoderPulsedIndices = indicesToPulse;
+
+                                            if (indicesToPulse.length > 0) {
+                                                var pulseStartTime = Date.now();
+                                                // Slower interval so we don't spam ECharts update loop
+                                                window.sivoGeocoderPulseTimer = setInterval(function() {
+                                                    var elapsed = Date.now() - pulseStartTime;
+                                                    var pulseVal = (Math.sin(elapsed / 200) + 1) / 2 * 0.6 + 0.4;
+
+                                                    var currentOpt = myChart.getOption();
+                                                    if (!currentOpt.series[0]) return;
+                                                    var newData = currentOpt.series[0].data;
+
+                                                    indicesToPulse.forEach(function(idxObj) {
+                                                        if (newData[idxObj.idx]) {
+                                                            if (!newData[idxObj.idx].itemStyle) newData[idxObj.idx].itemStyle = {};
+                                                            newData[idxObj.idx].itemStyle.opacity = pulseVal;
+                                                        }
+                                                    });
+
+                                                    myChart.setOption({
+                                                        series: [{
+                                                            data: newData,
+                                                            animationDurationUpdate: 0
+                                                        }]
+                                                    });
+                                                }, 100);
                                             }
                                         } catch (e) {
                                             console.log("Could not highlight element named " + val, e);
@@ -7152,7 +7181,7 @@ function tourNext() {
                                     }
                                 }
                                 if (!found) {
-                                    // Make sure we unhighlight all if not found
+                                                                                                            // Make sure we unhighlight all if not found
                                     try {
                                         myChart.dispatchAction({
                                             type: 'downplay',
@@ -7164,11 +7193,25 @@ function tourNext() {
                                         });
                                     } catch(e) {}
 
-                                    if (window.sivoGeocoderPulsedNodes) {
-                                        window.sivoGeocoderPulsedNodes.forEach(function(n) {
-                                            n.classList.remove('sivo-anim-fade-pulse-highlight');
-                                        });
-                                        window.sivoGeocoderPulsedNodes = [];
+                                    if (window.sivoGeocoderPulseTimer) {
+                                        clearInterval(window.sivoGeocoderPulseTimer);
+                                        window.sivoGeocoderPulseTimer = null;
+                                    }
+
+                                    // Make sure any previous pulsed elements are restored
+                                    if (window.sivoGeocoderPulsedIndices && window.sivoGeocoderPulsedIndices.length > 0) {
+                                        try {
+                                            var currentOpt = myChart.getOption();
+                                            var seriesData = currentOpt.series[0] ? currentOpt.series[0].data : [];
+                                            window.sivoGeocoderPulsedIndices.forEach(function(idxObj) {
+                                                if (seriesData[idxObj.idx]) {
+                                                    if (!seriesData[idxObj.idx].itemStyle) seriesData[idxObj.idx].itemStyle = {};
+                                                    seriesData[idxObj.idx].itemStyle.opacity = idxObj.origOpacity;
+                                                }
+                                            });
+                                            myChart.setOption({ series: [{ data: seriesData, animationDurationUpdate: 0 }] });
+                                        } catch (e) {}
+                                        window.sivoGeocoderPulsedIndices = [];
                                     }
 
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');
