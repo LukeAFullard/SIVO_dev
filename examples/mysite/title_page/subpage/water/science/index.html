@@ -1947,18 +1947,18 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                                 try {
                                                     var opts = c.getOption();
                                                     if (opts && opts.series && opts.series[0] && opts.series[0].data) {
-                                                        var restoreData = [];
+                                                        var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
                                                         window.sivoGeocoderPulsedNames.forEach(function(pn) {
-                                                            var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
                                                             if (existingItem) {
-                                                                var newItem = JSON.parse(JSON.stringify(existingItem));
-                                                                if (newItem.itemStyle) newItem.itemStyle.opacity = 1.0;
-                                                                if (newItem.emphasis && newItem.emphasis.itemStyle) newItem.emphasis.itemStyle.opacity = 1.0;
-                                                                if (newItem.select && newItem.select.itemStyle) newItem.select.itemStyle.opacity = 1.0;
-                                                                restoreData.push(newItem);
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
                                                             }
                                                         });
-                                                        if (restoreData.length > 0) {
+                                                        if (hasUpdate) {
                                                             c.setOption({ animation: false, series: [{ data: restoreData }] });
                                                         }
                                                     }
@@ -1981,26 +1981,26 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                                 try {
                                                     var opts = c.getOption();
                                                     if (opts && opts.series && opts.series[0] && opts.series[0].data) {
-                                                        var updateData = [];
+                                                        var updateData = opts.series[0].data;
+                                                        var hasUpdate = false;
                                                         window.sivoGeocoderPulsedNames.forEach(function(pn) {
-                                                            var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
+                                                            var existingItem = updateData.find(function(d) { return d.name === pn; });
                                                             if (existingItem) {
-                                                                var newItem = JSON.parse(JSON.stringify(existingItem));
-                                                                if (!newItem.itemStyle) newItem.itemStyle = {};
-                                                                newItem.itemStyle.opacity = opacity;
+                                                                if (!existingItem.itemStyle) existingItem.itemStyle = {};
+                                                                existingItem.itemStyle.opacity = opacity;
 
-                                                                if (!newItem.emphasis) newItem.emphasis = {};
-                                                                if (!newItem.emphasis.itemStyle) newItem.emphasis.itemStyle = {};
-                                                                newItem.emphasis.itemStyle.opacity = opacity;
+                                                                if (!existingItem.emphasis) existingItem.emphasis = {};
+                                                                if (!existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle = {};
+                                                                existingItem.emphasis.itemStyle.opacity = opacity;
 
-                                                                if (!newItem.select) newItem.select = {};
-                                                                if (!newItem.select.itemStyle) newItem.select.itemStyle = {};
-                                                                newItem.select.itemStyle.opacity = opacity;
+                                                                if (!existingItem.select) existingItem.select = {};
+                                                                if (!existingItem.select.itemStyle) existingItem.select.itemStyle = {};
+                                                                existingItem.select.itemStyle.opacity = opacity;
 
-                                                                updateData.push(newItem);
+                                                                hasUpdate = true;
                                                             }
                                                         });
-                                                        if (updateData.length > 0) {
+                                                        if (hasUpdate) {
                                                             c.setOption({ animation: false, series: [{ data: updateData }] });
                                                         }
                                                     }
@@ -2032,20 +2032,20 @@ Click on any of the management zones to read a detailed scientific breakdown for
                                             try {
                                                 var opts = c.getOption();
                                                 if (opts && opts.series && opts.series[0] && opts.series[0].data) {
-                                                    var restoreData = [];
-                                                    window.sivoGeocoderPulsedNames.forEach(function(pn) {
-                                                        var existingItem = opts.series[0].data.find(function(d) { return d.name === pn; });
-                                                        if (existingItem) {
-                                                            var newItem = JSON.parse(JSON.stringify(existingItem));
-                                                            if (newItem.itemStyle) newItem.itemStyle.opacity = 1.0;
-                                                            if (newItem.emphasis && newItem.emphasis.itemStyle) newItem.emphasis.itemStyle.opacity = 1.0;
-                                                            if (newItem.select && newItem.select.itemStyle) newItem.select.itemStyle.opacity = 1.0;
-                                                            restoreData.push(newItem);
+                                                    var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            c.setOption({ animation: false, series: [{ data: restoreData }] });
                                                         }
-                                                    });
-                                                    if (restoreData.length > 0) {
-                                                        c.setOption({ animation: false, series: [{ data: restoreData }] });
-                                                    }
                                                 }
                                             } catch (e) {}
                                         }
