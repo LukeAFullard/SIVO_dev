@@ -7342,6 +7342,10 @@ function tourNext() {
                             if (cCodeStr) {
                                 url += `&country=${cCodeStr}`;
                             }
+                        } else if (view.geocode_provider === 'photon') {
+                            url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`;
+                            // Photon currently has limited country filtering support in its public API via 'lat'/'lon' bias,
+                            // but we omit it here for simplicity as there is no direct equivalent to 'countrycodes'.
                         } else {
                             if (cCodeStr) {
                                 url += `&countrycodes=${cCodeStr}`;
@@ -7377,6 +7381,21 @@ function tourNext() {
                                     lat: f.center[1],
                                     lon: f.center[0]
                                 }));
+                            } else if (view.geocode_provider === 'photon' && data.features) {
+                                resultsArr = data.features.map(f => {
+                                    var props = f.properties;
+                                    var nameParts = [];
+                                    if (props.name) nameParts.push(props.name);
+                                    if (props.street) nameParts.push(props.street);
+                                    if (props.city) nameParts.push(props.city);
+                                    if (props.state) nameParts.push(props.state);
+                                    if (props.country) nameParts.push(props.country);
+                                    return {
+                                        display_name: nameParts.join(', '),
+                                        lat: f.geometry.coordinates[1],
+                                        lon: f.geometry.coordinates[0]
+                                    };
+                                });
                             }
 
                             resultsArr.forEach(function(item) {
