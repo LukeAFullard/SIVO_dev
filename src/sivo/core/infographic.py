@@ -73,6 +73,7 @@ class Infographic:
         self.svg_background_image_insert_after = svg_background_image_insert_after
         self.transparent_template_lines = transparent_template_lines
         self.layout_size = None
+        self.mobile_layout_size = None
         self.presentation_order = None
         if self.svg_background_image_url:
             self._inject_svg_background_image()
@@ -2110,6 +2111,7 @@ class Infographic:
             "presentation_order": self.presentation_order,
             "lock_zoom_out": self.lock_zoom_out,
             "layout_size": self.layout_size,
+            "mobile_layout_size": self.mobile_layout_size,
             "starting_zoom": self.starting_zoom,
             "render_mode": self.render_mode,
             "enable_minimap": self.enable_minimap,

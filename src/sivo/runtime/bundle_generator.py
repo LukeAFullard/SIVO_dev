@@ -271,6 +271,7 @@ def format_views_data(views_data: Dict[str, Dict]) -> Dict[str, Dict]:
             "presentation_order": view_obj.get("presentation_order", None),
             "lock_zoom_out": view_obj.get("lock_zoom_out", False),
             "layout_size": view_obj.get("layout_size", None),
+            "mobile_layout_size": view_obj.get("mobile_layout_size", None),
             "starting_zoom": view_obj.get("starting_zoom", 1.0),
             "lock_canvas": view_obj.get("lock_canvas", False),
             "render_mode": view_obj.get("render_mode", "canvas"),
