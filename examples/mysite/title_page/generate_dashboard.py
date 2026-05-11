@@ -9,7 +9,7 @@ from src.sivo.core.dashboard import SivoDashboard
 dashboard = SivoDashboard(
     title="",
     columns=2,
-    background_image_url="fish-green.png",
+    background_image_url="assets/fish-green.png",
     background_image_opacity=0.25,
     background_image_size="100%",
     gap="tight",
@@ -34,7 +34,7 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 # Add image blocks
 dashboard.add_image_block(
     block_id="env",
-    image_url="OurEnvironment.png",
+    image_url="assets/OurEnvironment.png",
     col_span=1,
     grid_area="env",
     object_fit="cover",
@@ -43,7 +43,7 @@ dashboard.add_image_block(
 )
 dashboard.add_image_block(
     block_id="air",
-    image_url="Air.png",
+    image_url="assets/air/Air.png",
     col_span=1,
     grid_area="air",
     object_fit="cover",
@@ -56,7 +56,7 @@ dashboard.add_image_block(
 )
 dashboard.add_image_block(
     block_id="land",
-    image_url="Land.png",
+    image_url="assets/land/Land.png",
     col_span=1,
     grid_area="land",
     object_fit="cover",
@@ -69,7 +69,7 @@ dashboard.add_image_block(
 )
 dashboard.add_image_block(
     block_id="water",
-    image_url="Water.png",
+    image_url="assets/water/Water.png",
     col_span=1,
     grid_area="water",
     object_fit="cover",

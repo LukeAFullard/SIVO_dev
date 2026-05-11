@@ -46,7 +46,7 @@
             height: 100vh;
             max-width: 100%;
             max-height: 100%;
-            background-image: url('fish-green.png');
+            background-image: url('assets/fish-green.png');
             background-size: 100%;
             background-position: center;
             opacity: 0.25;
@@ -600,7 +600,7 @@
 
         /* Navigation Menu Styles */
         .sivo-nav-btn {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -620,7 +620,7 @@
             transform: translateY(-1px);
         }
         .sivo-nav-menu {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -814,7 +814,7 @@
 
 
         .sivo-nav-btn {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -837,7 +837,7 @@
             transform: translateY(-1px);
         }
         .sivo-nav-menu {
-            position: absolute;
+            position: fixed;
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -939,6 +939,14 @@
         <div id="sivo-geocoder-attribution" style="display:none; font-size: 10px; color: #64748b; text-align: center; padding-top: 4px;">Data © OpenStreetMap contributors, ODbL 1.0.</div>
     </div>
 
+    <!-- Geocoder Block HTML Template -->
+    <template id="sivo-geocoder-block-template">
+        <div class="sivo-geocoder-block-content" style="width: 100%; height: 100%; position: relative; min-height: 50px;">
+            <!-- It will be moved here -->
+        </div>
+    </template>
+
+
 
 
 
@@ -956,7 +964,7 @@
 
             <div class="html-card" id="card-env" style="grid-area: env; ">
                 <div class="card-content" id="container-env">
-                    <img src="OurEnvironment.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" />
+                    <img src="assets/OurEnvironment.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" />
                 </div>
             </div>
 
@@ -972,7 +980,7 @@
 
             <div class="html-card" id="card-air" style="grid-area: air; ">
                 <div class="card-content" id="container-air">
-                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;"><a href="subpage/air/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/air/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="Air.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
+                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;"><a href="subpage/air/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/air/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="assets/air/Air.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
                 </div>
             </div>
 
@@ -988,7 +996,7 @@
 
             <div class="html-card" id="card-land" style="grid-area: land; ">
                 <div class="card-content" id="container-land">
-                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.6s;"><a href="subpage/land/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/land/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="Land.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
+                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.6s;"><a href="subpage/land/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/land/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="assets/land/Land.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
                 </div>
             </div>
 
@@ -1004,7 +1012,7 @@
 
             <div class="html-card" id="card-water" style="grid-area: water; ">
                 <div class="card-content" id="container-water">
-                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.9s;"><a href="subpage/water/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/water/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="Water.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
+                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.9s;"><a href="subpage/water/index.html" onclick="event.preventDefault(); document.body.classList.add('page-turn-enter'); setTimeout(() => window.location.href = 'subpage/water/index.html', 600);" style="display: block; width: 100%; height: 100%; cursor: pointer;"><img src="assets/water/Water.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 0px;" /></a></div>
                 </div>
             </div>
 
@@ -1048,19 +1056,24 @@
         window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         function calculateLayoutSize(view, domElement) {
-            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
-                return view ? view.layout_size : undefined;
+            var layoutSize = view ? view.layout_size : undefined;
+            if (window.innerWidth <= 900 && view && view.mobile_layout_size) {
+                layoutSize = view.mobile_layout_size;
             }
-            if (!domElement) return view.layout_size;
+
+            if (!layoutSize || typeof layoutSize !== 'string' || !layoutSize.endsWith('%')) {
+                return layoutSize;
+            }
+            if (!domElement) return layoutSize;
 
             var containerWidth = domElement.clientWidth;
             var containerHeight = domElement.clientHeight;
 
             if (containerWidth <= 0 || containerHeight <= 0) {
-                return view.layout_size;
+                return layoutSize;
             }
 
-            var fraction = parseFloat(view.layout_size.replace('%', '')) / 100.0;
+            var fraction = parseFloat(layoutSize.replace('%', '')) / 100.0;
             var svgW = 1000;
             var svgH = 1000;
 
@@ -1116,13 +1129,42 @@
                 echarts.registerMap('sivoMap_' + blockId, { svg: viewData.svg_string });
 
                 const option = {
-                    tooltip: { trigger: 'item' },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            var dataIndex = viewData.echarts_data.findIndex(item => item.name === params.name);
+                            var tooltipContent = "";
+
+                            if (dataIndex !== -1 && viewData.echarts_data[dataIndex].tooltip) {
+                                tooltipContent = viewData.echarts_data[dataIndex].tooltip;
+                            }
+
+                            if (viewData.data_binding && viewData.data_binding.data && viewData.data_binding.data[params.name]) {
+                                var val = viewData.data_binding.data[params.name][viewData.data_binding.key];
+                                if (val !== undefined) {
+                                    if (!tooltipContent) tooltipContent = params.name;
+                                    tooltipContent += '<br/>' + viewData.data_binding.key + ': <b>' + val + '</b>';
+                                }
+                            }
+
+                            if (!tooltipContent) {
+                                return "";
+                            }
+
+                            return tooltipContent;
+                        }
+                    },
                     series: [{
                         type: 'map',
                         map: 'sivoMap_' + blockId,
                         roam: viewData.lock_canvas ? false : true,
                         label: { show: false },
-                        emphasis: { disabled: true },
+                        itemStyle: {
+                            borderColor: viewData.transparent_template_lines ? 'transparent' : '#cbd5e1',
+                            borderWidth: viewData.transparent_template_lines ? 0 : 1,
+                            areaColor: (viewData.theme === 'transparent' || viewData.transparent_template_lines) ? 'transparent' : '#f1f5f9'
+                        },
+                        emphasis: { disabled: false },
                         selectedMode: false,
                         select: { disabled: true },
                         boundingCoords: viewData.bounding_coords || undefined,
@@ -1355,7 +1397,12 @@
                 if(!params.name) return;
 
                 const viewData = viewsData[chartId];
+                if (!viewData || !viewData.actions_manifest) return;
+
+                // bundle_generator.py stores an array of actions directly at viewData.actions_manifest[params.name]
+                // and NOT a config object containing an .actions property.
                 const elementActions = viewData.actions_manifest[params.name];
+                if (!elementActions) return;
 
                 let tooltipContent = null;
                 let payloadData = null;
@@ -1375,7 +1422,36 @@
                             if (action.target === '_blank') {
                                 window.open(action.url, '_blank');
                             } else {
-                                window.location.href = action.url;
+                                if (action.transition) {
+                                    document.body.classList.add(action.transition);
+                                    setTimeout(function() {
+                                        window.location.href = action.url;
+                                    }, 600);
+                                } else {
+                                    window.location.href = action.url;
+                                }
+                            }
+                        } else if (action.action_type === 'drill_through') {
+                            if (action.target === '_blank') {
+                                window.open(action.url, '_blank');
+                            } else {
+                                if (action.transition) {
+                                    var transitionClassBase = 'sivo-view-transition-' + action.transition;
+                                    chartDom.classList.add(transitionClassBase + '-out');
+
+                                    var overlayContainer = document.querySelector('.sivo-native-overlay-svg-container');
+                                    if (overlayContainer) {
+                                        overlayContainer.style.transition = 'all 0.5s ease-in-out';
+                                        overlayContainer.style.opacity = '0';
+                                    }
+
+                                    setTimeout(function() {
+                                        var separator = action.url.indexOf('?') !== -1 ? '&' : '?';
+                                        window.location.href = action.url + separator + 'sivo_transition_in=' + action.transition;
+                                    }, 500);
+                                } else {
+                                    window.location.href = action.url;
+                                }
                             }
                         } else if (action.action_type === 'zoom') {
                             var opt = chart.getOption();
@@ -1548,6 +1624,9 @@
                     }
                 }
 
+                // Get the details panels config
+                const detailsConfig = {};
+
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
@@ -1557,20 +1636,24 @@
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
+                        const blockId = panel.getAttribute('data-block-id');
+                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        container.innerHTML = `<h3>${safeName}</h3><p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
+                        container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
                 } else {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
+                        const blockId = panel.getAttribute('data-block-id');
+                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         if (tooltipContent) {
                             var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
-                            container.innerHTML = `<h3>${safeName}</h3>${safeTooltip}`;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeTooltip}`;
                         } else {
-                            container.innerHTML = `<h3>${safeName}</h3><p>No additional details mapped.</p>`;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
                         }
                     });
                 }
@@ -1622,40 +1705,55 @@
                     if (att) att.style.display = 'block';
                 }
 
-                var gPos = view.geocoder_position || 'top-center';
-                if (gPos === 'top-left') {
-                    geocoderContainer.style.left = '20px';
-                    geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'top-right') {
+                // Check if a geocoder block exists in the layout
+                var geocoderPanels = document.querySelectorAll('.sivo-geocoder-panel .card-content');
+                if (geocoderPanels.length > 0) {
+                    var panelContent = geocoderPanels[0];
+                    geocoderContainer.style.position = 'relative';
                     geocoderContainer.style.left = 'auto';
-                    geocoderContainer.style.right = '20px';
-                    geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'bottom-left') {
-                    geocoderContainer.style.left = '20px';
                     geocoderContainer.style.top = 'auto';
-                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.right = 'auto';
+                    geocoderContainer.style.bottom = 'auto';
                     geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'bottom-right') {
-                    geocoderContainer.style.left = 'auto';
-                    geocoderContainer.style.right = '20px';
-                    geocoderContainer.style.top = 'auto';
-                    geocoderContainer.style.bottom = '20px';
-                    geocoderContainer.style.transform = 'none';
-                } else if (gPos === 'bottom-center') {
-                    geocoderContainer.style.left = '50%';
-                    geocoderContainer.style.top = 'auto';
-                    geocoderContainer.style.bottom = '20px';
-                    geocoderContainer.style.transform = 'translateX(-50%)';
+                    geocoderContainer.style.width = '100%';
+                    geocoderContainer.style.maxWidth = '100%';
+                    panelContent.appendChild(geocoderContainer);
                 } else {
-                    // default top-center
-                    geocoderContainer.style.left = '50%';
-                    geocoderContainer.style.transform = 'translateX(-50%)';
-                }
+                    var gPos = view.geocoder_position || 'top-center';
+                    if (gPos === 'top-left') {
+                        geocoderContainer.style.left = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'top-right') {
+                        geocoderContainer.style.left = 'auto';
+                        geocoderContainer.style.right = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'bottom-left') {
+                        geocoderContainer.style.left = '20px';
+                        geocoderContainer.style.top = 'auto';
+                        geocoderContainer.style.bottom = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'bottom-right') {
+                        geocoderContainer.style.left = 'auto';
+                        geocoderContainer.style.right = '20px';
+                        geocoderContainer.style.top = 'auto';
+                        geocoderContainer.style.bottom = '20px';
+                        geocoderContainer.style.transform = 'none';
+                    } else if (gPos === 'bottom-center') {
+                        geocoderContainer.style.left = '50%';
+                        geocoderContainer.style.top = 'auto';
+                        geocoderContainer.style.bottom = '20px';
+                        geocoderContainer.style.transform = 'translateX(-50%)';
+                    } else {
+                        // default top-center
+                        geocoderContainer.style.left = '50%';
+                        geocoderContainer.style.transform = 'translateX(-50%)';
+                    }
 
-                if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
-                    geocoderContainer.style.top = '70px';
-                } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
-                    geocoderContainer.style.top = '20px';
+                    if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
+                        geocoderContainer.style.top = '70px';
+                    } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
+                        geocoderContainer.style.top = '20px';
+                    }
                 }
 
                 var geocodeInput = document.getElementById('sivo-geocoder-input');
@@ -1733,8 +1831,19 @@
                             if (existing) existing.remove();
                             var overlay = document.createElement('div');
                             overlay.id = 'sivo-geocoder-overlay-result';
-                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #3b82f6; border: 2px solid #3b82f6;">Calculating zone...</div>`;
-                            document.body.appendChild(overlay);
+                            overlay.style.position = 'absolute';
+                            overlay.style.top = '100%';
+                            overlay.style.left = '50%';
+                            overlay.style.transform = 'translateX(-50%)';
+                            overlay.style.marginTop = '10px';
+                            overlay.style.zIndex = '1000';
+                            overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #3b82f6; border: 2px solid #3b82f6;">Calculating zone...<button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                            var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                            if (geocoderContainer && geocoderContainer.parentElement) {
+                                geocoderContainer.parentElement.appendChild(overlay);
+                            } else {
+                                document.body.appendChild(overlay);
+                            }
                         }
 
                         fetch(intersectUrl)
@@ -1757,8 +1866,19 @@
                                         } else {
                                             var overlay = document.createElement('div');
                                             overlay.id = 'sivo-geocoder-overlay-result';
-                                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${safeVal}</span></div>`;
-                                            document.body.appendChild(overlay);
+                                            overlay.style.position = 'absolute';
+                                            overlay.style.top = '100%';
+                                            overlay.style.left = '50%';
+                                            overlay.style.transform = 'translateX(-50%)';
+                                            overlay.style.marginTop = '10px';
+                                            overlay.style.zIndex = '1000';
+                                            overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${safeVal}</span><button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                                            var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                                            if (geocoderContainer && geocoderContainer.parentElement) {
+                                                geocoderContainer.parentElement.appendChild(overlay);
+                                            } else {
+                                                document.body.appendChild(overlay);
+                                            }
                                         }
 
                                         // Try to trigger an ECharts highlight action if the mapped element exists on any dashboard chart
@@ -1770,10 +1890,89 @@
                                                 // ECharts needs the exact name match to highlight the SVG region
                                                 c.dispatchAction({ type: 'highlight', seriesIndex: 0, name: val });
                                                 c.dispatchAction({ type: 'select', seriesIndex: 0, name: val });
+
+                                                // Fallback for names that might have been mapped with underscores instead of spaces
+                                                if (val.indexOf(' ') !== -1) {
+                                                    var valUnderscored = val.replace(/ /g, '_');
+                                                    c.dispatchAction({ type: 'highlight', seriesIndex: 0, name: valUnderscored });
+                                                    c.dispatchAction({ type: 'select', seriesIndex: 0, name: valUnderscored });
+                                                }
                                                 // Force re-render to ensure visual update immediately
                                                 c.resize();
                                             } catch (e) {}
                                         }
+
+                                        if (window.sivoGeocoderPulseInterval) {
+                                            clearInterval(window.sivoGeocoderPulseInterval);
+                                            window.sivoGeocoderPulseInterval = null;
+                                        }
+
+                                        if (window.sivoGeocoderPulsedNames) {
+                                            for (var cid in window.sivoCharts) {
+                                                var c = window.sivoCharts[cid];
+                                                try {
+                                                    var opts = c.getOption();
+                                                    if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                        var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            c.setOption({ animation: false, series: [{ data: restoreData }] });
+                                                        }
+                                                    }
+                                                } catch (e) {}
+                                            }
+                                        }
+
+                                        var possibleNames = [val];
+                                        if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+                                        window.sivoGeocoderPulsedNames = possibleNames;
+
+                                        var startTime = Date.now();
+                                        window.sivoGeocoderPulseInterval = setInterval(function() {
+                                            var elapsed = Date.now() - startTime;
+                                            var progress = (elapsed % 2000) / 2000;
+                                            var opacity = 0.4 + 0.6 * (0.5 - 0.5 * Math.cos(progress * Math.PI * 2));
+
+                                            for (var cid in window.sivoCharts) {
+                                                var c = window.sivoCharts[cid];
+                                                try {
+                                                    var opts = c.getOption();
+                                                    if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                        var updateData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = updateData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (!existingItem.itemStyle) existingItem.itemStyle = {};
+                                                                existingItem.itemStyle.opacity = opacity;
+
+                                                                if (!existingItem.emphasis) existingItem.emphasis = {};
+                                                                if (!existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle = {};
+                                                                existingItem.emphasis.itemStyle.opacity = opacity;
+
+                                                                if (!existingItem.select) existingItem.select = {};
+                                                                if (!existingItem.select.itemStyle) existingItem.select.itemStyle = {};
+                                                                existingItem.select.itemStyle.opacity = opacity;
+
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            c.setOption({ animation: false, series: [{ data: updateData }] });
+                                                        }
+                                                    }
+                                                } catch (e) {}
+                                            }
+                                        }, 100);
 
                                         found = true;
                                         break;
@@ -1788,6 +1987,37 @@
                                         } catch (e) {}
                                     }
 
+                                    if (window.sivoGeocoderPulseInterval) {
+                                        clearInterval(window.sivoGeocoderPulseInterval);
+                                        window.sivoGeocoderPulseInterval = null;
+                                    }
+
+                                    if (window.sivoGeocoderPulsedNames) {
+                                        for (var cid in window.sivoCharts) {
+                                            var c = window.sivoCharts[cid];
+                                            try {
+                                                var opts = c.getOption();
+                                                if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                    var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            c.setOption({ animation: false, series: [{ data: restoreData }] });
+                                                        }
+                                                }
+                                            } catch (e) {}
+                                        }
+                                        window.sivoGeocoderPulsedNames = [];
+                                    }
+
                                     var existing = document.getElementById('sivo-geocoder-overlay-result');
                                     if (existing) existing.remove();
 
@@ -1796,8 +2026,19 @@
                                     } else {
                                         var overlay = document.createElement('div');
                                         overlay.id = 'sivo-geocoder-overlay-result';
-                                        overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">${noResText}</div>`;
-                                        document.body.appendChild(overlay);
+                                        overlay.style.position = 'absolute';
+                                        overlay.style.top = '100%';
+                                        overlay.style.left = '50%';
+                                        overlay.style.transform = 'translateX(-50%)';
+                                        overlay.style.marginTop = '10px';
+                                        overlay.style.zIndex = '1000';
+                                        overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #ef4444; border: 2px solid #ef4444;">${noResText}<button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                                        var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                                        if (geocoderContainer && geocoderContainer.parentElement) {
+                                            geocoderContainer.parentElement.appendChild(overlay);
+                                        } else {
+                                            document.body.appendChild(overlay);
+                                        }
                                     }
                                 }
                             })
@@ -1811,8 +2052,19 @@
                                 } else {
                                     var overlay = document.createElement('div');
                                     overlay.id = 'sivo-geocoder-overlay-result';
-                                    overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">Error intersecting point</div>`;
-                                    document.body.appendChild(overlay);
+                                    overlay.style.position = 'absolute';
+                                    overlay.style.top = '100%';
+                                    overlay.style.left = '50%';
+                                    overlay.style.transform = 'translateX(-50%)';
+                                    overlay.style.marginTop = '10px';
+                                    overlay.style.zIndex = '1000';
+                                    overlay.innerHTML = `<div style="position: relative; font-size: 24px; font-weight: bold; background: white; padding: 20px 40px 20px 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: #ef4444; border: 2px solid #ef4444;">Error intersecting point<button onclick="document.getElementById('sivo-geocoder-overlay-result').remove()" style="position:absolute; top: 5px; right: 10px; background:none; border:none; font-size:20px; cursor:pointer; color:#94a3b8;">&times;</button></div>`;
+                                    var geocoderContainer = document.getElementById('sivo-geocoder-container');
+                                    if (geocoderContainer && geocoderContainer.parentElement) {
+                                        geocoderContainer.parentElement.appendChild(overlay);
+                                    } else {
+                                        document.body.appendChild(overlay);
+                                    }
                                 }
                             });
                     } else {
@@ -1902,6 +2154,31 @@
                             if (cCodeStr) {
                                 url += `&country=${cCodeStr}`;
                             }
+                        } else if (view.geocode_provider === 'photon') {
+                            var limit = cCodeStr ? 30 : 5; // request more if we need to filter client-side
+                            url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=${limit}`;
+                            if (cCodeStr) {
+                                var countryCenters = {
+                                    'us': {lat: 39.8283, lon: -98.5795},
+                                    'ca': {lat: 56.1304, lon: -106.3468},
+                                    'gb': {lat: 55.3781, lon: -3.4360},
+                                    'au': {lat: -25.2744, lon: 133.7751},
+                                    'nz': {lat: -40.9006, lon: 174.8860},
+                                    'de': {lat: 51.1657, lon: 10.4515},
+                                    'fr': {lat: 46.2276, lon: 2.2137},
+                                    'es': {lat: 40.4637, lon: -3.7492},
+                                    'it': {lat: 41.8719, lon: 12.5674},
+                                    'in': {lat: 20.5937, lon: 78.9629},
+                                    'jp': {lat: 36.2048, lon: 138.2529},
+                                    'cn': {lat: 35.8617, lon: 104.1954},
+                                    'br': {lat: -14.2350, lon: -51.9253},
+                                    'za': {lat: -30.5595, lon: 22.9375}
+                                };
+                                var primaryCode = cCodeStr.split(',')[0].trim().toLowerCase();
+                                if (countryCenters[primaryCode]) {
+                                    url += `&lat=${countryCenters[primaryCode].lat}&lon=${countryCenters[primaryCode].lon}&zoom=4`;
+                                }
+                            }
                         } else {
                             if (cCodeStr) {
                                 url += `&countrycodes=${cCodeStr}`;
@@ -1937,6 +2214,32 @@
                                     lat: f.center[1],
                                     lon: f.center[0]
                                 }));
+                            } else if (view.geocode_provider === 'photon' && data.features) {
+                                var filteredFeatures = data.features;
+                                if (cCodeStr) {
+                                    var allowedCodes = cCodeStr.split(',').map(c => c.trim().toLowerCase());
+                                    filteredFeatures = data.features.filter(f => {
+                                        if (!f.properties || !f.properties.countrycode) return false;
+                                        return allowedCodes.includes(f.properties.countrycode.toLowerCase());
+                                    });
+                                }
+                                resultsArr = filteredFeatures.map(f => {
+                                    var props = f.properties;
+                                    var nameParts = [];
+                                    if (props.name) nameParts.push(props.name);
+                                    if (props.street) nameParts.push(props.street);
+                                    if (props.city) nameParts.push(props.city);
+                                    if (props.state) nameParts.push(props.state);
+                                    if (props.country) nameParts.push(props.country);
+                                    return {
+                                        display_name: nameParts.join(', '),
+                                        lat: f.geometry.coordinates[1],
+                                        lon: f.geometry.coordinates[0]
+                                    };
+                                });
+                                if (cCodeStr && resultsArr.length > 5) {
+                                    resultsArr = resultsArr.slice(0, 5); // restore limit after filtering
+                                }
                             }
 
                             resultsArr.forEach(function(item) {
@@ -1983,5 +2286,7 @@
             initGeocoder();
         }
 </script>
+
+
 </body>
 </html>
