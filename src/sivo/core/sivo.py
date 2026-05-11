@@ -2460,7 +2460,8 @@ class Sivo:
                  left: str = "0%", top: str = "0%", width: str = "100%", height: str = "100%",
                  shape: str = "rect", bg_color: str = "#ffffff", border_color: str = "#e2e8f0", border_width: str = "1px", rx: str = "8",
                  title_color: str = "#64748b", value_color: str = "#0f172a", subtitle_color: str = "#94a3b8", body_color: str = "#475569",
-                 auto_fit_text: bool = True):
+                 auto_fit_text: bool = True, url: Optional[str] = None, url_target: str = "_blank",
+                 url_transition: Optional[str] = None):
         """
         Automatically generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element, displaying a title, main value, and optional subtitle.
@@ -2481,8 +2482,11 @@ class Sivo:
             title_color: The text color for the title.
             value_color: The text color for the main value.
             subtitle_color: The text color for the subtitle.
+            url: Optional URL to navigate to when the card is clicked.
+            url_target: Target window for the URL (e.g. "_blank").
+            url_transition: Optional CSS transition class to add to body when navigating.
         """
-        self.infographic.add_card(element_id, title, value, subtitle, body, left, top, width, height, shape, bg_color, border_color, border_width, rx, title_color, value_color, subtitle_color, body_color, auto_fit_text)
+        self.infographic.add_card(element_id, title, value, subtitle, body, left, top, width, height, shape, bg_color, border_color, border_width, rx, title_color, value_color, subtitle_color, body_color, auto_fit_text, url, url_target, url_transition)
 
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """

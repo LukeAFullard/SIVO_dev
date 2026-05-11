@@ -1723,7 +1723,8 @@ class Infographic:
                  left: str = "0%", top: str = "0%", width: str = "100%", height: str = "100%",
                  shape: str = "rect", bg_color: str = "#ffffff", border_color: str = "#e2e8f0", border_width: str = "1px", rx: str = "8",
                  title_color: str = "#64748b", value_color: str = "#0f172a", subtitle_color: str = "#94a3b8", body_color: str = "#475569",
-                 auto_fit_text: bool = True):
+                 auto_fit_text: bool = True, url: Optional[str] = None, url_target: str = "_blank",
+                 url_transition: Optional[str] = None):
         """
         Generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element.
@@ -1744,6 +1745,9 @@ class Infographic:
             title_color: Color of the title text.
             value_color: Color of the main value text.
             subtitle_color: Color of the subtitle text.
+            url: Optional URL to navigate to when the card is clicked.
+            url_target: Target window for the URL (e.g. "_blank").
+            url_transition: Optional CSS transition class to add to body when navigating.
         """
         import uuid
         import lxml.etree as etree
@@ -1778,8 +1782,14 @@ class Infographic:
             "fill": bg_color,
             "stroke": border_color,
             "stroke-width": border_width,
-            "style": "pointer-events: none;"
+            "id": card_id,
+            "name": card_id
         }
+
+        if url:
+            shape_attrs["style"] = "cursor: pointer;"
+        else:
+            shape_attrs["style"] = "pointer-events: none;"
 
         if shape == "circle":
             cx = abs_left + abs_width / 2
@@ -1972,6 +1982,15 @@ class Infographic:
 
         # Inject at the end of the SVG
         self.parser.root.append(group)
+
+        # Add to lookup so we can map it
+        self._element_lookup[card_id] = {'id': card_id, 'name': card_id, 'tag': shape}
+        from .actions import InteractionMapping
+        if card_id not in self.mappings:
+            self.mappings[card_id] = InteractionMapping(id=card_id)
+
+        if url:
+            self.map(card_id, url=url, url_target=url_target, url_transition=url_transition)
 
     def add_scalable_progress_bar(self, element_id: str, progress: float, left: str = "0%", top: str = "0%", width: str = "100%", height: str = "10%", bg_color: str = "#f1f5f9", fill_color: str = "#10b981", rx: str = "4"):
         """
