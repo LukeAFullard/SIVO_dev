@@ -1,4 +1,6 @@
 import sys
+
+content = """import sys
 import os
 import unittest
 
@@ -14,79 +16,79 @@ class TestAddCardShapesAndStyles(unittest.TestCase):
     def test_add_hexagon_card(self):
         self.sivo.add_card(element_id="dummy", title="Hex", shape="hexagon")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<polygon', out)
+        self.assertIn(b'<polygon', out)
 
     def test_add_octagon_card(self):
         self.sivo.add_card(element_id="dummy", title="Oct", shape="octagon")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<polygon', out)
+        self.assertIn(b'<polygon', out)
 
     def test_add_diamond_card(self):
         self.sivo.add_card(element_id="dummy", title="Dia", shape="diamond")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<polygon', out)
+        self.assertIn(b'<polygon', out)
 
     def test_add_triangle_card(self):
         self.sivo.add_card(element_id="dummy", title="Tri", shape="triangle")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<polygon', out)
+        self.assertIn(b'<polygon', out)
 
     def test_add_card_styling_gradient(self):
         self.sivo.add_card(element_id="dummy", title="Grad", gradient_bg="#ff0000,#00ff00")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<linearGradient', out)
-        self.assertIn('<stop', out)
-        self.assertIn('#ff0000', out)
+        self.assertIn(b'<linearGradient', out)
+        self.assertIn(b'<stop', out)
+        self.assertIn(b'#ff0000', out)
 
     def test_add_card_styling_shadow(self):
         self.sivo.add_card(element_id="dummy", title="Shadow", shadow=True)
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<filter', out)
-        self.assertIn('<feDropShadow', out)
+        self.assertIn(b'<filter', out)
+        self.assertIn(b'<feDropShadow', out)
 
     def test_add_card_styling_glass(self):
         self.sivo.add_card(element_id="dummy", title="Glass", glass=True)
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<filter', out)
-        self.assertIn('<feGaussianBlur', out)
-        self.assertIn('<feColorMatrix', out)
+        self.assertIn(b'<filter', out)
+        self.assertIn(b'<feGaussianBlur', out)
+        self.assertIn(b'<feColorMatrix', out)
 
     def test_add_card_styling_dasharray(self):
         self.sivo.add_card(element_id="dummy", title="Dash", dasharray="5,5")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('stroke-dasharray="5,5"', out)
+        self.assertIn(b'stroke-dasharray="5,5"', out)
 
     def test_add_speech_bubble_left(self):
         self.sivo.add_card(element_id="dummy", title="Bubble", shape="speech_bubble_left")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
-        self.assertIn('d="M ', out)
+        self.assertIn(b'<path', out)
+        self.assertIn(b'd="M ', out)
 
     def test_add_speech_bubble_top(self):
         self.sivo.add_card(element_id="dummy", title="Bubble", shape="speech_bubble_top")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
-        self.assertIn('d="M ', out)
+        self.assertIn(b'<path', out)
+        self.assertIn(b'd="M ', out)
 
     def test_add_fish(self):
         self.sivo.add_card(element_id="dummy", title="Fish", shape="fish")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
-        self.assertIn('d="M ', out)
+        self.assertIn(b'<path', out)
+        self.assertIn(b'd="M ', out)
 
     def test_add_eel(self):
         self.sivo.add_card(element_id="dummy", title="Eel", shape="eel")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
+        self.assertIn(b'<path', out)
 
     def test_add_koura(self):
         self.sivo.add_card(element_id="dummy", title="Koura", shape="koura")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
+        self.assertIn(b'<path', out)
 
     def test_add_title_above(self):
         self.sivo.add_card(element_id="dummy", title="Above", shape="fish", title_above=True)
-        out = self.sivo.infographic.parser.to_string()
+        out = self.sivo.infographic.parser.to_string().decode('utf-8')
 
         # We need to extract the 'y' coordinate of the text element "Above" to ensure it's < 10 (since dummy rect y="10")
         import xml.etree.ElementTree as ET
@@ -100,32 +102,36 @@ class TestAddCardShapesAndStyles(unittest.TestCase):
     def test_add_tap_splash(self):
         self.sivo.add_card(element_id="dummy", title="Splash", shape="tap_splash")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
+        self.assertIn(b'<path', out)
 
     def test_add_mobile_phone(self):
         self.sivo.add_card(element_id="dummy", title="Mobile", shape="mobile_phone")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<rect', out)
-        self.assertIn('<circle', out) # home button
+        self.assertIn(b'<rect', out)
+        self.assertIn(b'<circle', out) # home button
 
     def test_add_internet(self):
         self.sivo.add_card(element_id="dummy", title="Net", shape="internet")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
+        self.assertIn(b'<path', out)
 
     def test_add_globe(self):
         self.sivo.add_card(element_id="dummy", title="Globe", shape="globe")
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<circle', out)
-        self.assertIn('<ellipse', out)
-        self.assertIn('<line', out)
+        self.assertIn(b'<circle', out)
+        self.assertIn(b'<ellipse', out)
+        self.assertIn(b'<line', out)
 
     def test_add_custom_path_card(self):
         path_str = "M 10 10 L 110 110 L 10 110 Z"
         self.sivo.add_card(element_id="dummy", title="Custom", custom_path_d=path_str)
         out = self.sivo.infographic.parser.to_string()
-        self.assertIn('<path', out)
-        self.assertIn('d="M 10 10 L 110 110 L 10 110 Z"', out)
+        self.assertIn(b'<path', out)
+        self.assertIn(b'd="M 10 10 L 110 110 L 10 110 Z"', out)
 
 if __name__ == '__main__':
     unittest.main()
+"""
+
+with open('tests/test_add_card_shapes.py', 'w') as f:
+    f.write(content)

@@ -1727,7 +1727,7 @@ class Infographic:
                  url_transition: Optional[str] = None, glow: Optional[bool] = None, fade_in: bool = False,
                  fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000,
                  shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = "",
-                 title_above: bool = False):
+                 title_above: bool = False, custom_path_d: str = ""):
         """
         Generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element.
@@ -1761,6 +1761,7 @@ class Infographic:
             dasharray: Applies a dashed border style (e.g., "5,5").
             gradient_bg: Applies a linear gradient background (comma-separated colors).
             title_above: If True, renders the title text above the card rather than inside it.
+            custom_path_d: Optional SVG path 'd' string to render a custom shape. Overrides 'shape' parameter.
         """
         import uuid
         import lxml.etree as etree
@@ -1848,7 +1849,11 @@ class Infographic:
                 shape_attrs["fill-opacity"] = "0.7"
 
 
-        if shape == "circle":
+        if custom_path_d:
+            shape_attrs.update({"d": custom_path_d})
+            etree.SubElement(group, "path", shape_attrs)
+            shape = "custom"
+        elif shape == "circle":
             cx = abs_left + abs_width / 2
             cy = abs_top + abs_height / 2
             r = min(abs_width, abs_height) / 2
@@ -1975,6 +1980,56 @@ class Infographic:
             shape_attrs.update({"d": path_d})
             shape_attrs["fill-rule"] = "evenodd"
             etree.SubElement(group, "path", shape_attrs)
+        elif shape == "tap_splash":
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+            # Tap nozzle on top left, splashing water into bottom right bowl
+            path_d = f"M {x},{y} L {x+w*0.3},{y} L {x+w*0.3},{y+h*0.2} L {x+w*0.1},{y+h*0.2} Z " # Tap
+            # Splash / Puddle
+            path_d += f"M {x+w*0.2},{y+h*0.2} C {x+w*0.2},{y+h*0.5} {x},{y+h*0.6} {x+w*0.1},{y+h*0.8} "
+            path_d += f"C {x+w*0.1},{y+h} {x+w*0.9},{y+h} {x+w*0.9},{y+h*0.8} "
+            path_d += f"C {x+w},{y+h*0.6} {x+w*0.8},{y+h*0.4} {x+w*0.6},{y+h*0.5} "
+            path_d += f"C {x+w*0.4},{y+h*0.6} {x+w*0.3},{y+h*0.5} {x+w*0.3},{y+h*0.2} Z"
+            shape_attrs.update({"d": path_d})
+            shape_attrs["fill-rule"] = "evenodd"
+            etree.SubElement(group, "path", shape_attrs)
+        elif shape == "mobile_phone":
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+            try: r_val = float(rx)
+            except (ValueError, TypeError): r_val = min(w, h) * 0.1
+            shape_attrs.update({"x": str(x), "y": str(y), "width": str(w), "height": str(h), "rx": str(r_val), "ry": str(r_val)})
+            etree.SubElement(group, "rect", shape_attrs)
+            # Add screen inner line to make it look like a phone
+            screen_attrs = {"x": str(x + w*0.05), "y": str(y + h*0.05), "width": str(w*0.9), "height": str(h*0.8), "rx": str(r_val*0.5), "fill": "none", "stroke": shape_attrs.get("stroke", "#000"), "stroke-width": str(float(shape_attrs.get("stroke-width", "1").replace("px", "")) * 0.5)}
+            etree.SubElement(group, "rect", screen_attrs)
+            # Add home button
+            btn_attrs = {"cx": str(x + w/2), "cy": str(y + h*0.925), "r": str(min(w, h)*0.04), "fill": "none", "stroke": shape_attrs.get("stroke", "#000")}
+            etree.SubElement(group, "circle", btn_attrs)
+        elif shape == "internet":
+            # Cloud/Network node shape
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+            path_d = f"M {x+w*0.2},{y+h*0.6} C {x},{y+h*0.6} {x},{y+h*0.3} {x+w*0.2},{y+h*0.3} "
+            path_d += f"C {x+w*0.3},{y} {x+w*0.7},{y} {x+w*0.8},{y+h*0.3} "
+            path_d += f"C {x+w},{y+h*0.3} {x+w},{y+h*0.6} {x+w*0.8},{y+h*0.6} Z"
+            shape_attrs.update({"d": path_d})
+            etree.SubElement(group, "path", shape_attrs)
+        elif shape == "globe":
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+            r = min(w, h) / 2
+            cx = x + w / 2
+            cy = y + h / 2
+            # Base circle
+            shape_attrs.update({"cx": str(cx), "cy": str(cy), "r": str(r)})
+            etree.SubElement(group, "circle", shape_attrs)
+            # Lat/Long lines
+            line_color = shape_attrs.get("stroke", "#000")
+            line_w = str(float(shape_attrs.get("stroke-width", "1").replace("px", "")) * 0.5)
+            # Equator
+            etree.SubElement(group, "line", x1=str(cx-r), y1=str(cy), x2=str(cx+r), y2=str(cy), stroke=line_color, **{"stroke-width": line_w})
+            # Prime Meridian
+            etree.SubElement(group, "line", x1=str(cx), y1=str(cy-r), x2=str(cx), y2=str(cy+r), stroke=line_color, **{"stroke-width": line_w})
+            # Ellipses for lat/long
+            etree.SubElement(group, "ellipse", cx=str(cx), cy=str(cy), rx=str(r*0.5), ry=str(r), fill="none", stroke=line_color, **{"stroke-width": line_w})
+            etree.SubElement(group, "ellipse", cx=str(cx), cy=str(cy), rx=str(r), ry=str(r*0.5), fill="none", stroke=line_color, **{"stroke-width": line_w})
         else: # default to rect
             shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx)})
             etree.SubElement(group, "rect", shape_attrs)
@@ -1995,11 +2050,14 @@ class Infographic:
         elif shape == "speech_bubble_top":
             padding_y += min(abs_width, abs_height) * 0.15
 
-        if is_centered or shape in ["fish", "eel", "koura"] or shape.startswith("speech_bubble_"):
+        if is_centered or shape in ["fish", "eel", "koura", "mobile_phone", "internet", "globe", "tap_splash"] or shape.startswith("speech_bubble_"):
             if shape == "speech_bubble_left":
                 text_x = abs_left + (abs_width + min(abs_width, abs_height) * 0.15) / 2
             elif shape == "speech_bubble_right":
                 text_x = abs_left + (abs_width - min(abs_width, abs_height) * 0.15) / 2
+            elif shape == "tap_splash":
+                # Splashes pool to the right side
+                text_x = abs_left + abs_width * 0.55
             else:
                 text_x = abs_left + abs_width / 2
             text_anchor = "middle"
@@ -2054,6 +2112,23 @@ class Infographic:
             elif shape == "eel":
                 # Eels are skinny, so text must be very restricted
                 return abs_width * 0.3
+            elif shape == "mobile_phone":
+                return abs_width * 0.8
+            elif shape == "internet":
+                return abs_width * 0.7
+            elif shape == "globe":
+                # Match circular bounds roughly
+                cy = abs_top + abs_height / 2
+                r = min(abs_width, abs_height) / 2
+                dy = abs(y_pos - cy)
+                if dy >= r: return 0
+                import math
+                return 2 * math.sqrt(r**2 - dy**2) * 0.75
+            elif shape == "tap_splash":
+                # Bounded text into the splash puddle
+                if y_pos < abs_top + abs_height * 0.3:
+                    return 0 # In the tap nozzle, no text
+                return abs_width * 0.6
             else:
                 return abs_width - (padding_x * 2)
 
@@ -2091,6 +2166,14 @@ class Infographic:
             max_y_limit -= min(abs_width, abs_height) * 0.15
         elif shape in ["fish", "eel", "koura"]:
             max_y_limit = abs_top + abs_height * 0.75 # heavily limit y drop
+        elif shape == "mobile_phone":
+            max_y_limit = abs_top + abs_height * 0.85 # Avoid home button
+        elif shape == "internet":
+            max_y_limit = abs_top + abs_height * 0.55 # Cloud bounds
+        elif shape == "tap_splash":
+            # Force text to start lower down, in the splash puddle
+            if not title_above:
+                padding_y = abs_height * 0.5
 
         # If title_above is used, the body can shift up slightly as there is no title taking up space inside.
         if title_above:
