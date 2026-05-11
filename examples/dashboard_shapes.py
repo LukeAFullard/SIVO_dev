@@ -25,6 +25,8 @@ def create_shapes_dashboard():
         <rect id="box_phone" x="50" y="300" width="250" height="200" fill="transparent" stroke="#ddd" stroke-dasharray="5,5" />
         <rect id="box_internet" x="350" y="300" width="250" height="200" fill="transparent" stroke="#ddd" stroke-dasharray="5,5" />
         <rect id="box_globe" x="650" y="300" width="250" height="200" fill="transparent" stroke="#ddd" stroke-dasharray="5,5" />
+
+        <rect id="box_custom" x="350" y="550" width="250" height="200" fill="transparent" stroke="#ddd" stroke-dasharray="5,5" />
     </svg>
     '''
 
@@ -48,6 +50,12 @@ def create_shapes_dashboard():
 
     # Render Globe
     sivo_canvas.add_card("box_globe", title="Global Earth", value="24", subtitle="Regions", shape="globe", bg_color="#ecfdf5", border_color="#34d399", shadow=True)
+
+    # Render Custom SVG (A Star)
+    # The bounding box is x=350, y=550, w=250, h=200
+    # Center is at x=475, y=650
+    star_path = "M 475,555 L 505,620 L 580,620 L 520,660 L 545,730 L 475,690 L 405,730 L 430,660 L 370,620 L 445,620 Z"
+    sivo_canvas.add_card("box_custom", title="Custom Star", value="A+", subtitle="Rating", custom_path_d=star_path, bg_color="#fdf4ff", border_color="#f472b6", shadow=True, title_above=True)
 
     # Add the Sivo instance to the dashboard layout block
     dashboard.add_sivo_block("shapes_block", sivo_canvas)
