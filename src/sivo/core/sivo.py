@@ -2463,7 +2463,7 @@ class Sivo:
                  auto_fit_text: bool = True, url: Optional[str] = None, url_target: str = "_blank",
                  url_transition: Optional[str] = None, glow: Optional[bool] = None, fade_in: bool = False,
                  fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000,
-                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = ""):
+                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = "", custom_svg: str = ""):
         """
         Automatically generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element, displaying a title, main value, and optional subtitle.
@@ -2497,7 +2497,7 @@ class Sivo:
             dasharray: Applies a dashed border style (e.g., "5,5").
             gradient_bg: Applies a linear gradient background (comma-separated colors).
         """
-        card_id = self.infographic.add_card(element_id, title, value, subtitle, body, left, top, width, height, shape, bg_color, border_color, border_width, rx, title_color, value_color, subtitle_color, body_color, auto_fit_text, url, url_target, url_transition, glow, fade_in, fade_pulse, fade_start_time_ms, fade_duration_ms, shadow, glass, dasharray, gradient_bg)
+        card_id = self.infographic.add_card(element_id, title, value, subtitle, body, left, top, width, height, shape, bg_color, border_color, border_width, rx, title_color, value_color, subtitle_color, body_color, auto_fit_text, url, url_target, url_transition, glow, fade_in, fade_pulse, fade_start_time_ms, fade_duration_ms, shadow, glass, dasharray, gradient_bg, custom_svg)
         if card_id and (url or glow is not None or fade_in or fade_pulse):
             self.map(card_id, url=url, url_target=url_target, url_transition=url_transition, glow=glow, fade_in=fade_in, fade_pulse=fade_pulse, fade_start_time_ms=fade_start_time_ms, fade_duration_ms=fade_duration_ms)
 

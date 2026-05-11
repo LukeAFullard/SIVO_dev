@@ -1726,7 +1726,8 @@ class Infographic:
                  auto_fit_text: bool = True, url: Optional[str] = None, url_target: str = "_blank",
                  url_transition: Optional[str] = None, glow: Optional[bool] = None, fade_in: bool = False,
                  fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000,
-                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = ""):
+                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = "",
+                 custom_svg: str = ""):
         """
         Generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element.
@@ -1845,8 +1846,67 @@ class Infographic:
             if glass:
                 shape_attrs["fill-opacity"] = "0.7"
 
+        custom_polygon_points = None
 
-        if shape == "circle":
+        if custom_svg:
+            import os
+            import base64
+            if len(custom_svg) < 255 and os.path.exists(custom_svg):
+                with open(custom_svg, 'r') as f:
+                    svg_content = f.read()
+            else:
+                svg_content = custom_svg
+
+            encoded_svg = base64.b64encode(svg_content.encode('utf-8')).decode('utf-8')
+            data_uri = f"data:image/svg+xml;base64,{encoded_svg}"
+
+            image_attrs = {
+                "x": str(abs_left),
+                "y": str(abs_top),
+                "width": str(abs_width),
+                "height": str(abs_height),
+                "href": data_uri
+            }
+            if filter_id:
+                image_attrs["filter"] = f"url(#{filter_id})"
+
+            etree.SubElement(group, "image", image_attrs)
+
+            # Try to extract polygon to use for text boundaries
+            try:
+                svg_tree = etree.fromstring(svg_content.encode('utf-8'))
+                polygon = svg_tree.find('.//{http://www.w3.org/2000/svg}polygon')
+                if polygon is None:
+                    polygon = svg_tree.find('.//polygon')
+
+                if polygon is not None:
+                    points_str = polygon.get('points')
+                    viewbox = svg_tree.get('viewBox')
+
+                    if points_str and viewbox:
+                        vb_parts = viewbox.split()
+                        if len(vb_parts) == 4:
+                            vb_w = float(vb_parts[2])
+                            vb_h = float(vb_parts[3])
+
+                            custom_polygon_points = []
+                            # Parse points: they can be comma-separated or space-separated
+                            # A standard approach is to replace commas with spaces and pair them
+                            flat_coords = [float(c) for c in points_str.replace(',', ' ').split() if c.strip()]
+
+                            for i in range(0, len(flat_coords), 2):
+                                if i+1 < len(flat_coords):
+                                    x = flat_coords[i]
+                                    y = flat_coords[i+1]
+                                    mapped_x = abs_left + (x / vb_w) * abs_width
+                                    mapped_y = abs_top + (y / vb_h) * abs_height
+                                    custom_polygon_points.append((mapped_x, mapped_y))
+            except Exception:
+                pass
+
+            shape = "custom" # Override shape behavior
+
+        elif shape == "circle":
             cx = abs_left + abs_width / 2
             cy = abs_top + abs_height / 2
             r = min(abs_width, abs_height) / 2
@@ -1930,7 +1990,27 @@ class Infographic:
 
         def get_max_width_at_y(y_pos):
             # Calculate the horizontal available width inside the shape at a specific Y coordinate
-            if shape == "circle":
+            if shape == "custom" and custom_polygon_points:
+                intersections = []
+                n = len(custom_polygon_points)
+                for i in range(n):
+                    p1 = custom_polygon_points[i]
+                    p2 = custom_polygon_points[(i+1)%n]
+                    if (p1[1] <= y_pos and p2[1] > y_pos) or (p2[1] <= y_pos and p1[1] > y_pos):
+                        if p1[1] == p2[1]: continue
+                        x_int = p1[0] + (y_pos - p1[1]) * (p2[0] - p1[0]) / (p2[1] - p1[1])
+                        intersections.append(x_int)
+
+                if len(intersections) >= 2:
+                    intersections.sort()
+                    max_w = 0
+                    for i in range(0, len(intersections)-1, 2):
+                        w = intersections[i+1] - intersections[i]
+                        if w > max_w:
+                            max_w = w
+                    return max_w
+                return 0
+            elif shape == "circle":
                 cy = abs_top + abs_height / 2
                 r = min(abs_width, abs_height) / 2
                 dy = abs(y_pos - cy)
@@ -1966,6 +2046,33 @@ class Infographic:
                 return abs_width * ratio * 0.8
             else:
                 return abs_width - (padding_x * 2)
+
+        def get_text_center_x_at_y(y_pos):
+            if shape == "custom" and custom_polygon_points:
+                intersections = []
+                n = len(custom_polygon_points)
+                for i in range(n):
+                    p1 = custom_polygon_points[i]
+                    p2 = custom_polygon_points[(i+1)%n]
+                    if (p1[1] <= y_pos and p2[1] > y_pos) or (p2[1] <= y_pos and p1[1] > y_pos):
+                        if p1[1] == p2[1]: continue
+                        x_int = p1[0] + (y_pos - p1[1]) * (p2[0] - p1[0]) / (p2[1] - p1[1])
+                        intersections.append(x_int)
+                if len(intersections) >= 2:
+                    intersections.sort()
+                    max_w = 0
+                    center_x = text_x
+                    for i in range(0, len(intersections)-1, 2):
+                        w = intersections[i+1] - intersections[i]
+                        if w > max_w:
+                            max_w = w
+                            center_x = (intersections[i] + intersections[i+1]) / 2
+                    return center_x
+            # We want elements dynamically placed within a custom shape to default to their regular X value
+            # BUT if we couldn't find a bounded center, it's safer to center it horizontally in the bounding box
+            if shape == "custom":
+                return abs_left + (abs_width / 2)
+            return text_x
 
         def auto_shrink_font(text, initial_size, y_pos):
             available_width = get_max_width_at_y(y_pos)
@@ -2007,8 +2114,11 @@ class Infographic:
             # 1. Title
             title_font_size = base_title_fs * scale
             title_y = current_y + (title_font_size * 0.8)
+            if shape == "custom" and custom_polygon_points:
+                # Adjust Y to be within bounding polygon if possible, or leave as is
+                pass
             actual_title_size = auto_shrink_font(title, title_font_size, title_y)
-            rendered_elements.append(("title", title, actual_title_size, title_y, title_color, "600"))
+            rendered_elements.append(("title", title, actual_title_size, title_y, title_color, "600", get_text_center_x_at_y(title_y), "middle" if shape == "custom" else text_anchor))
 
             current_y = title_y
 
@@ -2017,7 +2127,7 @@ class Infographic:
                 value_font_size = base_value_fs * scale
                 value_y = current_y + (title_font_size * 0.2) + (abs_height * 0.05 * scale) + (value_font_size * 0.8)
                 actual_value_size = auto_shrink_font(value, value_font_size, value_y)
-                rendered_elements.append(("value", value, actual_value_size, value_y, value_color, "bold"))
+                rendered_elements.append(("value", value, actual_value_size, value_y, value_color, "bold", get_text_center_x_at_y(value_y), "middle" if shape == "custom" else text_anchor))
                 current_y = value_y
             else:
                 value_font_size = 0
@@ -2027,8 +2137,9 @@ class Infographic:
                 subtitle_font_size = base_subtitle_fs * scale
                 prev_fs = value_font_size if value else title_font_size
                 subtitle_y = current_y + (prev_fs * 0.2) + (abs_height * 0.05 * scale) + (subtitle_font_size * 0.8)
+                # Check if subtitle is completely outside the polygon width
                 actual_subtitle_size = auto_shrink_font(subtitle, subtitle_font_size, subtitle_y)
-                rendered_elements.append(("subtitle", subtitle, actual_subtitle_size, subtitle_y, subtitle_color, "normal"))
+                rendered_elements.append(("subtitle", subtitle, actual_subtitle_size, subtitle_y, subtitle_color, "normal", get_text_center_x_at_y(subtitle_y), "middle" if shape == "custom" else text_anchor))
                 current_y = subtitle_y
             else:
                 subtitle_font_size = 0
@@ -2054,12 +2165,12 @@ class Infographic:
 
                     if est_width > available_width and len(current_line) > 1:
                         current_line.pop()
-                        rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal"))
+                        rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal", get_text_center_x_at_y(line_y), "middle" if shape == "custom" else text_anchor))
                         current_line = [word]
                         line_y += body_font_size * 1.2
 
                 if current_line:
-                    rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal"))
+                    rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal", get_text_center_x_at_y(line_y), "middle" if shape == "custom" else text_anchor))
                     line_y += body_font_size * 1.2
 
                 current_y = line_y - (body_font_size * 1.2) # Undo the last addition to get the true bottom of the text block
@@ -2068,7 +2179,26 @@ class Infographic:
             # Or if it's a circle/ellipse, we should check `get_max_width_at_y(current_y)` to see if there's enough room at the bottom tip.
             # A simple bounding box check is sufficient.
 
-            if auto_fit_text and current_y > max_y_limit:
+            # Additional constraint for custom shapes: if any text ended up with 0 available width, shrink.
+            has_zero_width = False
+            if shape == "custom":
+                for elem in rendered_elements:
+                    # y_pos is the 3rd element
+                    y_pos = elem[3]
+                    # Since custom fonts can be shrunk aggressively down to <1px, treat very small widths as functionally zero
+                    if get_max_width_at_y(y_pos) <= 10:
+                        has_zero_width = True
+                        break
+
+            # Custom polygons with narrow points at the bottom can force the text out if it gets squished to <10px width.
+            # Check if any element ended up physically lower than max_y_limit after calculations
+            has_overflow_y = False
+            for elem in rendered_elements:
+                if elem[3] > max_y_limit:
+                    has_overflow_y = True
+                    break
+
+            if auto_fit_text and (current_y > max_y_limit or has_zero_width or has_overflow_y):
                 # Shrink and try again
                 scale -= 0.05
             else:
@@ -2076,14 +2206,20 @@ class Infographic:
                 break
 
         # Finally, render all the elements
-        for elem_type, text_content, font_size, y_pos, color, weight in rendered_elements:
+        for elem in rendered_elements:
+            if len(elem) == 6:
+                elem_type, text_content, font_size, y_pos, color, weight = elem
+                this_text_x = text_x
+                this_text_anchor = text_anchor
+            else:
+                elem_type, text_content, font_size, y_pos, color, weight, this_text_x, this_text_anchor = elem
             attrs = {
-                "x": str(text_x),
+                "x": str(this_text_x),
                 "y": str(y_pos),
                 "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
                 "font-size": f"{font_size}px",
                 "fill": color,
-                "text-anchor": text_anchor,
+                "text-anchor": this_text_anchor,
                 "style": "pointer-events: none;"
             }
             if weight != "normal":
