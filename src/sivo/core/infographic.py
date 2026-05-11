@@ -1725,7 +1725,8 @@ class Infographic:
                  title_color: str = "#64748b", value_color: str = "#0f172a", subtitle_color: str = "#94a3b8", body_color: str = "#475569",
                  auto_fit_text: bool = True, url: Optional[str] = None, url_target: str = "_blank",
                  url_transition: Optional[str] = None, glow: Optional[bool] = None, fade_in: bool = False,
-                 fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000):
+                 fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000,
+                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = ""):
         """
         Generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element.
@@ -1754,6 +1755,10 @@ class Infographic:
             fade_pulse: Applies a continuous pulsing fade animation.
             fade_start_time_ms: Delay in milliseconds before animation starts.
             fade_duration_ms: Duration of the animation in milliseconds.
+            shadow: Applies a drop shadow to the card.
+            glass: Applies a glassmorphism effect to the card.
+            dasharray: Applies a dashed border style (e.g., "5,5").
+            gradient_bg: Applies a linear gradient background (comma-separated colors).
         """
         import uuid
         import lxml.etree as etree
@@ -1779,6 +1784,14 @@ class Infographic:
         abs_width = _parse_val(str(width), bbox_width)
         abs_height = _parse_val(str(height), bbox_height)
 
+
+        defs = self.parser.root.find(".//{http://www.w3.org/2000/svg}defs")
+        if defs is None:
+            defs = self.parser.root.find(".//defs")
+        if defs is None:
+            defs = etree.Element("defs")
+            self.parser.root.insert(0, defs)
+
         card_id = f"sivo_card_{uuid.uuid4().hex[:8]}"
 
         # Create a group for the card. The group acts as the mapped interactable element.
@@ -1794,11 +1807,44 @@ class Infographic:
 
         group = etree.Element("g", id=card_id, **group_attrs)
 
+
+        if gradient_bg:
+            colors = [c.strip() for c in gradient_bg.split(",")]
+            grad_id = f"sivo_grad_{uuid.uuid4().hex[:8]}"
+            linear_grad = etree.SubElement(defs, "linearGradient", id=grad_id, x1="0%", y1="0%", x2="100%", y2="100%")
+            if len(colors) == 1:
+                etree.SubElement(linear_grad, "stop", offset="0%", **{"stop-color": colors[0]})
+                etree.SubElement(linear_grad, "stop", offset="100%", **{"stop-color": colors[0]})
+            else:
+                for idx, c in enumerate(colors):
+                    offset = f"{int((idx / (len(colors) - 1)) * 100)}%"
+                    etree.SubElement(linear_grad, "stop", offset=offset, **{"stop-color": c})
+            bg_color = f"url(#{grad_id})"
+
+        filter_id = None
+        if shadow or glass:
+            filter_id = f"sivo_filter_{uuid.uuid4().hex[:8]}"
+            filter_node = etree.SubElement(defs, "filter", id=filter_id)
+            if shadow:
+                etree.SubElement(filter_node, "feDropShadow", dx="0", dy="4", stdDeviation="4", **{"flood-opacity": "0.15"})
+            if glass:
+                etree.SubElement(filter_node, "feGaussianBlur", stdDeviation="8", result="blur")
+                etree.SubElement(filter_node, "feColorMatrix", type="matrix", values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7", **{"in": "blur"})
+
         shape_attrs = {
             "fill": bg_color,
             "stroke": border_color,
             "stroke-width": border_width
         }
+
+        if dasharray:
+            shape_attrs["stroke-dasharray"] = dasharray
+
+        if filter_id:
+            shape_attrs["filter"] = f"url(#{filter_id})"
+            if glass:
+                shape_attrs["fill-opacity"] = "0.7"
+
 
         if shape == "circle":
             cx = abs_left + abs_width / 2
@@ -1817,6 +1863,50 @@ class Infographic:
             rx_val = abs_height / 2
             shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx_val), "ry": str(rx_val)})
             etree.SubElement(group, "rect", shape_attrs)
+        elif shape == "hexagon":
+            dx = abs_width * 0.25
+            pts = [
+                f"{abs_left + dx},{abs_top}",
+                f"{abs_left + abs_width - dx},{abs_top}",
+                f"{abs_left + abs_width},{abs_top + abs_height / 2}",
+                f"{abs_left + abs_width - dx},{abs_top + abs_height}",
+                f"{abs_left + dx},{abs_top + abs_height}",
+                f"{abs_left},{abs_top + abs_height / 2}"
+            ]
+            shape_attrs.update({"points": " ".join(pts)})
+            etree.SubElement(group, "polygon", shape_attrs)
+        elif shape == "octagon":
+            dx = abs_width * 0.3
+            dy = abs_height * 0.3
+            pts = [
+                f"{abs_left + dx},{abs_top}",
+                f"{abs_left + abs_width - dx},{abs_top}",
+                f"{abs_left + abs_width},{abs_top + dy}",
+                f"{abs_left + abs_width},{abs_top + abs_height - dy}",
+                f"{abs_left + abs_width - dx},{abs_top + abs_height}",
+                f"{abs_left + dx},{abs_top + abs_height}",
+                f"{abs_left},{abs_top + abs_height - dy}",
+                f"{abs_left},{abs_top + dy}"
+            ]
+            shape_attrs.update({"points": " ".join(pts)})
+            etree.SubElement(group, "polygon", shape_attrs)
+        elif shape == "diamond":
+            pts = [
+                f"{abs_left + abs_width / 2},{abs_top}",
+                f"{abs_left + abs_width},{abs_top + abs_height / 2}",
+                f"{abs_left + abs_width / 2},{abs_top + abs_height}",
+                f"{abs_left},{abs_top + abs_height / 2}"
+            ]
+            shape_attrs.update({"points": " ".join(pts)})
+            etree.SubElement(group, "polygon", shape_attrs)
+        elif shape == "triangle":
+            pts = [
+                f"{abs_left + abs_width / 2},{abs_top}",
+                f"{abs_left + abs_width},{abs_top + abs_height}",
+                f"{abs_left},{abs_top + abs_height}"
+            ]
+            shape_attrs.update({"points": " ".join(pts)})
+            etree.SubElement(group, "polygon", shape_attrs)
         else: # default to rect
             shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx)})
             etree.SubElement(group, "rect", shape_attrs)
@@ -1861,6 +1951,19 @@ class Infographic:
                 circle_width = 2 * math.sqrt(r**2 - dy**2)
                 straight_width = abs_width - 2*r
                 return (straight_width + circle_width) * 0.9 # 10% padding
+            elif shape in ["hexagon", "octagon"]:
+                return abs_width * 0.7
+            elif shape == "diamond":
+                cy = abs_top + abs_height / 2
+                dy = abs(y_pos - cy)
+                if dy >= abs_height / 2: return 0
+                ratio = 1 - (dy / (abs_height / 2))
+                return abs_width * ratio * 0.8
+            elif shape == "triangle":
+                dy = y_pos - abs_top
+                if dy < 0 or dy > abs_height: return 0
+                ratio = dy / abs_height
+                return abs_width * ratio * 0.8
             else:
                 return abs_width - (padding_x * 2)
 
