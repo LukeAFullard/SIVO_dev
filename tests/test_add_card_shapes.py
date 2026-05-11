@@ -56,5 +56,45 @@ class TestAddCardShapesAndStyles(unittest.TestCase):
         out = self.sivo.infographic.parser.to_string()
         self.assertIn('stroke-dasharray="5,5"', out)
 
+    def test_add_speech_bubble_left(self):
+        self.sivo.add_card(element_id="dummy", title="Bubble", shape="speech_bubble_left")
+        out = self.sivo.infographic.parser.to_string()
+        self.assertIn('<path', out)
+        self.assertIn('d="M ', out)
+
+    def test_add_speech_bubble_top(self):
+        self.sivo.add_card(element_id="dummy", title="Bubble", shape="speech_bubble_top")
+        out = self.sivo.infographic.parser.to_string()
+        self.assertIn('<path', out)
+        self.assertIn('d="M ', out)
+
+    def test_add_fish(self):
+        self.sivo.add_card(element_id="dummy", title="Fish", shape="fish")
+        out = self.sivo.infographic.parser.to_string()
+        self.assertIn('<path', out)
+        self.assertIn('d="M ', out)
+
+    def test_add_eel(self):
+        self.sivo.add_card(element_id="dummy", title="Eel", shape="eel")
+        out = self.sivo.infographic.parser.to_string()
+        self.assertIn('<path', out)
+
+    def test_add_koura(self):
+        self.sivo.add_card(element_id="dummy", title="Koura", shape="koura")
+        out = self.sivo.infographic.parser.to_string()
+        self.assertIn('<path', out)
+
+
+    def test_add_title_above(self):
+        self.sivo.add_card(element_id="dummy", title="Above", shape="fish", title_above=True)
+        out = self.sivo.infographic.parser.to_string()
+
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(out)
+        text_node = root.find(".//{http://www.w3.org/2000/svg}text")
+        y_val = float(text_node.attrib['y'])
+
+        self.assertTrue(y_val < 10)
+
 if __name__ == '__main__':
     unittest.main()

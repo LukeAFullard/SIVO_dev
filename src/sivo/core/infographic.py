@@ -1726,7 +1726,8 @@ class Infographic:
                  auto_fit_text: bool = True, url: Optional[str] = None, url_target: str = "_blank",
                  url_transition: Optional[str] = None, glow: Optional[bool] = None, fade_in: bool = False,
                  fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000,
-                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = ""):
+                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = "",
+                 title_above: bool = False):
         """
         Generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element.
@@ -1759,6 +1760,7 @@ class Infographic:
             glass: Applies a glassmorphism effect to the card.
             dasharray: Applies a dashed border style (e.g., "5,5").
             gradient_bg: Applies a linear gradient background (comma-separated colors).
+            title_above: If True, renders the title text above the card rather than inside it.
         """
         import uuid
         import lxml.etree as etree
@@ -1907,6 +1909,72 @@ class Infographic:
             ]
             shape_attrs.update({"points": " ".join(pts)})
             etree.SubElement(group, "polygon", shape_attrs)
+        elif shape.startswith("speech_bubble_"):
+            direction = shape.split("_")[-1]
+            try:
+                r_val = float(rx)
+            except (ValueError, TypeError):
+                r_val = 8.0
+
+            tail_size = min(abs_width, abs_height) * 0.15
+
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+
+            # Construct path with tail
+            # A speech bubble has 4 corners and a tail on one edge
+            # Start top-left and go clockwise
+            path_d = ""
+            if direction == "left":
+                path_d = f"M {x+tail_size+r_val},{y} L {x+w-r_val},{y} Q {x+w},{y} {x+w},{y+r_val} "
+                path_d += f"L {x+w},{y+h-r_val} Q {x+w},{y+h} {x+w-r_val},{y+h} L {x+tail_size+r_val},{y+h} Q {x+tail_size},{y+h} {x+tail_size},{y+h-r_val} "
+                path_d += f"L {x+tail_size},{y+h/2+tail_size/2} L {x},{y+h/2} L {x+tail_size},{y+h/2-tail_size/2} "
+                path_d += f"L {x+tail_size},{y+r_val} Q {x+tail_size},{y} {x+tail_size+r_val},{y} Z"
+            elif direction == "right":
+                path_d = f"M {x+r_val},{y} L {x+w-tail_size-r_val},{y} Q {x+w-tail_size},{y} {x+w-tail_size},{y+r_val} "
+                path_d += f"L {x+w-tail_size},{y+h/2-tail_size/2} L {x+w},{y+h/2} L {x+w-tail_size},{y+h/2+tail_size/2} "
+                path_d += f"L {x+w-tail_size},{y+h-r_val} Q {x+w-tail_size},{y+h} {x+w-tail_size-r_val},{y+h} "
+                path_d += f"L {x+r_val},{y+h} Q {x},{y+h} {x},{y+h-r_val} L {x},{y+r_val} Q {x},{y} {x+r_val},{y} Z"
+            elif direction == "top":
+                path_d = f"M {x+r_val},{y+tail_size} L {x+w/2-tail_size/2},{y+tail_size} L {x+w/2},{y} L {x+w/2+tail_size/2},{y+tail_size} "
+                path_d += f"L {x+w-r_val},{y+tail_size} Q {x+w},{y+tail_size} {x+w},{y+tail_size+r_val} L {x+w},{y+h-r_val} Q {x+w},{y+h} {x+w-r_val},{y+h} "
+                path_d += f"L {x+r_val},{y+h} Q {x},{y+h} {x},{y+h-r_val} L {x},{y+tail_size+r_val} Q {x},{y+tail_size} {x+r_val},{y+tail_size} Z"
+            else: # bottom
+                path_d = f"M {x+r_val},{y} L {x+w-r_val},{y} Q {x+w},{y} {x+w},{y+r_val} L {x+w},{y+h-tail_size-r_val} Q {x+w},{y+h-tail_size} {x+w-r_val},{y+h-tail_size} "
+                path_d += f"L {x+w/2+tail_size/2},{y+h-tail_size} L {x+w/2},{y+h} L {x+w/2-tail_size/2},{y+h-tail_size} "
+                path_d += f"L {x+r_val},{y+h-tail_size} Q {x},{y+h-tail_size} {x},{y+h-tail_size-r_val} L {x},{y+r_val} Q {x},{y} {x+r_val},{y} Z"
+
+            shape_attrs.update({"d": path_d})
+            etree.SubElement(group, "path", shape_attrs)
+        elif shape == "fish":
+            # Very stylized simple fish outline using cubic beziers
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+            path_d = f"M {x},{y+h/2} C {x+w*0.3},{y} {x+w*0.7},{y} {x+w*0.85},{y+h*0.4} "
+            path_d += f"L {x+w},{y+h*0.1} L {x+w},{y+h*0.9} L {x+w*0.85},{y+h*0.6} "
+            path_d += f"C {x+w*0.7},{y+h} {x+w*0.3},{y+h} {x},{y+h/2} Z"
+            shape_attrs.update({"d": path_d})
+            etree.SubElement(group, "path", shape_attrs)
+        elif shape == "eel":
+            # Squiggly eel shape
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+            path_d = f"M {x},{y+h*0.5} C {x+w*0.1},{y+h*0.1} {x+w*0.3},{y+h*0.9} {x+w*0.5},{y+h*0.5} "
+            path_d += f"C {x+w*0.7},{y+h*0.1} {x+w*0.9},{y+h*0.7} {x+w},{y+h*0.4} "
+            path_d += f"C {x+w*0.9},{y+h*0.8} {x+w*0.7},{y+h*0.2} {x+w*0.5},{y+h*0.6} "
+            path_d += f"C {x+w*0.3},{y+h} {x+w*0.1},{y+h*0.2} {x},{y+h*0.5} Z"
+            shape_attrs.update({"d": path_d})
+            etree.SubElement(group, "path", shape_attrs)
+        elif shape == "koura":
+            # Stylized crayfish shape (body and claws)
+            x, y, w, h = abs_left, abs_top, abs_width, abs_height
+            # Body curve
+            path_d = f"M {x+w*0.1},{y+h*0.5} C {x+w*0.3},{y+h*0.1} {x+w*0.7},{y+h*0.3} {x+w*0.8},{y+h*0.5} "
+            path_d += f"C {x+w*0.7},{y+h*0.7} {x+w*0.3},{y+h*0.9} {x+w*0.1},{y+h*0.5} Z "
+            # Top claw
+            path_d += f"M {x+w*0.7},{y+h*0.3} C {x+w*0.8},{y+h*0.1} {x+w},{y+h*0.1} {x+w*0.9},{y+h*0.3} C {x+w*0.85},{y+h*0.4} {x+w*0.8},{y+h*0.35} {x+w*0.7},{y+h*0.3} Z "
+            # Bottom claw
+            path_d += f"M {x+w*0.7},{y+h*0.7} C {x+w*0.8},{y+h*0.9} {x+w},{y+h*0.9} {x+w*0.9},{y+h*0.7} C {x+w*0.85},{y+h*0.6} {x+w*0.8},{y+h*0.65} {x+w*0.7},{y+h*0.7} Z"
+            shape_attrs.update({"d": path_d})
+            shape_attrs["fill-rule"] = "evenodd"
+            etree.SubElement(group, "path", shape_attrs)
         else: # default to rect
             shape_attrs.update({"x": str(abs_left), "y": str(abs_top), "width": str(abs_width), "height": str(abs_height), "rx": str(rx)})
             etree.SubElement(group, "rect", shape_attrs)
@@ -1921,8 +1989,19 @@ class Infographic:
         padding_x = abs_width * 0.08
         padding_y = abs_height * 0.15
 
-        if is_centered:
-            text_x = abs_left + abs_width / 2
+        # Adjust paddings for speech bubble pointers and organic shapes
+        if shape == "speech_bubble_left":
+            padding_x += min(abs_width, abs_height) * 0.15
+        elif shape == "speech_bubble_top":
+            padding_y += min(abs_width, abs_height) * 0.15
+
+        if is_centered or shape in ["fish", "eel", "koura"] or shape.startswith("speech_bubble_"):
+            if shape == "speech_bubble_left":
+                text_x = abs_left + (abs_width + min(abs_width, abs_height) * 0.15) / 2
+            elif shape == "speech_bubble_right":
+                text_x = abs_left + (abs_width - min(abs_width, abs_height) * 0.15) / 2
+            else:
+                text_x = abs_left + abs_width / 2
             text_anchor = "middle"
         else:
             text_x = abs_left + padding_x
@@ -1964,6 +2043,17 @@ class Infographic:
                 if dy < 0 or dy > abs_height: return 0
                 ratio = dy / abs_height
                 return abs_width * ratio * 0.8
+            elif shape.startswith("speech_bubble_"):
+                tail = min(abs_width, abs_height) * 0.15
+                if shape in ["speech_bubble_left", "speech_bubble_right"]:
+                    return (abs_width - tail) * 0.85
+                return abs_width * 0.85
+            elif shape in ["fish", "koura"]:
+                # The text should be bounded heavily within the central body
+                return abs_width * 0.5
+            elif shape == "eel":
+                # Eels are skinny, so text must be very restricted
+                return abs_width * 0.3
             else:
                 return abs_width - (padding_x * 2)
 
@@ -1997,6 +2087,14 @@ class Infographic:
         # such that the final Y coordinate does not overflow `abs_top + abs_height - padding_y`
 
         max_y_limit = abs_top + abs_height - padding_y
+        if shape == "speech_bubble_bottom":
+            max_y_limit -= min(abs_width, abs_height) * 0.15
+        elif shape in ["fish", "eel", "koura"]:
+            max_y_limit = abs_top + abs_height * 0.75 # heavily limit y drop
+
+        # If title_above is used, the body can shift up slightly as there is no title taking up space inside.
+        if title_above:
+            padding_y = abs_height * 0.05
 
         rendered_elements = [] # To hold the final attributes we decide to render
 
@@ -2006,11 +2104,17 @@ class Infographic:
 
             # 1. Title
             title_font_size = base_title_fs * scale
-            title_y = current_y + (title_font_size * 0.8)
-            actual_title_size = auto_shrink_font(title, title_font_size, title_y)
-            rendered_elements.append(("title", title, actual_title_size, title_y, title_color, "600"))
+            if title_above:
+                # Place title above the card, do not affect current_y
+                title_y = abs_top - (title_font_size * 0.5)
+                # Ensure we don't shrink it against the top tip of a shape
+                actual_title_size = title_font_size
+            else:
+                title_y = current_y + (title_font_size * 0.8)
+                actual_title_size = auto_shrink_font(title, title_font_size, title_y)
+                current_y = title_y
 
-            current_y = title_y
+            rendered_elements.append(("title", title, actual_title_size, title_y, title_color, "600"))
 
             # 2. Value
             if value:
