@@ -7347,6 +7347,31 @@ function tourNext() {
                             if (cCodeStr) {
                                 url += `&country=${cCodeStr}`;
                             }
+                        } else if (view.geocode_provider === 'photon') {
+                            var limit = cCodeStr ? 30 : 5; // request more if we need to filter client-side
+                            url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=${limit}`;
+                            if (cCodeStr) {
+                                var countryCenters = {
+                                    'us': {lat: 39.8283, lon: -98.5795},
+                                    'ca': {lat: 56.1304, lon: -106.3468},
+                                    'gb': {lat: 55.3781, lon: -3.4360},
+                                    'au': {lat: -25.2744, lon: 133.7751},
+                                    'nz': {lat: -40.9006, lon: 174.8860},
+                                    'de': {lat: 51.1657, lon: 10.4515},
+                                    'fr': {lat: 46.2276, lon: 2.2137},
+                                    'es': {lat: 40.4637, lon: -3.7492},
+                                    'it': {lat: 41.8719, lon: 12.5674},
+                                    'in': {lat: 20.5937, lon: 78.9629},
+                                    'jp': {lat: 36.2048, lon: 138.2529},
+                                    'cn': {lat: 35.8617, lon: 104.1954},
+                                    'br': {lat: -14.2350, lon: -51.9253},
+                                    'za': {lat: -30.5595, lon: 22.9375}
+                                };
+                                var primaryCode = cCodeStr.split(',')[0].trim().toLowerCase();
+                                if (countryCenters[primaryCode]) {
+                                    url += `&lat=${countryCenters[primaryCode].lat}&lon=${countryCenters[primaryCode].lon}&zoom=4`;
+                                }
+                            }
                         } else {
                             if (cCodeStr) {
                                 url += `&countrycodes=${cCodeStr}`;
@@ -7382,6 +7407,32 @@ function tourNext() {
                                     lat: f.center[1],
                                     lon: f.center[0]
                                 }));
+                            } else if (view.geocode_provider === 'photon' && data.features) {
+                                var filteredFeatures = data.features;
+                                if (cCodeStr) {
+                                    var allowedCodes = cCodeStr.split(',').map(c => c.trim().toLowerCase());
+                                    filteredFeatures = data.features.filter(f => {
+                                        if (!f.properties || !f.properties.countrycode) return false;
+                                        return allowedCodes.includes(f.properties.countrycode.toLowerCase());
+                                    });
+                                }
+                                resultsArr = filteredFeatures.map(f => {
+                                    var props = f.properties;
+                                    var nameParts = [];
+                                    if (props.name) nameParts.push(props.name);
+                                    if (props.street) nameParts.push(props.street);
+                                    if (props.city) nameParts.push(props.city);
+                                    if (props.state) nameParts.push(props.state);
+                                    if (props.country) nameParts.push(props.country);
+                                    return {
+                                        display_name: nameParts.join(', '),
+                                        lat: f.geometry.coordinates[1],
+                                        lon: f.geometry.coordinates[0]
+                                    };
+                                });
+                                if (cCodeStr && resultsArr.length > 5) {
+                                    resultsArr = resultsArr.slice(0, 5); // restore limit after filtering
+                                }
                             }
 
                             resultsArr.forEach(function(item) {
