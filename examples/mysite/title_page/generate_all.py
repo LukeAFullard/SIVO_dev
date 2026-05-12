@@ -12,6 +12,7 @@ def main():
         "subpage/water/generate_dashboard.py",
         "subpage/water/issues/generate_dashboard.py",
         "subpage/water/science/generate_science_page.py",
+        "subpage/water/help/generate_help_page.py",
     ]
 
     expected_script_paths = set(

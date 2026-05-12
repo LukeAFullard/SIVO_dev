@@ -2,7 +2,7 @@ import sys
 import os
 import textwrap
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../../..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../../src')))
 
 from sivo.core.dashboard import SivoDashboard
 from sivo.core.sivo import Sivo
