@@ -1037,12 +1037,23 @@
             <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Welcome\nThis is a placeholder text for the welcome panel.
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Our Water
+
+Water is a fundamental part of who we are. It sustains our physical health, natural ecosystems, and spiritual well-being. From mountain streams to the sea, healthy water supports both people and wildlife.
+
+In this chapter, we focus specifically on the water quality of our rivers and streams. We track the health of these waterways through our State of the Environment monitoring programme. This programme regularly tests water quality at representative sites across the entire region. This helps us understand the overall condition of our environment.
+
+**Click on the links below to explore our water story:**
+
+*   **What are the issues?** Discover the specific environmental challenges and pollutants affecting our local waterways.
+*   **What does the science say?** Dive into the latest data and long-term trends from our regional monitoring sites.
+*   **What can we do to help?** Learn about the practical, everyday actions we can all take to restore and protect our water.
+
 </p>
                 </div>
                 <script>
                     (function() {
-                        const rawPlaceholder = "# Welcome\\nThis is a placeholder text for the welcome panel.\n";
+                        const rawPlaceholder = "# Our Water\n\nWater is a fundamental part of who we are. It sustains our physical health, natural ecosystems, and spiritual well-being. From mountain streams to the sea, healthy water supports both people and wildlife.\n\nIn this chapter, we focus specifically on the water quality of our rivers and streams. We track the health of these waterways through our State of the Environment monitoring programme. This programme regularly tests water quality at representative sites across the entire region. This helps us understand the overall condition of our environment.\n\n**Click on the links below to explore our water story:**\n\n*   **What are the issues?** Discover the specific environmental challenges and pollutants affecting our local waterways.\n*   **What does the science say?** Dive into the latest data and long-term trends from our regional monitoring sites.\n*   **What can we do to help?** Learn about the practical, everyday actions we can all take to restore and protect our water.\n\n";
                         if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
                             const container = document.getElementById('container-markdown');
                             if (container) {
@@ -1678,7 +1689,7 @@
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "placeholder": "# Welcome\\nThis is a placeholder text for the welcome panel.\n", "show_element_name": false, "title": ""}};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "placeholder": "# Our Water\n\nWater is a fundamental part of who we are. It sustains our physical health, natural ecosystems, and spiritual well-being. From mountain streams to the sea, healthy water supports both people and wildlife.\n\nIn this chapter, we focus specifically on the water quality of our rivers and streams. We track the health of these waterways through our State of the Environment monitoring programme. This programme regularly tests water quality at representative sites across the entire region. This helps us understand the overall condition of our environment.\n\n**Click on the links below to explore our water story:**\n\n*   **What are the issues?** Discover the specific environmental challenges and pollutants affecting our local waterways.\n*   **What does the science say?** Dive into the latest data and long-term trends from our regional monitoring sites.\n*   **What can we do to help?** Learn about the practical, everyday actions we can all take to restore and protect our water.\n\n", "show_element_name": false, "title": ""}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
