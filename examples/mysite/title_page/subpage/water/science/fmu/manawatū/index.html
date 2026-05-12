@@ -1115,15 +1115,8 @@
 
 
 
-            <div class="html-card" id="card-overlay_div" style="grid-area: none; ">
-                <div class="card-content" id="container-overlay_div">
-
-<div id="full-page-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; overflow-y:auto; padding:50px; box-sizing:border-box;">
-    <button onclick="document.getElementById('full-page-overlay').style.display='none'" style="position:absolute; top:20px; right:20px; font-size:24px; cursor:pointer;">&times;</button>
-    <div id="overlay-content" style="max-width:800px; margin:0 auto;"></div>
-</div>
-
-                </div>
+            <div class="sivo-overlay-button-panel" id="card-button_state1" data-block-id="button_state1" data-payload-key="state_how" style="grid-area: button_state1;  display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
+                <button onclick="sivoOpenOverlay('button_state1')" style="width:100%; padding:10px; background-color:#0284c7; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">How we measure STATE</button>
             </div>
 
 
@@ -1136,12 +1129,8 @@
 
 
 
-            <div class="html-card" id="card-button_state1" style="grid-area: button_state1; ">
-                <div class="card-content" id="container-button_state1">
-
-    <button id="btn_state_how" onclick="openOverlay('btn_state_how')" style="width:100%; padding:10px; background-color:#0284c7; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">How we measure STATE</button>
-
-                </div>
+            <div class="sivo-overlay-button-panel" id="card-button_state2" data-block-id="button_state2" data-payload-key="state_understand" style="grid-area: button_state2;  display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
+                <button onclick="sivoOpenOverlay('button_state2')" style="width:100%; padding:10px; background-color:#0284c7; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">Understanding STATE maps</button>
             </div>
 
 
@@ -1154,12 +1143,8 @@
 
 
 
-            <div class="html-card" id="card-button_state2" style="grid-area: button_state2; ">
-                <div class="card-content" id="container-button_state2">
-
-    <button id="btn_state_understanding" onclick="openOverlay('btn_state_understanding')" style="width:100%; padding:10px; background-color:#0284c7; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">Understanding STATE maps</button>
-
-                </div>
+            <div class="sivo-overlay-button-panel" id="card-button_trend1" data-block-id="button_trend1" data-payload-key="trend_how" style="grid-area: button_trend1;  display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
+                <button onclick="sivoOpenOverlay('button_trend1')" style="width:100%; padding:10px; background-color:#10b981; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">How we measure TREND</button>
             </div>
 
 
@@ -1172,30 +1157,8 @@
 
 
 
-            <div class="html-card" id="card-button_trend1" style="grid-area: button_trend1; ">
-                <div class="card-content" id="container-button_trend1">
-
-    <button id="btn_trend_how" onclick="openOverlay('btn_trend_how')" style="width:100%; padding:10px; background-color:#10b981; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">How we measure TREND</button>
-
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-            <div class="html-card" id="card-button_trend2" style="grid-area: button_trend2; ">
-                <div class="card-content" id="container-button_trend2">
-
-    <button id="btn_trend_understanding" onclick="openOverlay('btn_trend_understanding')" style="width:100%; padding:10px; background-color:#10b981; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">Understanding TREND maps</button>
-
-                </div>
+            <div class="sivo-overlay-button-panel" id="card-button_trend2" data-block-id="button_trend2" data-payload-key="trend_understand" style="grid-area: button_trend2;  display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
+                <button onclick="sivoOpenOverlay('button_trend2')" style="width:100%; padding:10px; background-color:#10b981; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">Understanding TREND maps</button>
             </div>
 
 
@@ -1337,6 +1300,13 @@
         </div>
     </div>
 
+
+    <!-- Global Full Page Overlay for Buttons -->
+    <div id="sivo-full-page-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:10000; overflow-y:auto; padding:50px; box-sizing:border-box; backdrop-filter: blur(5px);">
+        <button onclick="document.getElementById('sivo-full-page-overlay').style.display='none'" style="position:absolute; top:20px; right:20px; font-size:32px; cursor:pointer; background:none; border:none; color:#64748b;">&times;</button>
+        <div id="sivo-overlay-content" style="max-width:800px; margin:0 auto; font-size: 1.1rem; line-height: 1.6;"></div>
+    </div>
+
     <!-- SIVO Data Injection -->
     <script>
         function toggleNavMenu() {
@@ -1360,6 +1330,69 @@
         // SIVO passes `views_data` directly to this template
         const viewsData = {"icon1":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../../../assets/water/20221123_OrangaWai_IconEcoli.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"E. \u003ci\u003ecoli\u003c/i\u003e","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"E. \u003ci\u003ecoli\u003c/i\u003e"},{"action_type":"tooltip","content":"\u003ch3\u003eE. \u003ci\u003ecoli\u003c/i\u003e\u003c/h3\u003e","title":"E. \u003ci\u003ecoli\u003c/i\u003e","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"E. \u003ci\u003ecoli\u003c/i\u003e"},{"action_type":"tooltip","content":"\u003ch3\u003eE. \u003ci\u003ecoli\u003c/i\u003e\u003c/h3\u003e","title":"E. \u003ci\u003ecoli\u003c/i\u003e","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon2":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Suspended sediment","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Suspended sediment"},{"action_type":"tooltip","content":"\u003ch3\u003eSuspended sediment\u003c/h3\u003e","title":"Suspended sediment","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Suspended sediment"},{"action_type":"tooltip","content":"\u003ch3\u003eSuspended sediment\u003c/h3\u003e","title":"Suspended sediment","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon3":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../../../assets/water/20221123_OrangaWai_IconN.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Nitrogen","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Nitrogen"},{"action_type":"tooltip","content":"\u003ch3\u003eNitrogen\u003c/h3\u003e","title":"Nitrogen","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Nitrogen"},{"action_type":"tooltip","content":"\u003ch3\u003eNitrogen\u003c/h3\u003e","title":"Nitrogen","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon4":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../../../assets/water/20221123_OrangaWai_IconP.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Phosphorus","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Phosphorus"},{"action_type":"tooltip","content":"\u003ch3\u003ePhosphorus\u003c/h3\u003e","title":"Phosphorus","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Phosphorus"},{"action_type":"tooltip","content":"\u003ch3\u003ePhosphorus\u003c/h3\u003e","title":"Phosphorus","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon5":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../../../assets/water/20221123_OrangaWai_IconChlA.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Algae","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Algae"},{"action_type":"tooltip","content":"\u003ch3\u003eAlgae\u003c/h3\u003e","title":"Algae","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Algae"},{"action_type":"tooltip","content":"\u003ch3\u003eAlgae\u003c/h3\u003e","title":"Algae","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon6":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Invertebrates","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Invertebrates"},{"action_type":"tooltip","content":"\u003ch3\u003eInvertebrates\u003c/h3\u003e","title":"Invertebrates","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Invertebrates"},{"action_type":"tooltip","content":"\u003ch3\u003eInvertebrates\u003c/h3\u003e","title":"Invertebrates","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
         const activeCharts = {};
+        // Initialize default texts for overlay buttons
+        window.sivoOverlayData = {};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                window.sivoOverlayData['button_state1'] = "Default text for How we measure STATE";
+
+
+
+                window.sivoOverlayData['button_state2'] = "Default text for Understanding STATE maps";
+
+
+
+                window.sivoOverlayData['button_trend1'] = "Default text for How we measure TREND";
+
+
+
+                window.sivoOverlayData['button_trend2'] = "Default text for Understanding TREND maps";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function sivoOpenOverlay(blockId) {
+            const overlay = document.getElementById('sivo-full-page-overlay');
+            const content = document.getElementById('sivo-overlay-content');
+            let text = window.sivoOverlayData[blockId] || "No content available.";
+
+            // Try parsing if marked is available and it looks like markdown
+            if (typeof marked !== 'undefined' && marked.parse) {
+                text = marked.parse(text);
+            }
+            if (window.DOMPurify) {
+                text = window.DOMPurify.sanitize(text);
+            }
+
+            content.innerHTML = text;
+            overlay.style.display = 'block';
+        }
+
         window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         function calculateLayoutSize(view, domElement) {
@@ -1932,7 +1965,7 @@
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"details": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 500, "fade_in": true, "fade_start_time_ms": 0, "padding": "10px", "placeholder": "This is the details placeholder.\n", "show_element_name": true, "title": "Details"}, "state": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 500, "fade_in": true, "fade_start_time_ms": 0, "padding": "10px", "placeholder": "This is the state placeholder.\n", "show_element_name": true, "title": "STATE"}, "trend": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 500, "fade_in": true, "fade_start_time_ms": 0, "padding": "10px", "placeholder": "This is the trend placeholder.\n", "show_element_name": true, "title": "TREND"}};
+                const detailsConfig = {"details": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 500, "fade_in": true, "fade_start_time_ms": 0, "padding": "10px", "payload_key": "details_md", "placeholder": "This is the details placeholder.\n", "show_element_name": true, "title": "Details"}, "state": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 500, "fade_in": true, "fade_start_time_ms": 0, "padding": "10px", "payload_key": "state_md", "placeholder": "This is the state placeholder.\n", "show_element_name": true, "title": "STATE"}, "trend": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 500, "fade_in": true, "fade_start_time_ms": 0, "padding": "10px", "payload_key": "trend_md", "placeholder": "This is the trend placeholder.\n", "show_element_name": true, "title": "TREND"}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
@@ -1953,14 +1986,35 @@
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
-                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
+                        const dConf = detailsConfig[blockId] || {};
+                        const showName = dConf.show_element_name !== false;
+                        const payloadKey = dConf.payload_key;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        if (tooltipContent) {
-                            var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
-                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeTooltip}`;
+
+                        let contentToDisplay = tooltipContent;
+                        if (payloadKey && payloadData && payloadData[payloadKey] !== undefined) {
+                            contentToDisplay = payloadData[payloadKey];
+                            if (typeof marked !== 'undefined' && marked.parse) {
+                                contentToDisplay = marked.parse(contentToDisplay);
+                            }
+                        }
+
+                        if (contentToDisplay) {
+                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay) : contentToDisplay;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeContent}`;
                         } else {
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
+                        }
+                    });
+
+                    // Update Overlay Button Data
+                    const overlayButtons = document.querySelectorAll('.sivo-overlay-button-panel');
+                    overlayButtons.forEach(btn => {
+                        const bId = btn.getAttribute('data-block-id');
+                        const pKey = btn.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            window.sivoOverlayData[bId] = payloadData[pKey];
                         }
                     });
                 }
@@ -1985,66 +2039,6 @@
         }
 
         // Inject Custom JS if provided
-
-
-window.currentOverlayData = {
-    'btn_state_how': 'Default text for How we measure STATE',
-    'btn_state_understanding': 'Default text for Understanding STATE maps',
-    'btn_trend_how': 'Default text for How we measure TREND',
-    'btn_trend_understanding': 'Default text for Understanding TREND maps'
-};
-
-function openOverlay(btnId) {
-    const overlay = document.getElementById('full-page-overlay');
-    const content = document.getElementById('overlay-content');
-    content.innerHTML = window.currentOverlayData[btnId];
-    overlay.style.display = 'block';
-}
-
-setTimeout(function() {
-    Object.keys(activeCharts).forEach(chartId => {
-        const chart = activeCharts[chartId];
-
-        chart.on('click', function(params) {
-            if(!params.name) return;
-
-            const viewData = viewsData[chartId];
-            if (!viewData || !viewData.actions_manifest) return;
-
-            const elementActions = viewData.actions_manifest[params.name];
-            if (!elementActions) return;
-
-            let payloadData = null;
-            const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
-            if (payloadAction && payloadAction.payload) {
-                payloadData = payloadAction.payload;
-            }
-
-            if (payloadData) {
-                if (typeof marked !== 'undefined') {
-                    if (payloadData.details_md) {
-                        const c = document.querySelector('#card-details .sivo-details-content');
-                        if (c) c.innerHTML = marked.parse(payloadData.details_md);
-                    }
-                    if (payloadData.state_md) {
-                        const c = document.querySelector('#card-state .sivo-details-content');
-                        if (c) c.innerHTML = marked.parse(payloadData.state_md);
-                    }
-                    if (payloadData.trend_md) {
-                        const c = document.querySelector('#card-trend .sivo-details-content');
-                        if (c) c.innerHTML = marked.parse(payloadData.trend_md);
-                    }
-                }
-
-                if (payloadData.state_how) window.currentOverlayData['btn_state_how'] = marked.parse(payloadData.state_how);
-                if (payloadData.state_understand) window.currentOverlayData['btn_state_understanding'] = marked.parse(payloadData.state_understand);
-                if (payloadData.trend_how) window.currentOverlayData['btn_trend_how'] = marked.parse(payloadData.trend_how);
-                if (payloadData.trend_understand) window.currentOverlayData['btn_trend_understanding'] = marked.parse(payloadData.trend_understand);
-            }
-        });
-    });
-}, 1000);
-
 
 
         // Handle back/forward cache (bfcache) restoration
