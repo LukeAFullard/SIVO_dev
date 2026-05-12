@@ -37,9 +37,11 @@ with open(os.path.join(os.path.dirname(__file__), "welcome.md"), "r", encoding="
 
 desktop_grid = """
 'banner banner'
+'markdown .'
 'markdown issues'
 'markdown science'
 'markdown help'
+'markdown .'
 'eels eels'
 """
 

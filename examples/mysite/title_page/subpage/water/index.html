@@ -84,9 +84,11 @@
 
             grid-template-areas:
 'banner banner'
+'markdown .'
 'markdown issues'
 'markdown science'
 'markdown help'
+'markdown .'
 'eels eels'
 ;
 
@@ -1093,6 +1095,13 @@ In this chapter, we focus specifically on the water quality of our rivers and st
         </div>
     </div>
 
+
+    <!-- Global Full Page Overlay for Buttons -->
+    <div id="sivo-full-page-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:10000; overflow-y:auto; padding:50px; box-sizing:border-box; backdrop-filter: blur(5px);">
+        <button onclick="document.getElementById('sivo-full-page-overlay').style.display='none'" style="position:absolute; top:20px; right:20px; font-size:32px; cursor:pointer; background:none; border:none; color:#64748b;">&times;</button>
+        <div id="sivo-overlay-content" style="max-width:800px; margin:0 auto; font-size: 1.1rem; line-height: 1.6;"></div>
+    </div>
+
     <!-- SIVO Data Injection -->
     <script>
         function toggleNavMenu() {
@@ -1116,6 +1125,39 @@ In this chapter, we focus specifically on the water quality of our rivers and st
         // SIVO passes `views_data` directly to this template
         const viewsData = {};
         const activeCharts = {};
+        // Initialize default texts for overlay buttons
+        window.sivoOverlayData = {};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function sivoOpenOverlay(blockId) {
+            const overlay = document.getElementById('sivo-full-page-overlay');
+            const content = document.getElementById('sivo-overlay-content');
+            let text = window.sivoOverlayData[blockId] || "No content available.";
+
+            // Try parsing if marked is available and it looks like markdown
+            if (typeof marked !== 'undefined' && marked.parse) {
+                text = marked.parse(text);
+            }
+            if (window.DOMPurify) {
+                text = window.DOMPurify.sanitize(text);
+            }
+
+            content.innerHTML = text;
+            overlay.style.display = 'block';
+        }
+
         window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         function calculateLayoutSize(view, domElement) {
@@ -1688,7 +1730,7 @@ In this chapter, we focus specifically on the water quality of our rivers and st
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "placeholder": "# Our Water\n\nWater is a fundamental part of who we are. It sustains our physical health, natural ecosystems, and spiritual well-being. From mountain streams to the sea, healthy water supports both people and wildlife.\n\nIn this chapter, we focus specifically on the water quality of our rivers and streams. We track the health of these waterways through our State of the Environment monitoring programme. This programme regularly tests water quality at representative sites across the entire region. This helps us understand the overall condition of our environment.\n\n**Click on the links to explore our water story:**\n\n*   **What are the issues?** Discover the specific environmental challenges and pollutants affecting our local waterways.\n*   **What does the science say?** Dive into the latest data and long-term trends from our regional monitoring sites.\n*   **What can we do to help?** Learn about the practical, everyday actions we can all take to restore and protect our water.\n", "show_element_name": false, "title": ""}};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "# Our Water\n\nWater is a fundamental part of who we are. It sustains our physical health, natural ecosystems, and spiritual well-being. From mountain streams to the sea, healthy water supports both people and wildlife.\n\nIn this chapter, we focus specifically on the water quality of our rivers and streams. We track the health of these waterways through our State of the Environment monitoring programme. This programme regularly tests water quality at representative sites across the entire region. This helps us understand the overall condition of our environment.\n\n**Click on the links to explore our water story:**\n\n*   **What are the issues?** Discover the specific environmental challenges and pollutants affecting our local waterways.\n*   **What does the science say?** Dive into the latest data and long-term trends from our regional monitoring sites.\n*   **What can we do to help?** Learn about the practical, everyday actions we can all take to restore and protect our water.\n", "show_element_name": false, "title": ""}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
@@ -1709,14 +1751,35 @@ In this chapter, we focus specifically on the water quality of our rivers and st
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
-                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
+                        const dConf = detailsConfig[blockId] || {};
+                        const showName = dConf.show_element_name !== false;
+                        const payloadKey = dConf.payload_key;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        if (tooltipContent) {
-                            var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
-                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeTooltip}`;
+
+                        let contentToDisplay = tooltipContent;
+                        if (payloadKey && payloadData && payloadData[payloadKey] !== undefined) {
+                            contentToDisplay = payloadData[payloadKey];
+                            if (typeof marked !== 'undefined' && marked.parse) {
+                                contentToDisplay = marked.parse(contentToDisplay);
+                            }
+                        }
+
+                        if (contentToDisplay) {
+                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay) : contentToDisplay;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeContent}`;
                         } else {
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
+                        }
+                    });
+
+                    // Update Overlay Button Data
+                    const overlayButtons = document.querySelectorAll('.sivo-overlay-button-panel');
+                    overlayButtons.forEach(btn => {
+                        const bId = btn.getAttribute('data-block-id');
+                        const pKey = btn.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            window.sivoOverlayData[bId] = payloadData[pKey];
                         }
                     });
                 }
