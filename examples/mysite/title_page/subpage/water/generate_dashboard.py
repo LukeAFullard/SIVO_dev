@@ -37,10 +37,10 @@ with open(os.path.join(os.path.dirname(__file__), "welcome.md"), "r", encoding="
 
 desktop_grid = """
 'banner banner'
-'markdown eels'
-'issues eels'
-'science eels'
-'help eels'
+'markdown issues'
+'markdown science'
+'markdown help'
+'eels eels'
 """
 
 mobile_grid = """
@@ -117,7 +117,7 @@ dashboard.add_details_panel(
 dashboard.add_image_block(
     block_id="eels",
     image_url="../../assets/water/eels.png",
-    col_span=1,
+    col_span=2,
     grid_area="eels",
     object_fit="contain",
     border_radius="10px",
