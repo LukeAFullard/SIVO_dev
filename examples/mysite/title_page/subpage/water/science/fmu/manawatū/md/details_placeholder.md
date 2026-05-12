@@ -1,7 +1,5 @@
 # The Manawatū Freshwater Management Unit
 
-Welcome to the Manawatū Freshwater Management Unit (FMU). This is the specific geographic area we use to monitor and manage the Manawatū River, its tributaries, and local lakes and wetlands.
-
 ### A Unique Journey
 The Manawatū River is truly unique—it is the only river in New Zealand that completely crosses a mountain range. It begins on the eastern side of the Ruahine Ranges, cuts through the stunning Te Āpiti (Manawatū Gorge), and flows across the plains before finally meeting the Tasman Sea at Foxton Beach. 
 
