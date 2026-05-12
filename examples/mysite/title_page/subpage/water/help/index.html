@@ -12,9 +12,6 @@
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
-    <!-- Include marked -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
 
     <style>
         :root {
@@ -84,7 +81,6 @@
 
             grid-template-areas:
 'banner banner banner'
-'intro_text intro_text intro_text'
 'card1 card2 card3'
 'card4 card5 card6'
 'footer_image footer_image footer_image'
@@ -230,7 +226,6 @@
 
                 grid-template-areas:
 'banner'
-'intro_text'
 'card1'
 'card2'
 'card3'
@@ -963,36 +958,6 @@
 
 
     <div class="dashboard-container" id="dashboard-container">
-
-
-
-
-
-
-
-
-
-
-            <div class="html-card sivo-details-panel" id="card-intro_text" data-block-id="intro_text" style="grid-area: intro_text;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
-                <div class="card-header"></div>
-                <div class="card-content sivo-details-content" id="container-intro_text">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-intro_text">Take Action for Healthy Waterways
-Everyone has a role to play in restoring the health of our local rivers, lakes, and groundwater. Whether you live in town or on a farm, here are simple, powerful actions you can take:
-</p>
-                </div>
-                <script>
-                    (function() {
-                        const rawPlaceholder = "Take Action for Healthy Waterways\nEveryone has a role to play in restoring the health of our local rivers, lakes, and groundwater. Whether you live in town or on a farm, here are simple, powerful actions you can take:\n";
-                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
-                            const container = document.getElementById('container-intro_text');
-                            if (container) {
-                                container.innerHTML = marked.parse(rawPlaceholder);
-                            }
-                        }
-                    })();
-                </script>
-            </div>
-
 
 
 
@@ -1742,7 +1707,7 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"intro_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "placeholder": "Take Action for Healthy Waterways\nEveryone has a role to play in restoring the health of our local rivers, lakes, and groundwater. Whether you live in town or on a farm, here are simple, powerful actions you can take:\n", "show_element_name": true, "title": ""}};
+                const detailsConfig = {};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
