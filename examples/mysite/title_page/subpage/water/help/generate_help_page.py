@@ -62,12 +62,12 @@ dashboard.add_image_block(
 )
 
 # Helper function to create a Sivo instance with a card
-def create_card_sivo(id_str, title, value, body):
+def create_card_sivo(id_str, title, value, body, color, url=None):
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
       <rect id="{id_str}" x="0" y="0" width="100" height="100" fill="none" />
     </svg>'''
     s = Sivo.from_string(svg, layout_size="100%", mobile_layout_size="100%", lock_canvas=True, disable_zoom_controls=True, disable_resizer=True, lock_scroll_bounds=True, lock_zoom_out=True)
-    s.add_card(element_id=id_str, title=title, value=value, body=body, left="0%", top="0%", width="100%", height="100%")
+    s.add_card(element_id=id_str, title=title, value=value, body=body, left="0%", top="0%", width="100%", height="100%", bg_color=color, url=url)
     return s
 
 dashboard.add_sivo_block("card1", create_card_sivo("c1", "Take action on-farm", "", "Seek guidance from Horizons to reduce\ncontaminants entering waterways. Learn\nmore about on-farm mitigations at\nlandscapedna.org.", "#007DA3", url="https://landscapedna.org/actions/"), col_span=1, grid_area="card1", min_height="250px")
