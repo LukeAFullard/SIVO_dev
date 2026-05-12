@@ -74,12 +74,12 @@ dashboard.add_text_block(
 
 # Define icons and their tooltips/markdown content files
 icons = [
-    {"id": "icon1", "img": "20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_file": "md/ecoli.md"},
-    {"id": "icon2", "img": "20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_file": "md/suspended_sediment.md"},
-    {"id": "icon3", "img": "20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_file": "md/nitrogen.md"},
-    {"id": "icon4", "img": "20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_file": "md/phosphorus.md"},
-    {"id": "icon5", "img": "20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_file": "md/algae.md"},
-    {"id": "icon6", "img": "20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_file": "md/invertebrates.md"}
+    {"id": "icon1", "img": "../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_file": "md/ecoli.md"},
+    {"id": "icon2", "img": "../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_file": "md/suspended_sediment.md"},
+    {"id": "icon3", "img": "../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_file": "md/nitrogen.md"},
+    {"id": "icon4", "img": "../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_file": "md/phosphorus.md"},
+    {"id": "icon5", "img": "../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_file": "md/algae.md"},
+    {"id": "icon6", "img": "../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_file": "md/invertebrates.md"}
 ]
 
 for icon in icons:
@@ -162,7 +162,7 @@ dashboard.add_details_panel(
 # Right image (4 columns now)
 dashboard.add_image_block(
     block_id="image",
-    image_url="koura-blue.png",
+    image_url="../../../assets/water/koura-blue.png",
     col_span=4,
     grid_area="image",
     object_fit="contain"
