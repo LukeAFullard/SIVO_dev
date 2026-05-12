@@ -86,7 +86,8 @@ def create_card_sivo(id_str, title, value, body, bg_color):
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
       <rect id="{id_str}" x="0" y="0" width="100" height="100" fill="none" />
     </svg>'''
-    s = Sivo.from_string(svg, layout_size="100%", mobile_layout_size="100%", lock_canvas=True, disable_zoom_controls=True, disable_resizer=True, lock_scroll_bounds=True, lock_zoom_out=True)
+    s = Sivo.from_string(svg, layout_size="100%", mobile_layout_size="100%", lock_canvas=True, disable_zoom_controls=True, disable_resizer=True, lock_scroll_bounds=True, lock_zoom_out=True, theme="transparent", render_mode="svg")
+    s.map(id_str, color="transparent")
     s.add_card(element_id=id_str, title=title, value=value, body=body, left="0%", top="0%", width="100%", height="100%", shape="ellipse", bg_color=bg_color, border_color=bg_color, title_color="#ffffff", value_color="#ffffff", body_color="#ffffff")
     return s
 
