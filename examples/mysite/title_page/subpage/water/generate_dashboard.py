@@ -31,8 +31,13 @@ dashboard = SivoDashboard(
     navigation_menu=nav_menu
 )
 
+# Read the markdown
+with open(os.path.join(os.path.dirname(__file__), "welcome.md"), "r", encoding="utf-8") as f:
+    md_content = f.read()
+
 desktop_grid = """
 'banner banner'
+'markdown eels'
 'issues eels'
 'science eels'
 'help eels'
@@ -40,6 +45,7 @@ desktop_grid = """
 
 mobile_grid = """
 'banner'
+'markdown'
 'issues'
 'science'
 'help'
@@ -90,6 +96,21 @@ dashboard.add_text_block(
     grid_area="help",
     fade_in=True,
     fade_start_time_ms=900,
+    fade_duration_ms=2000
+)
+
+dashboard.add_details_panel(
+    block_id="markdown",
+    title="",
+    placeholder=md_content,
+    col_span=1,
+    grid_area="markdown",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=300,
     fade_duration_ms=2000
 )
 
