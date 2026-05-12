@@ -36,6 +36,7 @@ desktop_grid = """
 'banner banner banner'
 'card1 card2 card3'
 'card4 card5 card6'
+'footer_image footer_image footer_image'
 """
 
 mobile_grid = """
@@ -46,6 +47,7 @@ mobile_grid = """
 'card4'
 'card5'
 'card6'
+'footer_image'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -68,12 +70,21 @@ def create_card_sivo(id_str, title, value, body):
     s.add_card(element_id=id_str, title=title, value=value, body=body, left="0%", top="0%", width="100%", height="100%")
     return s
 
-dashboard.add_sivo_block("card1", create_card_sivo("c1", "Volunteer", "Join us", "Sign up for weekend cleanups."), col_span=1, grid_area="card1", min_height="250px")
-dashboard.add_sivo_block("card2", create_card_sivo("c2", "Donate", "$50", "Your donation helps us plant more trees."), col_span=1, grid_area="card2", min_height="250px")
-dashboard.add_sivo_block("card3", create_card_sivo("c3", "Report", "1-800", "Report illegal dumping in waterways."), col_span=1, grid_area="card3", min_height="250px")
-dashboard.add_sivo_block("card4", create_card_sivo("c4", "Educate", "Learn", "Read our guides on water conservation."), col_span=1, grid_area="card4", min_height="250px")
-dashboard.add_sivo_block("card5", create_card_sivo("c5", "Reduce", "Save", "Tips on reducing daily water usage."), col_span=1, grid_area="card5", min_height="250px")
-dashboard.add_sivo_block("card6", create_card_sivo("c6", "Advocate", "Speak up", "Contact your local representatives."), col_span=1, grid_area="card6", min_height="250px")
+dashboard.add_sivo_block("card1", create_card_sivo("c1", "Take action on-farm", "", "Seek guidance from Horizons to reduce\ncontaminants entering waterways. Learn\nmore about on-farm mitigations at\nlandscapedna.org.", "#007DA3", url="https://landscapedna.org/actions/"), col_span=1, grid_area="card1", min_height="250px")
+dashboard.add_sivo_block("card2", create_card_sivo("c2", "Get involved", "", "Join a local Catchment Care\nGroup to support community\nled efforts to improve\nwater quality.", "#00A79E", url="https://www.cca.nz/"), col_span=1, grid_area="card2", min_height="250px")
+dashboard.add_sivo_block("card3", create_card_sivo("c3", "Help track fish passage barriers", "", "Download the NIWA Fish\nPassage Assessment\nTool app to log barriers\nnationwide, and explore\nassessed structures in the\ntool’s database.", "#459461", url="https://niwa.co.nz/freshwater/fish-passage/fish-passage-assessment-tool"), col_span=1, grid_area="card3", min_height="250px")
+dashboard.add_sivo_block("card4", create_card_sivo("c4", "Conserve water", "", "check your pipes for damage or leaks to avoid wasting water\n. Using water efficiently helps keep our river at healthy levels, which is essential for aquatic life to survive", "#283244"), col_span=1, grid_area="card4", min_height="250px")
+dashboard.add_sivo_block("card5", create_card_sivo("c5", "Maintain Septic Systems", "", "If you are not on a town sewage system, ensure your septic tank is well-maintained and not leaking. Leaky septic systems are a common source of excess nitrogen in our waterways", "#772981"), col_span=1, grid_area="card5", min_height="250px")
+dashboard.add_sivo_block("card6", create_card_sivo("c6", "Check out", "", "our State of\nEnvironment Report", "#007DA3", url="https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf"), col_span=1, grid_area="card6", min_height="250px")
+
+dashboard.add_image_block(
+    block_id="footer_image",
+    image_url="../../../assets/water/fishbanner.png",
+    col_span=3,
+    grid_area="footer_image",
+    object_fit="contain",
+    border_radius="0px"
+)
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.to_html(output_path=output_file)
