@@ -1097,9 +1097,14 @@
         const activeCharts = {};
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
+        window.sivoOverlaySizes = {};
         {% for block in layout_order %}
             {% if block.type == "overlay_button" %}
                 window.sivoOverlayData['{{ block.id }}'] = {{ block.default_text | tojson }};
+                window.sivoOverlaySizes['{{ block.id }}'] = {
+                    width: {{ block.panel_width | default('100%') | tojson }},
+                    height: {{ block.panel_height | default('100%') | tojson }}
+                };
             {% endif %}
         {% endfor %}
 
@@ -1107,6 +1112,25 @@
             const overlay = document.getElementById('sivo-full-page-overlay');
             const content = document.getElementById('sivo-overlay-content');
             let text = window.sivoOverlayData[blockId] || "No content available.";
+
+            if (window.sivoOverlaySizes[blockId]) {
+                overlay.style.width = window.sivoOverlaySizes[blockId].width;
+                overlay.style.height = window.sivoOverlaySizes[blockId].height;
+                // Center it if it's smaller than 100%
+                if (window.sivoOverlaySizes[blockId].width !== "100%" || window.sivoOverlaySizes[blockId].height !== "100%") {
+                    overlay.style.top = "50%";
+                    overlay.style.left = "50%";
+                    overlay.style.transform = "translate(-50%, -50%)";
+                    overlay.style.borderRadius = "10px";
+                    overlay.style.boxShadow = "0 25px 50px -12px rgba(0, 0, 0, 0.25)";
+                } else {
+                    overlay.style.top = "0";
+                    overlay.style.left = "0";
+                    overlay.style.transform = "none";
+                    overlay.style.borderRadius = "0";
+                    overlay.style.boxShadow = "none";
+                }
+            }
 
             // Try parsing if marked is available and it looks like markdown
             if (typeof marked !== 'undefined' && marked.parse) {
