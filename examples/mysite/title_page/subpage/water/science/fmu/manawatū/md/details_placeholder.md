@@ -1,4 +1,3 @@
-```markdown
 # The Manawatū Freshwater Management Unit
 
 Welcome to the Manawatū Freshwater Management Unit (FMU). This is the specific geographic area we use to monitor and manage the Manawatū River, its tributaries, and local lakes and wetlands.
@@ -24,4 +23,3 @@ As the local proverb reminds us: *"If the water is healthy, the land and the peo
 Understanding these local pressures is vital for protecting our waterways. 
 *   **Explore how state and trend are calculated in the sections below.**
 *   **When ready, click the icons above to explore monitoring results in the FMU.**
-```
