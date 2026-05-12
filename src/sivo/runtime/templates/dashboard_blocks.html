@@ -1036,6 +1036,10 @@
                     </div>
                 </div>
             </div>
+                        {% elif block.type == "overlay_button" %}
+            <div class="sivo-overlay-button-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-payload-key="{{ block.payload_key }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
+                <button onclick="sivoOpenOverlay('{{ block.id }}')" style="width:100%; padding:10px; background-color:{{ block.button_color }}; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">{{ block.label }}</button>
+            </div>
             {% elif block.type == "geocoder" %}
             <div class="html-card sivo-geocoder-panel {{ overflow_class }}" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; box-shadow: none; position: relative;">
                 {% if block.text %}
@@ -1061,6 +1065,13 @@
         </div>
     </div>
 
+
+    <!-- Global Full Page Overlay for Buttons -->
+    <div id="sivo-full-page-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:10000; overflow-y:auto; padding:50px; box-sizing:border-box; backdrop-filter: blur(5px);">
+        <button onclick="document.getElementById('sivo-full-page-overlay').style.display='none'" style="position:absolute; top:20px; right:20px; font-size:32px; cursor:pointer; background:none; border:none; color:#64748b;">&times;</button>
+        <div id="sivo-overlay-content" style="max-width:800px; margin:0 auto; font-size: 1.1rem; line-height: 1.6;"></div>
+    </div>
+
     <!-- SIVO Data Injection -->
     <script>
         function toggleNavMenu() {
@@ -1084,6 +1095,31 @@
         // SIVO passes `views_data` directly to this template
         const viewsData = {{ views_data | safe }};
         const activeCharts = {};
+        // Initialize default texts for overlay buttons
+        window.sivoOverlayData = {};
+        {% for block in layout_order %}
+            {% if block.type == "overlay_button" %}
+                window.sivoOverlayData['{{ block.id }}'] = {{ block.default_text | tojson }};
+            {% endif %}
+        {% endfor %}
+
+        function sivoOpenOverlay(blockId) {
+            const overlay = document.getElementById('sivo-full-page-overlay');
+            const content = document.getElementById('sivo-overlay-content');
+            let text = window.sivoOverlayData[blockId] || "No content available.";
+
+            // Try parsing if marked is available and it looks like markdown
+            if (typeof marked !== 'undefined' && marked.parse) {
+                text = marked.parse(text);
+            }
+            if (window.DOMPurify) {
+                text = window.DOMPurify.sanitize(text);
+            }
+
+            content.innerHTML = text;
+            overlay.style.display = 'block';
+        }
+
         window.sivoToggleImageState = window.sivoToggleImageState || {};
 
         function calculateLayoutSize(view, domElement) {
@@ -1677,14 +1713,35 @@
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
-                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
+                        const dConf = detailsConfig[blockId] || {};
+                        const showName = dConf.show_element_name !== false;
+                        const payloadKey = dConf.payload_key;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        if (tooltipContent) {
-                            var safeTooltip = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
-                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeTooltip}`;
+
+                        let contentToDisplay = tooltipContent;
+                        if (payloadKey && payloadData && payloadData[payloadKey] !== undefined) {
+                            contentToDisplay = payloadData[payloadKey];
+                            if (typeof marked !== 'undefined' && marked.parse) {
+                                contentToDisplay = marked.parse(contentToDisplay);
+                            }
+                        }
+
+                        if (contentToDisplay) {
+                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay) : contentToDisplay;
+                            container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeContent}`;
                         } else {
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
+                        }
+                    });
+
+                    // Update Overlay Button Data
+                    const overlayButtons = document.querySelectorAll('.sivo-overlay-button-panel');
+                    overlayButtons.forEach(btn => {
+                        const bId = btn.getAttribute('data-block-id');
+                        const pKey = btn.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            window.sivoOverlayData[bId] = payloadData[pKey];
                         }
                     });
                 }

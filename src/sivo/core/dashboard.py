@@ -142,7 +142,7 @@ class SivoDashboard:
 
         self.add_html_block(block_id, html_content, col_span=col_span, slot=slot, grid_area=grid_area, overflow_visible=overflow_visible, min_height=min_height)
 
-    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, background_color: Optional[str] = None, border_radius: Optional[str] = None, padding: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500, show_element_name: bool = True):
+    def add_details_panel(self, block_id: str, title: str = "Details", placeholder: str = "Select an item to view details.", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, background_color: Optional[str] = None, border_radius: Optional[str] = None, padding: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500, show_element_name: bool = True, payload_key: Optional[str] = None):
         """
         Adds a pre-built panel that automatically listens to SIVO canvas clicks and renders
         the clicked element's `html` (tooltip content) mapping.
@@ -156,7 +156,8 @@ class SivoDashboard:
             "fade_in": fade_in,
             "fade_start_time_ms": fade_start_time_ms,
             "fade_duration_ms": fade_duration_ms,
-            "show_element_name": show_element_name
+            "show_element_name": show_element_name,
+            "payload_key": payload_key
         }
         self.layout_order.append({"type": "details", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
 
@@ -179,6 +180,26 @@ class SivoDashboard:
         """
         self.layout_order.append({"type": "geocoder", "id": block_id, "text": text, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
 
+
+
+    def add_overlay_button(self, block_id: str, label: str, default_text: str = "Select an item to view details.", payload_key: Optional[str] = None, button_color: str = "#0284c7", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
+        """
+        Adds a button that opens a full-page overlay when clicked. The content of the overlay
+        is dynamically updated from the specified `payload_key` when SIVO elements are clicked.
+        """
+        self.layout_order.append({
+            "type": "overlay_button",
+            "id": block_id,
+            "label": label,
+            "default_text": default_text,
+            "payload_key": payload_key,
+            "button_color": button_color,
+            "col_span": col_span,
+            "slot": slot,
+            "grid_area": grid_area,
+            "overflow_visible": overflow_visible,
+            "min_height": min_height
+        })
 
     def set_grid_layout(self, desktop: str, mobile: Optional[str] = None):
         """

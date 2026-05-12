@@ -102,7 +102,8 @@ dashboard.add_details_panel(
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
     padding="10px",
-    fade_in=True
+    fade_in=True,
+    payload_key="details_md"
 )
 
 dashboard.add_details_panel(
@@ -114,7 +115,8 @@ dashboard.add_details_panel(
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
     padding="10px",
-    fade_in=True
+    fade_in=True,
+    payload_key="state_md"
 )
 
 dashboard.add_details_panel(
@@ -126,28 +128,15 @@ dashboard.add_details_panel(
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
     padding="10px",
-    fade_in=True
+    fade_in=True,
+    payload_key="trend_md"
 )
 
-overlay_html = """
-<div id="full-page-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; overflow-y:auto; padding:50px; box-sizing:border-box;">
-    <button onclick="document.getElementById('full-page-overlay').style.display='none'" style="position:absolute; top:20px; right:20px; font-size:24px; cursor:pointer;">&times;</button>
-    <div id="overlay-content" style="max-width:800px; margin:0 auto;"></div>
-</div>
-"""
-dashboard.add_html_block("overlay_div", html_content=overlay_html, col_span=8, slot="main", grid_area="none")
+dashboard.add_overlay_button(block_id="button_state1", label="How we measure STATE", default_text="Default text for How we measure STATE", payload_key="state_how", button_color="#0284c7", col_span=1, grid_area="button_state1")
+dashboard.add_overlay_button(block_id="button_state2", label="Understanding STATE maps", default_text="Default text for Understanding STATE maps", payload_key="state_understand", button_color="#0284c7", col_span=1, grid_area="button_state2")
 
-def make_button(id, label, default_overlay_text, bg_color):
-    btn = f'''
-    <button id="{id}" onclick="openOverlay('{id}')" style="width:100%; padding:10px; background-color:{bg_color}; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">{label}</button>
-    '''
-    return btn
-
-dashboard.add_html_block(block_id="button_state1", html_content=make_button("btn_state_how", "How we measure STATE", "Default text for How we measure STATE", "#0284c7"), col_span=1, grid_area="button_state1")
-dashboard.add_html_block(block_id="button_state2", html_content=make_button("btn_state_understanding", "Understanding STATE maps", "Default text for Understanding STATE maps", "#0284c7"), col_span=1, grid_area="button_state2")
-
-dashboard.add_html_block(block_id="button_trend1", html_content=make_button("btn_trend_how", "How we measure TREND", "Default text for How we measure TREND", "#10b981"), col_span=1, grid_area="button_trend1")
-dashboard.add_html_block(block_id="button_trend2", html_content=make_button("btn_trend_understanding", "Understanding TREND maps", "Default text for Understanding TREND maps", "#10b981"), col_span=1, grid_area="button_trend2")
+dashboard.add_overlay_button(block_id="button_trend1", label="How we measure TREND", default_text="Default text for How we measure TREND", payload_key="trend_how", button_color="#10b981", col_span=1, grid_area="button_trend1")
+dashboard.add_overlay_button(block_id="button_trend2", label="Understanding TREND maps", default_text="Default text for Understanding TREND maps", payload_key="trend_understand", button_color="#10b981", col_span=1, grid_area="button_trend2")
 
 for icon in icons:
     md_path = os.path.join(os.path.dirname(__file__), icon["md_file"])
@@ -227,65 +216,7 @@ with open(os.path.join(os.path.dirname(__file__), "md/map_placeholder.html"), "r
 
 dashboard.add_html_block(block_id="map", html_content=f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{map_html}</div>", col_span=4, grid_area="map")
 
-custom_js = """
-window.currentOverlayData = {
-    'btn_state_how': 'Default text for How we measure STATE',
-    'btn_state_understanding': 'Default text for Understanding STATE maps',
-    'btn_trend_how': 'Default text for How we measure TREND',
-    'btn_trend_understanding': 'Default text for Understanding TREND maps'
-};
-
-function openOverlay(btnId) {
-    const overlay = document.getElementById('full-page-overlay');
-    const content = document.getElementById('overlay-content');
-    content.innerHTML = window.currentOverlayData[btnId];
-    overlay.style.display = 'block';
-}
-
-setTimeout(function() {
-    Object.keys(activeCharts).forEach(chartId => {
-        const chart = activeCharts[chartId];
-
-        chart.on('click', function(params) {
-            if(!params.name) return;
-
-            const viewData = viewsData[chartId];
-            if (!viewData || !viewData.actions_manifest) return;
-
-            const elementActions = viewData.actions_manifest[params.name];
-            if (!elementActions) return;
-
-            let payloadData = null;
-            const payloadAction = elementActions.find(a => a.action_type === 'callback' || a.payload !== undefined);
-            if (payloadAction && payloadAction.payload) {
-                payloadData = payloadAction.payload;
-            }
-
-            if (payloadData) {
-                if (typeof marked !== 'undefined') {
-                    if (payloadData.details_md) {
-                        const c = document.querySelector('#card-details .sivo-details-content');
-                        if (c) c.innerHTML = marked.parse(payloadData.details_md);
-                    }
-                    if (payloadData.state_md) {
-                        const c = document.querySelector('#card-state .sivo-details-content');
-                        if (c) c.innerHTML = marked.parse(payloadData.state_md);
-                    }
-                    if (payloadData.trend_md) {
-                        const c = document.querySelector('#card-trend .sivo-details-content');
-                        if (c) c.innerHTML = marked.parse(payloadData.trend_md);
-                    }
-                }
-
-                if (payloadData.state_how) window.currentOverlayData['btn_state_how'] = marked.parse(payloadData.state_how);
-                if (payloadData.state_understand) window.currentOverlayData['btn_state_understanding'] = marked.parse(payloadData.state_understand);
-                if (payloadData.trend_how) window.currentOverlayData['btn_trend_how'] = marked.parse(payloadData.trend_how);
-                if (payloadData.trend_understand) window.currentOverlayData['btn_trend_understanding'] = marked.parse(payloadData.trend_understand);
-            }
-        });
-    });
-}, 1000);
-"""
+custom_js = None
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 
