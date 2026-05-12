@@ -34,6 +34,7 @@ dashboard = SivoDashboard(
 
 desktop_grid = """
 'banner banner banner'
+'intro_text intro_text intro_text'
 'card1 card2 card3'
 'card4 card5 card6'
 'footer_image footer_image footer_image'
@@ -41,6 +42,7 @@ desktop_grid = """
 
 mobile_grid = """
 'banner'
+'intro_text'
 'card1'
 'card2'
 'card3'
@@ -61,6 +63,24 @@ dashboard.add_image_block(
     border_radius="0px"
 )
 
+intro_md_path = os.path.join(os.path.dirname(__file__), "intro.md")
+with open(intro_md_path, "r") as f:
+    intro_md = f.read()
+
+dashboard.add_details_panel(
+    block_id="intro_text",
+    title="",
+    placeholder=intro_md,
+    col_span=3,
+    grid_area="intro_text",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    fade_in=True,
+    fade_start_time_ms=300,
+    fade_duration_ms=2000
+)
+
 # Helper function to create a Sivo instance with a card
 def create_card_sivo(id_str, title, value, body, color, url=None):
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
@@ -68,7 +88,7 @@ def create_card_sivo(id_str, title, value, body, color, url=None):
     </svg>'''
     s = Sivo.from_string(svg, layout_size="100%", mobile_layout_size="100%", lock_canvas=True, disable_zoom_controls=True, disable_resizer=True, lock_scroll_bounds=True, lock_zoom_out=True, theme="transparent", render_mode="svg")
     s.map(id_str, color="transparent")
-    s.add_card(element_id=id_str, title=title, value=value, body=body, left="0%", top="0%", width="100%", height="100%", shape="ellipse", bg_color=color, url=url)
+    s.add_card(element_id=id_str, title=title, value=value, body=body, left="0%", top="0%", width="100%", height="100%", shape="ellipse", bg_color=color, url=url, title_color="#ffffff", body_color="#ffffff")
     return s
 
 dashboard.add_sivo_block("card1", create_card_sivo("c1", "Take action on-farm", "", "Seek guidance from Horizons to reduce\ncontaminants entering waterways. Learn\nmore about on-farm mitigations at\nlandscapedna.org.", "#007DA3", url="https://landscapedna.org/actions/"), col_span=1, grid_area="card1", min_height="250px")
