@@ -182,7 +182,7 @@ class SivoDashboard:
 
 
 
-    def add_overlay_button(self, block_id: str, label: str, default_text: str = "Select an item to view details.", payload_key: Optional[str] = None, button_color: str = "#0284c7", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
+    def add_overlay_button(self, block_id: str, label: str, default_text: str = "Select an item to view details.", payload_key: Optional[str] = None, button_color: str = "#0284c7", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, panel_width: str = "100%", panel_height: str = "100%"):
         """
         Adds a button that opens a full-page overlay when clicked. The content of the overlay
         is dynamically updated from the specified `payload_key` when SIVO elements are clicked.
@@ -198,7 +198,9 @@ class SivoDashboard:
             "slot": slot,
             "grid_area": grid_area,
             "overflow_visible": overflow_visible,
-            "min_height": min_height
+            "min_height": min_height,
+            "panel_width": panel_width,
+            "panel_height": panel_height
         })
 
     def set_grid_layout(self, desktop: str, mobile: Optional[str] = None):
