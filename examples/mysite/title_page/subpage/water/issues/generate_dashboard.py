@@ -26,7 +26,7 @@ dashboard = SivoDashboard(
     columns=8,
     width="80%",
     mobile_width="100%",
-    background_image_url="../water_bg.png",
+    background_image_url="../../../assets/water/water_bg.png",
     background_image_opacity=0.25,
     background_image_size="100%",
     theme="transparent",
@@ -56,7 +56,7 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 
 dashboard.add_image_block(
     block_id="banner",
-    image_url="../water_banner.png",
+    image_url="../../../assets/water/water_banner.png",
     col_span=8,
     grid_area="banner",
     object_fit="contain",

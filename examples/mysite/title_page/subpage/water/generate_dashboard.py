@@ -21,7 +21,7 @@ nav_menu = [
 dashboard = SivoDashboard(
     title="",
     columns=2,
-    background_image_url="water_bg.png",
+    background_image_url="../../assets/water/water_bg.png",
     background_image_opacity=0.25,
     background_image_size="100%",
     width="80%",
@@ -50,7 +50,7 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 
 dashboard.add_image_block(
     block_id="banner",
-    image_url="water_banner.png",
+    image_url="../../assets/water/water_banner.png",
     col_span=2,
     grid_area="banner",
     object_fit="contain",
@@ -95,7 +95,7 @@ dashboard.add_text_block(
 
 dashboard.add_image_block(
     block_id="eels",
-    image_url="eels.png",
+    image_url="../../assets/water/eels.png",
     col_span=1,
     grid_area="eels",
     object_fit="contain",
