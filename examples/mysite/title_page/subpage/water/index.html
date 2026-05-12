@@ -12,6 +12,9 @@
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
+    <!-- Include marked -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 
     <style>
         :root {
@@ -81,6 +84,7 @@
 
             grid-template-areas:
 'banner banner'
+'markdown eels'
 'issues eels'
 'science eels'
 'help eels'
@@ -226,6 +230,7 @@
 
                 grid-template-areas:
 'banner'
+'markdown'
 'issues'
 'science'
 'help'
@@ -1029,6 +1034,35 @@
 
 
 
+            <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
+                <div class="card-header"></div>
+                <div class="card-content sivo-details-content" id="container-markdown">
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Welcome\nThis is a placeholder text for the welcome panel.
+</p>
+                </div>
+                <script>
+                    (function() {
+                        const rawPlaceholder = "# Welcome\\nThis is a placeholder text for the welcome panel.\n";
+                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
+                            const container = document.getElementById('container-markdown');
+                            if (container) {
+                                container.innerHTML = marked.parse(rawPlaceholder);
+                            }
+                        }
+                    })();
+                </script>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
             <div class="html-card" id="card-eels" style="grid-area: eels; ">
                 <div class="card-content" id="container-eels">
                     <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 1.2s;"><img src="../../assets/water/eels.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;" /></div>
@@ -1644,7 +1678,7 @@
                 }
 
                 // Get the details panels config
-                const detailsConfig = {};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "placeholder": "# Welcome\\nThis is a placeholder text for the welcome panel.\n", "show_element_name": false, "title": ""}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
