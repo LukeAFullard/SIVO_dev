@@ -38,6 +38,7 @@ desktop_grid = """
 'intro_text intro_text intro_text'
 'card1 card2 card3'
 'card4 card5 card6'
+'footer_image footer_image footer_image'
 """
 
 mobile_grid = """
@@ -49,6 +50,7 @@ mobile_grid = """
 'card4'
 'card5'
 'card6'
+'footer_image'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -100,6 +102,15 @@ dashboard.add_sivo_block("card3", create_card_sivo("c3", "Help track", "fish pas
 dashboard.add_sivo_block("card4", create_card_sivo("c4", "Conserve", "Water", "check your pipes for damage or leaks to avoid wasting water\n. Using water efficiently helps keep our river flows and groundwater at healthy levels, which is essential for aquatic life to survive", "#283244"), col_span=1, grid_area="card4", min_height="250px")
 dashboard.add_sivo_block("card5", create_card_sivo("c5", "Maintain", "Septic Systems", "If you are not on a town sewage system, ensure your septic tank is well-maintained and not leaking. Leaky septic systems are a common source of excess nitrogen in our waterways", "#772981"), col_span=1, grid_area="card5", min_height="250px")
 dashboard.add_sivo_block("card6", create_card_sivo("c6", "Check out", "our State of", "Environment Report", "#007DA3", url="https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf"), col_span=1, grid_area="card6", min_height="250px")
+
+dashboard.add_image_block(
+    block_id="footer_image",
+    image_url="../../../assets/water/fishbanner.png",
+    col_span=3,
+    grid_area="footer_image",
+    object_fit="contain",
+    border_radius="0px"
+)
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.to_html(output_path=output_file)
