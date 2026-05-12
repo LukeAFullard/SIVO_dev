@@ -37,10 +37,12 @@ with open(os.path.join(os.path.dirname(__file__), "welcome.md"), "r", encoding="
 
 desktop_grid = """
 'banner banner'
-'markdown leaves'
-'issues leaves'
-'science leaves'
-'help leaves'
+'markdown .'
+'markdown issues'
+'markdown science'
+'markdown help'
+'markdown .'
+'leaves leaves'
 """
 
 mobile_grid = """
@@ -81,7 +83,7 @@ dashboard.add_details_panel(
 dashboard.add_image_block(
     block_id="leaves",
     image_url="../../assets/air/leaves.png",
-    col_span=1,
+    col_span=2,
     grid_area="leaves",
     object_fit="contain",
     border_radius="0px"
