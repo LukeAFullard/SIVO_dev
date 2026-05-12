@@ -18,7 +18,7 @@ fmus = [
 ]
 
 app = Sivo.from_svg(
-    os.path.join(os.path.dirname(__file__), "sivo_template.svg"),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/water/sivo_template.svg")),
     enable_geocoder=True,
     geocode_provider="nominatim",
     geocode_country_codes="nz",
@@ -34,7 +34,7 @@ app = Sivo.from_svg(
 )
 
 app.add_svg_background_image(
-    "nz_comms_map_04_zoomed_detailed.png",
+    "../../../assets/water/nz_comms_map_04_zoomed_detailed.png",
     insert_after="background"
 )
 
