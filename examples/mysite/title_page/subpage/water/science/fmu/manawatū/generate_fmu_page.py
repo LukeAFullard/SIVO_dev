@@ -39,10 +39,10 @@ desktop_grid = """
 'details details details details map map map map'
 'gap1 gap1 gap1 gap1 map map map map'
 'state state state state map map map map'
-'. button_state1 button_state2 . map map map map'
+'button_state1 button_state1 button_state2 button_state2 map map map map'
 'gap2 gap2 gap2 gap2 map map map map'
 'trend trend trend trend map map map map'
-'. button_trend1 button_trend2 . map map map map'
+'button_trend1 button_trend1 button_trend2 button_trend2 map map map map'
 """
 
 mobile_grid = """
@@ -132,11 +132,11 @@ dashboard.add_details_panel(
     payload_key="trend_md"
 )
 
-dashboard.add_overlay_button(block_id="button_state1", label="How we measure STATE", default_text="Default text for How we measure STATE", payload_key="state_how", button_color="#0284c7", col_span=1, grid_area="button_state1")
-dashboard.add_overlay_button(block_id="button_state2", label="Understanding STATE maps", default_text="Default text for Understanding STATE maps", payload_key="state_understand", button_color="#0284c7", col_span=1, grid_area="button_state2")
+dashboard.add_overlay_button(block_id="button_state1", label="How we measure STATE", default_text="Default text for How we measure STATE", payload_key="state_how", button_color="#0284c7", col_span=2, grid_area="button_state1")
+dashboard.add_overlay_button(block_id="button_state2", label="Understanding STATE maps", default_text="Default text for Understanding STATE maps", payload_key="state_understand", button_color="#0284c7", col_span=2, grid_area="button_state2")
 
-dashboard.add_overlay_button(block_id="button_trend1", label="How we measure TREND", default_text="Default text for How we measure TREND", payload_key="trend_how", button_color="#10b981", col_span=1, grid_area="button_trend1")
-dashboard.add_overlay_button(block_id="button_trend2", label="Understanding TREND maps", default_text="Default text for Understanding TREND maps", payload_key="trend_understand", button_color="#10b981", col_span=1, grid_area="button_trend2")
+dashboard.add_overlay_button(block_id="button_trend1", label="How we measure TREND", default_text="Default text for How we measure TREND", payload_key="trend_how", button_color="#10b981", col_span=2, grid_area="button_trend1")
+dashboard.add_overlay_button(block_id="button_trend2", label="Understanding TREND maps", default_text="Default text for Understanding TREND maps", payload_key="trend_understand", button_color="#10b981", col_span=2, grid_area="button_trend2")
 
 for icon in icons:
     md_path = os.path.join(os.path.dirname(__file__), icon["md_file"])
