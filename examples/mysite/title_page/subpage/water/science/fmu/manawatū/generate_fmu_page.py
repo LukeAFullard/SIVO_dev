@@ -38,8 +38,8 @@ desktop_grid = """
 '. icon1 icon2 icon3 icon4 icon5 icon6 .'
 'details details details details map map map map'
 'gap1 gap1 gap1 gap1 map map map map'
-'state state trend trend map map map map'
-'button_state button_state button_trend button_trend map map map map'
+'state state state state trend trend trend trend'
+'button_state button_state button_state button_state button_trend button_trend button_trend button_trend'
 """
 
 mobile_grid = """
@@ -107,7 +107,7 @@ dashboard.add_details_panel(
     block_id="state",
     title="STATE",
     placeholder=state_default,
-    col_span=2,
+    col_span=4,
     grid_area="state",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
@@ -120,7 +120,7 @@ dashboard.add_details_panel(
     block_id="trend",
     title="TREND",
     placeholder=trend_default,
-    col_span=2,
+    col_span=4,
     grid_area="trend",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
@@ -132,9 +132,9 @@ dashboard.add_details_panel(
 with open(os.path.join(os.path.dirname(__file__), "md/state_popup.md"), "r", encoding="utf-8") as f:
     state_popup = f.read()
 
-dashboard.add_overlay_button(block_id="button_state", label="Click for more information", default_text=state_popup, payload_key="state_how", button_color="#772981", col_span=2, grid_area="button_state", panel_width="90%", panel_height="90%")
+dashboard.add_overlay_button(block_id="button_state", label="Click for more information", default_text=state_popup, payload_key="state_how", button_color="#772981", col_span=4, grid_area="button_state", panel_width="90%", panel_height="90%")
 
-dashboard.add_overlay_button(block_id="button_trend", label="Click for more information", default_text="Default text for How we measure TREND", payload_key="trend_how", button_color="#772981", col_span=2, grid_area="button_trend", panel_width="90%", panel_height="90%")
+dashboard.add_overlay_button(block_id="button_trend", label="Click for more information", default_text="Default text for How we measure TREND", payload_key="trend_how", button_color="#772981", col_span=4, grid_area="button_trend", panel_width="90%", panel_height="90%")
 
 for icon in icons:
     md_path = os.path.join(os.path.dirname(__file__), icon["md_file"])
