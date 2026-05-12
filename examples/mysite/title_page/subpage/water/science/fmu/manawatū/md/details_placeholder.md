@@ -20,6 +20,6 @@ As the local proverb reminds us: *"If the water is healthy, the land and the peo
 ***
 
 ### Explore the Data
-Understanding these local pressures is vital for protecting our waterways. 
-*   **Explore how state and trend are calculated in the sections below.**
-*   **When ready, click the icons above to explore monitoring results in the FMU.**
+Understanding these local pressures is the first step toward protecting our waterways. 
+*   **How do we measure health?** Scroll down to learn exactly how scientists calculate the current state and long-term trends of our local rivers and streams. 
+*   **View the latest results:** When you are ready to dive into the data, simply click the icons above to explore the current monitoring results for the Manawatū FMU.
