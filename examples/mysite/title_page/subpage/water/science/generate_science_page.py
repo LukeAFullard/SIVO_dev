@@ -138,5 +138,6 @@ dashboard.add_geocoder_block(
 dashboard.add_sivo_block("map", app, col_span=2, grid_area="map", min_height="500px")
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
+dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
 dashboard.to_html(output_path=output_file)
 print(f"Science Dashboard generated at {output_file}")
