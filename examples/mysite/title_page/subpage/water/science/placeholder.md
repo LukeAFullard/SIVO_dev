@@ -8,12 +8,12 @@ To manage our waterways effectively, the region is divided into specific geograp
 Use the map on the right or search for your address in the search-bar above to discover which FMU you live in.
 
 **Our 7 Management Zones:**
-*   Puketoi ki Tai
-*   Manawatū
-*   Rangitīkei-Turakina
-*   Waiopehu
-*   Kai Iwi
-*   Whangaehu
-*   Whanganui
+*   [Puketoi ki Tai](fmu/puketoi-ki-tai/index.html)
+*   [Manawatū](fmu/manawatu/index.html)
+*   [Rangitīkei-Turakina](fmu/rangitikei-turakina/index.html)
+*   [Waiopehu](fmu/waiopehu/index.html)
+*   [Kai Iwi](fmu/kai-iwi/index.html)
+*   [Whangaehu](fmu/whangaehu/index.html)
+*   [Whanganui](fmu/whanganui/index.html)
 
-**Click on any of the management zones in the map to explore a breakdown for your area.**
+**Click on any of the management zones in the map or the links above to explore a breakdown for your area.**
