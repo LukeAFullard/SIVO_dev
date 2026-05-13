@@ -11,7 +11,6 @@ Trends are grouped by how confident scientists are that a change is actually hap
 *   **Improving:** Bacteria levels are consistently going down (*very likely* or *likely improving*).
 *   **Degrading:** Bacteria levels are consistently going up, increasing health risks (*very likely* or *likely degrading*).
 *   **Indeterminate:** There is not enough statistical evidence to confirm a direction.
-*   **Not Assessed:** There is not enough reliable data over the 10 years to calculate a trend.
 
 ***
 
