@@ -2,22 +2,19 @@
 
 We evaluated the current state of *E. coli* at |NUMBER_SITES| monitoring sites across the Manawatū FMU. 
 
-### Understanding the Measurements
-When testing for *E. coli*, scientists report the results in units of Most Probable Number (MPN) per 100 millilitres (mL). Simply put, they count the number of living bacteria in a small sample of water. 
+### How We Measure and Grade
+Scientists measure *E. coli* by counting the living bacteria in a 100-millilitre (mL) water sample, reported as Colony Forming Units (cfu) or Most Probable Number (MPN). 
 
-### How We Grade the Risk
-To get a highly reliable A-to-E grade for human health risk, experts do not just look at a single number. Instead, the final grade is calculated using four different summary statistics:
+To calculate a reliable A-to-E health risk grade, experts use four different statistics:
+*   **Median:** The typical bacteria level on an average day.
+*   **95th percentile:** The highest bacteria level expected on a "bad" day.
+*   **Exceedances over 260:** How often levels cross 260 per 100 mL, where illness risk begins to rise.
+*   **Exceedances over 540:** How often levels cross 540 per 100 mL, where swimming is no longer recommended.
 
-*   **Median concentration:** The middle value, representing the typical amount of bacteria found on an average day.
-*   **95th percentile:** A measure of the extremes, representing the highest bacterial levels expected on a "bad" day.
-*   **Exceedances over 260:** The percentage of time bacteria levels rise above 260 per 100 mL, which is the point where the risk of illness begins to increase.
-*   **Exceedances over 540:** The percentage of time levels spike above 540 per 100 mL, which is the threshold where swimming is no longer recommended.
-
-To ensure we highly protect our community, a site must pass the test for all four of these statistics. If a site scores poorly on even one of these measures, it receives that lower grade overall.
+A site must pass all four tests. If it scores poorly on even one, it receives that lowest grade overall.
 
 ***
 
 ### *E. coli* Results in the Manawatū FMU
 
 *[Image Placeholder: Graph or chart showing the numbers/percentages of sites at each A-E NOF grade for E. coli]*
-
