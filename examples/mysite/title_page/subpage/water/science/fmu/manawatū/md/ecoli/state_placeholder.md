@@ -3,7 +3,7 @@
 We evaluated the current state of *E. coli* at |NUMBER_SITES| monitoring sites across the Manawatū FMU. 
 
 ### How We Measure and Grade
-Scientists measure *E. coli* by counting the living bacteria in a 100-millilitre (mL) water sample, reported as Colony Forming Units (cfu) or Most Probable Number (MPN). 
+Scientists measure *E. coli* by counting the living bacteria in a 100-millilitre (mL) water sample, reported as Most Probable Number (MPN). 
 
 To calculate a reliable A-to-E health risk grade, experts use four different statistics:
 *   **Median:** The typical bacteria level on an average day.
