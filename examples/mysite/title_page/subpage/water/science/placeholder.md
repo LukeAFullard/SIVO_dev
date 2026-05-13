@@ -9,7 +9,7 @@ Use the map on the right or search for your address in the search-bar above to d
 
 **Our 7 Management Zones:**
 *   [Puketoi ki Tai](fmu/puketoi-ki-tai/index.html)
-*   [Manawatū](fmu/manawatu/index.html)
+*   [Manawatū](fmu/manawatū/index.html)
 *   [Rangitīkei-Turakina](fmu/rangitikei-turakina/index.html)
 *   [Waiopehu](fmu/waiopehu/index.html)
 *   [Kai Iwi](fmu/kai-iwi/index.html)
