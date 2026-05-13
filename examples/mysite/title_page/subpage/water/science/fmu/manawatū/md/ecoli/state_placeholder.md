@@ -3,7 +3,7 @@
 We evaluated the current state of *E. coli* at |NUMBER_SITES| monitoring sites across the Manawatū FMU. 
 
 ### Understanding the Measurements
-When testing for *E. coli*, scientists report the results in either Colony Forming Units (cfu) or Most Probable Number (MPN) per 100 millilitres (mL). Simply put, both of these units count the number of living bacteria in a small sample of water. 
+When testing for *E. coli*, scientists report the results in units of Most Probable Number (MPN) per 100 millilitres (mL). Simply put, they count the number of living bacteria in a small sample of water. 
 
 ### How We Grade the Risk
 To get a highly reliable A-to-E grade for human health risk, experts do not just look at a single number. Instead, the final grade is calculated using four different summary statistics:
