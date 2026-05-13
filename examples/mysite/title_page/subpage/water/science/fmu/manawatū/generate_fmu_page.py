@@ -135,9 +135,9 @@ with open(os.path.join(os.path.dirname(__file__), "md/state_popup.md"), "r", enc
 with open(os.path.join(os.path.dirname(__file__), "md/trend_popup.md"), "r", encoding="utf-8") as f:
     trend_popup = f.read()
 
-dashboard.add_overlay_button(block_id="button_state", label="Click for more information", default_text=state_popup, payload_key="state_how", button_color="#772981", col_span=4, grid_area="button_state", panel_width="90%", panel_height="90%")
+dashboard.add_overlay_button(block_id="button_state", label="Click for more state information", default_text=state_popup, payload_key="state_how", button_color="#772981", col_span=4, grid_area="button_state", panel_width="90%", panel_height="90%")
 
-dashboard.add_overlay_button(block_id="button_trend", label="Click for more information", default_text=trend_popup, payload_key="trend_how", button_color="#772981", col_span=4, grid_area="button_trend", panel_width="90%", panel_height="90%")
+dashboard.add_overlay_button(block_id="button_trend", label="Click for more trend information", default_text=trend_popup, payload_key="trend_how", button_color="#772981", col_span=4, grid_area="button_trend", panel_width="90%", panel_height="90%")
 
 for icon in icons:
     md_dir = os.path.join(os.path.dirname(__file__), icon["md_dir"])
