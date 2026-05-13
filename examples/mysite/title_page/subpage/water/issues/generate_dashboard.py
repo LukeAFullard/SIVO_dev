@@ -170,5 +170,6 @@ dashboard.add_image_block(
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 
+dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
 dashboard.to_html(output_path=output_file)
 print(f"Dashboard generated at {output_file}")

@@ -253,6 +253,41 @@
             .sivo-card {
                 min-height: 300px;
             }
+            .sivo-layout-toggle-panel {
+                display: none !important;
+            }
+        }
+
+
+        /* Force Mobile Layout */
+        body.force-mobile .dashboard-container {
+            max-width: 100% !important;
+
+            gap: 0.35rem !important;
+
+
+            grid-template-areas:
+'banner banner'
+'icon1 icon2'
+'icon3 icon4'
+'icon5 icon6'
+'map map'
+'details details'
+'gap1 gap1'
+'state state'
+'button_state button_state'
+'gap2 gap2'
+'trend trend'
+'button_trend button_trend'
+ !important;
+
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+
+        }
+
+        body.force-mobile .sivo-card {
+            min-height: 300px !important;
         }
 
         /* Navigation Menu Styles */
@@ -1306,6 +1341,20 @@ For more detailed information, please read the [LAWA factsheet on calculating wa
             </div>
 
 
+
+
+
+
+
+
+
+            <div class="sivo-layout-toggle-panel" id="card-mobile_toggle" data-block-id="mobile_toggle" style="display: contents;">
+                <button title="Toggle Mobile View" onclick="document.body.classList.toggle('force-mobile'); updateChartLayoutSizes();" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 44px; height: 44px; background-color: #ffffff; color: #475569; border: 1px solid #e2e8f0; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: all 0.2s ease;">
+                    <span style="display:inline-block; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">📱</span>
+                </button>
+            </div>
+
+
     </div>
 
     <!-- Global Sliding Sidebar Overlay -->
@@ -1396,6 +1445,8 @@ For more detailed information, please read the [LAWA factsheet on calculating wa
 
 
 
+
+
         function sivoOpenOverlay(blockId) {
             const overlay = document.getElementById('sivo-full-page-overlay');
             const content = document.getElementById('sivo-overlay-content');
@@ -1436,7 +1487,7 @@ For more detailed information, please read the [LAWA factsheet on calculating wa
 
         function calculateLayoutSize(view, domElement) {
             var layoutSize = view ? view.layout_size : undefined;
-            if (window.innerWidth <= 900 && view && view.mobile_layout_size) {
+            if ((window.innerWidth <= 900 || document.body.classList.contains('force-mobile')) && view && view.mobile_layout_size) {
                 layoutSize = view.mobile_layout_size;
             }
 

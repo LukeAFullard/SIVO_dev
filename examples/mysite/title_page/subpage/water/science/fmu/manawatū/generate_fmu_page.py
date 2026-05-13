@@ -221,5 +221,6 @@ custom_js = None
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 
+dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
 dashboard.to_html(output_path=output_file, custom_js=custom_js)
 print(f"FMU Dashboard generated at {output_file}")
