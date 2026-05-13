@@ -72,12 +72,12 @@ dashboard.add_html_block(block_id="gap1", html_content="<div style='height: 20px
 dashboard.add_html_block(block_id="gap2", html_content="<div style='height: 20px;'></div>", col_span=4, grid_area="gap2")
 
 icons = [
-    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli"},
-    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment"},
-    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen"},
-    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus"},
-    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae"},
-    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts"}
+    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli", "map_file": "results/ecoli_map.html"},
+    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment", "map_file": "results/sediment_map.html"},
+    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen", "map_file": "results/nitrogen_map.html"},
+    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus", "map_file": "results/phosphorus_map.html"},
+    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae", "map_file": "results/algae_map.html"},
+    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts", "map_file": "results/inverts_map.html"}
 ]
 
 # We will populate md, state_md, trend_md
@@ -153,6 +153,9 @@ for icon in icons:
     with open(os.path.join(md_dir, "trend_popup.md"), "r", encoding="utf-8") as f:
         icon["trend_how"] = f.read()
 
+    with open(os.path.join(os.path.dirname(__file__), icon["map_file"]), "r", encoding="utf-8") as f:
+        icon["map_html"] = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{f.read()}</div>"
+
 for icon in icons:
     sivo_app = Sivo.from_string(
         '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>',
@@ -196,6 +199,7 @@ for icon in icons:
         "trend_md": icon["trend_md"],
         "state_how": icon["state_how"],
         "trend_how": icon["trend_how"],
+        "map_html": icon["map_html"]
     }
 
     sivo_app.map(
@@ -215,7 +219,7 @@ for icon in icons:
 with open(os.path.join(os.path.dirname(__file__), "md/map_placeholder.html"), "r", encoding="utf-8") as f:
     map_html = f.read()
 
-dashboard.add_html_block(block_id="map", html_content=f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{map_html}</div>", col_span=4, grid_area="map")
+dashboard.add_html_block(block_id="map", html_content=f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{map_html}</div>", col_span=4, grid_area="map", payload_key="map_html")
 
 custom_js = None
 

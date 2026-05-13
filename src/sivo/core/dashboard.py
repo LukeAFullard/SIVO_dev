@@ -52,7 +52,7 @@ class SivoDashboard:
         self.navigation_menu = navigation_menu
         self.navigation_menu_position = navigation_menu_position
         self.blocks: Dict[str, Sivo] = {}
-        self.html_blocks: Dict[str, str] = {}
+        self.html_blocks: Dict[str, Dict] = {}
         self.details_panels: Dict[str, Dict] = {}
         self.metrics_panels: Dict[str, Dict] = {}
         self.layout_order: List[Dict[str, str]] = []
@@ -62,9 +62,12 @@ class SivoDashboard:
         self.blocks[block_id] = sivo_app
         self.layout_order.append({"type": "sivo", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
 
-    def add_html_block(self, block_id: str, html_content: str, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
+    def add_html_block(self, block_id: str, html_content: str, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, payload_key: Optional[str] = None):
         """Adds raw HTML content to a specific block/slot in the dashboard layout."""
-        self.html_blocks[block_id] = html_content
+        self.html_blocks[block_id] = {
+            "html_content": html_content,
+            "payload_key": payload_key
+        }
         self.layout_order.append({"type": "html", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
 
     def add_image_block(self, block_id: str, image_url: str, object_fit: str = "cover", border_radius: str = "0.75rem", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, url: Optional[str] = None, url_transition: Optional[str] = None, fade_in: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 500, overflow_visible: bool = False, min_height: Optional[str] = None):
