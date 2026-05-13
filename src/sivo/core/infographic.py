@@ -549,10 +549,10 @@ class Infographic:
                 title=footnote_title or "Data Note"
             ))
 
-        if callback_event:
+        if callback_event is not None or callback_payload is not None:
             mapping.actions.append(CallbackAction(event_name=callback_event, payload=callback_payload))
 
-        if hover_callback_event:
+        if hover_callback_event is not None or hover_callback_payload is not None:
             mapping.actions.append(HoverCallbackAction(event_name=hover_callback_event, payload=hover_callback_payload))
 
         if video:
