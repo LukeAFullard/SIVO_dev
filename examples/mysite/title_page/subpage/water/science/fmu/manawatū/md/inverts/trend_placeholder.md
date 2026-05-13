@@ -11,7 +11,6 @@ Trends are grouped by how confident scientists are that a change is actually hap
 *   **Improving:** The MCI score is consistently increasing, showing a recovering ecosystem (*very likely* or *likely improving*).
 *   **Degrading:** The MCI score is consistently decreasing, meaning the river is becoming more polluted and sensitive species are dying off (*very likely* or *likely degrading*).
 *   **Indeterminate:** There is not enough statistical evidence to confirm a direction.
-*   **Not Assessed:** There is not enough reliable data over the 10 years to calculate a trend.
 
 ***
 
