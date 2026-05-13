@@ -1034,9 +1034,9 @@
                 </div>
             </div>
             {% elif block.type == "html" %}
-            <div class="html-card" id="card-{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }}">
-                <div class="card-content" id="container-{{ block.id }}">
-                    {{ html_blocks[block.id] | safe }}
+            <div class="html-card sivo-html-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" {% if html_blocks[block.id].payload_key %}data-payload-key="{{ html_blocks[block.id].payload_key }}"{% endif %} style="{{ grid_style }} {{ inline_min_height }}">
+                <div class="card-content sivo-html-content" id="container-{{ block.id }}">
+                    {{ html_blocks[block.id].html_content | safe }}
                 </div>
             </div>
             {% elif block.type == "details" %}
@@ -1807,6 +1807,18 @@
                         const pKey = btn.getAttribute('data-payload-key');
                         if (pKey && payloadData && payloadData[pKey] !== undefined) {
                             window.sivoOverlayData[bId] = payloadData[pKey];
+                        }
+                    });
+
+                    // Update HTML Panels Data
+                    const htmlPanels = document.querySelectorAll('.sivo-html-panel');
+                    htmlPanels.forEach(panel => {
+                        const pKey = panel.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            const container = panel.querySelector('.sivo-html-content');
+                            if (container) {
+                                container.innerHTML = payloadData[pKey];
+                            }
                         }
                     });
                 }
