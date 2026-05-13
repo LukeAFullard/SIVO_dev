@@ -203,6 +203,26 @@ class SivoDashboard:
             "panel_height": panel_height
         })
 
+
+    def add_layout_toggle_button(self, block_id: str, label: str = "📱", hover_text: str = "Toggle Mobile View", button_color: str = "#ffffff", text_color: str = "#475569", position: str = "bottom-right", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
+        """
+        Adds a floating button that forces the dashboard into a single column / mobile layout when clicked.
+        """
+        self.layout_order.append({
+            "type": "layout_toggle",
+            "id": block_id,
+            "label": label,
+            "hover_text": hover_text,
+            "button_color": button_color,
+            "text_color": text_color,
+            "position": position,
+            "col_span": col_span,
+            "slot": slot,
+            "grid_area": grid_area,
+            "overflow_visible": overflow_visible,
+            "min_height": min_height
+        })
+
     def set_grid_layout(self, desktop: str, mobile: Optional[str] = None):
         """
         Defines the responsive CSS Grid layout using grid-template-areas.

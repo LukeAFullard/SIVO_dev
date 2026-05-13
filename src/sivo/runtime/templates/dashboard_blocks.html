@@ -245,6 +245,41 @@
             .sivo-card {
                 min-height: 300px;
             }
+            .sivo-layout-toggle-panel {
+                display: none !important;
+            }
+        }
+
+
+        /* Force Mobile Layout */
+        body.force-mobile .dashboard-container {
+            max-width: {{ mobile_width | default('100%') }} !important;
+            {% if mobile_gap %}
+            gap: {{ mobile_gap }} !important;
+            {% endif %}
+            {% if mobile_grid %}
+            grid-template-areas: {{ mobile_grid | safe }} !important;
+            {% if mobile_grid_cols %}
+            grid-template-columns: repeat({{ mobile_grid_cols }}, minmax(0, 1fr)) !important;
+            {% else %}
+            grid-template-columns: unset !important;
+            {% endif %}
+            {% else %}
+            display: flex !important;
+            flex-direction: column !important;
+            grid-template-columns: unset !important;
+            {% endif %}
+        }
+        {% if not mobile_grid %}
+        body.force-mobile .sivo-card,
+        body.force-mobile .html-card,
+        body.force-mobile .sivo-details-panel,
+        body.force-mobile .sivo-metrics-panel {
+            width: 100% !important;
+        }
+        {% endif %}
+        body.force-mobile .sivo-card {
+            min-height: 300px !important;
         }
 
         /* Navigation Menu Styles */
@@ -1040,6 +1075,12 @@
             <div class="sivo-overlay-button-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-payload-key="{{ block.payload_key }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
                 <button onclick="sivoOpenOverlay('{{ block.id }}')" style="width:100%; padding:10px; background-color:{{ block.button_color }}; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">{{ block.label }}</button>
             </div>
+{% elif block.type == "layout_toggle" %}
+            <div class="sivo-layout-toggle-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="display: contents;">
+                <button title="{{ block.hover_text }}" onclick="document.body.classList.toggle('force-mobile'); updateChartLayoutSizes();" style="position: fixed; {% if block.position == 'top-left' %}top: 20px; left: 20px;{% elif block.position == 'top-right' %}top: 20px; right: 20px;{% elif block.position == 'bottom-left' %}bottom: 20px; left: 20px;{% else %}bottom: 20px; right: 20px;{% endif %} z-index: 1000; width: 44px; height: 44px; background-color: {{ block.button_color }}; color: {{ block.text_color }}; border: 1px solid #e2e8f0; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: all 0.2s ease;">
+                    <span style="display:inline-block; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">{{ block.label }}</span>
+                </button>
+            </div>
             {% elif block.type == "geocoder" %}
             <div class="html-card sivo-geocoder-panel {{ overflow_class }}" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; box-shadow: none; position: relative;">
                 {% if block.text %}
@@ -1148,7 +1189,7 @@
 
         function calculateLayoutSize(view, domElement) {
             var layoutSize = view ? view.layout_size : undefined;
-            if (window.innerWidth <= 900 && view && view.mobile_layout_size) {
+            if ((window.innerWidth <= 900 || document.body.classList.contains('force-mobile')) && view && view.mobile_layout_size) {
                 layoutSize = view.mobile_layout_size;
             }
 

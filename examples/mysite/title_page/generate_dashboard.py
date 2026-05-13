@@ -31,6 +31,13 @@ mobile_grid = """
 """
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 
+
+# Add layout toggle button
+dashboard.add_layout_toggle_button(
+    block_id="toggle",
+    position="bottom-right"
+)
+
 # Add image blocks
 dashboard.add_image_block(
     block_id="env",
