@@ -36,8 +36,8 @@ dashboard = SivoDashboard(
 desktop_grid = """
 'banner banner banner banner banner banner banner banner'
 '. icon1 icon2 icon3 icon4 icon5 icon6 .'
-'details details details details map map map map'
-'gap1 gap1 gap1 gap1 map map map map'
+'details details details map map map map map'
+'gap1 gap1 gap1 map map map map map'
 'state state state state trend trend trend trend'
 'button_state button_state button_state button_state button_trend button_trend button_trend button_trend'
 """
