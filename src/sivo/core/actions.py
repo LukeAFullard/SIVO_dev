@@ -50,13 +50,13 @@ class DrillThroughAction(BaseAction):
 class CallbackAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
     action_type: Literal["callback"] = "callback"
-    event_name: str = Field(description="Event name to send back to Streamlit or backend")
+    event_name: Optional[str] = Field(description="Event name to send back to Streamlit or backend")
     payload: Optional[dict] = Field(default=None, description="Optional data payload to send")
 
 class HoverCallbackAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
     action_type: Literal["hover_callback"] = "hover_callback"
-    event_name: str = Field(description="Event name to send back to Streamlit or backend on hover")
+    event_name: Optional[str] = Field(description="Event name to send back to Streamlit or backend on hover")
     payload: Optional[dict] = Field(default=None, description="Optional data payload to send")
 
 class VideoAction(BaseAction):
@@ -118,7 +118,7 @@ class AnalyticsAction(BaseAction):
     model_config = ConfigDict(extra="forbid")
     action_type: Literal["analytics"] = "analytics"
     provider: Literal["google_analytics", "posthog", "plausible"] = Field(description="The analytics provider")
-    event_name: str = Field(description="The event name to track")
+    event_name: Optional[str] = Field(description="The event name to track")
     payload: Optional[dict] = Field(default=None, description="Optional payload/properties for the event")
 
 class DataSourceAction(BaseAction):
