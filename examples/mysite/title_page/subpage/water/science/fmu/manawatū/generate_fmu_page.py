@@ -72,12 +72,12 @@ dashboard.add_html_block(block_id="gap1", html_content="<div style='height: 20px
 dashboard.add_html_block(block_id="gap2", html_content="<div style='height: 20px;'></div>", col_span=4, grid_area="gap2")
 
 icons = [
-    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_file": "md/ecoli.md"},
-    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_file": "md/suspended_sediment.md"},
-    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_file": "md/nitrogen.md"},
-    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_file": "md/phosphorus.md"},
-    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_file": "md/algae.md"},
-    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_file": "md/invertebrates.md"}
+    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli"},
+    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment"},
+    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen"},
+    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus"},
+    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae"},
+    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts"}
 ]
 
 # We will populate md, state_md, trend_md
@@ -140,16 +140,18 @@ dashboard.add_overlay_button(block_id="button_state", label="Click for more info
 dashboard.add_overlay_button(block_id="button_trend", label="Click for more information", default_text=trend_popup, payload_key="trend_how", button_color="#772981", col_span=4, grid_area="button_trend", panel_width="90%", panel_height="90%")
 
 for icon in icons:
-    md_path = os.path.join(os.path.dirname(__file__), icon["md_file"])
-    with open(md_path, "r", encoding="utf-8") as f:
-        icon["md"] = f.read()
+    md_dir = os.path.join(os.path.dirname(__file__), icon["md_dir"])
 
-    icon["state_md"] = f"### State for {icon['hover']}\nThis is the state data for {icon['hover']}."
-    icon["trend_md"] = f"### Trend for {icon['hover']}\nThis is the trend data for {icon['hover']}."
-    icon["state_how"] = f"How we measure STATE for {icon['hover']}"
-    icon["state_understand"] = f"Understanding STATE maps for {icon['hover']}"
-    icon["trend_how"] = f"How we measure TREND for {icon['hover']}"
-    icon["trend_understand"] = f"Understanding TREND maps for {icon['hover']}"
+    with open(os.path.join(md_dir, "placeholder.md"), "r", encoding="utf-8") as f:
+        icon["md"] = f.read()
+    with open(os.path.join(md_dir, "state_placeholder.md"), "r", encoding="utf-8") as f:
+        icon["state_md"] = f.read()
+    with open(os.path.join(md_dir, "trend_placeholder.md"), "r", encoding="utf-8") as f:
+        icon["trend_md"] = f.read()
+    with open(os.path.join(md_dir, "state_popup.md"), "r", encoding="utf-8") as f:
+        icon["state_how"] = f.read()
+    with open(os.path.join(md_dir, "trend_popup.md"), "r", encoding="utf-8") as f:
+        icon["trend_how"] = f.read()
 
 for icon in icons:
     sivo_app = Sivo.from_string(
@@ -193,9 +195,7 @@ for icon in icons:
         "state_md": icon["state_md"],
         "trend_md": icon["trend_md"],
         "state_how": icon["state_how"],
-        "state_understand": icon["state_understand"],
         "trend_how": icon["trend_how"],
-        "trend_understand": icon["trend_understand"]
     }
 
     sivo_app.map(
