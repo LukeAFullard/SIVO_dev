@@ -61,13 +61,11 @@ dashboard.add_image_block(
     border_radius="0px"
 )
 
-dashboard.add_image_block(
+dashboard.add_html_block(
     block_id="co_benefit",
-    image_url="../../../assets/land/soil_co_benefit.png",
+    html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/soil_co_benefit.png" style="width:70%; height:70%; object-fit:contain; border-radius:0px;" /></div>',
     col_span=3,
-    grid_area="co_benefit",
-    object_fit="contain",
-    border_radius="0px"
+    grid_area="co_benefit"
 )
 
 dashboard.add_details_panel(
@@ -85,22 +83,18 @@ dashboard.add_details_panel(
     fade_duration_ms=2000
 )
 
-dashboard.add_image_block(
+dashboard.add_html_block(
     block_id="sustainable",
-    image_url="../../../assets/land/sustainable.png",
+    html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/sustainable.png" style="width:70%; height:70%; object-fit:contain; border-radius:10px;" /></div>',
     col_span=2,
-    grid_area="sustainable",
-    object_fit="contain",
-    border_radius="10px"
+    grid_area="sustainable"
 )
 
-dashboard.add_image_block(
+dashboard.add_html_block(
     block_id="birds",
-    image_url="../../../assets/land/birds.png",
+    html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/birds.png" style="width:70%; height:70%; object-fit:contain; border-radius:10px;" /></div>',
     col_span=3,
-    grid_area="birds",
-    object_fit="contain",
-    border_radius="10px"
+    grid_area="birds"
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
