@@ -60,13 +60,24 @@ with open(os.path.join(os.path.dirname(__file__), "susceptible.md"), "r", encodi
     susceptible_md_content = f.read()
 
 for fmu in fmus:
+    slug = fmu.lower().replace(" ", "-").replace("ā", "a").replace("ī", "i")
     element_id = fmu.replace(" ", "_")
+
+    md_path = os.path.join(os.path.dirname(__file__), "fmu", slug, "md", "info.md")
+    with open(md_path, "r", encoding="utf-8") as f:
+        fmu_md = f.read()
+
+    html_path = os.path.join(os.path.dirname(__file__), "fmu", slug, "results", "chart.html")
+    with open(html_path, "r", encoding="utf-8") as f:
+        fmu_html = f.read()
+
     app.map(
         element_id=element_id,
         hover_color="lightgray",
         tooltip=fmu,
         glow=True,
-        markdown=susceptible_md_content
+        markdown=susceptible_md_content,
+        callback_payload={"fmu_md": fmu_md, "fmu_html": fmu_html}
     )
 
 
@@ -93,6 +104,7 @@ desktop_grid = """
 'markdown markdown markdown markdown'
 'search map map map'
 'text2 map map map'
+'fmu_text fmu_html fmu_html fmu_html'
 """
 
 mobile_grid = """
@@ -101,6 +113,8 @@ mobile_grid = """
 'search'
 'text2'
 'map'
+'fmu_text'
+'fmu_html'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -154,6 +168,32 @@ dashboard.add_details_panel(
 
 
 dashboard.add_sivo_block("map", app, col_span=3, grid_area="map", min_height="500px")
+
+dashboard.add_details_panel(
+    block_id="fmu_text",
+    title="",
+    placeholder="Click an FMU on the map to see details here.",
+    col_span=1,
+    grid_area="fmu_text",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=900,
+    fade_duration_ms=2000,
+    payload_key="fmu_md"
+)
+
+# add_html_block doesn't accept background_color and border_radius, need to wrap in div
+html_content = '<div style="background-color: rgba(240, 240, 240, 0.7); border-radius: 10px; padding: 10px; height: 100%;">Click an FMU on the map to see charts here.</div>'
+dashboard.add_html_block(
+    block_id="fmu_html",
+    html_content=html_content,
+    col_span=3,
+    grid_area="fmu_html",
+    payload_key="fmu_html"
+)
 
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
