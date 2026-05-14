@@ -18,6 +18,58 @@ nav_menu = [
     {"label": "Water", "url": "../../water/index.html", "url_transition": "page-turn-enter"}
 ]
 
+fmus = [
+    "Puketoi ki Tai",
+    "Manawatū",
+    "Rangitīkei-Turakina",
+    "Waiopehu",
+    "Kai Iwi",
+    "Whangaehu",
+    "Whanganui"
+]
+
+app = Sivo.from_svg(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/water/sivo_template.svg")),
+    enable_geocoder=True,
+    geocode_provider="nominatim",
+    geocode_country_codes="nz",
+    geocoder_position="top-left",
+    disable_zoom_controls=True,
+    lock_canvas=True,
+    disable_resizer=True,
+    lock_zoom_out=True,
+    lock_scroll_bounds=True,
+    transparent_template_lines=True,
+    layout_size="130%",
+    mobile_layout_size="100%"
+)
+
+app.add_svg_background_image(
+    "../../../assets/water/nz_comms_map_04_zoomed_detailed.png",
+    insert_after="background"
+)
+
+app.bind_geocoder_intersection(
+    geojson_url="https://services1.arcgis.com/VuN78wcRdq1Oj69W/arcgis/rest/services/FMU_20210122/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson",
+    display_element_id="null", # Output handled by overlay, we just put null
+    property_name="Name",
+    no_result_text="Address not found in any FMU zone."
+)
+
+with open(os.path.join(os.path.dirname(__file__), "susceptible.md"), "r", encoding="utf-8") as f:
+    susceptible_md_content = f.read()
+
+for fmu in fmus:
+    element_id = fmu.replace(" ", "_")
+    app.map(
+        element_id=element_id,
+        hover_color="lightgray",
+        tooltip=fmu,
+        glow=True,
+        markdown=susceptible_md_content
+    )
+
+
 dashboard = SivoDashboard(
     title="",
     columns=4,
@@ -33,16 +85,22 @@ dashboard = SivoDashboard(
 
 # Read the markdown
 with open(os.path.join(os.path.dirname(__file__), "welcome.md"), "r", encoding="utf-8") as f:
-    md_content = f.read()
+    welcome_md_content = f.read()
+
 
 desktop_grid = """
 'banner banner banner banner'
 'markdown markdown markdown markdown'
+'search map map map'
+'text2 map map map'
 """
 
 mobile_grid = """
 'banner'
 'markdown'
+'search'
+'text2'
+'map'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -59,7 +117,7 @@ dashboard.add_image_block(
 dashboard.add_details_panel(
     block_id="markdown",
     title="",
-    placeholder=md_content,
+    placeholder=welcome_md_content,
     col_span=4,
     grid_area="markdown",
     background_color="rgba(240, 240, 240, 0.7)",
@@ -70,6 +128,32 @@ dashboard.add_details_panel(
     fade_start_time_ms=300,
     fade_duration_ms=2000
 )
+
+dashboard.add_geocoder_block(
+    block_id="search",
+    col_span=1,
+    grid_area="search",
+    min_height="50px",
+    overflow_visible=True
+)
+
+dashboard.add_details_panel(
+    block_id="text2",
+    title="",
+    placeholder=susceptible_md_content,
+    col_span=1,
+    grid_area="text2",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=600,
+    fade_duration_ms=2000
+)
+
+
+dashboard.add_sivo_block("map", app, col_span=3, grid_area="map", min_height="500px")
 
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
