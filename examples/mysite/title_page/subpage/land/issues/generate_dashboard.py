@@ -46,6 +46,7 @@ desktop_grid = """
 'markdown1 image1'
 'markdown2 image1'
 'markdown3 image2'
+'image3 image3'
 """
 
 mobile_grid = """
@@ -55,6 +56,7 @@ mobile_grid = """
 'markdown2'
 'markdown3'
 'image2'
+'image3'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -134,6 +136,18 @@ dashboard.add_image_block(
     border_radius="10px",
     fade_in=True,
     fade_start_time_ms=1200,
+    fade_duration_ms=2000
+)
+
+dashboard.add_image_block(
+    block_id="image3",
+    image_url="../../../assets/land/landscape_multi.png",
+    col_span=2,
+    grid_area="image3",
+    object_fit="contain",
+    border_radius="10px",
+    fade_in=True,
+    fade_start_time_ms=1500,
     fade_duration_ms=2000
 )
 
