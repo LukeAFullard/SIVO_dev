@@ -8,6 +8,5 @@ def test_add_text_block():
         url="https://example.com"
     )
     assert "test_block" in dashboard.html_blocks
-    html_content = dashboard.html_blocks["test_block"].get("html_content", "")
-    assert "Hello World" in html_content
-    assert "https://example.com" in html_content
+    assert "Hello World" in dashboard.html_blocks["test_block"]["html_content"]
+    assert "https://example.com" in dashboard.html_blocks["test_block"]["html_content"]
