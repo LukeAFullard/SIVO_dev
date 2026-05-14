@@ -984,7 +984,14 @@
             100% { opacity: 1; }
         }
 
-    </style>
+
+        details[open] summary > span:last-child {
+            transform: rotate(-180deg);
+        }
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+</style>
     <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
 </head>
 <body>
@@ -1074,6 +1081,22 @@
                         {% elif block.type == "overlay_button" %}
             <div class="sivo-overlay-button-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" data-payload-key="{{ block.payload_key }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
                 <button onclick="sivoOpenOverlay('{{ block.id }}')" style="width:100%; padding:10px; background-color:{{ block.button_color }}; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold;">{{ block.label }}</button>
+            </div>
+            {% elif block.type == "expander" %}
+            <div class="sivo-expander-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" {% if block.payload_key %}data-payload-key="{{ block.payload_key }}"{% endif %} style="{{ grid_style }} {{ inline_min_height }} display: flex; align-items: start; justify-content: center; background: transparent; box-shadow: none; border: none; font-family: sans-serif;">
+                <details style="width: 100%; {% if block.background_color %}background-color: {{ block.background_color }};{% else %}background-color: #f8fafc;{% endif %} {% if block.border_radius %}border-radius: {{ block.border_radius }};{% else %}border-radius: 12px;{% endif %} overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: all 0.3s ease; border: 1px solid #e2e8f0;">
+                    <summary style="padding: 1.25rem 1.5rem; font-weight: 600; font-size: 1.1em; cursor: pointer; display: flex; align-items: center; justify-content: space-between; {% if block.text_color %}color: {{ block.text_color }};{% else %}color: #1e293b;{% endif %} outline: none; transition: background-color 0.2s ease; user-select: none;">
+                        <span style="flex-grow: 1;">{{ block.title }}</span>
+                        <span style="transition: transform 0.3s ease; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: rgba(0,0,0,0.05); margin-left: 1rem;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="sivo-expander-content" style="padding: 0 1.5rem 1.5rem 1.5rem; {% if block.text_color %}color: {{ block.text_color }};{% else %}color: #475569;{% endif %} line-height: 1.6; font-size: 0.95em; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 0.5rem; padding-top: 1rem;">
+                        {{ block.content | safe }}
+                    </div>
+                </details>
             </div>
 {% elif block.type == "layout_toggle" %}
             <div class="sivo-layout-toggle-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="display: contents;">
@@ -1811,6 +1834,30 @@
                     });
 
                     // Update HTML Panels Data
+
+                    // Update Expander Panels Data
+                    const expanderPanels = document.querySelectorAll('.sivo-expander-panel');
+                    expanderPanels.forEach(panel => {
+                        const pKey = panel.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            const container = panel.querySelector('.sivo-expander-content');
+                            if (container) {
+                                let val = payloadData[pKey];
+                                if (typeof window.marked !== 'undefined') {
+                                    val = window.marked.parse(String(val));
+                                } else {
+                                    val = val.replace(/\n/g, '<br>');
+                                }
+                                container.innerHTML = val;
+
+                                // Auto-open the details element if it has new content
+                                const detailsEl = panel.querySelector('details');
+                                if (detailsEl) {
+                                    detailsEl.open = true;
+                                }
+                            }
+                        }
+                    });
                     const htmlPanels = document.querySelectorAll('.sivo-html-panel');
                     htmlPanels.forEach(panel => {
                         const pKey = panel.getAttribute('data-payload-key');
