@@ -1,0 +1,3 @@
+Landowners and farmers are the heroes of the program, without there will and contribution it would have been impossible to run this program. About 41% of total funding in SLUI came from the landowners in the financial year 2024-25. If you are a land owner, get in touch with Horizons and our amazing team can assist in developing farm plans under SLUI.
+Even if you are not a landowner, you are already contributing to the program by paying your rates.
+There are several small yet meaningful actions that you can do to preserve our whenua and conserve our soils such as such as recycle, reuse and  reduce or 3Rs, supporting sustainable farming practice by understand and learning
