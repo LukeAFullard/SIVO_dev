@@ -1,34 +1,131 @@
 # SIVO (SVG Interactive Vector Objects)
 
-SIVO is a powerful Python framework designed to transform static SVG graphics into responsive, interactive web infographics seamlessly. It allows developers, designers, and data analysts to attach dynamic behaviors—such as tooltips, drill-downs, URL navigation, and dynamic updates—to individual SVG paths or groups without needing to write any complex JavaScript logic.
+SIVO is a powerful Python framework that transforms static vector graphics (SVGs) into responsive, interactive web infographics and data-driven dashboards—all without writing a single line of JavaScript.
 
-SIVO acts as the bridge between vector design tools and interactive web data visualization. It supports integration with **Streamlit** for live operational dashboards, and can export standalone interactive HTML bundles.
+## What Problem Does SIVO Solve?
+Designers and data analysts frequently create beautiful vector maps, diagrams, and illustrations, but making these assets interactive on the web usually requires tedious front-end development. You have to handle DOM events, responsive scaling across devices, viewport zooming, and coordinate mapping.
 
-## Future Work / Roadmap
-* **Presentation Mode Enhancements:**
-  * **Auto-Play:** A configuration (`presentation_autoplay_ms`) to automatically advance slides at a set interval.
-  * **Progress Indicator:** A visual pagination or step tracker overlay (`Slide X of Y` or dot navigation).
-  * **Laser Pointer Tool:** A drawing tool variant that leaves a glowing trail that fades over time.
-  * **Speaker Notes:** Dedicated side-channel (e.g., dual-monitor console or popup) to render notes tied to the current presentation element.
-  * **Overview Step:** A keyboard shortcut (`Escape` or `Home`) to break out of the presentation sequence, zoom fully out to the map view, and allow jumping back into the sequence.
+SIVO solves this by letting you define interactions directly from Python or via declarative JSON. Whether you need to turn an architectural floor plan into a live occupancy dashboard, or make a static infographic clickable with pop-up charts, SIVO automatically handles the heavy lifting. It bridges the gap between static vector design tools and rich, interactive web visualization.
 
-## Features
-*   **Zero-JavaScript Setup**: Define interactions purely in Python or via declarative JSON configurations.
-*   **Streamlit Integration**: A native V2 Custom Component is provided for seamless embedding and bidirectional data flow in Streamlit applications.
-*   **Complex SVG Handling**: Automatically normalizes complex SVGs, including correctly handling nested `<g>` tags and `<use>` symbol references.
-*   **Rich Behaviors**: Attach custom tooltips (supporting HTML content via Shadow DOM), URL navigation, state/callback events, and visual styling changes to any SVG element.
-*   **External Integrations**: Easily embed and configure Analytics (Google Analytics, PostHog, Plausible), Data Sources (Google Sheets, Airtable, Notion APIs), E-commerce (Stripe, Shopify), Forms (Typeform, Jotform, HubSpot, Google Forms, SurveyMonkey, Qualtrics, Calendly), Rich Media & Social (Vimeo, Wistia, Spotify, SoundCloud, Twitch, Pinterest, Apple Music, Reddit), Replit embeds, and Business Intelligence dashboards (Metabase, Tableau, PowerBI) directly into the info panel.
-*   **SVG Drill-downs**: Load and seamlessly transition to secondary SVGs, creating hierarchical visual storytelling experiences (e.g. Campus Map -> Building -> Floor).
-*   **Responsive Scaling**: Interactive elements adapt flawlessly inside flexible layouts.
-*   **Secure by Design**: Implements mitigations against XXE injections during SVG parsing, and sanitizes/escapes JSON configurations to prevent Cross-Site Scripting (XSS).
-*   **Multi-View HTML Export**: Bundle multiple SVG views and their logic into a single standalone, offline-capable interactive HTML file.
-*   **Data-Driven Choropleths**: Automatically compute and apply color gradients to SVG elements based on a dictionary of numerical values.
-*   **Dynamic Markers**: Calculate element bounding boxes and programmatically drop text/icon markers exactly on the SVG map.
-*   **Built-in Zoom UI**: Responsive user interface zoom controls natively included in exported interactives, with optional `lock_zoom_out` support to prevent zooming beyond the original scale.
-*   **Animation API**: Apply standard CSS keyframe animations (like `pulse` and `fade`) directly to SVG paths to highlight critical regions.
-*   **Auto-Generated Legends**: Automatically display interactive data-scale legends for generated choropleth maps.
+## Capabilities
+* **Zero-JavaScript Interactivity:** Attach tooltips, external links, animations, and custom HTML side-panels to any element in an SVG just by referencing its ID.
+* **Complex SVG Handling:** Automatically normalizes complex SVGs, natively supporting nested `<g>` groups and `<use>` symbol references.
+* **Dynamic Visuals:** Instantly build data-driven choropleths (heatmaps) and drop programmatic text/icon markers exactly where you need them.
+* **Animations:** Apply standard CSS keyframe animations (like `pulse`, `glow`, and `fade`) to highlight critical SVG paths or regions.
+* **Responsive & Mobile-Ready:** Interactive elements adapt flawlessly inside flexible layouts, complete with built-in UI zoom controls.
+* **Two Operating Modes:** Use SIVO to build standalone **Infographics** or embed them inside rich **Dashboards** with side-by-side metric panels.
+* **Streamlit Integration:** Seamlessly embed your creations into Streamlit apps with a native V2 Custom Component that supports bidirectional data flow.
+* **External Integrations:** Easily hook into Google Analytics, data sources (Google Sheets, Notion APIs), and embeds for YouTube, Vimeo, Typeform, and more.
+* **Export Anywhere:** Bundle your visualizations into single, offline-capable HTML files, perfect for sharing or embedding via iframes.
 
-## Installation
+---
+
+## 🎨 1. Infographic Mode
+
+**Infographic Mode** focuses on the graphic itself. It creates a rich, full-screen interactive asset out of a single or multiple connected SVGs. This mode is perfect for storytelling, scrollytelling, or creating interactive maps with pop-up tooltips and drill-downs.
+
+### Key Features of Infographic Mode:
+* **Rich Tooltips & Popups:** Hover over regions to see text, dynamic data, or even rich HTML content.
+* **Drill-Downs:** Click on a region (e.g., a country) to smoothly transition to a secondary SVG (e.g., a state map), creating hierarchical visual storytelling.
+* **Choropleths & Heatmaps:** Pass a dictionary of numerical values to automatically color-code SVG elements.
+* **Built-in Presentation:** Guide users through specific SVG elements using custom camera pans and zooms.
+
+### Example: Interactive Campus Map
+```python
+from sivo import Sivo
+
+# 1. Initialize Sivo from a static SVG file
+sivo_app = Sivo.from_svg("campus_map.svg")
+
+# 2. Attach interactions to an SVG element ID
+sivo_app.map(
+    element_id="buildingA",
+    tooltip="Main Administrative Building",
+    html="<h3>Building A</h3><p>Capacity: 500</p>",
+    hover_color="#ff9999",
+    glow=True
+)
+
+# 3. Create a drill-down experience
+sivo_app.map(
+    element_id="floor1",
+    drill_to="buildingA_floor1.svg"
+)
+
+# 4. Generate a choropleth map automatically
+sivo_app.apply_choropleth({"buildingA": 100, "floor1": 50}, min_color="#ffffff", max_color="#ff0000")
+
+# 5. Export as a standalone interactive HTML file
+sivo_app.to_html("interactive_map.html")
+```
+
+---
+
+## 📊 2. Dashboard Mode
+
+**Dashboard Mode** takes your infographics to the next level by placing them inside a responsive CSS Grid layout alongside other content blocks. While an infographic is a single visual, a **Dashboard** lets you build a full analytical application around it.
+
+Clicking an element on your SVG infographic can dynamically update text panels, image blocks, and metric readouts elsewhere on the screen!
+
+### Key Features of Dashboard Mode:
+* **Responsive CSS Grid Layout:** Build side-by-side or stacked layouts without writing CSS. It automatically stacks gracefully on mobile devices.
+* **Interconnected Blocks:** Configure "Details Panels" or "Metrics Panels" that listen for clicks on your SIVO map to reveal deeper insights.
+* **Rich Component Library:** Add markdown text blocks, raw HTML blocks, image blocks, and external embeds around your main visualization.
+
+### Example: Campus Overview Dashboard
+```python
+from sivo import Sivo, SivoDashboard
+
+# 1. Create the base infographic
+sivo_map = Sivo.from_svg("campus_map.svg")
+sivo_map.map(
+    "buildingA",
+    html="<p>This is the main facility.</p>",
+    callback_payload={"revenue": "$1.2M", "status": "Active"}
+)
+
+# 2. Initialize the Dashboard layout
+dashboard = SivoDashboard(title="Campus Overview")
+
+# 3. Add the infographic to the dashboard
+dashboard.add_sivo_block("map", sivo_map)
+
+# 4. Add interactive side-panels that respond to map clicks
+dashboard.add_details_panel("details", title="Building Details")
+dashboard.add_metrics_panel("metrics", title="Live Data", metrics=["revenue", "status"])
+
+# 5. Export the entire dashboard application
+dashboard.to_html("dashboard.html")
+```
+
+---
+
+## 🚀 Streamlit Integration
+
+Need more than a static HTML export? SIVO includes a native Streamlit component to embed your interactive SVGs into your Streamlit apps and receive click events directly back into your Python runtime.
+
+```python
+import streamlit as st
+from sivo import Sivo
+from sivo.streamlit.component import sivo_component
+
+st.title("Streamlit Interactive Map")
+
+sivo_app = Sivo.from_svg("campus_map.svg")
+sivo_app.map(
+    element_id="buildingB",
+    tooltip="Engineering Block",
+    callback_payload={"building_id": "B"}
+)
+
+# The component returns data when a user clicks the map!
+result = sivo_component(sivo_app, key="campus_map")
+
+if result:
+    st.write("You clicked on:", result)
+```
+
+## ⚙️ Installation
 
 To install SIVO, run:
 
@@ -37,175 +134,17 @@ pip install -r requirements.txt
 ```
 *(A PyPI release will be available soon as `pip install sivo`)*
 
-## Quick Start
+## 📚 Structure & Advanced Usage
 
-### 1. The Python API (`Sivo`)
-SIVO uses a clean, declarative API. Load an SVG, map actions to SVG IDs, and export the interactive web asset.
+SIVO is built on solid foundations, parsing and normalizing SVGs using `lxml`, managing structured configurations with `pydantic`, and using `Jinja2` with `Apache ECharts` on the frontend for high-performance rendering.
 
-```python
-from sivo import Sivo
+Advanced capabilities include:
+* **End-to-End Testing:** Enable `ProjectConfig.enable_e2e_testing` for comprehensive Playwright visual regression tests across your interactives.
+* **Local Asset Bundling:** Want to avoid CDN dependencies? SIVO can bundle JS and CSS locally for strict offline deployments.
+* **Real-time Telemetry:** Connect directly to WebSocket or PubSub brokers to update graphics live without refreshing.
+* **JSON Configuration:** Instead of Python scripts, entire interactives can be defined declaratively in JSON files and built via the command line (`python -m sivo export config.json`).
 
-# 1. Initialize Sivo from an SVG file
-sivo_app = Sivo.from_svg("campus_map.svg")
+Check the `examples/` directory in this repository for over 30 complete project tutorials spanning basic "Hello World" implementations to complex Hexbin Maps, Guided Tours, and Timeline UI playbacks.
 
-# 2. Map interactions to SVG element IDs
-sivo_app.map(
-    element_id="buildingA",
-    tooltip="Main Administrative Building",
-    html="<h3>Building A</h3><p>Capacity: 500</p>",
-    color="#ffcccc",
-    hover_color="#ff9999",
-    glow=True
-)
-
-# Example of an external integration (Data Source & Analytics)
-sivo_app.map(
-    element_id="buildingC",
-    tooltip="Live Occupancy",
-    datasource={"provider": "google_sheets", "api_endpoint": "https://api.example.com/buildingC/occupancy"},
-    analytics={"provider": "google_analytics", "event_name": "viewed_buildingC"}
-)
-
-sivo_app.map(
-    element_id="floor1",
-    drill_to="buildingA_floor1.svg"
-)
-
-# 3. Automatically drop a marker and create a heatmap
-sivo_app.add_marker("buildingA", icon="📍", label="Admin")
-sivo_app.apply_choropleth({"buildingA": 100, "floor1": 50}, min_color="#ffffff", max_color="#ff0000")
-
-# 4. Export to an interactive HTML bundle
-sivo_app.to_html("interactive_map.html")
-```
-
-### 2. Responsive CSS Grid Dashboards (No-Code)
-SIVO supports building responsive dashboards with multiple SVG blocks and dynamically generated data panels without writing custom HTML or JS. It uses CSS Grid to natively stack blocks on mobile devices.
-
-```python
-from sivo import Sivo, SivoDashboard
-
-sivo_map = Sivo.from_svg("campus_map.svg")
-sivo_map.map(
-    "buildingA",
-    html="<p>This is the main facility.</p><img src='building.jpg'>",
-    callback_payload={"revenue": "$1.2M", "status": "Active"}
-)
-
-dashboard = SivoDashboard(title="Campus Overview")
-
-# 1. Add the interactive map
-dashboard.add_sivo_block("map", sivo_map)
-
-# 2. Add a pre-built Details Panel (automatically renders the `html` content of clicked elements)
-dashboard.add_details_panel("details", title="Building Details")
-
-# 3. Add a pre-built Metrics Panel (automatically renders keys from `callback_payload`)
-dashboard.add_metrics_panel("metrics", title="Live Data", metrics=["revenue", "status"])
-
-dashboard.to_html("dashboard.html")
-```
-
-### 3. Streamlit Integration
-Render your interactive SVGs directly inside your Streamlit apps and receive callback data.
-
-```python
-import streamlit as st
-from sivo import Sivo
-from sivo.streamlit.component import sivo_component
-
-st.title("Interactive Campus Dashboard")
-
-# Initialize and map interactions
-sivo_app = Sivo.from_svg("campus_map.svg")
-
-sivo_app.map(
-    element_id="buildingB",
-    tooltip="Engineering Block",
-    callback_event="select_building",
-    callback_payload={"building_id": "B"}
-)
-
-# Render the SIVO component
-result = sivo_component(sivo_app, key="campus_dashboard")
-
-if result:
-    st.write("You clicked on:", result)
-```
-
-## Advanced Usage
-
-### End-to-End (E2E) Browser Testing (Non-Default)
-For enterprise use-cases, it is highly recommended to enable E2E testing to ensure custom interactive SVGs scale correctly across browsers without regressions.
-
-To enable scaffolding for Playwright, set the `enable_e2e_testing` flag in `ProjectConfig` to `True`. Then run tests using:
-```bash
-playwright install --with-deps chromium
-pytest tests/e2e
-```
-
-### JavaScript Bundling (Non-Default)
-By default, SIVO relies on CDN links (e.g., ECharts) to render the map quickly. If you want to bundle JS locally for offline environments or better minify assets, set `build_js=True` in your `ProjectConfig` or call `sivo_app.build_javascript()`. SIVO will invoke a JS bundler pipeline before generating the HTML output.
-
-### Real-time Telemetry (LiveBindingConfig)
-SIVO supports native WebSocket/PubSub integration to push real-time state changes directly to the browser (bypassing Streamlit). Use `sivo_app.bind_live("wss://your-broker", "sensor_data")` to connect the interactive canvas to a live data feed.
-
-### Declarative Configuration (JSON)
-For complex deployments or low-code environments, SIVO can be entirely configured via a JSON file.
-
-```json
-{
-  "svg_file": "campus_map.svg",
-  "mappings": {
-    "buildingA": {
-      "tooltip": "Main Admin",
-      "color": "#ff0000"
-    }
-  }
-}
-```
-
-Load it directly in Python:
-```python
-from sivo import Sivo
-
-sivo_app = Sivo.from_config("project.json")
-sivo_app.to_html("output.html")
-```
-
-### Command Line Interface (CLI)
-SIVO includes a helpful CLI to speed up the workflow:
-
-**Initialize a config from an SVG:**
-```bash
-python -m sivo init campus_map.svg -o project.json
-```
-
-**Validate a config against its SVG:**
-```bash
-python -m sivo validate project.json
-```
-
-**Export an HTML bundle from a config:**
-```bash
-python -m sivo export project.json -o interactive_map.html
-```
-
-## Structure
-SIVO parses and normalizes SVGs using `lxml`, manages configurations with `pydantic`, and uses `Jinja2` with `Apache ECharts` on the frontend for rendering the SVG interactions.
-
-## Tutorials / Examples
-
-We provide extensive examples ranging from basic setup to comprehensive Streamlit dashboards. Check the `examples/` directory for full scripts:
-
-*   **Phase 1: Basic Usage:** Hello World (`examples/01_hello_world`), URL Navigation (`examples/02_url_navigation`), Declarative Configuration (`examples/03_json_config`).
-*   **Phase 2: Advanced Standalone Features:** SVG Drill-Downs (`examples/04_drilldowns`), Custom Asset Injection (`examples/05_custom_assets`), HTML/DOM Overlays (`examples/06_html_overlays`), Multi-View Standalone HTML (`examples/07_multi_view_standalone`), Static Choropleths (`examples/08_choropleth`), Dynamic Data Binding & Legend (`examples/08_data_binding`), Animations & Dynamic Markers (`examples/09_animations_markers`), Document Embeds (`examples/10_document_and_map_embed`).
-*   **Phase 3: Streamlit Integration:** Basic Callbacks (`examples/10_streamlit_callbacks`), Hover Events (`examples/11_streamlit_hover`), Dynamic Color Updates (`examples/12_dynamic_colors`), Programmatic Zooming (`examples/13_streamlit_zoom`), Comprehensive Dashboard (`examples/14_comprehensive_dashboard`).
-*   **Phase 4: External Integrations:** Analytics & Live Data (`examples/22_analytics_and_data`), Forms & E-commerce (`examples/23_forms_and_ecommerce`), Rich Media & Business Intelligence (`examples/24_rich_media_and_bi`), New Integrations (`examples/25_new_integrations`), Nested ECharts Action (`examples/15_echarts_action`), Zoom on Click (`examples/16_zoom_on_click`).
-*   **Phase 5: Infographic Narratives:** Scrollytelling (`examples/26_scrollytelling`), Guided Tours (`examples/27_guided_tour`), Dynamic Odometers (`examples/28_odometers`), Minimap & Export (`examples/29_minimap_export`), Layer Toggles (`examples/30_layer_toggles`), Hexbin Maps (`examples/31_hexbin_map`), Dot Density Maps (`examples/32_dot_density_map`), Timeline UI (`examples/46_timeline_playback_ui`).
-
-These examples demonstrate the fully implemented Phase 1, 2, 3, 4, and 5 project goals.
-
-## License
+## 📄 License
 MIT
-dummy commit
