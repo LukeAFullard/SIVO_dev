@@ -112,7 +112,7 @@ desktop_grid = """
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
 'mitigation_text mitigation_text mitigation_image mitigation_image'
-'time_lag_text time_lag_text . .'
+'time_lag_text time_lag_text time_lag_text time_lag_text'
 'tree_soil_image tree_soil_image erosion_time_lag_image erosion_time_lag_image'
 """
 
