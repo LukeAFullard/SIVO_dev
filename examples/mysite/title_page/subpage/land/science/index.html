@@ -88,6 +88,7 @@
 'search map map map'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
+'mitigation_text mitigation_image mitigation_image mitigation_image'
 ;
 
         }
@@ -236,6 +237,8 @@
 'map'
 'fmu_text'
 'fmu_html'
+'mitigation_text'
+'mitigation_image'
 ;
 
                 grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -268,6 +271,8 @@
 'map'
 'fmu_text'
 'fmu_html'
+'mitigation_text'
+'mitigation_image'
  !important;
 
             grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
@@ -1163,6 +1168,53 @@ It is a largest, non-regulatory soil conservation program running successfully f
 
 
 
+
+
+            <div class="html-card sivo-details-panel" id="card-mitigation_text" data-block-id="mitigation_text" style="grid-area: mitigation_text;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 1.2s;">
+                <div class="card-header"></div>
+                <div class="card-content sivo-details-content" id="container-mitigation_text">
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-mitigation_text">Explain mitigation activities
+
+We then identified various measures that can help erosion mitigation in our region. The mitigation activities include (but not limited to) afforestation (of both native and exotic species), native forest retirement and poplar planting, stream fencing, riparian planting an set setting up of sediment traps.
+</p>
+                </div>
+                <script>
+                    (function() {
+                        const rawPlaceholder = "Explain mitigation activities \n\nWe then identified various measures that can help erosion mitigation in our region. The mitigation activities include (but not limited to) afforestation (of both native and exotic species), native forest retirement and poplar planting, stream fencing, riparian planting an set setting up of sediment traps. \n";
+                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
+                            const container = document.getElementById('container-mitigation_text');
+                            if (container) {
+                                container.innerHTML = marked.parse(rawPlaceholder);
+                            }
+                        }
+                    })();
+                </script>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card sivo-html-panel" id="card-mitigation_image" data-block-id="mitigation_image"  style="grid-area: mitigation_image; ">
+                <div class="card-content sivo-html-content" id="container-mitigation_image">
+                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 1.5s;"><img src="../../../assets/land/tree_important.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;" /></div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
             <div class="sivo-layout-toggle-panel" id="card-mobile_toggle" data-block-id="mobile_toggle" style="display: contents;">
                 <button title="Toggle Mobile View" onclick="document.body.classList.toggle('force-mobile'); updateChartLayoutSizes();" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; width: 44px; height: 44px; background-color: #ffffff; color: #475569; border: 1px solid #e2e8f0; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: all 0.2s ease;">
                     <span style="display:inline-block; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">📱</span>
@@ -1216,6 +1268,10 @@ It is a largest, non-regulatory soil conservation program running successfully f
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
         window.sivoOverlaySizes = {};
+
+
+
+
 
 
 
@@ -1842,7 +1898,7 @@ It is a largest, non-regulatory soil conservation program running successfully f
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"fmu_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": "fmu_md", "placeholder": "Click an FMU on the map to see details here.", "show_element_name": false, "title": ""}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "At Horizons Regional Council, we understand and appreciate how important our soils are to our region and its people. We initiated a long term hill country erosion-control program \u2013 Sustainable Land Use Initiative (SLUI) after our region witnessed the impact of devastating floods and resulting landslides and soil erosion, in 2004.  \nIt is a largest, non-regulatory soil conservation program running successfully for almost two decade, in the country. The primary objective of the program is to improve the resilience of soil and our land, particularly in the hill country. It is an example of a successful collaboration between landowners and the regional council, in the country.\n", "show_element_name": false, "title": ""}, "text2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "To be able to protect our region it is important to understand the degree to which various parts of our regions are susceptible to erosion, as not every part of the region is equally susceptible to soil erosion or driver of erosion may vary. We, therefore, first mapped the region to identify areas which are susceptible to soil erosion and its affects. \n", "show_element_name": false, "title": ""}};
+                const detailsConfig = {"fmu_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": "fmu_md", "placeholder": "Click an FMU on the map to see details here.", "show_element_name": false, "title": ""}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "At Horizons Regional Council, we understand and appreciate how important our soils are to our region and its people. We initiated a long term hill country erosion-control program \u2013 Sustainable Land Use Initiative (SLUI) after our region witnessed the impact of devastating floods and resulting landslides and soil erosion, in 2004.  \nIt is a largest, non-regulatory soil conservation program running successfully for almost two decade, in the country. The primary objective of the program is to improve the resilience of soil and our land, particularly in the hill country. It is an example of a successful collaboration between landowners and the regional council, in the country.\n", "show_element_name": false, "title": ""}, "mitigation_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1200, "padding": "10px", "payload_key": null, "placeholder": "Explain mitigation activities \n\nWe then identified various measures that can help erosion mitigation in our region. The mitigation activities include (but not limited to) afforestation (of both native and exotic species), native forest retirement and poplar planting, stream fencing, riparian planting an set setting up of sediment traps. \n", "show_element_name": false, "title": ""}, "text2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "To be able to protect our region it is important to understand the degree to which various parts of our regions are susceptible to erosion, as not every part of the region is equally susceptible to soil erosion or driver of erosion may vary. We, therefore, first mapped the region to identify areas which are susceptible to soil erosion and its affects. \n", "show_element_name": false, "title": ""}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
