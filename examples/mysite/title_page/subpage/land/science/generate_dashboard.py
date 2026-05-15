@@ -111,8 +111,8 @@ desktop_grid = """
 'search map map map'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
-'mitigation_text mitigation_image mitigation_image mitigation_image'
-'time_lag_text time_lag_text time_lag_text time_lag_text'
+'mitigation_text mitigation_text mitigation_image mitigation_image'
+'time_lag_text time_lag_text . .'
 'tree_soil_image tree_soil_image erosion_time_lag_image erosion_time_lag_image'
 """
 
@@ -213,7 +213,7 @@ dashboard.add_details_panel(
     block_id="mitigation_text",
     title="",
     placeholder=mitigation_md_content,
-    col_span=1,
+    col_span=2,
     grid_area="mitigation_text",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
@@ -227,7 +227,7 @@ dashboard.add_details_panel(
 dashboard.add_image_block(
     block_id="mitigation_image",
     image_url="../../../assets/land/tree_important.png",
-    col_span=3,
+    col_span=2,
     grid_area="mitigation_image",
     object_fit="contain",
     border_radius="10px",
@@ -240,7 +240,7 @@ dashboard.add_details_panel(
     block_id="time_lag_text",
     title="",
     placeholder=time_lag_md_content,
-    col_span=4,
+    col_span=2,
     grid_area="time_lag_text",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
