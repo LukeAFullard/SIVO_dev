@@ -98,6 +98,9 @@ dashboard = SivoDashboard(
 with open(os.path.join(os.path.dirname(__file__), "welcome.md"), "r", encoding="utf-8") as f:
     welcome_md_content = f.read()
 
+with open(os.path.join(os.path.dirname(__file__), "mitigation.md"), "r", encoding="utf-8") as f:
+    mitigation_md_content = f.read()
+
 
 desktop_grid = """
 'banner banner banner banner'
@@ -105,6 +108,7 @@ desktop_grid = """
 'search map map map'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
+'mitigation_text mitigation_image mitigation_image mitigation_image'
 """
 
 mobile_grid = """
@@ -115,6 +119,8 @@ mobile_grid = """
 'map'
 'fmu_text'
 'fmu_html'
+'mitigation_text'
+'mitigation_image'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -193,6 +199,33 @@ dashboard.add_html_block(
     col_span=3,
     grid_area="fmu_html",
     payload_key="fmu_html"
+)
+
+dashboard.add_details_panel(
+    block_id="mitigation_text",
+    title="",
+    placeholder=mitigation_md_content,
+    col_span=1,
+    grid_area="mitigation_text",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=1200,
+    fade_duration_ms=2000
+)
+
+dashboard.add_image_block(
+    block_id="mitigation_image",
+    image_url="../../../assets/land/tree_important.png",
+    col_span=3,
+    grid_area="mitigation_image",
+    object_fit="contain",
+    border_radius="10px",
+    fade_in=True,
+    fade_start_time_ms=1500,
+    fade_duration_ms=2000
 )
 
 
