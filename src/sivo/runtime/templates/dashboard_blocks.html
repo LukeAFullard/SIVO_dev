@@ -1356,6 +1356,11 @@
                 </button>
             </div>
 
+            {% elif block.type == "chart" %}
+            <div class="sivo-card" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} padding: 0.5rem; {{ inline_min_height }}">
+                <div id="chart-{{ block.id }}" style="width: 100%; height: 100%; min-height: 300px;"></div>
+            </div>
+
             {% elif block.type == "data_table" %}
             <div class="sivo-card sivo-data-table-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }}">
                 <div class="card-header">{{ data_tables[block.id].title }}</div>
@@ -2429,12 +2434,49 @@
                         }
                     });
                 });
+
+                // Update Native Chart Blocks if they have a matching payload_key
+                {% if chart_blocks %}
+                if (payloadData) {
+                    var chartBlocksConf = {{ chart_blocks | tojson | safe }};
+                    Object.keys(chartBlocksConf).forEach(function(blockId) {
+                        var conf = chartBlocksConf[blockId];
+                        if (conf.payload_key && payloadData[conf.payload_key] !== undefined) {
+                            var myChart = window.sivoCharts[blockId];
+                            if (myChart) {
+                                // Assume payload contains the full option update
+                                myChart.setOption(payloadData[conf.payload_key]);
+                            }
+                        }
+                    });
+                }
+                {% endif %}
             });
         });
 
         function closeSidebar() {
             document.getElementById('sivo-sliding-sidebar').classList.remove('active');
         }
+
+        // Initialize Native Chart Blocks
+        {% if chart_blocks %}
+            window.sivoCharts = window.sivoCharts || {};
+            var chartBlocksConfig = {{ chart_blocks | tojson | safe }};
+            Object.keys(chartBlocksConfig).forEach(function(blockId) {
+                var config = chartBlocksConfig[blockId];
+                var chartDom = document.getElementById('chart-' + blockId);
+                if (chartDom) {
+                    var myChart = echarts.init(chartDom);
+                    myChart.setOption(config.option);
+                    window.sivoCharts[blockId] = myChart;
+
+                    // Attach resize listener
+                    window.addEventListener('resize', function() {
+                        myChart.resize();
+                    });
+                }
+            });
+        {% endif %}
 
         // Inject Custom JS if provided
         {% if custom_js %}
