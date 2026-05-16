@@ -122,6 +122,23 @@ class TestDashboard(unittest.TestCase):
 
 
 
+    def test_add_chart_block(self):
+        dashboard = SivoDashboard(title="Chart Test")
+        option = {
+            "xAxis": {"type": "category", "data": ["A", "B", "C"]},
+            "yAxis": {"type": "value"},
+            "series": [{"data": [10, 20, 30], "type": "bar"}]
+        }
+        dashboard.add_chart_block("chart1", option=option, payload_key="chart_data")
+
+        self.assertIn("chart1", dashboard.chart_blocks)
+        self.assertEqual(dashboard.chart_blocks["chart1"]["payload_key"], "chart_data")
+
+        html = dashboard.to_html()
+        self.assertIn("chart1", html)
+        self.assertIn("echarts.init", html)
+        self.assertIn("category", html)
+
     def test_add_export_button(self):
         dashboard = SivoDashboard(title="Export Test")
         dashboard.add_export_button("export1", label="Save Image", filename="my_dashboard.png")
