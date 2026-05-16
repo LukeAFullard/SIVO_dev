@@ -1011,16 +1011,12 @@
             border-bottom: 1px solid var(--border-color);
         }
         .sivo-data-table th {
-            background-color: #f8fafc;
             font-weight: 600;
-            color: #475569;
             position: sticky;
             top: 0;
             z-index: 10;
         }
-        .sivo-data-table tbody tr:hover {
-            background-color: #f1f5f9;
-        }
+
         .sivo-data-table-search {
             width: 100%;
             padding: 0.5rem 1rem;
@@ -1054,6 +1050,130 @@
         .sivo-data-table-pagination button:hover:not(:disabled) {
             background-color: #f1f5f9;
         }
+
+        /* Theme: default (already handled by base styles, but we isolate them here for clarity) */
+        .sivo-table-theme-default {
+            border-collapse: collapse;
+        }
+        .sivo-table-theme-default th {
+            background-color: #f8fafc;
+            color: #475569;
+        }
+        .sivo-table-theme-default th, .sivo-table-theme-default td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-default tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Theme: striped */
+        .sivo-table-theme-striped th {
+            background-color: #f1f5f9;
+            color: #334155;
+            border-bottom: 2px solid #cbd5e1;
+        }
+        .sivo-table-theme-striped th, .sivo-table-theme-striped td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-striped tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .sivo-table-theme-striped tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Theme: modern */
+        .sivo-table-theme-modern {
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-modern) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-modern th {
+            background-color: transparent;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            border: none;
+            padding-bottom: 0;
+        }
+        .sivo-table-theme-modern td {
+            background-color: white;
+            border-bottom: none;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-modern td:first-child {
+            border-left: 1px solid var(--border-color);
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern td:last-child {
+            border-right: 1px solid var(--border-color);
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern tbody tr {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .sivo-table-theme-modern tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: white;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Theme: dark */
+        .sivo-table-theme-dark {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-dark) {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+        .sivo-table-theme-dark th {
+            background-color: #0f172a;
+            color: #94a3b8;
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark th, .sivo-table-theme-dark td {
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark tbody tr:hover {
+            background-color: #334155;
+        }
+
+        /* Theme: minimal */
+        .sivo-table-theme-minimal {
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-minimal) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-minimal th {
+            background-color: transparent;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal td {
+            border-bottom: 1px solid #e2e8f0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal tbody tr:hover {
+            background-color: transparent;
+        }
+
 
         /* Tabs Block Styles */
         .sivo-tabs-container {
@@ -1232,7 +1352,7 @@
                     <input type="text" class="sivo-data-table-search" placeholder="Search data..." oninput="sivoFilterTable('{{ block.id }}', this.value)">
                     {% endif %}
                     <div class="sivo-data-table-container">
-                        <table class="sivo-data-table" id="table-{{ block.id }}">
+                        <table class="sivo-data-table sivo-table-theme-{{ data_tables[block.id].table_theme }}" id="table-{{ block.id }}">
                             <thead>
                                 <tr>
                                     {% for col in data_tables[block.id].columns %}
