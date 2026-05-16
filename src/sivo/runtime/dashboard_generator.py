@@ -5,7 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .bundle_generator import format_views_data, determine_dependencies
 
-def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_size: str = "cover", gap: str = "1.5rem", mobile_gap: Optional[str] = None, width: str = "100%", mobile_width: str = "100%", theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right', output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None, data_tables: Dict[str, Dict] = None, tabs_blocks: Dict[str, Dict] = None) -> str:
+def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dict[str, str], details_panels: Dict[str, Dict], metrics_panels: Dict[str, Dict], layout_order: List[Dict[str, str]], title: str, columns: int = 3, template: str = "default", desktop_grid: Optional[str] = None, mobile_grid: Optional[str] = None, background_image_url: Optional[str] = None, background_image_opacity: float = 1.0, background_image_size: str = "cover", gap: str = "1.5rem", mobile_gap: Optional[str] = None, width: str = "100%", mobile_width: str = "100%", theme: str = "light", navigation_menu: Optional[List[Dict[str, str]]] = None, navigation_menu_position: str = 'top-right', output_path: Optional[str] = None, custom_css: Optional[str] = None, custom_js: Optional[str] = None, export_buttons: Dict[str, Dict] = None, data_tables: Dict[str, Dict] = None, tabs_blocks: Dict[str, Dict] = None) -> str:
     import warnings
     if template != "default":
         warnings.warn(f"Dashboard templates are deprecated. The '{template}' template parameter is ignored in favor of the modular CSS Grid Builder layout.", DeprecationWarning)
@@ -56,6 +56,7 @@ def generate_dashboard_blocks_html(views_data: Dict[str, Dict], html_blocks: Dic
         metrics_panels=metrics_panels,
         data_tables=data_tables,
         tabs_blocks=tabs_blocks,
+        export_buttons=export_buttons,
         title=title,
         columns=columns,
         desktop_grid=desktop_grid,

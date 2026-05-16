@@ -11,6 +11,10 @@
     {% if confetti %}
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     {% endif %}
+    <!-- Include html2canvas for Export feature -->
+    {% if export_buttons %}
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    {% endif %}
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     {% if marked %}
@@ -1337,7 +1341,15 @@
                     </div>
                 </details>
             </div>
-{% elif block.type == "layout_toggle" %}
+
+            {% elif block.type == "export_button" %}
+            <div class="sivo-export-button-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; align-items: center; justify-content: center; background: transparent; box-shadow: none; border: none;">
+                <button onclick="sivoExportDashboard('{{ export_buttons[block.id].filename }}')" style="width:100%; padding:10px 15px; background-color:{{ export_buttons[block.id].background_color }}; color:{{ export_buttons[block.id].text_color }}; border:none; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: opacity 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    {{ export_buttons[block.id].label }}
+                </button>
+            </div>
+            {% elif block.type == "layout_toggle" %}
             <div class="sivo-layout-toggle-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="display: contents;">
                 <button title="{{ block.hover_text }}" onclick="document.body.classList.toggle('force-mobile'); updateChartLayoutSizes();" style="position: fixed; {% if block.position == 'top-left' %}top: 20px; left: 20px;{% elif block.position == 'top-right' %}top: 20px; right: 20px;{% elif block.position == 'bottom-left' %}bottom: 20px; left: 20px;{% else %}bottom: 20px; right: 20px;{% endif %} z-index: 1000; width: 44px; height: 44px; background-color: {{ block.button_color }}; color: {{ block.text_color }}; border: 1px solid #e2e8f0; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: all 0.2s ease;">
                     <span style="display:inline-block; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">{{ block.label }}</span>
@@ -1665,6 +1677,34 @@
                 {% endfor %}
             {% endif %}
         });
+
+
+        // --- Export Dashboard Logic ---
+        function sivoExportDashboard(filename) {
+            const container = document.getElementById('dashboard-container');
+            if (!container || typeof html2canvas === 'undefined') {
+                console.error("Dashboard container or html2canvas not found.");
+                return;
+            }
+
+            // Optional: add a loading state to the button here if needed
+
+            // To ensure charts capture fully, we may need to slightly wait
+            // if there are animations, but generally they are canvas so they capture fine.
+            html2canvas(container, {
+                scale: 2, // Higher resolution
+                useCORS: true, // Allow external images
+                backgroundColor: window.getComputedStyle(document.body).backgroundColor
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = filename || 'dashboard.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error("Error exporting dashboard:", err);
+                alert("Failed to export dashboard.");
+            });
+        }
 
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
