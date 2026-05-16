@@ -55,6 +55,8 @@ class SivoDashboard:
         self.html_blocks: Dict[str, Dict] = {}
         self.details_panels: Dict[str, Dict] = {}
         self.metrics_panels: Dict[str, Dict] = {}
+        self.data_tables: Dict[str, Dict] = {}
+        self.tabs_blocks: Dict[str, Dict] = {}
         self.layout_order: List[Dict[str, str]] = []
 
     def add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
@@ -247,6 +249,48 @@ class SivoDashboard:
             "min_height": min_height
         })
 
+
+    def add_data_table_block(self, block_id: str, dataframe, title: str = "Data", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, pagination: bool = True, rows_per_page: int = 10, search: bool = True, render_html: bool = False, table_theme: str = "default"):
+        """
+        Adds a data table block to the dashboard, rendering a Pandas DataFrame.
+        """
+        # Convert dataframe to records dict
+        if hasattr(dataframe, 'to_dict'):
+            records = dataframe.to_dict(orient='records')
+            columns = list(dataframe.columns)
+        elif isinstance(dataframe, list) and len(dataframe) > 0 and isinstance(dataframe[0], dict):
+            records = dataframe
+            columns = list(dataframe[0].keys())
+        else:
+            records = []
+            columns = []
+
+        self.data_tables[block_id] = {
+            "title": title,
+            "records": records,
+            "columns": columns,
+            "pagination": pagination,
+            "rows_per_page": rows_per_page,
+            "search": search,
+            "render_html": render_html,
+            "table_theme": table_theme
+        }
+        self.layout_order.append({"type": "data_table", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
+
+    def add_tabs_block(self, block_id: str, tabs: List[Dict[str, str]], col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, default_tab: int = 0):
+        """
+        Adds a tabs block to the dashboard, allowing users to switch between multiple blocks.
+        `tabs` should be a list of dicts like `[{"label": "Tab 1", "block_id": "block1"}, ...]`.
+        Note: The nested blocks must have been added to the dashboard using `grid_area` equal to None
+        (or simply not positioned using standard grid templates), so they don't appear natively in the layout,
+        and will be injected into this tab container.
+        """
+        self.tabs_blocks[block_id] = {
+            "tabs": tabs,
+            "default_tab": default_tab
+        }
+        self.layout_order.append({"type": "tabs", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
+
     def set_grid_layout(self, desktop: str, mobile: Optional[str] = None):
         """
         Defines the responsive CSS Grid layout using grid-template-areas.
@@ -261,7 +305,7 @@ class SivoDashboard:
         Generates a responsive HTML dashboard containing the assigned blocks.
         Optionally saves to a file.
         """
-        if not self.blocks and not self.html_blocks:
+        if not self.blocks and not self.html_blocks and not self.data_tables and not self.tabs_blocks:
             raise ValueError("No blocks added to the dashboard.")
 
         views_data = {}
@@ -277,6 +321,8 @@ class SivoDashboard:
             html_blocks=self.html_blocks,
             details_panels=self.details_panels,
             metrics_panels=self.metrics_panels,
+            data_tables=self.data_tables,
+            tabs_blocks=self.tabs_blocks,
             layout_order=self.layout_order,
             title=self.title,
             columns=self.columns,

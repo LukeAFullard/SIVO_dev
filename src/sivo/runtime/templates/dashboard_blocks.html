@@ -991,8 +991,247 @@
         details summary::-webkit-details-marker {
             display: none;
         }
-</style>
-    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}</style>
+
+        /* Data Table Styles */
+        .sivo-data-table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .sivo-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .sivo-data-table th, .sivo-data-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-data-table th {
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sivo-data-table-search {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+        .sivo-data-table-pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .sivo-data-table-pagination button {
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            color: #475569;
+        }
+        .sivo-data-table-pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .sivo-data-table-pagination button:hover:not(:disabled) {
+            background-color: #f1f5f9;
+        }
+
+        /* Theme: default (already handled by base styles, but we isolate them here for clarity) */
+        .sivo-table-theme-default {
+            border-collapse: collapse;
+        }
+        .sivo-table-theme-default th {
+            background-color: #f8fafc;
+            color: #475569;
+        }
+        .sivo-table-theme-default th, .sivo-table-theme-default td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-default tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Theme: striped */
+        .sivo-table-theme-striped th {
+            background-color: #f1f5f9;
+            color: #334155;
+            border-bottom: 2px solid #cbd5e1;
+        }
+        .sivo-table-theme-striped th, .sivo-table-theme-striped td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-striped tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .sivo-table-theme-striped tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Theme: modern */
+        .sivo-table-theme-modern {
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-modern) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-modern th {
+            background-color: transparent;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            border: none;
+            padding-bottom: 0;
+        }
+        .sivo-table-theme-modern td {
+            background-color: white;
+            border-bottom: none;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-modern td:first-child {
+            border-left: 1px solid var(--border-color);
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern td:last-child {
+            border-right: 1px solid var(--border-color);
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern tbody tr {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .sivo-table-theme-modern tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: white;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Theme: dark */
+        .sivo-table-theme-dark {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-dark) {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+        .sivo-table-theme-dark th {
+            background-color: #0f172a;
+            color: #94a3b8;
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark th, .sivo-table-theme-dark td {
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark tbody tr:hover {
+            background-color: #334155;
+        }
+
+        /* Theme: minimal */
+        .sivo-table-theme-minimal {
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-minimal) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-minimal th {
+            background-color: transparent;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal td {
+            border-bottom: 1px solid #e2e8f0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal tbody tr:hover {
+            background-color: transparent;
+        }
+
+
+        /* Tabs Block Styles */
+        .sivo-tabs-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        .sivo-tabs-header {
+            display: flex;
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .sivo-tab-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .sivo-tab-btn:hover {
+            color: #334155;
+            background-color: #f1f5f9;
+        }
+        .sivo-tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background-color: white;
+        }
+        .sivo-tabs-content {
+            flex: 1;
+            position: relative;
+            background-color: white;
+            padding: 0;
+            overflow: hidden; /* Prevent nested elements from bleeding out */
+        }
+        .sivo-tab-pane {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .sivo-tab-pane.active {
+            display: block;
+        }
+
+    </style>
+    <style id="custom-css">{{ custom_css | safe if custom_css else '' }}
+
+
+    </style>
 </head>
 <body>
 
@@ -1104,6 +1343,57 @@
                     <span style="display:inline-block; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">{{ block.label }}</span>
                 </button>
             </div>
+
+            {% elif block.type == "data_table" %}
+            <div class="sivo-card sivo-data-table-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }}">
+                <div class="card-header">{{ data_tables[block.id].title }}</div>
+                <div class="card-content" style="display: flex; flex-direction: column; padding: 1.5rem;">
+                    {% if data_tables[block.id].search %}
+                    <input type="text" class="sivo-data-table-search" placeholder="Search data..." oninput="sivoFilterTable('{{ block.id }}', this.value)">
+                    {% endif %}
+                    <div class="sivo-data-table-container">
+                        <table class="sivo-data-table sivo-table-theme-{{ data_tables[block.id].table_theme }}" id="table-{{ block.id }}">
+                            <thead>
+                                <tr>
+                                    {% for col in data_tables[block.id].columns %}
+                                    <th onclick="sivoSortTable('{{ block.id }}', {{ loop.index0 }})" style="cursor: pointer;" title="Click to sort">
+                                        {{ col }} <span class="sort-icon">↕</span>
+                                    </th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-{{ block.id }}">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if data_tables[block.id].pagination %}
+                    <div class="sivo-data-table-pagination">
+                        <span id="page-info-{{ block.id }}">Page 1 of 1</span>
+                        <div>
+                            <button onclick="sivoPrevPage('{{ block.id }}')" id="prev-btn-{{ block.id }}">Previous</button>
+                            <button onclick="sivoNextPage('{{ block.id }}')" id="next-btn-{{ block.id }}">Next</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% elif block.type == "tabs" %}
+            <div class="sivo-card sivo-tabs-panel" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }}">
+                <div class="sivo-tabs-container">
+                    <div class="sivo-tabs-header">
+                        {% for tab in tabs_blocks[block.id].tabs %}
+                        <button class="sivo-tab-btn {% if loop.index0 == tabs_blocks[block.id].default_tab %}active{% endif %}" onclick="sivoSwitchTab('{{ block.id }}', '{{ tab.block_id }}', this)">
+                            {{ tab.label }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                    <div class="sivo-tabs-content" id="tabs-content-{{ block.id }}">
+                        <!-- Tab contents (other layout blocks) will be dynamically moved here by JS -->
+                    </div>
+                </div>
+            </div>
+
             {% elif block.type == "geocoder" %}
             <div class="html-card sivo-geocoder-panel {{ overflow_class }}" id="card-{{ block.id }}" data-block-id="{{ block.id }}" style="{{ grid_style }} {{ inline_min_height }} display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; box-shadow: none; position: relative;">
                 {% if block.text %}
@@ -1159,6 +1449,223 @@
         // SIVO passes `views_data` directly to this template
         const viewsData = {{ views_data | safe }};
         const activeCharts = {};
+
+        // --- Tab Logic ---
+        function sivoSwitchTab(tabsBlockId, targetBlockId, btnElement) {
+            // Update buttons
+            const tabsContainer = btnElement.closest('.sivo-tabs-container');
+            const btns = tabsContainer.querySelectorAll('.sivo-tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Update panes
+            const contentContainer = document.getElementById('tabs-content-' + tabsBlockId);
+            const panes = contentContainer.querySelectorAll('.sivo-tab-pane');
+            panes.forEach(pane => pane.classList.remove('active'));
+
+            const activePane = document.getElementById('tab-pane-' + tabsBlockId + '-' + targetBlockId);
+            if (activePane) {
+                activePane.classList.add('active');
+            }
+
+            // Trigger ECharts resize if the newly visible tab contains a chart
+            if (window.activeCharts && window.activeCharts[targetBlockId]) {
+                // Echarts needs a tiny delay to realize its container is now visible
+                setTimeout(() => {
+                    window.activeCharts[targetBlockId].resize();
+                }, 50);
+            }
+        }
+
+        // Initialize Tabs - Move target blocks into tab panes
+        document.addEventListener('DOMContentLoaded', () => {
+            {% if tabs_blocks %}
+                {% for block_id, block_data in tabs_blocks.items() %}
+                    (function() {
+                        const contentContainer = document.getElementById('tabs-content-{{ block_id }}');
+                        if (!contentContainer) return;
+
+                        const tabs = {{ block_data.tabs | tojson }};
+                        const defaultIdx = {{ block_data.default_tab }};
+
+                        tabs.forEach((tab, index) => {
+                            const targetCard = document.getElementById('card-' + tab.block_id);
+                            if (targetCard) {
+                                // Create pane wrapper
+                                const pane = document.createElement('div');
+                                pane.className = 'sivo-tab-pane';
+                                pane.id = 'tab-pane-{{ block_id }}-' + tab.block_id;
+                                if (index === defaultIdx) {
+                                    pane.classList.add('active');
+                                }
+
+                                // Reset target card styling to fit the pane
+                                targetCard.style.gridArea = 'none';
+                                targetCard.style.gridColumn = 'none';
+                                targetCard.style.width = '100%';
+                                targetCard.style.height = '100%';
+                                targetCard.style.boxShadow = 'none';
+                                targetCard.style.border = 'none';
+                                targetCard.style.borderRadius = '0';
+
+                                pane.appendChild(targetCard);
+                                contentContainer.appendChild(pane);
+                            } else {
+                                console.warn("Tab target block not found in DOM:", tab.block_id);
+                            }
+                        });
+                    })();
+                {% endfor %}
+            {% endif %}
+        });
+
+        // --- Data Table Logic ---
+        window.sivoTableData = {};
+
+        function sivoRenderTable(blockId) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            const tbody = document.getElementById('tbody-' + blockId);
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            const startIdx = (data.currentPage - 1) * data.rowsPerPage;
+            const endIdx = data.pagination ? Math.min(startIdx + data.rowsPerPage, data.filteredRecords.length) : data.filteredRecords.length;
+
+            for (let i = startIdx; i < endIdx; i++) {
+                const row = data.filteredRecords[i];
+                const tr = document.createElement('tr');
+
+                data.columns.forEach(col => {
+                    const td = document.createElement('td');
+                    const val = row[col] !== undefined && row[col] !== null ? String(row[col]) : '';
+                    if (data.renderHtml) {
+                        td.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(val) : val;
+                    } else {
+                        td.textContent = val;
+                    }
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            }
+
+            // Update pagination UI
+            if (data.pagination) {
+                const pageInfo = document.getElementById('page-info-' + blockId);
+                const prevBtn = document.getElementById('prev-btn-' + blockId);
+                const nextBtn = document.getElementById('next-btn-' + blockId);
+
+                const totalPages = Math.max(1, Math.ceil(data.filteredRecords.length / data.rowsPerPage));
+
+                if (pageInfo) pageInfo.textContent = `Page ${data.currentPage} of ${totalPages} (${data.filteredRecords.length} items)`;
+                if (prevBtn) prevBtn.disabled = data.currentPage <= 1;
+                if (nextBtn) nextBtn.disabled = data.currentPage >= totalPages;
+            }
+        }
+
+        function sivoFilterTable(blockId, query) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            query = query.toLowerCase();
+
+            if (!query) {
+                data.filteredRecords = [...data.records];
+            } else {
+                data.filteredRecords = data.records.filter(row => {
+                    return data.columns.some(col => {
+                        const val = row[col];
+                        return val !== null && val !== undefined && String(val).toLowerCase().includes(query);
+                    });
+                });
+            }
+
+            data.currentPage = 1; // Reset to first page
+            sivoRenderTable(blockId);
+        }
+
+        function sivoSortTable(blockId, colIdx) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            const col = data.columns[colIdx];
+
+            // Toggle sort direction
+            if (data.sortCol === col) {
+                data.sortAsc = !data.sortAsc;
+            } else {
+                data.sortCol = col;
+                data.sortAsc = true;
+            }
+
+            data.filteredRecords.sort((a, b) => {
+                let valA = a[col];
+                let valB = b[col];
+
+                // Handle nulls
+                if (valA === null || valA === undefined) valA = '';
+                if (valB === null || valB === undefined) valB = '';
+
+                // Try numeric sort first
+                const numA = Number(valA);
+                const numB = Number(valB);
+
+                if (!isNaN(numA) && !isNaN(numB)) {
+                    return data.sortAsc ? numA - numB : numB - numA;
+                }
+
+                // Fallback to string sort
+                const strA = String(valA).toLowerCase();
+                const strB = String(valB).toLowerCase();
+
+                if (strA < strB) return data.sortAsc ? -1 : 1;
+                if (strA > strB) return data.sortAsc ? 1 : -1;
+                return 0;
+            });
+
+            sivoRenderTable(blockId);
+        }
+
+        function sivoPrevPage(blockId) {
+            const data = window.sivoTableData[blockId];
+            if (data && data.currentPage > 1) {
+                data.currentPage--;
+                sivoRenderTable(blockId);
+            }
+        }
+
+        function sivoNextPage(blockId) {
+            const data = window.sivoTableData[blockId];
+            const totalPages = Math.ceil(data.filteredRecords.length / data.rowsPerPage);
+            if (data && data.currentPage < totalPages) {
+                data.currentPage++;
+                sivoRenderTable(blockId);
+            }
+        }
+
+        // Initialize Data Tables Data
+        document.addEventListener('DOMContentLoaded', () => {
+            {% if data_tables %}
+                {% for block_id, table_data in data_tables.items() %}
+                    window.sivoTableData['{{ block_id }}'] = {
+                        records: {{ table_data.records | tojson }},
+                        filteredRecords: {{ table_data.records | tojson }},
+                        columns: {{ table_data.columns | tojson }},
+                        pagination: {{ table_data.pagination | tojson }},
+                        rowsPerPage: {{ table_data.rows_per_page | tojson }},
+                        renderHtml: {{ table_data.render_html | tojson }},
+                        currentPage: 1,
+                        sortCol: null,
+                        sortAsc: true
+                    };
+                    sivoRenderTable('{{ block_id }}');
+                {% endfor %}
+            {% endif %}
+        });
+
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
         window.sivoOverlaySizes = {};
@@ -2316,7 +2823,10 @@
                             0% { transform: scale(0.5); opacity: 1; }
                             100% { transform: scale(2.0); opacity: 0; }
                         }
-                    </style>
+
+
+
+    </style>
                     `;
 
                     overlaysData['sivo-geocoder-pulse-overlay'] = {
