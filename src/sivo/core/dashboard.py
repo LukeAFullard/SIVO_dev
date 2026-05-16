@@ -250,7 +250,7 @@ class SivoDashboard:
         })
 
 
-    def add_data_table_block(self, block_id: str, dataframe, title: str = "Data", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, pagination: bool = True, rows_per_page: int = 10, search: bool = True):
+    def add_data_table_block(self, block_id: str, dataframe, title: str = "Data", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None, pagination: bool = True, rows_per_page: int = 10, search: bool = True, render_html: bool = False):
         """
         Adds a data table block to the dashboard, rendering a Pandas DataFrame.
         """
@@ -271,7 +271,8 @@ class SivoDashboard:
             "columns": columns,
             "pagination": pagination,
             "rows_per_page": rows_per_page,
-            "search": search
+            "search": search,
+            "render_html": render_html
         }
         self.layout_order.append({"type": "data_table", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
 

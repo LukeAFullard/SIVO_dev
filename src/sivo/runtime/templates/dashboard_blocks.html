@@ -1420,7 +1420,12 @@
 
                 data.columns.forEach(col => {
                     const td = document.createElement('td');
-                    td.textContent = row[col] !== undefined && row[col] !== null ? String(row[col]) : '';
+                    const val = row[col] !== undefined && row[col] !== null ? String(row[col]) : '';
+                    if (data.renderHtml) {
+                        td.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(val) : val;
+                    } else {
+                        td.textContent = val;
+                    }
                     tr.appendChild(td);
                 });
 
@@ -1531,6 +1536,7 @@
                         columns: {{ table_data.columns | tojson }},
                         pagination: {{ table_data.pagination | tojson }},
                         rowsPerPage: {{ table_data.rows_per_page | tojson }},
+                        renderHtml: {{ table_data.render_html | tojson }},
                         currentPage: 1,
                         sortCol: null,
                         sortAsc: true

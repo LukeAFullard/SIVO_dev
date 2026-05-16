@@ -78,46 +78,48 @@ class TestDashboard(unittest.TestCase):
         finally:
             os.remove(temp_name)
 
+
+    def test_add_data_table_block(self):
+        dashboard = SivoDashboard(title="Table Test")
+        data = [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]
+        dashboard.add_data_table_block("table1", data, title="My Table")
+
+        self.assertIn("table1", dashboard.data_tables)
+        self.assertEqual(dashboard.data_tables["table1"]["title"], "My Table")
+        self.assertEqual(dashboard.data_tables["table1"]["records"], data)
+        self.assertEqual(dashboard.data_tables["table1"]["columns"], ["id", "name"])
+
+        # Generate HTML
+        html = dashboard.to_html()
+        self.assertIn("table1", html)
+        self.assertIn("My Table", html)
+        self.assertIn("Alice", html)
+        self.assertIn("sivo-data-table", html)
+
+    def test_add_tabs_block(self):
+        dashboard = SivoDashboard(title="Tabs Test")
+
+        # Add dummy blocks for the tabs
+        dashboard.add_text_block("text1", "First Tab Content", grid_area=None)
+        dashboard.add_text_block("text2", "Second Tab Content", grid_area=None)
+
+        tabs = [
+            {"label": "Tab 1", "block_id": "text1"},
+            {"label": "Tab 2", "block_id": "text2"}
+        ]
+        dashboard.add_tabs_block("tabs1", tabs)
+
+        self.assertIn("tabs1", dashboard.tabs_blocks)
+        self.assertEqual(dashboard.tabs_blocks["tabs1"]["tabs"], tabs)
+
+        # Generate HTML
+        html = dashboard.to_html()
+        self.assertIn("tabs1", html)
+        self.assertIn("Tab 1", html)
+        self.assertIn("Tab 2", html)
+        self.assertIn("sivo-tabs-panel", html)
+        self.assertIn("sivoSwitchTab", html)
+
+
 if __name__ == '__main__':
     unittest.main()
-
-def test_add_data_table_block():
-    dashboard = SivoDashboard(title="Table Test")
-    data = [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]
-    dashboard.add_data_table_block("table1", data, title="My Table")
-
-    assert "table1" in dashboard.data_tables
-    assert dashboard.data_tables["table1"]["title"] == "My Table"
-    assert dashboard.data_tables["table1"]["records"] == data
-    assert dashboard.data_tables["table1"]["columns"] == ["id", "name"]
-
-    # Generate HTML
-    html = dashboard.to_html()
-    assert "table1" in html
-    assert "My Table" in html
-    assert "Alice" in html
-    assert "sivo-data-table" in html
-
-def test_add_tabs_block():
-    dashboard = SivoDashboard(title="Tabs Test")
-
-    # Add dummy blocks for the tabs
-    dashboard.add_text_block("text1", "First Tab Content", grid_area=None)
-    dashboard.add_text_block("text2", "Second Tab Content", grid_area=None)
-
-    tabs = [
-        {"label": "Tab 1", "block_id": "text1"},
-        {"label": "Tab 2", "block_id": "text2"}
-    ]
-    dashboard.add_tabs_block("tabs1", tabs)
-
-    assert "tabs1" in dashboard.tabs_blocks
-    assert dashboard.tabs_blocks["tabs1"]["tabs"] == tabs
-
-    # Generate HTML
-    html = dashboard.to_html()
-    assert "tabs1" in html
-    assert "Tab 1" in html
-    assert "Tab 2" in html
-    assert "sivo-tabs-panel" in html
-    assert "sivoSwitchTab" in html
