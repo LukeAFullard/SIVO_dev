@@ -136,6 +136,7 @@ class LiveBindingConfig(BaseModel):
     auth_token: Optional[str] = None
     reconnect_attempts: int = 5
     fallback_polling_interval: int = 0
+    cors_proxy: Optional[str] = Field(default=None, description="Optional CORS proxy URL to prepend to the connection URL.")
 
 class ApiBindingConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -147,6 +148,7 @@ class ApiBindingConfig(BaseModel):
     payload: Optional[Dict[str, Any]] = Field(default=None, description="Optional JSON payload for POST requests.")
     data_path: Optional[str] = Field(default=None, description="Optional dot-notation path to extract the relevant data array/object from the response (e.g., 'data.results').")
     max_retries: Optional[int] = Field(default=None, description="Maximum number of consecutive failed requests before polling stops.")
+    cors_proxy: Optional[str] = Field(default=None, description="Optional CORS proxy URL to prepend to the fetch URL.")
 
 class ScrollytellingStepConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")

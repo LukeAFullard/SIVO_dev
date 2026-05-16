@@ -3609,7 +3609,13 @@
                 liveSocket = null;
             }
             if (liveBinding) {
-                liveSocket = new WebSocket(liveBinding.url);
+                var wsUrl = liveBinding.url;
+                if (liveBinding.cors_proxy) {
+                    // Prepend proxy and encode the original URL if necessary depending on the proxy
+                    // Note: Most WS proxies require the target URL as part of the path, e.g. wss://proxy.com/wss://target.com
+                    wsUrl = liveBinding.cors_proxy + wsUrl;
+                }
+                liveSocket = new WebSocket(wsUrl);
 
                 liveSocket.onopen = function(e) {
                     if (liveBinding.auth_token) {
@@ -3617,6 +3623,18 @@
                     }
                     if (liveBinding.topic) {
                         liveSocket.send(JSON.stringify({ type: 'subscribe', topic: liveBinding.topic }));
+                    }
+                };
+
+                liveSocket.onerror = function(event) {
+                    console.error("[SIVO] WebSocket connection error. This may be due to CORS limitations, Mixed-Content security policies (trying to connect to a non-secure 'ws://' from a secure 'https://' context), or an offline server.", event);
+                    // Create a simple toast notification if not in a headless test
+                    if (!window.sivoDisablePanel && typeof document !== "undefined") {
+                        var toast = document.createElement('div');
+                        toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#ef4444;color:white;padding:12px 20px;border-radius:6px;z-index:99999;box-shadow:0 4px 6px rgba(0,0,0,0.1);font-family:sans-serif;";
+                        toast.innerText = "⚠️ Live Data Error: Failed to connect to WebSocket server. Check console for CORS or security errors.";
+                        document.body.appendChild(toast);
+                        setTimeout(() => { if(toast.parentNode) toast.parentNode.removeChild(toast); }, 8000);
                     }
                 };
 
@@ -3680,7 +3698,12 @@
                         fetchOptions.headers['Content-Type'] = 'application/json';
                     }
 
-                    fetch(apiBinding.url, fetchOptions)
+                    var fetchUrl = apiBinding.url;
+                    if (apiBinding.cors_proxy) {
+                        fetchUrl = apiBinding.cors_proxy + fetchUrl;
+                    }
+
+                    fetch(fetchUrl, fetchOptions)
                         .then(res => {
                             if (!res.ok) {
                                 throw new Error("HTTP " + res.status);
@@ -3824,6 +3847,14 @@
                         .catch(err => {
                             apiFailureCount++;
                             console.error(`[SIVO] API binding fetch error (${apiFailureCount} failures):`, err);
+                            if (apiFailureCount === 1 && !window.sivoDisablePanel && typeof document !== "undefined") {
+                                // Show toast on first failure
+                                var toast = document.createElement('div');
+                                toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#ef4444;color:white;padding:12px 20px;border-radius:6px;z-index:99999;box-shadow:0 4px 6px rgba(0,0,0,0.1);font-family:sans-serif;";
+                                toast.innerText = "⚠️ Live API Error: Failed to fetch data. Check console for CORS or network errors.";
+                                document.body.appendChild(toast);
+                                setTimeout(() => { if(toast.parentNode) toast.parentNode.removeChild(toast); }, 8000);
+                            }
                         });
                 }, apiBinding.polling_interval_ms || 5000);
             }
