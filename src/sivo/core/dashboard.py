@@ -57,6 +57,7 @@ class SivoDashboard:
         self.metrics_panels: Dict[str, Dict] = {}
         self.data_tables: Dict[str, Dict] = {}
         self.tabs_blocks: Dict[str, Dict] = {}
+        self.export_buttons: Dict[str, Dict] = {}
         self.layout_order: List[Dict[str, str]] = []
 
     def add_sivo_block(self, block_id: str, sivo_app: Sivo, col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
@@ -230,6 +231,19 @@ class SivoDashboard:
             "border_radius": border_radius
         })
 
+
+    def add_export_button(self, block_id: str, label: str = "Download Dashboard", filename: str = "dashboard_export.png", background_color: str = "#10b981", text_color: str = "#ffffff", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
+        """
+        Adds a button to the dashboard that allows the user to download a snapshot of the current dashboard state as an image.
+        """
+        self.export_buttons[block_id] = {
+            "label": label,
+            "filename": filename,
+            "background_color": background_color,
+            "text_color": text_color
+        }
+        self.layout_order.append({"type": "export_button", "id": block_id, "col_span": col_span, "slot": slot, "grid_area": grid_area, "overflow_visible": overflow_visible, "min_height": min_height})
+
     def add_layout_toggle_button(self, block_id: str, label: str = "📱", hover_text: str = "Toggle Mobile View", button_color: str = "#ffffff", text_color: str = "#475569", position: str = "bottom-right", col_span: int = 1, slot: str = "main", grid_area: Optional[str] = None, overflow_visible: bool = False, min_height: Optional[str] = None):
         """
         Adds a floating button that forces the dashboard into a single column / mobile layout when clicked.
@@ -305,7 +319,7 @@ class SivoDashboard:
         Generates a responsive HTML dashboard containing the assigned blocks.
         Optionally saves to a file.
         """
-        if not self.blocks and not self.html_blocks and not self.data_tables and not self.tabs_blocks:
+        if not self.blocks and not self.html_blocks and not self.data_tables and not self.tabs_blocks and not self.export_buttons:
             raise ValueError("No blocks added to the dashboard.")
 
         views_data = {}
@@ -323,6 +337,7 @@ class SivoDashboard:
             metrics_panels=self.metrics_panels,
             data_tables=self.data_tables,
             tabs_blocks=self.tabs_blocks,
+            export_buttons=self.export_buttons,
             layout_order=self.layout_order,
             title=self.title,
             columns=self.columns,

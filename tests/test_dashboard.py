@@ -121,5 +121,21 @@ class TestDashboard(unittest.TestCase):
         self.assertIn("sivoSwitchTab", html)
 
 
+
+    def test_add_export_button(self):
+        dashboard = SivoDashboard(title="Export Test")
+        dashboard.add_export_button("export1", label="Save Image", filename="my_dashboard.png")
+
+        self.assertIn("export1", dashboard.export_buttons)
+        self.assertEqual(dashboard.export_buttons["export1"]["label"], "Save Image")
+        self.assertEqual(dashboard.export_buttons["export1"]["filename"], "my_dashboard.png")
+
+        # Generate HTML
+        html = dashboard.to_html()
+        self.assertIn("export1", html)
+        self.assertIn("Save Image", html)
+        self.assertIn("sivoExportDashboard(", html)
+        self.assertIn("html2canvas", html)
+
 if __name__ == '__main__':
     unittest.main()
