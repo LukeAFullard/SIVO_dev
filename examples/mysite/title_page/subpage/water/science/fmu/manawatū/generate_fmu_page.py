@@ -220,11 +220,11 @@ for icon in icons:
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
 
 
-with open(os.path.join(os.path.dirname(__file__), "md/map_placeholder.html"), "r", encoding="utf-8") as f:
+with open(os.path.join(os.path.dirname(__file__), "results/FMU_Boundary_Only.html"), "r", encoding="utf-8") as f:
     map_html = f.read()
     if map_html.strip().lower().startswith("<!doctype html>") or map_html.strip().lower().startswith("<html"):
         # map_placeholder is currently a simple html snippet, but this handles future changes
-        map_content_block = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'><iframe src='md/map_placeholder.html' width='100%' height='100%' style='border:none; border-radius:10px;'></iframe></div>"
+        map_content_block = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'><iframe src='results/FMU_Boundary_Only.html' width='100%' height='100%' style='border:none; border-radius:10px;'></iframe></div>"
     else:
         map_content_block = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{map_html}</div>"
 
