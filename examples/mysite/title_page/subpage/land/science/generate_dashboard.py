@@ -45,7 +45,7 @@ app = Sivo.from_svg(
 )
 
 app.add_svg_background_image(
-    "../../../assets/water/nz_comms_map_04_zoomed_detailed.png",
+    "../../../assets/land/land_region_map.png",
     insert_after="background"
 )
 
