@@ -1,0 +1,2870 @@
+{
+    "Region": {
+        "ASPM": {
+            "Total Sites": 77,
+            "Grades": {
+                "A": {
+                    "Count": 7,
+                    "Percentage": 9.09
+                },
+                "B": {
+                    "Count": 36,
+                    "Percentage": 46.75
+                },
+                "C": {
+                    "Count": 25,
+                    "Percentage": 32.47
+                },
+                "D": {
+                    "Count": 9,
+                    "Percentage": 11.69
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "Ammoniacal-N (95th Percentile)": {
+            "Total Sites": 108,
+            "Grades": {
+                "A": {
+                    "Count": 87,
+                    "Percentage": 80.56
+                },
+                "B": {
+                    "Count": 15,
+                    "Percentage": 13.89
+                },
+                "C": {
+                    "Count": 6,
+                    "Percentage": 5.56
+                },
+                "D": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "Ammoniacal-N (Median)": {
+            "Total Sites": 108,
+            "Grades": {
+                "A": {
+                    "Count": 98,
+                    "Percentage": 90.74
+                },
+                "B": {
+                    "Count": 10,
+                    "Percentage": 9.26
+                },
+                "C": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                },
+                "D": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "Chlorophyll A": {
+            "Total Sites": 42,
+            "Grades": {
+                "A": {
+                    "Count": 27,
+                    "Percentage": 64.29
+                },
+                "B": {
+                    "Count": 11,
+                    "Percentage": 26.19
+                },
+                "C": {
+                    "Count": 3,
+                    "Percentage": 7.14
+                },
+                "D": {
+                    "Count": 1,
+                    "Percentage": 2.38
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "DRP (95th Percentile)": {
+            "Total Sites": 109,
+            "Grades": {
+                "A": {
+                    "Count": 37,
+                    "Percentage": 33.94
+                },
+                "B": {
+                    "Count": 23,
+                    "Percentage": 21.1
+                },
+                "C": {
+                    "Count": 28,
+                    "Percentage": 25.69
+                },
+                "D": {
+                    "Count": 21,
+                    "Percentage": 19.27
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "DRP (Median)": {
+            "Total Sites": 109,
+            "Grades": {
+                "A": {
+                    "Count": 21,
+                    "Percentage": 19.27
+                },
+                "B": {
+                    "Count": 24,
+                    "Percentage": 22.02
+                },
+                "C": {
+                    "Count": 34,
+                    "Percentage": 31.19
+                },
+                "D": {
+                    "Count": 30,
+                    "Percentage": 27.52
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "E coli (95th Percentile)": {
+            "Total Sites": 104,
+            "Grades": {
+                "A": {
+                    "Count": 16,
+                    "Percentage": 15.38
+                },
+                "B": {
+                    "Count": 8,
+                    "Percentage": 7.69
+                },
+                "C": {
+                    "Count": 4,
+                    "Percentage": 3.85
+                },
+                "D": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                },
+                "E": {
+                    "Count": 76,
+                    "Percentage": 73.08
+                }
+            }
+        },
+        "E coli (>260)": {
+            "Total Sites": 104,
+            "Grades": {
+                "A": {
+                    "Count": 25,
+                    "Percentage": 24.04
+                },
+                "B": {
+                    "Count": 16,
+                    "Percentage": 15.38
+                },
+                "C": {
+                    "Count": 7,
+                    "Percentage": 6.73
+                },
+                "D": {
+                    "Count": 35,
+                    "Percentage": 33.65
+                },
+                "E": {
+                    "Count": 21,
+                    "Percentage": 20.19
+                }
+            }
+        },
+        "E coli (>540)": {
+            "Total Sites": 104,
+            "Grades": {
+                "A": {
+                    "Count": 15,
+                    "Percentage": 14.42
+                },
+                "B": {
+                    "Count": 14,
+                    "Percentage": 13.46
+                },
+                "C": {
+                    "Count": 21,
+                    "Percentage": 20.19
+                },
+                "D": {
+                    "Count": 28,
+                    "Percentage": 26.92
+                },
+                "E": {
+                    "Count": 26,
+                    "Percentage": 25.0
+                }
+            }
+        },
+        "E coli (Median)": {
+            "Total Sites": 104,
+            "Grades": {
+                "A": {
+                    "Count": 44,
+                    "Percentage": 42.31
+                },
+                "B": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                },
+                "C": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                },
+                "D": {
+                    "Count": 37,
+                    "Percentage": 35.58
+                },
+                "E": {
+                    "Count": 23,
+                    "Percentage": 22.12
+                }
+            }
+        },
+        "MCI": {
+            "Total Sites": 77,
+            "Grades": {
+                "A": {
+                    "Count": 6,
+                    "Percentage": 7.79
+                },
+                "B": {
+                    "Count": 25,
+                    "Percentage": 32.47
+                },
+                "C": {
+                    "Count": 36,
+                    "Percentage": 46.75
+                },
+                "D": {
+                    "Count": 10,
+                    "Percentage": 12.99
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "Nitrate-N (95th Percentile)": {
+            "Total Sites": 109,
+            "Grades": {
+                "A": {
+                    "Count": 95,
+                    "Percentage": 87.16
+                },
+                "B": {
+                    "Count": 11,
+                    "Percentage": 10.09
+                },
+                "C": {
+                    "Count": 2,
+                    "Percentage": 1.83
+                },
+                "D": {
+                    "Count": 1,
+                    "Percentage": 0.92
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "Nitrate-N (Median)": {
+            "Total Sites": 109,
+            "Grades": {
+                "A": {
+                    "Count": 105,
+                    "Percentage": 96.33
+                },
+                "B": {
+                    "Count": 2,
+                    "Percentage": 1.83
+                },
+                "C": {
+                    "Count": 1,
+                    "Percentage": 0.92
+                },
+                "D": {
+                    "Count": 1,
+                    "Percentage": 0.92
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "QMCI": {
+            "Total Sites": 77,
+            "Grades": {
+                "A": {
+                    "Count": 12,
+                    "Percentage": 15.58
+                },
+                "B": {
+                    "Count": 22,
+                    "Percentage": 28.57
+                },
+                "C": {
+                    "Count": 23,
+                    "Percentage": 29.87
+                },
+                "D": {
+                    "Count": 20,
+                    "Percentage": 25.97
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        },
+        "Visual Clarity": {
+            "Total Sites": 59,
+            "Grades": {
+                "A": {
+                    "Count": 12,
+                    "Percentage": 20.34
+                },
+                "B": {
+                    "Count": 4,
+                    "Percentage": 6.78
+                },
+                "C": {
+                    "Count": 3,
+                    "Percentage": 5.08
+                },
+                "D": {
+                    "Count": 40,
+                    "Percentage": 67.8
+                },
+                "E": {
+                    "Count": 0,
+                    "Percentage": 0.0
+                }
+            }
+        }
+    },
+    "FMUs": {
+        "Kai Iwi": {
+            "Ammoniacal-N (95th Percentile)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (Median)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (95th Percentile)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (Median)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (95th Percentile)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "E coli (>260)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "E coli (>540)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "E coli (Median)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "Nitrate-N (95th Percentile)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (Median)": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        },
+        "Manawat\u016b": {
+            "ASPM": {
+                "Total Sites": 42,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 4.76
+                    },
+                    "B": {
+                        "Count": 23,
+                        "Percentage": 54.76
+                    },
+                    "C": {
+                        "Count": 16,
+                        "Percentage": 38.1
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 2.38
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (95th Percentile)": {
+                "Total Sites": 55,
+                "Grades": {
+                    "A": {
+                        "Count": 47,
+                        "Percentage": 85.45
+                    },
+                    "B": {
+                        "Count": 6,
+                        "Percentage": 10.91
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 3.64
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (Median)": {
+                "Total Sites": 55,
+                "Grades": {
+                    "A": {
+                        "Count": 49,
+                        "Percentage": 89.09
+                    },
+                    "B": {
+                        "Count": 6,
+                        "Percentage": 10.91
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites": 20,
+                "Grades": {
+                    "A": {
+                        "Count": 13,
+                        "Percentage": 65.0
+                    },
+                    "B": {
+                        "Count": 6,
+                        "Percentage": 30.0
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 5.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (95th Percentile)": {
+                "Total Sites": 55,
+                "Grades": {
+                    "A": {
+                        "Count": 23,
+                        "Percentage": 41.82
+                    },
+                    "B": {
+                        "Count": 12,
+                        "Percentage": 21.82
+                    },
+                    "C": {
+                        "Count": 14,
+                        "Percentage": 25.45
+                    },
+                    "D": {
+                        "Count": 6,
+                        "Percentage": 10.91
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (Median)": {
+                "Total Sites": 55,
+                "Grades": {
+                    "A": {
+                        "Count": 18,
+                        "Percentage": 32.73
+                    },
+                    "B": {
+                        "Count": 8,
+                        "Percentage": 14.55
+                    },
+                    "C": {
+                        "Count": 18,
+                        "Percentage": 32.73
+                    },
+                    "D": {
+                        "Count": 11,
+                        "Percentage": 20.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (95th Percentile)": {
+                "Total Sites": 53,
+                "Grades": {
+                    "A": {
+                        "Count": 4,
+                        "Percentage": 7.55
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 7.55
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 1.89
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 44,
+                        "Percentage": 83.02
+                    }
+                }
+            },
+            "E coli (>260)": {
+                "Total Sites": 53,
+                "Grades": {
+                    "A": {
+                        "Count": 7,
+                        "Percentage": 13.21
+                    },
+                    "B": {
+                        "Count": 9,
+                        "Percentage": 16.98
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 5.66
+                    },
+                    "D": {
+                        "Count": 23,
+                        "Percentage": 43.4
+                    },
+                    "E": {
+                        "Count": 11,
+                        "Percentage": 20.75
+                    }
+                }
+            },
+            "E coli (>540)": {
+                "Total Sites": 53,
+                "Grades": {
+                    "A": {
+                        "Count": 4,
+                        "Percentage": 7.55
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 7.55
+                    },
+                    "C": {
+                        "Count": 12,
+                        "Percentage": 22.64
+                    },
+                    "D": {
+                        "Count": 15,
+                        "Percentage": 28.3
+                    },
+                    "E": {
+                        "Count": 18,
+                        "Percentage": 33.96
+                    }
+                }
+            },
+            "E coli (Median)": {
+                "Total Sites": 53,
+                "Grades": {
+                    "A": {
+                        "Count": 16,
+                        "Percentage": 30.19
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 25,
+                        "Percentage": 47.17
+                    },
+                    "E": {
+                        "Count": 12,
+                        "Percentage": 22.64
+                    }
+                }
+            },
+            "MCI": {
+                "Total Sites": 42,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 4.76
+                    },
+                    "B": {
+                        "Count": 17,
+                        "Percentage": 40.48
+                    },
+                    "C": {
+                        "Count": 21,
+                        "Percentage": 50.0
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 4.76
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (95th Percentile)": {
+                "Total Sites": 55,
+                "Grades": {
+                    "A": {
+                        "Count": 50,
+                        "Percentage": 90.91
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 7.27
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 1.82
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (Median)": {
+                "Total Sites": 55,
+                "Grades": {
+                    "A": {
+                        "Count": 54,
+                        "Percentage": 98.18
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 1.82
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "QMCI": {
+                "Total Sites": 42,
+                "Grades": {
+                    "A": {
+                        "Count": 7,
+                        "Percentage": 16.67
+                    },
+                    "B": {
+                        "Count": 17,
+                        "Percentage": 40.48
+                    },
+                    "C": {
+                        "Count": 14,
+                        "Percentage": 33.33
+                    },
+                    "D": {
+                        "Count": 4,
+                        "Percentage": 9.52
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites": 29,
+                "Grades": {
+                    "A": {
+                        "Count": 4,
+                        "Percentage": 13.79
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 10.34
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 10.34
+                    },
+                    "D": {
+                        "Count": 19,
+                        "Percentage": 65.52
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        },
+        "Puketoi ki Tai": {
+            "ASPM": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (95th Percentile)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (Median)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (95th Percentile)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (Median)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 66.67
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (95th Percentile)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "E coli (>260)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 66.67
+                    },
+                    "E": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    }
+                }
+            },
+            "E coli (>540)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (Median)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    },
+                    "E": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    }
+                }
+            },
+            "MCI": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (95th Percentile)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (Median)": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "QMCI": {
+                "Total Sites": 1,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        },
+        "Rangit\u012bkei-Turakina": {
+            "ASPM": {
+                "Total Sites": 8,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (95th Percentile)": {
+                "Total Sites": 14,
+                "Grades": {
+                    "A": {
+                        "Count": 10,
+                        "Percentage": 71.43
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 7.14
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 21.43
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (Median)": {
+                "Total Sites": 14,
+                "Grades": {
+                    "A": {
+                        "Count": 13,
+                        "Percentage": 92.86
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 7.14
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites": 5,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 60.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 20.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 20.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (95th Percentile)": {
+                "Total Sites": 15,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 20.0
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 26.67
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 13.33
+                    },
+                    "D": {
+                        "Count": 6,
+                        "Percentage": 40.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (Median)": {
+                "Total Sites": 15,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 5,
+                        "Percentage": 33.33
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 20.0
+                    },
+                    "D": {
+                        "Count": 7,
+                        "Percentage": 46.67
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (95th Percentile)": {
+                "Total Sites": 14,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 7.14
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 14.29
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 7.14
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 10,
+                        "Percentage": 71.43
+                    }
+                }
+            },
+            "E coli (>260)": {
+                "Total Sites": 14,
+                "Grades": {
+                    "A": {
+                        "Count": 4,
+                        "Percentage": 28.57
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 21.43
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 7.14
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 21.43
+                    },
+                    "E": {
+                        "Count": 3,
+                        "Percentage": 21.43
+                    }
+                }
+            },
+            "E coli (>540)": {
+                "Total Sites": 14,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 7.14
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 28.57
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 21.43
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 14.29
+                    },
+                    "E": {
+                        "Count": 4,
+                        "Percentage": 28.57
+                    }
+                }
+            },
+            "E coli (Median)": {
+                "Total Sites": 14,
+                "Grades": {
+                    "A": {
+                        "Count": 8,
+                        "Percentage": 57.14
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 14.29
+                    },
+                    "E": {
+                        "Count": 4,
+                        "Percentage": 28.57
+                    }
+                }
+            },
+            "MCI": {
+                "Total Sites": 8,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 12.5
+                    },
+                    "C": {
+                        "Count": 5,
+                        "Percentage": 62.5
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (95th Percentile)": {
+                "Total Sites": 15,
+                "Grades": {
+                    "A": {
+                        "Count": 12,
+                        "Percentage": 80.0
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 20.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (Median)": {
+                "Total Sites": 15,
+                "Grades": {
+                    "A": {
+                        "Count": 15,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "QMCI": {
+                "Total Sites": 8,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "D": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites": 7,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 7,
+                        "Percentage": 100.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        },
+        "Waiopehu": {
+            "ASPM": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 27.27
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 18.18
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 9.09
+                    },
+                    "D": {
+                        "Count": 5,
+                        "Percentage": 45.45
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 9,
+                        "Percentage": 75.0
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 16.67
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 10,
+                        "Percentage": 83.33
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 16.67
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites": 6,
+                "Grades": {
+                    "A": {
+                        "Count": 5,
+                        "Percentage": 83.33
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 16.67
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 7,
+                        "Percentage": 58.33
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "D": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "D": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    }
+                }
+            },
+            "E coli (>260)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "E": {
+                        "Count": 5,
+                        "Percentage": 41.67
+                    }
+                }
+            },
+            "E coli (>540)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "E": {
+                        "Count": 2,
+                        "Percentage": 16.67
+                    }
+                }
+            },
+            "E coli (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "E": {
+                        "Count": 5,
+                        "Percentage": 41.67
+                    }
+                }
+            },
+            "MCI": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 18.18
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 9.09
+                    },
+                    "C": {
+                        "Count": 4,
+                        "Percentage": 36.36
+                    },
+                    "D": {
+                        "Count": 4,
+                        "Percentage": 36.36
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 9,
+                        "Percentage": 75.0
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "QMCI": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 27.27
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 27.27
+                    },
+                    "D": {
+                        "Count": 5,
+                        "Percentage": 45.45
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites": 9,
+                "Grades": {
+                    "A": {
+                        "Count": 6,
+                        "Percentage": 66.67
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        },
+        "Whangaehu": {
+            "ASPM": {
+                "Total Sites": 8,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 11,
+                        "Percentage": 91.67
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 11,
+                        "Percentage": 91.67
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites": 8,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 37.5
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 12.5
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 5,
+                        "Percentage": 41.67
+                    },
+                    "D": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 16.67
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 5,
+                        "Percentage": 41.67
+                    }
+                }
+            },
+            "E coli (>260)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 6,
+                        "Percentage": 50.0
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (>540)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 16.67
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 9,
+                        "Percentage": 75.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 25.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "MCI": {
+                "Total Sites": 8,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "B": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 37.5
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 12.5
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (95th Percentile)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 12,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (Median)": {
+                "Total Sites": 12,
+                "Grades": {
+                    "A": {
+                        "Count": 12,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "QMCI": {
+                "Total Sites": 8,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 25.0
+                    },
+                    "D": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites": 4,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 25.0
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 25.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 50.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        },
+        "Whanganui": {
+            "ASPM": {
+                "Total Sites": 7,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 5,
+                        "Percentage": 71.43
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 28.57
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (95th Percentile)": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 10,
+                        "Percentage": 90.91
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 9.09
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Ammoniacal-N (Median)": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 11,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites": 3,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (95th Percentile)": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 3,
+                        "Percentage": 27.27
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 27.27
+                    },
+                    "C": {
+                        "Count": 4,
+                        "Percentage": 36.36
+                    },
+                    "D": {
+                        "Count": 1,
+                        "Percentage": 9.09
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "DRP (Median)": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 36.36
+                    },
+                    "C": {
+                        "Count": 4,
+                        "Percentage": 36.36
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 27.27
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (95th Percentile)": {
+                "Total Sites": 9,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 7,
+                        "Percentage": 77.78
+                    }
+                }
+            },
+            "E coli (>260)": {
+                "Total Sites": 9,
+                "Grades": {
+                    "A": {
+                        "Count": 2,
+                        "Percentage": 22.22
+                    },
+                    "B": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    },
+                    "D": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E coli (>540)": {
+                "Total Sites": 9,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 22.22
+                    },
+                    "E": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    }
+                }
+            },
+            "E coli (Median)": {
+                "Total Sites": 9,
+                "Grades": {
+                    "A": {
+                        "Count": 4,
+                        "Percentage": 44.44
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 5,
+                        "Percentage": 55.56
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "MCI": {
+                "Total Sites": 7,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 4,
+                        "Percentage": 57.14
+                    },
+                    "C": {
+                        "Count": 3,
+                        "Percentage": 42.86
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (95th Percentile)": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 11,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Nitrate-N (Median)": {
+                "Total Sites": 11,
+                "Grades": {
+                    "A": {
+                        "Count": 11,
+                        "Percentage": 100.0
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "QMCI": {
+                "Total Sites": 7,
+                "Grades": {
+                    "A": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "B": {
+                        "Count": 3,
+                        "Percentage": 42.86
+                    },
+                    "C": {
+                        "Count": 2,
+                        "Percentage": 28.57
+                    },
+                    "D": {
+                        "Count": 2,
+                        "Percentage": 28.57
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites": 7,
+                "Grades": {
+                    "A": {
+                        "Count": 1,
+                        "Percentage": 14.29
+                    },
+                    "B": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "C": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "D": {
+                        "Count": 6,
+                        "Percentage": 85.71
+                    },
+                    "E": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        }
+    }
+}
