@@ -154,7 +154,11 @@ for icon in icons:
         icon["trend_how"] = f.read()
 
     with open(os.path.join(os.path.dirname(__file__), icon["map_file"]), "r", encoding="utf-8") as f:
-        icon["map_html"] = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{f.read()}</div>"
+        map_content = f.read()
+        if map_content.strip().lower().startswith("<!doctype html>") or map_content.strip().lower().startswith("<html"):
+            icon["map_html"] = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'><iframe src='{icon['map_file']}' width='100%' height='100%' style='border:none; border-radius:10px;'></iframe></div>"
+        else:
+            icon["map_html"] = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{map_content}</div>"
 
 for icon in icons:
     sivo_app = Sivo.from_string(
@@ -218,8 +222,13 @@ for icon in icons:
 
 with open(os.path.join(os.path.dirname(__file__), "md/map_placeholder.html"), "r", encoding="utf-8") as f:
     map_html = f.read()
+    if map_html.strip().lower().startswith("<!doctype html>") or map_html.strip().lower().startswith("<html"):
+        # map_placeholder is currently a simple html snippet, but this handles future changes
+        map_content_block = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'><iframe src='md/map_placeholder.html' width='100%' height='100%' style='border:none; border-radius:10px;'></iframe></div>"
+    else:
+        map_content_block = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{map_html}</div>"
 
-dashboard.add_html_block(block_id="map", html_content=f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'>{map_html}</div>", col_span=4, grid_area="map", payload_key="map_html")
+dashboard.add_html_block(block_id="map", html_content=map_content_block, col_span=4, grid_area="map", payload_key="map_html")
 
 custom_js = None
 
