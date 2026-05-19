@@ -11,6 +11,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the **median
 
 ### Suspended Sediment Results in the Manawatū FMU
 
+<div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
@@ -38,3 +39,4 @@ To calculate a reliable A-to-D ecological health grade, experts use the **median
     </tr>
   </tbody>
 </table>
+</div>
