@@ -63,7 +63,7 @@ dashboard.add_image_block(
 
 dashboard.add_html_block(
     block_id="co_benefit",
-    html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/soil_co_benefit.png" style="width:70%; height:70%; object-fit:contain; border-radius:0px;" /></div>',
+    html_content='<div style="display:flex; justify-content:center; align-items:flex-start; width:100%; height:100%;"><img src="../../../assets/land/soil_co_benefit.png" style="width:75%; height:75%; object-fit:contain; border-radius:0px;" /></div>',
     col_span=3,
     grid_area="co_benefit"
 )
@@ -85,14 +85,14 @@ dashboard.add_details_panel(
 
 dashboard.add_html_block(
     block_id="sustainable",
-    html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/sustainable.png" style="width:70%; height:70%; object-fit:contain; border-radius:10px;" /></div>',
+    html_content='<div style="display:flex; justify-content:center; align-items:flex-start; width:100%; height:100%;"><img src="../../../assets/land/sustainable.png" style="width:75%; height:75%; object-fit:contain; border-radius:10px;" /></div>',
     col_span=2,
     grid_area="sustainable"
 )
 
 dashboard.add_html_block(
     block_id="birds",
-    html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/birds.png" style="width:70%; height:70%; object-fit:contain; border-radius:10px;" /></div>',
+    html_content='<div style="display:flex; justify-content:center; align-items:flex-start; width:100%; height:100%;"><img src="../../../assets/land/birds.png" style="width:75%; height:75%; object-fit:contain; border-radius:10px;" /></div>',
     col_span=3,
     grid_area="birds"
 )
