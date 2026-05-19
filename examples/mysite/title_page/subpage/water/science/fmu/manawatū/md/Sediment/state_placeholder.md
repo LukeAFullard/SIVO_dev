@@ -11,4 +11,30 @@ To calculate a reliable A-to-D ecological health grade, experts use the **median
 
 ### Suspended Sediment Results in the Manawatū FMU
 
-*[Image Placeholder: Graph or chart showing the numbers/percentages of sites at each A-D NOF grade for suspended sediment]*
+<table style="width: 100%; border-collapse: collapse; text-align: center;">
+  <thead>
+    <tr>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Visual Clarity (median)</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">A</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #359B73; color: white;">B</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">C</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #E69F00; color: black;">D</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|FMU_A_PCT|% (|FMU_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|FMU_B_PCT|% (|FMU_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|FMU_C_PCT|% (|FMU_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|REGION_D_PCT|% (|REGION_D_COUNT|)</td>
+    </tr>
+  </tbody>
+</table>
