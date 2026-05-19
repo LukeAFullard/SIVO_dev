@@ -2,15 +2,46 @@
 
 We evaluated 10-year trends for algae and chlorophyll-a at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
-### Understanding the Trend
+<details style="
+    border: 1px solid #d0d7de;
+    border-radius: 14px;
+    padding: 0.9rem 1.1rem;
+    margin: 1.2rem 0;
+    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+">
+  <summary style="
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.08rem;
+      color: #1f2937;
+      outline: none;
+  ">
+    Understanding the Trend (click to expand)
+  </summary>
+
+  <div style="
+      margin-top: 1rem;
+      line-height: 1.7;
+      color: #374151;
+      font-size: 0.98rem;
+  ">
+
 Trends show us if the amount of algae is consistently changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 10-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
 
-### Trend Categories
+<br><br>
+<strong>Trend Categories</strong>
+<br>
 Trends are grouped by how confident scientists are that a change is actually happening. Because excess algae harms aquatic life and can be toxic, an "improvement" means the amount of chlorophyll-a (algae) in the water is safely decreasing.
 
-*   **Improving:** Algae levels are consistently decreasing (*very likely* or *likely improving*).
-*   **Degrading:** Algae levels are consistently increasing, posing a higher risk to the ecosystem (*very likely* or *likely degrading*).
-*   **Indeterminate:** There is not enough statistical evidence to confirm a direction.
+<ul>
+<li><strong>Improving:</strong> Algae levels are consistently decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
+<li><strong>Degrading:</strong> Algae levels are consistently increasing, posing a higher risk to the ecosystem (<em>very likely</em> or <em>likely degrading</em>).</li>
+<li><strong>Indeterminate:</strong> There is not enough statistical evidence to confirm a direction.</li>
+</ul>
+
+  </div>
+</details>
 
 ***
 
