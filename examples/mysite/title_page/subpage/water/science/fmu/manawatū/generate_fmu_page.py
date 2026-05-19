@@ -8,6 +8,34 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 from sivo.core.dashboard import SivoDashboard
 from sivo.core.sivo import Sivo
 
+base_dir = os.path.dirname(__file__)
+template_path = os.path.join(base_dir, "md/Sediment/state_placeholder_TEMPLATE.md")
+output_path = os.path.join(base_dir, "md/Sediment/state_placeholder.md")
+json_path = os.path.abspath(os.path.join(base_dir, "../../state_summary.json"))
+
+with open(json_path, 'r', encoding='utf-8') as f:
+    state_summary = json.load(f)
+
+fmu_data = state_summary["FMUs"]["Manawatū"]["Visual Clarity"]
+region_data = state_summary["Region"]["Visual Clarity"]
+
+fmu_sites = fmu_data["Total Sites for Attribute"]
+
+with open(template_path, 'r', encoding='utf-8') as f:
+    template_content = f.read()
+
+template_content = template_content.replace("|NUMBER_SITES|", str(fmu_sites))
+
+for grade in ["A", "B", "C", "D"]:
+    template_content = template_content.replace(f"|FMU_{grade}_PCT|", str(fmu_data["Grades"][grade]["Percentage"]))
+    template_content = template_content.replace(f"|FMU_{grade}_COUNT|", str(fmu_data["Grades"][grade]["Count"]))
+    template_content = template_content.replace(f"|REGION_{grade}_PCT|", str(region_data["Grades"][grade]["Percentage"]))
+    template_content = template_content.replace(f"|REGION_{grade}_COUNT|", str(region_data["Grades"][grade]["Count"]))
+
+with open(output_path, 'w', encoding='utf-8') as f:
+    f.write(template_content)
+
+
 nav_menu = [
     {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
     {"label": "Home", "url": "../../../../../index.html", "url_transition": "page-turn-enter"},
