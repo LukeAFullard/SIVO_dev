@@ -1,1 +1,3 @@
-Placeholder for Sediment state_popup.md
+Here is some filler text providing more details on the Sediment state.
+
+<iframe src="results/Chart_Visual Clarity.html" width="100%" height="900px" style="border:none; border-radius:10px;"></iframe>
