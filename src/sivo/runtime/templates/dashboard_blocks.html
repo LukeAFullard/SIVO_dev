@@ -1753,7 +1753,11 @@
                 text = marked.parse(text);
             }
             if (window.DOMPurify) {
-                text = window.DOMPurify.sanitize(text);
+                text = window.DOMPurify.sanitize(text, {
+                    ADD_TAGS: ['iframe', 'style'],
+                    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                    FORCE_BODY: true
+                });
             }
 
             content.innerHTML = text;
@@ -2338,7 +2342,11 @@
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
-                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
+                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent, {
+                        ADD_TAGS: ['iframe', 'style'],
+                        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                        FORCE_BODY: true
+                    }) : tooltipContent;
                     document.getElementById('sivo-sliding-sidebar').classList.add('active');
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
@@ -2368,7 +2376,11 @@
                         }
 
                         if (contentToDisplay) {
-                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay) : contentToDisplay;
+                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay, {
+                                ADD_TAGS: ['iframe', 'style'],
+                                ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                                FORCE_BODY: true
+                            }) : contentToDisplay;
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeContent}`;
                         } else {
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
