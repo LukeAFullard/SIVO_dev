@@ -1,0 +1,19 @@
+127.0.0.1 - - [19/May/2026 03:05:55] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/water_banner.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/water_bg.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /results/FMU_Boundary_Only.html HTTP/1.1" 200 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/20221123_OrangaWai_IconEcoli.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/20221123_OrangaWai_IconP.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/20221123_OrangaWai_IconN.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/20221123_OrangaWai_IconChlA.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/20221123_OrangaWai_IconSuspendedSediment.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:56] code 404, message File not found
+127.0.0.1 - - [19/May/2026 03:05:56] "GET /assets/water/20221123_OrangaWai_IconAquaticLife.png HTTP/1.1" 404 -
+127.0.0.1 - - [19/May/2026 03:05:58] "GET /results/sediment_map.html HTTP/1.1" 200 -
