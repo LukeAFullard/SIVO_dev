@@ -27,9 +27,12 @@ with open(template_path, 'r', encoding='utf-8') as f:
 template_content = template_content.replace("|NUMBER_SITES|", str(fmu_sites))
 
 for grade in ["A", "B", "C", "D"]:
-    template_content = template_content.replace(f"|FMU_{grade}_PCT|", str(fmu_data["Grades"][grade]["Percentage"]))
+    fmu_pct = float(fmu_data["Grades"][grade]["Percentage"])
+    region_pct = float(region_data["Grades"][grade]["Percentage"])
+
+    template_content = template_content.replace(f"|FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
     template_content = template_content.replace(f"|FMU_{grade}_COUNT|", str(fmu_data["Grades"][grade]["Count"]))
-    template_content = template_content.replace(f"|REGION_{grade}_PCT|", str(region_data["Grades"][grade]["Percentage"]))
+    template_content = template_content.replace(f"|REGION_{grade}_PCT|", f"{region_pct:.1f}")
     template_content = template_content.replace(f"|REGION_{grade}_COUNT|", str(region_data["Grades"][grade]["Count"]))
 
 with open(output_path, 'w', encoding='utf-8') as f:
@@ -101,7 +104,7 @@ dashboard.add_html_block(block_id="gap2", html_content="<div style='height: 20px
 
 icons = [
     {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli", "map_file": "results/ecoli_map.html"},
-    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment", "map_file": "results/sediment_map.html"},
+    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment", "map_file": "results/Map_Visual Clarity.html"},
     {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen", "map_file": "results/nitrogen_map.html"},
     {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus", "map_file": "results/phosphorus_map.html"},
     {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae", "map_file": "results/algae_map.html"},
