@@ -1,7 +1,8 @@
 {
     "Region": {
+        "Total Unique Sites in Region": 116,
         "ASPM": {
-            "Total Sites": 77,
+            "Total Sites for Attribute": 77,
             "Grades": {
                 "A": {
                     "Count": 7,
@@ -26,7 +27,7 @@
             }
         },
         "Ammoniacal-N (95th Percentile)": {
-            "Total Sites": 108,
+            "Total Sites for Attribute": 108,
             "Grades": {
                 "A": {
                     "Count": 87,
@@ -51,7 +52,7 @@
             }
         },
         "Ammoniacal-N (Median)": {
-            "Total Sites": 108,
+            "Total Sites for Attribute": 108,
             "Grades": {
                 "A": {
                     "Count": 98,
@@ -76,7 +77,7 @@
             }
         },
         "Chlorophyll A": {
-            "Total Sites": 42,
+            "Total Sites for Attribute": 42,
             "Grades": {
                 "A": {
                     "Count": 27,
@@ -101,7 +102,7 @@
             }
         },
         "DRP (95th Percentile)": {
-            "Total Sites": 109,
+            "Total Sites for Attribute": 109,
             "Grades": {
                 "A": {
                     "Count": 37,
@@ -126,7 +127,7 @@
             }
         },
         "DRP (Median)": {
-            "Total Sites": 109,
+            "Total Sites for Attribute": 109,
             "Grades": {
                 "A": {
                     "Count": 21,
@@ -151,7 +152,7 @@
             }
         },
         "E coli (95th Percentile)": {
-            "Total Sites": 104,
+            "Total Sites for Attribute": 104,
             "Grades": {
                 "A": {
                     "Count": 16,
@@ -176,7 +177,7 @@
             }
         },
         "E coli (>260)": {
-            "Total Sites": 104,
+            "Total Sites for Attribute": 104,
             "Grades": {
                 "A": {
                     "Count": 25,
@@ -201,7 +202,7 @@
             }
         },
         "E coli (>540)": {
-            "Total Sites": 104,
+            "Total Sites for Attribute": 104,
             "Grades": {
                 "A": {
                     "Count": 15,
@@ -226,7 +227,7 @@
             }
         },
         "E coli (Median)": {
-            "Total Sites": 104,
+            "Total Sites for Attribute": 104,
             "Grades": {
                 "A": {
                     "Count": 44,
@@ -251,7 +252,7 @@
             }
         },
         "MCI": {
-            "Total Sites": 77,
+            "Total Sites for Attribute": 77,
             "Grades": {
                 "A": {
                     "Count": 6,
@@ -276,7 +277,7 @@
             }
         },
         "Nitrate-N (95th Percentile)": {
-            "Total Sites": 109,
+            "Total Sites for Attribute": 109,
             "Grades": {
                 "A": {
                     "Count": 95,
@@ -301,7 +302,7 @@
             }
         },
         "Nitrate-N (Median)": {
-            "Total Sites": 109,
+            "Total Sites for Attribute": 109,
             "Grades": {
                 "A": {
                     "Count": 105,
@@ -326,7 +327,7 @@
             }
         },
         "QMCI": {
-            "Total Sites": 77,
+            "Total Sites for Attribute": 77,
             "Grades": {
                 "A": {
                     "Count": 12,
@@ -351,7 +352,7 @@
             }
         },
         "Visual Clarity": {
-            "Total Sites": 59,
+            "Total Sites for Attribute": 59,
             "Grades": {
                 "A": {
                     "Count": 12,
@@ -378,8 +379,9 @@
     },
     "FMUs": {
         "Kai Iwi": {
+            "Total Unique Sites in FMU": 1,
             "Ammoniacal-N (95th Percentile)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -404,7 +406,7 @@
                 }
             },
             "Ammoniacal-N (Median)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -429,7 +431,7 @@
                 }
             },
             "DRP (95th Percentile)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -454,7 +456,7 @@
                 }
             },
             "DRP (Median)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -479,7 +481,7 @@
                 }
             },
             "E coli (95th Percentile)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -504,7 +506,7 @@
                 }
             },
             "E coli (>260)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -529,7 +531,7 @@
                 }
             },
             "E coli (>540)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -554,7 +556,7 @@
                 }
             },
             "E coli (Median)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -579,7 +581,7 @@
                 }
             },
             "Nitrate-N (95th Percentile)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -604,7 +606,7 @@
                 }
             },
             "Nitrate-N (Median)": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -630,8 +632,9 @@
             }
         },
         "Manawat\u016b": {
+            "Total Unique Sites in FMU": 56,
             "ASPM": {
-                "Total Sites": 42,
+                "Total Sites for Attribute": 42,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -656,7 +659,7 @@
                 }
             },
             "Ammoniacal-N (95th Percentile)": {
-                "Total Sites": 55,
+                "Total Sites for Attribute": 55,
                 "Grades": {
                     "A": {
                         "Count": 47,
@@ -681,7 +684,7 @@
                 }
             },
             "Ammoniacal-N (Median)": {
-                "Total Sites": 55,
+                "Total Sites for Attribute": 55,
                 "Grades": {
                     "A": {
                         "Count": 49,
@@ -706,7 +709,7 @@
                 }
             },
             "Chlorophyll A": {
-                "Total Sites": 20,
+                "Total Sites for Attribute": 20,
                 "Grades": {
                     "A": {
                         "Count": 13,
@@ -731,7 +734,7 @@
                 }
             },
             "DRP (95th Percentile)": {
-                "Total Sites": 55,
+                "Total Sites for Attribute": 55,
                 "Grades": {
                     "A": {
                         "Count": 23,
@@ -756,7 +759,7 @@
                 }
             },
             "DRP (Median)": {
-                "Total Sites": 55,
+                "Total Sites for Attribute": 55,
                 "Grades": {
                     "A": {
                         "Count": 18,
@@ -781,7 +784,7 @@
                 }
             },
             "E coli (95th Percentile)": {
-                "Total Sites": 53,
+                "Total Sites for Attribute": 53,
                 "Grades": {
                     "A": {
                         "Count": 4,
@@ -806,7 +809,7 @@
                 }
             },
             "E coli (>260)": {
-                "Total Sites": 53,
+                "Total Sites for Attribute": 53,
                 "Grades": {
                     "A": {
                         "Count": 7,
@@ -831,7 +834,7 @@
                 }
             },
             "E coli (>540)": {
-                "Total Sites": 53,
+                "Total Sites for Attribute": 53,
                 "Grades": {
                     "A": {
                         "Count": 4,
@@ -856,7 +859,7 @@
                 }
             },
             "E coli (Median)": {
-                "Total Sites": 53,
+                "Total Sites for Attribute": 53,
                 "Grades": {
                     "A": {
                         "Count": 16,
@@ -881,7 +884,7 @@
                 }
             },
             "MCI": {
-                "Total Sites": 42,
+                "Total Sites for Attribute": 42,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -906,7 +909,7 @@
                 }
             },
             "Nitrate-N (95th Percentile)": {
-                "Total Sites": 55,
+                "Total Sites for Attribute": 55,
                 "Grades": {
                     "A": {
                         "Count": 50,
@@ -931,7 +934,7 @@
                 }
             },
             "Nitrate-N (Median)": {
-                "Total Sites": 55,
+                "Total Sites for Attribute": 55,
                 "Grades": {
                     "A": {
                         "Count": 54,
@@ -956,7 +959,7 @@
                 }
             },
             "QMCI": {
-                "Total Sites": 42,
+                "Total Sites for Attribute": 42,
                 "Grades": {
                     "A": {
                         "Count": 7,
@@ -981,7 +984,7 @@
                 }
             },
             "Visual Clarity": {
-                "Total Sites": 29,
+                "Total Sites for Attribute": 29,
                 "Grades": {
                     "A": {
                         "Count": 4,
@@ -1007,8 +1010,9 @@
             }
         },
         "Puketoi ki Tai": {
+            "Total Unique Sites in FMU": 3,
             "ASPM": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1033,7 +1037,7 @@
                 }
             },
             "Ammoniacal-N (95th Percentile)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1058,7 +1062,7 @@
                 }
             },
             "Ammoniacal-N (Median)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -1083,7 +1087,7 @@
                 }
             },
             "DRP (95th Percentile)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -1108,7 +1112,7 @@
                 }
             },
             "DRP (Median)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -1133,7 +1137,7 @@
                 }
             },
             "E coli (95th Percentile)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1158,7 +1162,7 @@
                 }
             },
             "E coli (>260)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1183,7 +1187,7 @@
                 }
             },
             "E coli (>540)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1208,7 +1212,7 @@
                 }
             },
             "E coli (Median)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -1233,7 +1237,7 @@
                 }
             },
             "MCI": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1258,7 +1262,7 @@
                 }
             },
             "Nitrate-N (95th Percentile)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -1283,7 +1287,7 @@
                 }
             },
             "Nitrate-N (Median)": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -1308,7 +1312,7 @@
                 }
             },
             "QMCI": {
-                "Total Sites": 1,
+                "Total Sites for Attribute": 1,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1333,7 +1337,7 @@
                 }
             },
             "Visual Clarity": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1359,8 +1363,9 @@
             }
         },
         "Rangit\u012bkei-Turakina": {
+            "Total Unique Sites in FMU": 17,
             "ASPM": {
-                "Total Sites": 8,
+                "Total Sites for Attribute": 8,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1385,7 +1390,7 @@
                 }
             },
             "Ammoniacal-N (95th Percentile)": {
-                "Total Sites": 14,
+                "Total Sites for Attribute": 14,
                 "Grades": {
                     "A": {
                         "Count": 10,
@@ -1410,7 +1415,7 @@
                 }
             },
             "Ammoniacal-N (Median)": {
-                "Total Sites": 14,
+                "Total Sites for Attribute": 14,
                 "Grades": {
                     "A": {
                         "Count": 13,
@@ -1435,7 +1440,7 @@
                 }
             },
             "Chlorophyll A": {
-                "Total Sites": 5,
+                "Total Sites for Attribute": 5,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -1460,7 +1465,7 @@
                 }
             },
             "DRP (95th Percentile)": {
-                "Total Sites": 15,
+                "Total Sites for Attribute": 15,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -1485,7 +1490,7 @@
                 }
             },
             "DRP (Median)": {
-                "Total Sites": 15,
+                "Total Sites for Attribute": 15,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1510,7 +1515,7 @@
                 }
             },
             "E coli (95th Percentile)": {
-                "Total Sites": 14,
+                "Total Sites for Attribute": 14,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -1535,7 +1540,7 @@
                 }
             },
             "E coli (>260)": {
-                "Total Sites": 14,
+                "Total Sites for Attribute": 14,
                 "Grades": {
                     "A": {
                         "Count": 4,
@@ -1560,7 +1565,7 @@
                 }
             },
             "E coli (>540)": {
-                "Total Sites": 14,
+                "Total Sites for Attribute": 14,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -1585,7 +1590,7 @@
                 }
             },
             "E coli (Median)": {
-                "Total Sites": 14,
+                "Total Sites for Attribute": 14,
                 "Grades": {
                     "A": {
                         "Count": 8,
@@ -1610,7 +1615,7 @@
                 }
             },
             "MCI": {
-                "Total Sites": 8,
+                "Total Sites for Attribute": 8,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1635,7 +1640,7 @@
                 }
             },
             "Nitrate-N (95th Percentile)": {
-                "Total Sites": 15,
+                "Total Sites for Attribute": 15,
                 "Grades": {
                     "A": {
                         "Count": 12,
@@ -1660,7 +1665,7 @@
                 }
             },
             "Nitrate-N (Median)": {
-                "Total Sites": 15,
+                "Total Sites for Attribute": 15,
                 "Grades": {
                     "A": {
                         "Count": 15,
@@ -1685,7 +1690,7 @@
                 }
             },
             "QMCI": {
-                "Total Sites": 8,
+                "Total Sites for Attribute": 8,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1710,7 +1715,7 @@
                 }
             },
             "Visual Clarity": {
-                "Total Sites": 7,
+                "Total Sites for Attribute": 7,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -1736,8 +1741,9 @@
             }
         },
         "Waiopehu": {
+            "Total Unique Sites in FMU": 12,
             "ASPM": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -1762,7 +1768,7 @@
                 }
             },
             "Ammoniacal-N (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 9,
@@ -1787,7 +1793,7 @@
                 }
             },
             "Ammoniacal-N (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 10,
@@ -1812,7 +1818,7 @@
                 }
             },
             "Chlorophyll A": {
-                "Total Sites": 6,
+                "Total Sites for Attribute": 6,
                 "Grades": {
                     "A": {
                         "Count": 5,
@@ -1837,7 +1843,7 @@
                 }
             },
             "DRP (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 7,
@@ -1862,7 +1868,7 @@
                 }
             },
             "DRP (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -1887,7 +1893,7 @@
                 }
             },
             "E coli (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 6,
@@ -1912,7 +1918,7 @@
                 }
             },
             "E coli (>260)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 6,
@@ -1937,7 +1943,7 @@
                 }
             },
             "E coli (>540)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 6,
@@ -1962,7 +1968,7 @@
                 }
             },
             "E coli (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 6,
@@ -1987,7 +1993,7 @@
                 }
             },
             "MCI": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -2012,7 +2018,7 @@
                 }
             },
             "Nitrate-N (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 6,
@@ -2037,7 +2043,7 @@
                 }
             },
             "Nitrate-N (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 9,
@@ -2062,7 +2068,7 @@
                 }
             },
             "QMCI": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -2087,7 +2093,7 @@
                 }
             },
             "Visual Clarity": {
-                "Total Sites": 9,
+                "Total Sites for Attribute": 9,
                 "Grades": {
                     "A": {
                         "Count": 6,
@@ -2113,8 +2119,9 @@
             }
         },
         "Whangaehu": {
+            "Total Unique Sites in FMU": 13,
             "ASPM": {
-                "Total Sites": 8,
+                "Total Sites for Attribute": 8,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -2139,7 +2146,7 @@
                 }
             },
             "Ammoniacal-N (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 11,
@@ -2164,7 +2171,7 @@
                 }
             },
             "Ammoniacal-N (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 11,
@@ -2189,7 +2196,7 @@
                 }
             },
             "Chlorophyll A": {
-                "Total Sites": 8,
+                "Total Sites for Attribute": 8,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -2214,7 +2221,7 @@
                 }
             },
             "DRP (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -2239,7 +2246,7 @@
                 }
             },
             "DRP (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -2264,7 +2271,7 @@
                 }
             },
             "E coli (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 4,
@@ -2289,7 +2296,7 @@
                 }
             },
             "E coli (>260)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 6,
@@ -2314,7 +2321,7 @@
                 }
             },
             "E coli (>540)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 4,
@@ -2339,7 +2346,7 @@
                 }
             },
             "E coli (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 9,
@@ -2364,7 +2371,7 @@
                 }
             },
             "MCI": {
-                "Total Sites": 8,
+                "Total Sites for Attribute": 8,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -2389,7 +2396,7 @@
                 }
             },
             "Nitrate-N (95th Percentile)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 12,
@@ -2414,7 +2421,7 @@
                 }
             },
             "Nitrate-N (Median)": {
-                "Total Sites": 12,
+                "Total Sites for Attribute": 12,
                 "Grades": {
                     "A": {
                         "Count": 12,
@@ -2439,7 +2446,7 @@
                 }
             },
             "QMCI": {
-                "Total Sites": 8,
+                "Total Sites for Attribute": 8,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -2464,7 +2471,7 @@
                 }
             },
             "Visual Clarity": {
-                "Total Sites": 4,
+                "Total Sites for Attribute": 4,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -2490,8 +2497,9 @@
             }
         },
         "Whanganui": {
+            "Total Unique Sites in FMU": 14,
             "ASPM": {
-                "Total Sites": 7,
+                "Total Sites for Attribute": 7,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -2516,7 +2524,7 @@
                 }
             },
             "Ammoniacal-N (95th Percentile)": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 10,
@@ -2541,7 +2549,7 @@
                 }
             },
             "Ammoniacal-N (Median)": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 11,
@@ -2566,7 +2574,7 @@
                 }
             },
             "Chlorophyll A": {
-                "Total Sites": 3,
+                "Total Sites for Attribute": 3,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -2591,7 +2599,7 @@
                 }
             },
             "DRP (95th Percentile)": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 3,
@@ -2616,7 +2624,7 @@
                 }
             },
             "DRP (Median)": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -2641,7 +2649,7 @@
                 }
             },
             "E coli (95th Percentile)": {
-                "Total Sites": 9,
+                "Total Sites for Attribute": 9,
                 "Grades": {
                     "A": {
                         "Count": 1,
@@ -2666,7 +2674,7 @@
                 }
             },
             "E coli (>260)": {
-                "Total Sites": 9,
+                "Total Sites for Attribute": 9,
                 "Grades": {
                     "A": {
                         "Count": 2,
@@ -2691,7 +2699,7 @@
                 }
             },
             "E coli (>540)": {
-                "Total Sites": 9,
+                "Total Sites for Attribute": 9,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -2716,7 +2724,7 @@
                 }
             },
             "E coli (Median)": {
-                "Total Sites": 9,
+                "Total Sites for Attribute": 9,
                 "Grades": {
                     "A": {
                         "Count": 4,
@@ -2741,7 +2749,7 @@
                 }
             },
             "MCI": {
-                "Total Sites": 7,
+                "Total Sites for Attribute": 7,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -2766,7 +2774,7 @@
                 }
             },
             "Nitrate-N (95th Percentile)": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 11,
@@ -2791,7 +2799,7 @@
                 }
             },
             "Nitrate-N (Median)": {
-                "Total Sites": 11,
+                "Total Sites for Attribute": 11,
                 "Grades": {
                     "A": {
                         "Count": 11,
@@ -2816,7 +2824,7 @@
                 }
             },
             "QMCI": {
-                "Total Sites": 7,
+                "Total Sites for Attribute": 7,
                 "Grades": {
                     "A": {
                         "Count": 0,
@@ -2841,7 +2849,7 @@
                 }
             },
             "Visual Clarity": {
-                "Total Sites": 7,
+                "Total Sites for Attribute": 7,
                 "Grades": {
                     "A": {
                         "Count": 1,
