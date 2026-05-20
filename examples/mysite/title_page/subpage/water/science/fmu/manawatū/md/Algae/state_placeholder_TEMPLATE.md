@@ -1,6 +1,6 @@
 # The Current State of Algae
 
-We evaluated the current state of algae at 20 monitoring sites across the Manawatū FMU.
+We evaluated the current state of algae at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -27,7 +27,7 @@ We evaluated the current state of algae at 20 monitoring sites across the Manawa
       font-size: 0.98rem;
   ">
 
-Because algae are tiny and difficult to count individually, scientists often measure chlorophyll-a instead. Chlorophyll-a is the green pigment that plants and algae use for photosynthesis. By measuring the concentration of this pigment in a water sample, scientists can accurately estimate the total amount of algae present at a monitoring site. 
+Because algae are tiny and difficult to count individually, scientists often measure chlorophyll-a instead. Chlorophyll-a is the green pigment that plants and algae use for photosynthesis. By measuring the concentration of this pigment in a water sample, scientists can accurately estimate the total amount of algae present at a monitoring site.
 
 <br><br>
 
@@ -36,7 +36,7 @@ To calculate a reliable A-to-D ecological health grade for rivers, experts evalu
 <li><strong>The 92nd Percentile:</strong> For rivers, scientists calculate the 92nd percentile. This is a measure of the extremes, helping us understand exactly how severe the algal blooms get on a "bad" day, without the final grade being skewed by a single, rare spike.</li>
 </ul>
 
-A site must pass the test for this statistic to receive a good grade. 
+A site must pass the test for this statistic to receive a good grade.
 
 <ul>
 <li><strong>Band A:</strong> Represents a healthy, resilient ecosystem with rare blooms, indicating natural conditions.</li>
@@ -64,17 +64,17 @@ A site must pass the test for this statistic to receive a good grade.
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">65.0% (13)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">30.0% (6)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">5.0% (1)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">0.0% (0)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|FMU_A_PCT|% (|FMU_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|FMU_B_PCT|% (|FMU_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|FMU_C_PCT|% (|FMU_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">64.3% (27)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">26.2% (11)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">7.1% (3)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">2.4% (1)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|REGION_D_PCT|% (|REGION_D_COUNT|)</td>
     </tr>
   </tbody>
 </table>

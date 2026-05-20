@@ -1,6 +1,6 @@
 # The Current State of Dissolved Reactive Phosphorus
 
-We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 55 monitoring sites across the Manawatū FMU.
+We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -27,7 +27,7 @@ We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 55 moni
       font-size: 0.98rem;
   ">
 
-Scientists measure the concentration of DRP in the water in milligrams per litre (mg/L). 
+Scientists measure the concentration of DRP in the water in milligrams per litre (mg/L).
 
 <br><br>
 
@@ -37,7 +37,7 @@ To calculate a reliable A-to-D ecological health grade, experts evaluate two dif
 <li><strong>95th percentile:</strong> A measure of the extremes, representing the highest DRP levels expected on a "bad" day.</li>
 </ul>
 
-A site must pass the test for both of these statistics. The final grade is always determined by the worst-performing statistic. 
+A site must pass the test for both of these statistics. The final grade is always determined by the worst-performing statistic.
 
 <ul>
 <li><strong>Band A:</strong> Represents natural, healthy conditions where no adverse effects from phosphorus enrichment are expected. </li>
@@ -65,17 +65,17 @@ A site must pass the test for both of these statistics. The final grade is alway
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">30.9% (17)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">12.7% (7)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">34.5% (19)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">21.8% (12)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|FMU_A_PCT|% (|FMU_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|FMU_B_PCT|% (|FMU_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|FMU_C_PCT|% (|FMU_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">17.4% (19)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">21.1% (23)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">33.0% (36)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">28.4% (31)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|REGION_D_PCT|% (|REGION_D_COUNT|)</td>
     </tr>
   </tbody>
 </table>

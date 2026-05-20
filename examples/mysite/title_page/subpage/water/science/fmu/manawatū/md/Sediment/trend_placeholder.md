@@ -52,23 +52,23 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <thead>
     <tr>
       <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Visual Clarity (10-year trend)</th>
-      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">Improving</th>
-      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">Indeterminate</th>
-      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #E69F00; color: black;">Degrading</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #2abeff; color: black;">Improving</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #e6e600; color: black;">Indeterminate</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #ff6767; color: black;">Degrading</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">23.33% (14)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">5.0% (3)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">71.67% (43)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">23.33% (14)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">5.0% (3)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">71.67% (43)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">21.24% (24)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">14.16% (16)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">64.6% (73)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">21.24% (24)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">14.16% (16)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">64.6% (73)</td>
     </tr>
   </tbody>
 </table>
