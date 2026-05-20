@@ -51,7 +51,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Visual Clarity (10-year trend)</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Suspended Sediment (10-year trend)</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">Improving</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">Indeterminate</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #E69F00; color: black;">Degrading</th>

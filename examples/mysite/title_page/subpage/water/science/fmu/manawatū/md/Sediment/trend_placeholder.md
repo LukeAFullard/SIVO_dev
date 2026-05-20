@@ -1,6 +1,6 @@
 # Long-Term Trends for Suspended Sediment
 
-We evaluated 10-year trends for suspended sediment at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
+We evaluated 10-year trends for suspended sediment at 60 monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -47,4 +47,29 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ### Suspended Sediment Trend Results in the Manawatū FMU
 
-*[Image Placeholder: Graph or chart showing the numbers/percentages of sites in each trend category for suspended sediment]*
+<div style="overflow-x: auto;">
+<table style="width: 100%; border-collapse: collapse; text-align: center;">
+  <thead>
+    <tr>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Suspended Sediment (10-year trend)</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">Improving</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">Indeterminate</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #E69F00; color: black;">Degrading</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">23.33% (14)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">5.0% (3)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">71.67% (43)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">21.24% (24)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">14.16% (16)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">64.6% (73)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
