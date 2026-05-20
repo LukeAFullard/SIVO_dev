@@ -1,6 +1,6 @@
 # Long-Term Trends for Nitrogen
 
-We evaluated 10-year trends for nitrate and ammoniacal nitrogen at 58 monitoring sites across the Manawatū FMU.
+We evaluated 10-year trends for nitrate and ammoniacal nitrogen at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -60,15 +60,15 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">22.41% (13)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">27.59% (16)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">50.0% (29)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|AMMO_FMU_IMPROVING_PCT|% (|AMMO_FMU_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|AMMO_FMU_INDETERMINATE_PCT|% (|AMMO_FMU_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|AMMO_FMU_DEGRADING_PCT|% (|AMMO_FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">22.5% (27)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">23.33% (28)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">54.17% (65)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|AMMO_REGION_IMPROVING_PCT|% (|AMMO_REGION_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|AMMO_REGION_INDETERMINATE_PCT|% (|AMMO_REGION_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|AMMO_REGION_DEGRADING_PCT|% (|AMMO_REGION_DEGRADING_COUNT|)</td>
     </tr>
   </tbody>
 </table>
@@ -89,15 +89,15 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">87.88% (58)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">3.03% (2)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">9.09% (6)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|NITRATE_FMU_IMPROVING_PCT|% (|NITRATE_FMU_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|NITRATE_FMU_INDETERMINATE_PCT|% (|NITRATE_FMU_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|NITRATE_FMU_DEGRADING_PCT|% (|NITRATE_FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">70.9% (95)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">11.94% (16)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">17.16% (23)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|NITRATE_REGION_IMPROVING_PCT|% (|NITRATE_REGION_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|NITRATE_REGION_INDETERMINATE_PCT|% (|NITRATE_REGION_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|NITRATE_REGION_DEGRADING_PCT|% (|NITRATE_REGION_DEGRADING_COUNT|)</td>
     </tr>
   </tbody>
 </table>

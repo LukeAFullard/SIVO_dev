@@ -10,33 +10,75 @@ from sivo.core.dashboard import SivoDashboard
 from sivo.core.sivo import Sivo
 
 base_dir = os.path.dirname(__file__)
-template_path = os.path.join(base_dir, "md/Sediment/state_placeholder_TEMPLATE.md")
-output_path = os.path.join(base_dir, "md/Sediment/state_placeholder.md")
 json_path = os.path.abspath(os.path.join(base_dir, "../../state_summary.json"))
 
 with open(json_path, 'r', encoding='utf-8') as f:
     state_summary = json.load(f)
 
-fmu_data = state_summary["FMUs"]["Manawatū"]["Visual Clarity"]
-region_data = state_summary["Region"]["Visual Clarity"]
+parameters_state = {
+    "Sediment": {"json_key": "Visual Clarity", "grades": ["A", "B", "C", "D"]},
+    "Algae": {"json_key": "Chlorophyll A", "grades": ["A", "B", "C", "D"]},
+    "Phosphorus": {"json_key": "DRP", "grades": ["A", "B", "C", "D"]},
+    "ecoli": {"json_key": "E coli", "grades": ["A", "B", "C", "D", "E"]},
+    "inverts": {"json_key": "MCI", "grades": ["A", "B", "C", "D"]},
+}
 
-fmu_sites = fmu_data["Total Sites for Attribute"]
+for folder, p_info in parameters_state.items():
+    template_path = os.path.join(base_dir, f"md/{folder}/state_placeholder_TEMPLATE.md")
+    output_path = os.path.join(base_dir, f"md/{folder}/state_placeholder.md")
 
-with open(template_path, 'r', encoding='utf-8') as f:
+    fmu_data = state_summary["FMUs"]["Manawatū"][p_info["json_key"]]
+    region_data = state_summary["Region"][p_info["json_key"]]
+    fmu_sites = fmu_data["Total Sites for Attribute"]
+
+    with open(template_path, 'r', encoding='utf-8') as f:
+        template_content = f.read()
+
+    template_content = template_content.replace("|NUMBER_SITES|", str(fmu_sites))
+
+    for grade in p_info["grades"]:
+        fmu_pct = float(fmu_data["Grades"][grade]["Percentage"])
+        region_pct = float(region_data["Grades"][grade]["Percentage"])
+
+        template_content = template_content.replace(f"|FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
+        template_content = template_content.replace(f"|FMU_{grade}_COUNT|", str(fmu_data["Grades"][grade]["Count"]))
+        template_content = template_content.replace(f"|REGION_{grade}_PCT|", f"{region_pct:.1f}")
+        template_content = template_content.replace(f"|REGION_{grade}_COUNT|", str(region_data["Grades"][grade]["Count"]))
+
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(template_content)
+
+# Special case for Nitrogen
+nitrogen_template_path = os.path.join(base_dir, "md/Nitrogen/state_placeholder_TEMPLATE.md")
+nitrogen_output_path = os.path.join(base_dir, "md/Nitrogen/state_placeholder.md")
+
+with open(nitrogen_template_path, 'r', encoding='utf-8') as f:
     template_content = f.read()
+
+ammo_fmu_data = state_summary["FMUs"]["Manawatū"]["Ammoniacal-N"]
+ammo_region_data = state_summary["Region"]["Ammoniacal-N"]
+nitrate_fmu_data = state_summary["FMUs"]["Manawatū"]["Nitrate-N"]
+nitrate_region_data = state_summary["Region"]["Nitrate-N"]
+fmu_sites = ammo_fmu_data["Total Sites for Attribute"] # Assuming both are evaluated together
 
 template_content = template_content.replace("|NUMBER_SITES|", str(fmu_sites))
 
 for grade in ["A", "B", "C", "D"]:
-    fmu_pct = float(fmu_data["Grades"][grade]["Percentage"])
-    region_pct = float(region_data["Grades"][grade]["Percentage"])
+    fmu_pct = float(ammo_fmu_data["Grades"][grade]["Percentage"])
+    region_pct = float(ammo_region_data["Grades"][grade]["Percentage"])
+    template_content = template_content.replace(f"|AMMO_FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
+    template_content = template_content.replace(f"|AMMO_FMU_{grade}_COUNT|", str(ammo_fmu_data["Grades"][grade]["Count"]))
+    template_content = template_content.replace(f"|AMMO_REGION_{grade}_PCT|", f"{region_pct:.1f}")
+    template_content = template_content.replace(f"|AMMO_REGION_{grade}_COUNT|", str(ammo_region_data["Grades"][grade]["Count"]))
 
-    template_content = template_content.replace(f"|FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
-    template_content = template_content.replace(f"|FMU_{grade}_COUNT|", str(fmu_data["Grades"][grade]["Count"]))
-    template_content = template_content.replace(f"|REGION_{grade}_PCT|", f"{region_pct:.1f}")
-    template_content = template_content.replace(f"|REGION_{grade}_COUNT|", str(region_data["Grades"][grade]["Count"]))
+    fmu_pct = float(nitrate_fmu_data["Grades"][grade]["Percentage"])
+    region_pct = float(nitrate_region_data["Grades"][grade]["Percentage"])
+    template_content = template_content.replace(f"|NITRATE_FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
+    template_content = template_content.replace(f"|NITRATE_FMU_{grade}_COUNT|", str(nitrate_fmu_data["Grades"][grade]["Count"]))
+    template_content = template_content.replace(f"|NITRATE_REGION_{grade}_PCT|", f"{region_pct:.1f}")
+    template_content = template_content.replace(f"|NITRATE_REGION_{grade}_COUNT|", str(nitrate_region_data["Grades"][grade]["Count"]))
 
-with open(output_path, 'w', encoding='utf-8') as f:
+with open(nitrogen_output_path, 'w', encoding='utf-8') as f:
     f.write(template_content)
 
 
@@ -116,35 +158,92 @@ import json
 with open(os.path.join(os.path.dirname(__file__), "../../trend_summary.json"), "r", encoding="utf-8") as f:
     trend_data = json.load(f)
 
-fmu_data = trend_data['FMUs']['Manawatū']['Visual Clarity']
-region_data = trend_data['Region']['Visual Clarity']
+parameters_trend = {
+    "Sediment": "Visual Clarity",
+    "Algae": "Chlorophyll A",
+    "Phosphorus": "Dissolved Reactive Phosphorus",
+    "ecoli": "E. coli",
+    "inverts": "MCI (Macroinvertebrate Community Index)",
+}
 
-sediment_trend_template_path = os.path.join(os.path.dirname(__file__), "md/Sediment/trend_placeholder_TEMPLATE.md")
-sediment_trend_output_path = os.path.join(os.path.dirname(__file__), "md/Sediment/trend_placeholder.md")
+for folder, json_key in parameters_trend.items():
+    fmu_data = trend_data['FMUs']['Manawatū'][json_key]
+    region_data = trend_data['Region'][json_key]
 
-with open(sediment_trend_template_path, "r", encoding="utf-8") as f:
+    template_path = os.path.join(os.path.dirname(__file__), f"md/{folder}/trend_placeholder_TEMPLATE.md")
+    output_path = os.path.join(os.path.dirname(__file__), f"md/{folder}/trend_placeholder.md")
+
+    with open(template_path, "r", encoding="utf-8") as f:
+        template_content = f.read()
+
+    replacements = {
+        '|NUMBER_SITES|': str(fmu_data['Total Sites for Parameter']),
+        '|FMU_IMPROVING_PCT|': str(fmu_data['Categories']['Improving']['Percentage']),
+        '|FMU_IMPROVING_COUNT|': str(fmu_data['Categories']['Improving']['Count']),
+        '|FMU_INDETERMINATE_PCT|': str(fmu_data['Categories']['Indeterminate']['Percentage']),
+        '|FMU_INDETERMINATE_COUNT|': str(fmu_data['Categories']['Indeterminate']['Count']),
+        '|FMU_DEGRADING_PCT|': str(fmu_data['Categories']['Degrading']['Percentage']),
+        '|FMU_DEGRADING_COUNT|': str(fmu_data['Categories']['Degrading']['Count']),
+        '|REGION_IMPROVING_PCT|': str(region_data['Categories']['Improving']['Percentage']),
+        '|REGION_IMPROVING_COUNT|': str(region_data['Categories']['Improving']['Count']),
+        '|REGION_INDETERMINATE_PCT|': str(region_data['Categories']['Indeterminate']['Percentage']),
+        '|REGION_INDETERMINATE_COUNT|': str(region_data['Categories']['Indeterminate']['Count']),
+        '|REGION_DEGRADING_PCT|': str(region_data['Categories']['Degrading']['Percentage']),
+        '|REGION_DEGRADING_COUNT|': str(region_data['Categories']['Degrading']['Count']),
+    }
+
+    for k, v in replacements.items():
+        template_content = template_content.replace(k, v)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(template_content)
+
+# Special case for Nitrogen
+nitrogen_trend_template_path = os.path.join(base_dir, "md/Nitrogen/trend_placeholder_TEMPLATE.md")
+nitrogen_trend_output_path = os.path.join(base_dir, "md/Nitrogen/trend_placeholder.md")
+
+with open(nitrogen_trend_template_path, "r", encoding="utf-8") as f:
     template_content = f.read()
 
+ammo_fmu_data = trend_data['FMUs']['Manawatū']["Ammoniacal Nitrogen (NH4)"]
+ammo_region_data = trend_data['Region']["Ammoniacal Nitrogen (NH4)"]
+nitrate_fmu_data = trend_data['FMUs']['Manawatū']["Nitrate Nitrogen (NO3)"]
+nitrate_region_data = trend_data['Region']["Nitrate Nitrogen (NO3)"]
+fmu_sites = ammo_fmu_data['Total Sites for Parameter']
+
 replacements = {
-    '|NUMBER_SITES|': str(fmu_data['Total Sites for Parameter']),
-    '|FMU_IMPROVING_PCT|': str(fmu_data['Categories']['Improving']['Percentage']),
-    '|FMU_IMPROVING_COUNT|': str(fmu_data['Categories']['Improving']['Count']),
-    '|FMU_INDETERMINATE_PCT|': str(fmu_data['Categories']['Indeterminate']['Percentage']),
-    '|FMU_INDETERMINATE_COUNT|': str(fmu_data['Categories']['Indeterminate']['Count']),
-    '|FMU_DEGRADING_PCT|': str(fmu_data['Categories']['Degrading']['Percentage']),
-    '|FMU_DEGRADING_COUNT|': str(fmu_data['Categories']['Degrading']['Count']),
-    '|REGION_IMPROVING_PCT|': str(region_data['Categories']['Improving']['Percentage']),
-    '|REGION_IMPROVING_COUNT|': str(region_data['Categories']['Improving']['Count']),
-    '|REGION_INDETERMINATE_PCT|': str(region_data['Categories']['Indeterminate']['Percentage']),
-    '|REGION_INDETERMINATE_COUNT|': str(region_data['Categories']['Indeterminate']['Count']),
-    '|REGION_DEGRADING_PCT|': str(region_data['Categories']['Degrading']['Percentage']),
-    '|REGION_DEGRADING_COUNT|': str(region_data['Categories']['Degrading']['Count']),
+    '|NUMBER_SITES|': str(fmu_sites),
+    '|AMMO_FMU_IMPROVING_PCT|': str(ammo_fmu_data['Categories']['Improving']['Percentage']),
+    '|AMMO_FMU_IMPROVING_COUNT|': str(ammo_fmu_data['Categories']['Improving']['Count']),
+    '|AMMO_FMU_INDETERMINATE_PCT|': str(ammo_fmu_data['Categories']['Indeterminate']['Percentage']),
+    '|AMMO_FMU_INDETERMINATE_COUNT|': str(ammo_fmu_data['Categories']['Indeterminate']['Count']),
+    '|AMMO_FMU_DEGRADING_PCT|': str(ammo_fmu_data['Categories']['Degrading']['Percentage']),
+    '|AMMO_FMU_DEGRADING_COUNT|': str(ammo_fmu_data['Categories']['Degrading']['Count']),
+    '|AMMO_REGION_IMPROVING_PCT|': str(ammo_region_data['Categories']['Improving']['Percentage']),
+    '|AMMO_REGION_IMPROVING_COUNT|': str(ammo_region_data['Categories']['Improving']['Count']),
+    '|AMMO_REGION_INDETERMINATE_PCT|': str(ammo_region_data['Categories']['Indeterminate']['Percentage']),
+    '|AMMO_REGION_INDETERMINATE_COUNT|': str(ammo_region_data['Categories']['Indeterminate']['Count']),
+    '|AMMO_REGION_DEGRADING_PCT|': str(ammo_region_data['Categories']['Degrading']['Percentage']),
+    '|AMMO_REGION_DEGRADING_COUNT|': str(ammo_region_data['Categories']['Degrading']['Count']),
+
+    '|NITRATE_FMU_IMPROVING_PCT|': str(nitrate_fmu_data['Categories']['Improving']['Percentage']),
+    '|NITRATE_FMU_IMPROVING_COUNT|': str(nitrate_fmu_data['Categories']['Improving']['Count']),
+    '|NITRATE_FMU_INDETERMINATE_PCT|': str(nitrate_fmu_data['Categories']['Indeterminate']['Percentage']),
+    '|NITRATE_FMU_INDETERMINATE_COUNT|': str(nitrate_fmu_data['Categories']['Indeterminate']['Count']),
+    '|NITRATE_FMU_DEGRADING_PCT|': str(nitrate_fmu_data['Categories']['Degrading']['Percentage']),
+    '|NITRATE_FMU_DEGRADING_COUNT|': str(nitrate_fmu_data['Categories']['Degrading']['Count']),
+    '|NITRATE_REGION_IMPROVING_PCT|': str(nitrate_region_data['Categories']['Improving']['Percentage']),
+    '|NITRATE_REGION_IMPROVING_COUNT|': str(nitrate_region_data['Categories']['Improving']['Count']),
+    '|NITRATE_REGION_INDETERMINATE_PCT|': str(nitrate_region_data['Categories']['Indeterminate']['Percentage']),
+    '|NITRATE_REGION_INDETERMINATE_COUNT|': str(nitrate_region_data['Categories']['Indeterminate']['Count']),
+    '|NITRATE_REGION_DEGRADING_PCT|': str(nitrate_region_data['Categories']['Degrading']['Percentage']),
+    '|NITRATE_REGION_DEGRADING_COUNT|': str(nitrate_region_data['Categories']['Degrading']['Count']),
 }
 
 for k, v in replacements.items():
     template_content = template_content.replace(k, v)
 
-with open(sediment_trend_output_path, "w", encoding="utf-8") as f:
+with open(nitrogen_trend_output_path, "w", encoding="utf-8") as f:
     f.write(template_content)
 
 # We will populate md, state_md, trend_md

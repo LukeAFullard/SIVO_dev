@@ -1,6 +1,6 @@
 # Long-Term Trends for Macroinvertebrates
 
-We evaluated 10-year trends for macroinvertebrates (using the MCI score) at 46 monitoring sites across the Manawatū FMU.
+We evaluated 10-year trends for macroinvertebrates (using the MCI score) at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -60,15 +60,15 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">26.09% (12)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">45.65% (21)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">28.26% (13)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|FMU_IMPROVING_PCT|% (|FMU_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|FMU_INDETERMINATE_PCT|% (|FMU_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|FMU_DEGRADING_PCT|% (|FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">32.93% (27)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">36.59% (30)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">30.49% (25)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|REGION_IMPROVING_PCT|% (|REGION_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|REGION_INDETERMINATE_PCT|% (|REGION_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|REGION_DEGRADING_PCT|% (|REGION_DEGRADING_COUNT|)</td>
     </tr>
   </tbody>
 </table>

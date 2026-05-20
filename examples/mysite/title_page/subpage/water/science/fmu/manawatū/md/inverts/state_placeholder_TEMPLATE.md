@@ -1,6 +1,6 @@
 # The Current State of Macroinvertebrates
 
-We evaluated the current state of macroinvertebrates at 42 monitoring sites across the Manawatū FMU.
+We evaluated the current state of macroinvertebrates at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -27,7 +27,7 @@ We evaluated the current state of macroinvertebrates at 42 monitoring sites acro
       font-size: 0.98rem;
   ">
 
-Scientists collect these small animals from the riverbed, usually once a year, and identify the different species present to calculate a score called the Macroinvertebrate Community Index (MCI). This index is based on the known sensitivity or tolerance of each species to pollution. 
+Scientists collect these small animals from the riverbed, usually once a year, and identify the different species present to calculate a score called the Macroinvertebrate Community Index (MCI). This index is based on the known sensitivity or tolerance of each species to pollution.
 
 <br><br>
 
@@ -59,17 +59,17 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">4.8% (2)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">40.5% (17)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">50.0% (21)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">4.8% (2)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|FMU_A_PCT|% (|FMU_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|FMU_B_PCT|% (|FMU_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|FMU_C_PCT|% (|FMU_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">7.8% (6)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">32.5% (25)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">46.8% (36)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">13.0% (10)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|REGION_D_PCT|% (|REGION_D_COUNT|)</td>
     </tr>
   </tbody>
 </table>

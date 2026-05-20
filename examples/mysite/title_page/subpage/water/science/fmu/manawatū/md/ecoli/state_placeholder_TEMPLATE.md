@@ -1,6 +1,6 @@
-# The Current State of *E. coli* 
+# The Current State of *E. coli*
 
-We evaluated the current state of *E. coli* at 53 monitoring sites across the Manawatū FMU.
+We evaluated the current state of *E. coli* at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -63,19 +63,19 @@ A site must pass all four tests. If it scores poorly on even one, it receives th
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">7.5% (4)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">5.7% (3)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">0.0% (0)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">3.8% (2)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #D55E00; color: white;">83.0% (44)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|FMU_A_PCT|% (|FMU_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|FMU_B_PCT|% (|FMU_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|FMU_C_PCT|% (|FMU_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #D55E00; color: white;">|FMU_E_PCT|% (|FMU_E_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">14.4% (15)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">7.7% (8)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">2.9% (3)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">1.9% (2)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #D55E00; color: white;">73.1% (76)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|REGION_D_PCT|% (|REGION_D_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #D55E00; color: white;">|REGION_E_PCT|% (|REGION_E_COUNT|)</td>
     </tr>
   </tbody>
 </table>

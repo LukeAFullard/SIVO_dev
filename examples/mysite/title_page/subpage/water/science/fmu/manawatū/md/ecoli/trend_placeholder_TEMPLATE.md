@@ -1,6 +1,6 @@
 # Long-Term Trends for *E. coli*
 
-We evaluated 10-year trends for *E. coli* at 63 monitoring sites across the Manawatū FMU.
+We evaluated 10-year trends for *E. coli* at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -60,15 +60,15 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">49.21% (31)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">28.57% (18)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">22.22% (14)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|FMU_IMPROVING_PCT|% (|FMU_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|FMU_INDETERMINATE_PCT|% (|FMU_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|FMU_DEGRADING_PCT|% (|FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">45.16% (56)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">29.03% (36)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">25.81% (32)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|REGION_IMPROVING_PCT|% (|REGION_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|REGION_INDETERMINATE_PCT|% (|REGION_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|REGION_DEGRADING_PCT|% (|REGION_DEGRADING_COUNT|)</td>
     </tr>
   </tbody>
 </table>

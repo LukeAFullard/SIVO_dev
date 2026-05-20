@@ -66,9 +66,9 @@ Trends are grouped by how confident scientists are that a change is actually hap
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_IMPROVING_PCT|% (|REGION_IMPROVING_COUNT|)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_INDETERMINATE_PCT|% (|REGION_INDETERMINATE_COUNT|)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|REGION_DEGRADING_PCT|% (|REGION_DEGRADING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|REGION_IMPROVING_PCT|% (|REGION_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|REGION_INDETERMINATE_PCT|% (|REGION_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|REGION_DEGRADING_PCT|% (|REGION_DEGRADING_COUNT|)</td>
     </tr>
   </tbody>
 </table>
