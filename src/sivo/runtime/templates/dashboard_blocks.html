@@ -2352,7 +2352,14 @@
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
-                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
+                        const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
+                        const showName = dConf.show_element_name !== false;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
@@ -2362,6 +2369,12 @@
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
                         const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
                         const showName = dConf.show_element_name !== false;
                         const payloadKey = dConf.payload_key;
                         const container = panel.querySelector('.sivo-details-content');
