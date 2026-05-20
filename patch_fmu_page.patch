@@ -1,0 +1,47 @@
+--- examples/mysite/title_page/subpage/water/science/fmu/manawatū/generate_fmu_page.py
++++ examples/mysite/title_page/subpage/water/science/fmu/manawatū/generate_fmu_page.py
+@@ -1,6 +1,7 @@
+ import sys
+ import os
+ import json
++import re
+
+ # fix sys path to include root src
+ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../../../../src')))
+@@ -131,6 +132,23 @@
+ dashboard.add_overlay_button(block_id="button_state", label="Click for more state information", default_text=state_popup, payload_key="state_how", button_color="#772981", col_span=4, grid_area="button_state", panel_width="90%", panel_height="90%")
+ dashboard.add_overlay_button(block_id="button_trend", label="Click for more trend information", default_text=trend_popup, payload_key="trend_how", button_color="#772981", col_span=4, grid_area="button_trend", panel_width="90%", panel_height="90%")
+
++def adjust_iframe_height(md_content, base_dir):
++    match = re.search(r'<iframe src="(results/[^"]+)"', md_content)
++    if match:
++        chart_file = match.group(1).replace('%20', ' ')
++        chart_path = os.path.join(base_dir, chart_file)
++        try:
++            with open(chart_path, 'r', encoding='utf-8') as f:
++                html_content = f.read()
++                h_match = re.search(r'height":(\d+)', html_content)
++                if h_match:
++                    height = int(h_match.group(1)) + 50
++                    md_content = re.sub(r'height="\d+px"', f'height="{height}px"', md_content)
++        except Exception as e:
++            print(f"Warning: Could not adjust height for {chart_file}: {e}")
++    return md_content
++
++
+ for icon in icons:
+     md_dir = os.path.join(os.path.dirname(__file__), icon["md_dir"])
+
+@@ -141,8 +159,10 @@
+     with open(os.path.join(md_dir, "trend_placeholder.md"), "r", encoding="utf-8") as f:
+         icon["trend_md"] = f.read()
+     with open(os.path.join(md_dir, "state_popup.md"), "r", encoding="utf-8") as f:
+-        icon["state_how"] = f.read()
++        state_how_content = f.read()
++        icon["state_how"] = adjust_iframe_height(state_how_content, os.path.dirname(__file__))
+     with open(os.path.join(md_dir, "trend_popup.md"), "r", encoding="utf-8") as f:
+-        icon["trend_how"] = f.read()
++        trend_how_content = f.read()
++        icon["trend_how"] = adjust_iframe_height(trend_how_content, os.path.dirname(__file__))
+
+     with open(os.path.join(os.path.dirname(__file__), icon["map_file"]), "r", encoding="utf-8") as f:
