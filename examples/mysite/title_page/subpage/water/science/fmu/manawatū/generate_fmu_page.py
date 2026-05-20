@@ -111,6 +111,41 @@ icons = [
     {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts", "map_file": "results/inverts_map.html"}
 ]
 
+import json
+with open(os.path.join(os.path.dirname(__file__), "../../trend_summary.json"), "r", encoding="utf-8") as f:
+    trend_data = json.load(f)
+
+fmu_data = trend_data['FMUs']['Manawatū']['Visual Clarity']
+region_data = trend_data['Region']['Visual Clarity']
+
+sediment_trend_template_path = os.path.join(os.path.dirname(__file__), "md/Sediment/trend_placeholder_TEMPLATE.md")
+sediment_trend_output_path = os.path.join(os.path.dirname(__file__), "md/Sediment/trend_placeholder.md")
+
+with open(sediment_trend_template_path, "r", encoding="utf-8") as f:
+    template_content = f.read()
+
+replacements = {
+    '|NUMBER_SITES|': str(fmu_data['Total Sites for Parameter']),
+    '|FMU_IMPROVING_PCT|': str(fmu_data['Categories']['Improving']['Percentage']),
+    '|FMU_IMPROVING_COUNT|': str(fmu_data['Categories']['Improving']['Count']),
+    '|FMU_INDETERMINATE_PCT|': str(fmu_data['Categories']['Indeterminate']['Percentage']),
+    '|FMU_INDETERMINATE_COUNT|': str(fmu_data['Categories']['Indeterminate']['Count']),
+    '|FMU_DEGRADING_PCT|': str(fmu_data['Categories']['Degrading']['Percentage']),
+    '|FMU_DEGRADING_COUNT|': str(fmu_data['Categories']['Degrading']['Count']),
+    '|REGION_IMPROVING_PCT|': str(region_data['Categories']['Improving']['Percentage']),
+    '|REGION_IMPROVING_COUNT|': str(region_data['Categories']['Improving']['Count']),
+    '|REGION_INDETERMINATE_PCT|': str(region_data['Categories']['Indeterminate']['Percentage']),
+    '|REGION_INDETERMINATE_COUNT|': str(region_data['Categories']['Indeterminate']['Count']),
+    '|REGION_DEGRADING_PCT|': str(region_data['Categories']['Degrading']['Percentage']),
+    '|REGION_DEGRADING_COUNT|': str(region_data['Categories']['Degrading']['Count']),
+}
+
+for k, v in replacements.items():
+    template_content = template_content.replace(k, v)
+
+with open(sediment_trend_output_path, "w", encoding="utf-8") as f:
+    f.write(template_content)
+
 # We will populate md, state_md, trend_md
 with open(os.path.join(os.path.dirname(__file__), "md/details_placeholder.md"), "r", encoding="utf-8") as f:
     details_default = f.read()
