@@ -52,17 +52,17 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <thead>
     <tr>
       <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Visual Clarity (10-year trend)</th>
-      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">Improving</th>
-      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">Indeterminate</th>
-      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #E69F00; color: black;">Degrading</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #2abeff; color: black;">Improving</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #e6e600; color: black;">Indeterminate</th>
+      <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #ff6767; color: black;">Degrading</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|FMU_IMPROVING_PCT|% (|FMU_IMPROVING_COUNT|)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|FMU_INDETERMINATE_PCT|% (|FMU_INDETERMINATE_COUNT|)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_DEGRADING_PCT|% (|FMU_DEGRADING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|FMU_IMPROVING_PCT|% (|FMU_IMPROVING_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|FMU_INDETERMINATE_PCT|% (|FMU_INDETERMINATE_COUNT|)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|FMU_DEGRADING_PCT|% (|FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
