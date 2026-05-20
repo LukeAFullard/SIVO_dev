@@ -9,6 +9,8 @@
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 
+    <!-- Include html2canvas for Export feature -->
+
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
@@ -964,8 +966,254 @@
             100% { opacity: 1; }
         }
 
+
+        details[open] summary > span:last-child {
+            transform: rotate(-180deg);
+        }
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* Data Table Styles */
+        .sivo-data-table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .sivo-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .sivo-data-table th, .sivo-data-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-data-table th {
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sivo-data-table-search {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+        .sivo-data-table-pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .sivo-data-table-pagination button {
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            color: #475569;
+        }
+        .sivo-data-table-pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .sivo-data-table-pagination button:hover:not(:disabled) {
+            background-color: #f1f5f9;
+        }
+
+        /* Theme: default (already handled by base styles, but we isolate them here for clarity) */
+        .sivo-table-theme-default {
+            border-collapse: collapse;
+        }
+        .sivo-table-theme-default th {
+            background-color: #f8fafc;
+            color: #475569;
+        }
+        .sivo-table-theme-default th, .sivo-table-theme-default td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-default tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Theme: striped */
+        .sivo-table-theme-striped th {
+            background-color: #f1f5f9;
+            color: #334155;
+            border-bottom: 2px solid #cbd5e1;
+        }
+        .sivo-table-theme-striped th, .sivo-table-theme-striped td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-striped tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .sivo-table-theme-striped tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Theme: modern */
+        .sivo-table-theme-modern {
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-modern) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-modern th {
+            background-color: transparent;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            border: none;
+            padding-bottom: 0;
+        }
+        .sivo-table-theme-modern td {
+            background-color: white;
+            border-bottom: none;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-modern td:first-child {
+            border-left: 1px solid var(--border-color);
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern td:last-child {
+            border-right: 1px solid var(--border-color);
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern tbody tr {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .sivo-table-theme-modern tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: white;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Theme: dark */
+        .sivo-table-theme-dark {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-dark) {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+        .sivo-table-theme-dark th {
+            background-color: #0f172a;
+            color: #94a3b8;
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark th, .sivo-table-theme-dark td {
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark tbody tr:hover {
+            background-color: #334155;
+        }
+
+        /* Theme: minimal */
+        .sivo-table-theme-minimal {
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-minimal) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-minimal th {
+            background-color: transparent;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal td {
+            border-bottom: 1px solid #e2e8f0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal tbody tr:hover {
+            background-color: transparent;
+        }
+
+
+        /* Tabs Block Styles */
+        .sivo-tabs-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        .sivo-tabs-header {
+            display: flex;
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .sivo-tab-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .sivo-tab-btn:hover {
+            color: #334155;
+            background-color: #f1f5f9;
+        }
+        .sivo-tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background-color: white;
+        }
+        .sivo-tabs-content {
+            flex: 1;
+            position: relative;
+            background-color: white;
+            padding: 0;
+            overflow: hidden; /* Prevent nested elements from bleeding out */
+        }
+        .sivo-tab-pane {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .sivo-tab-pane.active {
+            display: block;
+        }
+
     </style>
-    <style id="custom-css"></style>
+    <style id="custom-css">
+
+
+    </style>
 </head>
 <body>
 
@@ -1000,8 +1248,8 @@
 
 
 
-            <div class="html-card" id="card-banner" style="grid-area: banner; ">
-                <div class="card-content" id="container-banner">
+            <div class="html-card sivo-html-panel" id="card-banner" data-block-id="banner"  style="grid-area: banner; ">
+                <div class="card-content sivo-html-content" id="container-banner">
                     <img src="../../../assets/water/water_banner.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0px;" />
                 </div>
             </div>
@@ -1016,8 +1264,8 @@
 
 
 
-            <div class="html-card" id="card-subtitle" style="grid-area: subtitle; min-height: auto !important;">
-                <div class="card-content" id="container-subtitle">
+            <div class="html-card sivo-html-panel" id="card-subtitle" data-block-id="subtitle"  style="grid-area: subtitle; min-height: auto !important;">
+                <div class="card-content sivo-html-content" id="container-subtitle">
                     <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box;">Issues with Water Quality in the region</div>
                 </div>
             </div>
@@ -1188,8 +1436,8 @@ For more information you may be interested to read our [State of Environment Rep
 
 
 
-            <div class="html-card" id="card-image" style="grid-area: image; ">
-                <div class="card-content" id="container-image">
+            <div class="html-card sivo-html-panel" id="card-image" data-block-id="image"  style="grid-area: image; ">
+                <div class="card-content sivo-html-content" id="container-image">
                     <img src="../../../assets/water/koura-blue.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0.75rem;" />
                 </div>
             </div>
@@ -1207,6 +1455,7 @@ For more information you may be interested to read our [State of Environment Rep
                     <span style="display:inline-block; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">📱</span>
                 </button>
             </div>
+
 
 
     </div>
@@ -1252,6 +1501,199 @@ For more information you may be interested to read our [State of Environment Rep
         // SIVO passes `views_data` directly to this template
         const viewsData = {"icon1":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../assets/water/20221123_OrangaWai_IconEcoli.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"E. \u003ci\u003ecoli\u003c/i\u003e","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"E. \u003ci\u003ecoli\u003c/i\u003e"},{"action_type":"tooltip","content":"\u003ch3\u003eE. \u003ci\u003ecoli\u003c/i\u003e\u003c/h3\u003e","title":"E. \u003ci\u003ecoli\u003c/i\u003e","panel_position":"none"},{"action_type":"markdown","markdown_text":"# *E. coli* and Your Health\n\n*E. coli* is a type of bacteria naturally found in the guts of warm-blooded animals and humans. While these bacteria are tiny, they act as a crucial warning sign for the health of our local waterways.\n\n### Why is it a problem?\nHigh levels of *E. coli* indicate that a waterway has been contaminated by faecal matter, or poop. If *E. coli* is present, it is highly likely that other harmful viruses, protozoa, and disease-causing bacteria are also lurking in the water. Swimming or playing in contaminated water can easily make you sick, significantly increasing the risk of gastroenteritis, as well as skin, ear, eye, and respiratory infections.\n\n### How does it get into our water?\nThese bacteria wash into our rivers, lakes, and coastal waters through everyday environmental pressures and weather events. The most common sources include:\n*   Animal and bird droppings.\n*   Heavy rain washing over the land, known as overland flow.\n*   Discharges from local wastewater and stormwater systems.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/faecal-indicators) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"E. \u003ci\u003ecoli\u003c/i\u003e"},{"action_type":"tooltip","content":"\u003ch3\u003eE. \u003ci\u003ecoli\u003c/i\u003e\u003c/h3\u003e","title":"E. \u003ci\u003ecoli\u003c/i\u003e","panel_position":"none"},{"action_type":"markdown","markdown_text":"# *E. coli* and Your Health\n\n*E. coli* is a type of bacteria naturally found in the guts of warm-blooded animals and humans. While these bacteria are tiny, they act as a crucial warning sign for the health of our local waterways.\n\n### Why is it a problem?\nHigh levels of *E. coli* indicate that a waterway has been contaminated by faecal matter, or poop. If *E. coli* is present, it is highly likely that other harmful viruses, protozoa, and disease-causing bacteria are also lurking in the water. Swimming or playing in contaminated water can easily make you sick, significantly increasing the risk of gastroenteritis, as well as skin, ear, eye, and respiratory infections.\n\n### How does it get into our water?\nThese bacteria wash into our rivers, lakes, and coastal waters through everyday environmental pressures and weather events. The most common sources include:\n*   Animal and bird droppings.\n*   Heavy rain washing over the land, known as overland flow.\n*   Discharges from local wastewater and stormwater systems.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/faecal-indicators) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon2":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Suspended sediment","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Suspended sediment"},{"action_type":"tooltip","content":"\u003ch3\u003eSuspended sediment\u003c/h3\u003e","title":"Suspended sediment","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Suspended Sediment and Stream Health\n\nWhen it rains, tiny particles of soil, clay, and plant matter are washed into our rivers and streams. Because the Horizons Region has large areas of highly erodible land, millions of tonnes of dirt can wash into our waterways each year. When this dirt is carried along by the water current, it is known as suspended sediment.\n\n### Why is it a problem?\n\n**Cloudy Water and Blocked Sunlight**\nSediment makes the water murky. This reduces visual clarity and blocks the vital sunlight that aquatic plants need to survive. Cloudy water also hides underwater hazards, making our swimming spots unsafe, and makes the water unappealing for farm animals to drink.\n\n**Harm to Wildlife**\nHigh levels of dirt in the water can physically harm aquatic life. The fine particles can literally clog the gills of fish, making it hard for them to breathe and take in oxygen.\n\n**Smothering Riverbeds**\nAs the water current slows down, the suspended dirt eventually sinks to the bottom of the river. This settling dirt fills in the tiny gaps between rocks and gravel, completely smothering the natural habitats where fish and vital water bugs live.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/water-clarity) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Suspended sediment"},{"action_type":"tooltip","content":"\u003ch3\u003eSuspended sediment\u003c/h3\u003e","title":"Suspended sediment","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Suspended Sediment and Stream Health\n\nWhen it rains, tiny particles of soil, clay, and plant matter are washed into our rivers and streams. Because the Horizons Region has large areas of highly erodible land, millions of tonnes of dirt can wash into our waterways each year. When this dirt is carried along by the water current, it is known as suspended sediment.\n\n### Why is it a problem?\n\n**Cloudy Water and Blocked Sunlight**\nSediment makes the water murky. This reduces visual clarity and blocks the vital sunlight that aquatic plants need to survive. Cloudy water also hides underwater hazards, making our swimming spots unsafe, and makes the water unappealing for farm animals to drink.\n\n**Harm to Wildlife**\nHigh levels of dirt in the water can physically harm aquatic life. The fine particles can literally clog the gills of fish, making it hard for them to breathe and take in oxygen.\n\n**Smothering Riverbeds**\nAs the water current slows down, the suspended dirt eventually sinks to the bottom of the river. This settling dirt fills in the tiny gaps between rocks and gravel, completely smothering the natural habitats where fish and vital water bugs live.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/water-clarity) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon3":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../assets/water/20221123_OrangaWai_IconN.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Nitrogen","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Nitrogen"},{"action_type":"tooltip","content":"\u003ch3\u003eNitrogen\u003c/h3\u003e","title":"Nitrogen","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Nitrogen: Too Much of a Good Thing\n\nNitrogen is a naturally occurring nutrient that is absolutely essential for plants to grow. However, when too much nitrogen enters our rivers, lakes, and streams, it throws the entire ecosystem out of balance.\n\n### Why is it a problem?\n\n**Fuels Plant and Algae Growth**\nExcess nitrogen acts like a super-food in our waterways, fueling the rapid and problematic growth of aquatic weeds and algae. \n\n**Toxic to Aquatic Life**\nAt extremely high levels, specific types of nitrogen (like ammonia and nitrate) become directly toxic to fish and sensitive water bugs. \n\n**Harmful to Drinking Water**\nHigh nitrate levels can also pose a serious health risk to humans and livestock if the nitrogen contaminates our groundwater and drinking water supplies.\n\n### How does it get into our water?\nNitrogen is highly soluble, meaning it easily dissolves in water and travels quickly through the environment. The most common sources include:\n*   Excess fertiliser washing off agricultural paddocks.\n*   Animal waste, particularly cow urine, soaking through the soil and into groundwater.\n*   Direct discharges from wastewater treatment plants and leaky septic systems.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/nitrogen) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Nitrogen"},{"action_type":"tooltip","content":"\u003ch3\u003eNitrogen\u003c/h3\u003e","title":"Nitrogen","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Nitrogen: Too Much of a Good Thing\n\nNitrogen is a naturally occurring nutrient that is absolutely essential for plants to grow. However, when too much nitrogen enters our rivers, lakes, and streams, it throws the entire ecosystem out of balance.\n\n### Why is it a problem?\n\n**Fuels Plant and Algae Growth**\nExcess nitrogen acts like a super-food in our waterways, fueling the rapid and problematic growth of aquatic weeds and algae. \n\n**Toxic to Aquatic Life**\nAt extremely high levels, specific types of nitrogen (like ammonia and nitrate) become directly toxic to fish and sensitive water bugs. \n\n**Harmful to Drinking Water**\nHigh nitrate levels can also pose a serious health risk to humans and livestock if the nitrogen contaminates our groundwater and drinking water supplies.\n\n### How does it get into our water?\nNitrogen is highly soluble, meaning it easily dissolves in water and travels quickly through the environment. The most common sources include:\n*   Excess fertiliser washing off agricultural paddocks.\n*   Animal waste, particularly cow urine, soaking through the soil and into groundwater.\n*   Direct discharges from wastewater treatment plants and leaky septic systems.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/nitrogen) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon4":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../assets/water/20221123_OrangaWai_IconP.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Phosphorus","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Phosphorus"},{"action_type":"tooltip","content":"\u003ch3\u003ePhosphorus\u003c/h3\u003e","title":"Phosphorus","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Phosphorus: Fuel for Weeds and Algae\n\nPhosphorus is an essential natural nutrient that helps aquatic plants grow. However, just like nitrogen, having too much phosphorus in our rivers and lakes disrupts the natural balance of the ecosystem.\n\n### Why is it a problem?\n\n**Out of Control Growth**\nHigh levels of phosphorus act as a powerful fertiliser in the water. This excess nutrient fuels the rapid, explosive growth of aquatic weeds and harmful algal blooms.\n\n**Choking Aquatic Life**\nWhen massive algal blooms take over a waterway, they can literally choke fish and sensitive water bugs. This overgrown plant life causes long-term damage to the overall health of our surface water.\n\n### How does it get into our water?\nPhosphorus enters our waterways through both natural processes and human activities:\n\n*   **Natural Geology:** Phosphorus occurs naturally in rocks, minerals, and soils. In some areas, the local geology and groundwater naturally release higher levels of phosphorus into the water.\n*   **Soil Erosion:** Phosphorus binds very tightly to dirt particles. When soil washes into rivers during heavy rain, it carries this trapped phosphorus with it. \n*   **Fertiliser Run-off:** Excess agricultural fertiliser applied to the land can wash directly into rivers and streams during storms.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/phosphorus) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Phosphorus"},{"action_type":"tooltip","content":"\u003ch3\u003ePhosphorus\u003c/h3\u003e","title":"Phosphorus","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Phosphorus: Fuel for Weeds and Algae\n\nPhosphorus is an essential natural nutrient that helps aquatic plants grow. However, just like nitrogen, having too much phosphorus in our rivers and lakes disrupts the natural balance of the ecosystem.\n\n### Why is it a problem?\n\n**Out of Control Growth**\nHigh levels of phosphorus act as a powerful fertiliser in the water. This excess nutrient fuels the rapid, explosive growth of aquatic weeds and harmful algal blooms.\n\n**Choking Aquatic Life**\nWhen massive algal blooms take over a waterway, they can literally choke fish and sensitive water bugs. This overgrown plant life causes long-term damage to the overall health of our surface water.\n\n### How does it get into our water?\nPhosphorus enters our waterways through both natural processes and human activities:\n\n*   **Natural Geology:** Phosphorus occurs naturally in rocks, minerals, and soils. In some areas, the local geology and groundwater naturally release higher levels of phosphorus into the water.\n*   **Soil Erosion:** Phosphorus binds very tightly to dirt particles. When soil washes into rivers during heavy rain, it carries this trapped phosphorus with it. \n*   **Fertiliser Run-off:** Excess agricultural fertiliser applied to the land can wash directly into rivers and streams during storms.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/phosphorus) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon5":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../assets/water/20221123_OrangaWai_IconChlA.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Algae","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Algae"},{"action_type":"tooltip","content":"\u003ch3\u003eAlgae\u003c/h3\u003e","title":"Algae","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Algae and Toxic Algae: A Slimy Threat\n\nAlgae are naturally occurring microscopic organisms that live in our rivers and lakes. While a small amount is a normal part of the food chain, an overgrowth of algae can cause major problems for our waterways.\n\nTo understand exactly how much algae is in the water, scientists measure **chlorophyll-a**, which is the green pigment that plants and algae use to grow. High levels of chlorophyll-a act as a warning sign that a large algal bloom is happening.\n\n### Why is it a problem?\n\n**Smothering Habitats**\nFast-growing algae can form thick, slimy mats on riverbeds or turn lake water cloudy and green. This massive overgrowth physically smothers the natural homes where fish and vital water bugs live.\n\n**Toxic Threats**\nSome specific types of algae, known scientifically as cyanobacteria, can produce dangerous natural toxins. In rivers, toxic algae typically form dark brown or black mats on rocks. These mats can break off and wash up on the river edge, where they dry out and produce a strong, musty smell. \n\n**Danger to Dogs and Humans**\nTouching or swallowing water that contains toxic algae can make people seriously ill. It is especially dangerous for dogs, who are naturally attracted to the musty smell of the dried mats. Eating even a tiny piece of toxic algae the size of a 50-cent coin can be fatal for a dog. \n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/can-i-swim-here/toxic-algae) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Algae"},{"action_type":"tooltip","content":"\u003ch3\u003eAlgae\u003c/h3\u003e","title":"Algae","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Algae and Toxic Algae: A Slimy Threat\n\nAlgae are naturally occurring microscopic organisms that live in our rivers and lakes. While a small amount is a normal part of the food chain, an overgrowth of algae can cause major problems for our waterways.\n\nTo understand exactly how much algae is in the water, scientists measure **chlorophyll-a**, which is the green pigment that plants and algae use to grow. High levels of chlorophyll-a act as a warning sign that a large algal bloom is happening.\n\n### Why is it a problem?\n\n**Smothering Habitats**\nFast-growing algae can form thick, slimy mats on riverbeds or turn lake water cloudy and green. This massive overgrowth physically smothers the natural homes where fish and vital water bugs live.\n\n**Toxic Threats**\nSome specific types of algae, known scientifically as cyanobacteria, can produce dangerous natural toxins. In rivers, toxic algae typically form dark brown or black mats on rocks. These mats can break off and wash up on the river edge, where they dry out and produce a strong, musty smell. \n\n**Danger to Dogs and Humans**\nTouching or swallowing water that contains toxic algae can make people seriously ill. It is especially dangerous for dogs, who are naturally attracted to the musty smell of the dried mats. Eating even a tiny piece of toxic algae the size of a 50-cent coin can be fatal for a dog. \n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/can-i-swim-here/toxic-algae) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"icon6":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"\u003e\u003cimage id=\"img_vis\" href=\"../../../assets/water/20221123_OrangaWai_IconAquaticLife.png\" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" preserveAspectRatio=\"xMidYMid meet\" opacity=\"1.0\" name=\"img_vis\"/\u003e\u003crect id=\"img_interact\" name=\" \" x=\"12.5\" y=\"12.5\" width=\"75\" height=\"75\" fill=\"rgba(255,255,255,0.01)\" rx=\"5\" ry=\"5\"/\u003e\u003c/svg\u003e","echarts_data":[{"name":"img_vis","value":1,"itemStyle":{"borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":" ","value":1,"tooltip":"Invertebrates","itemStyle":{"areaColor":"rgba(255,255,255,0.01)","borderColor":"transparent","borderWidth":3},"label":{"show":false},"emphasis":{"label":{"show":false},"itemStyle":{"areaColor":"transparent"}}}],"actions_manifest":{" ":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Invertebrates"},{"action_type":"tooltip","content":"\u003ch3\u003eInvertebrates\u003c/h3\u003e","title":"Invertebrates","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Macroinvertebrates: Tiny Indicators of Stream Health\n\nMacroinvertebrates are small water bugs and animals without backbones\u2014such as mayflies, snails, worms, and freshwater crayfish\u2014that live on the bottom of our rivers and streams. While they might be tiny, they play a massive role in the health of our local waterways.\n\n### Why are they important?\n\n**A Crucial Food Source**\nThese small creatures are a vital part of the underwater food chain. They act as nature's clean-up crew by feeding on dead leaves and algae, and in turn, provide an essential food source for larger animals like fish and wading birds.\n\n**Nature's Warning Sign**\nBecause different bugs react differently to environmental pressures, they are excellent indicators of overall water quality. \n\n### What hurts our water bugs?\n\n**Low-Level Nutrient Threats**\nNutrients like nitrogen do not need to reach directly toxic levels to harm our water bugs. Even at lower levels, excess nutrients act as a super-food that fuels massive weed and algal blooms. When this overgrown plant life eventually dies and rots, the decomposition process sucks vital oxygen out of the water, essentially suffocating sensitive aquatic insects.\n\n**Loss of Sensitive Species**\nCertain insects, like mayflies and stoneflies, are highly sensitive to pollution and can only thrive in clean, healthy water. When rivers become polluted by excess dirt, toxic algae, or nutrient enrichment, these sensitive bugs are often the first to disappear.\n\n**A Shift in the Ecosystem**\nWhen water quality drops, only tough, pollution-tolerant bugs like worms and snails can survive. A healthy stream needs a wide variety of insect life. If scientists only find worms and snails, it is a clear warning sign that the waterway is degraded and struggling.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/benthic-macroinvertebrates) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}]},"overlays":{},"metadata":{"objects":[{"id":"img_vis","type":"image"},{"id":"img_interact","type":"rect"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"canvas","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"img_vis":{"id":"img_vis","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}," ":{"id":"img_interact","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"Invertebrates"},{"action_type":"tooltip","content":"\u003ch3\u003eInvertebrates\u003c/h3\u003e","title":"Invertebrates","panel_position":"none"},{"action_type":"markdown","markdown_text":"# Macroinvertebrates: Tiny Indicators of Stream Health\n\nMacroinvertebrates are small water bugs and animals without backbones\u2014such as mayflies, snails, worms, and freshwater crayfish\u2014that live on the bottom of our rivers and streams. While they might be tiny, they play a massive role in the health of our local waterways.\n\n### Why are they important?\n\n**A Crucial Food Source**\nThese small creatures are a vital part of the underwater food chain. They act as nature's clean-up crew by feeding on dead leaves and algae, and in turn, provide an essential food source for larger animals like fish and wading birds.\n\n**Nature's Warning Sign**\nBecause different bugs react differently to environmental pressures, they are excellent indicators of overall water quality. \n\n### What hurts our water bugs?\n\n**Low-Level Nutrient Threats**\nNutrients like nitrogen do not need to reach directly toxic levels to harm our water bugs. Even at lower levels, excess nutrients act as a super-food that fuels massive weed and algal blooms. When this overgrown plant life eventually dies and rots, the decomposition process sucks vital oxygen out of the water, essentially suffocating sensitive aquatic insects.\n\n**Loss of Sensitive Species**\nCertain insects, like mayflies and stoneflies, are highly sensitive to pollution and can only thrive in clean, healthy water. When rivers become polluted by excess dirt, toxic algae, or nutrient enrichment, these sensitive bugs are often the first to disappear.\n\n**A Shift in the Ecosystem**\nWhen water quality drops, only tough, pollution-tolerant bugs like worms and snails can survive. A healthy stream needs a wide variety of insect life. If scientists only find worms and snails, it is a clear warning sign that the waterway is degraded and struggling.\n\nFor further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/benthic-macroinvertebrates) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).\n","panel_position":"none"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"rgba(255,255,255,0.01)","hover_color":"transparent","hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":3,"border_color":"transparent","transparent_lines":null,"glow":false,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
         const activeCharts = {};
+
+        // --- Tab Logic ---
+        function sivoSwitchTab(tabsBlockId, targetBlockId, btnElement) {
+            // Update buttons
+            const tabsContainer = btnElement.closest('.sivo-tabs-container');
+            const btns = tabsContainer.querySelectorAll('.sivo-tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Update panes
+            const contentContainer = document.getElementById('tabs-content-' + tabsBlockId);
+            const panes = contentContainer.querySelectorAll('.sivo-tab-pane');
+            panes.forEach(pane => pane.classList.remove('active'));
+
+            const activePane = document.getElementById('tab-pane-' + tabsBlockId + '-' + targetBlockId);
+            if (activePane) {
+                activePane.classList.add('active');
+            }
+
+            // Trigger ECharts resize if the newly visible tab contains a chart
+            if (window.activeCharts && window.activeCharts[targetBlockId]) {
+                // Echarts needs a tiny delay to realize its container is now visible
+                setTimeout(() => {
+                    window.activeCharts[targetBlockId].resize();
+                }, 50);
+            }
+        }
+
+        // Initialize Tabs - Move target blocks into tab panes
+        document.addEventListener('DOMContentLoaded', () => {
+
+        });
+
+        // --- Data Table Logic ---
+        window.sivoTableData = {};
+
+        function sivoRenderTable(blockId) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            const tbody = document.getElementById('tbody-' + blockId);
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            const startIdx = (data.currentPage - 1) * data.rowsPerPage;
+            const endIdx = data.pagination ? Math.min(startIdx + data.rowsPerPage, data.filteredRecords.length) : data.filteredRecords.length;
+
+            for (let i = startIdx; i < endIdx; i++) {
+                const row = data.filteredRecords[i];
+                const tr = document.createElement('tr');
+
+                data.columns.forEach(col => {
+                    const td = document.createElement('td');
+                    const val = row[col] !== undefined && row[col] !== null ? String(row[col]) : '';
+                    if (data.renderHtml) {
+                        td.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(val) : val;
+                    } else {
+                        td.textContent = val;
+                    }
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            }
+
+            // Update pagination UI
+            if (data.pagination) {
+                const pageInfo = document.getElementById('page-info-' + blockId);
+                const prevBtn = document.getElementById('prev-btn-' + blockId);
+                const nextBtn = document.getElementById('next-btn-' + blockId);
+
+                const totalPages = Math.max(1, Math.ceil(data.filteredRecords.length / data.rowsPerPage));
+
+                if (pageInfo) pageInfo.textContent = `Page ${data.currentPage} of ${totalPages} (${data.filteredRecords.length} items)`;
+                if (prevBtn) prevBtn.disabled = data.currentPage <= 1;
+                if (nextBtn) nextBtn.disabled = data.currentPage >= totalPages;
+            }
+        }
+
+        function sivoFilterTable(blockId, query) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            query = query.toLowerCase();
+
+            if (!query) {
+                data.filteredRecords = [...data.records];
+            } else {
+                data.filteredRecords = data.records.filter(row => {
+                    return data.columns.some(col => {
+                        const val = row[col];
+                        return val !== null && val !== undefined && String(val).toLowerCase().includes(query);
+                    });
+                });
+            }
+
+            data.currentPage = 1; // Reset to first page
+            sivoRenderTable(blockId);
+        }
+
+        function sivoSortTable(blockId, colIdx) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            const col = data.columns[colIdx];
+
+            // Toggle sort direction
+            if (data.sortCol === col) {
+                data.sortAsc = !data.sortAsc;
+            } else {
+                data.sortCol = col;
+                data.sortAsc = true;
+            }
+
+            data.filteredRecords.sort((a, b) => {
+                let valA = a[col];
+                let valB = b[col];
+
+                // Handle nulls
+                if (valA === null || valA === undefined) valA = '';
+                if (valB === null || valB === undefined) valB = '';
+
+                // Try numeric sort first
+                const numA = Number(valA);
+                const numB = Number(valB);
+
+                if (!isNaN(numA) && !isNaN(numB)) {
+                    return data.sortAsc ? numA - numB : numB - numA;
+                }
+
+                // Fallback to string sort
+                const strA = String(valA).toLowerCase();
+                const strB = String(valB).toLowerCase();
+
+                if (strA < strB) return data.sortAsc ? -1 : 1;
+                if (strA > strB) return data.sortAsc ? 1 : -1;
+                return 0;
+            });
+
+            sivoRenderTable(blockId);
+        }
+
+        function sivoPrevPage(blockId) {
+            const data = window.sivoTableData[blockId];
+            if (data && data.currentPage > 1) {
+                data.currentPage--;
+                sivoRenderTable(blockId);
+            }
+        }
+
+        function sivoNextPage(blockId) {
+            const data = window.sivoTableData[blockId];
+            const totalPages = Math.ceil(data.filteredRecords.length / data.rowsPerPage);
+            if (data && data.currentPage < totalPages) {
+                data.currentPage++;
+                sivoRenderTable(blockId);
+            }
+        }
+
+        // Initialize Data Tables Data
+        document.addEventListener('DOMContentLoaded', () => {
+
+        });
+
+
+        // --- Export Dashboard Logic ---
+        function sivoExportDashboard(filename) {
+            const container = document.getElementById('dashboard-container');
+            if (!container || typeof html2canvas === 'undefined') {
+                console.error("Dashboard container or html2canvas not found.");
+                return;
+            }
+
+            // Optional: add a loading state to the button here if needed
+
+            // To ensure charts capture fully, we may need to slightly wait
+            // if there are animations, but generally they are canvas so they capture fine.
+            html2canvas(container, {
+                scale: 2, // Higher resolution
+                useCORS: true, // Allow external images
+                backgroundColor: window.getComputedStyle(document.body).backgroundColor
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = filename || 'dashboard.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error("Error exporting dashboard:", err);
+                alert("Failed to export dashboard.");
+            });
+        }
+
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
         window.sivoOverlaySizes = {};
@@ -1308,7 +1750,11 @@ For more information you may be interested to read our [State of Environment Rep
                 text = marked.parse(text);
             }
             if (window.DOMPurify) {
-                text = window.DOMPurify.sanitize(text);
+                text = window.DOMPurify.sanitize(text, {
+                    ADD_TAGS: ['iframe', 'style'],
+                    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                    FORCE_BODY: true
+                });
             }
 
             content.innerHTML = text;
@@ -1893,7 +2339,11 @@ For more information you may be interested to read our [State of Environment Rep
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
-                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
+                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent, {
+                        ADD_TAGS: ['iframe', 'style'],
+                        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                        FORCE_BODY: true
+                    }) : tooltipContent;
                     document.getElementById('sivo-sliding-sidebar').classList.add('active');
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
@@ -1923,7 +2373,11 @@ For more information you may be interested to read our [State of Environment Rep
                         }
 
                         if (contentToDisplay) {
-                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay) : contentToDisplay;
+                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay, {
+                                ADD_TAGS: ['iframe', 'style'],
+                                ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                                FORCE_BODY: true
+                            }) : contentToDisplay;
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeContent}`;
                         } else {
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
@@ -1937,6 +2391,42 @@ For more information you may be interested to read our [State of Environment Rep
                         const pKey = btn.getAttribute('data-payload-key');
                         if (pKey && payloadData && payloadData[pKey] !== undefined) {
                             window.sivoOverlayData[bId] = payloadData[pKey];
+                        }
+                    });
+
+                    // Update HTML Panels Data
+
+                    // Update Expander Panels Data
+                    const expanderPanels = document.querySelectorAll('.sivo-expander-panel');
+                    expanderPanels.forEach(panel => {
+                        const pKey = panel.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            const container = panel.querySelector('.sivo-expander-content');
+                            if (container) {
+                                let val = payloadData[pKey];
+                                if (typeof window.marked !== 'undefined') {
+                                    val = window.marked.parse(String(val));
+                                } else {
+                                    val = val.replace(/\n/g, '<br>');
+                                }
+                                container.innerHTML = val;
+
+                                // Auto-open the details element if it has new content
+                                const detailsEl = panel.querySelector('details');
+                                if (detailsEl) {
+                                    detailsEl.open = true;
+                                }
+                            }
+                        }
+                    });
+                    const htmlPanels = document.querySelectorAll('.sivo-html-panel');
+                    htmlPanels.forEach(panel => {
+                        const pKey = panel.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            const container = panel.querySelector('.sivo-html-content');
+                            if (container) {
+                                container.innerHTML = payloadData[pKey];
+                            }
                         }
                     });
                 }
@@ -1953,12 +2443,18 @@ For more information you may be interested to read our [State of Environment Rep
                         }
                     });
                 });
+
+                // Update Native Chart Blocks if they have a matching payload_key
+
             });
         });
 
         function closeSidebar() {
             document.getElementById('sivo-sliding-sidebar').classList.remove('active');
         }
+
+        // Initialize Native Chart Blocks
+
 
         // Inject Custom JS if provided
 
@@ -2385,7 +2881,10 @@ For more information you may be interested to read our [State of Environment Rep
                             0% { transform: scale(0.5); opacity: 1; }
                             100% { transform: scale(2.0); opacity: 0; }
                         }
-                    </style>
+
+
+
+    </style>
                     `;
 
                     overlaysData['sivo-geocoder-pulse-overlay'] = {

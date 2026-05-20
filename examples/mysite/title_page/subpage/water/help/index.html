@@ -9,6 +9,8 @@
     <!-- Include ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 
+    <!-- Include html2canvas for Export feature -->
+
     <!-- Include DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
@@ -969,8 +971,254 @@
             100% { opacity: 1; }
         }
 
+
+        details[open] summary > span:last-child {
+            transform: rotate(-180deg);
+        }
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* Data Table Styles */
+        .sivo-data-table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .sivo-data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        .sivo-data-table th, .sivo-data-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-data-table th {
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .sivo-data-table-search {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+        .sivo-data-table-pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .sivo-data-table-pagination button {
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            color: #475569;
+        }
+        .sivo-data-table-pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .sivo-data-table-pagination button:hover:not(:disabled) {
+            background-color: #f1f5f9;
+        }
+
+        /* Theme: default (already handled by base styles, but we isolate them here for clarity) */
+        .sivo-table-theme-default {
+            border-collapse: collapse;
+        }
+        .sivo-table-theme-default th {
+            background-color: #f8fafc;
+            color: #475569;
+        }
+        .sivo-table-theme-default th, .sivo-table-theme-default td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-default tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Theme: striped */
+        .sivo-table-theme-striped th {
+            background-color: #f1f5f9;
+            color: #334155;
+            border-bottom: 2px solid #cbd5e1;
+        }
+        .sivo-table-theme-striped th, .sivo-table-theme-striped td {
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-striped tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .sivo-table-theme-striped tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+
+        /* Theme: modern */
+        .sivo-table-theme-modern {
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-modern) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-modern th {
+            background-color: transparent;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            border: none;
+            padding-bottom: 0;
+        }
+        .sivo-table-theme-modern td {
+            background-color: white;
+            border-bottom: none;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sivo-table-theme-modern td:first-child {
+            border-left: 1px solid var(--border-color);
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern td:last-child {
+            border-right: 1px solid var(--border-color);
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .sivo-table-theme-modern tbody tr {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .sivo-table-theme-modern tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: white;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Theme: dark */
+        .sivo-table-theme-dark {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-dark) {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+        .sivo-table-theme-dark th {
+            background-color: #0f172a;
+            color: #94a3b8;
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark th, .sivo-table-theme-dark td {
+            border-bottom: 1px solid #334155;
+        }
+        .sivo-table-theme-dark tbody tr:hover {
+            background-color: #334155;
+        }
+
+        /* Theme: minimal */
+        .sivo-table-theme-minimal {
+            border: none;
+        }
+        .sivo-data-table-container:has(.sivo-table-theme-minimal) {
+            border: none;
+            background: transparent;
+        }
+        .sivo-table-theme-minimal th {
+            background-color: transparent;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal td {
+            border-bottom: 1px solid #e2e8f0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .sivo-table-theme-minimal tbody tr:hover {
+            background-color: transparent;
+        }
+
+
+        /* Tabs Block Styles */
+        .sivo-tabs-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        .sivo-tabs-header {
+            display: flex;
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .sivo-tab-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .sivo-tab-btn:hover {
+            color: #334155;
+            background-color: #f1f5f9;
+        }
+        .sivo-tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background-color: white;
+        }
+        .sivo-tabs-content {
+            flex: 1;
+            position: relative;
+            background-color: white;
+            padding: 0;
+            overflow: hidden; /* Prevent nested elements from bleeding out */
+        }
+        .sivo-tab-pane {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .sivo-tab-pane.active {
+            display: block;
+        }
+
     </style>
-    <style id="custom-css"></style>
+    <style id="custom-css">
+
+
+    </style>
 </head>
 <body>
 
@@ -1005,8 +1253,8 @@
 
 
 
-            <div class="html-card" id="card-banner" style="grid-area: banner; ">
-                <div class="card-content" id="container-banner">
+            <div class="html-card sivo-html-panel" id="card-banner" data-block-id="banner"  style="grid-area: banner; ">
+                <div class="card-content sivo-html-content" id="container-banner">
                     <img src="../../../assets/water/water_banner.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0px;" />
                 </div>
             </div>
@@ -1158,8 +1406,8 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
 
 
 
-            <div class="html-card" id="card-footer_image" style="grid-area: footer_image; ">
-                <div class="card-content" id="container-footer_image">
+            <div class="html-card sivo-html-panel" id="card-footer_image" data-block-id="footer_image"  style="grid-area: footer_image; ">
+                <div class="card-content sivo-html-content" id="container-footer_image">
                     <img src="../../../assets/water/fishbanner.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 0px;" />
                 </div>
             </div>
@@ -1177,6 +1425,7 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                     <span style="display:inline-block; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">📱</span>
                 </button>
             </div>
+
 
 
     </div>
@@ -1220,8 +1469,201 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
         });
 
         // SIVO passes `views_data` directly to this template
-        const viewsData = {"card1":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c1\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c1\"/\u003e\n    \u003cg id=\"sivo_card_85cd496d\" class=\"sivo-injected-card\" name=\"sivo_card_85cd496d\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#007DA3\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"21.4\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.746839737978702px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eTake action on-\u003c/text\u003e\u003ctext x=\"50.0\" y=\"32.12\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"6.399999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003efarm\u003c/text\u003e\u003ctext x=\"50.0\" y=\"44.279999999999994\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eSeek guidance from Horizons\u003c/text\u003e\u003ctext x=\"50.0\" y=\"50.99999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eto reduce contaminants\u003c/text\u003e\u003ctext x=\"50.0\" y=\"57.71999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eentering waterways. Learn\u003c/text\u003e\u003ctext x=\"50.0\" y=\"64.44\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003emore about on-farm\u003c/text\u003e\u003ctext x=\"50.0\" y=\"71.16\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003emitigations at\u003c/text\u003e\u003ctext x=\"50.0\" y=\"77.88\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003elandscapedna.org.\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c1","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_85cd496d","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c1":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c1"}],"sivo_card_85cd496d":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_85cd496d"},{"action_type":"url","url":"https://landscapedna.org/actions/","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c1","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c1":{"id":"c1","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c1"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_85cd496d":{"id":"sivo_card_85cd496d","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_85cd496d"},{"action_type":"url","url":"https://landscapedna.org/actions/","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card2":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c2\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c2\"/\u003e\n    \u003cg id=\"sivo_card_45927c35\" class=\"sivo-injected-card\" name=\"sivo_card_45927c35\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#00A79E\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"23.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"9.936323111458716px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eGet involved\u003c/text\u003e\u003ctext x=\"50.0\" y=\"38.6\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eJoin a local\u003c/text\u003e\u003ctext x=\"50.0\" y=\"47.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eCatchment Care Group\u003c/text\u003e\u003ctext x=\"50.0\" y=\"55.4\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eto support community\u003c/text\u003e\u003ctext x=\"50.0\" y=\"63.8\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eled efforts to\u003c/text\u003e\u003ctext x=\"50.0\" y=\"72.2\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eimprove water\u003c/text\u003e\u003ctext x=\"50.0\" y=\"80.60000000000001\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003equality.\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c2","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_45927c35","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c2":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c2"}],"sivo_card_45927c35":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_45927c35"},{"action_type":"url","url":"https://www.cca.nz/","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c2","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c2":{"id":"c2","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c2"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_45927c35":{"id":"sivo_card_45927c35","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_45927c35"},{"action_type":"url","url":"https://www.cca.nz/","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card3":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c3\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c3\"/\u003e\n    \u003cg id=\"sivo_card_16e3482f\" class=\"sivo-injected-card\" name=\"sivo_card_16e3482f\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#459461\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"21.799999999999997\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.798984106049951px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eHelp track fish\u003c/text\u003e\u003ctext x=\"50.0\" y=\"33.19\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"6.799999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003epassage barriers\u003c/text\u003e\u003ctext x=\"50.0\" y=\"46.10999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eDownload the NIWA Fish\u003c/text\u003e\u003ctext x=\"50.0\" y=\"53.24999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ePassage Assessment Tool\u003c/text\u003e\u003ctext x=\"50.0\" y=\"60.38999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eapp to log barriers\u003c/text\u003e\u003ctext x=\"50.0\" y=\"67.52999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003enationwide, and explore\u003c/text\u003e\u003ctext x=\"50.0\" y=\"74.66999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eassessed structures in\u003c/text\u003e\u003ctext x=\"50.0\" y=\"81.80999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ethe tool\u2019s database.\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c3","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_16e3482f","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c3":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c3"}],"sivo_card_16e3482f":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_16e3482f"},{"action_type":"url","url":"https://niwa.co.nz/freshwater/fish-passage/fish-passage-assessment-tool","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c3","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c3":{"id":"c3","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c3"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_16e3482f":{"id":"sivo_card_16e3482f","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_16e3482f"},{"action_type":"url","url":"https://niwa.co.nz/freshwater/fish-passage/fish-passage-assessment-tool","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card4":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c4\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c4\"/\u003e\n    \u003cg id=\"sivo_card_4dc6ccf1\" class=\"sivo-injected-card\" name=\"sivo_card_4dc6ccf1\" style=\"pointer-events: none;\"\u003e\u003cellipse fill=\"#283244\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"21.4\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.999999999999998px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eConserve water\u003c/text\u003e\u003ctext x=\"50.0\" y=\"33.879999999999995\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003echeck your pipes for\u003c/text\u003e\u003ctext x=\"50.0\" y=\"40.599999999999994\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003edamage or leaks to avoid\u003c/text\u003e\u003ctext x=\"50.0\" y=\"47.31999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ewasting water . Using water\u003c/text\u003e\u003ctext x=\"50.0\" y=\"54.03999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eefficiently helps keep our\u003c/text\u003e\u003ctext x=\"50.0\" y=\"60.75999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eriver at healthy levels,\u003c/text\u003e\u003ctext x=\"50.0\" y=\"67.47999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ewhich is essential for\u003c/text\u003e\u003ctext x=\"50.0\" y=\"74.19999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eaquatic life to survive\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c4","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_4dc6ccf1","value":1,"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c4":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c4"}]},"overlays":{},"metadata":{"objects":[{"id":"c4","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c4":{"id":"c4","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c4"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_4dc6ccf1":{"id":"sivo_card_4dc6ccf1","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card5":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c5\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c5\"/\u003e\n    \u003cg id=\"sivo_card_8464b4b4\" class=\"sivo-injected-card\" name=\"sivo_card_8464b4b4\" style=\"pointer-events: none;\"\u003e\u003cellipse fill=\"#772981\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"20.599999999999998\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"6.999999999999997px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eMaintain Septic\u003c/text\u003e\u003ctext x=\"50.0\" y=\"29.979999999999997\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.599999999999998px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eSystems\u003c/text\u003e\u003ctext x=\"50.0\" y=\"40.62\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eIf you are not on a town\u003c/text\u003e\u003ctext x=\"50.0\" y=\"46.49999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003esewage system, ensure your\u003c/text\u003e\u003ctext x=\"50.0\" y=\"52.37999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eseptic tank is well-maintained\u003c/text\u003e\u003ctext x=\"50.0\" y=\"58.259999999999984\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eand not leaking. Leaky septic\u003c/text\u003e\u003ctext x=\"50.0\" y=\"64.13999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003esystems are a common source of\u003c/text\u003e\u003ctext x=\"50.0\" y=\"70.01999999999998\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eexcess nitrogen in our\u003c/text\u003e\u003ctext x=\"50.0\" y=\"75.89999999999998\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ewaterways\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c5","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_8464b4b4","value":1,"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c5":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c5"}]},"overlays":{},"metadata":{"objects":[{"id":"c5","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c5":{"id":"c5","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c5"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_8464b4b4":{"id":"sivo_card_8464b4b4","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card6":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c6\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c6\"/\u003e\n    \u003cg id=\"sivo_card_169b23a4\" class=\"sivo-injected-card\" name=\"sivo_card_169b23a4\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#007DA3\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"23.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"10.0px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eCheck out\u003c/text\u003e\u003ctext x=\"50.0\" y=\"38.6\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eour State of\u003c/text\u003e\u003ctext x=\"50.0\" y=\"47.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eEnvironment Report\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c6","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_169b23a4","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c6":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c6"}],"sivo_card_169b23a4":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_169b23a4"},{"action_type":"url","url":"https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c6","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c6":{"id":"c6","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c6"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_169b23a4":{"id":"sivo_card_169b23a4","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_169b23a4"},{"action_type":"url","url":"https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
+        const viewsData = {"card1":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c1\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c1\"/\u003e\n    \u003cg id=\"sivo_card_accd51e5\" class=\"sivo-injected-card\" name=\"sivo_card_accd51e5\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#007DA3\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"21.4\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.746839737978702px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eTake action on-\u003c/text\u003e\u003ctext x=\"50.0\" y=\"32.12\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"6.399999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003efarm\u003c/text\u003e\u003ctext x=\"50.0\" y=\"44.279999999999994\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eSeek guidance from Horizons\u003c/text\u003e\u003ctext x=\"50.0\" y=\"50.99999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eto reduce contaminants\u003c/text\u003e\u003ctext x=\"50.0\" y=\"57.71999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eentering waterways. Learn\u003c/text\u003e\u003ctext x=\"50.0\" y=\"64.44\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003emore about on-farm\u003c/text\u003e\u003ctext x=\"50.0\" y=\"71.16\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003emitigations at\u003c/text\u003e\u003ctext x=\"50.0\" y=\"77.88\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003elandscapedna.org.\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c1","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_accd51e5","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c1":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c1"}],"sivo_card_accd51e5":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_accd51e5"},{"action_type":"url","url":"https://landscapedna.org/actions/","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c1","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c1":{"id":"c1","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c1"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_accd51e5":{"id":"sivo_card_accd51e5","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_accd51e5"},{"action_type":"url","url":"https://landscapedna.org/actions/","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card2":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c2\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c2\"/\u003e\n    \u003cg id=\"sivo_card_d0363fa1\" class=\"sivo-injected-card\" name=\"sivo_card_d0363fa1\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#00A79E\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"23.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"9.936323111458716px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eGet involved\u003c/text\u003e\u003ctext x=\"50.0\" y=\"38.6\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eJoin a local\u003c/text\u003e\u003ctext x=\"50.0\" y=\"47.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eCatchment Care Group\u003c/text\u003e\u003ctext x=\"50.0\" y=\"55.4\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eto support community\u003c/text\u003e\u003ctext x=\"50.0\" y=\"63.8\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eled efforts to\u003c/text\u003e\u003ctext x=\"50.0\" y=\"72.2\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eimprove water\u003c/text\u003e\u003ctext x=\"50.0\" y=\"80.60000000000001\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003equality.\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c2","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_d0363fa1","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c2":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c2"}],"sivo_card_d0363fa1":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_d0363fa1"},{"action_type":"url","url":"https://www.cca.nz/","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c2","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c2":{"id":"c2","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c2"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_d0363fa1":{"id":"sivo_card_d0363fa1","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_d0363fa1"},{"action_type":"url","url":"https://www.cca.nz/","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card3":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c3\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c3\"/\u003e\n    \u003cg id=\"sivo_card_82948b90\" class=\"sivo-injected-card\" name=\"sivo_card_82948b90\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#459461\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"21.799999999999997\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.798984106049951px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eHelp track fish\u003c/text\u003e\u003ctext x=\"50.0\" y=\"33.19\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"6.799999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003epassage barriers\u003c/text\u003e\u003ctext x=\"50.0\" y=\"46.10999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eDownload the NIWA Fish\u003c/text\u003e\u003ctext x=\"50.0\" y=\"53.24999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ePassage Assessment Tool\u003c/text\u003e\u003ctext x=\"50.0\" y=\"60.38999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eapp to log barriers\u003c/text\u003e\u003ctext x=\"50.0\" y=\"67.52999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003enationwide, and explore\u003c/text\u003e\u003ctext x=\"50.0\" y=\"74.66999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eassessed structures in\u003c/text\u003e\u003ctext x=\"50.0\" y=\"81.80999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.95px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ethe tool\u2019s database.\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c3","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_82948b90","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c3":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c3"}],"sivo_card_82948b90":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_82948b90"},{"action_type":"url","url":"https://niwa.co.nz/freshwater/fish-passage/fish-passage-assessment-tool","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c3","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c3":{"id":"c3","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c3"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_82948b90":{"id":"sivo_card_82948b90","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_82948b90"},{"action_type":"url","url":"https://niwa.co.nz/freshwater/fish-passage/fish-passage-assessment-tool","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card4":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c4\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c4\"/\u003e\n    \u003cg id=\"sivo_card_c1244795\" class=\"sivo-injected-card\" name=\"sivo_card_c1244795\" style=\"pointer-events: none;\"\u003e\u003cellipse fill=\"#283244\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"21.4\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.999999999999998px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eConserve water\u003c/text\u003e\u003ctext x=\"50.0\" y=\"33.879999999999995\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003echeck your pipes for\u003c/text\u003e\u003ctext x=\"50.0\" y=\"40.599999999999994\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003edamage or leaks to avoid\u003c/text\u003e\u003ctext x=\"50.0\" y=\"47.31999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ewasting water . Using water\u003c/text\u003e\u003ctext x=\"50.0\" y=\"54.03999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eefficiently helps keep our\u003c/text\u003e\u003ctext x=\"50.0\" y=\"60.75999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eriver at healthy levels,\u003c/text\u003e\u003ctext x=\"50.0\" y=\"67.47999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ewhich is essential for\u003c/text\u003e\u003ctext x=\"50.0\" y=\"74.19999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.6px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eaquatic life to survive\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c4","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_c1244795","value":1,"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c4":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c4"}]},"overlays":{},"metadata":{"objects":[{"id":"c4","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c4":{"id":"c4","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c4"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_c1244795":{"id":"sivo_card_c1244795","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card5":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c5\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c5\"/\u003e\n    \u003cg id=\"sivo_card_c6e34615\" class=\"sivo-injected-card\" name=\"sivo_card_c6e34615\" style=\"pointer-events: none;\"\u003e\u003cellipse fill=\"#772981\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"20.599999999999998\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"6.999999999999997px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eMaintain Septic\u003c/text\u003e\u003ctext x=\"50.0\" y=\"29.979999999999997\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"5.599999999999998px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eSystems\u003c/text\u003e\u003ctext x=\"50.0\" y=\"40.62\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eIf you are not on a town\u003c/text\u003e\u003ctext x=\"50.0\" y=\"46.49999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003esewage system, ensure your\u003c/text\u003e\u003ctext x=\"50.0\" y=\"52.37999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eseptic tank is well-maintained\u003c/text\u003e\u003ctext x=\"50.0\" y=\"58.259999999999984\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eand not leaking. Leaky septic\u003c/text\u003e\u003ctext x=\"50.0\" y=\"64.13999999999999\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003esystems are a common source of\u003c/text\u003e\u003ctext x=\"50.0\" y=\"70.01999999999998\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eexcess nitrogen in our\u003c/text\u003e\u003ctext x=\"50.0\" y=\"75.89999999999998\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"4.899999999999999px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003ewaterways\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c5","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_c6e34615","value":1,"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c5":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c5"}]},"overlays":{},"metadata":{"objects":[{"id":"c5","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c5":{"id":"c5","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c5"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_c6e34615":{"id":"sivo_card_c6e34615","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":null,"hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}},"card6":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"100%\" height=\"100%\"\u003e\n      \u003cdefs/\u003e\u003crect id=\"c6\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"none\" name=\"c6\"/\u003e\n    \u003cg id=\"sivo_card_5875b3bc\" class=\"sivo-injected-card\" name=\"sivo_card_5875b3bc\" style=\"cursor: pointer;\"\u003e\u003cellipse fill=\"#007DA3\" stroke=\"#e2e8f0\" stroke-width=\"1px\" cx=\"50.0\" cy=\"50.0\" rx=\"50.0\" ry=\"50.0\"/\u003e\u003ctext x=\"50.0\" y=\"23.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"10.0px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\" font-weight=\"600\"\u003eCheck out\u003c/text\u003e\u003ctext x=\"50.0\" y=\"38.6\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eour State of\u003c/text\u003e\u003ctext x=\"50.0\" y=\"47.0\" font-family=\"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif\" font-size=\"7.000000000000001px\" fill=\"#ffffff\" text-anchor=\"middle\" style=\"pointer-events: none;\"\u003eEnvironment Report\u003c/text\u003e\u003c/g\u003e\u003c/svg\u003e","echarts_data":[{"name":"c6","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"sivo_card_5875b3bc","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"c6":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c6"}],"sivo_card_5875b3bc":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_5875b3bc"},{"action_type":"url","url":"https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf","target":"_blank","transition":null}]},"overlays":{},"metadata":{"objects":[{"id":"c6","type":"rect","bbox":[0.0,0.0,100.0,100.0]}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"100%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"transparent","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[100.0,100.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"c6":{"id":"c6","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"c6"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"sivo_card_5875b3bc":{"id":"sivo_card_5875b3bc","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"sivo_card_5875b3bc"},{"action_type":"url","url":"https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf","target":"_blank","transition":null}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}}}}};
         const activeCharts = {};
+
+        // --- Tab Logic ---
+        function sivoSwitchTab(tabsBlockId, targetBlockId, btnElement) {
+            // Update buttons
+            const tabsContainer = btnElement.closest('.sivo-tabs-container');
+            const btns = tabsContainer.querySelectorAll('.sivo-tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Update panes
+            const contentContainer = document.getElementById('tabs-content-' + tabsBlockId);
+            const panes = contentContainer.querySelectorAll('.sivo-tab-pane');
+            panes.forEach(pane => pane.classList.remove('active'));
+
+            const activePane = document.getElementById('tab-pane-' + tabsBlockId + '-' + targetBlockId);
+            if (activePane) {
+                activePane.classList.add('active');
+            }
+
+            // Trigger ECharts resize if the newly visible tab contains a chart
+            if (window.activeCharts && window.activeCharts[targetBlockId]) {
+                // Echarts needs a tiny delay to realize its container is now visible
+                setTimeout(() => {
+                    window.activeCharts[targetBlockId].resize();
+                }, 50);
+            }
+        }
+
+        // Initialize Tabs - Move target blocks into tab panes
+        document.addEventListener('DOMContentLoaded', () => {
+
+        });
+
+        // --- Data Table Logic ---
+        window.sivoTableData = {};
+
+        function sivoRenderTable(blockId) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            const tbody = document.getElementById('tbody-' + blockId);
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            const startIdx = (data.currentPage - 1) * data.rowsPerPage;
+            const endIdx = data.pagination ? Math.min(startIdx + data.rowsPerPage, data.filteredRecords.length) : data.filteredRecords.length;
+
+            for (let i = startIdx; i < endIdx; i++) {
+                const row = data.filteredRecords[i];
+                const tr = document.createElement('tr');
+
+                data.columns.forEach(col => {
+                    const td = document.createElement('td');
+                    const val = row[col] !== undefined && row[col] !== null ? String(row[col]) : '';
+                    if (data.renderHtml) {
+                        td.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(val) : val;
+                    } else {
+                        td.textContent = val;
+                    }
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            }
+
+            // Update pagination UI
+            if (data.pagination) {
+                const pageInfo = document.getElementById('page-info-' + blockId);
+                const prevBtn = document.getElementById('prev-btn-' + blockId);
+                const nextBtn = document.getElementById('next-btn-' + blockId);
+
+                const totalPages = Math.max(1, Math.ceil(data.filteredRecords.length / data.rowsPerPage));
+
+                if (pageInfo) pageInfo.textContent = `Page ${data.currentPage} of ${totalPages} (${data.filteredRecords.length} items)`;
+                if (prevBtn) prevBtn.disabled = data.currentPage <= 1;
+                if (nextBtn) nextBtn.disabled = data.currentPage >= totalPages;
+            }
+        }
+
+        function sivoFilterTable(blockId, query) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            query = query.toLowerCase();
+
+            if (!query) {
+                data.filteredRecords = [...data.records];
+            } else {
+                data.filteredRecords = data.records.filter(row => {
+                    return data.columns.some(col => {
+                        const val = row[col];
+                        return val !== null && val !== undefined && String(val).toLowerCase().includes(query);
+                    });
+                });
+            }
+
+            data.currentPage = 1; // Reset to first page
+            sivoRenderTable(blockId);
+        }
+
+        function sivoSortTable(blockId, colIdx) {
+            const data = window.sivoTableData[blockId];
+            if (!data) return;
+
+            const col = data.columns[colIdx];
+
+            // Toggle sort direction
+            if (data.sortCol === col) {
+                data.sortAsc = !data.sortAsc;
+            } else {
+                data.sortCol = col;
+                data.sortAsc = true;
+            }
+
+            data.filteredRecords.sort((a, b) => {
+                let valA = a[col];
+                let valB = b[col];
+
+                // Handle nulls
+                if (valA === null || valA === undefined) valA = '';
+                if (valB === null || valB === undefined) valB = '';
+
+                // Try numeric sort first
+                const numA = Number(valA);
+                const numB = Number(valB);
+
+                if (!isNaN(numA) && !isNaN(numB)) {
+                    return data.sortAsc ? numA - numB : numB - numA;
+                }
+
+                // Fallback to string sort
+                const strA = String(valA).toLowerCase();
+                const strB = String(valB).toLowerCase();
+
+                if (strA < strB) return data.sortAsc ? -1 : 1;
+                if (strA > strB) return data.sortAsc ? 1 : -1;
+                return 0;
+            });
+
+            sivoRenderTable(blockId);
+        }
+
+        function sivoPrevPage(blockId) {
+            const data = window.sivoTableData[blockId];
+            if (data && data.currentPage > 1) {
+                data.currentPage--;
+                sivoRenderTable(blockId);
+            }
+        }
+
+        function sivoNextPage(blockId) {
+            const data = window.sivoTableData[blockId];
+            const totalPages = Math.ceil(data.filteredRecords.length / data.rowsPerPage);
+            if (data && data.currentPage < totalPages) {
+                data.currentPage++;
+                sivoRenderTable(blockId);
+            }
+        }
+
+        // Initialize Data Tables Data
+        document.addEventListener('DOMContentLoaded', () => {
+
+        });
+
+
+        // --- Export Dashboard Logic ---
+        function sivoExportDashboard(filename) {
+            const container = document.getElementById('dashboard-container');
+            if (!container || typeof html2canvas === 'undefined') {
+                console.error("Dashboard container or html2canvas not found.");
+                return;
+            }
+
+            // Optional: add a loading state to the button here if needed
+
+            // To ensure charts capture fully, we may need to slightly wait
+            // if there are animations, but generally they are canvas so they capture fine.
+            html2canvas(container, {
+                scale: 2, // Higher resolution
+                useCORS: true, // Allow external images
+                backgroundColor: window.getComputedStyle(document.body).backgroundColor
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = filename || 'dashboard.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                console.error("Error exporting dashboard:", err);
+                alert("Failed to export dashboard.");
+            });
+        }
+
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
         window.sivoOverlaySizes = {};
@@ -1276,7 +1718,11 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                 text = marked.parse(text);
             }
             if (window.DOMPurify) {
-                text = window.DOMPurify.sanitize(text);
+                text = window.DOMPurify.sanitize(text, {
+                    ADD_TAGS: ['iframe', 'style'],
+                    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                    FORCE_BODY: true
+                });
             }
 
             content.innerHTML = text;
@@ -1861,7 +2307,11 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
                 if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
-                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent) : tooltipContent;
+                    document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent, {
+                        ADD_TAGS: ['iframe', 'style'],
+                        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                        FORCE_BODY: true
+                    }) : tooltipContent;
                     document.getElementById('sivo-sliding-sidebar').classList.add('active');
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
@@ -1891,7 +2341,11 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                         }
 
                         if (contentToDisplay) {
-                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay) : contentToDisplay;
+                            var safeContent = window.DOMPurify ? window.DOMPurify.sanitize(contentToDisplay, {
+                                ADD_TAGS: ['iframe', 'style'],
+                                ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                                FORCE_BODY: true
+                            }) : contentToDisplay;
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `${safeContent}`;
                         } else {
                             container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p>No additional details mapped.</p>`;
@@ -1905,6 +2359,42 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                         const pKey = btn.getAttribute('data-payload-key');
                         if (pKey && payloadData && payloadData[pKey] !== undefined) {
                             window.sivoOverlayData[bId] = payloadData[pKey];
+                        }
+                    });
+
+                    // Update HTML Panels Data
+
+                    // Update Expander Panels Data
+                    const expanderPanels = document.querySelectorAll('.sivo-expander-panel');
+                    expanderPanels.forEach(panel => {
+                        const pKey = panel.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            const container = panel.querySelector('.sivo-expander-content');
+                            if (container) {
+                                let val = payloadData[pKey];
+                                if (typeof window.marked !== 'undefined') {
+                                    val = window.marked.parse(String(val));
+                                } else {
+                                    val = val.replace(/\n/g, '<br>');
+                                }
+                                container.innerHTML = val;
+
+                                // Auto-open the details element if it has new content
+                                const detailsEl = panel.querySelector('details');
+                                if (detailsEl) {
+                                    detailsEl.open = true;
+                                }
+                            }
+                        }
+                    });
+                    const htmlPanels = document.querySelectorAll('.sivo-html-panel');
+                    htmlPanels.forEach(panel => {
+                        const pKey = panel.getAttribute('data-payload-key');
+                        if (pKey && payloadData && payloadData[pKey] !== undefined) {
+                            const container = panel.querySelector('.sivo-html-content');
+                            if (container) {
+                                container.innerHTML = payloadData[pKey];
+                            }
                         }
                     });
                 }
@@ -1921,12 +2411,18 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                         }
                     });
                 });
+
+                // Update Native Chart Blocks if they have a matching payload_key
+
             });
         });
 
         function closeSidebar() {
             document.getElementById('sivo-sliding-sidebar').classList.remove('active');
         }
+
+        // Initialize Native Chart Blocks
+
 
         // Inject Custom JS if provided
 
@@ -2353,7 +2849,10 @@ Everyone has a role to play in restoring the health of our local rivers, lakes, 
                             0% { transform: scale(0.5); opacity: 1; }
                             100% { transform: scale(2.0); opacity: 0; }
                         }
-                    </style>
+
+
+
+    </style>
                     `;
 
                     overlaysData['sivo-geocoder-pulse-overlay'] = {
