@@ -27,7 +27,7 @@ We evaluated the current state of macroinvertebrates at 42 monitoring sites acro
       font-size: 0.98rem;
   ">
 
-Scientists collect these small animals from the riverbed, usually once a year, and identify the different species present to calculate a score called the Macroinvertebrate Community Index (MCI). This index is based on the known sensitivity or tolerance of each species to pollution. 
+Scientists collect these small animals from the riverbed, usually once a year, and identify the different species present to calculate a score called the Macroinvertebrate Community Index (MCI). This index is based on the known sensitivity or tolerance of each species to pollution.
 
 <br><br>
 

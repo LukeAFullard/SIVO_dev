@@ -2029,10 +2029,20 @@
                         } else if (item.animation_class === 'fade_pulse') {
                             var delay = item.fade_start_time_ms || 0;
                             var duration = item.fade_duration_ms || 5000;
+                            var selectedChart = window.sivoSelectedElements ? window.sivoSelectedElements['global_selected_chart'] : null;
+
+                            // If an element is selected, only pulse the selected one
+                            var shouldPulse = true;
+                            if (selectedChart) {
+                                shouldPulse = (chartId === selectedChart);
+                            }
 
                             if (elapsed > delay) {
-                                var progress = (elapsed - delay) / duration;
-                                var opacity = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+                                var opacity = 1.0;
+                                if (shouldPulse) {
+                                    var progress = (elapsed - delay) / duration;
+                                    opacity = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+                                }
 
                                 if (!item.itemStyle) item.itemStyle = {};
                                 if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
@@ -2102,10 +2112,16 @@
         const detailsPanels = document.querySelectorAll('.sivo-details-panel');
         const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
 
+        window.sivoSelectedElements = window.sivoSelectedElements || {};
+
         Object.keys(activeCharts).forEach(chartId => {
             const chart = activeCharts[chartId];
             chart.on('click', function(params) {
                 if(!params.name) return;
+
+                // Track selected element globally for conditional animations across independent blocks
+                window.sivoSelectedElements = window.sivoSelectedElements || {};
+                window.sivoSelectedElements['global_selected_chart'] = chartId;
 
                 const viewData = viewsData[chartId];
                 if (!viewData || !viewData.actions_manifest) return;

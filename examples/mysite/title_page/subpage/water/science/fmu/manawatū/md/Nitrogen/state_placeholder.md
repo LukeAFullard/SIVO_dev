@@ -27,7 +27,7 @@ We evaluated the current state of both nitrate and ammoniacal nitrogen at 55 mon
       font-size: 0.98rem;
   ">
 
-Scientists measure the concentration of nitrogen in the water in milligrams per litre (mg/L). 
+Scientists measure the concentration of nitrogen in the water in milligrams per litre (mg/L).
 
 <br><br>
 
@@ -37,7 +37,7 @@ To calculate a reliable A-to-D ecological health grade for toxicity, experts eva
 <li><strong>95th percentile:</strong> A measure of the extremes, representing the highest nitrogen levels expected on a "bad" day.</li>
 </ul>
 
-A site must pass the test for both of these statistics. The final grade is always determined by the worst-performing statistic. 
+A site must pass the test for both of these statistics. The final grade is always determined by the worst-performing statistic.
 
 <ul>
 <li><strong>Band A:</strong> Represents high conservation value, where sensitive species are unlikely to be harmed. </li>

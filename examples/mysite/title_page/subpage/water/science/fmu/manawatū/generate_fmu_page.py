@@ -399,7 +399,8 @@ for icon in icons:
         border_color="transparent",
         border_width=3,
         hover_color="transparent",
-        glow=False
+        glow=False,
+        fade_pulse=True
     )
 
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")

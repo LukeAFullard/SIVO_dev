@@ -1,4 +1,4 @@
-# The Current State of *E. coli* 
+# The Current State of *E. coli*
 
 We evaluated the current state of *E. coli* at 53 monitoring sites across the Manawatū FMU.
 

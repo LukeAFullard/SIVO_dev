@@ -27,7 +27,7 @@ We evaluated the current state of algae at 20 monitoring sites across the Manawa
       font-size: 0.98rem;
   ">
 
-Because algae are tiny and difficult to count individually, scientists often measure chlorophyll-a instead. Chlorophyll-a is the green pigment that plants and algae use for photosynthesis. By measuring the concentration of this pigment in a water sample, scientists can accurately estimate the total amount of algae present at a monitoring site. 
+Because algae are tiny and difficult to count individually, scientists often measure chlorophyll-a instead. Chlorophyll-a is the green pigment that plants and algae use for photosynthesis. By measuring the concentration of this pigment in a water sample, scientists can accurately estimate the total amount of algae present at a monitoring site.
 
 <br><br>
 
@@ -36,7 +36,7 @@ To calculate a reliable A-to-D ecological health grade for rivers, experts evalu
 <li><strong>The 92nd Percentile:</strong> For rivers, scientists calculate the 92nd percentile. This is a measure of the extremes, helping us understand exactly how severe the algal blooms get on a "bad" day, without the final grade being skewed by a single, rare spike.</li>
 </ul>
 
-A site must pass the test for this statistic to receive a good grade. 
+A site must pass the test for this statistic to receive a good grade.
 
 <ul>
 <li><strong>Band A:</strong> Represents a healthy, resilient ecosystem with rare blooms, indicating natural conditions.</li>
