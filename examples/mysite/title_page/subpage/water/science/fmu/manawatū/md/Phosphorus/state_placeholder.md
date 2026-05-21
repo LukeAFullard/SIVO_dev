@@ -27,7 +27,7 @@ We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 55 moni
       font-size: 0.98rem;
   ">
 
-Scientists measure the concentration of DRP in the water in milligrams per litre (mg/L). 
+Scientists measure the concentration of DRP in the water in milligrams per litre (mg/L).
 
 <br><br>
 
@@ -37,7 +37,7 @@ To calculate a reliable A-to-D ecological health grade, experts evaluate two dif
 <li><strong>95th percentile:</strong> A measure of the extremes, representing the highest DRP levels expected on a "bad" day.</li>
 </ul>
 
-A site must pass the test for both of these statistics. The final grade is always determined by the worst-performing statistic. 
+A site must pass the test for both of these statistics. The final grade is always determined by the worst-performing statistic.
 
 <ul>
 <li><strong>Band A:</strong> Represents natural, healthy conditions where no adverse effects from phosphorus enrichment are expected. </li>
