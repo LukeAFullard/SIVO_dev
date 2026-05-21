@@ -3,7 +3,7 @@
 To get a reliable picture of our waterways, scientists need much more than a single water sample. Water quality constantly shifts due to rainfall, seasons, and land use changes.
 
 ### The Five-Year Hydrological Snapshot
-We calculate the current state of a river using data collected over the five hydrological years ending |FINAL_DATE|. A hydrological year runs from July to June, aligning with natural water cycles rather than the standard calendar year.
+We calculate the current state of a river using data collected over the five hydrological years ending 1st July 2025. A hydrological year runs from July to June, aligning with natural water cycles rather than the standard calendar year.
 
 Before any analysis begins, the raw data undergoes strict quality control. Using National Environmental Monitoring Standards (NEMS), scientists screen the dataset to remove any missing or compromised measurements to ensure the final calculations are highly accurate.
 
