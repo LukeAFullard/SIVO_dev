@@ -1965,10 +1965,21 @@
                         } else if (item.animation_class === 'fade_pulse') {
                             var delay = item.fade_start_time_ms || 0;
                             var duration = item.fade_duration_ms || 5000;
+                            var selectedChart = window.sivoSelectedElements ? window.sivoSelectedElements['global_selected_chart'] : null;
+
+                            // If an element is selected, only pulse the selected one
+                            var shouldPulse = true;
+                            if (selectedChart) {
+                                shouldPulse = (blockId === selectedChart);
+                            }
 
                             if (elapsed > delay) {
-                                var progress = (elapsed - delay) / duration;
-                                var opacity = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+                                var opacity = 0.0; // unselected
+                                if (shouldPulse) {
+                                    var progress = (elapsed - delay) / duration;
+                                    var sine = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2; // 0 to 1
+                                    opacity = sine; // pulse between 0.0 and 1.0
+                                }
 
                                 if (!item.itemStyle) item.itemStyle = {};
                                 if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
@@ -1980,11 +1991,13 @@
                                             var tag = domNode.tagName.toLowerCase();
                                             if (true) {
                                                 domNode.setAttribute('fill-opacity', opacity);
+                                                domNode.setAttribute('stroke-opacity', opacity);
 
                                                 var textChildren = domNode.querySelectorAll('text, tspan');
                                                 textChildren.forEach(child => {
                                                     child.setAttribute('opacity', opacity);
                                                     child.setAttribute('fill-opacity', opacity);
+                                                    child.setAttribute('stroke-opacity', opacity);
                                                 });
                                             }
                                         }
@@ -2038,10 +2051,16 @@
         const detailsPanels = document.querySelectorAll('.sivo-details-panel');
         const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
 
+        window.sivoSelectedElements = window.sivoSelectedElements || {};
+
         Object.keys(activeCharts).forEach(chartId => {
             const chart = activeCharts[chartId];
             chart.on('click', function(params) {
                 if(!params.name) return;
+
+                // Track selected element globally for conditional animations across independent blocks
+                window.sivoSelectedElements = window.sivoSelectedElements || {};
+                window.sivoSelectedElements['global_selected_chart'] = chartId;
 
                 const viewData = viewsData[chartId];
                 if (!viewData || !viewData.actions_manifest) return;
@@ -2272,7 +2291,7 @@
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown1": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "We dedicate, 2025-26 Annual SOE report, to our soils, which underpins various other resources that supports us and the very existence of our being by providing us food and is a primary means of income in the region. We all know that soil, particularly, top soil stores nutrients for plants and is important for food production, healthy soils make healthy bodies. However, performs various other functions beyond supporting food-crops. Soil filters water that seeps into the ground and replenishes ground water, an important source of fresh water for drinking and other uses. A whole ecosystem of microbes lives in the soil that thrives on organic matter contributing to carbon storage. Surprisingly, as per latest studies (Nature 2005), soil is the largest terrestrial carbon sink, more than what atmosphere and vegetation can hold combined. Soil is a powerhouse of various ecosystem goods and services.", "show_element_name": false, "title": ""}, "markdown2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "Soil in our region is very fertile supporting different ecosystem services and goods and various agricultural and economic activities including dairy farms, forestry etc. Our region is naturally susceptible to soil erosion, for it largely being a hill country (fragile geology), prone to floods and storms (weather events) and supporting largest area of hill country farming in NZ (human activities). Rainfall plays a key role in washing away the top soil with it. The characteristics of land itself such as soil type, slope, weather events such as excessive rainfall, and storms contributes to soil erosion. However, human activities such as clearing land for food production, converting land for settlements, urban infrastructure and intensive farming practices influences the health of soil and intensifies soil erosion.  Climate change is like to further exacerbate the rate of soil erosion in the Horizons Region.", "show_element_name": false, "title": ""}, "markdown3": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": null, "placeholder": "Erosion of soil is not just a matter of loss of top soil layer, soil erosion influences larger ecosystem. The soil erosion often leads to slips and landslides, loss of top soil influences nutrients and agricultural production which in turn affects economic benefits. In addition, it clogs the waterways, hampers hard infrastructure such as roads, dams and bridges, which are requires a large of amount of capital investment and forms an important lifeline for our day to day lives. Soil run off into streams causes nutrient loss but also, pollutes the water ways and harm the aquatic life. Therefore, it is important to look at soil and soil erosion from a holistic perspective and not a local phenomenon.", "show_element_name": false, "title": ""}};
+                const detailsConfig = {"markdown1": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "We dedicate, 2025-26 Annual SOE report, to our soils, which underpins various other resources that supports us and the very existence of our being by providing us food and is a primary means of income in the region. We all know that soil, particularly, top soil stores nutrients for plants and is important for food production, healthy soils make healthy bodies. However, performs various other functions beyond supporting food-crops. Soil filters water that seeps into the ground and replenishes ground water, an important source of fresh water for drinking and other uses. A whole ecosystem of microbes lives in the soil that thrives on organic matter contributing to carbon storage. Surprisingly, as per latest studies (Nature 2005), soil is the largest terrestrial carbon sink, more than what atmosphere and vegetation can hold combined. Soil is a powerhouse of various ecosystem goods and services.", "show_element_name": false, "title": "", "update_on_click": true}, "markdown2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "Soil in our region is very fertile supporting different ecosystem services and goods and various agricultural and economic activities including dairy farms, forestry etc. Our region is naturally susceptible to soil erosion, for it largely being a hill country (fragile geology), prone to floods and storms (weather events) and supporting largest area of hill country farming in NZ (human activities). Rainfall plays a key role in washing away the top soil with it. The characteristics of land itself such as soil type, slope, weather events such as excessive rainfall, and storms contributes to soil erosion. However, human activities such as clearing land for food production, converting land for settlements, urban infrastructure and intensive farming practices influences the health of soil and intensifies soil erosion.  Climate change is like to further exacerbate the rate of soil erosion in the Horizons Region.", "show_element_name": false, "title": "", "update_on_click": true}, "markdown3": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": null, "placeholder": "Erosion of soil is not just a matter of loss of top soil layer, soil erosion influences larger ecosystem. The soil erosion often leads to slips and landslides, loss of top soil influences nutrients and agricultural production which in turn affects economic benefits. In addition, it clogs the waterways, hampers hard infrastructure such as roads, dams and bridges, which are requires a large of amount of capital investment and forms an important lifeline for our day to day lives. Soil run off into streams causes nutrient loss but also, pollutes the water ways and harm the aquatic life. Therefore, it is important to look at soil and soil erosion from a holistic perspective and not a local phenomenon.", "show_element_name": false, "title": "", "update_on_click": true}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
@@ -2288,7 +2307,14 @@
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
-                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
+                        const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
+                        const showName = dConf.show_element_name !== false;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
@@ -2298,6 +2324,12 @@
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
                         const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
                         const showName = dConf.show_element_name !== false;
                         const payloadKey = dConf.payload_key;
                         const container = panel.querySelector('.sivo-details-content');
