@@ -408,7 +408,7 @@ for icon in icons:
         tooltip=icon["hover"],
         callback_payload=payload,
         color="transparent",
-        border_color="#772981",
+        border_color="#ccffcc",
         border_width=8,
         hover_color="transparent",
         glow=True,
