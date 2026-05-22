@@ -409,7 +409,7 @@ for icon in icons:
         callback_payload=payload,
         color="transparent",
         border_color="#772981",
-        border_width=4,
+        border_width=8,
         hover_color="transparent",
         glow=True,
         fade_pulse=True
