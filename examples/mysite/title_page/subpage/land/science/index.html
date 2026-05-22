@@ -2105,10 +2105,21 @@ We then identified various measures that can help erosion mitigation in our regi
                         } else if (item.animation_class === 'fade_pulse') {
                             var delay = item.fade_start_time_ms || 0;
                             var duration = item.fade_duration_ms || 5000;
+                            var selectedChart = window.sivoSelectedElements ? window.sivoSelectedElements['global_selected_chart'] : null;
+
+                            // If an element is selected, only pulse the selected one
+                            var shouldPulse = true;
+                            if (selectedChart) {
+                                shouldPulse = (blockId === selectedChart);
+                            }
 
                             if (elapsed > delay) {
-                                var progress = (elapsed - delay) / duration;
-                                var opacity = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+                                var opacity = 0.0; // unselected
+                                if (shouldPulse) {
+                                    var progress = (elapsed - delay) / duration;
+                                    var sine = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2; // 0 to 1
+                                    opacity = sine; // pulse between 0.0 and 1.0
+                                }
 
                                 if (!item.itemStyle) item.itemStyle = {};
                                 if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
@@ -2120,11 +2131,13 @@ We then identified various measures that can help erosion mitigation in our regi
                                             var tag = domNode.tagName.toLowerCase();
                                             if (true) {
                                                 domNode.setAttribute('fill-opacity', opacity);
+                                                domNode.setAttribute('stroke-opacity', opacity);
 
                                                 var textChildren = domNode.querySelectorAll('text, tspan');
                                                 textChildren.forEach(child => {
                                                     child.setAttribute('opacity', opacity);
                                                     child.setAttribute('fill-opacity', opacity);
+                                                    child.setAttribute('stroke-opacity', opacity);
                                                 });
                                             }
                                         }
@@ -2178,10 +2191,16 @@ We then identified various measures that can help erosion mitigation in our regi
         const detailsPanels = document.querySelectorAll('.sivo-details-panel');
         const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
 
+        window.sivoSelectedElements = window.sivoSelectedElements || {};
+
         Object.keys(activeCharts).forEach(chartId => {
             const chart = activeCharts[chartId];
             chart.on('click', function(params) {
                 if(!params.name) return;
+
+                // Track selected element globally for conditional animations across independent blocks
+                window.sivoSelectedElements = window.sivoSelectedElements || {};
+                window.sivoSelectedElements['global_selected_chart'] = chartId;
 
                 const viewData = viewsData[chartId];
                 if (!viewData || !viewData.actions_manifest) return;
@@ -2412,7 +2431,7 @@ We then identified various measures that can help erosion mitigation in our regi
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"fmu_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": "fmu_md", "placeholder": "Click an FMU on the map to see details here.", "show_element_name": false, "title": ""}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "At Horizons Regional Council, we understand and appreciate how important our soils are to our region and its people. We initiated a long term hill country erosion-control program \u2013 Sustainable Land Use Initiative (SLUI) after our region witnessed the impact of devastating floods and resulting landslides and soil erosion, in 2004.\nIt is a largest, non-regulatory soil conservation program running successfully for almost two decade, in the country. The primary objective of the program is to improve the resilience of soil and our land, particularly in the hill country. It is an example of a successful collaboration between landowners and the regional council, in the country.\n", "show_element_name": false, "title": ""}, "mitigation_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1200, "padding": "10px", "payload_key": null, "placeholder": "Explain mitigation activities\n\nWe then identified various measures that can help erosion mitigation in our region. The mitigation activities include (but not limited to) afforestation (of both native and exotic species), native forest retirement and poplar planting, stream fencing, riparian planting an set setting up of sediment traps.\n", "show_element_name": false, "title": ""}, "text2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "To be able to protect our region it is important to understand the degree to which various parts of our regions are susceptible to erosion, as not every part of the region is equally susceptible to soil erosion or driver of erosion may vary. We, therefore, first mapped the region to identify areas which are susceptible to soil erosion and its affects.\n", "show_element_name": false, "title": ""}, "time_lag_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1800, "padding": "10px", "payload_key": null, "placeholder": "Explain time lag\n", "show_element_name": false, "title": ""}};
+                const detailsConfig = {"fmu_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": "fmu_md", "placeholder": "Click an FMU on the map to see details here.", "show_element_name": false, "title": "", "update_on_click": true}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "At Horizons Regional Council, we understand and appreciate how important our soils are to our region and its people. We initiated a long term hill country erosion-control program \u2013 Sustainable Land Use Initiative (SLUI) after our region witnessed the impact of devastating floods and resulting landslides and soil erosion, in 2004.\nIt is a largest, non-regulatory soil conservation program running successfully for almost two decade, in the country. The primary objective of the program is to improve the resilience of soil and our land, particularly in the hill country. It is an example of a successful collaboration between landowners and the regional council, in the country.\n", "show_element_name": false, "title": "", "update_on_click": true}, "mitigation_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1200, "padding": "10px", "payload_key": null, "placeholder": "Explain mitigation activities\n\nWe then identified various measures that can help erosion mitigation in our region. The mitigation activities include (but not limited to) afforestation (of both native and exotic species), native forest retirement and poplar planting, stream fencing, riparian planting an set setting up of sediment traps.\n", "show_element_name": false, "title": "", "update_on_click": true}, "text2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "To be able to protect our region it is important to understand the degree to which various parts of our regions are susceptible to erosion, as not every part of the region is equally susceptible to soil erosion or driver of erosion may vary. We, therefore, first mapped the region to identify areas which are susceptible to soil erosion and its affects.\n", "show_element_name": false, "title": "", "update_on_click": true}, "time_lag_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1800, "padding": "10px", "payload_key": null, "placeholder": "Explain time lag\n", "show_element_name": false, "title": "", "update_on_click": true}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
@@ -2428,7 +2447,14 @@ We then identified various measures that can help erosion mitigation in our regi
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
-                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
+                        const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
+                        const showName = dConf.show_element_name !== false;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
@@ -2438,6 +2464,12 @@ We then identified various measures that can help erosion mitigation in our regi
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
                         const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
                         const showName = dConf.show_element_name !== false;
                         const payloadKey = dConf.payload_key;
                         const container = panel.querySelector('.sivo-details-content');

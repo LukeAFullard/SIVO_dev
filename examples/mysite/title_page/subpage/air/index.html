@@ -1268,12 +1268,17 @@
             <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Welcome\nThis is a placeholder text for the welcome panel.
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown">### We are lucky here.
+The prevailing winds that breeze over a dominantly rural landscape, combined with our low population density and a small number of industrial emissions, likely enable the Horizons Region to experience good air quality.
+
+However, some of the activities we practice can put the region’s air quality at risk.
+
+Explore the following pages to learn more about the latest state and trends of air in the Horizons Region.
 </p>
                 </div>
                 <script>
                     (function() {
-                        const rawPlaceholder = "# Welcome\\nThis is a placeholder text for the welcome panel.\n";
+                        const rawPlaceholder = "### We are lucky here. \nThe prevailing winds that breeze over a dominantly rural landscape, combined with our low population density and a small number of industrial emissions, likely enable the Horizons Region to experience good air quality.  \n\nHowever, some of the activities we practice can put the region\u2019s air quality at risk. \n\nExplore the following pages to learn more about the latest state and trends of air in the Horizons Region.\n";
                         if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
                             const container = document.getElementById('container-markdown');
                             if (container) {
@@ -1924,10 +1929,21 @@
                         } else if (item.animation_class === 'fade_pulse') {
                             var delay = item.fade_start_time_ms || 0;
                             var duration = item.fade_duration_ms || 5000;
+                            var selectedChart = window.sivoSelectedElements ? window.sivoSelectedElements['global_selected_chart'] : null;
+
+                            // If an element is selected, only pulse the selected one
+                            var shouldPulse = true;
+                            if (selectedChart) {
+                                shouldPulse = (blockId === selectedChart);
+                            }
 
                             if (elapsed > delay) {
-                                var progress = (elapsed - delay) / duration;
-                                var opacity = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+                                var opacity = 0.0; // unselected
+                                if (shouldPulse) {
+                                    var progress = (elapsed - delay) / duration;
+                                    var sine = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2; // 0 to 1
+                                    opacity = sine; // pulse between 0.0 and 1.0
+                                }
 
                                 if (!item.itemStyle) item.itemStyle = {};
                                 if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
@@ -1939,11 +1955,13 @@
                                             var tag = domNode.tagName.toLowerCase();
                                             if (true) {
                                                 domNode.setAttribute('fill-opacity', opacity);
+                                                domNode.setAttribute('stroke-opacity', opacity);
 
                                                 var textChildren = domNode.querySelectorAll('text, tspan');
                                                 textChildren.forEach(child => {
                                                     child.setAttribute('opacity', opacity);
                                                     child.setAttribute('fill-opacity', opacity);
+                                                    child.setAttribute('stroke-opacity', opacity);
                                                 });
                                             }
                                         }
@@ -1997,10 +2015,16 @@
         const detailsPanels = document.querySelectorAll('.sivo-details-panel');
         const metricsPanels = document.querySelectorAll('.sivo-metrics-panel');
 
+        window.sivoSelectedElements = window.sivoSelectedElements || {};
+
         Object.keys(activeCharts).forEach(chartId => {
             const chart = activeCharts[chartId];
             chart.on('click', function(params) {
                 if(!params.name) return;
+
+                // Track selected element globally for conditional animations across independent blocks
+                window.sivoSelectedElements = window.sivoSelectedElements || {};
+                window.sivoSelectedElements['global_selected_chart'] = chartId;
 
                 const viewData = viewsData[chartId];
                 if (!viewData || !viewData.actions_manifest) return;
@@ -2231,7 +2255,7 @@
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "# Welcome\\nThis is a placeholder text for the welcome panel.\n", "show_element_name": false, "title": ""}};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "### We are lucky here. \nThe prevailing winds that breeze over a dominantly rural landscape, combined with our low population density and a small number of industrial emissions, likely enable the Horizons Region to experience good air quality.  \n\nHowever, some of the activities we practice can put the region\u2019s air quality at risk. \n\nExplore the following pages to learn more about the latest state and trends of air in the Horizons Region.\n", "show_element_name": false, "title": "", "update_on_click": true}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
@@ -2247,7 +2271,14 @@
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
-                        const showName = detailsConfig[blockId] ? detailsConfig[blockId].show_element_name !== false : true;
+                        const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
+                        const showName = dConf.show_element_name !== false;
                         const container = panel.querySelector('.sivo-details-content');
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
@@ -2257,6 +2288,12 @@
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
                         const dConf = detailsConfig[blockId] || {};
+
+                        // Skip updating if update_on_click is explicitly set to false
+                        if (dConf.update_on_click === false) {
+                            return;
+                        }
+
                         const showName = dConf.show_element_name !== false;
                         const payloadKey = dConf.payload_key;
                         const container = panel.querySelector('.sivo-details-content');
