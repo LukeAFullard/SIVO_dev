@@ -360,16 +360,6 @@ for icon in icons:
 
     blank_name = " "
 
-    # configure circular shape overlay
-    sivo_app.add_shape("circle", {
-        "id": "img_interact",
-        "name": blank_name,
-        "cx": str(offset + size / 2),
-        "cy": str(offset + size / 2),
-        "r": str(size / 2),
-        "fill": "rgba(255,255,255,0.01)"
-    })
-
     sivo_app.add_image_rect(
         element_id="img_vis",
         image_url=icon["img"],
@@ -379,6 +369,16 @@ for icon in icons:
         y=str(offset),
         preserve_aspect_ratio="xMidYMid meet"
     )
+
+    # configure circular shape overlay
+    sivo_app.add_shape("circle", {
+        "id": "img_interact",
+        "name": blank_name,
+        "cx": str(offset + size / 2),
+        "cy": str(offset + size / 2),
+        "r": str(size / 2),
+        "fill": "rgba(255,255,255,0.01)"
+    })
 
     payload = {
         "details_md": icon["md"],
