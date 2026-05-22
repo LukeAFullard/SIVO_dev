@@ -114,28 +114,39 @@ for icon in icons:
     # Set the name to " " so that the Details Panel header appears blank, as requested.
     blank_name = " "
 
-    sivo_app.add_shape("rect", {
+    sivo_app.add_shape("circle", {
         "id": "img_interact",
         "name": blank_name,
-        "x": str(offset),
-        "y": str(offset),
-        "width": str(size),
-        "height": str(size),
-        "fill": "rgba(255,255,255,0.01)", # ECharts hit testing requires non-transparent!
-        "rx": "5",
-        "ry": "5"
+        "cx": str(offset + size / 2),
+        "cy": str(offset + size / 2),
+        "r": str(size / 2),
+        "fill": "rgba(255,255,255,0.01)"
     })
 
-    # Map the interactive layer using the blank name. Set hover_color to transparent.
+    # map img_vis
+    sivo_app.map(
+        "img_vis",
+        tooltip=icon["hover"],
+        markdown=icon["md"],
+        color="rgba(255,255,255,0.01)",
+        border_color="transparent",
+        border_width=3,
+        hover_color="transparent",
+        glow=False,
+        fade_pulse=False
+    )
+
+    # map blank_name for pulsing
     sivo_app.map(
         blank_name,
         tooltip=icon["hover"],
         markdown=icon["md"],
-        color="rgba(255,255,255,0.01)",   # Keep it mostly invisible but hit-testable
-        border_color="transparent",       # No border by default
-        border_width=3,                   # Give it thickness so hover is visible
-        hover_color="transparent",        # No highlight on hover
-        glow=False                        # No shadow/glow on hover to prevent highlight
+        color="transparent",
+        border_color="#ccffcc",
+        border_width=8,
+        hover_color="transparent",
+        glow=True,
+        fade_pulse=True
     )
 
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
