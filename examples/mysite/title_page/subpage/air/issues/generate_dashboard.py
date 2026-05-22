@@ -1,5 +1,10 @@
 import sys
 import os
+import subprocess
+
+# Run the sub-dashboard generator first
+sub_dashboard_script = os.path.join(os.path.dirname(__file__), "generate_sub_dashboard.py")
+subprocess.run([sys.executable, sub_dashboard_script], check=True)
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../../')))
 
