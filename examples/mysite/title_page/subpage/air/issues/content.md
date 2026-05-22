@@ -1,1 +1,1 @@
-# Select an issue to view details.
+### Click a question to learn about air quality.
