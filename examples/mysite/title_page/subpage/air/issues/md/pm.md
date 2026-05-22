@@ -7,4 +7,4 @@ Scientists classify particulate matter (PM) by the following sizes:
 * **PM<sub>10</sub>** particles are smaller than 10 micrometres ($\mu\text{m}$) across
 * **PM<sub>2.5</sub>** particles are smaller than 2.5 micrometres ($\mu\text{m}$) across.
 
-These particles are between five times smaller (for PM10) and 20 to 28 times smaller (for PM2.5) than a single strand of human hair (which is approximately $50\text{–}70\ \mu\text{m}$ across).
+These particles are between five times smaller (for PM<sub>10</sub>) and 20 to 28 times smaller (for PM<sub>2.5</sub>) than a single strand of human hair (which is approximately $50\text{–}70\ \mu\text{m}$ across).
