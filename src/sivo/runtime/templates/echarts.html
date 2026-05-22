@@ -2864,11 +2864,28 @@
                             var delay = item.fade_start_time_ms || 0;
                             var duration = item.fade_duration_ms || 5000;
 
+                            var selectedChart = null;
+                            if (window.sivoSelectedElements) {
+                                selectedChart = window.sivoSelectedElements['global_selected_chart'];
+                            } else if (window.parent && window.parent.sivoSelectedElements) {
+                                selectedChart = window.parent.sivoSelectedElements['global_selected_chart'];
+                            }
+
+                            var shouldPulse = true;
+                            if (selectedChart) {
+                                var myId = typeof currentViewId !== 'undefined' ? currentViewId : null;
+                                if (myId && myId !== selectedChart) {
+                                    shouldPulse = false;
+                                }
+                            }
+
                             if (elapsed > delay) {
-                                // Sine wave oscillation
-                                // We map it from 0 to 1 back and forth.
-                                var progress = (elapsed - delay) / duration;
-                                var opacity = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+                                var opacity = 0.0; // unselected
+                                if (shouldPulse) {
+                                    var progress = (elapsed - delay) / duration;
+                                    var sine = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2; // 0 to 1
+                                    opacity = sine; // pulse between 0.0 and 1.0
+                                }
 
                                 if (!item.itemStyle) item.itemStyle = {};
                                 if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
@@ -2880,11 +2897,13 @@
                                             var tag = domNode.tagName.toLowerCase();
                                             if (true) {
                                                 domNode.setAttribute('fill-opacity', opacity);
+                                                domNode.setAttribute('stroke-opacity', opacity);
 
                                                 var textChildren = domNode.querySelectorAll('text, tspan');
                                                 textChildren.forEach(child => {
                                                     child.setAttribute('opacity', opacity);
                                                     child.setAttribute('fill-opacity', opacity);
+                                                    child.setAttribute('stroke-opacity', opacity);
                                                 });
                                             }
                                         }
