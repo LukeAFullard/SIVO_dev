@@ -41,9 +41,11 @@ dashboard = SivoDashboard(
 with open(os.path.join(os.path.dirname(__file__), "content.md"), "r", encoding="utf-8") as f:
     md_content = f.read()
 
+import urllib.parse
+
 def read_md(name):
     with open(os.path.join(os.path.dirname(__file__), "md", name + ".md"), "r", encoding="utf-8") as f:
-        return f.read().replace('`', '\\`')
+        return f.read()
 
 desktop_grid = """
 'banner banner banner'
@@ -90,12 +92,13 @@ dashboard.add_details_panel(
 
 # Function to generate an interactive block using raw HTML that mimics details panel trigger behavior.
 def add_interactive_text_block(block_id, text, md_name, grid_area, delay_ms):
-    md_escaped = read_md(md_name)
+    md_content = read_md(md_name)
+    encoded_md = urllib.parse.quote(md_content)
     html_content = f'''
     <div onclick="
         const panel = document.querySelector('.sivo-details-panel[data-block-id=\\\'markdown\\\'] .sivo-details-content');
         if(panel) {{
-            panel.innerHTML = marked.parse(`{md_escaped}`);
+            panel.innerHTML = marked.parse(decodeURIComponent('{encoded_md}'));
         }}
     " style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold; color: #333; background-color: #f0f8ff; border: 2px solid #87cefa; border-radius: 15px; text-align: center; box-sizing: border-box; cursor: pointer;">
         {text}
