@@ -376,16 +376,13 @@ for icon in icons:
 
     blank_name = " "
 
-    sivo_app.add_shape("rect", {
+    sivo_app.add_shape("circle", {
         "id": "img_interact",
         "name": blank_name,
-        "x": str(offset),
-        "y": str(offset),
-        "width": str(size),
-        "height": str(size),
-        "fill": "rgba(255,255,255,0.01)",
-        "rx": "5",
-        "ry": "5"
+        "cx": str(offset + size / 2),
+        "cy": str(offset + size / 2),
+        "r": str(size / 2),
+        "fill": "rgba(255,255,255,0.01)"
     })
 
     payload = {
@@ -397,15 +394,31 @@ for icon in icons:
         "map_html": icon["map_html"]
     }
 
+
+    # map img_vis
     sivo_app.map(
-        blank_name,
+        "img_vis",
         tooltip=icon["hover"],
         callback_payload=payload,
         color="rgba(255,255,255,0.01)",
         border_color="transparent",
         border_width=3,
         hover_color="transparent",
-        glow=False
+        glow=False,
+        fade_pulse=False
+    )
+
+    # map blank_name for pulsing
+    sivo_app.map(
+        blank_name,
+        tooltip=icon["hover"],
+        callback_payload=payload,
+        color="transparent",
+        border_color="#ccffcc",
+        border_width=8,
+        hover_color="transparent",
+        glow=True,
+        fade_pulse=True
     )
 
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
