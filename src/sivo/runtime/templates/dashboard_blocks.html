@@ -2034,14 +2034,16 @@
                             // If an element is selected, only pulse the selected one
                             var shouldPulse = true;
                             if (selectedChart) {
-                                shouldPulse = (chartId === selectedChart);
+                                shouldPulse = (blockId === selectedChart);
                             }
 
                             if (elapsed > delay) {
-                                var opacity = 1.0;
+                                var opacity = 1.0; // unselected
                                 if (shouldPulse) {
                                     var progress = (elapsed - delay) / duration;
-                                    opacity = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+                                    var pulseRange = 0.5; // oscillate between 0.5 and 1.0
+                                    var sine = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2; // 0 to 1
+                                    opacity = 1.0 - (pulseRange * (1.0 - sine)); // peaks at 1.0, dips to 0.5
                                 }
 
                                 if (!item.itemStyle) item.itemStyle = {};

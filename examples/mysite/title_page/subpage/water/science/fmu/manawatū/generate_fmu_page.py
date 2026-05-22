@@ -358,6 +358,17 @@ for icon in icons:
     size = 75
     offset = (100 - size) / 2
 
+    blank_name = " "
+
+    sivo_app.add_shape("circle", {
+        "id": "img_interact",
+        "name": blank_name,
+        "cx": str(offset + size / 2),
+        "cy": str(offset + size / 2),
+        "r": str(size / 2),
+        "fill": "rgba(255,255,255,0.01)"
+    })
+
     sivo_app.add_image_rect(
         element_id="img_vis",
         image_url=icon["img"],
@@ -367,20 +378,6 @@ for icon in icons:
         y=str(offset),
         preserve_aspect_ratio="xMidYMid meet"
     )
-
-    blank_name = " "
-
-    sivo_app.add_shape("rect", {
-        "id": "img_interact",
-        "name": blank_name,
-        "x": str(offset),
-        "y": str(offset),
-        "width": str(size),
-        "height": str(size),
-        "fill": "rgba(255,255,255,0.01)",
-        "rx": "5",
-        "ry": "5"
-    })
 
     payload = {
         "details_md": icon["md"],
@@ -392,7 +389,7 @@ for icon in icons:
     }
 
     sivo_app.map(
-        blank_name,
+        "img_vis",
         tooltip=icon["hover"],
         callback_payload=payload,
         color="rgba(255,255,255,0.01)",
@@ -400,6 +397,18 @@ for icon in icons:
         border_width=3,
         hover_color="transparent",
         glow=False,
+        fade_pulse=False
+    )
+
+    sivo_app.map(
+        blank_name,
+        tooltip=icon["hover"],
+        callback_payload=payload,
+        color="transparent",
+        border_color="#772981",
+        border_width=4,
+        hover_color="transparent",
+        glow=True,
         fade_pulse=True
     )
 
