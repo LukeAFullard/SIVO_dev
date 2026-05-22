@@ -360,6 +360,7 @@ for icon in icons:
 
     blank_name = " "
 
+    # configure circular shape overlay
     sivo_app.add_shape("circle", {
         "id": "img_interact",
         "name": blank_name,
@@ -388,6 +389,7 @@ for icon in icons:
         "map_html": icon["map_html"]
     }
 
+    # map img_vis
     sivo_app.map(
         "img_vis",
         tooltip=icon["hover"],
@@ -400,6 +402,7 @@ for icon in icons:
         fade_pulse=False
     )
 
+    # map blank_name for pulsing
     sivo_app.map(
         blank_name,
         tooltip=icon["hover"],
