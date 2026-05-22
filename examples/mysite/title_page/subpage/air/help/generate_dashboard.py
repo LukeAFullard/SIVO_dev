@@ -119,16 +119,16 @@ good_air.map(element_id="outside_wood", tooltip="Click me!", fade_pulse=True)
 good_air.map(element_id="heatpump", tooltip="Click me!", fade_pulse=True)
 
 
-dashboard.add_html_block(
+dashboard.add_sivo_block(
     block_id="bad",
-    html_content=f'<div style="background-color: white; width: 100%; height: 100%;">{bad_air.to_html()}</div>',
+    sivo_app=bad_air,
     col_span=2,
     grid_area="bad",
 )
 
-dashboard.add_html_block(
+dashboard.add_sivo_block(
     block_id="good",
-    html_content=f'<div style="background-color: white; width: 100%; height: 100%;">{good_air.to_html()}</div>',
+    sivo_app=good_air,
     col_span=2,
     grid_area="good",
 )
