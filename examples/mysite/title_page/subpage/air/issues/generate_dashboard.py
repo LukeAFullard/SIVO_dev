@@ -42,9 +42,11 @@ def read_md(name):
 
 desktop_grid = """
 'banner banner banner'
+'. markdown markdown'
 'pm markdown markdown'
 'importance markdown markdown'
 'influences markdown markdown'
+'. markdown markdown'
 """
 
 mobile_grid = """
