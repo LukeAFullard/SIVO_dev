@@ -102,10 +102,10 @@ bad_air.add_svg_background_image(
     url="../../../assets/air/bad_air_q.png",
     insert_after="background"
 )
-bad_air.map(element_id="burnoff", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("burnoff"))
-bad_air.map(element_id="vehicle", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("vehicle"))
-bad_air.map(element_id="wet_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("wet_wood"))
-bad_air.map(element_id="bad_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("bad_fireplace"))
+bad_air.map(element_id="burnoff", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("burnoff"))
+bad_air.map(element_id="vehicle", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("vehicle"))
+bad_air.map(element_id="wet_wood", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("wet_wood"))
+bad_air.map(element_id="bad_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("bad_fireplace"))
 
 good_air_svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/air/good_air_quality.svg"))
 good_air = Sivo.from_svg(
@@ -126,11 +126,11 @@ good_air.add_svg_background_image(
     url="../../../assets/air/good_air_q.png",
     insert_after="background"
 )
-good_air.map(element_id="Good_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("Good_fireplace"))
-good_air.map(element_id="split_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("split_wood"))
-good_air.map(element_id="good_transport", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("good_transport"))
-good_air.map(element_id="outside_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("outside_wood"))
-good_air.map(element_id="heatpump", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("heatpump"))
+good_air.map(element_id="Good_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("Good_fireplace"))
+good_air.map(element_id="split_wood", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("split_wood"))
+good_air.map(element_id="good_transport", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("good_transport"))
+good_air.map(element_id="outside_wood", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("outside_wood"))
+good_air.map(element_id="heatpump", tooltip="Click me!", fade_pulse=True, glow=True, hover_color="rgba(255, 255, 255, 0.8)", markdown=read_md("heatpump"))
 
 
 dashboard.add_sivo_block(
