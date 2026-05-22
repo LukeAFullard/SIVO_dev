@@ -9,7 +9,6 @@ You can see that in winter, when temperatures drop (the red line), PM<sub>10</su
 
 <iframe src="../../../assets/air/air_quality_line_race.html" width="100%" height="920px" style="border:none; border-radius:10px;"></iframe>
 <figure>
-  <img src="image-url.jpg" alt="Description for screen readers">
   <figcaption>Figure 1. PM<sub>10</sub> concentrations (µg/m3) and temperature (°C) in Taumarunui for the period December 2022 to December 2025. </figcaption>
 </figure>
 
