@@ -36,6 +36,11 @@ dashboard = SivoDashboard(
 with open(os.path.join(os.path.dirname(__file__), "content.md"), "r", encoding="utf-8") as f:
     md_content = f.read()
 
+
+def read_md(name):
+    with open(os.path.join(os.path.dirname(__file__), "md", name + ".md"), "r", encoding="utf-8") as f:
+        return f.read()
+
 desktop_grid = """
 'banner banner banner banner'
 '. markdown markdown .'
@@ -88,16 +93,19 @@ bad_air = Sivo.from_svg(
     disable_resizer=True,
     lock_zoom_out=True,
     lock_scroll_bounds=True,
-    transparent_template_lines=True
+    transparent_template_lines=True,
+    default_panel_position="overlay",
+    panel_width="90%",
+    panel_height="90%",
 )
 bad_air.add_svg_background_image(
     url="../../../assets/air/bad_air_q.png",
     insert_after="background"
 )
-bad_air.map(element_id="burnoff", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
-bad_air.map(element_id="vehicle", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
-bad_air.map(element_id="wet_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
-bad_air.map(element_id="bad_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
+bad_air.map(element_id="burnoff", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("burnoff"))
+bad_air.map(element_id="vehicle", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("vehicle"))
+bad_air.map(element_id="wet_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("wet_wood"))
+bad_air.map(element_id="bad_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("bad_fireplace"))
 
 good_air_svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/air/good_air_quality.svg"))
 good_air = Sivo.from_svg(
@@ -109,17 +117,20 @@ good_air = Sivo.from_svg(
     disable_resizer=True,
     lock_zoom_out=True,
     lock_scroll_bounds=True,
-    transparent_template_lines=True
+    transparent_template_lines=True,
+    default_panel_position="overlay",
+    panel_width="90%",
+    panel_height="90%",
 )
 good_air.add_svg_background_image(
     url="../../../assets/air/good_air_q.png",
     insert_after="background"
 )
-good_air.map(element_id="Good_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
-good_air.map(element_id="split_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
-good_air.map(element_id="good_transport", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
-good_air.map(element_id="outside_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
-good_air.map(element_id="heatpump", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0)
+good_air.map(element_id="Good_fireplace", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("Good_fireplace"))
+good_air.map(element_id="split_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("split_wood"))
+good_air.map(element_id="good_transport", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("good_transport"))
+good_air.map(element_id="outside_wood", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("outside_wood"))
+good_air.map(element_id="heatpump", tooltip="Click me!", fade_pulse=True, glow=True, border_color="rgba(255, 255, 255, 0.8)", border_width=2.0, markdown=read_md("heatpump"))
 
 
 dashboard.add_sivo_block(
