@@ -397,19 +397,19 @@ for icon in icons:
         border_width=3,
         hover_color="transparent",
         glow=False,
-        fade_pulse=True
+        fade_pulse=False
     )
 
     sivo_app.map(
         blank_name,
         tooltip=icon["hover"],
         callback_payload=payload,
-        color="rgba(255,255,255,0.01)",
-        border_color="transparent",
-        border_width=3,
+        color="transparent",
+        border_color="#772981",
+        border_width=4,
         hover_color="transparent",
-        glow=False,
-        fade_pulse=False
+        glow=True,
+        fade_pulse=True
     )
 
     dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
