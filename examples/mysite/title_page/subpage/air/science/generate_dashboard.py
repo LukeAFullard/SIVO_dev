@@ -114,12 +114,13 @@ svg_content = f"""
 </svg>
 """
 
-sivo_app = Sivo.from_string(svg_content, render_mode="svg")
+sivo_app = Sivo.from_string(svg_content, render_mode="svg", transparent_template_lines=True)
 sivo_app.map(
     element_id="taihape_val",
     odometer_value=taihape_exc_val,
     odometer_duration_ms=2500,
-    odometer_format="int"
+    odometer_format="int",
+    color="transparent"
 )
 
 dashboard.add_sivo_block(

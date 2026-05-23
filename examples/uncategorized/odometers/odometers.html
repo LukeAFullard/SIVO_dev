@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'self' https: data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; connect-src 'self' https: wss: ws: data:; object-src 'none'; frame-src 'self' https: data:;">
     <title>SIVO Interactive Graphic</title>
 
 
@@ -478,7 +478,7 @@
             max-height: 300px;
             overflow-y: auto;
             display: none;
-            z-index: 1001;
+            z-index: 9998;
         }
 
         .sivo-search-result-item {
@@ -612,7 +612,7 @@
             max-height: 300px;
             overflow-y: auto;
             display: none;
-            z-index: 1001;
+            z-index: 9998;
         }
 
 
@@ -815,6 +815,115 @@
             animation: sivo-overlay-roll-out 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+
+        /* Navigation Menu Styles */
+        .sivo-nav-btn {
+            position: fixed;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            color: #475569;
+            z-index: 9999;
+            transition: all 0.2s ease;
+        }
+        .sivo-nav-btn:hover {
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+        .sivo-nav-menu {
+            position: fixed;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 8px 0;
+            min-width: 200px;
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .sivo-nav-menu.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .sivo-nav-item {
+            padding: 10px 20px;
+            color: #334155;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .sivo-nav-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+
+        .sivo-nav-subitem {
+            padding: 8px 20px 8px 40px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .sivo-nav-subitem:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem {
+            color: #94a3b8;
+        }
+        body.sivo-theme-dark .sivo-nav-subitem:hover {
+            background: #334155;
+            color: #f8fafc;
+        }
+        .sivo-nav-header {
+            padding: 10px 20px 5px 20px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        body.sivo-theme-dark .sivo-nav-header {
+            color: #64748b;
+        }
+        /* Dark Theme Support */
+        body.sivo-theme-dark .sivo-nav-btn {
+            background: #1e293b;
+            border-color: #334155;
+            color: #cbd5e1;
+        }
+        body.sivo-theme-dark .sivo-nav-btn:hover {
+            background: #334155;
+        }
+        body.sivo-theme-dark .sivo-nav-menu {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        body.sivo-theme-dark .sivo-nav-item {
+            color: #cbd5e1;
+        }
+        body.sivo-theme-dark .sivo-nav-item:hover {
+            background: #334155;
+            color: #f8fafc;
+        }
+
         /* Responsive Layout Overrides */
         .mobile-handle {
             display: none;
@@ -869,7 +978,8 @@
                 top: 10px !important;
                 right: 10px !important;
             }
-            .zoom-controls {
+
+        .zoom-controls {
                 right: 10px !important;
                 bottom: 40px !important;
                 z-index: 1001 !important;
@@ -1105,6 +1215,7 @@
             background: #e2e8f0;
             color: #0f172a;
         }
+
         .zoom-controls {
             position: absolute;
             bottom: 20px;
@@ -1539,6 +1650,16 @@
         .sivo-anim-blocks:nth-child(7) { animation-delay: 0.3s; }
         .sivo-anim-blocks:nth-child(8) { animation-delay: 0.4s; }
         .sivo-anim-blocks:nth-child(9) { animation-delay: 0.5s; }
+    .sivo-a11y-target:focus {
+            outline: 3px solid #3b82f6 !important;
+            outline-offset: 2px !important;
+        }
+        .sivo-a11y-target {
+            outline: none;
+            background: transparent;
+            color: transparent;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -1548,7 +1669,7 @@
         <div id="chart-wrapper">
             <img id="sivo-background-image" src="" alt="Background" />
             <img id="sivo-border-image" src="" alt="Border" />
-            <div id="a11y-container" class="sr-only"></div>
+            <div id="a11y-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100;"></div>
             <div id="sivo-watermark-container"></div>
             <div id="sivo-context-menu"></div>
             <div id="sivo-global-loading" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999; background:rgba(255,255,255,0.9); padding:20px 40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.1); font-weight:bold; color:#333; align-items:center; gap:10px;">
@@ -1566,6 +1687,7 @@
                 <input type="text" id="sivo-geocoder-input" placeholder="Search address or place..." autocomplete="off">
                 <div class="sivo-geocoder-spinner" id="sivo-geocoder-spinner"></div>
                 <div id="sivo-geocoder-results"></div>
+                <div id="sivo-geocoder-attribution" style="display:none; font-size: 10px; color: #64748b; text-align: center; padding-top: 4px;">Data © OpenStreetMap contributors, ODbL 1.0.</div>
             </div>
 
             <div id="sivo-title-container">
@@ -1664,7 +1786,7 @@
         var chartDom = document.getElementById('chart-container');
 
         // Multi-view data injected from Python
-        var viewsData = {"default_view":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\" style=\"background:#0f172a;\"\u003e\n  \u003crect id=\"kpi_box1\" x=\"100\" y=\"200\" width=\"300\" height=\"200\" fill=\"#1e293b\" rx=\"10\" name=\"kpi_box1\"/\u003e\n  \u003ctext x=\"250\" y=\"260\" font-size=\"24\" fill=\"#94a3b8\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eTotal Revenue\u003c/text\u003e\n  \u003ctext id=\"revenue_val\" x=\"250\" y=\"340\" font-size=\"64\" fill=\"#38bdf8\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"revenue_val\"\u003e0\u003c/text\u003e\n\n  \u003crect id=\"kpi_box2\" x=\"600\" y=\"200\" width=\"300\" height=\"200\" fill=\"#1e293b\" rx=\"10\" name=\"kpi_box2\"/\u003e\n  \u003ctext x=\"750\" y=\"260\" font-size=\"24\" fill=\"#94a3b8\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eActive Users\u003c/text\u003e\n  \u003ctext id=\"users_val\" x=\"750\" y=\"340\" font-size=\"64\" fill=\"#10b981\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"users_val\"\u003e0\u003c/text\u003e\n\u003c/svg\u003e","echarts_data":[{"name":"kpi_box1","value":1,"itemStyle":{"areaColor":"#1e293b"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"revenue_val","value":1,"itemStyle":{"areaColor":"#38bdf8"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"kpi_box2","value":1,"itemStyle":{"areaColor":"#1e293b"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"users_val","value":1,"itemStyle":{"areaColor":"#10b981"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"revenue_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"revenue_val"}],"users_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"users_val"}]},"overlays":{},"metadata":{"objects":[{"id":"kpi_box1","type":"rect","bbox":[100.0,200.0,400.0,400.0]},{"id":"revenue_val","type":"text"},{"id":"kpi_box2","type":"rect","bbox":[600.0,200.0,900.0,400.0]},{"id":"users_val","type":"text"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","starting_zoom":1.0,"lock_canvas":false,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[1000.0,600.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"mappings":{"kpi_box1":{"id":"kpi_box1","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#1e293b","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"revenue_val":{"id":"revenue_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"revenue_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#38bdf8","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":124500.5,"odometer_duration_ms":3000,"odometer_format":"currency"}},"kpi_box2":{"id":"kpi_box2","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#1e293b","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"users_val":{"id":"users_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"users_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#10b981","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":8432,"odometer_duration_ms":2500,"odometer_format":"int"}}}}};
+        var viewsData = {"default_view":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 600\" style=\"background:#0f172a;\"\u003e\n  \u003crect id=\"kpi_box1\" x=\"100\" y=\"200\" width=\"300\" height=\"200\" fill=\"#1e293b\" rx=\"10\" name=\"kpi_box1\"/\u003e\n  \u003ctext x=\"250\" y=\"260\" font-size=\"24\" fill=\"#94a3b8\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eTotal Revenue\u003c/text\u003e\n  \u003ctext id=\"revenue_val\" x=\"250\" y=\"340\" font-size=\"64\" fill=\"#38bdf8\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"revenue_val\"\u003e0\u003c/text\u003e\n\n  \u003crect id=\"kpi_box2\" x=\"600\" y=\"200\" width=\"300\" height=\"200\" fill=\"#1e293b\" rx=\"10\" name=\"kpi_box2\"/\u003e\n  \u003ctext x=\"750\" y=\"260\" font-size=\"24\" fill=\"#94a3b8\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eActive Users\u003c/text\u003e\n  \u003ctext id=\"users_val\" x=\"750\" y=\"340\" font-size=\"64\" fill=\"#10b981\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"users_val\"\u003e0\u003c/text\u003e\n\u003c/svg\u003e","echarts_data":[{"name":"kpi_box1","value":1,"itemStyle":{"areaColor":"#1e293b"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"revenue_val","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"kpi_box2","value":1,"itemStyle":{"areaColor":"#1e293b"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"users_val","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent"},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"revenue_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"revenue_val"}],"users_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"users_val"}]},"overlays":{},"metadata":{"objects":[{"id":"kpi_box1","type":"rect","bbox":[100.0,200.0,400.0,400.0]},{"id":"revenue_val","type":"text"},{"id":"kpi_box2","type":"rect","bbox":[600.0,200.0,900.0,400.0]},{"id":"users_val","type":"text"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":false,"disable_tooltips":false,"disable_zoom_controls":false,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":false,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[1000.0,600.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":false,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"kpi_box1":{"id":"kpi_box1","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#1e293b","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"revenue_val":{"id":"revenue_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"revenue_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":124500.5,"odometer_duration_ms":3000,"odometer_format":"currency"}},"kpi_box2":{"id":"kpi_box2","actions":[],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"#1e293b","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":null,"transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":null,"odometer_duration_ms":2000,"odometer_format":null}},"users_val":{"id":"users_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"users_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":8432,"odometer_duration_ms":2500,"odometer_format":"int"}}}}};
         var currentViewId = "default_view";
 
         // Check if we are in Compare Mode
@@ -1881,20 +2003,25 @@
         var currentCenter = null;
 
         function calculateLayoutSize(view, domElement) {
-            if (!view || !view.layout_size || typeof view.layout_size !== 'string' || !view.layout_size.endsWith('%')) {
-                return view ? view.layout_size : undefined;
+            var layoutSize = view ? view.layout_size : undefined;
+            if (window.innerWidth <= 900 && view && view.mobile_layout_size) {
+                layoutSize = view.mobile_layout_size;
             }
 
-            if (!domElement) return view.layout_size;
+            if (!layoutSize || typeof layoutSize !== 'string' || !layoutSize.endsWith('%')) {
+                return layoutSize;
+            }
+
+            if (!domElement) return layoutSize;
 
             var containerWidth = domElement.clientWidth;
             var containerHeight = domElement.clientHeight;
 
             if (containerWidth <= 0 || containerHeight <= 0) {
-                return view.layout_size;
+                return layoutSize;
             }
 
-            var fraction = parseFloat(view.layout_size.replace('%', '')) / 100.0;
+            var fraction = parseFloat(layoutSize.replace('%', '')) / 100.0;
 
             var svgW = 1000;
             var svgH = 1000;
@@ -1982,7 +2109,7 @@
                     },
                     formatter: function (params) {
                         var dataIndex = echartsData.findIndex(item => item.name === params.name);
-                        var tooltipContent = params.name;
+                        var tooltipContent = "";
 
                         if (dataIndex !== -1 && echartsData[dataIndex].tooltip) {
                             tooltipContent = echartsData[dataIndex].tooltip;
@@ -1991,8 +2118,13 @@
                         if (dataBinding && dataBinding.data && dataBinding.data[params.name]) {
                             var val = dataBinding.data[params.name][dataBinding.key];
                             if (val !== undefined) {
+                                if (!tooltipContent) tooltipContent = params.name;
                                 tooltipContent += '<br/>' + dataBinding.key + ': <b>' + val + '</b>';
                             }
+                        }
+
+                        if (!tooltipContent) {
+                            return "";
                         }
 
                         return tooltipContent;
@@ -2006,9 +2138,9 @@
                         roam: view.lock_canvas ? false : true, // Enable zoom and pan
                         label: { show: false },
                         itemStyle: {
-                            borderColor: '#cbd5e1', // Sleek slate-300
-                            borderWidth: 1,
-                            areaColor: '#f1f5f9' // Subtle slate-100
+                            borderColor: view.transparent_template_lines ? 'transparent' : '#cbd5e1', // Sleek slate-300
+                            borderWidth: view.transparent_template_lines ? 0 : 1,
+                            areaColor: (view.theme === 'transparent' || view.transparent_template_lines) ? 'transparent' : '#f1f5f9' // Subtle slate-100
                         },
                         emphasis: {
                             disabled: false
@@ -2626,6 +2758,7 @@
         }
 
         var animationInterval = null;
+        var animationFrameId = null;
 
         function applyAnimations() {
             // Clear any existing interval to prevent memory leaks and erratic stacked animations during drill-downs
@@ -2633,14 +2766,10 @@
                 clearInterval(animationInterval);
                 animationInterval = null;
             }
-
-            // ECharts uses Canvas or SVG.
-            // If it's SVG renderer, we can apply classes.
-            // But since ECharts defaults to canvas, animating individual geo regions via CSS is hard.
-            // ECharts doesn't support CSS animations on canvas paths easily.
-            // If an animation is set, we will use setInterval to mutate the ECharts option instead for basic effects,
-            // or if it's rendered as SVG (which echarts map allows), we can query the dom.
-            // For now, if we want robust canvas animation, we just toggle emphasis state.
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
 
             var option = myChart.getOption();
             var seriesData = option.series[0].data;
@@ -2648,85 +2777,188 @@
 
             if (animatedItems.length === 0) return;
 
-            // Simple toggle for 'pulse' or 'fade' via ECharts itemStyle opacity
-            // We use animation_duration_ms if available, default to 1000
-            // If we have items with different durations, ideally we'd have separate intervals,
-            // but for simplicity we'll just pick the first valid animation_duration_ms
             var pulseIntervalMs = 1000;
             var customItem = animatedItems.find(d => d.animation_duration_ms && d.animation_class === 'pulse');
             if (customItem) {
                 pulseIntervalMs = customItem.animation_duration_ms;
             }
 
-            let toggle = false;
-            animationInterval = setInterval(() => {
-                toggle = !toggle;
-                var currentOption = myChart.getOption();
-                var currentData = currentOption.series[0].data;
-                var updated = false;
+            // Continuous animation loop using requestAnimationFrame
+            // Particularly handles 'fade_in' and 'fade_pulse' perfectly smoothly
+            var hasSmoothFade = animatedItems.some(d => d.animation_class === 'fade_in' || d.animation_class === 'fade_pulse');
+            var hasLegacyAnim = animatedItems.some(d => d.animation_class === 'fade' || d.animation_class === 'pulse');
 
-                currentData.forEach((item, index) => {
-                    if (item.animation_class === 'fade') {
-                        // Fade should just happen once and stay faded
-                        if (!item._has_faded) {
+            if (hasSmoothFade) {
+                var startTime = performance.now();
+
+                function animateFade() {
+                    var currentTime = performance.now();
+                    var elapsed = currentTime - startTime;
+                    var currentOption = myChart.getOption();
+                    var currentData = currentOption.series[0].data;
+                    var updated = false;
+
+                    currentData.forEach((item, index) => {
+                        if (item.animation_class === 'fade_in') {
+                            var delay = item.fade_start_time_ms || 0;
+                            var duration = item.fade_duration_ms || 5000;
+
+                            if (elapsed > delay) {
+                                var progress = (elapsed - delay) / duration;
+                                if (progress > 1) progress = 1;
+
+                                // Easing: Sine wave calculation for standard fade
+                                var opacity = Math.sin(progress * Math.PI / 2);
+
+                                if (!item.itemStyle) item.itemStyle = {};
+                                // Only update if changed significantly to avoid spamming setOption
+                                if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
+                                    item.itemStyle.opacity = opacity;
+                                    var domNodes = document.querySelectorAll(`[id="${item.name}"], [name="${item.name}"]`);
+                                    domNodes.forEach(domNode => {
+                                        if (domNode && domNode.tagName) {
+                                            domNode.setAttribute('opacity', opacity);
+                                            var tag = domNode.tagName.toLowerCase();
+                                            if (true) {
+                                                domNode.setAttribute('fill-opacity', opacity);
+
+                                                // Cascade down to any text/tspan children
+                                                var textChildren = domNode.querySelectorAll('text, tspan');
+                                                textChildren.forEach(child => {
+                                                    child.setAttribute('opacity', opacity);
+                                                    child.setAttribute('fill-opacity', opacity);
+                                                });
+                                            }
+                                        }
+                                    });
+                                    updated = true;
+                                }
+                            }
+                        } else if (item.animation_class === 'fade_pulse') {
+                            var delay = item.fade_start_time_ms || 0;
+                            var duration = item.fade_duration_ms || 5000;
+
+                            var selectedChart = null;
+                            if (window.sivoSelectedElements) {
+                                selectedChart = window.sivoSelectedElements['global_selected_chart'];
+                            } else if (window.parent && window.parent.sivoSelectedElements) {
+                                selectedChart = window.parent.sivoSelectedElements['global_selected_chart'];
+                            }
+
+                            var shouldPulse = true;
+                            if (selectedChart) {
+                                var myId = typeof currentViewId !== 'undefined' ? currentViewId : null;
+                                if (myId && myId !== selectedChart) {
+                                    shouldPulse = false;
+                                }
+                            }
+
+                            if (elapsed > delay) {
+                                var opacity = 0.0; // unselected
+                                if (shouldPulse) {
+                                    var progress = (elapsed - delay) / duration;
+                                    var sine = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2; // 0 to 1
+                                    opacity = sine; // pulse between 0.0 and 1.0
+                                }
+
+                                if (!item.itemStyle) item.itemStyle = {};
+                                if (Math.abs((item.itemStyle.opacity || 0) - opacity) > 0.01) {
+                                    item.itemStyle.opacity = opacity;
+                                    var domNodes = document.querySelectorAll(`[id="${item.name}"], [name="${item.name}"]`);
+                                    domNodes.forEach(domNode => {
+                                        if (domNode && domNode.tagName) {
+                                            domNode.setAttribute('opacity', opacity);
+                                            var tag = domNode.tagName.toLowerCase();
+                                            if (true) {
+                                                domNode.setAttribute('fill-opacity', opacity);
+                                                domNode.setAttribute('stroke-opacity', opacity);
+
+                                                var textChildren = domNode.querySelectorAll('text, tspan');
+                                                textChildren.forEach(child => {
+                                                    child.setAttribute('opacity', opacity);
+                                                    child.setAttribute('fill-opacity', opacity);
+                                                    child.setAttribute('stroke-opacity', opacity);
+                                                });
+                                            }
+                                        }
+                                    });
+                                    updated = true;
+                                }
+                            }
+                        }
+                    });
+
+                    if (updated) {
+                        myChart.setOption({
+                            series: [{
+                                animationDurationUpdate: 0,
+                                data: currentData
+                            }]
+                        });
+                    }
+
+                    animationFrameId = requestAnimationFrame(animateFade);
+                }
+
+                animationFrameId = requestAnimationFrame(animateFade);
+            }
+
+            if (hasLegacyAnim) {
+                let toggle = false;
+                animationInterval = setInterval(() => {
+                    toggle = !toggle;
+                    var currentOption = myChart.getOption();
+                    var currentData = currentOption.series[0].data;
+                    var updated = false;
+
+                    currentData.forEach((item, index) => {
+                        if (item.animation_class === 'fade') {
+                            if (!item._has_faded) {
+                                if (!item.itemStyle) item.itemStyle = {};
+                                item.itemStyle.opacity = 0.2;
+                                item._has_faded = true;
+                                item._just_faded = true;
+                                item._fade_duration = item.animation_duration_ms || 1000;
+                                updated = true;
+                            }
+                        } else if (item.animation_class === 'pulse') {
                             if (!item.itemStyle) item.itemStyle = {};
-                            item.itemStyle.opacity = 0.2;
-                            item._has_faded = true;
-                            item._just_faded = true;
-                            // Ensure the fade uses the configured duration for its transition
-                            item._fade_duration = item.animation_duration_ms || 1000;
+                            item.itemStyle.opacity = toggle ? 0.8 : 1.0;
+                            item.itemStyle.borderWidth = toggle ? 3 : 0;
+                            item.itemStyle.borderColor = 'rgba(255,255,255,0.8)';
+                            item.itemStyle.shadowBlur = toggle ? 15 : 0;
+                            item.itemStyle.shadowColor = item.itemStyle.color || 'yellow';
+
+                            if (toggle) {
+                                myChart.dispatchAction({ type: 'highlight', name: item.name });
+                            } else {
+                                myChart.dispatchAction({ type: 'downplay', name: item.name });
+                            }
                             updated = true;
                         }
-                    } else if (item.animation_class === 'pulse') {
-                        // Shadow blur doesn't always render on complex map SVGs in ECharts.
-                        // For a distinct pulse, we will use a scale effect by utilizing the `select` state,
-                        // or by dynamically updating the symbolSize if it's a scatter, but this is a map item.
-                        // For map items, the only way to scale is using `emphasis.itemStyle`.
-                        if (!item.itemStyle) item.itemStyle = {};
+                    });
 
-                        // We will simulate a pulse by rapidly alternating a highly contrasting border and a slight opacity change
-                        // that differs from the deep fade. We also change the base color slightly.
-                        // Setting animationDurationUpdate specifically on itemStyle helps ECharts tween the values rather than jumping.
-                        if (!item.itemStyle) item.itemStyle = {};
-                        item.itemStyle.opacity = toggle ? 0.8 : 1.0;
-                        item.itemStyle.borderWidth = toggle ? 3 : 0;
-                        item.itemStyle.borderColor = 'rgba(255,255,255,0.8)';
-                        item.itemStyle.shadowBlur = toggle ? 15 : 0;
-                        item.itemStyle.shadowColor = item.itemStyle.color || 'yellow';
-                        // Note: ECharts handles transition tweening if animationDurationUpdate is applied
-
-                        if (toggle) {
-                            myChart.dispatchAction({ type: 'highlight', name: item.name });
-                        } else {
-                            myChart.dispatchAction({ type: 'downplay', name: item.name });
-                        }
-                        updated = true;
-                    }
-                });
-
-                if (updated) {
-                    // Tell ECharts to smoothly tween the update over the pulse interval duration.
-                    // This creates a ramped transition rather than a blunt switch.
-                    // If we have a fade happening that has a custom duration, we can use that, otherwise pulseIntervalMs.
-                    var maxDuration = pulseIntervalMs;
-                    currentData.forEach(d => {
-                        if (d._just_faded) {
-                            if (d._fade_duration > maxDuration) {
-                                maxDuration = d._fade_duration;
+                    if (updated) {
+                        var maxDuration = pulseIntervalMs;
+                        currentData.forEach(d => {
+                            if (d._just_faded) {
+                                if (d._fade_duration > maxDuration) {
+                                    maxDuration = d._fade_duration;
+                                }
+                                d._just_faded = false;
                             }
-                            d._just_faded = false;
-                        }
-                    });
+                        });
 
-                    myChart.setOption({
-                        series: [{
-                            animationDurationUpdate: maxDuration,
-                            animationEasingUpdate: 'cubicInOut',
-                            data: currentData
-                        }]
-                    });
-                }
-            }, pulseIntervalMs);
+                        myChart.setOption({
+                            series: [{
+                                animationDurationUpdate: maxDuration,
+                                animationEasingUpdate: 'cubicInOut',
+                                data: currentData
+                            }]
+                        });
+                    }
+                }, pulseIntervalMs);
+            }
         }
 
         function applyNativeSvgManipulations() {
@@ -2774,6 +3006,10 @@
 
                 var node = wrapperGroup.querySelector(`[id="${name}"], [name="${name}"]`);
                 if (!node) continue;
+
+                if (hasTheme && (mapping.theme.fade_in || mapping.theme.fade_pulse)) {
+                    node.setAttribute('opacity', '0');
+                }
 
                 // Make interactive elements pointer-events: auto so they can catch events
                 // because the parent svg is pointer-events: none.
@@ -3039,6 +3275,9 @@
             var nav = document.createElement('nav');
             nav.setAttribute('aria-label', 'Interactive map regions');
             var ul = document.createElement('ul');
+            ul.style.listStyle = 'none';
+            ul.style.padding = '0';
+            ul.style.margin = '0';
             nav.appendChild(ul);
 
             Object.keys(actionsManifest).forEach(function(elementId) {
@@ -3060,18 +3299,45 @@
                     a11yItem.setAttribute('tabindex', tabIndex);
                     // Use inline styles to ensure it remains hidden but focusable
                     a11yItem.style.position = 'absolute';
-                    a11yItem.style.width = '1px';
-                    a11yItem.style.height = '1px';
+
+                    // We try to grab the bounding box of the element to place the invisible a11y div over it
+                    // so the screen reader focus ring appears in the correct location on the map.
+                    var meta = elementMetadata[elementId];
+                    if (meta && meta.bbox) {
+                        var bbox = meta.bbox;
+                        var tl = myChart.convertToPixel({seriesIndex: 0}, [bbox[0], bbox[1]]);
+                        var br = myChart.convertToPixel({seriesIndex: 0}, [bbox[2], bbox[3]]);
+                        if (tl && br) {
+                            var w = Math.abs(br[0] - tl[0]);
+                            var h = Math.abs(br[1] - tl[1]);
+                            var x = Math.min(tl[0], br[0]);
+                            var y = Math.min(tl[1], br[1]);
+                            a11yItem.style.left = x + 'px';
+                            a11yItem.style.top = y + 'px';
+                            a11yItem.style.width = w + 'px';
+                            a11yItem.style.height = h + 'px';
+                        } else {
+                            a11yItem.style.width = '1px';
+                            a11yItem.style.height = '1px';
+                            a11yItem.style.clip = 'rect(0, 0, 0, 0)';
+                        }
+                    } else {
+                        a11yItem.style.width = '1px';
+                        a11yItem.style.height = '1px';
+                        a11yItem.style.clip = 'rect(0, 0, 0, 0)';
+                    }
                     a11yItem.style.padding = '0';
-                    a11yItem.style.margin = '-1px';
+                    a11yItem.style.margin = '0';
                     a11yItem.style.overflow = 'hidden';
-                    a11yItem.style.clip = 'rect(0, 0, 0, 0)';
                     a11yItem.style.whiteSpace = 'nowrap';
                     a11yItem.style.borderWidth = '0';
+                    a11yItem.style.color = 'transparent';
+                    a11yItem.style.background = 'transparent';
+                    a11yItem.style.outlineStyle = 'solid';
+                    a11yItem.style.outlineColor = 'transparent'; // Let CSS or browser handle focus
 
                     // Use class for locator
-                    a11yItem.className = 'a11y-focus-target';
-
+                    a11yItem.className = 'a11y-focus-target sivo-a11y-target';
                     // Focus logic (visually highlight the ECharts region)
                     a11yItem.addEventListener('focus', function() {
                         myChart.dispatchAction({
@@ -3185,12 +3451,46 @@
             var bgImage = document.getElementById('sivo-background-image');
             if (view.background_image_url) {
                 bgImage.src = view.background_image_url;
-                bgImage.style.opacity = view.background_image_opacity !== undefined ? view.background_image_opacity : 1.0;
+
+                var finalOpacity = view.background_image_opacity !== undefined ? view.background_image_opacity : 1.0;
+
+                if (view.background_image_fade_in) {
+                    var dur = view.background_image_fade_duration_ms || 5000;
+                    var delay = view.background_image_fade_start_time_ms || 0;
+                    bgImage.style.animation = 'sivo-fade-in-bg ' + dur + 'ms ease-in forwards ' + delay + 'ms';
+                    bgImage.style.opacity = '0';
+
+                    var styleEl = document.getElementById('sivo-bg-anim-style');
+                    if (!styleEl) {
+                        styleEl = document.createElement('style');
+                        styleEl.id = 'sivo-bg-anim-style';
+                        document.head.appendChild(styleEl);
+                    }
+                    styleEl.innerHTML = `@keyframes sivo-fade-in-bg { 0% { opacity: 0; } 100% { opacity: ${finalOpacity}; } }`;
+                } else if (view.background_image_fade_pulse) {
+                    var dur = view.background_image_fade_duration_ms || 5000;
+                    var delay = view.background_image_fade_start_time_ms || 0;
+                    bgImage.style.animation = 'sivo-fade-pulse-bg ' + dur + 'ms ease-in-out infinite ' + delay + 'ms';
+                    bgImage.style.opacity = String(finalOpacity * 0.2);
+
+                    var styleEl = document.getElementById('sivo-bg-anim-style');
+                    if (!styleEl) {
+                        styleEl = document.createElement('style');
+                        styleEl.id = 'sivo-bg-anim-style';
+                        document.head.appendChild(styleEl);
+                    }
+                    styleEl.innerHTML = `@keyframes sivo-fade-pulse-bg { 0% { opacity: ${finalOpacity * 0.2}; } 50% { opacity: ${finalOpacity}; } 100% { opacity: ${finalOpacity * 0.2}; } }`;
+                } else {
+                    bgImage.style.animation = 'none';
+                    bgImage.style.opacity = finalOpacity;
+                }
+
                 bgImage.style.filter = view.background_image_grayscale ? 'grayscale(100%)' : 'none';
                 bgImage.style.display = 'block';
             } else {
                 bgImage.style.display = 'none';
                 bgImage.src = '';
+                bgImage.style.animation = 'none';
             }
 
             // Handle Border Image
@@ -3302,7 +3602,13 @@
                 liveSocket = null;
             }
             if (liveBinding) {
-                liveSocket = new WebSocket(liveBinding.url);
+                var wsUrl = liveBinding.url;
+                if (liveBinding.cors_proxy) {
+                    // Prepend proxy and encode the original URL if necessary depending on the proxy
+                    // Note: Most WS proxies require the target URL as part of the path, e.g. wss://proxy.com/wss://target.com
+                    wsUrl = liveBinding.cors_proxy + wsUrl;
+                }
+                liveSocket = new WebSocket(wsUrl);
 
                 liveSocket.onopen = function(e) {
                     if (liveBinding.auth_token) {
@@ -3310,6 +3616,18 @@
                     }
                     if (liveBinding.topic) {
                         liveSocket.send(JSON.stringify({ type: 'subscribe', topic: liveBinding.topic }));
+                    }
+                };
+
+                liveSocket.onerror = function(event) {
+                    console.error("[SIVO] WebSocket connection error. This may be due to CORS limitations, Mixed-Content security policies (trying to connect to a non-secure 'ws://' from a secure 'https://' context), or an offline server.", event);
+                    // Create a simple toast notification if not in a headless test
+                    if (!window.sivoDisablePanel && typeof document !== "undefined") {
+                        var toast = document.createElement('div');
+                        toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#ef4444;color:white;padding:12px 20px;border-radius:6px;z-index:99999;box-shadow:0 4px 6px rgba(0,0,0,0.1);font-family:sans-serif;";
+                        toast.innerText = "⚠️ Live Data Error: Failed to connect to WebSocket server. Check console for CORS or security errors.";
+                        document.body.appendChild(toast);
+                        setTimeout(() => { if(toast.parentNode) toast.parentNode.removeChild(toast); }, 8000);
                     }
                 };
 
@@ -3354,7 +3672,16 @@
                 window.sivoApiPollingInterval = null;
             }
             if (apiBinding) {
+                var apiFailureCount = 0;
+                var maxRetries = apiBinding.max_retries !== undefined && apiBinding.max_retries !== null ? apiBinding.max_retries : null;
+
                 window.sivoApiPollingInterval = setInterval(() => {
+                    if (maxRetries !== null && apiFailureCount >= maxRetries) {
+                        console.warn("[SIVO] Maximum API retries reached. Stopping polling.");
+                        clearInterval(window.sivoApiPollingInterval);
+                        return;
+                    }
+
                     var fetchOptions = {
                         method: apiBinding.method || 'GET',
                         headers: apiBinding.headers || {}
@@ -3364,9 +3691,20 @@
                         fetchOptions.headers['Content-Type'] = 'application/json';
                     }
 
-                    fetch(apiBinding.url, fetchOptions)
-                        .then(res => res.json())
+                    var fetchUrl = apiBinding.url;
+                    if (apiBinding.cors_proxy) {
+                        fetchUrl = apiBinding.cors_proxy + fetchUrl;
+                    }
+
+                    fetch(fetchUrl, fetchOptions)
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error("HTTP " + res.status);
+                            }
+                            return res.json();
+                        })
                         .then(data => {
+                            apiFailureCount = 0; // reset on success
                             var targetData = data;
                             if (apiBinding.data_path) {
                                 var parts = apiBinding.data_path.split('.');
@@ -3499,7 +3837,18 @@
                             } else {
                             }
                         })
-                        .catch(err => console.error("[SIVO] API binding fetch error:", err));
+                        .catch(err => {
+                            apiFailureCount++;
+                            console.error(`[SIVO] API binding fetch error (${apiFailureCount} failures):`, err);
+                            if (apiFailureCount === 1 && !window.sivoDisablePanel && typeof document !== "undefined") {
+                                // Show toast on first failure
+                                var toast = document.createElement('div');
+                                toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#ef4444;color:white;padding:12px 20px;border-radius:6px;z-index:99999;box-shadow:0 4px 6px rgba(0,0,0,0.1);font-family:sans-serif;";
+                                toast.innerText = "⚠️ Live API Error: Failed to fetch data. Check console for CORS or network errors.";
+                                document.body.appendChild(toast);
+                                setTimeout(() => { if(toast.parentNode) toast.parentNode.removeChild(toast); }, 8000);
+                            }
+                        });
                 }, apiBinding.polling_interval_ms || 5000);
             }
 
@@ -3690,6 +4039,7 @@
             initWatermark(view);
 
             // Initialize Title, Subtitle, Attribution
+            initNavMenu(view);
             initTitles(view);
 
             // Initialize Controls (Fullscreen, Share, Download)
@@ -4252,7 +4602,18 @@ if (originalId) {
                             </div>
                         </div>`;
                     } else if (action.action_type === 'url') {
-                        window.open(action.url, action.target);
+                        if (action.target === '_blank') {
+                            window.open(action.url, '_blank');
+                        } else {
+                            if (action.transition) {
+                                document.body.classList.add(action.transition);
+                                setTimeout(function() {
+                                    window.location.href = action.url;
+                                }, 600);
+                            } else {
+                                window.location.href = action.url;
+                            }
+                        }
                     } else if (action.action_type === 'drill_through') {
                         if (action.target === '_blank') {
                             window.open(action.url, '_blank');
@@ -4756,15 +5117,21 @@ if (originalId) {
                     } else if (action.action_type === 'compare') {
                         hasInteraction = true;
                         var compareId = 'sivo-compare-' + name + '-' + Math.random().toString(36).substr(2, 9);
+
+                        var baseImg = action.reverse ? action.after_image : action.before_image;
+                        var overlayImg = action.reverse ? action.before_image : action.after_image;
+                        var leftLabel = action.reverse ? action.label_before : action.label_after;
+                        var rightLabel = action.reverse ? action.label_after : action.label_before;
+
                         var compareHtml = `
                         <div style="position:relative; width:100%; height:300px; overflow:hidden; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-                            <img src="${action.before_image}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" />
-                            <div id="${compareId}-after" style="position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; border-right:2px solid white; box-shadow: 2px 0 5px rgba(0,0,0,0.3);">
-                                <img src="${action.after_image}" style="position:absolute; top:0; left:0; width:200%; height:100%; object-fit:cover;" />
+                            <img src="${baseImg}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" />
+                            <div id="${compareId}-overlay" style="position:absolute; top:0; left:0; width:50%; height:100%; overflow:hidden; border-right:2px solid white; box-shadow: 2px 0 5px rgba(0,0,0,0.3);">
+                                <img src="${overlayImg}" style="position:absolute; top:0; left:0; width:200%; height:100%; object-fit:cover;" />
                             </div>
-                            <input type="range" class="sivo-compare-slider" data-target="${compareId}-after" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:ew-resize;" />
-                            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_after}</div>
-                            <div style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${action.label_before}</div>
+                            <input type="range" class="sivo-compare-slider" data-target="${compareId}-overlay" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:ew-resize;" />
+                            <div style="position:absolute; bottom:10px; left:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${leftLabel}</div>
+                            <div style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.5); color:white; padding:2px 6px; border-radius:4px; font-size:12px; pointer-events:none;">${rightLabel}</div>
                         </div>`;
                         htmlContent += compareHtml;
                     } else if (action.action_type === 'progress_bar') {
@@ -6596,9 +6963,44 @@ function tourNext() {
 
             if (view.enable_geocoder) {
                 geocoderContainer.style.display = 'block';
-                if (view.enable_search) {
-                    geocoderContainer.style.top = '70px';
+                if (view.geocode_provider === 'nominatim') {
+                    var att = document.getElementById('sivo-geocoder-attribution');
+                    if (att) att.style.display = 'block';
+                }
+
+                var gPos = view.geocoder_position || 'top-center';
+                if (gPos === 'top-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'top-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-left') {
+                    geocoderContainer.style.left = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-right') {
+                    geocoderContainer.style.left = 'auto';
+                    geocoderContainer.style.right = '20px';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'none';
+                } else if (gPos === 'bottom-center') {
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.top = 'auto';
+                    geocoderContainer.style.bottom = '20px';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
                 } else {
+                    // default top-center
+                    geocoderContainer.style.left = '50%';
+                    geocoderContainer.style.transform = 'translateX(-50%)';
+                }
+
+                if (view.enable_search && (gPos === 'top-center' || gPos === 'top-right' || gPos === 'top-left')) {
+                    geocoderContainer.style.top = '70px';
+                } else if (gPos !== 'bottom-left' && gPos !== 'bottom-right' && gPos !== 'bottom-center') {
                     geocoderContainer.style.top = '20px';
                 }
 
@@ -6619,6 +7021,270 @@ function tourNext() {
                         plotLat = (maxLat + minLat) - lat; // INVERT LATITUDE
                     }
 
+                    // Skip camera zoom and marker if we are only doing an intersection (no map desired)
+                    if (view.geocoder_intersection) {
+                        var intersectUrl = view.geocoder_intersection.geojson_url;
+                        var displayId = view.geocoder_intersection.display_element_id;
+                        var propName = view.geocoder_intersection.property_name;
+                        var noResText = view.geocoder_intersection.no_result_text;
+
+                        // Very basic ray-casting PIP for 2D coords
+                        function pointInPolygon(point, vs) {
+                            var x = point[0], y = point[1];
+                            var inside = false;
+                            for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+                                var xi = vs[i][0], yi = vs[i][1];
+                                var xj = vs[j][0], yj = vs[j][1];
+                                var intersect = ((yi > y) != (yj > y))
+                                    && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+                                if (intersect) inside = !inside;
+                            }
+                            return inside;
+                        }
+
+                        function checkFeature(feature, point) {
+                            function getPolygons(geom) {
+                                if (geom.type === 'Polygon') return [geom.coordinates];
+                                if (geom.type === 'MultiPolygon') return geom.coordinates;
+                                return [];
+                            }
+
+                            var polys = getPolygons(feature.geometry);
+                            for (var i=0; i<polys.length; i++) {
+                                var rings = polys[i];
+                                // Check exterior ring
+                                if (pointInPolygon(point, rings[0])) {
+                                    // Check holes
+                                    var inHole = false;
+                                    for (var h=1; h<rings.length; h++) {
+                                        if (pointInPolygon(point, rings[h])) {
+                                            inHole = true; break;
+                                        }
+                                    }
+                                    if (!inHole) return true;
+                                }
+                            }
+                            return false;
+                        }
+
+                        var targetEl = document.getElementById(displayId);
+                        if (!targetEl && window.parent) {
+                            targetEl = window.parent.document.getElementById(displayId);
+                        }
+
+                        if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                            targetEl.innerHTML = "Calculating zone...";
+                        } else {
+                            var existing = document.getElementById('sivo-geocoder-overlay-result');
+                            if (existing) existing.remove();
+                            var overlay = document.createElement('div');
+                            overlay.id = 'sivo-geocoder-overlay-result';
+                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #3b82f6; border: 2px solid #3b82f6;">Calculating zone...</div>`;
+                            document.body.appendChild(overlay);
+                        }
+
+                        fetch(intersectUrl)
+                            .then(res => res.json())
+                            .then(data => {
+                                var found = false;
+                                var features = data.features || [];
+                                for (var i=0; i<features.length; i++) {
+                                    if (checkFeature(features[i], [lon, lat])) {
+                                        var val = features[i].properties[propName];
+
+                                        var existing = document.getElementById('sivo-geocoder-overlay-result');
+                                        if (existing) existing.remove();
+
+                                        // Ensure val is safely escaped
+                                        var safeVal = String(val).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                                        if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                                            targetEl.innerHTML = safeVal;
+                                        } else {
+                                            var overlay = document.createElement('div');
+                                            overlay.id = 'sivo-geocoder-overlay-result';
+                                            overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #10b981; border: 2px solid #10b981; text-align: center;">Zone Found:<br/><span style="color:#0f172a;">${safeVal}</span></div>`;
+                                            document.body.appendChild(overlay);
+                                        }
+
+                                        // Try to trigger an ECharts highlight action if the mapped element exists
+                                        try {
+                                            myChart.dispatchAction({
+                                                type: 'downplay',
+                                                seriesIndex: 0
+                                            });
+                                            myChart.dispatchAction({
+                                                type: 'unselect',
+                                                seriesIndex: 0
+                                            });
+                                            myChart.dispatchAction({
+                                                type: 'highlight',
+                                                seriesIndex: 0,
+                                                name: val
+                                            });
+                                            myChart.dispatchAction({
+                                                type: 'select',
+                                                seriesIndex: 0,
+                                                name: val
+                                            });
+
+                                            // Fallback for names that might have been mapped with underscores instead of spaces
+                                            if (val.indexOf(' ') !== -1) {
+                                                var valUnderscored = val.replace(/ /g, '_');
+                                                myChart.dispatchAction({
+                                                    type: 'highlight',
+                                                    seriesIndex: 0,
+                                                    name: valUnderscored
+                                                });
+                                                myChart.dispatchAction({
+                                                    type: 'select',
+                                                    seriesIndex: 0,
+                                                    name: valUnderscored
+                                                });
+                                            }
+
+                                            if (window.sivoGeocoderPulseInterval) {
+                                                clearInterval(window.sivoGeocoderPulseInterval);
+                                                window.sivoGeocoderPulseInterval = null;
+                                            }
+
+                                            if (window.sivoGeocoderPulsedNames) {
+                                                try {
+                                                    var opts = myChart.getOption();
+                                                    if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                        var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            myChart.setOption({ animation: false, series: [{ data: restoreData }] });
+                                                        }
+                                                    }
+                                                } catch (e) {}
+                                            }
+
+                                            var possibleNames = [val];
+                                            if (val.indexOf(' ') !== -1) possibleNames.push(val.replace(/ /g, '_'));
+                                            window.sivoGeocoderPulsedNames = possibleNames;
+
+                                            var startTime = Date.now();
+                                            window.sivoGeocoderPulseInterval = setInterval(function() {
+                                                var elapsed = Date.now() - startTime;
+                                                var progress = (elapsed % 2000) / 2000;
+                                                var opacity = 0.4 + 0.6 * (0.5 - 0.5 * Math.cos(progress * Math.PI * 2));
+
+                                                try {
+                                                    var opts = myChart.getOption();
+                                                    if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                        var updateData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = updateData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (!existingItem.itemStyle) existingItem.itemStyle = {};
+                                                                existingItem.itemStyle.opacity = opacity;
+
+                                                                if (!existingItem.emphasis) existingItem.emphasis = {};
+                                                                if (!existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle = {};
+                                                                existingItem.emphasis.itemStyle.opacity = opacity;
+
+                                                                if (!existingItem.select) existingItem.select = {};
+                                                                if (!existingItem.select.itemStyle) existingItem.select.itemStyle = {};
+                                                                existingItem.select.itemStyle.opacity = opacity;
+
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            myChart.setOption({ animation: false, series: [{ data: updateData }] });
+                                                        }
+                                                    }
+                                                } catch (e) {}
+                                            }, 100);
+                                        } catch (e) {
+                                            console.log("Could not highlight element named " + val, e);
+                                        }
+
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    // Make sure we unhighlight all if not found
+                                    try {
+                                        myChart.dispatchAction({
+                                            type: 'downplay',
+                                            seriesIndex: 0
+                                        });
+                                        myChart.dispatchAction({
+                                            type: 'unselect',
+                                            seriesIndex: 0
+                                        });
+                                    } catch(e) {}
+
+                                    if (window.sivoGeocoderPulseInterval) {
+                                        clearInterval(window.sivoGeocoderPulseInterval);
+                                        window.sivoGeocoderPulseInterval = null;
+                                    }
+
+                                    if (window.sivoGeocoderPulsedNames) {
+                                        try {
+                                            var opts = myChart.getOption();
+                                            if (opts && opts.series && opts.series[0] && opts.series[0].data) {
+                                                var restoreData = opts.series[0].data;
+                                                        var hasUpdate = false;
+                                                        window.sivoGeocoderPulsedNames.forEach(function(pn) {
+                                                            var existingItem = restoreData.find(function(d) { return d.name === pn; });
+                                                            if (existingItem) {
+                                                                if (existingItem.itemStyle) existingItem.itemStyle.opacity = 1.0;
+                                                                if (existingItem.emphasis && existingItem.emphasis.itemStyle) existingItem.emphasis.itemStyle.opacity = 1.0;
+                                                                if (existingItem.select && existingItem.select.itemStyle) existingItem.select.itemStyle.opacity = 1.0;
+                                                                hasUpdate = true;
+                                                            }
+                                                        });
+                                                        if (hasUpdate) {
+                                                            myChart.setOption({ animation: false, series: [{ data: restoreData }] });
+                                                        }
+                                            }
+                                        } catch (e) {}
+                                        window.sivoGeocoderPulsedNames = [];
+                                    }
+
+                                    var existing = document.getElementById('sivo-geocoder-overlay-result');
+                                    if (existing) existing.remove();
+
+                                    if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                                        targetEl.innerHTML = noResText;
+                                    } else {
+                                        var overlay = document.createElement('div');
+                                        overlay.id = 'sivo-geocoder-overlay-result';
+                                        overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">${noResText}</div>`;
+                                        document.body.appendChild(overlay);
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Error intersecting geocoder point with geojson:", err);
+                                var existing = document.getElementById('sivo-geocoder-overlay-result');
+                                if (existing) existing.remove();
+
+                                if (targetEl && targetEl.tagName.toLowerCase() !== 'svg' && targetEl.tagName.toLowerCase() !== 'text') {
+                                    targetEl.innerHTML = "Error";
+                                } else {
+                                    var overlay = document.createElement('div');
+                                    overlay.id = 'sivo-geocoder-overlay-result';
+                                    overlay.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; font-weight: bold; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; color: #ef4444; border: 2px solid #ef4444;">Error intersecting point</div>`;
+                                    document.body.appendChild(overlay);
+                                }
+                            });
+                    } else {
                     // Camera Zoom and Marker Placement
                     var opt = myChart.getOption();
                     var newOpt = {};
@@ -6664,6 +7330,7 @@ function tourNext() {
                     };
                     initOverlays();
                     updateOverlaysPosition();
+                    } // end skip map actions
                 };
 
                 geocodeInput.oninput = function(e) {
@@ -6682,10 +7349,57 @@ function tourNext() {
                         geocodeSpinner.style.display = 'block';
 
                         var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`;
+
+                        var cCodes = view.geocode_country_codes;
+                        var cCodeStr = "";
+                        if (cCodes) {
+                            if (Array.isArray(cCodes)) {
+                                cCodeStr = cCodes.join(',');
+                            } else {
+                                cCodeStr = cCodes;
+                            }
+                        }
+
                         if (view.geocode_provider === 'google' && view.geocode_api_key) {
                             url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=${view.geocode_api_key}`;
+                            if (cCodeStr) {
+                                var gCodes = cCodeStr.split(',').map(c => 'country:' + c.trim()).join('|');
+                                url += `&components=${gCodes}`;
+                            }
                         } else if (view.geocode_provider === 'mapbox' && view.geocode_api_key) {
                             url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${view.geocode_api_key}`;
+                            if (cCodeStr) {
+                                url += `&country=${cCodeStr}`;
+                            }
+                        } else if (view.geocode_provider === 'photon') {
+                            var limit = cCodeStr ? 30 : 5; // request more if we need to filter client-side
+                            url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=${limit}`;
+                            if (cCodeStr) {
+                                var countryCenters = {
+                                    'us': {lat: 39.8283, lon: -98.5795},
+                                    'ca': {lat: 56.1304, lon: -106.3468},
+                                    'gb': {lat: 55.3781, lon: -3.4360},
+                                    'au': {lat: -25.2744, lon: 133.7751},
+                                    'nz': {lat: -40.9006, lon: 174.8860},
+                                    'de': {lat: 51.1657, lon: 10.4515},
+                                    'fr': {lat: 46.2276, lon: 2.2137},
+                                    'es': {lat: 40.4637, lon: -3.7492},
+                                    'it': {lat: 41.8719, lon: 12.5674},
+                                    'in': {lat: 20.5937, lon: 78.9629},
+                                    'jp': {lat: 36.2048, lon: 138.2529},
+                                    'cn': {lat: 35.8617, lon: 104.1954},
+                                    'br': {lat: -14.2350, lon: -51.9253},
+                                    'za': {lat: -30.5595, lon: 22.9375}
+                                };
+                                var primaryCode = cCodeStr.split(',')[0].trim().toLowerCase();
+                                if (countryCenters[primaryCode]) {
+                                    url += `&lat=${countryCenters[primaryCode].lat}&lon=${countryCenters[primaryCode].lon}&zoom=4`;
+                                }
+                            }
+                        } else {
+                            if (cCodeStr) {
+                                url += `&countrycodes=${cCodeStr}`;
+                            }
                         }
 
                         fetch(url, {
@@ -6717,6 +7431,32 @@ function tourNext() {
                                     lat: f.center[1],
                                     lon: f.center[0]
                                 }));
+                            } else if (view.geocode_provider === 'photon' && data.features) {
+                                var filteredFeatures = data.features;
+                                if (cCodeStr) {
+                                    var allowedCodes = cCodeStr.split(',').map(c => c.trim().toLowerCase());
+                                    filteredFeatures = data.features.filter(f => {
+                                        if (!f.properties || !f.properties.countrycode) return false;
+                                        return allowedCodes.includes(f.properties.countrycode.toLowerCase());
+                                    });
+                                }
+                                resultsArr = filteredFeatures.map(f => {
+                                    var props = f.properties;
+                                    var nameParts = [];
+                                    if (props.name) nameParts.push(props.name);
+                                    if (props.street) nameParts.push(props.street);
+                                    if (props.city) nameParts.push(props.city);
+                                    if (props.state) nameParts.push(props.state);
+                                    if (props.country) nameParts.push(props.country);
+                                    return {
+                                        display_name: nameParts.join(', '),
+                                        lat: f.geometry.coordinates[1],
+                                        lon: f.geometry.coordinates[0]
+                                    };
+                                });
+                                if (cCodeStr && resultsArr.length > 5) {
+                                    resultsArr = resultsArr.slice(0, 5); // restore limit after filtering
+                                }
                             }
 
                             resultsArr.forEach(function(item) {
@@ -6767,6 +7507,106 @@ function tourNext() {
                 }
             } else {
                 watermarkContainer.style.display = 'none';
+            }
+        }
+
+
+        function toggleNavMenu() {
+            var menu = document.getElementById('sivo-nav-menu');
+            if (menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            } else {
+                menu.classList.add('active');
+            }
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            var btn = document.getElementById('sivo-nav-btn');
+            var menu = document.getElementById('sivo-nav-menu');
+            if (btn && menu && !btn.contains(event.target) && !menu.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+
+        function initNavMenu(view) {
+            var container = document.getElementById('sivo-nav-container');
+            var btn = document.getElementById('sivo-nav-btn');
+            var menu = document.getElementById('sivo-nav-menu');
+
+            if (view.navigation_menu && view.navigation_menu.length > 0) {
+                container.style.display = 'block';
+                menu.innerHTML = '';
+
+                // Position logic
+                var pos = view.navigation_menu_position || 'top-right';
+                btn.style.top = btn.style.bottom = btn.style.left = btn.style.right = 'auto';
+                menu.style.top = menu.style.bottom = menu.style.left = menu.style.right = 'auto';
+
+                var padding = '20px';
+
+                if (pos === 'top-left') {
+                    btn.style.top = padding;
+                    btn.style.left = padding;
+                    menu.style.top = '70px';
+                    menu.style.left = padding;
+                } else if (pos === 'top-right') {
+                    btn.style.top = padding;
+                    btn.style.right = padding;
+                    menu.style.top = '70px';
+                    menu.style.right = padding;
+                } else if (pos === 'bottom-left') {
+                    btn.style.bottom = padding;
+                    btn.style.left = padding;
+                    menu.style.bottom = '70px';
+                    menu.style.left = padding;
+                } else if (pos === 'bottom-right') {
+                    btn.style.bottom = padding;
+                    btn.style.right = padding;
+                    menu.style.bottom = '70px';
+                    menu.style.right = padding;
+                }
+
+
+                // Helper to create link elements
+                function createLink(item, isSub) {
+                    var el = document.createElement(item.url || item.view_id ? 'a' : 'div');
+                    el.className = isSub ? 'sivo-nav-subitem' : (item.url || item.view_id ? 'sivo-nav-item' : 'sivo-nav-header');
+                    el.innerText = item.label;
+                    if (item.url) {
+                        el.href = item.url;
+                        el.target = item.target || '_self';
+                        if (item.url_transition) {
+                            el.onclick = function(e) {
+                                e.preventDefault();
+                                document.body.classList.add(item.url_transition);
+                                setTimeout(function() {
+                                    window.location.href = item.url;
+                                }, 600);
+                            };
+                        }
+                    } else if (item.view_id) {
+                        el.onclick = function(e) {
+                            e.preventDefault();
+                            renderView(item.view_id);
+                            menu.classList.remove('active');
+                        };
+                    }
+                    return el;
+                }
+
+                // Populate items
+                view.navigation_menu.forEach(function(item) {
+                    menu.appendChild(createLink(item, false));
+                    if (item.sublinks && item.sublinks.length > 0) {
+                        item.sublinks.forEach(function(sub) {
+                            menu.appendChild(createLink(sub, true));
+                        });
+                    }
+                });
+
+            } else {
+                container.style.display = 'none';
             }
         }
 
@@ -7826,7 +8666,27 @@ function tourNext() {
                 }
             });
         }
-    </script>
 
+        // Handle back/forward cache (bfcache) restoration
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Remove transition classes from body if they exist
+                document.body.classList.remove('sivo-view-transition-page-turn-out');
+                // General cleanup of transition classes just in case
+                document.body.className = document.body.className.replace(/\b(sivo-view-transition-[^\s]+)\b/g, '');
+            }
+        });
+</script>
+
+
+
+
+            <!-- Navigation Menu -->
+            <div id="sivo-nav-container" style="display: none;">
+                <div id="sivo-nav-btn" class="sivo-nav-btn" title="Navigation Menu" onclick="toggleNavMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </div>
+                <div id="sivo-nav-menu" class="sivo-nav-menu"></div>
+            </div>
 </body>
 </html>
