@@ -46,7 +46,7 @@ desktop_grid = """
 'banner banner banner banner'
 '. markdown markdown .'
 'trends trends exceedances exceedances'
-'odometers odometers odometers odometers'
+'odometer_1 odometer_1 odometer_2 odometer_2'
 """
 
 mobile_grid = """
@@ -54,7 +54,7 @@ mobile_grid = """
 'markdown'
 'trends'
 'exceedances'
-'odometers'
+'odometer_2'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -171,11 +171,11 @@ dashboard.add_details_panel(
 )
 
 dashboard.add_details_panel(
-    block_id="odometers",
+    block_id="odometer_2",
     title="",
     placeholder=odometer_html,
-    col_span=4,
-    grid_area="odometers",
+    col_span=2,
+    grid_area="odometer_2",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
     padding="10px",
