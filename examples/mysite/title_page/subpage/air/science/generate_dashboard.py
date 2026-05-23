@@ -130,42 +130,42 @@ def get_trend_color(text):
     return "#f97316" # Orange
 
 odometer_1_html = f'''
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; padding: 20px;">
-  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
-    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape PM10 trend</h3>
-    <div style="font-size: 32px; font-weight: bold; color: {get_trend_color(t_trend_text)};">{t_trend_text}</div>
-    <div style="font-size: 14px; color: #555; margin-top: 10px;">Trend rate: <strong>{t_trend_rate}</strong> &mu;g/m&sup3;</div>
-  </div>
-  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
-    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui PM10 trend</h3>
-    <div style="font-size: 32px; font-weight: bold; color: {get_trend_color(tau_trend_text)};">{tau_trend_text}</div>
-    <div style="font-size: 14px; color: #555; margin-top: 10px;">Trend rate: <strong>{tau_trend_rate}</strong> &mu;g/m&sup3;</div>
-  </div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; padding: 20px;">
+<div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px; width: 100%; max-width: 350px;">
+<h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape PM10 trend</h3>
+<div style="font-size: 32px; font-weight: bold; color: {get_trend_color(t_trend_text)};">{t_trend_text}</div>
+<div style="font-size: 14px; color: #555; margin-top: 10px;">Trend rate: <strong>{t_trend_rate}</strong> &mu;g/m&sup3;</div>
+</div>
+<div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px; width: 100%; max-width: 350px;">
+<h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui PM10 trend</h3>
+<div style="font-size: 32px; font-weight: bold; color: {get_trend_color(tau_trend_text)};">{tau_trend_text}</div>
+<div style="font-size: 14px; color: #555; margin-top: 10px;">Trend rate: <strong>{tau_trend_rate}</strong> &mu;g/m&sup3;</div>
+</div>
+<div style="font-size: 14px; color: #555; margin-top: 10px; text-align: center;">
+Figure 2. Trend analysis of PM10 concentrations in Taumarunui and Taihape between 2014 and 2025
+</div>
 </div>
 '''
 
 odometer_html = f'''
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; padding: 20px;">
-  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
-    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape exceedances 5 years</h3>
-    <div style="font-size: 64px; font-weight: bold; color: {t_5yr_color};">{t_5yr}</div>
-    {get_subtext(t_date, t_5yr)}
-  </div>
-  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
-    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape exceedances last year</h3>
-    <div style="font-size: 64px; font-weight: bold; color: {t_1yr_color};">{t_1yr}</div>
-    {get_subtext(t_date, t_1yr)}
-  </div>
-  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
-    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui exceedances 5 years</h3>
-    <div style="font-size: 64px; font-weight: bold; color: {tau_5yr_color};">{tau_5yr}</div>
-    {get_subtext(tau_date, tau_5yr)}
-  </div>
-  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
-    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui exceedances last year</h3>
-    <div style="font-size: 64px; font-weight: bold; color: {tau_1yr_color};">{tau_1yr}</div>
-    {get_subtext(tau_date, tau_1yr)}
-  </div>
+<div style="padding: 20px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
+<div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
+<h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape PM10 exceedances 5 years</h3>
+<div style="font-size: 64px; font-weight: bold; color: {t_5yr_color};">{t_5yr}</div>{get_subtext(t_date, t_5yr)}</div>
+<div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
+<h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape PM10 exceedances last year</h3>
+<div style="font-size: 64px; font-weight: bold; color: {t_1yr_color};">{t_1yr}</div>{get_subtext(t_date, t_1yr)}</div>
+<div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
+<h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui PM10 exceedances 5 years</h3>
+<div style="font-size: 64px; font-weight: bold; color: {tau_5yr_color};">{tau_5yr}</div>{get_subtext(tau_date, tau_5yr)}</div>
+<div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
+<h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui PM10 exceedances last year</h3>
+<div style="font-size: 64px; font-weight: bold; color: {tau_1yr_color};">{tau_1yr}</div>{get_subtext(tau_date, tau_1yr)}</div>
+</div>
+<div style="font-size: 14px; color: #555; margin-top: 20px; text-align: center;">
+Figure 3. [Caption to be added once vis. is complete]
+</div>
 </div>
 '''
 
