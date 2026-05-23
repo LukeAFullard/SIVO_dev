@@ -35,14 +35,23 @@ dashboard = SivoDashboard(
 with open(os.path.join(os.path.dirname(__file__), "content.md"), "r", encoding="utf-8") as f:
     md_content = f.read()
 
+with open(os.path.join(os.path.dirname(__file__), "pm10_trends.md"), "r", encoding="utf-8") as f:
+    pm10_trends = f.read()
+
+with open(os.path.join(os.path.dirname(__file__), "pm10_exceedances.md"), "r", encoding="utf-8") as f:
+    pm10_exceedances = f.read()
+
 desktop_grid = """
 'banner banner banner banner'
 '. markdown markdown .'
+'trends trends exceedances exceedances'
 """
 
 mobile_grid = """
 'banner'
 'markdown'
+'trends'
+'exceedances'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -70,6 +79,37 @@ dashboard.add_details_panel(
     fade_start_time_ms=300,
     fade_duration_ms=2000
 )
+
+dashboard.add_details_panel(
+    block_id="trends",
+    title="",
+    placeholder=pm10_trends,
+    col_span=2,
+    grid_area="trends",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=600,
+    fade_duration_ms=2000
+)
+
+dashboard.add_details_panel(
+    block_id="exceedances",
+    title="",
+    placeholder=pm10_exceedances,
+    col_span=2,
+    grid_area="exceedances",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=900,
+    fade_duration_ms=2000
+)
+
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
