@@ -88,7 +88,7 @@
 'banner banner banner banner'
 '. markdown markdown .'
 'trends trends exceedances exceedances'
-'odometer_1 odometer_1 odometer_2 odometer_2'
+'odometers odometers odometers odometers'
 ;
 
         }
@@ -241,7 +241,7 @@
 'markdown'
 'trends'
 'exceedances'
-'odometer_2'
+'odometers'
 ;
 
                 grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -271,7 +271,7 @@
 'markdown'
 'trends'
 'exceedances'
-'odometer_2'
+'odometers'
  !important;
 
             grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
@@ -1300,24 +1300,6 @@ Greater concentrations of particulate matter in the air indicate poorer air qual
 
 
 
-            <div class="sivo-card " id="card-odometer_2" style="grid-area: odometer_2; ">
-                <div class="card-header">Odometer_2</div>
-                <div class="sivo-container" id="container-odometer_2">
-                    <div id="chart-odometer_2" style="width: 100%; height: 100%;"></div>
-                    <div id="overlay-odometer_2" class="sivo-native-overlay-svg-container"></div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
             <div class="html-card sivo-details-panel" id="card-trends" data-block-id="trends" style="grid-area: trends;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.6s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-trends">
@@ -1362,6 +1344,57 @@ The Air Quality NES permits one exceedance of the PM10 limit per year. An exceed
                         const rawPlaceholder = "PM10 exceedances \n\nThe Air Quality NES permits one exceedance of the PM10 limit per year. An exceedance is an occasion when PM10 concentrations are higher than the levels required to protect human health. \n";
                         if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
                             const container = document.getElementById('container-exceedances');
+                            if (container) {
+                                container.innerHTML = marked.parse(rawPlaceholder);
+                            }
+                        }
+                    })();
+                </script>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <div class="html-card sivo-details-panel" id="card-odometers" data-block-id="odometers" style="grid-area: odometers;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 1.2s;">
+                <div class="card-header"></div>
+                <div class="card-content sivo-details-content" id="container-odometers">
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-odometers">
+&lt;div style=&#34;display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; padding: 20px;&#34;&gt;
+  &lt;div style=&#34;padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;&#34;&gt;
+    &lt;h3 style=&#34;margin-bottom: 5px; font-size: 16px; color: #333;&#34;&gt;Taihape exceedances 5 years&lt;/h3&gt;
+    &lt;div style=&#34;font-size: 64px; font-weight: bold; color: #eab308;&#34;&gt;1&lt;/div&gt;
+    &lt;div style=&#34;font-size: 12px; color: #333; margin-top: 5px;&#34;&gt;Date of last exceedance:&lt;br&gt;&lt;strong&gt;20/10/2023&lt;/strong&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style=&#34;padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;&#34;&gt;
+    &lt;h3 style=&#34;margin-bottom: 5px; font-size: 16px; color: #333;&#34;&gt;Taihape exceedances last year&lt;/h3&gt;
+    &lt;div style=&#34;font-size: 64px; font-weight: bold; color: #10b981;&#34;&gt;0&lt;/div&gt;
+
+  &lt;/div&gt;
+  &lt;div style=&#34;padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;&#34;&gt;
+    &lt;h3 style=&#34;margin-bottom: 5px; font-size: 16px; color: #333;&#34;&gt;Taumarunui exceedances 5 years&lt;/h3&gt;
+    &lt;div style=&#34;font-size: 64px; font-weight: bold; color: #10b981;&#34;&gt;0&lt;/div&gt;
+
+  &lt;/div&gt;
+  &lt;div style=&#34;padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;&#34;&gt;
+    &lt;h3 style=&#34;margin-bottom: 5px; font-size: 16px; color: #333;&#34;&gt;Taumarunui exceedances last year&lt;/h3&gt;
+    &lt;div style=&#34;font-size: 64px; font-weight: bold; color: #10b981;&#34;&gt;0&lt;/div&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+</p>
+                </div>
+                <script>
+                    (function() {
+                        const rawPlaceholder = "\n\u003cdiv style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; padding: 20px;\"\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaihape exceedances 5 years\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #eab308;\"\u003e1\u003c/div\u003e\n    \u003cdiv style=\"font-size: 12px; color: #333; margin-top: 5px;\"\u003eDate of last exceedance:\u003cbr\u003e\u003cstrong\u003e20/10/2023\u003c/strong\u003e\u003c/div\u003e\n  \u003c/div\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaihape exceedances last year\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #10b981;\"\u003e0\u003c/div\u003e\n    \n  \u003c/div\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaumarunui exceedances 5 years\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #10b981;\"\u003e0\u003c/div\u003e\n    \n  \u003c/div\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaumarunui exceedances last year\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #10b981;\"\u003e0\u003c/div\u003e\n    \n  \u003c/div\u003e\n\u003c/div\u003e\n";
+                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
+                            const container = document.getElementById('container-odometers');
                             if (container) {
                                 container.innerHTML = marked.parse(rawPlaceholder);
                             }
@@ -1427,7 +1460,7 @@ The Air Quality NES permits one exceedance of the PM10 limit per year. An exceed
         });
 
         // SIVO passes `views_data` directly to this template
-        const viewsData = {"odometer_2":{"svg_string":"\u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 400\" style=\"background:rgba(220, 230, 240, 0.9); border-radius: 10px; box-shadow: none;\"\u003e\n\u003cstyle\u003e.hide-native { opacity: 0; }\u003c/style\u003e\n  \u003c!-- Taihape 5 year (Top Left) --\u003e\n  \u003ctext x=\"150\" y=\"40\" font-size=\"16\" fill=\"#333\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\"\u003eTaihape exceedances 5 years\u003c/text\u003e\n  \u003ctext class=\"hide-native\" id=\"t_5yr_val\" x=\"150\" y=\"120\" font-size=\"64\" fill=\"#eab308\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"t_5yr_val\"\u003e1\u003c/text\u003e\n  \n    \u003ctext x=\"150\" y=\"160\" font-size=\"12\" fill=\"#333\" font-family=\"sans-serif\" text-anchor=\"middle\"\u003eDate of last exceedance:\u003c/text\u003e\n    \u003ctext x=\"150\" y=\"180\" font-size=\"12\" fill=\"#333\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\"\u003e20/10/2023\u003c/text\u003e\n    \n\n  \u003c!-- Taihape 1 year (Top Right) --\u003e\n  \u003ctext x=\"450\" y=\"40\" font-size=\"16\" fill=\"#333\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\"\u003eTaihape exceedances last year\u003c/text\u003e\n  \u003ctext class=\"hide-native\" id=\"t_1yr_val\" x=\"450\" y=\"120\" font-size=\"64\" fill=\"#10b981\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"t_1yr_val\"\u003e0\u003c/text\u003e\n  \n\n  \u003c!-- Taumarunui 5 year (Bottom Left) --\u003e\n  \u003ctext x=\"150\" y=\"240\" font-size=\"16\" fill=\"#333\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\"\u003eTaumarunui exceedances 5 years\u003c/text\u003e\n  \u003ctext class=\"hide-native\" id=\"tau_5yr_val\" x=\"150\" y=\"320\" font-size=\"64\" fill=\"#10b981\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"tau_5yr_val\"\u003e0\u003c/text\u003e\n  \n\n  \u003c!-- Taumarunui 1 year (Bottom Right) --\u003e\n  \u003ctext x=\"450\" y=\"240\" font-size=\"16\" fill=\"#333\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\"\u003eTaumarunui exceedances last year\u003c/text\u003e\n  \u003ctext class=\"hide-native\" id=\"tau_1yr_val\" x=\"450\" y=\"320\" font-size=\"64\" fill=\"#10b981\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\" name=\"tau_1yr_val\"\u003e0\u003c/text\u003e\n  \n\u003c/svg\u003e","echarts_data":[{"name":"t_5yr_val","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent","borderWidth":0},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"t_1yr_val","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent","borderWidth":0},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"tau_5yr_val","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent","borderWidth":0},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}},{"name":"tau_1yr_val","value":1,"itemStyle":{"areaColor":"transparent","borderColor":"transparent","borderWidth":0},"emphasis":{"disabled":true,"label":{"show":false}},"label":{"show":false}}],"actions_manifest":{"t_5yr_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"t_5yr_val"}],"t_1yr_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"t_1yr_val"}],"tau_5yr_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"tau_5yr_val"}],"tau_1yr_val":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"tau_1yr_val"}]},"overlays":{},"metadata":{"objects":[{"id":"t_5yr_val","type":"text"},{"id":"t_1yr_val","type":"text"},{"id":"tau_5yr_val","type":"text"},{"id":"tau_1yr_val","type":"text"}]},"connections":[],"default_panel_position":"none","disable_panel":false,"panel_width":"90%","panel_height":"90%","panel_css":null,"disable_resizer":true,"disable_tooltips":false,"disable_zoom_controls":true,"lock_scroll_bounds":true,"presentation_order":null,"lock_zoom_out":true,"layout_size":"95%","mobile_layout_size":null,"starting_zoom":1.0,"lock_canvas":true,"render_mode":"svg","enable_minimap":false,"enable_export":false,"fade_unselected":false,"theme":"light","enable_search":false,"enable_geocoder":false,"geocoder_intersection":null,"geocode_country_codes":null,"geocode_provider":"nominatim","geocode_api_key":null,"watermark":null,"enable_brush_selection":false,"title":null,"subtitle":null,"attribution":null,"enable_fullscreen":false,"enable_share":false,"enable_data_download":false,"enable_drawing_tools":false,"ambient_effect":null,"ambient_speed":1.0,"bounding_coords":[[0.0,0.0],[600.0,400.0]],"graphic":null,"border_image_url":null,"border_image_position":"all","border_image_width":"10%","border_image_opacity":1.0,"border_image_grayscale":false,"background_image_url":null,"background_image_opacity":1.0,"background_image_grayscale":false,"background_image_fade_in":false,"background_image_fade_pulse":false,"background_image_fade_start_time_ms":0,"background_image_fade_duration_ms":5000,"svg_background_image_url":null,"svg_background_image_opacity":1.0,"svg_background_image_grayscale":false,"svg_background_image_insert_after":null,"transparent_template_lines":true,"navigation_menu":null,"navigation_menu_position":"top-right","mappings":{"t_5yr_val":{"id":"t_5yr_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"t_5yr_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":1,"odometer_duration_ms":2500,"odometer_format":"int"}},"t_1yr_val":{"id":"t_1yr_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"t_1yr_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":0,"odometer_duration_ms":2500,"odometer_format":"int"}},"tau_5yr_val":{"id":"tau_5yr_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"tau_5yr_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":0,"odometer_duration_ms":2500,"odometer_format":"int"}},"tau_1yr_val":{"id":"tau_1yr_val","actions":[{"action_type":"a11y","role":"button","tabindex":"0","aria_label":"tau_1yr_val"}],"context_menu":null,"open_by_default":false,"panel_position":null,"panel_css":null,"draggable":false,"theme":{"animation_duration_ms":1000,"color":"transparent","hover_color":null,"hover_image":null,"fill_gradient":null,"fill_pattern":null,"border_width":null,"border_color":"transparent","transparent_lines":null,"glow":null,"animation":null,"fade_in":false,"fade_pulse":false,"fade_start_time_ms":0,"fade_duration_ms":5000,"morph_to_path":null,"morph_duration_ms":1000,"morph_delay_ms":0,"morph_easing":"ease-in-out","morph_iterations":1.0,"filter":null,"clip_path":null,"mask":null,"transform":null,"odometer_value":0,"odometer_duration_ms":2500,"odometer_format":"int"}}}}};
+        const viewsData = {};
         const activeCharts = {};
 
         // --- Tab Logic ---
@@ -2270,7 +2303,7 @@ The Air Quality NES permits one exceedance of the PM10 limit per year. An exceed
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"exceedances": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": null, "placeholder": "PM10 exceedances \n\nThe Air Quality NES permits one exceedance of the PM10 limit per year. An exceedance is an occasion when PM10 concentrations are higher than the levels required to protect human health. \n", "show_element_name": false, "title": "", "update_on_click": true}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "Horizons Environmental Data team measures the concentrations (amount) of PM10 and PM2.5 at the region\u2019s two gazetted airsheds - Taumarunui and Taihape.   \n \nAn airshed is a legally defined geographic area for air quality management. When these areas were gazetted, air quality was known to breach the National Environmental Standards for Air Quality (Air Quality NES) in these towns. These standards set the minimum level of air quality required to protect New Zealanders\u2019 health.  \n \nGreater concentrations of particulate matter in the air indicate poorer air quality. \n", "show_element_name": false, "title": "", "update_on_click": true}, "trends": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "PM10 trends \n\nTrend analysis of PM10 concentrations in our airsheds since 2014 indicates that air quality in Taumarunui and Taihape is likely improving (Figure 2). \n", "show_element_name": false, "title": "", "update_on_click": true}};
+                const detailsConfig = {"exceedances": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": null, "placeholder": "PM10 exceedances \n\nThe Air Quality NES permits one exceedance of the PM10 limit per year. An exceedance is an occasion when PM10 concentrations are higher than the levels required to protect human health. \n", "show_element_name": false, "title": "", "update_on_click": true}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "Horizons Environmental Data team measures the concentrations (amount) of PM10 and PM2.5 at the region\u2019s two gazetted airsheds - Taumarunui and Taihape.   \n \nAn airshed is a legally defined geographic area for air quality management. When these areas were gazetted, air quality was known to breach the National Environmental Standards for Air Quality (Air Quality NES) in these towns. These standards set the minimum level of air quality required to protect New Zealanders\u2019 health.  \n \nGreater concentrations of particulate matter in the air indicate poorer air quality. \n", "show_element_name": false, "title": "", "update_on_click": true}, "odometers": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1200, "padding": "10px", "payload_key": null, "placeholder": "\n\u003cdiv style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; padding: 20px;\"\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaihape exceedances 5 years\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #eab308;\"\u003e1\u003c/div\u003e\n    \u003cdiv style=\"font-size: 12px; color: #333; margin-top: 5px;\"\u003eDate of last exceedance:\u003cbr\u003e\u003cstrong\u003e20/10/2023\u003c/strong\u003e\u003c/div\u003e\n  \u003c/div\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaihape exceedances last year\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #10b981;\"\u003e0\u003c/div\u003e\n    \n  \u003c/div\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaumarunui exceedances 5 years\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #10b981;\"\u003e0\u003c/div\u003e\n    \n  \u003c/div\u003e\n  \u003cdiv style=\"padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;\"\u003e\n    \u003ch3 style=\"margin-bottom: 5px; font-size: 16px; color: #333;\"\u003eTaumarunui exceedances last year\u003c/h3\u003e\n    \u003cdiv style=\"font-size: 64px; font-weight: bold; color: #10b981;\"\u003e0\u003c/div\u003e\n    \n  \u003c/div\u003e\n\u003c/div\u003e\n", "show_element_name": false, "title": "", "update_on_click": true}, "trends": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "PM10 trends \n\nTrend analysis of PM10 concentrations in our airsheds since 2014 indicates that air quality in Taumarunui and Taihape is likely improving (Figure 2). \n", "show_element_name": false, "title": "", "update_on_click": true}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
