@@ -54,6 +54,7 @@ mobile_grid = """
 'markdown'
 'trends'
 'exceedances'
+'odometer_1'
 'odometer_2'
 """
 
@@ -115,6 +116,34 @@ def get_subtext(date, val):
     if not date or val == 0: return ""
     return f'<div style="font-size: 12px; color: #333; margin-top: 5px;">Date of last exceedance:<br><strong>{date}</strong></div>'
 
+# Get Trend Data
+t_trend_text = site_data.get("Taihape", {}).get("trend_text", "")
+t_trend_rate = site_data.get("Taihape", {}).get("trend_rate", "")
+
+tau_trend_text = site_data.get("Taumarunui", {}).get("trend_text", "")
+tau_trend_rate = site_data.get("Taumarunui", {}).get("trend_rate", "")
+
+def get_trend_color(text):
+    text_lower = text.lower()
+    if "improving" in text_lower: return "#10b981" # Green
+    if "degrading" in text_lower: return "#ef4444" # Red
+    return "#f97316" # Orange
+
+odometer_1_html = f'''
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; padding: 20px;">
+  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
+    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape PM10 trend</h3>
+    <div style="font-size: 32px; font-weight: bold; color: {get_trend_color(t_trend_text)};">{t_trend_text}</div>
+    <div style="font-size: 14px; color: #555; margin-top: 10px;">Trend rate: <strong>{t_trend_rate}</strong> &mu;g/m&sup3;</div>
+  </div>
+  <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
+    <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui PM10 trend</h3>
+    <div style="font-size: 32px; font-weight: bold; color: {get_trend_color(tau_trend_text)};">{tau_trend_text}</div>
+    <div style="font-size: 14px; color: #555; margin-top: 10px;">Trend rate: <strong>{tau_trend_rate}</strong> &mu;g/m&sup3;</div>
+  </div>
+</div>
+'''
+
 odometer_html = f'''
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center; padding: 20px;">
   <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
@@ -167,6 +196,21 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=900,
+    fade_duration_ms=2000
+)
+
+dashboard.add_details_panel(
+    block_id="odometer_1",
+    title="",
+    placeholder=odometer_1_html,
+    col_span=2,
+    grid_area="odometer_1",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=1200,
     fade_duration_ms=2000
 )
 
