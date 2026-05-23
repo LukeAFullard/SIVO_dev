@@ -1,9 +1,11 @@
 import sys
 import os
+import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../../')))
 
 from src.sivo.core.dashboard import SivoDashboard
+from src.sivo.core.sivo import Sivo
 
 nav_menu = [
     {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
@@ -43,13 +45,14 @@ with open(os.path.join(os.path.dirname(__file__), "pm10_exceedances.md"), "r", e
 
 desktop_grid = """
 'banner banner banner banner'
-'. markdown markdown .'
+'. markdown markdown odometer'
 'trends trends exceedances exceedances'
 """
 
 mobile_grid = """
 'banner'
 'markdown'
+'odometer'
 'trends'
 'exceedances'
 """
@@ -78,6 +81,51 @@ dashboard.add_details_panel(
     fade_in=True,
     fade_start_time_ms=300,
     fade_duration_ms=2000
+)
+
+# Read JSON Data
+with open(os.path.join(os.path.dirname(__file__), "data.json"), "r") as f:
+    site_data = json.load(f)
+
+taihape_exc = site_data.get("Taihape", {}).get("exceedances_last_year", "0")
+taihape_exc_val = int(taihape_exc) if taihape_exc.isdigit() else 0
+
+color = "#10b981" # green
+if taihape_exc_val == 1:
+    color = "#eab308" # yellow
+elif taihape_exc_val > 1:
+    color = "#ef4444" # red
+
+taihape_last_exc_date = site_data.get("Taihape", {}).get("date_of_last_exceedance", "")
+
+subtext_svg = ""
+if taihape_last_exc_date:
+    subtext_svg = f"""
+    <text x="150" y="160" font-size="14" fill="#333" font-family="sans-serif" text-anchor="middle">Date of last exceedance:</text>
+    <text x="150" y="180" font-size="14" fill="#333" font-family="sans-serif" text-anchor="middle" font-weight="bold">{taihape_last_exc_date}</text>
+    """
+
+svg_content = f"""
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="background:rgba(240, 240, 240, 0.7); border-radius: 10px;">
+  <text x="150" y="40" font-size="16" fill="#333" font-family="sans-serif" font-weight="bold" text-anchor="middle">Taihape exceedances last year</text>
+  <text id="taihape_val" x="150" y="120" font-size="64" fill="{color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">0</text>
+  {subtext_svg}
+</svg>
+"""
+
+sivo_app = Sivo.from_string(svg_content, render_mode="svg")
+sivo_app.map(
+    element_id="taihape_val",
+    odometer_value=taihape_exc_val,
+    odometer_duration_ms=2500,
+    odometer_format="int"
+)
+
+dashboard.add_sivo_block(
+    block_id="odometer",
+    sivo_app=sivo_app,
+    col_span=1,
+    grid_area="odometer"
 )
 
 dashboard.add_details_panel(
@@ -109,7 +157,6 @@ dashboard.add_details_panel(
     fade_start_time_ms=900,
     fade_duration_ms=2000
 )
-
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
