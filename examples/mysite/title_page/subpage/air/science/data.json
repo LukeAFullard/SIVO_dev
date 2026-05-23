@@ -1,0 +1,16 @@
+{
+  "Taihape": {
+    "trend_rate": "-0.4",
+    "trend_text": "Improving",
+    "exceedances_last_year": "0",
+    "exceedances_5_year": "1",
+    "date_of_last_exceedance": "20/10/2023"
+  },
+  "Taumarunui": {
+    "trend_rate": "-0.45",
+    "trend_text": "Improving",
+    "exceedances_last_year": "0",
+    "exceedances_5_year": "0",
+    "date_of_last_exceedance": ""
+  }
+}
