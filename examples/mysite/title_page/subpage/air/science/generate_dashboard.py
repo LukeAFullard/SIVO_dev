@@ -53,8 +53,8 @@ mobile_grid = """
 'banner'
 'markdown'
 'trends'
-'exceedances'
 'odometer_1'
+'exceedances'
 'odometer_2'
 """
 
