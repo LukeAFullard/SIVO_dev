@@ -122,29 +122,30 @@ def get_subtext(date, val, x, y):
 
 svg_content = f'''
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" style="background:rgba(220, 230, 240, 0.9); border-radius: 10px; box-shadow: none;">
+<style>.hide-native {{ opacity: 0; }}</style>
   <!-- Taihape 5 year (Top Left) -->
   <text x="150" y="40" font-size="16" fill="#333" font-family="sans-serif" font-weight="bold" text-anchor="middle">Taihape exceedances 5 years</text>
-  <text id="t_5yr_val" x="150" y="120" font-size="64" fill="{t_5yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{t_5yr}</text>
+  <text class="hide-native" id="t_5yr_val" x="150" y="120" font-size="64" fill="{t_5yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{t_5yr}</text>
   {get_subtext(t_date, t_5yr, 150, 160)}
 
   <!-- Taihape 1 year (Top Right) -->
   <text x="450" y="40" font-size="16" fill="#333" font-family="sans-serif" font-weight="bold" text-anchor="middle">Taihape exceedances last year</text>
-  <text id="t_1yr_val" x="450" y="120" font-size="64" fill="{t_1yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{t_1yr}</text>
+  <text class="hide-native" id="t_1yr_val" x="450" y="120" font-size="64" fill="{t_1yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{t_1yr}</text>
   {get_subtext(t_date, t_1yr, 450, 160)}
 
   <!-- Taumarunui 5 year (Bottom Left) -->
   <text x="150" y="240" font-size="16" fill="#333" font-family="sans-serif" font-weight="bold" text-anchor="middle">Taumarunui exceedances 5 years</text>
-  <text id="tau_5yr_val" x="150" y="320" font-size="64" fill="{tau_5yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{tau_5yr}</text>
+  <text class="hide-native" id="tau_5yr_val" x="150" y="320" font-size="64" fill="{tau_5yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{tau_5yr}</text>
   {get_subtext(tau_date, tau_5yr, 150, 360)}
 
   <!-- Taumarunui 1 year (Bottom Right) -->
   <text x="450" y="240" font-size="16" fill="#333" font-family="sans-serif" font-weight="bold" text-anchor="middle">Taumarunui exceedances last year</text>
-  <text id="tau_1yr_val" x="450" y="320" font-size="64" fill="{tau_1yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{tau_1yr}</text>
+  <text class="hide-native" id="tau_1yr_val" x="450" y="320" font-size="64" fill="{tau_1yr_color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">{tau_1yr}</text>
   {get_subtext(tau_date, tau_1yr, 450, 360)}
 </svg>
 '''
 
-sivo_app = Sivo.from_string(svg_content, render_mode="svg", transparent_template_lines=True)
+sivo_app = Sivo.from_string(svg_content, render_mode="svg", transparent_template_lines=True, lock_canvas=True, disable_zoom_controls=True, disable_resizer=True, lock_zoom_out=True, lock_scroll_bounds=True)
 sivo_app.map(element_id="t_5yr_val", odometer_value=t_5yr, odometer_duration_ms=2500, odometer_format="int")
 sivo_app.map(element_id="t_1yr_val", odometer_value=t_1yr, odometer_duration_ms=2500, odometer_format="int")
 sivo_app.map(element_id="tau_5yr_val", odometer_value=tau_5yr, odometer_duration_ms=2500, odometer_format="int")
