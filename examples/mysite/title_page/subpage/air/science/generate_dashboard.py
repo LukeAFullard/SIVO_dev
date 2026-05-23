@@ -45,16 +45,17 @@ with open(os.path.join(os.path.dirname(__file__), "pm10_exceedances.md"), "r", e
 
 desktop_grid = """
 'banner banner banner banner'
-'. markdown markdown odometer'
+'. markdown markdown .'
 'trends trends exceedances exceedances'
+'odometer_1 odometer_2 odometer_3 odometer_4'
 """
 
 mobile_grid = """
 'banner'
 'markdown'
-'odometer'
 'trends'
 'exceedances'
+'odometer_3'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -106,7 +107,7 @@ if taihape_last_exc_date:
     """
 
 svg_content = f"""
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="background:rgba(240, 240, 240, 0.7); border-radius: 10px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" style="background:rgba(240, 240, 240, 0.7); border-radius: 10px; box-shadow: none;">
   <text x="150" y="40" font-size="16" fill="#333" font-family="sans-serif" font-weight="bold" text-anchor="middle">Taihape exceedances last year</text>
   <text id="taihape_val" x="150" y="120" font-size="64" fill="{color}" font-family="sans-serif" font-weight="bold" text-anchor="middle">0</text>
   {subtext_svg}
@@ -122,10 +123,10 @@ sivo_app.map(
 )
 
 dashboard.add_sivo_block(
-    block_id="odometer",
+    block_id="odometer_3",
     sivo_app=sivo_app,
     col_span=1,
-    grid_area="odometer"
+    grid_area="odometer_3"
 )
 
 dashboard.add_details_panel(
