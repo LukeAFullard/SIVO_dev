@@ -12,6 +12,7 @@ def main():
         "subpage/air/issues/generate_sub_dashboard.py",
         "subpage/air/issues/generate_dashboard.py",
         "subpage/air/help/generate_dashboard.py",
+        "subpage/air/science/generate_dashboard.py",
         "subpage/water/generate_dashboard.py",
         "subpage/water/issues/generate_dashboard.py",
         "subpage/water/science/generate_science_page.py",
@@ -60,13 +61,16 @@ def main():
 
         print(f"Running {script_path}...")
 
-        # Add the root directory to PYTHONPATH so that 'src' can be imported
+        # Add the root directory and src to PYTHONPATH so that 'src' can be imported in different ways
         env = os.environ.copy()
         root_dir = os.path.abspath(os.path.join(base_dir, '../../..'))
+        src_dir = os.path.join(root_dir, 'src')
+        paths = [root_dir, src_dir]
+
         if 'PYTHONPATH' in env:
-            env['PYTHONPATH'] = f"{root_dir}:{env['PYTHONPATH']}"
+            env['PYTHONPATH'] = f"{':'.join(paths)}:{env['PYTHONPATH']}"
         else:
-            env['PYTHONPATH'] = root_dir
+            env['PYTHONPATH'] = ':'.join(paths)
 
         result = subprocess.run([sys.executable, os.path.basename(script_path)], cwd=os.path.dirname(script_path), env=env)
         if result.returncode != 0:

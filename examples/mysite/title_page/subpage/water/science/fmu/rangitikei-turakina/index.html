@@ -225,6 +225,13 @@
 
                 /* Responsive Design */
         @media (max-width: 900px) {
+            #sivo-sliding-sidebar {
+                width: 100%;
+                z-index: 99999;
+            }
+        }
+
+        @media (max-width: 900px) {
             .dashboard-container {
                 max-width: 100%;
 
@@ -2510,7 +2517,7 @@ For more detailed information, please read the [LAWA factsheet on calculating wa
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
-                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent && window.innerWidth > 900) {
                     document.getElementById('sidebar-title').innerText = params.name;
                     document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent, {
                         ADD_TAGS: ['iframe', 'style'],
@@ -2534,7 +2541,7 @@ For more detailed information, please read the [LAWA factsheet on calculating wa
                         var safeName = window.DOMPurify ? window.DOMPurify.sanitize(params.name) : String(params.name || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         container.innerHTML = (showName ? `<h3>${safeName}</h3>` : '') + `<p style="color: #64748b; font-style: italic;">Details opened in sidebar overlay.</p>`;
                     });
-                } else {
+                } else if (tooltipContent) {
                     // Update in-grid Details Panels
                     detailsPanels.forEach(panel => {
                         const blockId = panel.getAttribute('data-block-id');
