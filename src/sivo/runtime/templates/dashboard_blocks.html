@@ -2366,7 +2366,7 @@
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
-                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent && window.innerWidth > 900) {
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
                     document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent, {
                         ADD_TAGS: ['iframe', 'style'],
