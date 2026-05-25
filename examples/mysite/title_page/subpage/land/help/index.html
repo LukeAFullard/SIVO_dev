@@ -82,13 +82,14 @@
             width: 100%;
             max-width: 80%;
             /* Remove overflow: hidden so body can scroll if needed */
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
 
             grid-template-areas:
-'banner banner banner'
-'co_benefit co_benefit co_benefit'
-'markdown sustainable sustainable'
-'birds birds birds'
+'banner banner banner banner'
+'co_benefit co_benefit new_panel new_panel'
+'. markdown markdown .'
+'. sustainable sustainable .'
+'birds birds birds birds'
 ;
 
         }
@@ -238,8 +239,9 @@
 
                 grid-template-areas:
 'banner'
-'co_benefit'
 'markdown'
+'co_benefit'
+'new_panel'
 'sustainable'
 'birds'
 ;
@@ -268,8 +270,9 @@
 
             grid-template-areas:
 'banner'
-'co_benefit'
 'markdown'
+'co_benefit'
+'new_panel'
 'sustainable'
 'birds'
  !important;
@@ -1283,6 +1286,36 @@
 
 
 
+            <div class="html-card sivo-details-panel" id="card-new_panel" data-block-id="new_panel" style="grid-area: new_panel;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.6s;">
+                <div class="card-header"></div>
+                <div class="card-content sivo-details-content" id="container-new_panel">
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-new_panel"># Co-Benefits
+
+Placeholder text for the new details panel next to the co_benefit image.</p>
+                </div>
+                <script>
+                    (function() {
+                        const rawPlaceholder = "# Co-Benefits\n\nPlaceholder text for the new details panel next to the co_benefit image.";
+                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
+                            const container = document.getElementById('container-new_panel');
+                            if (container) {
+                                container.innerHTML = marked.parse(rawPlaceholder);
+                            }
+                        }
+                    })();
+                </script>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
             <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
@@ -1590,6 +1623,8 @@ There are several small yet meaningful actions that you can do to preserve our w
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
         window.sivoOverlaySizes = {};
+
+
 
 
 
@@ -2235,7 +2270,7 @@ There are several small yet meaningful actions that you can do to preserve our w
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "Landowners and farmers are the heroes of the program, without there will and contribution it would have been impossible to run this program. About 41% of total funding in SLUI came from the landowners in the financial year 2024-25. If you are a land owner, get in touch with Horizons and our amazing team can assist in developing farm plans under SLUI.\nEven if you are not a landowner, you are already contributing to the program by paying your rates.\nThere are several small yet meaningful actions that you can do to preserve our whenua and conserve our soils such as such as recycle, reuse and  reduce or 3Rs, supporting sustainable farming practice by understand and learning", "show_element_name": false, "title": "", "update_on_click": true}};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "Landowners and farmers are the heroes of the program, without there will and contribution it would have been impossible to run this program. About 41% of total funding in SLUI came from the landowners in the financial year 2024-25. If you are a land owner, get in touch with Horizons and our amazing team can assist in developing farm plans under SLUI.\nEven if you are not a landowner, you are already contributing to the program by paying your rates.\nThere are several small yet meaningful actions that you can do to preserve our whenua and conserve our soils such as such as recycle, reuse and  reduce or 3Rs, supporting sustainable farming practice by understand and learning", "show_element_name": false, "title": "", "update_on_click": true}, "new_panel": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "# Co-Benefits\n\nPlaceholder text for the new details panel next to the co_benefit image.", "show_element_name": false, "title": "", "update_on_click": true}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
