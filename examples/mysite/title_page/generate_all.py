@@ -68,9 +68,9 @@ def main():
         paths = [root_dir, src_dir]
 
         if 'PYTHONPATH' in env:
-            env['PYTHONPATH'] = f"{':'.join(paths)}:{env['PYTHONPATH']}"
+            env['PYTHONPATH'] = f"{os.pathsep.join(paths)}{os.pathsep}{env['PYTHONPATH']}"
         else:
-            env['PYTHONPATH'] = ':'.join(paths)
+            env['PYTHONPATH'] = os.pathsep.join(paths)
 
         result = subprocess.run([sys.executable, os.path.basename(script_path)], cwd=os.path.dirname(script_path), env=env)
         if result.returncode != 0:

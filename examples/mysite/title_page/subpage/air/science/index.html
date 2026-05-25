@@ -2130,7 +2130,7 @@ Figure 3. [Caption to be added once vis. is complete]
                 let tooltipContent = null;
                 let payloadData = null;
 
-                let panelPosition = "none";
+                let panelPosition = viewData.default_panel_position || "none";
 
                 if (elementActions && elementActions.length > 0) {
                     // Extract desired panel position if provided in mapping
@@ -2352,14 +2352,21 @@ Figure 3. [Caption to be added once vis. is complete]
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
-                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent && window.innerWidth > 900) {
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
                     document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent, {
                         ADD_TAGS: ['iframe', 'style'],
                         ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
                         FORCE_BODY: true
                     }) : tooltipContent;
-                    document.getElementById('sivo-sliding-sidebar').classList.add('active');
+
+                    var sidebar = document.getElementById('sivo-sliding-sidebar');
+                    if (viewData && viewData.panel_width) {
+                        sidebar.style.setProperty('width', viewData.panel_width, 'important');
+                    } else {
+                        sidebar.style.removeProperty('width');
+                    }
+                    sidebar.classList.add('active');
 
                     // Do NOT update in-grid Details panels if we opened a sidebar (OR behavior)
                     detailsPanels.forEach(panel => {
