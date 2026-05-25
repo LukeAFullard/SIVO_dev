@@ -2044,7 +2044,7 @@ More details will be added here in the future.
                 let tooltipContent = null;
                 let payloadData = null;
 
-                let panelPosition = "none";
+                let panelPosition = viewData.default_panel_position || "none";
 
                 if (elementActions && elementActions.length > 0) {
                     // Extract desired panel position if provided in mapping
@@ -2266,7 +2266,7 @@ More details will be added here in the future.
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
-                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent && window.innerWidth > 900) {
+                if ((panelPosition === 'right' || panelPosition === 'overlay') && tooltipContent) {
                     document.getElementById('sidebar-title').innerText = params.name;
                     document.getElementById('sidebar-content').innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(tooltipContent, {
                         ADD_TAGS: ['iframe', 'style'],
