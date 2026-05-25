@@ -27,9 +27,9 @@ for folder, p_info in parameters_state.items():
     template_path = os.path.join(base_dir, f"md/{folder}/state_placeholder_TEMPLATE.md")
     output_path = os.path.join(base_dir, f"md/{folder}/state_placeholder.md")
 
-    fmu_data = state_summary["FMUs"]["Whangaehu"][p_info["json_key"]]
+    fmu_data = state_summary["FMUs"]["Whangaehu"].get(p_info["json_key"])
     region_data = state_summary["Region"][p_info["json_key"]]
-    fmu_sites = fmu_data["Total Sites for Attribute"]
+    fmu_sites = fmu_data["Total Sites for Attribute"] if fmu_data else 0
 
     with open(template_path, 'r', encoding='utf-8') as f:
         template_content = f.read()
@@ -37,11 +37,12 @@ for folder, p_info in parameters_state.items():
     template_content = template_content.replace("|NUMBER_SITES|", str(fmu_sites))
 
     for grade in p_info["grades"]:
-        fmu_pct = float(fmu_data["Grades"][grade]["Percentage"])
+        fmu_pct = float(fmu_data["Grades"][grade]["Percentage"]) if fmu_data and grade in fmu_data["Grades"] else 0.0
+        fmu_count = fmu_data["Grades"][grade]["Count"] if fmu_data and grade in fmu_data["Grades"] else 0
         region_pct = float(region_data["Grades"][grade]["Percentage"])
 
         template_content = template_content.replace(f"|FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
-        template_content = template_content.replace(f"|FMU_{grade}_COUNT|", str(fmu_data["Grades"][grade]["Count"]))
+        template_content = template_content.replace(f"|FMU_{grade}_COUNT|", str(fmu_count))
         template_content = template_content.replace(f"|REGION_{grade}_PCT|", f"{region_pct:.1f}")
         template_content = template_content.replace(f"|REGION_{grade}_COUNT|", str(region_data["Grades"][grade]["Count"]))
 
@@ -167,7 +168,7 @@ parameters_trend = {
 }
 
 for folder, json_key in parameters_trend.items():
-    fmu_data = trend_data['FMUs']['Whangaehu'][json_key]
+    fmu_data = trend_data['FMUs']['Whangaehu'].get(json_key)
     region_data = trend_data['Region'][json_key]
 
     template_path = os.path.join(os.path.dirname(__file__), f"md/{folder}/trend_placeholder_TEMPLATE.md")
@@ -177,13 +178,13 @@ for folder, json_key in parameters_trend.items():
         template_content = f.read()
 
     replacements = {
-        '|NUMBER_SITES|': str(fmu_data['Total Sites for Parameter']),
-        '|FMU_IMPROVING_PCT|': str(fmu_data['Categories']['Improving']['Percentage']),
-        '|FMU_IMPROVING_COUNT|': str(fmu_data['Categories']['Improving']['Count']),
-        '|FMU_INDETERMINATE_PCT|': str(fmu_data['Categories']['Indeterminate']['Percentage']),
-        '|FMU_INDETERMINATE_COUNT|': str(fmu_data['Categories']['Indeterminate']['Count']),
-        '|FMU_DEGRADING_PCT|': str(fmu_data['Categories']['Degrading']['Percentage']),
-        '|FMU_DEGRADING_COUNT|': str(fmu_data['Categories']['Degrading']['Count']),
+        '|NUMBER_SITES|': str(fmu_data['Total Sites for Parameter']) if fmu_data else '0',
+        '|FMU_IMPROVING_PCT|': str(fmu_data['Categories']['Improving']['Percentage']) if fmu_data else '0.0',
+        '|FMU_IMPROVING_COUNT|': str(fmu_data['Categories']['Improving']['Count']) if fmu_data else '0',
+        '|FMU_INDETERMINATE_PCT|': str(fmu_data['Categories']['Indeterminate']['Percentage']) if fmu_data else '0.0',
+        '|FMU_INDETERMINATE_COUNT|': str(fmu_data['Categories']['Indeterminate']['Count']) if fmu_data else '0',
+        '|FMU_DEGRADING_PCT|': str(fmu_data['Categories']['Degrading']['Percentage']) if fmu_data else '0.0',
+        '|FMU_DEGRADING_COUNT|': str(fmu_data['Categories']['Degrading']['Count']) if fmu_data else '0',
         '|REGION_IMPROVING_PCT|': str(region_data['Categories']['Improving']['Percentage']),
         '|REGION_IMPROVING_COUNT|': str(region_data['Categories']['Improving']['Count']),
         '|REGION_INDETERMINATE_PCT|': str(region_data['Categories']['Indeterminate']['Percentage']),
@@ -338,7 +339,12 @@ for icon in icons:
         trend_how_content = f.read()
         icon["trend_how"] = adjust_iframe_height(trend_how_content, os.path.dirname(__file__))
 
-    with open(os.path.join(os.path.dirname(__file__), icon["map_file"]), "r", encoding="utf-8") as f:
+    map_file_path = os.path.join(os.path.dirname(__file__), icon["map_file"])
+    if not os.path.exists(map_file_path):
+        map_file_path = os.path.join(os.path.dirname(__file__), "results/FMU_Boundary_Only.html")
+        icon["map_file"] = "results/FMU_Boundary_Only.html"
+
+    with open(map_file_path, "r", encoding="utf-8") as f:
         map_content = f.read()
         if map_content.strip().lower().startswith("<!doctype html>") or map_content.strip().lower().startswith("<html"):
             icon["map_html"] = f"<div id='map_container' style='background:#f1f5f9; width:100%; height:100%; min-height:600px; display:flex; align-items:center; justify-content:center; border-radius:10px;'><iframe src='{icon['map_file']}' width='100%' height='100%' style='border:none; border-radius:10px;'></iframe></div>"
