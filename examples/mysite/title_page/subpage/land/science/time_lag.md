@@ -1,1 +1,2 @@
-Explain time lag
+The key to any nature-based solution is to remember that nature takes its course. Although the impact of soil mitigation activities starts taking effect much sooner, it takes a few years to fully realize the positive results of the actions taken.
+We also need to be mindful that the risk from severe weather events can never be entirely removed.  Certain soil erosion processes are naturally too aggressive to stop completely and are inevitable. However, we can always mitigate the effects by doing what we can.
