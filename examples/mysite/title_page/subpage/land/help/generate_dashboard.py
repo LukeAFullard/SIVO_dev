@@ -20,7 +20,7 @@ nav_menu = [
 
 dashboard = SivoDashboard(
     title="",
-    columns=3,
+    columns=4,
     background_image_url="../../../assets/land/land_bg.png",
     background_image_opacity=0.15,
     background_image_size="50%",
@@ -35,17 +35,22 @@ dashboard = SivoDashboard(
 with open(os.path.join(os.path.dirname(__file__), "md/help.md"), "r", encoding="utf-8") as f:
     md_content = f.read()
 
+with open(os.path.join(os.path.dirname(__file__), "md/new_panel.md"), "r", encoding="utf-8") as f:
+    new_panel_md_content = f.read()
+
 desktop_grid = """
-'banner banner banner'
-'co_benefit co_benefit co_benefit'
-'markdown sustainable sustainable'
-'birds birds birds'
+'banner banner banner banner'
+'co_benefit co_benefit new_panel new_panel'
+'. markdown markdown .'
+'. sustainable sustainable .'
+'birds birds birds birds'
 """
 
 mobile_grid = """
 'banner'
-'co_benefit'
 'markdown'
+'co_benefit'
+'new_panel'
 'sustainable'
 'birds'
 """
@@ -55,7 +60,7 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 dashboard.add_image_block(
     block_id="banner",
     image_url="../../../assets/land/land_banner.png",
-    col_span=3,
+    col_span=4,
     grid_area="banner",
     object_fit="contain",
     border_radius="0px"
@@ -64,15 +69,30 @@ dashboard.add_image_block(
 dashboard.add_html_block(
     block_id="co_benefit",
     html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/soil_co_benefit.png" style="width:70%; height:70%; object-fit:contain; border-radius:0px;" /></div>',
-    col_span=3,
+    col_span=2,
     grid_area="co_benefit"
+)
+
+dashboard.add_details_panel(
+    block_id="new_panel",
+    title="",
+    placeholder=new_panel_md_content,
+    col_span=2,
+    grid_area="new_panel",
+    background_color="rgba(240, 240, 240, 0.7)",
+    border_radius="10px",
+    padding="10px",
+    show_element_name=False,
+    fade_in=True,
+    fade_start_time_ms=600,
+    fade_duration_ms=2000
 )
 
 dashboard.add_details_panel(
     block_id="markdown",
     title="",
     placeholder=md_content,
-    col_span=1,
+    col_span=2,
     grid_area="markdown",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
@@ -93,7 +113,7 @@ dashboard.add_html_block(
 dashboard.add_html_block(
     block_id="birds",
     html_content='<div style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"><img src="../../../assets/land/birds.png" style="width:70%; height:70%; object-fit:contain; border-radius:10px;" /></div>',
-    col_span=3,
+    col_span=4,
     grid_area="birds"
 )
 
