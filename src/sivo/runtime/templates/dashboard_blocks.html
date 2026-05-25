@@ -2144,7 +2144,7 @@
                 let tooltipContent = null;
                 let payloadData = null;
 
-                let panelPosition = "none";
+                let panelPosition = viewData.default_panel_position || "none";
 
                 if (elementActions && elementActions.length > 0) {
                     // Extract desired panel position if provided in mapping
