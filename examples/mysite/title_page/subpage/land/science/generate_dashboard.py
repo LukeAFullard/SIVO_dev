@@ -152,7 +152,8 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=300,
-    fade_duration_ms=2000
+    fade_duration_ms=2000,
+    update_on_click=False
 )
 
 dashboard.add_geocoder_block(
@@ -175,7 +176,8 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=600,
-    fade_duration_ms=2000
+    fade_duration_ms=2000,
+    update_on_click=False
 )
 
 
@@ -219,7 +221,8 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=1200,
-    fade_duration_ms=2000
+    fade_duration_ms=2000,
+    update_on_click=False
 )
 
 dashboard.add_image_block(
@@ -246,7 +249,8 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=1800,
-    fade_duration_ms=2000
+    fade_duration_ms=2000,
+    update_on_click=False
 )
 
 dashboard.add_image_block(
