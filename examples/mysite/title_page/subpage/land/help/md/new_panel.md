@@ -1,3 +1,1 @@
-# Co-Benefits
-
-Placeholder text for the new details panel next to the co_benefit image.
+Over the years we have observed that actions undertaken under SLUI program are not limited to soil mitigation but also deliver environmental, economic and social co-benefits contributing to overall sustainability of the region and making the region secure for our future generations. 
