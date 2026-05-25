@@ -108,10 +108,10 @@ with open(os.path.join(os.path.dirname(__file__), "time_lag.md"), "r", encoding=
 desktop_grid = """
 'banner banner banner banner'
 'markdown markdown markdown markdown'
+'mitigation_text mitigation_text mitigation_image mitigation_image'
 'search map map map'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
-'mitigation_text mitigation_text mitigation_image mitigation_image'
 'time_lag_text time_lag_text time_lag_text time_lag_text'
 'tree_soil_image tree_soil_image erosion_time_lag_image erosion_time_lag_image'
 """
@@ -119,13 +119,13 @@ desktop_grid = """
 mobile_grid = """
 'banner'
 'markdown'
+'mitigation_text'
+'mitigation_image'
 'search'
 'text2'
 'map'
 'fmu_text'
 'fmu_html'
-'mitigation_text'
-'mitigation_image'
 'time_lag_text'
 'tree_soil_image'
 'erosion_time_lag_image'
