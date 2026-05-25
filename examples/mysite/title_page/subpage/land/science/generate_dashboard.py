@@ -112,8 +112,7 @@ desktop_grid = """
 'search map map map'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
-'time_lag_text time_lag_text time_lag_text time_lag_text'
-'tree_soil_image tree_soil_image erosion_time_lag_image erosion_time_lag_image'
+'time_lag_text time_lag_text erosion_time_lag_image erosion_time_lag_image'
 """
 
 mobile_grid = """
@@ -127,7 +126,6 @@ mobile_grid = """
 'fmu_text'
 'fmu_html'
 'time_lag_text'
-'tree_soil_image'
 'erosion_time_lag_image'
 """
 
@@ -248,18 +246,6 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=1800,
-    fade_duration_ms=2000
-)
-
-dashboard.add_image_block(
-    block_id="tree_soil_image",
-    image_url="../../../assets/land/tree_soil.png",
-    col_span=2,
-    grid_area="tree_soil_image",
-    object_fit="contain",
-    border_radius="10px",
-    fade_in=True,
-    fade_start_time_ms=2100,
     fade_duration_ms=2000
 )
 
