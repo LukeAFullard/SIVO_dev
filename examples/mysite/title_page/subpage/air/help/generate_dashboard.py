@@ -25,8 +25,8 @@ dashboard = SivoDashboard(
     background_image_url="../../../assets/air/air_bg.png",
     background_image_opacity=0.25,
     background_image_size="100%",
-    width="100%",
-    mobile_width="100%",
+    width="80%",
+    mobile_width="80%",
     theme="transparent",
     gap="tight",
     navigation_menu=nav_menu
@@ -44,8 +44,8 @@ def read_md(name):
 desktop_grid = """
 'banner banner banner banner'
 '. markdown markdown .'
-'. bad good .'
-'. bad_cap good_cap .'
+'bad bad good good'
+'bad_cap bad_cap good_cap good_cap'
 """
 
 mobile_grid = """
@@ -142,15 +142,17 @@ good_air.map(element_id="good_bike", tooltip="Click me!", glow=True, fade_pulse=
 dashboard.add_sivo_block(
     block_id="bad",
     sivo_app=bad_air,
-    col_span=1,
+    col_span=2,
     grid_area="bad",
+    min_height="700px"
 )
 
 dashboard.add_sivo_block(
     block_id="good",
     sivo_app=good_air,
-    col_span=1,
+    col_span=2,
     grid_area="good",
+    min_height="700px"
 )
 
 dashboard.add_text_block(
@@ -160,7 +162,7 @@ dashboard.add_text_block(
     font_weight="normal",
     background_color="transparent",
     border="none",
-    col_span=1,
+    col_span=2,
     grid_area="bad_cap"
 )
 
@@ -171,7 +173,7 @@ dashboard.add_text_block(
     font_weight="normal",
     background_color="transparent",
     border="none",
-    col_span=1,
+    col_span=2,
     grid_area="good_cap"
 )
 

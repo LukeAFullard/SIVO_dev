@@ -80,15 +80,15 @@
             flex: 1;
             margin: 0 auto;
             width: 100%;
-            max-width: 100%;
+            max-width: 80%;
             /* Remove overflow: hidden so body can scroll if needed */
             grid-template-columns: repeat(4, 1fr);
 
             grid-template-areas:
 'banner banner banner banner'
 '. markdown markdown .'
-'. bad good .'
-'. bad_cap good_cap .'
+'bad bad good good'
+'bad_cap bad_cap good_cap good_cap'
 ;
 
         }
@@ -231,7 +231,7 @@
 
         @media (max-width: 900px) {
             .dashboard-container {
-                max-width: 100%;
+                max-width: 80%;
 
                 gap: 0.35rem;
 
@@ -262,7 +262,7 @@
 
         /* Force Mobile Layout */
         body.force-mobile .dashboard-container {
-            max-width: 100% !important;
+            max-width: 80% !important;
 
             gap: 0.35rem !important;
 
@@ -1302,7 +1302,7 @@ More details will be added here in the future.
 
 
 
-            <div class="sivo-card " id="card-bad" style="grid-area: bad; ">
+            <div class="sivo-card " id="card-bad" style="grid-area: bad; min-height: 700px !important;">
                 <div class="card-header">Bad</div>
                 <div class="sivo-container" id="container-bad">
                     <div id="chart-bad" style="width: 100%; height: 100%;"></div>
@@ -1320,7 +1320,7 @@ More details will be added here in the future.
 
 
 
-            <div class="sivo-card " id="card-good" style="grid-area: good; ">
+            <div class="sivo-card " id="card-good" style="grid-area: good; min-height: 700px !important;">
                 <div class="card-header">Good</div>
                 <div class="sivo-container" id="container-good">
                     <div id="chart-good" style="width: 100%; height: 100%;"></div>
