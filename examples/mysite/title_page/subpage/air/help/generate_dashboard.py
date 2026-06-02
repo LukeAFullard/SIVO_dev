@@ -180,5 +180,13 @@ dashboard.add_text_block(
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
-dashboard.to_html(output_path=output_file)
+dashboard.to_html(output_path=output_file, custom_css="""
+<style>
+@media (max-width: 900px) {
+    #card-bad, #card-good {
+        min-height: 50vh !important;
+    }
+}
+</style>
+""")
 print(f"Dashboard generated at {output_file}")
