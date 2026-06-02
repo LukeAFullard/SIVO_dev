@@ -1,0 +1,14 @@
+--- examples/mysite/title_page/subpage/air/help/generate_dashboard.py
++++ examples/mysite/title_page/subpage/air/help/generate_dashboard.py
+@@ -21,11 +21,11 @@
+     columns=4,
+     background_image_url="../../../assets/air/air_bg.png",
+     background_image_opacity=0.25,
+     background_image_size="100%",
+-    width="80%",
++    width="100%",
+     mobile_width="100%",
+     theme="transparent",
+     gap="tight",
+     navigation_menu=nav_menu
+ )

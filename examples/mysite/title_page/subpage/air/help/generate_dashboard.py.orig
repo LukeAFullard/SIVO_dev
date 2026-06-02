@@ -44,8 +44,8 @@ def read_md(name):
 desktop_grid = """
 'banner banner banner banner'
 '. markdown markdown .'
-'. bad good .'
-'. bad_cap good_cap .'
+'bad good'
+'bad_cap bad_cap good_cap good_cap'
 """
 
 mobile_grid = """
@@ -142,14 +142,14 @@ good_air.map(element_id="good_bike", tooltip="Click me!", glow=True, fade_pulse=
 dashboard.add_sivo_block(
     block_id="bad",
     sivo_app=bad_air,
-    col_span=1,
+    col_span=2,
     grid_area="bad",
 )
 
 dashboard.add_sivo_block(
     block_id="good",
     sivo_app=good_air,
-    col_span=1,
+    col_span=2,
     grid_area="good",
 )
 
@@ -160,7 +160,7 @@ dashboard.add_text_block(
     font_weight="normal",
     background_color="transparent",
     border="none",
-    col_span=1,
+    col_span=2,
     grid_area="bad_cap"
 )
 
@@ -171,7 +171,7 @@ dashboard.add_text_block(
     font_weight="normal",
     background_color="transparent",
     border="none",
-    col_span=1,
+    col_span=2,
     grid_area="good_cap"
 )
 
