@@ -144,6 +144,7 @@ dashboard.add_sivo_block(
     sivo_app=bad_air,
     col_span=2,
     grid_area="bad",
+    min_height="700px"
 )
 
 dashboard.add_sivo_block(
@@ -151,6 +152,7 @@ dashboard.add_sivo_block(
     sivo_app=good_air,
     col_span=2,
     grid_area="good",
+    min_height="700px"
 )
 
 dashboard.add_text_block(
@@ -180,12 +182,9 @@ output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
 dashboard.to_html(output_path=output_file, custom_css="""
 <style>
-#card-bad, #card-good {
-    min-height: 700px;
-}
 @media (max-width: 900px) {
     #card-bad, #card-good {
-        min-height: 95vw;
+        min-height: 50vh !important;
     }
 }
 </style>
