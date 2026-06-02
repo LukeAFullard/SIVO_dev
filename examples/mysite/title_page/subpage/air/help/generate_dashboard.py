@@ -83,7 +83,7 @@ dashboard.add_details_panel(
     fade_duration_ms=2000
 )
 
-bad_air_svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/air/bad_air_Quality.svg"))
+bad_air_svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/air/bad_template.svg"))
 bad_air = Sivo.from_svg(
     bad_air_svg_path,
     theme="transparent",
@@ -99,15 +99,17 @@ bad_air = Sivo.from_svg(
     panel_height="90%",
 )
 bad_air.add_svg_background_image(
-    url="../../../assets/air/bad_air_q.png",
+    url="../../../assets/air/J420218 - Practices vs Good Practices Illustrations V3-04.png",
     insert_after="background"
 )
-bad_air.map(element_id="burnoff", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("burnoff"), border_color="yellow", border_width=3)
-bad_air.map(element_id="vehicle", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("vehicle"), border_color="yellow", border_width=3)
-bad_air.map(element_id="wet_wood", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("wet_wood"), border_color="yellow", border_width=3)
+bad_air.map(element_id="bad_logs_in_fireplace", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("bad_logs_in_fireplace"), border_color="yellow", border_width=3)
 bad_air.map(element_id="bad_fireplace", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("bad_fireplace"), border_color="yellow", border_width=3)
+bad_air.map(element_id="bad_log_stack", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("bad_log_stack"), border_color="yellow", border_width=3)
+bad_air.map(element_id="bad_car", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("bad_car"), border_color="yellow", border_width=3)
+bad_air.map(element_id="bad_rubbish", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("bad_rubbish"), border_color="yellow", border_width=3)
+bad_air.map(element_id="bad_chimney", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("bad_chimney"), border_color="yellow", border_width=3)
 
-good_air_svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/air/good_air_quality.svg"))
+good_air_svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/air/good_template.svg"))
 good_air = Sivo.from_svg(
     good_air_svg_path,
     theme="transparent",
@@ -123,14 +125,18 @@ good_air = Sivo.from_svg(
     panel_height="90%",
 )
 good_air.add_svg_background_image(
-    url="../../../assets/air/good_air_q.png",
+    url="../../../assets/air/J420218 - Practices vs Good Practices Illustrations V3-03.png",
     insert_after="background"
 )
-good_air.map(element_id="Good_fireplace", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("Good_fireplace"), border_color="yellow", border_width=3)
-good_air.map(element_id="split_wood", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("split_wood"), border_color="yellow", border_width=3)
-good_air.map(element_id="good_transport", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_transport"), border_color="yellow", border_width=3)
-good_air.map(element_id="outside_wood", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("outside_wood"), border_color="yellow", border_width=3)
-good_air.map(element_id="heatpump", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("heatpump"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_chimney", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_chimney"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_wood_in_fireplace", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_wood_in_fireplace"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_fireplace", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_fireplace"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_bus", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_bus"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_log_stack", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_log_stack"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_compost", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_compost"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_woodshed", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_woodshed"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_brush", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_brush"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_bike", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_bike"), border_color="yellow", border_width=3)
 
 
 dashboard.add_sivo_block(
