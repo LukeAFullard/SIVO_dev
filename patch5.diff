@@ -1,0 +1,44 @@
+--- examples/mysite/title_page/subpage/air/help/generate_dashboard.py
++++ examples/mysite/title_page/subpage/air/help/generate_dashboard.py
+@@ -134,18 +134,20 @@
+ dashboard.add_sivo_block(
+     block_id="bad",
+     sivo_app=bad_air,
+-    col_span=2,
++    col_span=1,
+     grid_area="bad",
+ )
+
+ dashboard.add_sivo_block(
+     block_id="good",
+     sivo_app=good_air,
+-    col_span=2,
++    col_span=1,
+     grid_area="good",
+ )
+
+ dashboard.add_text_block(
+     block_id="bad_cap",
+     text="<div style='text-align: center; width: 100%;'><i>Activities contributing to poor air quality.</i></div>",
+     font_size="16px",
+@@ -148,15 +150,15 @@
+     font_size="16px",
+     font_weight="normal",
+     background_color="transparent",
+     border="none",
+-    col_span=2,
++    col_span=1,
+     grid_area="bad_cap"
+ )
+
+ dashboard.add_text_block(
+     block_id="good_cap",
+     text="<div style='text-align: center; width: 100%;'><i>Activities contributing to good air quality.</i></div>",
+     font_size="16px",
+     font_weight="normal",
+     background_color="transparent",
+     border="none",
+-    col_span=2,
++    col_span=1,
+     grid_area="good_cap"
+ )

@@ -1,0 +1,17 @@
+--- examples/mysite/title_page/subpage/air/help/generate_dashboard.py
++++ examples/mysite/title_page/subpage/air/help/generate_dashboard.py
+@@ -37,13 +37,13 @@
+ desktop_grid = """
+ 'banner banner banner banner'
+ '. markdown markdown .'
+-'bad bad good good'
++'bad good'
+ 'bad_cap bad_cap good_cap good_cap'
+ """
+
+ mobile_grid = """
+ 'banner'
+ 'markdown'
+ 'bad'
+ 'bad_cap'
+ 'good'
