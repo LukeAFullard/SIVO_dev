@@ -14,6 +14,8 @@
         const toolFreehandBtn = document.getElementById('tool-freehand');
         const toolMagicBtn = document.getElementById('tool-magic');
         const toolSamBtn = document.getElementById('tool-sam');
+        const polyOptionsDiv = document.getElementById('poly-options');
+        const polySmoothCheckbox = document.getElementById('poly-smooth');
         const magicOptionsDiv = document.getElementById('magic-wand-options');
         const samOptionsDiv = document.getElementById('sam-options');
         const samModelSelect = document.getElementById('sam-model-select');
@@ -506,6 +508,7 @@
             toolFreehandBtn.classList.remove('tool-active');
             toolMagicBtn.classList.remove('tool-active');
             toolSamBtn.classList.remove('tool-active');
+            polyOptionsDiv.style.display = 'none';
             magicOptionsDiv.style.display = 'none';
             samOptionsDiv.style.display = 'none';
 
@@ -514,6 +517,7 @@
                 toolInstructions.innerHTML = "Click a shape to select it. Drag to move it.";
             } else if (tool === 'poly') {
                 toolPolyBtn.classList.add('tool-active');
+                polyOptionsDiv.style.display = 'block';
                 toolInstructions.innerHTML = "Click to add points. Press <strong>Enter</strong> or click the first point to complete the polygon. Press <strong>Esc</strong> to cancel.";
             } else if (tool === 'rect') {
                 toolRectBtn.classList.add('tool-active');
@@ -1242,8 +1246,42 @@
             }
         });
 
+
+        function catmullRomSpline(points, numInterpolations=10) {
+            if (points.length < 3) return points;
+
+            const res = [];
+            for (let i = 0; i < points.length; i++) {
+                const p0 = points[(i - 1 + points.length) % points.length];
+                const p1 = points[i];
+                const p2 = points[(i + 1) % points.length];
+                const p3 = points[(i + 2) % points.length];
+
+                for (let t = 0; t < 1; t += 1/numInterpolations) {
+                    const t2 = t * t;
+                    const t3 = t2 * t;
+
+                    const x = 0.5 * ((2 * p1.x) +
+                                     (-p0.x + p2.x) * t +
+                                     (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 +
+                                     (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3);
+
+                    const y = 0.5 * ((2 * p1.y) +
+                                     (-p0.y + p2.y) * t +
+                                     (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 +
+                                     (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3);
+                    res.push({x, y});
+                }
+            }
+            return res;
+        }
+
         function finishPolygon() {
-            addShape('poly', null, [...currentPath]);
+            let finalPoints = [...currentPath];
+            if (polySmoothCheckbox && polySmoothCheckbox.checked) {
+                finalPoints = catmullRomSpline(finalPoints, 10);
+            }
+            addShape('poly', null, finalPoints);
             currentPath = [];
             tempEndPoint = null;
             redraw();
