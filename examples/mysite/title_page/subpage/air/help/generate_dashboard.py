@@ -137,6 +137,7 @@ good_air.map(element_id="good_compost", tooltip="Click me!", glow=True, fade_pul
 good_air.map(element_id="good_woodshed", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_woodshed"), border_color="yellow", border_width=3)
 good_air.map(element_id="good_brush", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_brush"), border_color="yellow", border_width=3)
 good_air.map(element_id="good_bike", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_bike"), border_color="yellow", border_width=3)
+good_air.map(element_id="good_heatpump", tooltip="Click me!", glow=True, fade_pulse=True, hover_color="rgba(255, 255, 0, 0.8)", markdown=read_md("good_heatpump"), border_color="yellow", border_width=3)
 
 
 dashboard.add_sivo_block(
