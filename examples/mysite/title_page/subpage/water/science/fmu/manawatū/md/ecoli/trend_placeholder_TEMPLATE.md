@@ -27,7 +27,7 @@ We evaluated 15-year trends for *E. coli* at |NUMBER_SITES| monitoring sites acr
       font-size: 0.98rem;
   ">
 
-Trends show us if bacteria levels are consistently changing over time. We use a 10-year timeframe to see past temporary weather spikes—like heavy rain washing animal waste into rivers—and uncover the true, long-term direction of water quality.
+Trends show us if bacteria levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes—like heavy rain washing animal waste into rivers—and uncover the true, long-term direction of water quality.
 
 <br>
 <strong>Trend Categories</strong>
