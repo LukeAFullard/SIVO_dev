@@ -1,12 +1,12 @@
-# The Manawatū FMU
+# The Kai Iwi FMU
 
-The Manawatū River is unique—it is the only river in New Zealand that completely crosses a mountain range. It begins on the eastern side of the Ruahine Ranges, cuts through the stunning Te Āpiti (Manawatū Gorge), and flows across the plains before finally meeting the Tasman Sea at Foxton Beach.
+The Kai Iwi Freshwater Management Unit (FMU) is the smallest in our region. It encompasses the Kai Iwi, Mōwhānau, and Ototoka streams, which all flow into the Tasman Sea on the west coast. The Kai Iwi Stream begins its journey in the native forest south of Whanganui National Park, travelling southwest through a valley until it reaches the coast, where stunning cliffs tower over the estuary.
 
-According to Māori tradition, the river's name tells a story. When the explorer Haunui-a-Nanaia reached its wide, cold waters, it made him catch his breath. In te reo Māori, *manawa* means breath, and *tū* means to stand still.
+The surrounding landscape is dominated by erosion-prone hill country. This unique terrain was formed by ancient layers of sandstone, shelly limestone, and siltstone that rose from the sea to create dramatic cliffs and steep stream channels.
 
 ***
 
 ### Explore the Data
-*   **How do we measure health?** Scroll down to learn exactly how scientists calculate the current state and long-term trends of our local rivers and streams.
-*   **View the latest results:** When you are ready to dive into the data, <span style="background-color: #ccffcc; padding: 0 4px; border-radius: 3px;">simply click the icons above</span> to explore the current monitoring results for the Manawatū FMU.
-*   **Dive deeper with LAWA:** For an independent, national view of our water quality, check out the [LAWA Manawatū River Quality data](https://www.lawa.org.nz/explore-data/manawatu-whanganui-region/river-quality/manawatu).
+*   **How do we measure health?** Scroll down to learn exactly how scientists calculate the current state and long-term trends of our local rivers and streams. 
+*   **View the latest results:** When you are ready to dive into the data, <span style="background-color: #ccffcc; padding: 0 4px; border-radius: 3px;">simply click the icons above</span> to explore the current monitoring results for the Kai Iwi FMU.
+*   **Dive deeper with LAWA:** For an independent, national view of our water quality, check out the [LAWA Manawatū-Whanganui Region data](https://www.lawa.org.nz/explore-data/manawatu-whanganui-region/).
