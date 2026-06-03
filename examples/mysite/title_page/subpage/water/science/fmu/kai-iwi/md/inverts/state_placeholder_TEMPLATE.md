@@ -1,6 +1,6 @@
 # The Current State of Macroinvertebrates
 
-We evaluated the current state of macroinvertebrates at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
+We evaluated the current state of macroinvertebrates at |NUMBER_SITES| monitoring sites across the Kai Iwi FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -43,7 +43,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
 
 ***
 
-### Macroinvertebrate (MCI) Results in the Manawatū FMU
+### Macroinvertebrate (MCI) Results in the Kai Iwi FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -58,7 +58,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Kai Iwi FMU</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|FMU_A_PCT|% (|FMU_A_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|FMU_B_PCT|% (|FMU_B_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|FMU_C_PCT|% (|FMU_C_COUNT|)</td>
