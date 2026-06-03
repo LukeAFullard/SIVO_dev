@@ -1,6 +1,6 @@
 # Long-Term Trends for Algae
 
-We evaluated 10-year trends for algae and chlorophyll-a at 8 monitoring sites across the Whangaehu FMU.
+We evaluated 15-year trends for algae and chlorophyll-a at 8 monitoring sites across the Whangaehu FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -27,7 +27,7 @@ We evaluated 10-year trends for algae and chlorophyll-a at 8 monitoring sites ac
       font-size: 0.98rem;
   ">
 
-Trends show us if the amount of algae is consistently changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 10-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
+Trends show us if the amount of algae is consistently changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 15-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
 
 <br><br>
 <strong>Trend Categories</strong>
@@ -51,7 +51,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll A (10-year trend)</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll A (15-year trend)</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #2abeff; color: black;">Improving</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #e6e600; color: black;">Indeterminate</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #ff6767; color: black;">Degrading</th>
