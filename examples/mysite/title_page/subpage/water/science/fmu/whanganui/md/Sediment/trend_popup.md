@@ -1,6 +1,6 @@
 ### How to Read the Site-specific Trend Charts below
 
-The interactive charts display individual monitoring site metrics assessing changes in water quality variables over a 10-year period (2016–2025).
+The interactive charts display individual monitoring site metrics assessing changes in water quality variables over a 15-year period (2011–2025).
 
 * **Baseline Evaluation (0%):** The bold vertical line at **0** represents a stable state with no detected environmental change.
 * **Directional Vectors:** Lollipops extending to the **right** represent positive percentage increases per year, while lollipops extending to the **left** represent negative percentage decreases per year.
