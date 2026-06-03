@@ -1,9 +1,9 @@
 # Diving Deeper: How We Calculate Trends
 
-To understand if our water quality is truly improving or degrading, we look at long-term trends. In this report, we specifically calculate and focus on 15-year trends to include more monitoring sites that have a reliable, consistent length of data. If you are interested in exploring trends over 5, 10, 15, or 20 years, you can visit the Land, Air, Water Aotearoa (LAWA) website.
+To understand if our water quality is truly improving or degrading, we look at long-term trends. In this report, we specifically calculate and focus on 15-year trends to include more monitoring sites that have a reliable, consistent length of data. If you are interested in exploring trends over 5, 10, or 20 years, you can visit the Land, Air, Water Aotearoa (LAWA) website.
 
 ### Strict Data Rules
-Before we calculate a trend, the raw data goes through strict quality control to remove any missing or compromised measurements. To calculate a reliable 15-year trend, a monitoring site must have at least 90% of its expected water samples, covering at least 90% of those ten years.
+Before we calculate a trend, the raw data goes through strict quality control to remove any missing or compromised measurements. To calculate a reliable 15-year trend, a monitoring site must have at least 90% of its expected water samples, covering at least 90% of those 15 years.
 
 ### Dealing with "Invisible" Pollution
 Sometimes, the amount of a pollutant in the water is so tiny that standard laboratory tests cannot even detect it. If a monitoring site has too many of these undetected results, or if it is missing too much overall data, scientists cannot calculate a reliable trend. In these cases, the site is simply marked as "Not Assessed".
@@ -21,5 +21,5 @@ Water quality is always changing due to natural events like floods, droughts, an
 When a trend is categorised as "very likely" or "likely," it simply means experts are confident the water quality is generally moving in a certain direction. However, it is important to remember what trends *cannot* tell us:
 
 *   **Size:** A trend indicates the direction of change, not the magnitude or scale. Even a "very likely improving" waterway might only have a tiny decrease in pollution.
-*   **Steadiness:** A trend does not mean the change happened smoothly. Water quality can still jump up and down year to year within that decade. 
+*   **Steadiness:** A trend does not mean the change happened smoothly. Water quality can still jump up and down year to year within that 15-year period.
 *   **The Future:** We only calculate changes within the strict 15-year window. We cannot use this data to guess what the water was like before, or predict exactly what it will do next.

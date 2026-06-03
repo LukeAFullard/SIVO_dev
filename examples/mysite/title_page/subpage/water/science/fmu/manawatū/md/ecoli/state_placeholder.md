@@ -29,7 +29,7 @@ We evaluated the current state of *E. coli* at 53 monitoring sites across the Ma
 
 Scientists measure <em>E. coli</em> by counting the living bacteria in a 100-millilitre (mL) water sample, reported as Most Probable Number (MPN).
 
-<br>
+<br><br>
 
 To calculate a reliable A-to-E health risk grade, experts use four different statistics:
 <ul>
