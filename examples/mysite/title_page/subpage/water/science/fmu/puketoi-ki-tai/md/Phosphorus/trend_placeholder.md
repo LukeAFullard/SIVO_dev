@@ -1,6 +1,6 @@
 # Long-Term Trends for Phosphorus
 
-We evaluated 10-year trends for Dissolved Reactive Phosphorus (DRP) at 2 monitoring sites across the Manawatū FMU.
+We evaluated 15-year trends for Dissolved Reactive Phosphorus (DRP) at 2 monitoring sites across the Manawatū FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -27,7 +27,7 @@ We evaluated 10-year trends for Dissolved Reactive Phosphorus (DRP) at 2 monitor
       font-size: 0.98rem;
   ">
 
-Trends show us if phosphorus levels are consistently changing over time. We use a 10-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
+Trends show us if phosphorus levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend Categories</strong>
@@ -51,7 +51,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">DRP (10-year trend)</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">DRP (15-year trend)</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #2abeff; color: black;">Improving</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #e6e600; color: black;">Indeterminate</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #ff6767; color: black;">Degrading</th>
