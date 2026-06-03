@@ -1,6 +1,6 @@
 # The Current State of Dissolved Reactive Phosphorus
 
-We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 3 monitoring sites across the Manawatū FMU.
+We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 3 monitoring sites across the Puketoi ki Tai FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -49,7 +49,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 ***
 
-### Dissolved Reactive Phosphorus Results in the Manawatū FMU
+### Dissolved Reactive Phosphorus Results in the Puketoi ki Tai FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -64,7 +64,7 @@ A site must pass the test for both of these statistics. The final grade is alway
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Puketoi ki Tai FMU</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">33.3% (1)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">33.3% (1)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">33.3% (1)</td>

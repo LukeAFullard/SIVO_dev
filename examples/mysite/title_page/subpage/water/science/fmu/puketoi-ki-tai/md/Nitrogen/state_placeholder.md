@@ -1,6 +1,6 @@
 # The Current State of Nitrogen Toxicity
 
-We evaluated the current state of both nitrate and ammoniacal nitrogen at 3 monitoring sites across the Manawatū FMU.
+We evaluated the current state of both nitrate and ammoniacal nitrogen at 3 monitoring sites across the Puketoi ki Tai FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -49,7 +49,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 ***
 
-### Ammoniacal Nitrogen Toxicity Results in the Manawatū FMU
+### Ammoniacal Nitrogen Toxicity Results in the Puketoi ki Tai FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -64,7 +64,7 @@ A site must pass the test for both of these statistics. The final grade is alway
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Puketoi ki Tai FMU</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">0.0% (0)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">100.0% (3)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">0.0% (0)</td>
@@ -81,7 +81,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 </table>
 </div>
 
-### Nitrate Nitrogen Toxicity Results in the Manawatū FMU
+### Nitrate Nitrogen Toxicity Results in the Puketoi ki Tai FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -96,7 +96,7 @@ A site must pass the test for both of these statistics. The final grade is alway
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Puketoi ki Tai FMU</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">100.0% (3)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">0.0% (0)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">0.0% (0)</td>

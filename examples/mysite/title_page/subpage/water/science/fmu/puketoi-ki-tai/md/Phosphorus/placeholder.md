@@ -1,4 +1,4 @@
-# Tracking Phosphorus in the Manawatū
+# Tracking Phosphorus in Puketoi ki Tai
 
 Phosphorus is a naturally occurring element and an essential nutrient for plant growth. While it usually attaches to soil, it can also dissolve in water. This dissolved form—known as Dissolved Reactive Phosphorus (DRP)—is easily absorbed by aquatic plants and algae.
 
@@ -8,8 +8,8 @@ Too much DRP in our rivers and lakes is a major problem. It acts as a super-fert
 ### Where Does It Come From?
 DRP enters our waterways through soil erosion, excess agricultural fertilisers, animal waste, and domestic wastewater discharges. Heavy rain often washes this nutrient off the land and directly into the river system.
 
-We regularly monitor DRP levels to track our environmental progress and protect our freshwater ecosystems. The spatial map shows the current DRP state grades across the Manawatū FMU.
+We regularly monitor DRP levels to track our environmental progress and protect our freshwater ecosystems. The spatial map shows the current DRP state grades across the Puketoi ki Tai FMU.
 
 ***
 
-Explore the spatial map, current state grades, and long-term trends to see how phosphorus is impacting the Manawatū FMU.
+Explore the spatial map, current state grades, and long-term trends to see how phosphorus is impacting the Puketoi ki Tai FMU.

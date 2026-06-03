@@ -1,6 +1,6 @@
 # Long-Term Trends for Macroinvertebrates
 
-We evaluated 15-year trends for macroinvertebrates (using the MCI score) at 1 monitoring sites across the Manawatū FMU.
+We evaluated 15-year trends for macroinvertebrates (using the MCI score) at 1 monitoring sites across the Puketoi ki Tai FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Macroinvertebrate (MCI) Trend Results in the Manawatū FMU
+### Macroinvertebrate (MCI) Trend Results in the Puketoi ki Tai FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -59,7 +59,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Puketoi ki Tai FMU</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">0.0% (0)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">0.0% (0)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">100.0% (1)</td>
