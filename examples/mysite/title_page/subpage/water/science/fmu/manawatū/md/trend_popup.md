@@ -1,6 +1,6 @@
 # Diving Deeper: How We Calculate Trends
 
-To understand if our water quality is truly improving or degrading, we look at long-term trends. In this report, we specifically calculate and focus on 15-year trends to include more monitoring sites that have a reliable, consistent length of data. If you are interested in exploring trends over 5, 15, or 20 years, you can visit the Land, Air, Water Aotearoa (LAWA) website.
+To understand if our water quality is truly improving or degrading, we look at long-term trends. In this report, we specifically calculate and focus on 15-year trends to include more monitoring sites that have a reliable, consistent length of data. If you are interested in exploring trends over 5, 10, 15, or 20 years, you can visit the Land, Air, Water Aotearoa (LAWA) website.
 
 ### Strict Data Rules
 Before we calculate a trend, the raw data goes through strict quality control to remove any missing or compromised measurements. To calculate a reliable 15-year trend, a monitoring site must have at least 90% of its expected water samples, covering at least 90% of those ten years.
