@@ -1,4 +1,4 @@
-# Tracking Algae and Chlorophyll-a in the Manawatū
+# Tracking Algae and Chlorophyll-a in the Kai Iwi
 
 Algae are naturally occurring microscopic organisms that live in our waterways. In rivers and streams, they often attach to underwater surfaces (known as periphyton), while in lakes they float freely in the water (known as phytoplankton).
 
@@ -8,8 +8,8 @@ In small amounts, algae provide a nutritious and essential food source for aquat
 ### Where Does It Come From?
 While algae are natural, rapid overgrowth is fueled by human activities. Blooms thrive when there are excess nutrients (like nitrogen and phosphorus) in the water, combined with warm temperatures, high sunlight, and low river flows that fail to flush the algae away.
 
-We regularly monitor algae levels to track our environmental progress and protect our freshwater ecosystems. The spatial map shows the current state grades for algae and chlorophyll-a across the Manawatū FMU.
+We regularly monitor algae levels to track our environmental progress and protect our freshwater ecosystems. The spatial map shows the current state grades for algae and chlorophyll-a across the Kai Iwi FMU.
 
 ***
 
-Explore the spatial map, current state grades, and long-term trends to see how algae is impacting the Manawatū FMU.
+Explore the spatial map, current state grades, and long-term trends to see how algae is impacting the Kai Iwi FMU.
