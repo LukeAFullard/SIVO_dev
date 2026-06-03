@@ -179,7 +179,7 @@
             position: fixed;
             top: 0;
             right: -100%;
-            width: 400px;
+            width: var(--sidebar-width, 400px);
             height: 100vh;
             background-color: var(--card-bg);
             box-shadow: -4px 0 15px rgba(0,0,0,0.1);
@@ -223,7 +223,7 @@
                 /* Responsive Design */
         @media (max-width: 900px) {
             #sivo-sliding-sidebar {
-                width: 100%;
+                width: 100% !important;
                 z-index: 99999;
             }
         }
@@ -2376,9 +2376,9 @@
 
                     var sidebar = document.getElementById('sivo-sliding-sidebar');
                     if (viewData && viewData.panel_width) {
-                        sidebar.style.setProperty('width', viewData.panel_width, 'important');
+                        sidebar.style.setProperty('--sidebar-width', viewData.panel_width);
                     } else {
-                        sidebar.style.removeProperty('width');
+                        sidebar.style.removeProperty('--sidebar-width');
                     }
                     sidebar.classList.add('active');
 
