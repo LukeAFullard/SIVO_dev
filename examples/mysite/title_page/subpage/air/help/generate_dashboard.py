@@ -95,7 +95,7 @@ bad_air = Sivo.from_svg(
     lock_scroll_bounds=True,
     transparent_template_lines=False,
     default_panel_position="overlay",
-    panel_width="90%",
+    panel_width="30%",
     panel_height="90%",
 )
 bad_air.add_svg_background_image(
@@ -121,7 +121,7 @@ good_air = Sivo.from_svg(
     lock_scroll_bounds=True,
     transparent_template_lines=False,
     default_panel_position="overlay",
-    panel_width="90%",
+    panel_width="30%",
     panel_height="90%",
 )
 good_air.add_svg_background_image(
