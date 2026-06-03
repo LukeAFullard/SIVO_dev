@@ -1,6 +1,6 @@
 # The Current State of Suspended Sediment
 
-We evaluated the current state of suspended sediment at 3 monitoring sites across the Manawatū FMU.
+We evaluated the current state of suspended sediment at 3 monitoring sites across the Puketoi ki Tai FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -38,7 +38,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
 
 ***
 
-### Suspended Sediment Results in the Manawatū FMU
+### Suspended Sediment Results in the Puketoi ki Tai FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -53,7 +53,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Manawatū FMU</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Puketoi ki Tai FMU</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">0.0% (0)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">0.0% (0)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">0.0% (0)</td>
