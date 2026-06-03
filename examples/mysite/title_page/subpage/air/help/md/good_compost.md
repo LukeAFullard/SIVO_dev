@@ -1,3 +1,3 @@
-# Good Compost
+# Proper waste disposal 
 
-Placeholder text for good compost.
+Compost, recycle, or take waste to the transfer station instead of burning it outdoors. 
