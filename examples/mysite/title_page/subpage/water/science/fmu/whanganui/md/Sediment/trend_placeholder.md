@@ -1,6 +1,6 @@
 # Long-Term Trends for Suspended Sediment
 
-We evaluated 10-year trends for suspended sediment at 8 monitoring sites across the Whanganui FMU.
+We evaluated 10-year trends for suspended sediment at 6 monitoring sites across the Whanganui FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -61,14 +61,14 @@ Trends are grouped by how confident scientists are that a change is actually hap
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whanganui FMU</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">0.0% (0)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">12.5% (1)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">87.5% (7)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">0.0% (0)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">100.0% (6)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">21.24% (24)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">14.16% (16)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">64.6% (73)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">12.5% (10)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">11.25% (9)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">76.25% (61)</td>
     </tr>
   </tbody>
 </table>
