@@ -1,6 +1,6 @@
 # Long-Term Trends for Algae
 
-We evaluated 10-year trends for algae and chlorophyll-a at 6 monitoring sites across the Waiopehu FMU.
+We evaluated 10-year trends for algae and chlorophyll-a at 3 monitoring sites across the Waiopehu FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -60,15 +60,15 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Waiopehu FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">33.33% (2)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">0.0% (0)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">0.0% (0)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">66.67% (4)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">100.0% (3)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">25.81% (16)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">20.97% (13)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">53.23% (33)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">13.33% (6)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">22.22% (10)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">64.44% (29)</td>
     </tr>
   </tbody>
 </table>

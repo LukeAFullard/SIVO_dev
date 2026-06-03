@@ -1,6 +1,6 @@
 # Long-Term Trends for Macroinvertebrates
 
-We evaluated 10-year trends for macroinvertebrates (using the MCI score) at 6 monitoring sites across the Whanganui FMU.
+We evaluated 10-year trends for macroinvertebrates (using the MCI score) at 5 monitoring sites across the Whanganui FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -60,15 +60,15 @@ Trends are grouped by how confident scientists are that a change is actually hap
   <tbody>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whanganui FMU</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">66.67% (4)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">16.67% (1)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">16.67% (1)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">0.0% (0)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">60.0% (3)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">40.0% (2)</td>
     </tr>
     <tr>
       <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">32.93% (27)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">36.59% (30)</td>
-      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">30.49% (25)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">13.11% (8)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">32.79% (20)</td>
+      <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">54.1% (33)</td>
     </tr>
   </tbody>
 </table>
