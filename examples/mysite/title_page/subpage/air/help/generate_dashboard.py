@@ -80,7 +80,8 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=300,
-    fade_duration_ms=2000
+    fade_duration_ms=2000,
+    update_on_click=False
 )
 
 bad_air_svg_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../assets/air/bad_template.svg"))
@@ -188,6 +189,8 @@ dashboard.to_html(output_path=output_file, custom_css="""
         min-height: 50vh !important;
     }
 }
+#sidebar-title { display: none !important; }
+.sidebar-header { justify-content: flex-end !important; }
 </style>
 """)
 print(f"Dashboard generated at {output_file}")

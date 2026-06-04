@@ -1222,6 +1222,8 @@
         min-height: 50vh !important;
     }
 }
+#sidebar-title { display: none !important; }
+.sidebar-header { justify-content: flex-end !important; }
 </style>
 
 
@@ -2270,7 +2272,7 @@ More details will be added here in the future.
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "# How to Help Improve Air Quality\n\nThis page is a placeholder for information on how you can help improve air quality in the Horizons region.\n\nMore details will be added here in the future.\n", "show_element_name": false, "title": "", "update_on_click": true}};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "# How to Help Improve Air Quality\n\nThis page is a placeholder for information on how you can help improve air quality in the Horizons region.\n\nMore details will be added here in the future.\n", "show_element_name": false, "title": "", "update_on_click": false}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
