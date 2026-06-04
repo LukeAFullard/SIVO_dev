@@ -304,7 +304,9 @@ def adjust_iframe_height(md_content, base_dir):
                 h_match = re.search(r'height":(\d+)', html_content)
                 if h_match:
                     height = int(h_match.group(1)) + 50
-                    md_content = re.sub(r'height="\d+px"', f'height="{height}px"', md_content)
+                    # Do not override hardcoded height in the combined Nitrogen chart.
+                    if "height=\"920px\"" not in md_content and "height=\"1730px\"" not in md_content:
+                        md_content = re.sub(r'height="\d+px"', f'height="{height}px"', md_content)
         except Exception as e:
             print(f"Warning: Could not adjust height for {chart_file}: {e}")
     return md_content
