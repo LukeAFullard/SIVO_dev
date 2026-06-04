@@ -190,7 +190,7 @@ dashboard.to_html(output_path=output_file, custom_css="""
     }
 }
 #sidebar-title { display: none !important; }
-.sidebar-header { justify-content: flex-end !important; }
+.sidebar-header { justify-content: flex-end !important; position: sticky; top: 0; background-color: var(--card-bg, white); z-index: 10; }
 </style>
 """)
 print(f"Dashboard generated at {output_file}")
