@@ -46,6 +46,7 @@ desktop_grid = """
 '. markdown markdown .'
 'bad bad good good'
 'bad_cap bad_cap good_cap good_cap'
+'footer_image footer_image footer_image footer_image'
 """
 
 mobile_grid = """
@@ -55,6 +56,7 @@ mobile_grid = """
 'bad_cap'
 'good'
 'good_cap'
+'footer_image'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -179,6 +181,14 @@ dashboard.add_text_block(
     grid_area="good_cap"
 )
 
+dashboard.add_image_block(
+    block_id="footer_image",
+    image_url="../../../assets/air/leaves_purple.png",
+    col_span=4,
+    grid_area="footer_image",
+    object_fit="contain",
+    border_radius="0px"
+)
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
