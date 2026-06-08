@@ -6,7 +6,7 @@ However, many of our local waterways face significant environmental challenges. 
 
 When left unmanaged, these environmental pressures can:
 * **Cloud the water** and block vital sunlight.
-* **Fuel the rapid growth** of toxic algae.
+* **Fuel the rapid growth** of algae.
 * **Smother the riverbed homes** of fish and aquatic insects.
 * **Make swimming spots unsafe** for our families and pets.
 
