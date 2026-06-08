@@ -15,6 +15,7 @@ Phosphorus enters our waterways through both natural processes and human activit
 
 *   **Natural Geology:** Phosphorus occurs naturally in rocks, minerals, and soils. In some areas, the local geology and groundwater naturally release higher levels of phosphorus into the water.
 *   **Soil Erosion:** Phosphorus binds very tightly to dirt particles. When soil washes into rivers during heavy rain, it carries this trapped phosphorus with it. 
-*   **Fertiliser Run-off:** Excess agricultural fertiliser applied to the land can wash directly into rivers and streams during storms.
+*   **Overland Runoff:** Rainwater flowing across the land can pick up excess agricultural fertiliser and poorly timed effluent applications, washing them directly into rivers and streams.
+*   **Wastewater Discharges:** Phosphorus is a common component of human and animal waste, and it can enter our waterways directly through domestic wastewater and stormwater discharges.
 
 For further information you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/phosphorus) or the Horizons [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf).
