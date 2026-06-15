@@ -111,7 +111,7 @@ with open(os.path.join(os.path.dirname(__file__), "markdown_panel.md"), "r", enc
 desktop_grid = """
 'banner banner banner banner'
 'markdown markdown markdown markdown'
-'search map map map'
+'text2  . search .'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
 """
@@ -119,8 +119,8 @@ desktop_grid = """
 mobile_grid = """
 'banner'
 'markdown'
-'search'
 'text2'
+'search'
 'map'
 'fmu_text'
 'fmu_html'
