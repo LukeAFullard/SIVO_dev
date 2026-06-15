@@ -8,11 +8,16 @@
         body { font-family: sans-serif; padding: 20px; }
         #chart-container { width: 100%; height: 600px; }
         h2 { text-align: center; color: #333; }
+        figure { margin: 0; padding-top: 10px; text-align: center; }
+        figcaption { font-size: 0.9em; color: #555; }
     </style>
 </head>
 <body>
     <h2>Air Quality at Taumarunui</h2>
     <div id="chart-container"></div>
+    <figure>
+        <figcaption>Figure 1. PM<sub>10</sub> concentrations (µg/m3) and temperature (°C) in Taumarunui for the period December 2022 to December 2025.</figcaption>
+    </figure>
 
     <script type="text/javascript">
         var chartDom = document.getElementById('chart-container');
