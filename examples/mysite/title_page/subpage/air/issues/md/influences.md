@@ -8,7 +8,7 @@ Figure 1 shows the relationship between temperature and the amount of PM<sub>10<
 You can see that in winter, when temperatures drop (the red line), PM<sub>10</sub> concentrations increase (the black line), as people use their fireplaces more to stay warm.
 
 <iframe src="../../../assets/air/air_quality_line_race.html" width="100%" height="750px" style="border:none; border-radius:10px;"></iframe>
-<figure style="margin-top: -25px; padding-top: 0;">
+<figure style="margin-top: -50px; padding-top: 0;">
   <figcaption style="font-size: 0.9em; color: #555;">Figure 1. PM<sub>10</sub> concentrations (µg/m3) and temperature (°C) in Taumarunui for the period December 2022 to December 2025.</figcaption>
 </figure>
 
@@ -17,6 +17,6 @@ You can see that in winter, when temperatures drop (the red line), PM<sub>10</su
 ## Sources of air pollution 
 
 Select each of the icons below to learn more about some key sources of air pollution in the Horizons Region. 
-<iframe src="sub_dashboard.html" width="100%" height="900px" style="border:none; border-radius:10px;"></iframe>
+<iframe src="sub_dashboard.html" width="100%" height="800px" style="border:none; border-radius:10px;"></iframe>
 
 
