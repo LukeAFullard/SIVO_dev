@@ -7,10 +7,10 @@ from src.sivo.core.dashboard import SivoDashboard
 
 nav_menu = [
     {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
-    {"label": "Home", "url": "../../index.html", "url_transition": "page-turn-enter"},
-    {"label": "Air", "url": "../air/index.html", "url_transition": "page-turn-enter"},
-    {"label": "Land", "url": "../land/index.html", "url_transition": "page-turn-enter"},
-    {"label": "Water", "url": "../water/index.html", "url_transition": "page-turn-enter"},
+    {"label": "Home", "url": "index.html", "url_transition": "page-turn-enter"},
+    {"label": "Air", "url": "subpage/air/index.html", "url_transition": "page-turn-enter"},
+    {"label": "Land", "url": "subpage/land/index.html", "url_transition": "page-turn-enter"},
+    {"label": "Water", "url": "subpage/water/index.html", "url_transition": "page-turn-enter"},
 ]
 
 # Create the dashboard
@@ -21,7 +21,7 @@ dashboard = SivoDashboard(
     background_image_opacity=0.25,
     background_image_size="100%",
     gap="tight",
-    width="75%",
+    width="90%",
     mobile_width="85%",
     theme="transparent",
     navigation_menu=nav_menu
