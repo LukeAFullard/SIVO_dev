@@ -17,7 +17,10 @@
   </summary>
 
   <div style="display: flex; flex-direction: row; align-items: center;">
-  <div style="flex: 1; padding-right: 20px;">
+  <div style="flex: 1;">
+    <img src="../../../assets/land/tree_important.png" style="max-width: 100%; height: auto; border-radius: 10px;" />
+  </div>
+  <div style="flex: 1; padding-left: 20px;">
 <br>
 Under Horizons’ Sustainable Land Use Initiative (SLUI) - New Zealand’s largest hill country erosion control programme - our Land and Freshwater teams work with landowners to keep soil on the hills and out of the region’s waterways. The initiative aims to reduce erosion rates, create a more resilient rural sector, improve water quality, and mitigate the impacts of upstream erosion on lowland communities. 
 
@@ -34,10 +37,5 @@ Under Horizons’ Sustainable Land Use Initiative (SLUI) - New Zealand’s large
 
 
   </div>
-  <div style="flex: 1;">
-    <img src="../../../assets/land/tree_important.png" style="max-width: 100%; height: auto; border-radius: 10px;" />
-  </div>
 </div>
 </details>
-
-
