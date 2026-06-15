@@ -87,11 +87,9 @@
             grid-template-areas:
 'banner banner banner banner'
 'markdown markdown markdown markdown'
-'mitigation_text mitigation_text mitigation_image mitigation_image'
 'search map map map'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
-'time_lag_text time_lag_text erosion_time_lag_image erosion_time_lag_image'
 ;
 
         }
@@ -242,15 +240,11 @@
                 grid-template-areas:
 'banner'
 'markdown'
-'mitigation_text'
-'mitigation_image'
 'search'
 'text2'
 'map'
 'fmu_text'
 'fmu_html'
-'time_lag_text'
-'erosion_time_lag_image'
 ;
 
                 grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -278,15 +272,11 @@
             grid-template-areas:
 'banner'
 'markdown'
-'mitigation_text'
-'mitigation_image'
 'search'
 'text2'
 'map'
 'fmu_text'
 'fmu_html'
-'time_lag_text'
-'erosion_time_lag_image'
  !important;
 
             grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
@@ -1285,13 +1275,18 @@
             <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown">At Horizons Regional Council, we understand and appreciate how important our soils are to our region and its people. We initiated a long-term hill country erosion-control program – Sustainable Land Use Initiative (SLUI) after our region witnessed the impact of devastating floods and resulting landslides and soil erosion, in 2004.
-It is a largest, non-regulatory soil conservation program running successfully for almost two decades, in the country. The primary objective of the program is to improve the resilience of soil and our land, particularly in the hill country. It is an example of a successful collaboration between landowners and the regional council, in the country.
-</p>
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown">&lt;div style=&#34;display: flex; flex-direction: row; align-items: center;&#34;&gt;
+  &lt;div style=&#34;flex: 1; padding-right: 20px;&#34;&gt;
+    Some placeholder text for now.
+  &lt;/div&gt;
+  &lt;div style=&#34;flex: 1;&#34;&gt;
+    &lt;img src=&#34;../../../assets/land/tree_important.png&#34; style=&#34;max-width: 100%; height: auto; border-radius: 10px;&#34; /&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</p>
                 </div>
                 <script>
                     (function() {
-                        const rawPlaceholder = "At Horizons Regional Council, we understand and appreciate how important our soils are to our region and its people. We initiated a long-term hill country erosion-control program \u2013 Sustainable Land Use Initiative (SLUI) after our region witnessed the impact of devastating floods and resulting landslides and soil erosion, in 2004. \nIt is a largest, non-regulatory soil conservation program running successfully for almost two decades, in the country. The primary objective of the program is to improve the resilience of soil and our land, particularly in the hill country. It is an example of a successful collaboration between landowners and the regional council, in the country.\n";
+                        const rawPlaceholder = "\u003cdiv style=\"display: flex; flex-direction: row; align-items: center;\"\u003e\n  \u003cdiv style=\"flex: 1; padding-right: 20px;\"\u003e\n    Some placeholder text for now.\n  \u003c/div\u003e\n  \u003cdiv style=\"flex: 1;\"\u003e\n    \u003cimg src=\"../../../assets/land/tree_important.png\" style=\"max-width: 100%; height: auto; border-radius: 10px;\" /\u003e\n  \u003c/div\u003e\n\u003c/div\u003e";
                         if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
                             const container = document.getElementById('container-markdown');
                             if (container) {
@@ -1361,7 +1356,7 @@ It is a largest, non-regulatory soil conservation program running successfully f
 
 
 
-            <div class="sivo-card " id="card-map" style="grid-area: map; min-height: 500px !important;">
+            <div class="sivo-card " id="card-map" style="grid-area: map; min-height: 600px !important;">
                 <div class="card-header">Map</div>
                 <div class="sivo-container" id="container-map">
                     <div id="chart-map" style="width: 100%; height: 100%;"></div>
@@ -1410,105 +1405,6 @@ It is a largest, non-regulatory soil conservation program running successfully f
             <div class="html-card sivo-html-panel" id="card-fmu_html" data-block-id="fmu_html" data-payload-key="fmu_html" style="grid-area: fmu_html; ">
                 <div class="card-content sivo-html-content" id="container-fmu_html">
                     <div style="background-color: rgba(240, 240, 240, 0.7); border-radius: 10px; padding: 10px; height: 100%;">Click an FMU on the map to see charts here.</div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-            <div class="html-card sivo-details-panel" id="card-mitigation_text" data-block-id="mitigation_text" style="grid-area: mitigation_text;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 1.2s;">
-                <div class="card-header"></div>
-                <div class="card-content sivo-details-content" id="container-mitigation_text">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-mitigation_text">## Mitigating soil erosion
-
-Based on scientific evidence and after mapping the erodible land within our region we broadly offer three nature-based solutions to mitigate soil erosion: afforestation, retirement and on-farm conservation.
--	**Afforestation:** Planting native or exotic trees on marginal or non-productive land to provide canopy cover.
-This keeps farms profitable for long term, also provides alternative sources of income by earning carbon credits or setting up a honeybee farm.
--	Retirement through fencing:  Retiring riparian margins and wetland areas from grazing, which allows growth of native cover including grass to regenerate. A long strip of grass along riparian margins intercepts sediments, preventing sediments to enter the water ways.
--	On-farm soil conservation:  Planting poplar or willow trees at different intervals on erosion-prone pastureland. This planting method is suitable for lower slopes with sufficient soil and moisture to grow poplar poles. Spaced planting also allows grazing to continue.
-
-The focus of all three methods above is to  increase the vegetation cover (See the figure on right on the importance of vegetation cover). These solutions don’t only prevent soil erosion but has additional co benefits.
-</p>
-                </div>
-                <script>
-                    (function() {
-                        const rawPlaceholder = "## Mitigating soil erosion\n\nBased on scientific evidence and after mapping the erodible land within our region we broadly offer three nature-based solutions to mitigate soil erosion: afforestation, retirement and on-farm conservation.   \n-\t**Afforestation:** Planting native or exotic trees on marginal or non-productive land to provide canopy cover. \nThis keeps farms profitable for long term, also provides alternative sources of income by earning carbon credits or setting up a honeybee farm. \n-\tRetirement through fencing:  Retiring riparian margins and wetland areas from grazing, which allows growth of native cover including grass to regenerate. A long strip of grass along riparian margins intercepts sediments, preventing sediments to enter the water ways. \n-\tOn-farm soil conservation:  Planting poplar or willow trees at different intervals on erosion-prone pastureland. This planting method is suitable for lower slopes with sufficient soil and moisture to grow poplar poles. Spaced planting also allows grazing to continue.\n  \nThe focus of all three methods above is to  increase the vegetation cover (See the figure on right on the importance of vegetation cover). These solutions don\u2019t only prevent soil erosion but has additional co benefits.  \n";
-                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
-                            const container = document.getElementById('container-mitigation_text');
-                            if (container) {
-                                container.innerHTML = marked.parse(rawPlaceholder);
-                            }
-                        }
-                    })();
-                </script>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-            <div class="html-card sivo-html-panel" id="card-mitigation_image" data-block-id="mitigation_image"  style="grid-area: mitigation_image; ">
-                <div class="card-content sivo-html-content" id="container-mitigation_image">
-                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 1.5s;"><img src="../../../assets/land/tree_important.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;" /></div>
-                </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-            <div class="html-card sivo-details-panel" id="card-time_lag_text" data-block-id="time_lag_text" style="grid-area: time_lag_text;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 1.8s;">
-                <div class="card-header"></div>
-                <div class="card-content sivo-details-content" id="container-time_lag_text">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-time_lag_text">The key to any nature-based solution is to remember that nature takes its course. Although the impact of soil mitigation activities starts taking effect much sooner, it takes a few years to fully realize the positive results of the actions taken.
-We also need to be mindful that the risk from severe weather events can never be entirely removed.  Certain soil erosion processes are naturally too aggressive to stop completely and are inevitable. However, we can always mitigate the effects by doing what we can.
-</p>
-                </div>
-                <script>
-                    (function() {
-                        const rawPlaceholder = "The key to any nature-based solution is to remember that nature takes its course. Although the impact of soil mitigation activities starts taking effect much sooner, it takes a few years to fully realize the positive results of the actions taken.\nWe also need to be mindful that the risk from severe weather events can never be entirely removed.  Certain soil erosion processes are naturally too aggressive to stop completely and are inevitable. However, we can always mitigate the effects by doing what we can.\n";
-                        if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
-                            const container = document.getElementById('container-time_lag_text');
-                            if (container) {
-                                container.innerHTML = marked.parse(rawPlaceholder);
-                            }
-                        }
-                    })();
-                </script>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-            <div class="html-card sivo-html-panel" id="card-erosion_time_lag_image" data-block-id="erosion_time_lag_image"  style="grid-area: erosion_time_lag_image; ">
-                <div class="card-content sivo-html-content" id="container-erosion_time_lag_image">
-                    <div style="width: 100%; height: 100%; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 2.4s;"><img src="../../../assets/land/erosion_time_lag.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;" /></div>
                 </div>
             </div>
 
@@ -1767,14 +1663,6 @@ We also need to be mindful that the risk from severe weather events can never be
         // Initialize default texts for overlay buttons
         window.sivoOverlayData = {};
         window.sivoOverlaySizes = {};
-
-
-
-
-
-
-
-
 
 
 
@@ -2424,7 +2312,7 @@ We also need to be mindful that the risk from severe weather events can never be
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"fmu_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": "fmu_md", "placeholder": "Click an FMU on the map to see details here.", "show_element_name": false, "title": "", "update_on_click": true}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "At Horizons Regional Council, we understand and appreciate how important our soils are to our region and its people. We initiated a long-term hill country erosion-control program \u2013 Sustainable Land Use Initiative (SLUI) after our region witnessed the impact of devastating floods and resulting landslides and soil erosion, in 2004. \nIt is a largest, non-regulatory soil conservation program running successfully for almost two decades, in the country. The primary objective of the program is to improve the resilience of soil and our land, particularly in the hill country. It is an example of a successful collaboration between landowners and the regional council, in the country.\n", "show_element_name": false, "title": "", "update_on_click": false}, "mitigation_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1200, "padding": "10px", "payload_key": null, "placeholder": "## Mitigating soil erosion\n\nBased on scientific evidence and after mapping the erodible land within our region we broadly offer three nature-based solutions to mitigate soil erosion: afforestation, retirement and on-farm conservation.   \n-\t**Afforestation:** Planting native or exotic trees on marginal or non-productive land to provide canopy cover. \nThis keeps farms profitable for long term, also provides alternative sources of income by earning carbon credits or setting up a honeybee farm. \n-\tRetirement through fencing:  Retiring riparian margins and wetland areas from grazing, which allows growth of native cover including grass to regenerate. A long strip of grass along riparian margins intercepts sediments, preventing sediments to enter the water ways. \n-\tOn-farm soil conservation:  Planting poplar or willow trees at different intervals on erosion-prone pastureland. This planting method is suitable for lower slopes with sufficient soil and moisture to grow poplar poles. Spaced planting also allows grazing to continue.\n  \nThe focus of all three methods above is to  increase the vegetation cover (See the figure on right on the importance of vegetation cover). These solutions don\u2019t only prevent soil erosion but has additional co benefits.  \n", "show_element_name": false, "title": "", "update_on_click": false}, "text2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "To be able to protect our region it is important to understand the degree to which various parts of our regions are susceptible to erosion, as type and degree of soil erosion varies. We, therefore, first mapped the region to identify areas which are susceptible to soil erosion and its affects. \n", "show_element_name": false, "title": "", "update_on_click": false}, "time_lag_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 1800, "padding": "10px", "payload_key": null, "placeholder": "The key to any nature-based solution is to remember that nature takes its course. Although the impact of soil mitigation activities starts taking effect much sooner, it takes a few years to fully realize the positive results of the actions taken.\nWe also need to be mindful that the risk from severe weather events can never be entirely removed.  Certain soil erosion processes are naturally too aggressive to stop completely and are inevitable. However, we can always mitigate the effects by doing what we can.\n", "show_element_name": false, "title": "", "update_on_click": false}};
+                const detailsConfig = {"fmu_text": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 900, "padding": "10px", "payload_key": "fmu_md", "placeholder": "Click an FMU on the map to see details here.", "show_element_name": false, "title": "", "update_on_click": true}, "markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "\u003cdiv style=\"display: flex; flex-direction: row; align-items: center;\"\u003e\n  \u003cdiv style=\"flex: 1; padding-right: 20px;\"\u003e\n    Some placeholder text for now.\n  \u003c/div\u003e\n  \u003cdiv style=\"flex: 1;\"\u003e\n    \u003cimg src=\"../../../assets/land/tree_important.png\" style=\"max-width: 100%; height: auto; border-radius: 10px;\" /\u003e\n  \u003c/div\u003e\n\u003c/div\u003e", "show_element_name": false, "title": "", "update_on_click": false}, "text2": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 600, "padding": "10px", "payload_key": null, "placeholder": "To be able to protect our region it is important to understand the degree to which various parts of our regions are susceptible to erosion, as type and degree of soil erosion varies. We, therefore, first mapped the region to identify areas which are susceptible to soil erosion and its affects. \n", "show_element_name": false, "title": "", "update_on_click": false}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.

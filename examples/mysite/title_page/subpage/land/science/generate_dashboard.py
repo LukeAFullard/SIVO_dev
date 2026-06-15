@@ -104,29 +104,26 @@ with open(os.path.join(os.path.dirname(__file__), "mitigation.md"), "r", encodin
 with open(os.path.join(os.path.dirname(__file__), "time_lag.md"), "r", encoding="utf-8") as f:
     time_lag_md_content = f.read()
 
+with open(os.path.join(os.path.dirname(__file__), "markdown_panel.md"), "r", encoding="utf-8") as f:
+    markdown_panel_content = f.read()
+
 
 desktop_grid = """
 'banner banner banner banner'
 'markdown markdown markdown markdown'
-'mitigation_text mitigation_text mitigation_image mitigation_image'
 'search map map map'
 'text2 map map map'
 'fmu_text fmu_html fmu_html fmu_html'
-'time_lag_text time_lag_text erosion_time_lag_image erosion_time_lag_image'
 """
 
 mobile_grid = """
 'banner'
 'markdown'
-'mitigation_text'
-'mitigation_image'
 'search'
 'text2'
 'map'
 'fmu_text'
 'fmu_html'
-'time_lag_text'
-'erosion_time_lag_image'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
@@ -143,7 +140,7 @@ dashboard.add_image_block(
 dashboard.add_details_panel(
     block_id="markdown",
     title="",
-    placeholder=welcome_md_content,
+    placeholder=markdown_panel_content,
     col_span=4,
     grid_area="markdown",
     background_color="rgba(240, 240, 240, 0.7)",
@@ -181,7 +178,7 @@ dashboard.add_details_panel(
 )
 
 
-dashboard.add_sivo_block("map", app, col_span=3, grid_area="map", min_height="500px")
+dashboard.add_sivo_block("map", app, col_span=3, grid_area="map", min_height="600px")
 
 dashboard.add_details_panel(
     block_id="fmu_text",
@@ -209,61 +206,13 @@ dashboard.add_html_block(
     payload_key="fmu_html"
 )
 
-dashboard.add_details_panel(
-    block_id="mitigation_text",
-    title="",
-    placeholder=mitigation_md_content,
-    col_span=2,
-    grid_area="mitigation_text",
-    background_color="rgba(240, 240, 240, 0.7)",
-    border_radius="10px",
-    padding="10px",
-    show_element_name=False,
-    fade_in=True,
-    fade_start_time_ms=1200,
-    fade_duration_ms=2000,
-    update_on_click=False
-)
 
-dashboard.add_image_block(
-    block_id="mitigation_image",
-    image_url="../../../assets/land/tree_important.png",
-    col_span=2,
-    grid_area="mitigation_image",
-    object_fit="contain",
-    border_radius="10px",
-    fade_in=True,
-    fade_start_time_ms=1500,
-    fade_duration_ms=2000
-)
 
-dashboard.add_details_panel(
-    block_id="time_lag_text",
-    title="",
-    placeholder=time_lag_md_content,
-    col_span=2,
-    grid_area="time_lag_text",
-    background_color="rgba(240, 240, 240, 0.7)",
-    border_radius="10px",
-    padding="10px",
-    show_element_name=False,
-    fade_in=True,
-    fade_start_time_ms=1800,
-    fade_duration_ms=2000,
-    update_on_click=False
-)
 
-dashboard.add_image_block(
-    block_id="erosion_time_lag_image",
-    image_url="../../../assets/land/erosion_time_lag.png",
-    col_span=2,
-    grid_area="erosion_time_lag_image",
-    object_fit="contain",
-    border_radius="10px",
-    fade_in=True,
-    fade_start_time_ms=2400,
-    fade_duration_ms=2000
-)
+
+
+
+
 
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
