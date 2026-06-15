@@ -16,12 +16,12 @@ nav_menu = [
 # Create the dashboard
 dashboard = SivoDashboard(
     title="",
-    columns=4,
+    columns=3,
     background_image_url="assets/fish-green.png",
     background_image_opacity=0.25,
     background_image_size="100%",
     gap="tight",
-    width="65%",
+    width="75%",
     mobile_width="85%",
     theme="transparent",
     navigation_menu=nav_menu
@@ -33,8 +33,8 @@ with open(os.path.join(os.path.dirname(__file__), "welcome.md"), "r", encoding="
 
 # Set the grid layout
 desktop_grid = """
-'markdown markdown env air'
-'markdown markdown land water'
+'markdown env air'
+'markdown land water'
 """
 mobile_grid = """
 'markdown'
@@ -57,7 +57,7 @@ dashboard.add_details_panel(
     block_id="markdown",
     title="",
     placeholder=md_content,
-    col_span=2,
+    col_span=1,
     grid_area="markdown",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
