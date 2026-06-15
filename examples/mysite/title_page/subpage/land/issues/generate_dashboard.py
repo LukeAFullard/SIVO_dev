@@ -20,7 +20,7 @@ nav_menu = [
 
 dashboard = SivoDashboard(
     title="",
-    columns=2,
+    columns=4,
     background_image_url="../../../assets/land/land_bg.png",
     background_image_opacity=0.15,
     background_image_size="50%",
@@ -38,24 +38,17 @@ with open(os.path.join(os.path.dirname(__file__), "md/md1.md"), "r", encoding="u
 with open(os.path.join(os.path.dirname(__file__), "md/md2.md"), "r", encoding="utf-8") as f:
     md_content2 = f.read()
 
-with open(os.path.join(os.path.dirname(__file__), "md/md3.md"), "r", encoding="utf-8") as f:
-    md_content3 = f.read()
-
 desktop_grid = """
-'banner banner'
-'markdown1 image1'
-'markdown2 image1'
-'markdown3 image2'
-'image3 image3'
+'banner banner banner banner'
+'. markdown1 markdown1 .'
+'. markdown2 markdown2 .'
+'. image3 image3 .'
 """
 
 mobile_grid = """
 'banner'
 'markdown1'
-'image1'
 'markdown2'
-'markdown3'
-'image2'
 'image3'
 """
 
@@ -64,7 +57,7 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 dashboard.add_image_block(
     block_id="banner",
     image_url="../../../assets/land/land_banner.png",
-    col_span=2,
+    col_span=4,
     grid_area="banner",
     object_fit="contain",
     border_radius="0px"
@@ -74,7 +67,7 @@ dashboard.add_details_panel(
     block_id="markdown1",
     title="",
     placeholder=md_content1,
-    col_span=1,
+    col_span=2,
     grid_area="markdown1",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
@@ -89,7 +82,7 @@ dashboard.add_details_panel(
     block_id="markdown2",
     title="",
     placeholder=md_content2,
-    col_span=1,
+    col_span=2,
     grid_area="markdown2",
     background_color="rgba(240, 240, 240, 0.7)",
     border_radius="10px",
@@ -97,45 +90,6 @@ dashboard.add_details_panel(
     show_element_name=False,
     fade_in=True,
     fade_start_time_ms=600,
-    fade_duration_ms=2000
-)
-
-dashboard.add_image_block(
-    block_id="image1",
-    image_url="../../../assets/land/soil_important.png",
-    col_span=1,
-    grid_area="image1",
-    object_fit="contain",
-    border_radius="10px",
-    fade_in=True,
-    fade_start_time_ms=900,
-    fade_duration_ms=2000
-)
-
-dashboard.add_details_panel(
-    block_id="markdown3",
-    title="",
-    placeholder=md_content3,
-    col_span=1,
-    grid_area="markdown3",
-    background_color="rgba(240, 240, 240, 0.7)",
-    border_radius="10px",
-    padding="10px",
-    show_element_name=False,
-    fade_in=True,
-    fade_start_time_ms=900,
-    fade_duration_ms=2000
-)
-
-dashboard.add_image_block(
-    block_id="image2",
-    image_url="../../../assets/land/soil_erosion.jpg",
-    col_span=1,
-    grid_area="image2",
-    object_fit="contain",
-    border_radius="10px",
-    fade_in=True,
-    fade_start_time_ms=1200,
     fade_duration_ms=2000
 )
 
