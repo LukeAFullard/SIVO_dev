@@ -1,9 +1,9 @@
-# Welcome to Our Project Site
+# Welcome to our environmental reporting update
 
-We are thrilled to have you here! Explore the insights, data, and stories we've put together.
+Explore the insights, data, and stories.
 
 ### How to Navigate
-- **Hamburger Menu:** Click the hamburger menu at the top right of the page to access a full list of sections and tools.
-- **Icons:** You can also click the various icons displayed here to jump directly to your chapter of choice.
+- **Hamburger Menu:** Click the hamburger menu at the top right of the page to access the different report chapters.
+- **Icons:** You can also click the icons displayed on this page to jump directly to your chapter of choice.
 
 Enjoy exploring!
