@@ -1267,14 +1267,20 @@
             <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Welcome
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># Welcome to our environmental reporting update
 
-This is a placeholder markdown file for the title page dashboard.
+Explore the insights, data, and stories.
+
+### How to Navigate
+- **Hamburger Menu:** Click the hamburger menu at the top right of the page to access the different report chapters.
+- **Icons:** You can also click the icons displayed on this page to jump directly to your chapter of choice.
+
+Enjoy exploring!
 </p>
                 </div>
                 <script>
                     (function() {
-                        const rawPlaceholder = "# Welcome\n\nThis is a placeholder markdown file for the title page dashboard.\n";
+                        const rawPlaceholder = "# Welcome to our environmental reporting update\n\nExplore the insights, data, and stories.\n\n### How to Navigate\n- **Hamburger Menu:** Click the hamburger menu at the top right of the page to access the different report chapters.\n- **Icons:** You can also click the icons displayed on this page to jump directly to your chapter of choice.\n\nEnjoy exploring!\n";
                         if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
                             const container = document.getElementById('container-markdown');
                             if (container) {
@@ -2234,7 +2240,7 @@ This is a placeholder markdown file for the title page dashboard.
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "# Welcome\n\nThis is a placeholder markdown file for the title page dashboard.\n", "show_element_name": false, "title": "", "update_on_click": true}};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "# Welcome to our environmental reporting update\n\nExplore the insights, data, and stories.\n\n### How to Navigate\n- **Hamburger Menu:** Click the hamburger menu at the top right of the page to access the different report chapters.\n- **Icons:** You can also click the icons displayed on this page to jump directly to your chapter of choice.\n\nEnjoy exploring!\n", "show_element_name": false, "title": "", "update_on_click": true}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
