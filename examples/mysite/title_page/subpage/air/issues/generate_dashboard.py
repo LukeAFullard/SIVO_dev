@@ -118,7 +118,18 @@ add_interactive_text_block("pm", "What is particulate matter?", "pm", "pm", 300)
 add_interactive_text_block("importance", "Why do we care about air quality?", "importance", "importance", 600)
 add_interactive_text_block("influences", "What influences air quality?", "influences", "influences", 900)
 
+custom_css = """
+@media (min-width: 901px) {
+    .dashboard-container {
+        grid-template-rows: max-content max-content max-content max-content 1fr;
+    }
+    #card-pm, #card-importance, #card-influences {
+        align-self: start;
+    }
+}
+"""
+
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
-dashboard.to_html(output_path=output_file)
+dashboard.to_html(output_path=output_file, custom_css=custom_css)
 print(f"Dashboard generated at {output_file}")
