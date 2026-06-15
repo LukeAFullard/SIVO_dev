@@ -97,7 +97,7 @@ for icon in icons:
         fade_pulse=True
     )
 
-    dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="100px")
+    dashboard.add_sivo_block(block_id=icon["id"], sivo_app=sivo_app, col_span=1, grid_area=icon["id"], overflow_visible=True, min_height="180px")
 
 dashboard.add_details_panel(
     block_id="markdown",
@@ -115,5 +115,10 @@ dashboard.add_details_panel(
 )
 
 output_file = os.path.join(os.path.dirname(__file__), "sub_dashboard.html")
-dashboard.to_html(output_path=output_file)
+custom_css = """
+#card-icon1, #card-icon2, #card-icon3, #card-icon4 {
+    max-height: 180px !important;
+}
+"""
+dashboard.to_html(output_path=output_file, custom_css=custom_css)
 print(f"Dashboard generated at {output_file}")
