@@ -3,5 +3,9 @@ Landscapes in the Horizons Region are varied and vast. Snow-capped mountaintops 
 
 This year (2025-26), the land chapter explores hill-country erosion, a significant issue in the region. 
 
-Check out the following pages to learn more about: 
+**Select the questions to explore the state of the region’s air:**
+
+- **Pressures | What's affecting the land?** Discover the environmental challenges affecting the region’s land. 
+- **State | What does the data tell us?** Dive into the latest data. 
+- **Actions | What can we do to help?** Learn about the practical, everyday actions we can all take to improve the state of the air where we live. 
 
