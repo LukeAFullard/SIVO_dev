@@ -11,9 +11,9 @@ nav_menu = [
     {"label": "Home", "url": "../../index.html", "url_transition": "page-turn-enter"},
     {"label": "Air", "url": "../air/index.html", "url_transition": "page-turn-enter"},
     {"label": "Land", "sublinks": [
-        {"label": "Issues", "url": "issues/index.html", "url_transition": "page-turn-enter"},
-        {"label": "What we are doing", "url": "science/index.html", "url_transition": "page-turn-enter"},
-        {"label": "How to help", "url": "help/index.html", "url_transition": "page-turn-enter"}
+        {"label": "Pressures", "url": "issues/index.html", "url_transition": "page-turn-enter"},
+        {"label": "State", "url": "science/index.html", "url_transition": "page-turn-enter"},
+        {"label": "Actions", "url": "help/index.html", "url_transition": "page-turn-enter"}
     ]},
     {"label": "Water", "url": "../water/index.html", "url_transition": "page-turn-enter"}
 ]
@@ -67,7 +67,7 @@ dashboard.add_image_block(
 
 dashboard.add_text_block(
     block_id="issues",
-    text="What are the issues?",
+    text="Pressures | What's affecting the land? ",
     url="issues/index.html",
     url_transition="page-turn-enter",
     col_span=1,
@@ -79,7 +79,7 @@ dashboard.add_text_block(
 
 dashboard.add_text_block(
     block_id="science",
-    text="What is Horizons is doing about it?",
+    text="State | What does the data tell us?",
     url="science/index.html",
     url_transition="page-turn-enter",
     col_span=1,
@@ -91,7 +91,7 @@ dashboard.add_text_block(
 
 dashboard.add_text_block(
     block_id="help",
-    text="What can we do to help?",
+    text="Actions | What can we do to help?",
     url="help/index.html",
     url_transition="page-turn-enter",
     col_span=1,
