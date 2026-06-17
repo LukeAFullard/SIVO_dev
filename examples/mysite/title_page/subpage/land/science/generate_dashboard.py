@@ -179,7 +179,7 @@ dashboard.add_sivo_block("map", app, col_span=3, grid_area="map", min_height="60
 dashboard.add_details_panel(
     block_id="fmu_text",
     title="",
-    placeholder="Click an FMU on the map to see details here.",
+    placeholder="Click an FMU on the map to see details of erosion mitigation works completed to date.",
     col_span=2,
     grid_area="fmu_text",
     background_color="rgba(240, 240, 240, 0.7)",
