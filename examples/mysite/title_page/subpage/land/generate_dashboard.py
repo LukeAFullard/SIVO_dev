@@ -67,7 +67,7 @@ dashboard.add_image_block(
 
 dashboard.add_text_block(
     block_id="issues",
-    text="Pressures | What's affecting the land?",
+    text="Pressures",
     url="issues/index.html",
     url_transition="page-turn-enter",
     col_span=1,
@@ -79,7 +79,7 @@ dashboard.add_text_block(
 
 dashboard.add_text_block(
     block_id="science",
-    text="State | What does the data tell us?",
+    text="State",
     url="science/index.html",
     url_transition="page-turn-enter",
     col_span=1,
@@ -91,7 +91,7 @@ dashboard.add_text_block(
 
 dashboard.add_text_block(
     block_id="help",
-    text="Actions | What can we do to help?",
+    text="Actions",
     url="help/index.html",
     url_transition="page-turn-enter",
     col_span=1,
