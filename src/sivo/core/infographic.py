@@ -2054,27 +2054,38 @@ class Infographic:
                     # the rectangle must fit inside the bounding shape at both its top and bottom.
                     # We iterate to find an `est_width` such that both the top and bottom widths
                     # can accommodate the resulting `est_height`.
+                    def calc_wrapped_lines(text, max_chars):
+                        if max_chars < 1: return 1
+                        words = text.split()
+                        lines = 1
+                        current_line_len = 0
+                        for word in words:
+                            word_len = len(word)
+                            if current_line_len + word_len > max_chars and current_line_len > 0:
+                                lines += 1
+                                current_line_len = word_len + 1
+                            else:
+                                current_line_len += word_len + 1
+                        return max(1, lines)
+
                     for _ in range(10):
                         chars_per_line = max(1, est_width / char_width)
-                        num_lines = max(1, len(clean_text) / chars_per_line)
+                        num_lines = calc_wrapped_lines(clean_text, chars_per_line)
                         est_height = num_lines * body_font_size * 1.2
 
                         w_bottom = get_max_width_at_y(line_y + est_height)
 
-                        # We want the width to be constrained by both the top and the bottom
-                        # of the text block to prevent it from spilling out of curved shapes.
                         safe_width = min(est_width, w_bottom)
 
-                        # Only shrink if the bottom is narrower than our current est_width
                         if safe_width < est_width - 1.0:
-                            # Limit shrinking to avoid collapsing height completely
                             est_width = max(20, safe_width)
                         else:
                             break
 
                     chars_per_line = max(1, est_width / char_width)
-                    num_lines = max(1, len(clean_text) / chars_per_line)
-                    est_height = num_lines * body_font_size * 1.2
+                    num_lines = calc_wrapped_lines(clean_text, chars_per_line)
+                    # Add a small buffer to height to prevent CSS clipping of descenders
+                    est_height = (num_lines * body_font_size * 1.2) + (body_font_size * 0.5)
 
                     rendered_elements.append(("foreignObject", body, body_font_size, line_y, body_color, "normal", est_width, est_height))
                     line_y += est_height
