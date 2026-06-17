@@ -2049,6 +2049,29 @@ class Infographic:
                     est_width = get_max_width_at_y(line_y)
                     if est_width <= 0: est_width = abs_width * 0.8
                     char_width = body_font_size * 0.55
+
+                    # When rendering an HTML block inside a circular/elliptical shape,
+                    # the rectangle must fit inside the bounding shape at both its top and bottom.
+                    # We iterate to find an `est_width` such that both the top and bottom widths
+                    # can accommodate the resulting `est_height`.
+                    for _ in range(10):
+                        chars_per_line = max(1, est_width / char_width)
+                        num_lines = max(1, len(clean_text) / chars_per_line)
+                        est_height = num_lines * body_font_size * 1.2
+
+                        w_bottom = get_max_width_at_y(line_y + est_height)
+
+                        # We want the width to be constrained by both the top and the bottom
+                        # of the text block to prevent it from spilling out of curved shapes.
+                        safe_width = min(est_width, w_bottom)
+
+                        # Only shrink if the bottom is narrower than our current est_width
+                        if safe_width < est_width - 1.0:
+                            # Limit shrinking to avoid collapsing height completely
+                            est_width = max(20, safe_width)
+                        else:
+                            break
+
                     chars_per_line = max(1, est_width / char_width)
                     num_lines = max(1, len(clean_text) / chars_per_line)
                     est_height = num_lines * body_font_size * 1.2
