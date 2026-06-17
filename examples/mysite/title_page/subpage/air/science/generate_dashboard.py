@@ -168,9 +168,6 @@ odometer_html = f'''
 <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui PM<sub>10</sub> exceedances last year</h3>
 <div style="font-size: 64px; font-weight: bold; color: {tau_1yr_color};">{tau_1yr}</div>{get_subtext(tau_date, tau_1yr)}</div>
 </div>
-<div style="font-size: 14px; color: #555; margin-top: 20px; text-align: center;">
-Figure 3. [Caption to be added once vis. is complete]
-</div>
 </div>
 '''
 
