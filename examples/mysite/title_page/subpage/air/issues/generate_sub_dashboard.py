@@ -8,19 +8,19 @@ from src.sivo.core.sivo import Sivo
 
 dashboard = SivoDashboard(
     title="",
-    columns=4,
+    columns=3,
     theme="transparent",
     gap="tight"
 )
 
 desktop_grid = """
-'icon1 icon2 icon3 icon4'
-'markdown markdown markdown markdown'
+'icon1 icon2 icon4'
+'markdown markdown markdown'
 """
 
 mobile_grid = """
 'icon1 icon2'
-'icon3 icon4'
+'icon4 .'
 'markdown markdown'
 """
 
@@ -29,7 +29,6 @@ dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
 icons = [
     {"id": "icon1", "img": "../../../assets/air/air_icon1.png", "hover": "Air Icon 1", "md_file": "md2/icon1.md"},
     {"id": "icon2", "img": "../../../assets/air/air_icon2.png", "hover": "Air Icon 2", "md_file": "md2/icon2.md"},
-    {"id": "icon3", "img": "../../../assets/air/air_icon3.png", "hover": "Air Icon 3", "md_file": "md2/icon3.md"},
     {"id": "icon4", "img": "../../../assets/air/air_icon4.png", "hover": "Air Icon 4", "md_file": "md2/icon4.md"}
 ]
 
@@ -103,7 +102,7 @@ dashboard.add_details_panel(
     block_id="markdown",
     title="",
     placeholder="Click an icon above to view details.",
-    col_span=4,
+    col_span=3,
     grid_area="markdown",
     background_color="transparent",
     border_radius="10px",
@@ -116,7 +115,7 @@ dashboard.add_details_panel(
 
 output_file = os.path.join(os.path.dirname(__file__), "sub_dashboard.html")
 custom_css = """
-#card-icon1, #card-icon2, #card-icon3, #card-icon4 {
+#card-icon1, #card-icon2, #card-icon4 {
     max-height: 180px !important;
 }
 """
