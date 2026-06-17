@@ -86,7 +86,9 @@ Erosion is a naturally occurring process, but human activities can accelerate it
       color: #374151;
       font-size: 0.98rem;
   ">
-The council’s approach to erosion management intensified after the February 2004 storm highlighted the region’s vulnerability to severe weather events. The catastrophic storm and associated flooding are forever etched in locals’ memories. About 70 per cent of the Horizons Region was affected by the weather, with 62,000 individual landslides recorded, and an estimated 200 million tonnes of soil lost across the region. During the event, 28 tonnes of sediment passed under Palmerston North’s Fitzherbert Bridge every second for eight hours. 
+When intense rainfall from storms falls on steep terrain without protective forest cover, a large number of particularly damaging landslides are likely to occur.  
+
+The February 2004 storm highlighted the region’s vulnerability to severe weather events. About 70 per cent of the Horizons Region was affected by the weather, with 62,000 individual landslides recorded, and an estimated 200 million tonnes of soil lost across the region. During the event, 28 tonnes of <a href="https://www.lawa.org.nz/learn/glossary/s/sediment">sediment</a> passed under Palmerston North’s Fitzherbert Bridge every second for eight hours. 
 
   </div>
 </details>
