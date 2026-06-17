@@ -149,6 +149,7 @@ Figure 2. Trend analysis of PM10 concentrations in Taumarunui and Taihape betwee
 
 odometer_html = f'''
 <div style="padding: 20px;">
+<h2 style="text-align: center; margin-bottom: 10px;">Taihape</h2>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
 <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
 <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape PM10 exceedances 5 years</h3>
@@ -156,6 +157,10 @@ odometer_html = f'''
 <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
 <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taihape PM10 exceedances last year</h3>
 <div style="font-size: 64px; font-weight: bold; color: {t_1yr_color};">{t_1yr}</div>{get_subtext(t_date, t_1yr)}</div>
+</div>
+<hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc;">
+<h2 style="text-align: center; margin-bottom: 10px;">Taumarunui</h2>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
 <div style="padding: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 10px;">
 <h3 style="margin-bottom: 5px; font-size: 16px; color: #333;">Taumarunui PM10 exceedances 5 years</h3>
 <div style="font-size: 64px; font-weight: bold; color: {tau_5yr_color};">{tau_5yr}</div>{get_subtext(tau_date, tau_5yr)}</div>
