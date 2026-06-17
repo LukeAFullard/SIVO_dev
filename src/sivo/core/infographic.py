@@ -1726,7 +1726,7 @@ class Infographic:
                  auto_fit_text: bool = True, url: Optional[str] = None, url_target: str = "_blank",
                  url_transition: Optional[str] = None, glow: Optional[bool] = None, fade_in: bool = False,
                  fade_pulse: bool = False, fade_start_time_ms: int = 0, fade_duration_ms: int = 5000,
-                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = ""):
+                 shadow: bool = False, glass: bool = False, dasharray: str = "", gradient_bg: str = "", html_body: bool = False):
         """
         Generates a perfectly scaled, native SVG card relative to the bounding box
         of a target element.
@@ -1801,7 +1801,7 @@ class Infographic:
         }
         if url:
             group_attrs["style"] = "cursor: pointer;"
-        elif glow is None:
+        elif glow is None and not html_body:
             # If not clickable and no hover glow, don't steal mouse events from elements underneath
             group_attrs["style"] = "pointer-events: none;"
 
@@ -2042,25 +2042,39 @@ class Infographic:
                 body_start_y = current_y + (prev_fs * 0.2) + (abs_height * 0.08 * scale) + (body_font_size * 0.8)
                 line_y = body_start_y
 
-                words = str(body).split()
-                current_line = []
+                if html_body:
+                    import re
+                    clean_text = re.sub('<[^<]+>', '', str(body))
+                    # Fallback to simple rectangle for width/height
+                    est_width = get_max_width_at_y(line_y)
+                    if est_width <= 0: est_width = abs_width * 0.8
+                    char_width = body_font_size * 0.55
+                    chars_per_line = max(1, est_width / char_width)
+                    num_lines = max(1, len(clean_text) / chars_per_line)
+                    est_height = num_lines * body_font_size * 1.2
 
-                for word in words:
-                    current_line.append(word)
-                    test_line = " ".join(current_line)
+                    rendered_elements.append(("foreignObject", body, body_font_size, line_y, body_color, "normal", est_width, est_height))
+                    line_y += est_height
+                else:
+                    words = str(body).split()
+                    current_line = []
 
-                    est_width = len(test_line) * (body_font_size * 0.55)
-                    available_width = get_max_width_at_y(line_y)
+                    for word in words:
+                        current_line.append(word)
+                        test_line = " ".join(current_line)
 
-                    if est_width > available_width and len(current_line) > 1:
-                        current_line.pop()
+                        est_width = len(test_line) * (body_font_size * 0.55)
+                        available_width = get_max_width_at_y(line_y)
+
+                        if est_width > available_width and len(current_line) > 1:
+                            current_line.pop()
+                            rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal"))
+                            current_line = [word]
+                            line_y += body_font_size * 1.2
+
+                    if current_line:
                         rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal"))
-                        current_line = [word]
                         line_y += body_font_size * 1.2
-
-                if current_line:
-                    rendered_elements.append(("body", " ".join(current_line), body_font_size, line_y, body_color, "normal"))
-                    line_y += body_font_size * 1.2
 
                 current_y = line_y - (body_font_size * 1.2) # Undo the last addition to get the true bottom of the text block
 
@@ -2076,21 +2090,63 @@ class Infographic:
                 break
 
         # Finally, render all the elements
-        for elem_type, text_content, font_size, y_pos, color, weight in rendered_elements:
-            attrs = {
-                "x": str(text_x),
-                "y": str(y_pos),
-                "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-                "font-size": f"{font_size}px",
-                "fill": color,
-                "text-anchor": text_anchor,
-                "style": "pointer-events: none;"
-            }
-            if weight != "normal":
-                attrs["font-weight"] = weight
+        for elem_data in rendered_elements:
+            if len(elem_data) == 6:
+                elem_type, text_content, font_size, y_pos, color, weight = elem_data
+                attrs = {
+                    "x": str(text_x),
+                    "y": str(y_pos),
+                    "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                    "font-size": f"{font_size}px",
+                    "fill": color,
+                    "text-anchor": text_anchor,
+                    "style": "pointer-events: none;"
+                }
+                if weight != "normal":
+                    attrs["font-weight"] = weight
 
-            node = etree.SubElement(text_group, "text", attrs)
-            node.text = text_content
+                node = etree.SubElement(text_group, "text", attrs)
+                node.text = text_content
+            else:
+                # foreignObject
+                elem_type, text_content, font_size, y_pos, color, weight, est_width, est_height = elem_data
+
+                # foreignObject requires an exact bounding box.
+                # calculate x and y offset
+                # Since we use 'text-anchor'="middle" for centered shapes:
+                if is_centered:
+                    fo_x = text_x - (est_width / 2)
+                else:
+                    fo_x = text_x
+
+                # y_pos corresponds to the text baseline in normal text rendering.
+                # For foreignObject, y_pos is the top-left edge. Let's adjust slightly:
+                fo_y = y_pos - (font_size * 0.8)
+
+                fo_attrs = {
+                    "x": str(fo_x),
+                    "y": str(fo_y),
+                    "width": str(est_width),
+                    "height": str(est_height + font_size), # slight padding
+                }
+                fo_node = etree.SubElement(text_group, "foreignObject", fo_attrs)
+
+                # Use a div to render HTML
+                div_style = f"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: {font_size}px; color: {color}; pointer-events: auto;"
+                if is_centered:
+                    div_style += " text-align: center;"
+                else:
+                    div_style += " text-align: left;"
+
+                div_html = f'<div xmlns="http://www.w3.org/1999/xhtml" style="{div_style}">{text_content}</div>'
+
+                try:
+                    import lxml.html
+                    fragment = lxml.html.fragment_fromstring(div_html)
+                    fo_node.append(fragment)
+                except Exception as e:
+                    # fallback
+                    fo_node.text = str(text_content)
 
         # Inject at the end of the SVG
         self.parser.root.append(group)
