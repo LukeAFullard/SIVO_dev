@@ -1,3 +1,6 @@
-# Erosion mitigation works completed to date 
+Learn more about the land-use, geology and erosion mitigation works in your local Freshwater Management Unit (FMU). 
 
-To be able to protect our region it is important to understand the degree to which various parts of our regions are susceptible to erosion, as type and degree of soil erosion varies. We, therefore, first mapped the region to identify areas which are susceptible to soil erosion and its affects. 
+- **Select an FMU** on the map, or **enter an address** in the search bar
+- **Scroll down slightly** to see the volume of erosion mitigation works completed in that FMU 
+
+Key for map: Purple represents areas of that region that have been mapped and identified as erosion-prone and are considered a priority for erosion mitigation works.  
