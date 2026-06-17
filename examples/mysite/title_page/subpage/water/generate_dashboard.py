@@ -68,7 +68,7 @@ dashboard.add_image_block(
 
 dashboard.add_text_block(
     block_id="issues",
-    text="What are the issues?",
+    text="Pressures",
     url="issues/index.html",
     url_transition="page-turn-enter",
     col_span=1,
@@ -80,7 +80,7 @@ dashboard.add_text_block(
 
 dashboard.add_text_block(
     block_id="science",
-    text="What does the science say?",
+    text="State",
     url="science/index.html",
     url_transition="page-turn-enter",
     col_span=1,
@@ -92,7 +92,7 @@ dashboard.add_text_block(
 
 dashboard.add_text_block(
     block_id="help",
-    text="What can we do to help?",
+    text="Actions",
     url="help/index.html",
     url_transition="page-turn-enter",
     col_span=1,
