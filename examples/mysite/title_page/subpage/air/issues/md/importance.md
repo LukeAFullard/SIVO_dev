@@ -13,36 +13,16 @@
       color: #1f2937;
       outline: none;
   ">
-   How does air quality impact people?
+    How does air quality impact people?
   </summary>
 
-<style>
-  .responsive-flex {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-  .responsive-flex-item-text {
-    flex: 1;
-    padding-left: 20px;
-  }
-  @media (max-width: 900px) {
-    .responsive-flex {
-      flex-direction: column;
-    }
-    .responsive-flex-item-text {
-      padding-left: 0 !important;
-      padding-top: 20px;
-    }
-  }
-</style>
+  <div style="
+      margin-top: 1rem;
+      line-height: 1.7;
+      color: #374151;
+      font-size: 0.98rem;
+  ">
 
-  <div class="responsive-flex">
-  <div style="flex: 1;">
-    <img src="../../../assets/land/tree_important.png" style="max-width: 100%; height: auto; border-radius: 10px;" />
-  </div>
-  <div class="responsive-flex-item-text">
-<br>
 <h2>It can affect our health</h2>
 Poor air quality leads to poorer health outcomes for our friends, whānau and neighbours. 
 
@@ -52,13 +32,10 @@ When we breathe in particulate matter, the larger particles (PM<sub>10</sub>) ca
 <h2>It can bother people</h2>
 Beyond serious health impacts, air pollution can also be a real nuisance for the region’s communities. 
 
-Odour, smoke, and other discharges to air can make it unpleasant to do outdoor activities such as gardening, barbequing, and playing in the backyard. It can also discourage us from hanging washing on the line and opening doors and windows on hot days.  
+Odour, smoke, and other discharges to air can make it unpleasant to do outdoor activities such as gardening, barbequing, and playing in the backyard. It can also discourage us from hanging washing on the line and opening doors and windows on hot days.  es are between five times smaller (for PM<sub>10</sub>) and 20 to 28 times smaller (for PM<sub>2.5</sub>) than a single strand of human hair (which is approximately 50-70 µm across). 
 
   </div>
-</div>
 </details>
-
-
 
 
 
