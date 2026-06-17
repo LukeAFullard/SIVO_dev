@@ -13,7 +13,7 @@
       color: #1f2937;
       outline: none;
   ">
-   It can affect our health
+   How does air quality impact people?
   </summary>
 
 <style>
@@ -43,6 +43,7 @@
   </div>
   <div class="responsive-flex-item-text">
 <br>
+<h2>It can affect our health</h2>
 Poor air quality leads to poorer health outcomes for our friends, whānau and neighbours. 
 
 When we breathe in particulate matter, the larger particles (PM<sub>10</sub>) can remain in our upper airways, and the smaller particles (PM<sub>2.5</sub>) can lodge deeper into our lungs and even enter our bloodstream. Here, particulate matter can cause coughing and difficulty breathing, aggravate asthma, increase the risk of lung cancer, and contribute to cardiovascular and respiratory problems.  
