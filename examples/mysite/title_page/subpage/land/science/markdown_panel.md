@@ -43,14 +43,14 @@
   </div>
   <div class="responsive-flex-item-text">
 <br>
-Under Horizons’ Sustainable Land Use Initiative (SLUI) - New Zealand’s largest hill country erosion control programme - our Land and Freshwater teams work with landowners to keep soil on the hills and out of the region’s waterways. The initiative aims to reduce erosion rates, create a more resilient rural sector, improve water quality, and mitigate the impacts of upstream erosion on lowland communities. 
+Under Horizons’ Sustainable Land Use Initiative (SLUI) - New Zealand’s largest hill country erosion control programme - and other work programmes, our Land and Freshwater teams work with landowners to keep soil on the hills and out of the region’s waterways. These activities aim to reduce erosion rates, create a more resilient rural sector, improve water quality, and mitigate the impacts of upstream erosion on lowland communities. 
 
- Our teams work with farmers and lifestyle block owners to implement erosion control works on their properties, including:
+Our teams work with farmers and lifestyle block owners to implement erosion control works on their properties, including: 
 
  <ul>
-  <li>Afforestation: Planting native or exotic tree species on marginal (not productive) land for full canopy cover. </li>
-  <li>Retirement: Native regeneration and retirement from grazing. This can also include retiring riparian margins and wetland areas.</li>
-  <li>On-farm soil conservation: Planting poplar or willow trees at different intervals on erosion-prone pastureland.  </li>
+  <li>Afforestation: Planting native or exotic tree species on marginal (not productive) land for full canopy cover.  </li>
+  <li>Retirement: Native regeneration and retirement from grazing. This can also include retiring riparian margins and wetland areas.  </li>
+  <li>On-farm soil conservation: Planting poplar or willow trees at different intervals on erosion-prone pastureland.    </li>
 </ul>
 
 
