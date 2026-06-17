@@ -4,5 +4,5 @@ The Waiopehu FMU is a patchwork of landscapes that includes market gardening and
 
 <img src="../../../assets/land/Waiopehu.jpg" alt="SLUI works completed in Waiopehu to date" style="width: 85%;">
 <figure style="margin-top: -50px; padding-top: 0;">
-  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Waiopehu FMU as of December 2025.</figcaption>
+  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Waiopehu FMU as of May 2026.</figcaption>
 </figure>

@@ -4,6 +4,6 @@ The Kai Iwi FMU is a mixture of pastoral farming, exotic forestry and native bus
 
 <img src="../../../assets/land/KaiIwi.jpg" alt="SLUI works completed in Kai Iwi to date" style="width: 85%;">
 <figure style="margin-top: -50px; padding-top: 0;">
-  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Kai Iwi FMU as of December 2025.</figcaption>
+  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Kai Iwi FMU as of May 2026.</figcaption>
 </figure>
 

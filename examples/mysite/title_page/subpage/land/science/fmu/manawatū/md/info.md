@@ -4,5 +4,5 @@ The Manawatū FMU is a patchwork of landscapes that includes pastoral farming on
 
 <img src="../../../assets/land/Manawatu.jpg" alt="SLUI works completed in Manawatū to date" style="width: 85%;">
 <figure style="margin-top: -50px; padding-top: 0;">
-  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Manawatū FMU as of December 2025.</figcaption>
+  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Manawatū FMU as of May 2026.</figcaption>
 </figure>

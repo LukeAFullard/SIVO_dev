@@ -5,5 +5,5 @@ The Whanganui River channel has high sided cliffs of sand and mudstone. Much of 
 
 <img src="../../../assets/land/Whanganui.jpg" alt="SLUI works completed in Whanganui to date" style="width: 85%;">
 <figure style="margin-top: -50px; padding-top: 0;">
-  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Whanganui FMU as of December 2025.</figcaption>
+  <figcaption style="font-size: 0.9em; color: #555;">Planting, fencing and area of land treated under Horizons' Freshwater and Sustainable Land Use Initiative programmes in the Whanganui FMU as of May 2026.</figcaption>
 </figure>
