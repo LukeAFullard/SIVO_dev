@@ -12,9 +12,9 @@ nav_menu = [
     {"label": "Home", "url": "../../../index.html", "url_transition": "page-turn-enter"},
     {"label": "Air", "url": "../../air/index.html", "url_transition": "page-turn-enter"},
     {"label": "Land", "sublinks": [
-        {"label": "Issues", "url": "../issues/index.html", "url_transition": "page-turn-enter"},
-        {"label": "What we are doing", "url": "../science/index.html", "url_transition": "page-turn-enter"},
-        {"label": "How to help", "url": "index.html", "url_transition": "page-turn-enter"}
+        {"label": "Pressures", "url": "../issues/index.html", "url_transition": "page-turn-enter"},
+        {"label": "State", "url": "../science/index.html", "url_transition": "page-turn-enter"},
+        {"label": "Actions", "url": "index.html", "url_transition": "page-turn-enter"}
     ]},
     {"label": "Water", "url": "../../water/index.html", "url_transition": "page-turn-enter"}
 ]

@@ -16,9 +16,9 @@ nav_menu = [
     {"label": "Home", "url": "../../../index.html", "url_transition": "page-turn-enter"},
     {"label": "Air", "sublinks": [
         {"label": "Overview", "url": "../index.html", "url_transition": "page-turn-enter"},
-        {"label": "Issues", "url": "index.html", "url_transition": "page-turn-enter"},
-        {"label": "Science", "url": "../science/index.html", "url_transition": "page-turn-enter"},
-        {"label": "How to help", "url": "../help/index.html", "url_transition": "page-turn-enter"}
+        {"label": "Pressures", "url": "index.html", "url_transition": "page-turn-enter"},
+        {"label": "State", "url": "../science/index.html", "url_transition": "page-turn-enter"},
+        {"label": "Actions", "url": "../help/index.html", "url_transition": "page-turn-enter"}
     ]},
     {"label": "Land", "url": "../../land/index.html", "url_transition": "page-turn-enter"},
     {"label": "Water", "url": "../../water/index.html", "url_transition": "page-turn-enter"}
