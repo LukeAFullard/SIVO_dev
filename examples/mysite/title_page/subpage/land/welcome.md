@@ -6,6 +6,6 @@ This year (2025-26), the land chapter explores hill-country erosion, a significa
 **Select the questions to explore the state of the region’s air:**
 
 - **Pressures | What's affecting the land?** Discover the environmental challenges affecting the region’s land. 
-- **State | What does the data tell us?** Dive into the latest data. 
+- **State | What does the data tell us?** Dive into the latest data on efforts to mitigate erosion in the region.  
 - **Actions | What can we do to help?** Learn about the practical, everyday actions we can all take to improve the state of the air where we live. 
 
