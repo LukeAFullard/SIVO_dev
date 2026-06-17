@@ -1,5 +1,4 @@
-# How to Help Improve Air Quality
+Looking to reduce your impact on the region’s air quality? 
 
-This page is a placeholder for information on how you can help improve air quality in the Horizons region.
-
-More details will be added here in the future.
+**Select the glowing items in the pictures below** to learn what actions can make air quality worse, and what you can do to improve the air around you.  
+By working together, we can keep our neighbourhoods smog-free and our friends and whānau breathing easy 🤝 
