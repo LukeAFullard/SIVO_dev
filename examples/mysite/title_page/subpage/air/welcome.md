@@ -6,6 +6,6 @@ However, some of the activities we practice can put the region’s air quality a
 
 **Select the questions to explore the state of the region’s air:** 
 
-- **Pressures | What's affecting the air?** Discover the environmental challenges and pollutants affecting the region’s air.
-- **State | What does the data tell us?** Dive into the latest data and long-term trends from Horizons’ monitoring sites.
-- **Actions | What can we do to help?** Learn about the practical, everyday actions we can all take to improve the state of the air where we live. 
+- **Pressures | What's affecting the air?**  Discover the environmental challenges and pollutants affecting the region’s air.
+- **State | What does the data tell us?**  Dive into the latest data and long-term trends from Horizons’ monitoring sites.
+- **Actions | What can we do to help?**  Learn about the practical, everyday actions we can all take to improve the state of the air where we live. 
