@@ -1,3 +1,5 @@
+# What influences air quality? 
+
 ## Climate and landscape
 
 During winter and the dry summer months, some parts of the region are prone to lower standards of air quality. The bowl-like topography of Taumarunui and Taihape - Horizons’ two gazetted airsheds (a legally defined geographic area for air quality management) - enables air pollutants to settle in these towns, limiting their ability to be lifted and blown away by the wind and putting communities at risk of poor air quality.
