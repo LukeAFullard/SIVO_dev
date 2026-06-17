@@ -2,4 +2,4 @@
 
 The Rangitīkei-Turakina FMU is a patchwork of pastoral farming, native forest, plantation forestry and non-agricultural grassland. The land is characterised by rock, sandstone and clay, and the rivers have created terraces that are now predominantly used for pasture. Remnants of native bush remain at the headwaters in the Kaimanawa and Ruahine Forest Parks and throughout the hill country.
 
-![SLUI works completed in Rangitikei-Turakina to date](../../../assets/land/Rangitikei-Turakina.jpg)
+<img src="../../../assets/land/Rangitikei-Turakina.jpg" alt="SLUI works completed in Rangitikei-Turakina to date" style="width: 85%;">
