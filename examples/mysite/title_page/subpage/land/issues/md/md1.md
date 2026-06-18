@@ -86,7 +86,7 @@ Erosion is a naturally occurring process, but human activities can accelerate it
       color: #374151;
       font-size: 0.98rem;
   ">
-When intense rainfall from storms falls on steep terrain without protective forest cover, a large number of particularly damaging landslides are likely to occur.  
+Intense rainfall during storm events often triggers landslides on steep terrain.
 
 The February 2004 storm highlighted the region’s vulnerability to severe weather events. About 70 per cent of the Horizons Region was affected by the weather, with 62,000 individual landslides recorded, and an estimated 200 million tonnes of soil lost across the region. During the event, 28 tonnes of <a href="https://www.lawa.org.nz/learn/glossary/s/sediment">sediment</a> passed under Palmerston North’s Fitzherbert Bridge every second for eight hours. 
 
