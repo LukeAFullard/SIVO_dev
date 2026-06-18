@@ -4,21 +4,21 @@ The interactive charts display individual monitoring site metrics assessing chan
 
 * **Baseline evaluation (0%):** The bold vertical line at **0** represents a stable state with no detected environmental change.
 * **Directional vectors:** Lollipops extending to the **Right** represent positive percentage increases per year, while lollipops extending to the **Left** represent negative percentage decreases per year.
-* **Site order:** Sites are categorized into core performance groups from most improving at the top to most degrading at the bottom. Within those groups, they are organized by magnitude of structural change.
-* **Trend category classifications:** Marker colors indicate the calculated confidence direction:
-* ● **Improving** 🔵 *(Water quality metrics are getting healthier)*
-* ● **Indeterminate** 🟡 *(Data variations show no clear structural trend direction)*
-* ● **Degrading** 🔴 *(Water quality metrics are deteriorating)*
+* **Site order:** Sites are categorised into core performance groups from most improving at the top to most degrading at the bottom. Within those groups, they are organised by magnitude of structural change.
+* **Trend category classifications:** Marker colours indicate the calculated confidence direction:
+* **Improving** 🔵 *(Water quality metrics are getting healthier)*
+* **Indeterminate** 🟡 *(Data variations show no clear structural trend direction)*
+* **Degrading** 🔴 *(Water quality metrics are deteriorating)*
 
 
 
-> *Note: For nutrients and bacteria (E.*coli*, Phosphorus, Nitrogen), a negative vector extending to the left represents an **Improving** trend (pollution is dropping). For ecosystem health variables (Visual Clarity, MCI), a positive vector extending to the right represents an **Improving** trend.*
+> *Note: For nutrients and bacteria (E.*coli*, Phosphorus, Nitrogen), a negative vector extending to the left represents an **Improving** trend (contaminant is dropping). For ecosystem health variables (Visual Clarity, MCI), a positive vector extending to the right represents an **Improving** trend.*
 
 ---
 
 ### Interactive controls
 
-> **Contextual Insights:** Hover over any localized site circle marker to see a deep dive of the asset parameters, including the precise statistical change velocity (`% / year`) alongside the original confidence descriptor assigned during analytical evaluation.
+> **Contextual Insights:** Hover over any localised site circle marker to see a deep dive of the asset parameters, including the precise statistical change velocity (`% / year`) alongside the confidence descriptor.
 
 
 
