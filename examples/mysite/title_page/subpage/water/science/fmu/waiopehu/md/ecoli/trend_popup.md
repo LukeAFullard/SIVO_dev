@@ -6,9 +6,9 @@ The interactive charts display individual monitoring site metrics assessing chan
 * **Directional vectors:** Lollipops extending to the **right** represent positive percentage increases per year, while lollipops extending to the **left** represent negative percentage decreases per year.
 * **Site order:** Sites are categorised into core performance groups from most improving at the top to most degrading at the bottom. Within those groups, they are organised by magnitude of structural change.
 * **Trend category classifications:** Marker colours indicate the calculated confidence direction:
-* **Improving** 🔵 *(Water quality metrics are getting healthier)*
-* **Indeterminate** 🟡 *(Data variations show no clear structural trend direction)*
-* **Degrading** 🔴 *(Water quality metrics are deteriorating)*
+    * **Improving** 🔵 *(Water quality metrics are getting healthier)*
+    * **Indeterminate** 🟡 *(Data variations show no clear structural trend direction)*
+    * **Degrading** 🔴 *(Water quality metrics are deteriorating)*
 
 
 

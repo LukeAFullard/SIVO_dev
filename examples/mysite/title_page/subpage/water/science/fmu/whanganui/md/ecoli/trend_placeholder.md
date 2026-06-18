@@ -27,12 +27,12 @@ We evaluated 15-year trends for *E. coli* at 7 monitoring sites across the Whang
       font-size: 0.98rem;
   ">
 
-Trends show us if bacteria levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes (like heavy rain washing animal waste into rivers) and uncover the true, long-term direction of water quality.
+Trends show us if bacteria levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes, like heavy rain washing animal waste into rivers, and uncover the true, long-term direction of water quality.
 
-<br><br>
+<br>
 <strong>Trend categories</strong>
 <br>
-Trends are grouped by how confident scientists are that a change is actually happening. Because *E. coli* indicates a risk of illness, an "improvement" means the concentration of bacteria in the water is safely decreasing.
+Trends are grouped by how confident scientists are that a change is actually happening. Because *E. coli* indicates a risk of illness, an "improvement" means the concentration of bacteria in the water is decreasing.
 
 <ul>
 <li><strong>Improving:</strong> Bacteria levels are decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
