@@ -2004,13 +2004,35 @@ class Infographic:
             rendered_elements.clear()
             current_y = abs_top + padding_y
 
-            # 1. Title
+            # 1. Title (Wrapped)
             title_font_size = base_title_fs * scale
-            title_y = current_y + (title_font_size * 0.8)
-            actual_title_size = auto_shrink_font(title, title_font_size, title_y)
-            rendered_elements.append(("title", title, actual_title_size, title_y, title_color, "600"))
+            title_words = str(title).split()
 
-            current_y = title_y
+            if title_words:
+                current_title_line = []
+                title_line_y = current_y + (title_font_size * 0.8)
+
+                for word in title_words:
+                    current_title_line.append(word)
+                    test_line = " ".join(current_title_line)
+
+                    est_width = len(test_line) * (title_font_size * 0.6)
+                    available_width = get_max_width_at_y(title_line_y)
+
+                    if est_width > available_width and len(current_title_line) > 1:
+                        current_title_line.pop()
+                        rendered_elements.append(("title", " ".join(current_title_line), title_font_size, title_line_y, title_color, "600"))
+                        current_title_line = [word]
+                        title_line_y += title_font_size * 1.2
+
+                if current_title_line:
+                    rendered_elements.append(("title", " ".join(current_title_line), title_font_size, title_line_y, title_color, "600"))
+                    title_line_y += title_font_size * 1.2
+
+                current_y = title_line_y - (title_font_size * 1.2)
+            else:
+                # If title is empty, preserve original behavior of advancing current_y
+                current_y = current_y + (title_font_size * 0.8)
 
             # 2. Value
             if value:

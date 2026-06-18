@@ -1,6 +1,5 @@
 import sys
 import os
-import textwrap
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../../src')))
 
@@ -85,16 +84,12 @@ dashboard.add_details_panel(
 
 # Helper function to create a Sivo instance with a card
 def create_card_sivo(id_str, title, value, body, color, url=None):
-    wrapped_title = textwrap.wrap(title, width=18)
-    display_title = wrapped_title[0] if wrapped_title else ""
-    display_subtitle = wrapped_title[1] if len(wrapped_title) > 1 else ""
-
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
       <rect id="{id_str}" x="0" y="0" width="100" height="100" fill="none" />
     </svg>'''
     s = Sivo.from_string(svg, layout_size="100%", mobile_layout_size="100%", lock_canvas=True, disable_zoom_controls=True, disable_resizer=True, lock_scroll_bounds=True, lock_zoom_out=True, theme="transparent", render_mode="svg")
     s.map(id_str, color="transparent")
-    s.add_card(element_id=id_str, title=display_title, subtitle=display_subtitle, value=value, body=body, left="0%", top="0%", width="100%", height="100%", shape="ellipse", bg_color=color, url=url, title_color="#ffffff", subtitle_color="#ffffff", body_color="#ffffff")
+    s.add_card(element_id=id_str, title=title, subtitle="", value=value, body=body, left="0%", top="0%", width="100%", height="100%", shape="ellipse", bg_color=color, url=url, title_color="#ffffff", subtitle_color="#ffffff", body_color="#ffffff")
     return s
 
 dashboard.add_sivo_block("card1", create_card_sivo("c1", "Take action on-farm", "", "Seek guidance from Horizons to reduce\ncontaminants entering waterways. Learn\nmore about on-farm mitigations at\nlandscapedna.org.", "#007DA3", url="https://ourlandandwater.nz/fep-actions/"), col_span=1, grid_area="card1", min_height="250px")
