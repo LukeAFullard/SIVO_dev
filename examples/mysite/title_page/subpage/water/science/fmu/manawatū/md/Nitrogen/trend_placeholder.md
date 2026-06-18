@@ -30,7 +30,7 @@ We evaluated 15-year trends for nitrate and ammoniacal nitrogen at 45 monitoring
 Trends show us if nitrogen levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
 
 <br><br>
-<strong>Trend Categories</strong>
+<strong>Trend categories</strong>
 <br>
 Trends are grouped by how confident scientists are that a change is actually happening. Because nitrogen can be toxic to aquatic life, an "improvement" means the concentration of nitrogen in the water is safely decreasing.
 
