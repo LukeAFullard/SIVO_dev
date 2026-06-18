@@ -17,7 +17,7 @@ We evaluated the current state of *E. coli* at 53 monitoring sites across the Ma
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
