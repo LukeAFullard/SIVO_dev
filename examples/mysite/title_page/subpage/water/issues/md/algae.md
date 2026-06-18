@@ -13,4 +13,7 @@ To understand how much algae is in the water, scientists measure chlorophyll-a
 - **Risk to humans and pets**
     * Some potentially toxic forms of algae, known as cyanobacteria, can be harmful to human and animal health (especially dogs), making the water unsuitable for play. 
 
+### Where does it come from?
+While algae are natural, rapid overgrowth is fueled by human activities. Blooms thrive when there are excess nutrients (like nitrogen and phosphorus) in the water, combined with warm temperatures, high sunlight, and low river flows that fail to flush the algae away. 
+
 For further information, you may like to check out this [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/can-i-swim-here/toxic-algae) on potentially toxic algae. 
