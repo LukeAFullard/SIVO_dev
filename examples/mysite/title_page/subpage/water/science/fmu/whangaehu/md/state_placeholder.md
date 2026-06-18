@@ -8,6 +8,6 @@ This is how Land, Air, Water Aotearoa (LAWA) reports the state of our local rive
 *   **Band B (good)** 🟢 and **Band C (fair)** 🟡: These grades represent a drop in water quality. The ecosystem may be experiencing some stress, and environmental risks are increasing.
 *   **Band D** 🟠 and **Band E (poor)** 🔴: These scores represent progressively worse conditions. At these levels, the water poses a much higher risk to both aquatic life and human health.
 
-Measuring the current state helps us identify pollution pressures, track our environmental progress, and make better decisions to protect our local waterways.
+Measuring the current state helps us identify pressures, track our environmental progress, and make better decisions to protect local waterways.
 
 For more detailed information, please read the [LAWA factsheet on calculating water quality state](https://www.lawa.org.nz/learn/factsheets/calculating-water-quality-state-for-rivers).
