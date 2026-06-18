@@ -1,4 +1,4 @@
-# Long-Term Trends for Nitrogen
+# Long-term trends for nitrogen
 
 We evaluated 15-year trends for nitrate and ammoniacal nitrogen at 11 monitoring sites across the Whangaehu FMU.
 
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Ammoniacal Nitrogen Trend Results in the Whangaehu FMU
+### Ammoniacal nitrogen trend results in the Whangaehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -74,7 +74,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 </table>
 </div>
 
-### Nitrate Nitrogen Trend Results in the Whangaehu FMU
+### Nitrate nitrogen trend results in the Whangaehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

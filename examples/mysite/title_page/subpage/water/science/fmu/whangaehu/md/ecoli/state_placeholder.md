@@ -1,4 +1,4 @@
-# The Current State of *E. coli*
+# The current state of *E. coli*
 
 We evaluated the current state of *E. coli* at 12 monitoring sites across the Whangaehu FMU.
 
@@ -17,7 +17,7 @@ We evaluated the current state of *E. coli* at 12 monitoring sites across the Wh
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -46,7 +46,7 @@ A site must pass all four tests. If it scores poorly on even one, it receives th
 
 ***
 
-### *E. coli* Results in the Whangaehu FMU
+### *E. coli* results in the Whangaehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

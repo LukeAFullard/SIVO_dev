@@ -1,4 +1,4 @@
-# The Current State of Algae
+# The current state of algae
 
 We evaluated the current state of algae at 8 monitoring sites across the Whangaehu FMU.
 
@@ -17,7 +17,7 @@ We evaluated the current state of algae at 8 monitoring sites across the Whangae
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -48,7 +48,7 @@ A site must pass the test for this statistic to receive a good grade.
 
 ***
 
-### Algae (Chlorophyll-a) Results in the Whangaehu FMU
+### Algae (chlorophyll-a) results in the Whangaehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

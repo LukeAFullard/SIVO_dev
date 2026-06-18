@@ -1,4 +1,4 @@
-# The Current State of Suspended Sediment
+# The current state of suspended sediment
 
 We evaluated the current state of suspended sediment at |NUMBER_SITES| monitoring sites across the Whangaehu FMU.
 
@@ -17,7 +17,7 @@ We evaluated the current state of suspended sediment at |NUMBER_SITES| monitorin
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -38,7 +38,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
 
 ***
 
-### Suspended Sediment Results in the Whangaehu FMU
+### Suspended sediment results in the Whangaehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

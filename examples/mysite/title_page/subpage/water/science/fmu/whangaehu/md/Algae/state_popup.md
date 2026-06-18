@@ -1,4 +1,4 @@
-### How to Read the Site-specific State Charts below
+### How to read the site-specific state charts below
 
 The interactive charts display individual monitoring site metrics against the National Objectives Framework (NOF) bands.
 
@@ -9,7 +9,7 @@ The interactive charts display individual monitoring site metrics against the Na
 
 
 
-### Interactive Controls
+### Interactive controls
 
 > **Switching Component Attributes:** Use the **dropdown menu** in the top-left corner of the chart to toggle between the individual metrics that define the overall grade (such as switching between *Median* and *95th Percentile* states).
 
