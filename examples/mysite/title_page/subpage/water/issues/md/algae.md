@@ -13,4 +13,4 @@ To understand how much algae is in the water, scientists measure chlorophyll-a
 - **Risk to humans and pets**
     * Some potentially toxic forms of algae, known as cyanobacteria, can be harmful to human and animal health (especially dogs), making the water unsuitable for play. 
 
-For further information, you may like to check out thIS [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/can-i-swim-here/toxic-algae) on potentially toxic algae. 
+For further information, you may like to check out this [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/can-i-swim-here/toxic-algae) on potentially toxic algae. 
