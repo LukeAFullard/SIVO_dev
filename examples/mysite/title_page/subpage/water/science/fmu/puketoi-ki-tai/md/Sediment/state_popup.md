@@ -3,7 +3,7 @@
 The interactive charts display individual monitoring site metrics against the National Objectives Framework (NOF) bands.
 
 * **Site order:** Sites are ranked from best performing at the top to most degraded at the bottom.
-* **NOF grade bands:** Node colors indicate the localized environmental band:
+* **NOF grade bands:** Node colours indicate the localised environmental band:
 * ● Band A (Excellent) 🔵 | ● Band B (Good) 🟢| ● Band C (Fair) 🟡
 * ● Band D (Poor) 🟠
 
@@ -13,6 +13,6 @@ The interactive charts display individual monitoring site metrics against the Na
 
 > **Switching Component Attributes:** Use the **dropdown menu** in the top-left corner of the chart to toggle between the individual metrics that define the overall grade (such as switching between *Median* and *95th Percentile* states).
 
-The horizontal scale, site rankings, and color bands will update based on your selection. Hover over any site marker to view the precise recorded values.
+The horizontal scale, site rankings, and colour bands will update based on your selection. Hover over any site marker to view the precise recorded values.
 
 <iframe src="results/Chart_Visual%20Clarity.html" width="100%" height="920px" style="border:none; border-radius:10px;"></iframe>
