@@ -27,7 +27,7 @@ We evaluated 15-year trends for algae and chlorophyll-a at 8 monitoring sites ac
       font-size: 0.98rem;
   ">
 
-Trends show us if the amount of algae is consistently changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 15-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
+Trends show us if the amount of algae is changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 15-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
 
 <br><br>
 <strong>Trend Categories</strong>
