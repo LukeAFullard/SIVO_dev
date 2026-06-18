@@ -27,7 +27,7 @@ We evaluated 15-year trends for nitrate and ammoniacal nitrogen at 45 monitoring
       font-size: 0.98rem;
   ">
 
-Trends show us if nitrogen levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
+Trends show us if nitrogen levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend Categories</strong>
