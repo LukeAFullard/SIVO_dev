@@ -4,8 +4,8 @@ The interactive charts display individual monitoring site metrics against the Na
 
 * **Site order:** Sites are ranked from best performing at the top to most degraded at the bottom.
 * **NOF grade bands:** Node colors indicate the localized environmental band:
-* ● Band A (Excellent) 🔵 | ● Band B (Good) 🟢| ● Band C (Fair) 🟡
-* ● Band D (Poor) 🟠
+* ● Band A (excellent) 🔵 | ● Band B (good) 🟢| ● Band C (fair) 🟡
+* ● Band D (poor) 🟠
 
 
 

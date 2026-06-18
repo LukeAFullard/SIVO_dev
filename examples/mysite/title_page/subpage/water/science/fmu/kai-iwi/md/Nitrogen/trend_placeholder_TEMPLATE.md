@@ -1,4 +1,4 @@
-# Long-Term trends for nitrogen
+# Long-term trends for nitrogen
 
 We evaluated 15-year trends for nitrate and ammoniacal nitrogen at |NUMBER_SITES| monitoring sites across the Kai Iwi FMU.
 

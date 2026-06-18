@@ -5,8 +5,8 @@ When scientists talk about the "state" of a river, they are describing its curre
 This is how Land, Air, Water Aotearoa (LAWA) reports the state of our local rivers and streams. To make this data easy to understand, LAWA grades rivers using a national scoring system. These scores, known as attribute bands, range from A to E and use colours to make interpretation easier:
 
 *   **Band A (excellent)** 🔵: This represents the best conditions, meaning the waterway has high ecological health and poses a very low risk for human use.
-*   **Band B (good)** 🟢 and **Band C (Fair)** 🟡: These grades represent a drop in water quality. The ecosystem may be experiencing some stress, and environmental risks are increasing.
-*   **Band D** 🟠 and **Band E (Poor)** 🔴: These scores represent progressively worse conditions. At these levels, the water poses a much higher risk to both aquatic life and human health.
+*   **Band B (good)** 🟢 and **Band C (fair)** 🟡: These grades represent a drop in water quality. The ecosystem may be experiencing some stress, and environmental risks are increasing.
+*   **Band D** 🟠 and **Band E (poor)** 🔴: These scores represent progressively worse conditions. At these levels, the water poses a much higher risk to both aquatic life and human health.
 
 Measuring the current state helps us identify pollution pressures, track our environmental progress, and make better decisions to protect our local waterways.
 

@@ -1,4 +1,4 @@
-# Long-Term trends for phosphorus
+# Long-term trends for phosphorus
 
 We evaluated 15-year trends for Dissolved Reactive Phosphorus (DRP) at 1 monitoring sites across the Kai Iwi FMU.
 

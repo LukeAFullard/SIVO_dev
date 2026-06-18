@@ -1,4 +1,4 @@
-# Long-Term trends for *E. coli*
+# Long-term trends for *E. coli*
 
 We evaluated 15-year trends for *E. coli* at 1 monitoring sites across the Kai Iwi FMU.
 
