@@ -1,6 +1,6 @@
 # The current state of dissolved reactive phosphorus
 
-We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Waiopehu FMU.
+We evaluated the current state of dissolved reactive phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Waiopehu FMU.
 
 <details style="
     border: 1px solid #d0d7de;

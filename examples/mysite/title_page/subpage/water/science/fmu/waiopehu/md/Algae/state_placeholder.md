@@ -54,7 +54,7 @@ A site must pass the test for this statistic to receive a good grade.
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll A</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll a</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">A</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #359B73; color: white;">B</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">C</th>
