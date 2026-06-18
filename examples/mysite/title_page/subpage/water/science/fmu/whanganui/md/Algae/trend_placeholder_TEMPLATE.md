@@ -17,7 +17,7 @@ We evaluated 15-year trends for algae and chlorophyll-a at |NUMBER_SITES| monito
       color: #1f2937;
       outline: none;
   ">
-    Understanding the trend (click to expand)
+    Understanding the Trend (click to expand)
   </summary>
 
   <div style="
@@ -27,10 +27,10 @@ We evaluated 15-year trends for algae and chlorophyll-a at |NUMBER_SITES| monito
       font-size: 0.98rem;
   ">
 
-Trends show us if the amount of algae is consistently changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 15-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
+Trends show us if the amount of algae is changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 15-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
 
 <br><br>
-<strong>Trend categories</strong>
+<strong>Trend Categories</strong>
 <br>
 Trends are grouped by how confident scientists are that a change is actually happening. Because excess algae harms aquatic life and can be toxic, an "improvement" means the amount of chlorophyll-a (algae) in the water is safely decreasing.
 

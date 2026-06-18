@@ -17,7 +17,7 @@ We evaluated the current state of algae at 8 monitoring sites across the Whangae
       color: #1f2937;
       outline: none;
   ">
-    How we measure and grade (click to expand)
+    How We Measure and Grade (click to expand)
   </summary>
 
   <div style="
@@ -33,7 +33,7 @@ Because algae are tiny and difficult to count individually, scientists often mea
 
 To calculate a reliable A-to-D ecological health grade for rivers, experts evaluate data collected over a multi-year period using a specific statistic:
 <ul>
-<li><strong>The 92nd percentile:</strong> For rivers, scientists calculate the 92nd percentile. This is a measure of the extremes, helping us understand exactly how severe the algal blooms get on a "bad" day, without the final grade being skewed by a single, rare spike.</li>
+<li><strong>The 92nd Percentile:</strong> For rivers, scientists calculate the 92nd percentile. This is a measure of the extremes, helping us understand exactly how severe the algal blooms get on a "bad" day, without the final grade being skewed by a single, rare spike.</li>
 </ul>
 
 A site must pass the test for this statistic to receive a good grade.
