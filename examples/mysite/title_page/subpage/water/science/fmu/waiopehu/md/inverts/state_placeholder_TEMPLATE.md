@@ -1,4 +1,4 @@
-# The Current State of Macroinvertebrates
+# The current state of macroinvertebrates
 
 We evaluated the current state of macroinvertebrates at |NUMBER_SITES| monitoring sites across the Waiopehu FMU.
 
@@ -43,7 +43,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
 
 ***
 
-### Macroinvertebrate (MCI) Results in the Waiopehu FMU
+### Macroinvertebrate (MCI) results in the Waiopehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

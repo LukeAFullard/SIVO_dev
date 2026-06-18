@@ -1,4 +1,4 @@
-# The Current State of Dissolved Reactive Phosphorus
+# The current state of dissolved reactive phosphorus
 
 We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Waiopehu FMU.
 
@@ -49,7 +49,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 ***
 
-### Dissolved Reactive Phosphorus Results in the Waiopehu FMU
+### Dissolved reactive phosphorus results in the Waiopehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
