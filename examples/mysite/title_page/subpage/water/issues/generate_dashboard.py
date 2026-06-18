@@ -37,7 +37,6 @@ dashboard = SivoDashboard(
 
 desktop_grid = """
 'banner banner banner banner banner banner banner banner'
-'subtitle subtitle subtitle subtitle subtitle subtitle subtitle subtitle'
 '. icon1 icon2 icon3 icon4 icon5 icon6 .'
 'details details details details image image image image'
 """
@@ -45,7 +44,6 @@ desktop_grid = """
 # For mobile, we probably still want 2 columns for icons
 mobile_grid = """
 'banner banner'
-'subtitle subtitle'
 'icon1 icon2'
 'icon3 icon4'
 'icon5 icon6'
@@ -62,15 +60,6 @@ dashboard.add_image_block(
     grid_area="banner",
     object_fit="contain",
     border_radius="0px"
-)
-
-dashboard.add_text_block(
-    block_id="subtitle",
-    text="Issues with Water Quality in the region",
-    col_span=8,
-    grid_area="subtitle",
-    font_size="24px",
-    min_height="auto"
 )
 
 # Define icons and their tooltips/markdown content files
