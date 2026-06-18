@@ -46,7 +46,7 @@ importance_md = read_md("importance")
 influences_md = read_md("influences")
 
 desktop_grid = """
-'. banner banner banner banner .'
+'banner banner banner banner banner banner'
 '. pm pm pm pm .'
 '. importance importance importance importance .'
 '. influences influences influences influences .'
