@@ -109,31 +109,82 @@ dashboard = SivoDashboard(
     navigation_menu=nav_menu
 )
 
-desktop_grid = """
+icons = [
+    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli", "map_file": "results/Map_E coli.html"},
+    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment", "map_file": "results/Map_Visual Clarity.html"},
+    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen", "map_file": "results/Map_Combined_Nitrogen.html"},
+    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus", "map_file": "results/Map_DRP.html"},
+    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae", "map_file": "results/Map_Chlorophyll A.html"},
+    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts", "map_file": "results/Map_MCI.html"}
+]
+
+# Dynamically filter icons based on whether the parameter has state evaluated sites
+filtered_icons = []
+for icon in icons:
+    md_dir = icon["md_dir"]
+    key = None
+    if md_dir == "md/ecoli": key = "E coli"
+    elif md_dir == "md/Sediment": key = "Visual Clarity"
+    elif md_dir == "md/Nitrogen": key = "Ammoniacal-N"
+    elif md_dir == "md/Phosphorus": key = "DRP"
+    elif md_dir == "md/Algae": key = "Chlorophyll A"
+    elif md_dir == "md/inverts": key = "MCI"
+
+    sites = 0
+    if key == "Ammoniacal-N":
+        sites = state_summary["FMUs"]["Rangit\u012bkei-Turakina"].get("Ammoniacal-N", {}).get("Total Sites for Attribute", 0) + \
+                state_summary["FMUs"]["Rangit\u012bkei-Turakina"].get("Nitrate-N", {}).get("Total Sites for Attribute", 0)
+    elif key:
+        fmu_obj = state_summary["FMUs"].get("Rangit\u012bkei-Turakina", {})
+        if fmu_obj and key in fmu_obj:
+            sites = fmu_obj[key].get("Total Sites for Attribute", 0)
+
+    if sites > 0:
+        filtered_icons.append(icon)
+
+icons = filtered_icons
+
+# Build dynamic grid layouts
+icon_ids = [icon["id"] for icon in icons]
+n_icons = len(icon_ids)
+
+left_dots = (8 - n_icons) // 2
+right_dots = 8 - n_icons - left_dots
+icon_row = " ".join(["."] * left_dots + icon_ids + ["."] * right_dots)
+
+desktop_grid = f"""
 'banner banner banner banner banner banner banner banner'
-'. icon1 icon2 icon3 icon4 icon5 icon6 .'
+'{icon_row}'
 'details details details map map map map map'
 'gap1 gap1 gap1 map map map map map'
 'state state state state trend trend trend trend'
 'button_state button_state button_state button_state button_trend button_trend button_trend button_trend'
 """
 
-mobile_grid = """
-'banner banner'
-'icon1 icon2'
-'icon3 icon4'
-'icon5 icon6'
-'map map'
-'details details'
-'gap1 gap1'
-'state state'
-'button_state button_state'
-'gap2 gap2'
-'trend trend'
-'button_trend button_trend'
-"""
+mobile_grid_lines = ["'banner banner'"]
+for i in range(0, n_icons, 2):
+    if i + 1 < n_icons:
+        mobile_grid_lines.append(f"\'{icon_ids[i]} {icon_ids[i+1]}\'")
+    else:
+        mobile_grid_lines.append(f"\'{icon_ids[i]} {icon_ids[i]}\'")
+
+mobile_grid_lines.extend([
+    "'map map'",
+    "'details details'",
+    "'gap1 gap1'",
+    "'state state'",
+    "'button_state button_state'",
+    "'gap2 gap2'",
+    "'trend trend'",
+    "'button_trend button_trend'"
+])
+mobile_grid = "\n".join(mobile_grid_lines).replace("\\'", "'")
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
+
+
+
+
 
 dashboard.add_image_block(
     block_id="banner",
@@ -147,14 +198,7 @@ dashboard.add_image_block(
 dashboard.add_html_block(block_id="gap1", html_content="<div style='height: 20px;'></div>", col_span=4, grid_area="gap1")
 dashboard.add_html_block(block_id="gap2", html_content="<div style='height: 20px;'></div>", col_span=4, grid_area="gap2")
 
-icons = [
-    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli", "map_file": "results/Map_E coli.html"},
-    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment", "map_file": "results/Map_Visual Clarity.html"},
-    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen", "map_file": "results/Map_Combined_Nitrogen.html"},
-    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus", "map_file": "results/Map_DRP.html"},
-    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae", "map_file": "results/Map_Chlorophyll A.html"},
-    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts", "map_file": "results/Map_MCI.html"}
-]
+
 
 import json
 with open(os.path.join(os.path.dirname(__file__), "../../trend_summary.json"), "r", encoding="utf-8") as f:
