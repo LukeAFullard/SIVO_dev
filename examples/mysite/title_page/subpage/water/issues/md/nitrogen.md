@@ -6,10 +6,8 @@ Nitrogen is a naturally occurring nutrient essential for plant growth. However, 
 
 - **Fuels excessive plant and algae growth**
     * Excess nitrogen acts like a super-food in our waterways, fuelling the rapid and problematic growth of aquatic weeds and algae.  
-
 - **Toxic to aquatic life**
     * At high levels, specific types of nitrogen (like ammonia and nitrate) become directly toxic to fish and aquatic insects. 
-
 - **Affects drinking water**
     * High nitrate levels in groundwater and drinking water supplies pose a health risk to humans and livestock. 
 
