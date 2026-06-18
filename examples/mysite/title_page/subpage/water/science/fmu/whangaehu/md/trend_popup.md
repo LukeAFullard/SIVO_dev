@@ -22,4 +22,4 @@ When a trend is categorised as "very likely" or "likely," it simply means expert
 
 *   **Size:** A trend indicates the direction of change, not the magnitude or scale. Even a "very likely improving" waterway might only have a tiny decrease in pollution.
 *   **Steadiness:** A trend does not mean the change happened smoothly. Water quality can still jump up and down year to year within that 15-year period.
-*   **The Future:** We only calculate changes within the strict 15-year window. We cannot use this data to guess what the water was like before, or predict exactly what it will do next.
+*   **The future:** We only calculate changes within the strict 15-year window. We cannot use this data to guess what the water was like before, or predict exactly what it will do next.
