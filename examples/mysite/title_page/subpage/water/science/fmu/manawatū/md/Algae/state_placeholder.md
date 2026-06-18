@@ -1,4 +1,4 @@
-# The Current State of Algae
+# The current state of algae
 
 We evaluated the current state of algae at 20 monitoring sites across the Manawatū FMU.
 
@@ -48,7 +48,7 @@ A site must pass the test for this statistic to receive a good grade.
 
 ***
 
-### Algae (Chlorophyll-a) Results in the Manawatū FMU
+### Algae (chlorophyll-a) results in the Manawatū FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
