@@ -1,6 +1,6 @@
 # The current state of dissolved reactive phosphorus
 
-We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Puketoi ki Tai FMU.
+We evaluated the current state of Dissolved reactive phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Puketoi ki Tai FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -17,7 +17,7 @@ We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at |NUMBER
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
