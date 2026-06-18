@@ -35,7 +35,7 @@ Trends show us if nitrogen levels are changing over time. We use a 15-year timef
 Trends are grouped by how confident scientists are that a change is actually happening. Because nitrogen can be toxic to aquatic life, an "improvement" means the concentration of nitrogen in the water is decreasing.
 
 <ul>
-<li><strong>Improving:</strong> Nitrogen levels are consistently decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
+<li><strong>Improving:</strong> Nitrogen levels are decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
 <li><strong>Degrading:</strong> Nitrogen levels are increasing, posing a higher toxic risk to aquatic life (<em>very likely</em> or <em>likely degrading</em>).</li>
 <li><strong>Indeterminate:</strong> There is not enough statistical evidence to confirm a direction.</li>
 </ul>
