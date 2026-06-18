@@ -1,6 +1,6 @@
 # The current state of dissolved reactive phosphorus
 
-We evaluated the current state of Dissolved reactive phosphorus (DRP) at 15 monitoring sites across the Rangitīkei-Turakina FMU.
+We evaluated the current state of dissolved reactive phosphorus (DRP) at 15 monitoring sites across the Rangitīkei-Turakina FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -41,7 +41,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 <ul>
 <li><strong>Band A:</strong> Represents natural, healthy conditions where no adverse effects from phosphorus enrichment are expected. </li>
-<li><strong>Band D:</strong> Represents significant pollution, where high DRP levels drive excessive algal growth and cause the loss of sensitive aquatic life.</li>
+<li><strong>Band D:</strong> Represents significant contamination, where high DRP levels drive excessive algal growth and cause the loss of sensitive aquatic life.</li>
 </ul>
 
   </div>
@@ -71,7 +71,7 @@ A site must pass the test for both of these statistics. The final grade is alway
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">46.7% (7)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">17.4% (19)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">21.1% (23)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">33.0% (36)</td>
