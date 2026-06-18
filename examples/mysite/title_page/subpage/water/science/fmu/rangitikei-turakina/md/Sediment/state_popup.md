@@ -1,15 +1,15 @@
-### How to Read the Site-specific State Charts below
+### How to read the site-specific state charts below
 
 The interactive charts display individual monitoring site metrics against the National Objectives Framework (NOF) bands.
 
-* **Site Order:** Sites are ranked from best performing at the top to most degraded at the bottom.
-* **NOF Grade Bands:** Node colors indicate the localized environmental band:
-* ● Band A (Excellent) 🔵 | ● Band B (Good) 🟢| ● Band C (Fair) 🟡
-* ● Band D (Poor) 🟠
+* **Site order:** Sites are ranked from best performing at the top to most degraded at the bottom.
+* **NOF grade bands:** Node colors indicate the localized environmental band:
+* ● Band A (Excellent) 🔵 | ● Band B (Good) 🟢| ● Band C (fair) 🟡
+* ● Band D (poor) 🟠
 
 
 
-### Interactive Controls
+### Interactive controls
 
 > **Switching Component Attributes:** Use the **dropdown menu** in the top-left corner of the chart to toggle between the individual metrics that define the overall grade (such as switching between *Median* and *95th Percentile* states).
 

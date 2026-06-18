@@ -1,4 +1,4 @@
-# Long-Term Trends for Algae
+# Long-term trends for algae
 
 We evaluated 15-year trends for algae and chlorophyll-a at |NUMBER_SITES| monitoring sites across the Rangitīkei-Turakina FMU.
 
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Algae (Chlorophyll-a) Trend Results in the Rangitīkei-Turakina FMU
+### Algae (Chlorophyll-a) trend results in the Rangitīkei-Turakina FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

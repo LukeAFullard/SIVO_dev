@@ -6,7 +6,7 @@ According to Māori tradition, the explorer Haunui-a-Nanaia named these rivers d
 
 ***
 
-### Explore the Data
+### Explore the data
 *   **How do we measure health?** Scroll down to learn exactly how scientists calculate the current state and long-term trends of our local rivers and streams. 
 *   **View the latest results:** When you are ready to dive into the data, <span style="background-color: #ccffcc; padding: 0 4px; border-radius: 3px;">simply click the icons above</span> to explore the current monitoring results for the Rangitīkei-Turakina FMU.
 *   **Dive deeper with LAWA:** For an independent, national view of our water quality, check out the [LAWA Manawatū-Whanganui Region data](https://www.lawa.org.nz/explore-data/manawatu-whanganui-region/).
