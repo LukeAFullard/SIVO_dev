@@ -1,4 +1,4 @@
-# The current state of Dissolved Reactive Phosphorus
+# The current state of dissolved reactive phosphorus
 
 We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 55 monitoring sites across the Manawatū FMU.
 
@@ -49,7 +49,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 ***
 
-### Dissolved Reactive Phosphorus results in the Manawatū FMU
+### Dissolved reactive phosphorus results in the Manawatū FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
