@@ -17,7 +17,7 @@ We evaluated the current state of suspended sediment at |NUMBER_SITES| monitorin
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -27,7 +27,7 @@ We evaluated the current state of suspended sediment at |NUMBER_SITES| monitorin
       font-size: 0.98rem;
   ">
 
-Scientists typically assess suspended sediment by measuring visual clarity, often using a tool known as a <strong>Black Disc</strong>. This involves looking horizontally through the water to measure exactly how far away a black target remains visible. The further away the disc can be seen, the clearer the water.
+Scientists typically assess suspended sediment by measuring visual clarity, often using a tool known as a <strong>black disc</strong>. This involves looking horizontally through the water to measure exactly how far away a black target remains visible. The further away the disc can be seen, the clearer the water.
 
 <br><br>
 
@@ -60,7 +60,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>
