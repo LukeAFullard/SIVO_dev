@@ -18,7 +18,7 @@ The interactive charts display individual monitoring site metrics assessing chan
 
 ### Interactive controls
 
-> **Contextual Insights:** Hover over any localised site circle marker to see a deep dive of the asset parameters, including the precise statistical change velocity (`% / year`) alongside the original confidence descriptor.
+> **Contextual insights:** Hover over any localised site circle marker to see a deep dive of the asset parameters, including the precise statistical change velocity (`% / year`) alongside the original confidence descriptor.
 
 
 
