@@ -1,6 +1,6 @@
 # The current state of dissolved reactive phosphorus
 
-We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 1 monitoring sites across the Kai Iwi FMU.
+We evaluated the current state of Dissolved reactive phosphorus (DRP) at 1 monitoring sites across the Kai Iwi FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -17,7 +17,7 @@ We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at 1 monit
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="

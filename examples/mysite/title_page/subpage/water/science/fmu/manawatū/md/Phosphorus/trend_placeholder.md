@@ -27,7 +27,7 @@ We evaluated 15-year trends for Dissolved reactive phosphorus (DRP) at 45 monito
       font-size: 0.98rem;
   ">
 
-Trends show us if phosphorus levels are generally changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
+Trends show us if phosphorus levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend categories</strong>
@@ -35,8 +35,8 @@ Trends show us if phosphorus levels are generally changing over time. We use a 1
 Trends are grouped by how confident scientists are that a change is actually happening. Because excess phosphorus drives excessive algal growth, an "improvement" means the concentration of DRP in the water is safely decreasing.
 
 <ul>
-<li><strong>Improving:</strong> Phosphorus levels are generally decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
-<li><strong>Degrading:</strong> Phosphorus levels are generally increasing, posing a higher risk of algal blooms (<em>very likely</em> or <em>likely degrading</em>).</li>
+<li><strong>Improving:</strong> Phosphorus levels are decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
+<li><strong>Degrading:</strong> Phosphorus levels are increasing, posing a higher risk of algal blooms (<em>very likely</em> or <em>likely degrading</em>).</li>
 <li><strong>Indeterminate:</strong> There is not enough statistical evidence to confirm a direction.</li>
 </ul>
 
