@@ -1,4 +1,4 @@
-# Long-Term Trends for Suspended Sediment
+# Long-term trends for suspended sediment
 
 We evaluated 15-year trends for suspended sediment at 43 monitoring sites across the Manawatū FMU.
 
@@ -27,7 +27,7 @@ We evaluated 15-year trends for suspended sediment at 43 monitoring sites across
       font-size: 0.98rem;
   ">
 
-Trends show us if water clarity is consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes—like heavy rain that naturally washes more soil into the river—and uncover the true, long-term direction of water quality.
+Trends show us if water clarity is consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes, like heavy rain that naturally washes more soil into the river, and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend Categories</strong>
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Suspended Sediment Trend Results in the Manawatū FMU
+### Suspended sediment trend results in the Manawatū FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

@@ -1,4 +1,4 @@
-# The Current State of Nitrogen Toxicity
+# The current state of nitrogen toxicity
 
 We evaluated the current state of both nitrate and ammoniacal nitrogen at |NUMBER_SITES| monitoring sites across the Manawatū FMU.
 
@@ -49,7 +49,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 ***
 
-### Ammoniacal Nitrogen Toxicity Results in the Manawatū FMU
+### Ammoniacal nitrogen toxicity results in the Manawatū FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -81,7 +81,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 </table>
 </div>
 
-### Nitrate Nitrogen Toxicity Results in the Manawatū FMU
+### Nitrate nitrogen toxicity results in the Manawatū FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

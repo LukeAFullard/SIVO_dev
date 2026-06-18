@@ -1,4 +1,4 @@
-# Tracking Suspended Sediment in the Manawatū
+# Tracking suspended sediment in the Manawatū
 
 Suspended sediment consists of tiny particles of clay, silt, and soil that wash into our waterways. These particles typically enter our rivers when natural or human-accelerated erosion wears away the land, and heavy rainfall washes the dirt directly into the river system. High levels of sediment make the water murky, which can harm aquatic life by clogging fish gills, smothering riverbed habitats, and blocking vital sunlight needed for plant growth.
 

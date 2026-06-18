@@ -1,10 +1,10 @@
-# Tracking Water Quality Trends
+# Tracking water quality trends
 
 While "state" gives us a current snapshot of water health, a "trend" shows us the bigger picture over time. It reveals whether the overall water quality is consistently improving or degrading.
 
 Because water quality constantly changes with rainfall, seasons, and land use, scientists look at data collected over 5, 10, 15, and 20 years. Analysing these long-term trends is essential for tracking progress. It helps us understand exactly where our environmental restoration efforts are working and where more action is needed.
 
-### Trend Categories
+### Trend categories
 
 To make the data easy to understand, trends are grouped into categories based on how confident experts are that a change is actually happening:
 
