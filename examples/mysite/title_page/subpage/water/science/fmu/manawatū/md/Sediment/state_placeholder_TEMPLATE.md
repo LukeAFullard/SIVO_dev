@@ -17,7 +17,7 @@ We evaluated the current state of suspended sediment at |NUMBER_SITES| monitorin
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -27,7 +27,7 @@ We evaluated the current state of suspended sediment at |NUMBER_SITES| monitorin
       font-size: 0.98rem;
   ">
 
-Scientists typically assess suspended sediment by measuring visual clarity, often using a tool known as a <strong>Black Disc</strong>. This involves looking horizontally through the water to measure exactly how far away a black target remains visible. The further away the disc can be seen, the clearer the water.
+Scientists typically assess suspended sediment by measuring visual clarity, often using a tool known as a <strong>black disc</strong>. This involves looking horizontally through the water to measure how far away a black target remains visible. The further away the disc can be seen, the clearer the water.
 
 <br><br>
 
