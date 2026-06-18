@@ -64,7 +64,7 @@
             flex: 1;
             margin: 0 auto;
             width: 100%;
-            max-width: 100%;
+            max-width: 95%;
             /* Remove overflow: hidden so body can scroll if needed */
             grid-template-columns: repeat(3, 1fr);
 
@@ -208,18 +208,19 @@
 
         @media (max-width: 900px) {
             .dashboard-container {
-                max-width: 100%;
+                max-width: 95%;
 
                 gap: 0.35rem;
 
 
                 grid-template-areas:
-'icon1 icon2'
-'icon4 .'
-'markdown markdown'
+'icon1'
+'icon2'
+'icon4'
+'markdown'
 ;
 
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-columns: repeat(1, minmax(0, 1fr));
 
 
             }
@@ -236,18 +237,19 @@
 
         /* Force Mobile Layout */
         body.force-mobile .dashboard-container {
-            max-width: 100% !important;
+            max-width: 95% !important;
 
             gap: 0.35rem !important;
 
 
             grid-template-areas:
-'icon1 icon2'
-'icon4 .'
-'markdown markdown'
+'icon1'
+'icon2'
+'icon4'
+'markdown'
  !important;
 
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
 
 
         }

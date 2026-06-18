@@ -10,7 +10,9 @@ dashboard = SivoDashboard(
     title="",
     columns=3,
     theme="transparent",
-    gap="tight"
+    gap="tight",
+    width="95%",
+    mobile_width="95%"
 )
 
 desktop_grid = """
@@ -19,9 +21,10 @@ desktop_grid = """
 """
 
 mobile_grid = """
-'icon1 icon2'
-'icon4 .'
-'markdown markdown'
+'icon1'
+'icon2'
+'icon4'
+'markdown'
 """
 
 dashboard.set_grid_layout(desktop=desktop_grid, mobile=mobile_grid)
