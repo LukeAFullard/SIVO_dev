@@ -17,7 +17,7 @@ We evaluated the current state of both nitrate and ammoniacal nitrogen at 55 mon
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
