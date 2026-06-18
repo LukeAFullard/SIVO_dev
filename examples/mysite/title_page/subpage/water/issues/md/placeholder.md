@@ -1,4 +1,4 @@
-# Protecting Our Waterways
+# Protecting our waterways
 
 Water is a fundamental part of the Horizons Region, sustaining our physical well-being and natural ecosystems. When our rivers, lakes, and streams are healthy, their life force, or *mauri*, thrives and supports both people and wildlife.
 
@@ -14,7 +14,7 @@ Understanding these challenges is the first step toward restoring and protecting
 
 ***
 
-### Explore the Issues
-**Click on the icons above to discover how specific environmental issues impact our surface water quality.** 
+### Explore the pressures 
+**Click on the glowing icons above to learn more about the challenges to the region’s surface water quality.** 
 
-For more information you may be interested to read our [State of Environment Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf) or browse the [LAWA website](https://www.lawa.org.nz/).
+For more information, you may be interested in reading our latest [State of Environment Synthesis Report](https://www.horizons.govt.nz/HRC/media/Media/State-of-the-Environment-Horizons-Region-2025-Print.pdf) or browsing the [LAWA website](https://www.lawa.org.nz/).
