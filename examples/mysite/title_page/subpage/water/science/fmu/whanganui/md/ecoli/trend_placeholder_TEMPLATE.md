@@ -27,7 +27,7 @@ We evaluated 15-year trends for *E. coli* at |NUMBER_SITES| monitoring sites acr
       font-size: 0.98rem;
   ">
 
-Trends show us if bacteria levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes (like heavy rain washing animal waste into rivers) and uncover the true, long-term direction of water quality.
+Trends show us if bacteria levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes (like heavy rain washing animal waste into rivers) and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend categories</strong>
@@ -35,8 +35,8 @@ Trends show us if bacteria levels are consistently changing over time. We use a 
 Trends are grouped by how confident scientists are that a change is actually happening. Because *E. coli* indicates a risk of illness, an "improvement" means the concentration of bacteria in the water is safely decreasing.
 
 <ul>
-<li><strong>Improving:</strong> Bacteria levels are consistently decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
-<li><strong>Degrading:</strong> Bacteria levels are consistently increasing, posing a higher risk to swimmers (<em>very likely</em> or <em>likely degrading</em>).</li>
+<li><strong>Improving:</strong> Bacteria levels are decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
+<li><strong>Degrading:</strong> Bacteria levels are increasing, posing a higher risk to swimmers (<em>very likely</em> or <em>likely degrading</em>).</li>
 <li><strong>Indeterminate:</strong> There is not enough statistical evidence to confirm a direction.</li>
 </ul>
 
@@ -65,7 +65,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|FMU_DEGRADING_PCT|% (|FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|REGION_IMPROVING_PCT|% (|REGION_IMPROVING_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|REGION_INDETERMINATE_PCT|% (|REGION_INDETERMINATE_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|REGION_DEGRADING_PCT|% (|REGION_DEGRADING_COUNT|)</td>

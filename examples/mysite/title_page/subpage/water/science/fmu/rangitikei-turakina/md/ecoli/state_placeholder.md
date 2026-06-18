@@ -17,7 +17,7 @@ We evaluated the current state of *E. coli* at 14 monitoring sites across the Ra
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -70,7 +70,7 @@ A site must pass all four tests. If it scores poorly on even one, it receives th
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #D55E00; color: white;">71.4% (10)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">14.4% (15)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">7.7% (8)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">2.9% (3)</td>
