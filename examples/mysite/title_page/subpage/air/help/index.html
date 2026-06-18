@@ -1285,16 +1285,15 @@
             <div class="html-card sivo-details-panel" id="card-markdown" data-block-id="markdown" style="grid-area: markdown;  background-color: rgba(240, 240, 240, 0.7) !important; border-radius: 10px; padding: 10px; opacity: 0; animation: sivo-fade-in-card 2.0s ease-in-out forwards; animation-delay: 0.3s;">
                 <div class="card-header"></div>
                 <div class="card-content sivo-details-content" id="container-markdown">
-                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown"># How to Help Improve Air Quality
+                    <p class="placeholder-text" style="color: #64748b;" id="placeholder-markdown">Looking to reduce your impact on the region’s air quality?
 
-This page is a placeholder for information on how you can help improve air quality in the Horizons region.
-
-More details will be added here in the future.
+**Select the glowing items in the pictures below** to learn what actions can make air quality worse, and what you can do to improve the air around you.
+By working together, we can keep our neighbourhoods smog-free and our friends and whānau breathing easy 🤝
 </p>
                 </div>
                 <script>
                     (function() {
-                        const rawPlaceholder = "# How to Help Improve Air Quality\n\nThis page is a placeholder for information on how you can help improve air quality in the Horizons region.\n\nMore details will be added here in the future.\n";
+                        const rawPlaceholder = "Looking to reduce your impact on the region\u2019s air quality? \n\n**Select the glowing items in the pictures below** to learn what actions can make air quality worse, and what you can do to improve the air around you.  \nBy working together, we can keep our neighbourhoods smog-free and our friends and wh\u0101nau breathing easy \ud83e\udd1d \n";
                         if (typeof marked !== 'undefined' && marked.parse && rawPlaceholder) {
                             const container = document.getElementById('container-markdown');
                             if (container) {
@@ -1353,7 +1352,7 @@ More details will be added here in the future.
 
             <div class="html-card sivo-html-panel" id="card-bad_cap" data-block-id="bad_cap"  style="grid-area: bad_cap; ">
                 <div class="card-content sivo-html-content" id="container-bad_cap">
-                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 16px; font-weight: normal; color: #333; background-color: transparent; border: none; border-radius: 15px; text-align: center; box-sizing: border-box;"><div style='text-align: center; width: 100%;'><i>Activities contributing to poor air quality.</i></div></div>
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 16px; font-weight: normal; color: #333; background-color: transparent; border: none; border-radius: 15px; text-align: center; box-sizing: border-box;"><div style='text-align: center; width: 100%;'><i>Figure 2 Behaviours that can worsen air quality.</i></div></div>
                 </div>
             </div>
 
@@ -1369,7 +1368,7 @@ More details will be added here in the future.
 
             <div class="html-card sivo-html-panel" id="card-good_cap" data-block-id="good_cap"  style="grid-area: good_cap; ">
                 <div class="card-content sivo-html-content" id="container-good_cap">
-                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 16px; font-weight: normal; color: #333; background-color: transparent; border: none; border-radius: 15px; text-align: center; box-sizing: border-box;"><div style='text-align: center; width: 100%;'><i>Activities contributing to good air quality.</i></div></div>
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Arial, sans-serif; font-size: 16px; font-weight: normal; color: #333; background-color: transparent; border: none; border-radius: 15px; text-align: center; box-sizing: border-box;"><div style='text-align: center; width: 100%;'><i>Figure 3 Behaviours that clead to better air quality.</i></div></div>
                 </div>
             </div>
 
@@ -2293,7 +2292,7 @@ More details will be added here in the future.
                 }
 
                 // Get the details panels config
-                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "# How to Help Improve Air Quality\n\nThis page is a placeholder for information on how you can help improve air quality in the Horizons region.\n\nMore details will be added here in the future.\n", "show_element_name": false, "title": "", "update_on_click": false}};
+                const detailsConfig = {"markdown": {"background_color": "rgba(240, 240, 240, 0.7)", "border_radius": "10px", "fade_duration_ms": 2000, "fade_in": true, "fade_start_time_ms": 300, "padding": "10px", "payload_key": null, "placeholder": "Looking to reduce your impact on the region\u2019s air quality? \n\n**Select the glowing items in the pictures below** to learn what actions can make air quality worse, and what you can do to improve the air around you.  \nBy working together, we can keep our neighbourhoods smog-free and our friends and wh\u0101nau breathing easy \ud83e\udd1d \n", "show_element_name": false, "title": "", "update_on_click": false}};
 
                 // If this mapping requested a sidebar overlay (i.e. panel_position != 'none'), trigger it
                 // 'overlay' or 'right' typically indicate a sliding pane requirement in SIVO.
