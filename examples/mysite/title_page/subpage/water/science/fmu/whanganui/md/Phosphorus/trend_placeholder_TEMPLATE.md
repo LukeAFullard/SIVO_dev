@@ -1,4 +1,4 @@
-# Long-Term Trends for Phosphorus
+# Long-term trends for phosphorus
 
 We evaluated 15-year trends for Dissolved Reactive Phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Whanganui FMU.
 
@@ -30,7 +30,7 @@ We evaluated 15-year trends for Dissolved Reactive Phosphorus (DRP) at |NUMBER_S
 Trends show us if phosphorus levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
 
 <br><br>
-<strong>Trend Categories</strong>
+<strong>Trend categories</strong>
 <br>
 Trends are grouped by how confident scientists are that a change is actually happening. Because excess phosphorus drives excessive algal growth, an "improvement" means the concentration of DRP in the water is safely decreasing.
 
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Dissolved Reactive Phosphorus Trend Results in the Whanganui FMU
+### Dissolved reactive phosphorus trend results in the Whanganui FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

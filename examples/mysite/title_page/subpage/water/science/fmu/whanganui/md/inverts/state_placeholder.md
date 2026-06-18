@@ -1,4 +1,4 @@
-# The Current State of Macroinvertebrates
+# The current state of macroinvertebrates
 
 We evaluated the current state of macroinvertebrates at 7 monitoring sites across the Whanganui FMU.
 
@@ -43,7 +43,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
 
 ***
 
-### Macroinvertebrate (MCI) Results in the Whanganui FMU
+### Macroinvertebrate (MCI) results in the Whanganui FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

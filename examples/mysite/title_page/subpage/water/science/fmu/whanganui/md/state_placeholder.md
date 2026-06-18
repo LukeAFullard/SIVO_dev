@@ -1,4 +1,4 @@
-# Understanding Water Quality State
+# Understanding water quality state
 
 When scientists talk about the "state" of a river, they are describing its current health and condition. To get a reliable snapshot, experts analyse water quality data collected over the last five years.
 

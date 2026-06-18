@@ -1,4 +1,4 @@
-# The Current State of *E. coli*
+# The current state of *E. coli*
 
 We evaluated the current state of *E. coli* at |NUMBER_SITES| monitoring sites across the Whanganui FMU.
 
@@ -46,7 +46,7 @@ A site must pass all four tests. If it scores poorly on even one, it receives th
 
 ***
 
-### *E. coli* Results in the Whanganui FMU
+### *E. coli* results in the Whanganui FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
