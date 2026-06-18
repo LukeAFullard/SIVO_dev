@@ -13,4 +13,4 @@ These bacteria wash into our rivers, lakes, and coastal waters through everyday 
 *   Discharges from local wastewater and stormwater systems.
 *   Poorly managed on-site wastewater systems.
 
-For further information, you may like to check out the [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/faecal-indicators) on faecal indicator bacteria.
+For further information, you may like to check out this [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/faecal-indicators) on faecal indicator bacteria.
