@@ -17,7 +17,7 @@ We evaluated 15-year trends for macroinvertebrates (using the MCI score) at |NUM
       color: #1f2937;
       outline: none;
   ">
-    Understanding the Trend (click to expand)
+    Understanding the trend (click to expand)
   </summary>
 
   <div style="
@@ -30,7 +30,7 @@ We evaluated 15-year trends for macroinvertebrates (using the MCI score) at |NUM
 Trends show us if the health of the aquatic insect community is changing over time. We use a 15-year timeframe to see past temporary weather events, like floods that wash away insects, and uncover the true, long-term direction of ecological health.
 
 <br><br>
-<strong>Trend Categories</strong>
+<strong>Trend categories</strong>
 <br>
 Trends are grouped by how confident scientists are that a change is actually happening. Because a high MCI score means a healthier ecosystem, an "improvement" means the score is increasing over time.
 
