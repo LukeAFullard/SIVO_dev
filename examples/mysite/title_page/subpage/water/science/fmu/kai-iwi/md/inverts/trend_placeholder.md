@@ -27,7 +27,7 @@ We evaluated 15-year trends for macroinvertebrates (using the MCI score) at 0 mo
       font-size: 0.98rem;
   ">
 
-Trends show us if the health of the aquatic insect community is consistently changing over time. We use a 15-year timeframe to see past temporary weather events, like floods that wash away insects, and uncover the true, long-term direction of ecological health.
+Trends show us if the health of the aquatic insect community is changing over time. We use a 15-year timeframe to see past temporary weather events, like floods that wash away insects, and uncover the true, long-term direction of ecological health.
 
 <br><br>
 <strong>Trend Categories</strong>
@@ -35,8 +35,8 @@ Trends show us if the health of the aquatic insect community is consistently cha
 Trends are grouped by how confident scientists are that a change is actually happening. Because a high MCI score means a healthier ecosystem, an "improvement" means the score is increasing over time.
 
 <ul>
-<li><strong>Improving:</strong> The MCI score is consistently increasing, showing ecological recovery (<em>very likely</em> or <em>likely improving</em>).</li>
-<li><strong>Degrading:</strong> The MCI score is consistently decreasing, showing ecological decline (<em>very likely</em> or <em>likely degrading</em>).</li>
+<li><strong>Improving:</strong> The MCI score is increasing, showing ecological recovery (<em>very likely</em> or <em>likely improving</em>).</li>
+<li><strong>Degrading:</strong> The MCI score is decreasing, showing ecological decline (<em>very likely</em> or <em>likely degrading</em>).</li>
 <li><strong>Indeterminate:</strong> There is not enough statistical evidence to confirm a direction.</li>
 </ul>
 
@@ -65,7 +65,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">0.0% (0)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">13.11% (8)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">32.79% (20)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">54.1% (33)</td>

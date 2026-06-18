@@ -34,8 +34,8 @@ Scientists collect these small animals from the riverbed, usually once a year, a
 To calculate a reliable A-to-D ecological health grade, experts use the <strong>median</strong> (middle) MCI score from data collected over a five-year period.
 
 <ul>
-<li><strong>Band A:</strong> Represents pristine, healthy conditions where sensitive insects thrive, indicating almost no organic pollution or nutrient enrichment.</li>
-<li><strong>Band D:</strong> Represents severe pollution, where sensitive insects have been lost and the community is largely composed of hardy, pollution-tolerant species like snails and worms.</li>
+<li><strong>Band A:</strong> Represents pristine, healthy conditions where sensitive insects thrive, indicating almost no organic contamination or nutrient enrichment.</li>
+<li><strong>Band D:</strong> Represents severe pollution, where sensitive insects have been lost and the community is largely composed of hardy, contaminant-tolerant species like snails and worms.</li>
 </ul>
 
   </div>
@@ -65,7 +65,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">12.5% (1)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">7.8% (6)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">32.5% (25)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">46.8% (36)</td>
