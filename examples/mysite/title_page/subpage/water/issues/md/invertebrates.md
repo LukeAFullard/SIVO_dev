@@ -13,7 +13,6 @@ Macroinvertebrates are small animals without backbones, such as mayflies, snails
 
 - **Excessive plant and algae growth**
     * Excess nutrients act as a super-food that fuels massive weed and algal growth, with that plant matter then smothering where these aquatic insects live. When this overgrown plant life eventually dies and rots, the decomposition process sucks vital oxygen out of the water, essentially suffocating sensitive aquatic insects. 
-
 - **Sensitivity to contaminants**
     * Certain insects, like mayflies and stoneflies, are highly sensitive to pollution and can only thrive in clean, healthy water. When rivers are contaminated with excess soil, algae, or nutrient enrichment, these sensitive bugs are often the first to disappear. .
 
