@@ -1,4 +1,4 @@
-### How to Read the Site-specific Trend Charts below
+### How to read the site-specific trend charts below
 
 The interactive charts display individual monitoring site metrics assessing changes in water quality variables over a 15-year period (2011–2025).
 
@@ -16,7 +16,7 @@ The interactive charts display individual monitoring site metrics assessing chan
 
 ---
 
-### Interactive Controls
+### Interactive controls
 
 > **Contextual Insights:** Hover over any localized site circle marker to see a deep dive of the asset parameters, including the precise statistical change velocity (`% / year`) alongside the original confidence descriptor assigned during analytical evaluation.
 

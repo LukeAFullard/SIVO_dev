@@ -1,4 +1,4 @@
-# Long-Term Trends for Algae
+# Long-term trends for algae
 
 We evaluated 15-year trends for algae and chlorophyll-a at 3 monitoring sites across the Whanganui FMU.
 
@@ -30,7 +30,7 @@ We evaluated 15-year trends for algae and chlorophyll-a at 3 monitoring sites ac
 Trends show us if the amount of algae is consistently changing over time. Because algae growth relies heavily on warm weather and low summer river flows, we use a 15-year timeframe to see past these temporary seasonal cycles. This long-term view helps uncover the true underlying direction of our water quality.
 
 <br><br>
-<strong>Trend Categories</strong>
+<strong>Trend categories</strong>
 <br>
 Trends are grouped by how confident scientists are that a change is actually happening. Because excess algae harms aquatic life and can be toxic, an "improvement" means the amount of chlorophyll-a (algae) in the water is safely decreasing.
 
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Algae (Chlorophyll-a) Trend Results in the Whanganui FMU
+### Algae (Chlorophyll-a) trend results in the Whanganui FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
