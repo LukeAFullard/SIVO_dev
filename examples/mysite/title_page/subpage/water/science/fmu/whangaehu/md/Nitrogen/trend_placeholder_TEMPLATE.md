@@ -27,16 +27,16 @@ We evaluated 15-year trends for nitrate and ammoniacal nitrogen at |NUMBER_SITES
       font-size: 0.98rem;
   ">
 
-Trends show us if nitrogen levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
+Trends show us if nitrogen levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend categories</strong>
 <br>
-Trends are grouped by how confident scientists are that a change is actually happening. Because nitrogen can be toxic to aquatic life, an "improvement" means the concentration of nitrogen in the water is safely decreasing.
+Trends are grouped by how confident scientists are that a change is actually happening. Because nitrogen can be toxic to aquatic life, an "improvement" means the concentration of nitrogen in the water is decreasing.
 
 <ul>
 <li><strong>Improving:</strong> Nitrogen levels are decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
-<li><strong>Degrading:</strong> Nitrogen levels are consistently increasing, posing a higher toxic risk to aquatic life (<em>very likely</em> or <em>likely degrading</em>).</li>
+<li><strong>Degrading:</strong> Nitrogen levels are increasing, posing a higher toxic risk to aquatic life (<em>very likely</em> or <em>likely degrading</em>).</li>
 <li><strong>Indeterminate:</strong> There is not enough statistical evidence to confirm a direction.</li>
 </ul>
 
@@ -65,7 +65,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|AMMO_FMU_DEGRADING_PCT|% (|AMMO_FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|AMMO_REGION_IMPROVING_PCT|% (|AMMO_REGION_IMPROVING_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|AMMO_REGION_INDETERMINATE_PCT|% (|AMMO_REGION_INDETERMINATE_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|AMMO_REGION_DEGRADING_PCT|% (|AMMO_REGION_DEGRADING_COUNT|)</td>
@@ -94,7 +94,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|NITRATE_FMU_DEGRADING_PCT|% (|NITRATE_FMU_DEGRADING_COUNT|)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">|NITRATE_REGION_IMPROVING_PCT|% (|NITRATE_REGION_IMPROVING_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">|NITRATE_REGION_INDETERMINATE_PCT|% (|NITRATE_REGION_INDETERMINATE_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">|NITRATE_REGION_DEGRADING_PCT|% (|NITRATE_REGION_DEGRADING_COUNT|)</td>

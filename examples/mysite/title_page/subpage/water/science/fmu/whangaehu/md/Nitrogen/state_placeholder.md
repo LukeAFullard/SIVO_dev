@@ -41,7 +41,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 <ul>
 <li><strong>Band A:</strong> Represents high conservation value, where sensitive species are unlikely to be harmed. </li>
-<li><strong>Band D:</strong> Represents significant pollution, where nitrogen levels are high enough to impact growth or approach acute toxicity (risk of death) for sensitive fish and aquatic insects.</li>
+<li><strong>Band D:</strong> Represents significant contamination, where nitrogen levels are high enough to impact growth or approach acute toxicity (risk of death) for sensitive fish and aquatic insects.</li>
 </ul>
 
   </div>
@@ -55,7 +55,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Ammoniacal-N Toxicity</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Ammoniacal-N toxicity</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">A</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #359B73; color: white;">B</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">C</th>
@@ -71,7 +71,7 @@ A site must pass the test for both of these statistics. The final grade is alway
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">0.0% (0)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">80.6% (87)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">13.9% (15)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">5.6% (6)</td>
@@ -87,7 +87,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Nitrate-N Toxicity</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Nitrate-N toxicity</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">A</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #359B73; color: white;">B</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">C</th>
@@ -103,7 +103,7 @@ A site must pass the test for both of these statistics. The final grade is alway
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">0.0% (0)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">87.2% (95)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">10.1% (11)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">1.8% (2)</td>

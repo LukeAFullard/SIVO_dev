@@ -27,16 +27,16 @@ We evaluated 15-year trends for nitrate and ammoniacal nitrogen at 13 monitoring
       font-size: 0.98rem;
   ">
 
-Trends show us if nitrogen levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
+Trends show us if nitrogen levels are changing over time. We use a 15-year timeframe to see past temporary weather spikes and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend categories</strong>
 <br>
-Trends are grouped by how confident scientists are that a change is actually happening. Because nitrogen can be toxic to aquatic life, an "improvement" means the concentration of nitrogen in the water is safely decreasing.
+Trends are grouped by how confident scientists are that a change is actually happening. Because nitrogen can be toxic to aquatic life, an "improvement" means the concentration of nitrogen in the water is decreasing.
 
 <ul>
 <li><strong>Improving:</strong> Nitrogen levels are decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
-<li><strong>Degrading:</strong> Nitrogen levels are consistently increasing, posing a higher toxic risk to aquatic life (<em>very likely</em> or <em>likely degrading</em>).</li>
+<li><strong>Degrading:</strong> Nitrogen levels are increasing, posing a higher toxic risk to aquatic life (<em>very likely</em> or <em>likely degrading</em>).</li>
 <li><strong>Indeterminate:</strong> There is not enough statistical evidence to confirm a direction.</li>
 </ul>
 
@@ -65,7 +65,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">15.38% (2)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">70.0% (63)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">15.56% (14)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">14.44% (13)</td>
@@ -94,7 +94,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">28.57% (4)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #2abeff; color: black;">56.52% (52)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #e6e600; color: black;">11.96% (11)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #ff6767; color: black;">31.52% (29)</td>
