@@ -1,4 +1,4 @@
-# Tracking algae and Chlorophyll-a in the Kai Iwi
+# Tracking algae and chlorophyll-a in the Kai Iwi
 
 Algae are naturally occurring microscopic organisms that live in our waterways. In rivers and streams, they often attach to underwater surfaces (known as periphyton), while in lakes they float freely in the water (known as phytoplankton).
 

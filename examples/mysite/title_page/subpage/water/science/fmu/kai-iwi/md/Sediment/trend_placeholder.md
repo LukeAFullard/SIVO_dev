@@ -1,4 +1,4 @@
-# Long-Term trends for suspended sediment
+# Long-term trends for suspended sediment
 
 We evaluated 15-year trends for suspended sediment at 1 monitoring sites across the Kai Iwi FMU.
 

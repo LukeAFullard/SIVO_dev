@@ -1,4 +1,4 @@
-# Long-Term trends for macroinvertebrates
+# Long-term trends for macroinvertebrates
 
 We evaluated 15-year trends for macroinvertebrates (using the MCI score) at |NUMBER_SITES| monitoring sites across the Kai Iwi FMU.
 
