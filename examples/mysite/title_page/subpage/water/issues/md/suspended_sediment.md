@@ -13,4 +13,4 @@ When it rains, tiny particles of soil, plant, and animal matter are washed into 
 - **Smothers riverbeds**
     * As the water current slows down, suspended dirt eventually sinks to the bottom of the river. These settled particles fill in the tiny gaps between rocks and gravel, smothering the natural habitats where fish and aquatic insects live.  
 
-For further information you may like to check out this  [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/water-clarity) on water clarity.
+For further information, you may like to check out this  [LAWA Factsheet](https://www.lawa.org.nz/learn/factsheets/water-clarity) on water clarity.
