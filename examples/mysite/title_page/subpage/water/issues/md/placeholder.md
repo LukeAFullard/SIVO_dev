@@ -2,7 +2,7 @@
 
 Water is a fundamental part of the Horizons Region, sustaining our physical well-being and natural ecosystems. When our rivers, lakes, and streams are healthy, their life force, or *mauri*, thrives and supports both people and wildlife.
 
-However, many of our local waterways face significant environmental challenges. Over time, everyday activities on the land can cause harmful pollutants to wash into our water. General issues like soil erosion, bacteria from waste, and excess nutrients can drastically alter stream health. 
+However, many of our local waterways face significant environmental challenges. Over time, everyday activities on the land can cause harmful contaminants to wash into our water. General issues like soil erosion, bacteria from waste, and excess nutrients can drastically alter stream health. 
 
 When left unmanaged, these environmental pressures can:
 * **Cloud the water** and block vital sunlight.
