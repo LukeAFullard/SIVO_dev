@@ -1,6 +1,6 @@
 # Tracking phosphorus in the Waiopehu
 
-Phosphorus is a naturally occurring element and an essential nutrient for plant growth. While it usually attaches to soil, it can also dissolve in water. This dissolved form, known as Dissolved Reactive Phosphorus (DRP), is easily absorbed by aquatic plants and algae.
+Phosphorus is a naturally occurring element and an essential nutrient for plant growth. While it usually attaches to soil, it can also dissolve in water. This dissolved form, known as dissolved reactive phosphorus (DRP), is easily absorbed by aquatic plants and algae.
 
 ### Why it matters
 Too much DRP in our rivers and lakes is a major problem. It acts as a super-fertiliser, fueling the rapid, uncontrolled growth of weeds and algal blooms. These blooms can choke aquatic life and cause long-term damage to the health of the entire waterbody.

@@ -51,7 +51,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll A (15-year trend)</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll a (15-year trend)</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #2abeff; color: black;">Improving</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #e6e600; color: black;">Indeterminate</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #ff6767; color: black;">Degrading</th>

@@ -1,6 +1,6 @@
 # Long-term trends for phosphorus
 
-We evaluated 15-year trends for Dissolved Reactive Phosphorus (DRP) at 9 monitoring sites across the Waiopehu FMU.
+We evaluated 15-year trends for dissolved reactive phosphorus (DRP) at 9 monitoring sites across the Waiopehu FMU.
 
 <details style="
     border: 1px solid #d0d7de;
