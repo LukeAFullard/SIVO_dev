@@ -1,4 +1,4 @@
-# Long-Term Trends for Algae
+# Long-Term trends for algae
 
 We evaluated 15-year trends for algae and chlorophyll-a at 0 monitoring sites across the Kai Iwi FMU.
 
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Algae (Chlorophyll-a) Trend Results in the Kai Iwi FMU
+### Algae (chlorophyll-a) trend results in the Kai Iwi FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

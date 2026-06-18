@@ -1,4 +1,4 @@
-# The Current State of Algae
+# The current state of algae
 
 We evaluated the current state of algae at 0 monitoring sites across the Kai Iwi FMU.
 
@@ -33,7 +33,7 @@ Because algae are tiny and difficult to count individually, scientists often mea
 
 To calculate a reliable A-to-D ecological health grade for rivers, experts evaluate data collected over a multi-year period using a specific statistic:
 <ul>
-<li><strong>The 92nd Percentile:</strong> For rivers, scientists calculate the 92nd percentile. This is a measure of the extremes, helping us understand exactly how severe the algal blooms get on a "bad" day, without the final grade being skewed by a single, rare spike.</li>
+<li><strong>The 92nd percentile:</strong> For rivers, scientists calculate the 92nd percentile. This is a measure of the extremes, helping us understand exactly how severe the algal blooms get on a "bad" day, without the final grade being skewed by a single, rare spike.</li>
 </ul>
 
 A site must pass the test for this statistic to receive a good grade.
@@ -48,7 +48,7 @@ A site must pass the test for this statistic to receive a good grade.
 
 ***
 
-### Algae (Chlorophyll-a) Results in the Kai Iwi FMU
+### Algae (chlorophyll-a) results in the Kai Iwi FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

@@ -1,11 +1,11 @@
-### How to Read the Site-specific Trend Charts below
+### How to read the site-specific trend charts below
 
 The interactive charts display individual monitoring site metrics assessing changes in water quality variables over a 15-year period (2011–2025).
 
-* **Baseline Evaluation (0%):** The bold vertical line at **0** represents a stable state with no detected environmental change.
-* **Directional Vectors:** Lollipops extending to the **right** represent positive percentage increases per year, while lollipops extending to the **left** represent negative percentage decreases per year.
-* **Site Order:** Sites are categorized into core performance groups from most improving at the top to most degrading at the bottom. Within those groups, they are organized by magnitude of structural change.
-* **Trend Category Classifications:** Marker colors indicate the calculated confidence direction:
+* **Baseline evaluation (0%):** The bold vertical line at **0** represents a stable state with no detected environmental change.
+* **Directional vectors:** Lollipops extending to the **right** represent positive percentage increases per year, while lollipops extending to the **left** represent negative percentage decreases per year.
+* **Site order:** Sites are categorized into core performance groups from most improving at the top to most degrading at the bottom. Within those groups, they are organized by magnitude of structural change.
+* **Trend category classifications:** Marker colors indicate the calculated confidence direction:
 * ● **Improving** 🔵 *(Water quality metrics are getting healthier)*
 * ● **Indeterminate** 🟡 *(Data variations show no clear structural trend direction)*
 * ● **Degrading** 🔴 *(Water quality metrics are deteriorating)*
@@ -16,7 +16,7 @@ The interactive charts display individual monitoring site metrics assessing chan
 
 ---
 
-### Interactive Controls
+### Interactive controls
 
 > **Contextual Insights:** Hover over any localized site circle marker to see a deep dive of the asset parameters, including the precise statistical change velocity (`% / year`) alongside the original confidence descriptor assigned during analytical evaluation.
 
