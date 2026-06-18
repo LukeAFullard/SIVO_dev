@@ -1,4 +1,4 @@
-# Diving deeper: how we calculate state
+# How we calculate state
 
 To get a reliable picture of our waterways, scientists need much more than a single water sample. Water quality constantly shifts due to rainfall, seasons, and land use changes.
 
