@@ -17,7 +17,7 @@ We evaluated the current state of macroinvertebrates at |NUMBER_SITES| monitorin
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -34,8 +34,8 @@ Scientists collect these small animals from the riverbed, usually once a year, a
 To calculate a reliable A-to-D ecological health grade, experts use the <strong>median</strong> (middle) MCI score from data collected over a five-year period.
 
 <ul>
-<li><strong>Band A:</strong> Represents pristine, healthy conditions where sensitive insects thrive, indicating almost no organic pollution or nutrient enrichment.</li>
-<li><strong>Band D:</strong> Represents severe pollution, where sensitive insects have been lost and the community is largely composed of hardy, pollution-tolerant species like snails and worms.</li>
+<li><strong>Band A:</strong> Represents pristine, healthy conditions where sensitive insects thrive, indicating almost no organic contamination or nutrient enrichment.</li>
+<li><strong>Band D:</strong> Represents severe pollution, where sensitive insects have been lost and the community is largely composed of hardy, contaminant-tolerant species like snails and worms.</li>
 </ul>
 
   </div>
@@ -65,7 +65,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>
