@@ -12,7 +12,7 @@ The interactive charts display individual monitoring site metrics assessing chan
 
 
 
-> *Note: For nutrients and bacteria (E.*coli*, Phosphorus, Nitrogen), a negative vector extending to the left represents an **Improving** trend (contaminant is dropping). For ecosystem health variables (Visual Clarity, MCI), a positive vector extending to the right represents an **Improving** trend.*
+> *Note: For nutrients and bacteria (E. *coli*, phosphorus, nitrogen), a negative vector extending to the left represents an **improving** trend (contaminant levels are dropping). For ecosystem health variables (visual clarity, MCI), a positive vector extending to the right represents an **improving** trend.*
 
 ---
 
