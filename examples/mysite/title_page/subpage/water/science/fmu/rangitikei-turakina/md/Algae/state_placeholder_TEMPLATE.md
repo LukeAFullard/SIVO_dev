@@ -1,4 +1,4 @@
-# The Current State of Algae
+# The current state of algae
 
 We evaluated the current state of algae at |NUMBER_SITES| monitoring sites across the Rangitīkei-Turakina FMU.
 
@@ -48,7 +48,7 @@ A site must pass the test for this statistic to receive a good grade.
 
 ***
 
-### Algae (Chlorophyll-a) Results in the Rangitīkei-Turakina FMU
+### Algae (Chlorophyll-a) results in the Rangitīkei-Turakina FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
