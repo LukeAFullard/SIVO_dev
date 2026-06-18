@@ -5,7 +5,7 @@ When it rains, tiny particles of soil, plant, and animal matter are washed into 
 ### Why is it a problem?
 
 - **Cloudy Water and Blocked Sunlight**
-* Sediment makes the water murky. This reduces visual clarity and blocks the vital sunlight that aquatic plants need to survive. Cloudy water also hides underwater hazards, making our swimming spots unsafe, and makes the water unappealing for farm animals to drink.
+    * Sediment makes the water murky. This reduces visual clarity and blocks the vital sunlight that aquatic plants need to survive. Cloudy water also hides underwater hazards, making our swimming spots unsafe, and makes the water unappealing for farm animals to drink.
 
 - **Harm to Wildlife**
 High levels of dirt in the water can physically harm aquatic life. The fine particles can literally clog the gills of fish, making it hard for them to breathe and take in oxygen.
