@@ -1,4 +1,4 @@
-# Long-Term Trends for *E. coli*
+# Long-term trends for *E. coli*
 
 We evaluated 15-year trends for *E. coli* at |NUMBER_SITES| monitoring sites across the Puketoi ki Tai FMU.
 
@@ -27,7 +27,7 @@ We evaluated 15-year trends for *E. coli* at |NUMBER_SITES| monitoring sites acr
       font-size: 0.98rem;
   ">
 
-Trends show us if bacteria levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes—like heavy rain washing animal waste into rivers—and uncover the true, long-term direction of water quality.
+Trends show us if bacteria levels are consistently changing over time. We use a 15-year timeframe to see past temporary weather spikes, like heavy rain washing animal waste into rivers, and uncover the true, long-term direction of water quality.
 
 <br><br>
 <strong>Trend Categories</strong>
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### *E. coli* Trend Results in the Puketoi ki Tai FMU
+### *E. coli* trend results in the Puketoi ki Tai FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

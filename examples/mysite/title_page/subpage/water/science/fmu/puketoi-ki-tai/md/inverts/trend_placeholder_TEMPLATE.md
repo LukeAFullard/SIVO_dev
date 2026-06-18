@@ -1,4 +1,4 @@
-# Long-Term Trends for Macroinvertebrates
+# Long-term trends for macroinvertebrates
 
 We evaluated 15-year trends for macroinvertebrates (using the MCI score) at |NUMBER_SITES| monitoring sites across the Puketoi ki Tai FMU.
 
@@ -27,7 +27,7 @@ We evaluated 15-year trends for macroinvertebrates (using the MCI score) at |NUM
       font-size: 0.98rem;
   ">
 
-Trends show us if the health of the aquatic insect community is consistently changing over time. We use a 15-year timeframe to see past temporary weather events—like floods that wash away insects—and uncover the true, long-term direction of ecological health.
+Trends show us if the health of the aquatic insect community is consistently changing over time. We use a 15-year timeframe to see past temporary weather events, like floods that wash away insects, and uncover the true, long-term direction of ecological health.
 
 <br><br>
 <strong>Trend Categories</strong>
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Macroinvertebrate (MCI) Trend Results in the Puketoi ki Tai FMU
+### Macroinvertebrate (MCI) trend results in the Puketoi ki Tai FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
