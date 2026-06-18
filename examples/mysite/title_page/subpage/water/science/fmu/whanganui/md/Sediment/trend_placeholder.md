@@ -17,7 +17,7 @@ We evaluated 15-year trends for suspended sediment at 6 monitoring sites across 
       color: #1f2937;
       outline: none;
   ">
-    Understanding the Trend (click to expand)
+    Understanding the trend (click to expand)
   </summary>
 
   <div style="

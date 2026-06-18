@@ -1,6 +1,6 @@
 # Long-term trends for phosphorus
 
-We evaluated 15-year trends for Dissolved Reactive Phosphorus (DRP) at 9 monitoring sites across the Whanganui FMU.
+We evaluated 15-year trends for dissolved reactive phosphorus (DRP) at 9 monitoring sites across the Whanganui FMU.
 
 <details style="
     border: 1px solid #d0d7de;
@@ -17,7 +17,7 @@ We evaluated 15-year trends for Dissolved Reactive Phosphorus (DRP) at 9 monitor
       color: #1f2937;
       outline: none;
   ">
-    Understanding the Trend (click to expand)
+    Understanding the trend (click to expand)
   </summary>
 
   <div style="

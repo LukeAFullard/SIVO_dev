@@ -17,7 +17,7 @@ We evaluated 15-year trends for algae and chlorophyll-a at |NUMBER_SITES| monito
       color: #1f2937;
       outline: none;
   ">
-    Understanding the Trend (click to expand)
+    Understanding the trend (click to expand)
   </summary>
 
   <div style="
@@ -45,7 +45,7 @@ Trends are grouped by how confident scientists are that a change is actually hap
 
 ***
 
-### Algae (Chlorophyll-a) trend results in the Whanganui FMU
+### Algae (chlorophyll-a) trend results in the Whanganui FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">

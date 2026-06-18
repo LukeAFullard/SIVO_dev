@@ -17,7 +17,7 @@ We evaluated the current state of algae at |NUMBER_SITES| monitoring sites acros
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -48,7 +48,7 @@ A site must pass the test for this statistic to receive a good grade.
 
 ***
 
-### Algae (Chlorophyll-a) results in the Whanganui FMU
+### Algae (chlorophyll-a) results in the Whanganui FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
