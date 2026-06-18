@@ -1,4 +1,4 @@
-# The Current State of Dissolved Reactive Phosphorus
+# The current state of dissolved reactive phosphorus
 
 We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at |NUMBER_SITES| monitoring sites across the Whangaehu FMU.
 
@@ -17,7 +17,7 @@ We evaluated the current state of Dissolved Reactive Phosphorus (DRP) at |NUMBER
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -49,7 +49,7 @@ A site must pass the test for both of these statistics. The final grade is alway
 
 ***
 
-### Dissolved Reactive Phosphorus Results in the Whangaehu FMU
+### Dissolved reactive phosphorus results in the Whangaehu FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
