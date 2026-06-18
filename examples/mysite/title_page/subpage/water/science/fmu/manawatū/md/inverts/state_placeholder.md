@@ -17,7 +17,7 @@ We evaluated the current state of macroinvertebrates at 42 monitoring sites acro
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -65,7 +65,7 @@ To calculate a reliable A-to-D ecological health grade, experts use the <strong>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">4.8% (2)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">7.8% (6)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">32.5% (25)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">46.8% (36)</td>
