@@ -438,9 +438,31 @@ with open(os.path.join(os.path.dirname(__file__), "results/FMU_Boundary_Only.htm
 dashboard.add_html_block(block_id="map", html_content=map_content_block, col_span=4, grid_area="map", payload_key="map_html")
 
 custom_js = None
+custom_css = None
+
+fmu_name_for_icons = "Waiopehu"
+fmu_state_data = state_summary["FMUs"].get(fmu_name_for_icons, {})
+
+ecoli_sites = fmu_state_data.get('E coli', {}).get('Total Sites for Attribute', 0) if fmu_state_data.get('E coli') else 0
+sediment_sites = fmu_state_data.get('Visual Clarity', {}).get('Total Sites for Attribute', 0) if fmu_state_data.get('Visual Clarity') else 0
+nitro_sites = (fmu_state_data.get('Ammoniacal-N', {}).get('Total Sites for Attribute', 0) if fmu_state_data.get('Ammoniacal-N') else 0) + (fmu_state_data.get('Nitrate-N', {}).get('Total Sites for Attribute', 0) if fmu_state_data.get('Nitrate-N') else 0)
+phos_sites = fmu_state_data.get('DRP', {}).get('Total Sites for Attribute', 0) if fmu_state_data.get('DRP') else 0
+algae_sites = fmu_state_data.get('Chlorophyll A', {}).get('Total Sites for Attribute', 0) if fmu_state_data.get('Chlorophyll A') else 0
+mci_sites = fmu_state_data.get('MCI', {}).get('Total Sites for Attribute', 0) if fmu_state_data.get('MCI') else 0
+
+hidden_icons_css = []
+if ecoli_sites == 0: hidden_icons_css.append("#card-icon1 { visibility: hidden; pointer-events: none; }")
+if sediment_sites == 0: hidden_icons_css.append("#card-icon2 { visibility: hidden; pointer-events: none; }")
+if nitro_sites == 0: hidden_icons_css.append("#card-icon3 { visibility: hidden; pointer-events: none; }")
+if phos_sites == 0: hidden_icons_css.append("#card-icon4 { visibility: hidden; pointer-events: none; }")
+if algae_sites == 0: hidden_icons_css.append("#card-icon5 { visibility: hidden; pointer-events: none; }")
+if mci_sites == 0: hidden_icons_css.append("#card-icon6 { visibility: hidden; pointer-events: none; }")
+
+if hidden_icons_css:
+    custom_css = " ".join(hidden_icons_css)
 
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
-dashboard.to_html(output_path=output_file, custom_js=custom_js)
+dashboard.to_html(output_path=output_file, custom_js=custom_js, custom_css=custom_css)
 print(f"FMU Dashboard generated at {output_file}")
