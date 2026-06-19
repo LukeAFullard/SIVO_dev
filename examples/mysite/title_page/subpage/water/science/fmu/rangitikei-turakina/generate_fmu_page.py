@@ -27,7 +27,10 @@ for folder, p_info in parameters_state.items():
     template_path = os.path.join(base_dir, f"md/{folder}/state_placeholder_TEMPLATE.md")
     output_path = os.path.join(base_dir, f"md/{folder}/state_placeholder.md")
 
-    fmu_data = state_summary["FMUs"]["Rangit\u012bkei-Turakina"].get(p_info["json_key"])
+    if not os.path.exists(template_path):
+        continue
+
+    fmu_data = state_summary["FMUs"]["Rangitīkei-Turakina"].get(p_info["json_key"])
     region_data = state_summary["Region"][p_info["json_key"]]
     fmu_sites = fmu_data["Total Sites for Attribute"] if fmu_data else 0
 
@@ -53,34 +56,37 @@ for folder, p_info in parameters_state.items():
 nitrogen_template_path = os.path.join(base_dir, "md/Nitrogen/state_placeholder_TEMPLATE.md")
 nitrogen_output_path = os.path.join(base_dir, "md/Nitrogen/state_placeholder.md")
 
-with open(nitrogen_template_path, 'r', encoding='utf-8') as f:
-    template_content = f.read()
+if os.path.exists(nitrogen_template_path):
+    with open(nitrogen_template_path, 'r', encoding='utf-8') as f:
+        template_content = f.read()
 
-ammo_fmu_data = state_summary["FMUs"]["Rangit\u012bkei-Turakina"]["Ammoniacal-N"]
-ammo_region_data = state_summary["Region"]["Ammoniacal-N"]
-nitrate_fmu_data = state_summary["FMUs"]["Rangit\u012bkei-Turakina"]["Nitrate-N"]
-nitrate_region_data = state_summary["Region"]["Nitrate-N"]
-fmu_sites = ammo_fmu_data["Total Sites for Attribute"] # Assuming both are evaluated together
+    ammo_fmu_data = state_summary["FMUs"]["Rangitīkei-Turakina"].get("Ammoniacal-N")
+    ammo_region_data = state_summary["Region"]["Ammoniacal-N"]
+    nitrate_fmu_data = state_summary["FMUs"]["Rangitīkei-Turakina"].get("Nitrate-N")
+    nitrate_region_data = state_summary["Region"]["Nitrate-N"]
+    fmu_sites = ammo_fmu_data["Total Sites for Attribute"] if ammo_fmu_data else 0
 
-template_content = template_content.replace("|NUMBER_SITES|", str(fmu_sites))
+    template_content = template_content.replace("|NUMBER_SITES|", str(fmu_sites))
 
-for grade in ["A", "B", "C", "D"]:
-    fmu_pct = float(ammo_fmu_data["Grades"][grade]["Percentage"])
-    region_pct = float(ammo_region_data["Grades"][grade]["Percentage"])
-    template_content = template_content.replace(f"|AMMO_FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
-    template_content = template_content.replace(f"|AMMO_FMU_{grade}_COUNT|", str(ammo_fmu_data["Grades"][grade]["Count"]))
-    template_content = template_content.replace(f"|AMMO_REGION_{grade}_PCT|", f"{region_pct:.1f}")
-    template_content = template_content.replace(f"|AMMO_REGION_{grade}_COUNT|", str(ammo_region_data["Grades"][grade]["Count"]))
+    for grade in ["A", "B", "C", "D"]:
+        fmu_pct = float(ammo_fmu_data["Grades"][grade]["Percentage"]) if ammo_fmu_data and grade in ammo_fmu_data["Grades"] else 0.0
+        fmu_count = ammo_fmu_data["Grades"][grade]["Count"] if ammo_fmu_data and grade in ammo_fmu_data["Grades"] else 0
+        region_pct = float(ammo_region_data["Grades"][grade]["Percentage"])
+        template_content = template_content.replace(f"|AMMO_FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
+        template_content = template_content.replace(f"|AMMO_FMU_{grade}_COUNT|", str(fmu_count))
+        template_content = template_content.replace(f"|AMMO_REGION_{grade}_PCT|", f"{region_pct:.1f}")
+        template_content = template_content.replace(f"|AMMO_REGION_{grade}_COUNT|", str(ammo_region_data["Grades"][grade]["Count"]))
 
-    fmu_pct = float(nitrate_fmu_data["Grades"][grade]["Percentage"])
-    region_pct = float(nitrate_region_data["Grades"][grade]["Percentage"])
-    template_content = template_content.replace(f"|NITRATE_FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
-    template_content = template_content.replace(f"|NITRATE_FMU_{grade}_COUNT|", str(nitrate_fmu_data["Grades"][grade]["Count"]))
-    template_content = template_content.replace(f"|NITRATE_REGION_{grade}_PCT|", f"{region_pct:.1f}")
-    template_content = template_content.replace(f"|NITRATE_REGION_{grade}_COUNT|", str(nitrate_region_data["Grades"][grade]["Count"]))
+        fmu_pct = float(nitrate_fmu_data["Grades"][grade]["Percentage"]) if nitrate_fmu_data and grade in nitrate_fmu_data["Grades"] else 0.0
+        fmu_count = nitrate_fmu_data["Grades"][grade]["Count"] if nitrate_fmu_data and grade in nitrate_fmu_data["Grades"] else 0
+        region_pct = float(nitrate_region_data["Grades"][grade]["Percentage"])
+        template_content = template_content.replace(f"|NITRATE_FMU_{grade}_PCT|", f"{fmu_pct:.1f}")
+        template_content = template_content.replace(f"|NITRATE_FMU_{grade}_COUNT|", str(fmu_count))
+        template_content = template_content.replace(f"|NITRATE_REGION_{grade}_PCT|", f"{region_pct:.1f}")
+        template_content = template_content.replace(f"|NITRATE_REGION_{grade}_COUNT|", str(nitrate_region_data["Grades"][grade]["Count"]))
 
-with open(nitrogen_output_path, 'w', encoding='utf-8') as f:
-    f.write(template_content)
+    with open(nitrogen_output_path, 'w', encoding='utf-8') as f:
+        f.write(template_content)
 
 
 nav_menu = [
@@ -148,13 +154,32 @@ dashboard.add_html_block(block_id="gap1", html_content="<div style='height: 20px
 dashboard.add_html_block(block_id="gap2", html_content="<div style='height: 20px;'></div>", col_span=4, grid_area="gap2")
 
 icons = [
-    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli", "map_file": "results/Map_E coli.html"},
-    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment", "map_file": "results/Map_Visual Clarity.html"},
-    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen", "map_file": "results/Map_Combined_Nitrogen.html"},
-    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus", "map_file": "results/Map_DRP.html"},
-    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae", "map_file": "results/Map_Chlorophyll A.html"},
-    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts", "map_file": "results/Map_MCI.html"}
+    {"id": "icon1", "img": "../../../../../assets/water/20221123_OrangaWai_IconEcoli.png", "hover": "E. <i>coli</i>", "md_dir": "md/ecoli", "map_file": "results/Map_E coli.html", "param": "ecoli"},
+    {"id": "icon2", "img": "../../../../../assets/water/20221123_OrangaWai_IconSuspendedSediment.png", "hover": "Suspended sediment", "md_dir": "md/Sediment", "map_file": "results/Map_Visual Clarity.html", "param": "Sediment"},
+    {"id": "icon3", "img": "../../../../../assets/water/20221123_OrangaWai_IconN.png", "hover": "Nitrogen", "md_dir": "md/Nitrogen", "map_file": "results/Map_Combined_Nitrogen.html", "param": "Nitrogen"},
+    {"id": "icon4", "img": "../../../../../assets/water/20221123_OrangaWai_IconP.png", "hover": "Phosphorus", "md_dir": "md/Phosphorus", "map_file": "results/Map_DRP.html", "param": "Phosphorus"},
+    {"id": "icon5", "img": "../../../../../assets/water/20221123_OrangaWai_IconChlA.png", "hover": "Algae", "md_dir": "md/Algae", "map_file": "results/Map_Chlorophyll A.html", "param": "Algae"},
+    {"id": "icon6", "img": "../../../../../assets/water/20221123_OrangaWai_IconAquaticLife.png", "hover": "Invertebrates", "md_dir": "md/inverts", "map_file": "results/Map_MCI.html", "param": "inverts"}
 ]
+
+hidden_icons = []
+for icon in icons:
+    if icon["param"] == "Nitrogen":
+        ammo_sites = state_summary["FMUs"]["Rangitīkei-Turakina"].get("Ammoniacal-N", {}).get("Total Sites for Attribute", 0)
+        nitrate_sites = state_summary["FMUs"]["Rangitīkei-Turakina"].get("Nitrate-N", {}).get("Total Sites for Attribute", 0)
+        if ammo_sites == 0 and nitrate_sites == 0:
+            hidden_icons.append(icon["id"])
+    else:
+        p_info = parameters_state.get(icon["param"])
+        if p_info:
+            fmu_sites = state_summary["FMUs"]["Rangitīkei-Turakina"].get(p_info["json_key"], {}).get("Total Sites for Attribute", 0)
+            if fmu_sites == 0:
+                hidden_icons.append(icon["id"])
+
+custom_css = ""
+if hidden_icons:
+    css_targets = ", ".join([f"#card-{icon_id}" for icon_id in hidden_icons])
+    custom_css = f"{css_targets} {{ visibility: hidden; pointer-events: none; }}"
 
 import json
 with open(os.path.join(os.path.dirname(__file__), "../../trend_summary.json"), "r", encoding="utf-8") as f:
@@ -329,18 +354,25 @@ dashboard.add_overlay_button(block_id="button_trend", label="Click for more tren
 for icon in icons:
     md_dir = os.path.join(os.path.dirname(__file__), icon["md_dir"])
 
-    with open(os.path.join(md_dir, "placeholder.md"), "r", encoding="utf-8") as f:
-        icon["md"] = f.read()
-    with open(os.path.join(md_dir, "state_placeholder.md"), "r", encoding="utf-8") as f:
-        icon["state_md"] = f.read()
-    with open(os.path.join(md_dir, "trend_placeholder.md"), "r", encoding="utf-8") as f:
-        icon["trend_md"] = f.read()
-    with open(os.path.join(md_dir, "state_popup.md"), "r", encoding="utf-8") as f:
-        state_how_content = f.read()
-        icon["state_how"] = adjust_iframe_height(state_how_content, os.path.dirname(__file__))
-    with open(os.path.join(md_dir, "trend_popup.md"), "r", encoding="utf-8") as f:
-        trend_how_content = f.read()
-        icon["trend_how"] = adjust_iframe_height(trend_how_content, os.path.dirname(__file__))
+    if os.path.exists(md_dir):
+        with open(os.path.join(md_dir, "placeholder.md"), "r", encoding="utf-8") as f:
+            icon["md"] = f.read()
+        with open(os.path.join(md_dir, "state_placeholder.md"), "r", encoding="utf-8") as f:
+            icon["state_md"] = f.read()
+        with open(os.path.join(md_dir, "trend_placeholder.md"), "r", encoding="utf-8") as f:
+            icon["trend_md"] = f.read()
+        with open(os.path.join(md_dir, "state_popup.md"), "r", encoding="utf-8") as f:
+            state_how_content = f.read()
+            icon["state_how"] = adjust_iframe_height(state_how_content, os.path.dirname(__file__))
+        with open(os.path.join(md_dir, "trend_popup.md"), "r", encoding="utf-8") as f:
+            trend_how_content = f.read()
+            icon["trend_how"] = adjust_iframe_height(trend_how_content, os.path.dirname(__file__))
+    else:
+        icon["md"] = ""
+        icon["state_md"] = ""
+        icon["trend_md"] = ""
+        icon["state_how"] = ""
+        icon["trend_how"] = ""
 
     map_file_path = os.path.join(os.path.dirname(__file__), icon["map_file"])
     if not os.path.exists(map_file_path):
@@ -442,5 +474,5 @@ custom_js = None
 output_file = os.path.join(os.path.dirname(__file__), "index.html")
 
 dashboard.add_layout_toggle_button("mobile_toggle", "📱", hover_text="Toggle Mobile View")
-dashboard.to_html(output_path=output_file, custom_js=custom_js)
+dashboard.to_html(output_path=output_file, custom_js=custom_js, custom_css=custom_css)
 print(f"FMU Dashboard generated at {output_file}")
