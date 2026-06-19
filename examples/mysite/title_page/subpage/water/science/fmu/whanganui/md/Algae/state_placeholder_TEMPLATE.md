@@ -17,7 +17,7 @@ We evaluated the current state of algae at |NUMBER_SITES| monitoring sites acros
       color: #1f2937;
       outline: none;
   ">
-    How We Measure and Grade (click to expand)
+    How we measure and grade (click to expand)
   </summary>
 
   <div style="
@@ -40,7 +40,7 @@ A site must pass the test for this statistic to receive a good grade.
 
 <ul>
 <li><strong>Band A:</strong> Represents a healthy, resilient ecosystem with rare blooms, indicating natural conditions.</li>
-<li><strong>Band D:</strong> Represents significant pollution, where regular or extended nuisance blooms smother the habitat and put aquatic life at high risk.</li>
+<li><strong>Band D:</strong> Represents significant contamination, where regular or extended nuisance blooms smother the habitat and put aquatic life at high risk.</li>
 </ul>
 
   </div>
@@ -48,13 +48,13 @@ A site must pass the test for this statistic to receive a good grade.
 
 ***
 
-### Algae (chlorophyll-a) results in the Whanganui FMU
+### Algae (Chlorophyll-a) results in the Whanganui FMU
 
 <div style="overflow-x: auto;">
 <table style="width: 100%; border-collapse: collapse; text-align: center;">
   <thead>
     <tr>
-      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll A</th>
+      <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Chlorophyll-a</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #3DB7E9; color: black;">A</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #359B73; color: white;">B</th>
       <th style="padding: 8px; border-bottom: 2px solid #ddd; background-color: #F0E442; color: black;">C</th>
@@ -70,7 +70,7 @@ A site must pass the test for this statistic to receive a good grade.
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #E69F00; color: black;">|FMU_D_PCT|% (|FMU_D_COUNT|)</td>
     </tr>
     <tr>
-      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole Region</td>
+      <td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Whole region</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #3DB7E9; color: black;">|REGION_A_PCT|% (|REGION_A_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #359B73; color: white;">|REGION_B_PCT|% (|REGION_B_COUNT|)</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd; background-color: #F0E442; color: black;">|REGION_C_PCT|% (|REGION_C_COUNT|)</td>

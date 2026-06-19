@@ -3,16 +3,16 @@
 The interactive charts display individual monitoring site metrics assessing changes in water quality variables over a 15-year period (2011–2025).
 
 * **Baseline evaluation (0%):** The bold vertical line at **0** represents a stable state with no detected environmental change.
-* **Directional vectors:** Lollipops extending to the **Right** represent positive percentage increases per year, while lollipops extending to the **Left** represent negative percentage decreases per year.
+* **Directional vectors:** Lollipops extending to the **right** represent positive percentage increases per year, while lollipops extending to the **left** represent negative percentage decreases per year.
 * **Site order:** Sites are categorised into core performance groups from most improving at the top to most degrading at the bottom. Within those groups, they are organised by magnitude of structural change.
 * **Trend category classifications:** Marker colours indicate the calculated confidence direction:
-* **Improving** 🔵 *(Water quality metrics are getting healthier)*
-* **Indeterminate** 🟡 *(Data variations show no clear structural trend direction)*
-* **Degrading** 🔴 *(Water quality metrics are deteriorating)*
+    * **Improving** 🔵 *(Water quality metrics are getting healthier)*
+    * **Indeterminate** 🟡 *(Data variations show no clear structural trend direction)*
+    * **Degrading** 🔴 *(Water quality metrics are deteriorating)*
 
 
 
-> *Note: For nutrients and bacteria (E. *coli*, phosphorus, nitrogen), a negative vector extending to the Left represents an **improving** trend (contaminant levels are dropping). For ecosystem health variables (visual clarity, MCI), a positive vector extending to the Right represents an **improving** trend.*
+> *Note: For nutrients and bacteria (E. *coli*, phosphorus, nitrogen), a negative vector extending to the left represents an **improving** trend (contaminant levels are dropping). For ecosystem health variables (visual clarity, MCI), a positive vector extending to the right represents an **improving** trend.*
 
 ---
 
