@@ -32,7 +32,7 @@ Trends show us if bacteria levels are changing over time. We use a 15-year timef
 <br>
 <strong>Trend categories</strong>
 <br>
-Trends are grouped by how confident scientists are that a change is actually happening. Because *E. coli* indicates a risk of illness, an "improvement" means the concentration of bacteria in the water is decreasing.
+Trends are grouped by how confident scientists are that a change is actually happening. Because <i>E. coli</i> indicates a risk of illness, an "improvement" means the concentration of bacteria in the water is decreasing.
 
 <ul>
 <li><strong>Improving:</strong> Bacteria levels are decreasing (<em>very likely</em> or <em>likely improving</em>).</li>
