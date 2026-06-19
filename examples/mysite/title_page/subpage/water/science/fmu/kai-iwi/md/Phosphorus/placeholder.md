@@ -1,4 +1,4 @@
-# Tracking phosphorus in the Kai Iwi
+# Tracking phosphorus in the Kai Iwi FMU
 
 While phosphorus usually attaches to soil, it can also dissolve in water. This dissolved form, known as dissolved reactive phosphorus (DRP), is easily absorbed by aquatic plants and algae.
 We regularly monitor DRP levels to track our environmental progress and protect our freshwater ecosystems. The spatial map shows the current DRP state grades across the Kai Iwi FMU.
