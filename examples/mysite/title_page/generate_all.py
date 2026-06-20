@@ -79,5 +79,14 @@ def main():
 
     print("All scripts executed successfully.")
 
+    # Run the website build script
+    build_script_path = os.path.abspath(os.path.join(root_dir, 'examples/mysite/build_website.py'))
+    print(f"Running {build_script_path}...")
+    result = subprocess.run([sys.executable, os.path.basename(build_script_path)], cwd=os.path.dirname(build_script_path), env=env)
+    if result.returncode != 0:
+        print(f"Error running {build_script_path}. Exiting.")
+        sys.exit(result.returncode)
+    print("Website build completed successfully.")
+
 if __name__ == "__main__":
     main()
