@@ -79,5 +79,16 @@ def main():
 
     print("All scripts executed successfully.")
 
+    # Finally, build the final website output directory
+    build_script = os.path.abspath(os.path.join(base_dir, "..", "build_website.py"))
+    if os.path.exists(build_script):
+        print(f"Running {build_script} to package website...")
+        build_result = subprocess.run([sys.executable, os.path.basename(build_script)], cwd=os.path.dirname(build_script), env=env)
+        if build_result.returncode != 0:
+            print(f"Error running {build_script}. Exiting.")
+            sys.exit(build_result.returncode)
+    else:
+        print(f"Warning: Build script not found at {build_script}")
+
 if __name__ == "__main__":
     main()
