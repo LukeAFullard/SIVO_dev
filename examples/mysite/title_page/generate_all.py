@@ -28,6 +28,7 @@ def main():
         "subpage/land/issues/generate_dashboard.py",
         "subpage/land/help/generate_dashboard.py",
         "subpage/land/science/generate_dashboard.py",
+        "build_website.py",
     ]
 
     expected_script_paths = set(
