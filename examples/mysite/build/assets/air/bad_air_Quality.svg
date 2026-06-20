@@ -1,0 +1,9 @@
+<svg viewBox="0 0 960 960" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background anchor for add_svg_background_image -->
+    <rect id="background" x="0" y="0" width="960" height="960" fill="transparent" pointer-events="none" />
+
+    <rect id="burnoff" fill="transparent" x="81.1" y="203.1" width="281.6" height="396.6" />
+    <rect id="vehicle" fill="transparent" x="637.6" y="201.8" width="285.1" height="397.7" />
+    <path id="wet_wood" fill="transparent" d="M931.0,791.0 L944.0,796.0 L959.0,812.0 L959.0,925.0 L908.0,928.0 L901.0,930.0 L897.0,935.0 L880.0,940.0 L734.0,938.0 L710.0,935.0 L702.0,930.0 L702.0,922.0 L714.0,913.0 L749.0,910.0 L751.0,914.0 L756.0,915.0 L761.0,912.0 L758.0,879.0 L762.0,876.0 L766.0,878.0 L775.0,870.0 L794.0,866.0 L793.0,837.0 L799.0,827.0 L806.0,822.0 L931.0,791.0 Z" />
+    <path id="bad_fireplace" fill="transparent" d="M486.0,755.0 L520.0,756.0 L549.0,763.0 L570.0,772.0 L586.0,784.0 L585.0,906.0 L414.0,906.0 L413.0,784.0 L444.0,765.0 L486.0,755.0 Z" />
+</svg>
