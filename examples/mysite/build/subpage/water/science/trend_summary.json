@@ -1,0 +1,929 @@
+{
+    "Region": {
+        "Total Unique Sites in Region": 97,
+        "Ammoniacal Nitrogen (NH4)": {
+            "Total Sites for Parameter": 90,
+            "Categories": {
+                "Improving": {
+                    "Count": 63,
+                    "Percentage": 70.0
+                },
+                "Indeterminate": {
+                    "Count": 14,
+                    "Percentage": 15.56
+                },
+                "Degrading": {
+                    "Count": 13,
+                    "Percentage": 14.44
+                }
+            }
+        },
+        "Chlorophyll A": {
+            "Total Sites for Parameter": 45,
+            "Categories": {
+                "Improving": {
+                    "Count": 6,
+                    "Percentage": 13.33
+                },
+                "Indeterminate": {
+                    "Count": 10,
+                    "Percentage": 22.22
+                },
+                "Degrading": {
+                    "Count": 29,
+                    "Percentage": 64.44
+                }
+            }
+        },
+        "Dissolved Reactive Phosphorus": {
+            "Total Sites for Parameter": 92,
+            "Categories": {
+                "Improving": {
+                    "Count": 24,
+                    "Percentage": 26.09
+                },
+                "Indeterminate": {
+                    "Count": 21,
+                    "Percentage": 22.83
+                },
+                "Degrading": {
+                    "Count": 47,
+                    "Percentage": 51.09
+                }
+            }
+        },
+        "E. coli": {
+            "Total Sites for Parameter": 88,
+            "Categories": {
+                "Improving": {
+                    "Count": 36,
+                    "Percentage": 40.91
+                },
+                "Indeterminate": {
+                    "Count": 20,
+                    "Percentage": 22.73
+                },
+                "Degrading": {
+                    "Count": 32,
+                    "Percentage": 36.36
+                }
+            }
+        },
+        "MCI (Macroinvertebrate Community Index)": {
+            "Total Sites for Parameter": 61,
+            "Categories": {
+                "Improving": {
+                    "Count": 8,
+                    "Percentage": 13.11
+                },
+                "Indeterminate": {
+                    "Count": 20,
+                    "Percentage": 32.79
+                },
+                "Degrading": {
+                    "Count": 33,
+                    "Percentage": 54.1
+                }
+            }
+        },
+        "Nitrate Nitrogen (NO3)": {
+            "Total Sites for Parameter": 92,
+            "Categories": {
+                "Improving": {
+                    "Count": 52,
+                    "Percentage": 56.52
+                },
+                "Indeterminate": {
+                    "Count": 11,
+                    "Percentage": 11.96
+                },
+                "Degrading": {
+                    "Count": 29,
+                    "Percentage": 31.52
+                }
+            }
+        },
+        "Visual Clarity": {
+            "Total Sites for Parameter": 80,
+            "Categories": {
+                "Improving": {
+                    "Count": 10,
+                    "Percentage": 12.5
+                },
+                "Indeterminate": {
+                    "Count": 9,
+                    "Percentage": 11.25
+                },
+                "Degrading": {
+                    "Count": 61,
+                    "Percentage": 76.25
+                }
+            }
+        }
+    },
+    "FMUs": {
+        "Kai Iwi": {
+            "Total Unique Sites in FMU": 1,
+            "Ammoniacal Nitrogen (NH4)": {
+                "Total Sites for Parameter": 1,
+                "Categories": {
+                    "Improving": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Dissolved Reactive Phosphorus": {
+                "Total Sites for Parameter": 1,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "E. coli": {
+                "Total Sites for Parameter": 1,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "Nitrate Nitrogen (NO3)": {
+                "Total Sites for Parameter": 1,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    },
+                    "Degrading": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites for Parameter": 1,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            }
+        },
+        "Manawat\u016b": {
+            "Total Unique Sites in FMU": 46,
+            "Ammoniacal Nitrogen (NH4)": {
+                "Total Sites for Parameter": 45,
+                "Categories": {
+                    "Improving": {
+                        "Count": 36,
+                        "Percentage": 80.0
+                    },
+                    "Indeterminate": {
+                        "Count": 5,
+                        "Percentage": 11.11
+                    },
+                    "Degrading": {
+                        "Count": 4,
+                        "Percentage": 8.89
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites for Parameter": 26,
+                "Categories": {
+                    "Improving": {
+                        "Count": 1,
+                        "Percentage": 3.85
+                    },
+                    "Indeterminate": {
+                        "Count": 6,
+                        "Percentage": 23.08
+                    },
+                    "Degrading": {
+                        "Count": 19,
+                        "Percentage": 73.08
+                    }
+                }
+            },
+            "Dissolved Reactive Phosphorus": {
+                "Total Sites for Parameter": 45,
+                "Categories": {
+                    "Improving": {
+                        "Count": 17,
+                        "Percentage": 37.78
+                    },
+                    "Indeterminate": {
+                        "Count": 10,
+                        "Percentage": 22.22
+                    },
+                    "Degrading": {
+                        "Count": 18,
+                        "Percentage": 40.0
+                    }
+                }
+            },
+            "E. coli": {
+                "Total Sites for Parameter": 45,
+                "Categories": {
+                    "Improving": {
+                        "Count": 13,
+                        "Percentage": 28.89
+                    },
+                    "Indeterminate": {
+                        "Count": 10,
+                        "Percentage": 22.22
+                    },
+                    "Degrading": {
+                        "Count": 22,
+                        "Percentage": 48.89
+                    }
+                }
+            },
+            "MCI (Macroinvertebrate Community Index)": {
+                "Total Sites for Parameter": 31,
+                "Categories": {
+                    "Improving": {
+                        "Count": 4,
+                        "Percentage": 12.9
+                    },
+                    "Indeterminate": {
+                        "Count": 12,
+                        "Percentage": 38.71
+                    },
+                    "Degrading": {
+                        "Count": 15,
+                        "Percentage": 48.39
+                    }
+                }
+            },
+            "Nitrate Nitrogen (NO3)": {
+                "Total Sites for Parameter": 45,
+                "Categories": {
+                    "Improving": {
+                        "Count": 34,
+                        "Percentage": 75.56
+                    },
+                    "Indeterminate": {
+                        "Count": 4,
+                        "Percentage": 8.89
+                    },
+                    "Degrading": {
+                        "Count": 7,
+                        "Percentage": 15.56
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites for Parameter": 43,
+                "Categories": {
+                    "Improving": {
+                        "Count": 6,
+                        "Percentage": 13.95
+                    },
+                    "Indeterminate": {
+                        "Count": 3,
+                        "Percentage": 6.98
+                    },
+                    "Degrading": {
+                        "Count": 34,
+                        "Percentage": 79.07
+                    }
+                }
+            }
+        },
+        "Puketoi ki Tai": {
+            "Total Unique Sites in FMU": 2,
+            "Ammoniacal Nitrogen (NH4)": {
+                "Total Sites for Parameter": 2,
+                "Categories": {
+                    "Improving": {
+                        "Count": 2,
+                        "Percentage": 100.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Dissolved Reactive Phosphorus": {
+                "Total Sites for Parameter": 2,
+                "Categories": {
+                    "Improving": {
+                        "Count": 1,
+                        "Percentage": 50.0
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 50.0
+                    },
+                    "Degrading": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "E. coli": {
+                "Total Sites for Parameter": 2,
+                "Categories": {
+                    "Improving": {
+                        "Count": 1,
+                        "Percentage": 50.0
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 50.0
+                    },
+                    "Degrading": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "MCI (Macroinvertebrate Community Index)": {
+                "Total Sites for Parameter": 1,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 1,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "Nitrate Nitrogen (NO3)": {
+                "Total Sites for Parameter": 2,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 50.0
+                    },
+                    "Degrading": {
+                        "Count": 1,
+                        "Percentage": 50.0
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites for Parameter": 2,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 2,
+                        "Percentage": 100.0
+                    },
+                    "Degrading": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            }
+        },
+        "Rangit\u012bkei-Turakina": {
+            "Total Unique Sites in FMU": 15,
+            "Ammoniacal Nitrogen (NH4)": {
+                "Total Sites for Parameter": 13,
+                "Categories": {
+                    "Improving": {
+                        "Count": 11,
+                        "Percentage": 84.62
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 15.38
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites for Parameter": 5,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 5,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "Dissolved Reactive Phosphorus": {
+                "Total Sites for Parameter": 14,
+                "Categories": {
+                    "Improving": {
+                        "Count": 2,
+                        "Percentage": 14.29
+                    },
+                    "Indeterminate": {
+                        "Count": 2,
+                        "Percentage": 14.29
+                    },
+                    "Degrading": {
+                        "Count": 10,
+                        "Percentage": 71.43
+                    }
+                }
+            },
+            "E. coli": {
+                "Total Sites for Parameter": 13,
+                "Categories": {
+                    "Improving": {
+                        "Count": 10,
+                        "Percentage": 76.92
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 7.69
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 15.38
+                    }
+                }
+            },
+            "MCI (Macroinvertebrate Community Index)": {
+                "Total Sites for Parameter": 8,
+                "Categories": {
+                    "Improving": {
+                        "Count": 1,
+                        "Percentage": 12.5
+                    },
+                    "Indeterminate": {
+                        "Count": 3,
+                        "Percentage": 37.5
+                    },
+                    "Degrading": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    }
+                }
+            },
+            "Nitrate Nitrogen (NO3)": {
+                "Total Sites for Parameter": 14,
+                "Categories": {
+                    "Improving": {
+                        "Count": 8,
+                        "Percentage": 57.14
+                    },
+                    "Indeterminate": {
+                        "Count": 2,
+                        "Percentage": 14.29
+                    },
+                    "Degrading": {
+                        "Count": 4,
+                        "Percentage": 28.57
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites for Parameter": 11,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 2,
+                        "Percentage": 18.18
+                    },
+                    "Degrading": {
+                        "Count": 9,
+                        "Percentage": 81.82
+                    }
+                }
+            }
+        },
+        "Waiopehu": {
+            "Total Unique Sites in FMU": 9,
+            "Ammoniacal Nitrogen (NH4)": {
+                "Total Sites for Parameter": 9,
+                "Categories": {
+                    "Improving": {
+                        "Count": 5,
+                        "Percentage": 55.56
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    },
+                    "Degrading": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites for Parameter": 3,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 3,
+                        "Percentage": 100.0
+                    }
+                }
+            },
+            "Dissolved Reactive Phosphorus": {
+                "Total Sites for Parameter": 9,
+                "Categories": {
+                    "Improving": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    },
+                    "Indeterminate": {
+                        "Count": 4,
+                        "Percentage": 44.44
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 22.22
+                    }
+                }
+            },
+            "E. coli": {
+                "Total Sites for Parameter": 8,
+                "Categories": {
+                    "Improving": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    },
+                    "Indeterminate": {
+                        "Count": 3,
+                        "Percentage": 37.5
+                    },
+                    "Degrading": {
+                        "Count": 1,
+                        "Percentage": 12.5
+                    }
+                }
+            },
+            "MCI (Macroinvertebrate Community Index)": {
+                "Total Sites for Parameter": 8,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 12.5
+                    },
+                    "Degrading": {
+                        "Count": 7,
+                        "Percentage": 87.5
+                    }
+                }
+            },
+            "Nitrate Nitrogen (NO3)": {
+                "Total Sites for Parameter": 9,
+                "Categories": {
+                    "Improving": {
+                        "Count": 6,
+                        "Percentage": 66.67
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 22.22
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites for Parameter": 8,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 8,
+                        "Percentage": 100.0
+                    }
+                }
+            }
+        },
+        "Whangaehu": {
+            "Total Unique Sites in FMU": 13,
+            "Ammoniacal Nitrogen (NH4)": {
+                "Total Sites for Parameter": 11,
+                "Categories": {
+                    "Improving": {
+                        "Count": 4,
+                        "Percentage": 36.36
+                    },
+                    "Indeterminate": {
+                        "Count": 5,
+                        "Percentage": 45.45
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 18.18
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites for Parameter": 8,
+                "Categories": {
+                    "Improving": {
+                        "Count": 5,
+                        "Percentage": 62.5
+                    },
+                    "Indeterminate": {
+                        "Count": 3,
+                        "Percentage": 37.5
+                    },
+                    "Degrading": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    }
+                }
+            },
+            "Dissolved Reactive Phosphorus": {
+                "Total Sites for Parameter": 12,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "Degrading": {
+                        "Count": 8,
+                        "Percentage": 66.67
+                    }
+                }
+            },
+            "E. coli": {
+                "Total Sites for Parameter": 12,
+                "Categories": {
+                    "Improving": {
+                        "Count": 7,
+                        "Percentage": 58.33
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "Degrading": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    }
+                }
+            },
+            "MCI (Macroinvertebrate Community Index)": {
+                "Total Sites for Parameter": 8,
+                "Categories": {
+                    "Improving": {
+                        "Count": 3,
+                        "Percentage": 37.5
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 12.5
+                    },
+                    "Degrading": {
+                        "Count": 4,
+                        "Percentage": 50.0
+                    }
+                }
+            },
+            "Nitrate Nitrogen (NO3)": {
+                "Total Sites for Parameter": 12,
+                "Categories": {
+                    "Improving": {
+                        "Count": 4,
+                        "Percentage": 33.33
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 8.33
+                    },
+                    "Degrading": {
+                        "Count": 7,
+                        "Percentage": 58.33
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites for Parameter": 9,
+                "Categories": {
+                    "Improving": {
+                        "Count": 4,
+                        "Percentage": 44.44
+                    },
+                    "Indeterminate": {
+                        "Count": 2,
+                        "Percentage": 22.22
+                    },
+                    "Degrading": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    }
+                }
+            }
+        },
+        "Whanganui": {
+            "Total Unique Sites in FMU": 11,
+            "Ammoniacal Nitrogen (NH4)": {
+                "Total Sites for Parameter": 9,
+                "Categories": {
+                    "Improving": {
+                        "Count": 4,
+                        "Percentage": 44.44
+                    },
+                    "Indeterminate": {
+                        "Count": 3,
+                        "Percentage": 33.33
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 22.22
+                    }
+                }
+            },
+            "Chlorophyll A": {
+                "Total Sites for Parameter": 3,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 33.33
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 66.67
+                    }
+                }
+            },
+            "Dissolved Reactive Phosphorus": {
+                "Total Sites for Parameter": 9,
+                "Categories": {
+                    "Improving": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 8,
+                        "Percentage": 88.89
+                    }
+                }
+            },
+            "E. coli": {
+                "Total Sites for Parameter": 7,
+                "Categories": {
+                    "Improving": {
+                        "Count": 1,
+                        "Percentage": 14.29
+                    },
+                    "Indeterminate": {
+                        "Count": 4,
+                        "Percentage": 57.14
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 28.57
+                    }
+                }
+            },
+            "MCI (Macroinvertebrate Community Index)": {
+                "Total Sites for Parameter": 5,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 3,
+                        "Percentage": 60.0
+                    },
+                    "Degrading": {
+                        "Count": 2,
+                        "Percentage": 40.0
+                    }
+                }
+            },
+            "Nitrate Nitrogen (NO3)": {
+                "Total Sites for Parameter": 9,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 1,
+                        "Percentage": 11.11
+                    },
+                    "Degrading": {
+                        "Count": 8,
+                        "Percentage": 88.89
+                    }
+                }
+            },
+            "Visual Clarity": {
+                "Total Sites for Parameter": 6,
+                "Categories": {
+                    "Improving": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Indeterminate": {
+                        "Count": 0,
+                        "Percentage": 0.0
+                    },
+                    "Degrading": {
+                        "Count": 6,
+                        "Percentage": 100.0
+                    }
+                }
+            }
+        }
+    }
+}
