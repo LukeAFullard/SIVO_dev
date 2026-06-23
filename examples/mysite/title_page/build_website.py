@@ -64,7 +64,8 @@ def build_website(subfolder=None):
                 # Check if file needs to be copied
                 should_copy = True
                 if os.path.exists(dest_file):
-                    should_copy = False
+                    if get_file_hash(src_file) == get_file_hash(dest_file):
+                        should_copy = False
 
                 if should_copy:
                     # Ensure destination directory exists
