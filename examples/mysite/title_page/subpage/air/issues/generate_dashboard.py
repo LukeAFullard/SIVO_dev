@@ -13,15 +13,15 @@ from src.sivo.core.sivo import Sivo
 
 nav_menu = [
     {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
-    {"label": "Home", "url": "../../../index.html", "url_transition": "page-turn-enter"},
+    {"label": "Home", "url": "../../../index.html"},
     {"label": "Air", "sublinks": [
-        {"label": "Overview", "url": "../index.html", "url_transition": "page-turn-enter"},
-        {"label": "Pressures", "url": "index.html", "url_transition": "page-turn-enter"},
-        {"label": "State", "url": "../science/index.html", "url_transition": "page-turn-enter"},
-        {"label": "Actions", "url": "../help/index.html", "url_transition": "page-turn-enter"}
+        {"label": "Overview", "url": "../index.html"},
+        {"label": "Pressures", "url": "index.html"},
+        {"label": "State", "url": "../science/index.html"},
+        {"label": "Actions", "url": "../help/index.html"}
     ]},
-    {"label": "Land", "url": "../../land/index.html", "url_transition": "page-turn-enter"},
-    {"label": "Water", "url": "../../water/index.html", "url_transition": "page-turn-enter"}
+    {"label": "Land", "url": "../../land/index.html"},
+    {"label": "Water", "url": "../../water/index.html"}
 ]
 
 dashboard = SivoDashboard(
