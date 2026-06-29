@@ -32,7 +32,7 @@ When we breathe in particulate matter, the larger particles (PM<sub>10</sub>) ca
 <h2>It can bother people</h2>
 Beyond serious health impacts, air pollution can also be a real nuisance for the region’s communities. 
 
-Odour, smoke, and other discharges to air can make it unpleasant to do outdoor activities such as gardening, barbequing, and playing in the backyard. It can also discourage us from hanging washing on the line and opening doors and windows on hot days.  es are between five times smaller (for PM<sub>10</sub>) and 20 to 28 times smaller (for PM<sub>2.5</sub>) than a single strand of human hair (which is approximately 50-70 µm across). 
+Odour, smoke, and other discharges to air can make it unpleasant to do outdoor activities such as gardening, barbequing, and playing in the backyard. It can also discourage us from hanging washing on the line and opening doors and windows on hot days. 
 
   </div>
 </details>
