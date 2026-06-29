@@ -11,6 +11,6 @@ It is illegal to burn any of these things in an open fire:
 * Agrichemical waste
 * PVC plastics 
 
-Contact your local city or district council for advice on safely disposing of these items. 
+Contact your local city or district council for advice on safely disposing these items. 
 
 If you have concerns about offensive smoke, odour, or dust discharges from an outdoor fire, call Horizons’ 24-hour Pollution Hotline at **0508 800 800** and speak with our consent monitoring officers. 
