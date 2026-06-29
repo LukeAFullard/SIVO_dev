@@ -91,8 +91,7 @@ Landslides also lead to the loss of topsoil and its productive capacity. Topsoil
       font-size: 0.98rem;
   ">
 Sedimentation from accelerated erosion can reduce the river channel’s capacity to transport floodwaters. Severe weather events transport eroded soils and associated debris throughout Horizons’ river and drainage schemes, impacting flood protection assets and causing sediment to accumulate in rivers, raising the riverbed and reducing the river channel's capacity to transport flood flows. 
-<br><br>
-      
+<br>
 Sedimentation is especially problematic along the Ōroua River, as its berms can be more than a metre higher than the land directly outside the stop bank. This reduces the river’s carrying capacity during high-flow events.    
 
   </div>
