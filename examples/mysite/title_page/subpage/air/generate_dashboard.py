@@ -8,14 +8,14 @@ from src.sivo.core.sivo import Sivo
 
 nav_menu = [
     {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
-    {"label": "Home", "url": "../../index.html", "url_transition": "page-turn-enter"},
+    {"label": "Home", "url": "../../index.html"},
     {"label": "Air", "sublinks": [
-        {"label": "Pressures", "url": "issues/index.html", "url_transition": "page-turn-enter"},
-        {"label": "State", "url": "science/index.html", "url_transition": "page-turn-enter"},
-        {"label": "Actions", "url": "help/index.html", "url_transition": "page-turn-enter"}
+        {"label": "Pressures", "url": "issues/index.html"},
+        {"label": "State", "url": "science/index.html"},
+        {"label": "Actions", "url": "help/index.html"}
     ]},
-    {"label": "Land", "url": "../land/index.html", "url_transition": "page-turn-enter"},
-    {"label": "Water", "url": "../water/index.html", "url_transition": "page-turn-enter"}
+    {"label": "Land", "url": "../land/index.html"},
+    {"label": "Water", "url": "../water/index.html"}
 ]
 
 dashboard = SivoDashboard(
@@ -93,7 +93,6 @@ dashboard.add_text_block(
     block_id="issues",
     text="Pressures",
     url="issues/index.html",
-    url_transition="page-turn-enter",
     col_span=1,
     grid_area="issues",
     fade_in=True,
@@ -105,7 +104,6 @@ dashboard.add_text_block(
     block_id="science",
     text="State",
     url="science/index.html",
-    url_transition="page-turn-enter",
     col_span=1,
     grid_area="science",
     fade_in=True,
@@ -117,7 +115,6 @@ dashboard.add_text_block(
     block_id="help",
     text="Actions",
     url="help/index.html",
-    url_transition="page-turn-enter",
     col_span=1,
     grid_area="help",
     fade_in=True,

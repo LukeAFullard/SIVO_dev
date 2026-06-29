@@ -7,10 +7,10 @@ from src.sivo.core.dashboard import SivoDashboard
 
 nav_menu = [
     {"label": "Horizons Regional Council", "url": "https://www.horizons.govt.nz/"},
-    {"label": "Home", "url": "index.html", "url_transition": "page-turn-enter"},
-    {"label": "Air", "url": "subpage/air/index.html", "url_transition": "page-turn-enter"},
-    {"label": "Land", "url": "subpage/land/index.html", "url_transition": "page-turn-enter"},
-    {"label": "Water", "url": "subpage/water/index.html", "url_transition": "page-turn-enter"},
+    {"label": "Home", "url": "index.html"},
+    {"label": "Air", "url": "subpage/air/index.html"},
+    {"label": "Land", "url": "subpage/land/index.html"},
+    {"label": "Water", "url": "subpage/water/index.html"},
 ]
 
 # Create the dashboard
@@ -86,7 +86,6 @@ dashboard.add_image_block(
     object_fit="cover",
     border_radius="0px",
     url="subpage/air/index.html",
-    url_transition="page-turn-enter",
     fade_in=True,
     fade_start_time_ms=300,
     fade_duration_ms=2000
@@ -99,7 +98,6 @@ dashboard.add_image_block(
     object_fit="cover",
     border_radius="0px",
     url="subpage/land/index.html",
-    url_transition="page-turn-enter",
     fade_in=True,
     fade_start_time_ms=600,
     fade_duration_ms=2000
@@ -112,7 +110,6 @@ dashboard.add_image_block(
     object_fit="cover",
     border_radius="0px",
     url="subpage/water/index.html",
-    url_transition="page-turn-enter",
     fade_in=True,
     fade_start_time_ms=900,
     fade_duration_ms=2000
