@@ -172,7 +172,7 @@ dashboard.add_text_block(
 
 dashboard.add_text_block(
     block_id="good_cap",
-    text="<div style='text-align: center; width: 100%;'><i>Figure 3 Behaviours that clead to better air quality.</i></div>",
+    text="<div style='text-align: center; width: 100%;'><i>Figure 3 Behaviours that lead to better air quality.</i></div>",
     font_size="16px",
     font_weight="normal",
     background_color="transparent",
