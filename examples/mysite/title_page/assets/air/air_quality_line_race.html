@@ -7,11 +7,30 @@
     <style>
         body { font-family: sans-serif; padding: 20px; }
         #chart-container { width: 100%; height: 600px; }
-        h2 { text-align: center; color: #333; }
+        h2 { text-align: center; color: #333; margin-bottom: 10px; }
+        
+        .controls { text-align: center; margin-bottom: 15px; }
+        #start-btn {
+            padding: 10px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        #start-btn:hover { background-color: #1a252f; }
     </style>
 </head>
 <body>
     <h2>Air Quality at Taumarunui</h2>
+    
+    <div class="controls">
+        <button id="start-btn">Restart Animation</button>
+    </div>
+
     <div id="chart-container"></div>
 
     <script type="text/javascript">
@@ -39,15 +58,13 @@
         let tempMaData = [];
         let pm10MaData = [];
 
-        // UPDATED: Now receives its value directly from the Python script variable
         const totalDuration = 20000; 
         const updateFrequency = rawData.length > 0 ? (totalDuration / rawData.length) : 100;
 
-        var option = {
+        var baseOption = {
             animationDurationUpdate: updateFrequency,
             animationEasingUpdate: 'linear',
             
-            // --- FIXED: Graphic Component for the Seasonal Watermark ---
             graphic: {
                 elements: [
                     {
@@ -55,18 +72,17 @@
                         id: 'seasonWatermark',
                         right: '10%', 
                         top: '15%',
-                        z: 1, // Pulled forward so it doesn't hide behind the background
-                        silent: true, // Ensures tooltips still work when hovering over the text
+                        z: 1, 
+                        silent: true, 
                         style: {
                             text: '',
-                            fontSize: 80, // ECharts 5 strict syntax
-                            fontWeight: 'bold', // ECharts 5 strict syntax
+                            fontSize: 80, 
+                            fontWeight: 'bold', 
                             fill: 'rgba(200, 200, 200, 0)', 
                         }
                     }
                 ]
             },
-            // -----------------------------------------------------------
 
             tooltip: { 
                 trigger: 'axis',
@@ -150,137 +166,148 @@
                     showSymbol: false,
                     data: pm10MaData,
                     itemStyle: { color: '#000000' }, 
-                    lineStyle: { width: 3, color: '#000000', type: 'solid' } 
+                    lineStyle: { width: 3, color: '#000000', type: 'solid' },
+                    markArea: { data: [] }
                 }
             ]
         };
 
-        myChart.setOption(option);
+        myChart.setOption(baseOption);
 
         let currentIndex = 0;
-        
-        const timer = setInterval(function() {
-            if (currentIndex >= rawData.length) {
-                clearInterval(timer); 
+        let timer = null;
+        const startBtn = document.getElementById('start-btn');
 
-                // Post-race highlighting
-                let markAreaData = [];
-                let currentStart = null;
-                let textAdded = false; 
+        function runAnimation() {
+            if (timer) clearInterval(timer);
+            
+            currentIndex = 0;
+            tempMaData = [];
+            pm10MaData = [];
+            
+            startBtn.innerText = "Restart Animation";
 
-                allDates.forEach((dateStr, index) => {
-                    const d = new Date(dateStr);
-                    if (isNaN(d.getTime())) return;
-                    
-                    const month = d.getMonth() + 1; 
-                    const isTargetMonth = month >= 5 && month <= 10; 
+            myChart.setOption({
+                graphic: { elements: [{ id: 'seasonWatermark', style: { fill: 'rgba(0,0,0,0)', text: '' } }] },
+                series: [
+                    { data: [] }, 
+                    { data: [], markArea: { data: [] } }
+                ]
+            });
 
-                    if (isTargetMonth && currentStart === null) {
-                        currentStart = dateStr;
-                    } else if (!isTargetMonth && currentStart !== null) {
+            timer = setInterval(function() {
+                if (currentIndex >= rawData.length) {
+                    clearInterval(timer); 
+
+                    let markAreaData = [];
+                    let currentStart = null;
+                    let textAdded = false; 
+
+                    allDates.forEach((dateStr, index) => {
+                        const d = new Date(dateStr);
+                        if (isNaN(d.getTime())) return;
+                        
+                        const month = d.getMonth() + 1; 
+                        const isTargetMonth = month >= 5 && month <= 10; 
+
+                        if (isTargetMonth && currentStart === null) {
+                            currentStart = dateStr;
+                        } else if (!isTargetMonth && currentStart !== null) {
+                            const blockText = textAdded ? '' : `Winter Period
+When Temperature is lower air quality is worse.`;
+                            textAdded = true; 
+
+                            markAreaData.push([
+                                { xAxis: currentStart, name: blockText, itemStyle: { color: 'rgba(135, 206, 250, 0.3)' } },
+                                { xAxis: allDates[index - 1] }
+                            ]);
+                            currentStart = null;
+                        }
+                    });
+
+                    if (currentStart !== null) {
                         const blockText = textAdded ? '' : `Winter Period
 When Temperature is lower air quality is worse.`;
-                        textAdded = true; 
-
                         markAreaData.push([
-                            { 
-                                xAxis: currentStart, 
-                                name: blockText, 
-                                itemStyle: { color: 'rgba(135, 206, 250, 0.3)' } 
-                            },
-                            { xAxis: allDates[index - 1] }
+                            { xAxis: currentStart, name: blockText, itemStyle: { color: 'rgba(135, 206, 250, 0.3)' } },
+                            { xAxis: allDates[allDates.length - 1] }
                         ]);
-                        currentStart = null;
                     }
-                });
 
-                if (currentStart !== null) {
-                    const blockText = textAdded ? '' : `Winter Period
-When Temperature is lower air quality is worse.`;
-                    markAreaData.push([
-                        { xAxis: currentStart, name: blockText, itemStyle: { color: 'rgba(135, 206, 250, 0.3)' } },
-                        { xAxis: allDates[allDates.length - 1] }
-                    ]);
+                    myChart.setOption({
+                        graphic: { elements: [{ id: 'seasonWatermark', style: { fill: 'rgba(0,0,0,0)' } }] },
+                        series: [
+                            { }, 
+                            {
+                                markArea: {
+                                    silent: true, 
+                                    label: {
+                                        show: true,
+                                        position: 'insideTop',
+                                        color: '#333',
+                                        fontSize: 14,
+                                        fontWeight: 'bold',
+                                        padding: [15, 0, 0, 0] 
+                                    },
+                                    data: markAreaData
+                                }
+                            }
+                        ]
+                    });
+                    
+                    return;
+                }
+                
+                const currentDateStr = rawData[currentIndex].date;
+                const currentMonth = new Date(currentDateStr).getMonth() + 1;
+                
+                let seasonText = '';
+                let seasonColor = '';
+
+                if (currentMonth >= 3 && currentMonth <= 5) {
+                    seasonText = '🍂 Autumn';
+                    seasonColor = 'rgba(211, 84, 0, 0.3)'; 
+                } else if (currentMonth >= 6 && currentMonth <= 8) {
+                    seasonText = '❄️ Winter';
+                    seasonColor = 'rgba(41, 128, 185, 0.3)'; 
+                } else if (currentMonth >= 9 && currentMonth <= 11) {
+                    seasonText = '🌱 Spring';
+                    seasonColor = 'rgba(39, 174, 96, 0.3)'; 
+                } else {
+                    seasonText = '☀️ Summer';
+                    seasonColor = 'rgba(241, 196, 15, 0.3)'; 
                 }
 
+                tempMaData.push(rawData[currentIndex]['Temperature (30 day moving average)']); 
+                pm10MaData.push(rawData[currentIndex]['PM10 ((30 day moving average))']); 
+
                 myChart.setOption({
-                    // Clear out the seasonal watermark text at the very end
-                    graphic: { 
+                    graphic: {
                         elements: [
-                            { 
-                                id: 'seasonWatermark', 
-                                style: { fill: 'rgba(0,0,0,0)' } 
+                            {
+                                id: 'seasonWatermark',
+                                style: {
+                                    text: seasonText,
+                                    fill: seasonColor
+                                }
                             }
-                        ] 
+                        ]
                     },
                     series: [
-                        { }, 
-                        {
-                            markArea: {
-                                silent: true, 
-                                label: {
-                                    show: true,
-                                    position: 'insideTop',
-                                    color: '#333',
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    padding: [15, 0, 0, 0] 
-                                },
-                                data: markAreaData
-                            }
-                        }
+                        { data: tempMaData },
+                        { data: pm10MaData }
                     ]
                 });
                 
-                return;
-            }
-            
-            // --- FIXED: Seasonal Animation Logic ---
-            const currentDateStr = rawData[currentIndex].date;
-            const currentMonth = new Date(currentDateStr).getMonth() + 1;
-            
-            let seasonText = '';
-            let seasonColor = '';
+                currentIndex++;
+            }, updateFrequency);
+        }
 
-            // Southern Hemisphere Seasons (Bumped opacity to 0.3 so it's clearly visible)
-            if (currentMonth >= 3 && currentMonth <= 5) {
-                seasonText = '🍂 Autumn';
-                seasonColor = 'rgba(211, 84, 0, 0.3)'; 
-            } else if (currentMonth >= 6 && currentMonth <= 8) {
-                seasonText = '❄️ Winter';
-                seasonColor = 'rgba(41, 128, 185, 0.3)'; 
-            } else if (currentMonth >= 9 && currentMonth <= 11) {
-                seasonText = '🌱 Spring';
-                seasonColor = 'rgba(39, 174, 96, 0.3)'; 
-            } else {
-                seasonText = '☀️ Summer';
-                seasonColor = 'rgba(241, 196, 15, 0.3)'; 
-            }
+        // Attach event listener so the user can restart it manually
+        startBtn.addEventListener('click', runAnimation);
 
-            tempMaData.push(rawData[currentIndex]['Temperature (30 day moving average)']); 
-            pm10MaData.push(rawData[currentIndex]['PM10 ((30 day moving average))']); 
-
-            // Update the lines and push the new season/color to the graphic
-            myChart.setOption({
-                graphic: {
-                    elements: [
-                        {
-                            id: 'seasonWatermark',
-                            style: {
-                                text: seasonText,
-                                fill: seasonColor
-                            }
-                        }
-                    ]
-                },
-                series: [
-                    { data: tempMaData },
-                    { data: pm10MaData }
-                ]
-            });
-            
-            currentIndex++;
-        }, updateFrequency);
+        // Call the function immediately to auto-start the animation on load
+        runAnimation();
 
         window.addEventListener('resize', function() {
             myChart.resize();
