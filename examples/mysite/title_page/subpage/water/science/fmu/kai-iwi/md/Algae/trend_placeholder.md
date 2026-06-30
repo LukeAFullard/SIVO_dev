@@ -17,7 +17,7 @@ We evaluated 15-year trends for algae and chlorophyll-a at 0 monitoring sites ac
       color: #1f2937;
       outline: none;
   ">
-    Understanding the Trend (click to expand)
+    Understanding the trend (click to expand)
   </summary>
 
   <div style="
