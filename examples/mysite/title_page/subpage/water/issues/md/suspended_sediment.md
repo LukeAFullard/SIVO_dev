@@ -1,4 +1,4 @@
-# Suspended Sediment
+# Suspended sediment
 
 When it rains, tiny particles of soil, plant, and animal matter are washed into our rivers and streams. Because the Horizons Region has large areas of highly erodible land, millions of tonnes of soil can wash into our waterways each year. When this soil is carried along by the water current, it is known as suspended sediment. 
 
