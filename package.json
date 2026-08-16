@@ -15,7 +15,7 @@
     "puppeteer": "^24.39.0"
   },
   "devDependencies": {
-    "esbuild": "^0.20.0"
+    "esbuild": "^0.28.0"
   },
   "main": "test_lottie_mobile.js",
   "directories": {
